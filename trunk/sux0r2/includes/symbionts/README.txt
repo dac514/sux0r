@@ -42,9 +42,16 @@ PHP Calendar
 dBug
 * Path: ./dBug.php
 * Version: Dec 04, 2007
-* Licence: GPL, (version unspecified, assuming GPLv3)
+* Licence: GPL, (version unspecified, assuming GPL 3)
 * Website: http://dbug.ospinto.com/
 * Notes: The PHP file says March 22, 2007 but the website says Dec 04, 2007
+
+
+htmLawed
+* Path: ./htmLawed/
+* Version: 1.0.7
+* Licence: GPL 3
+* Website: http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/index.php
 
 
 Smarty
