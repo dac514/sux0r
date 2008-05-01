@@ -5,7 +5,7 @@ require_once '../initialize.php';
 include_once 'suxNaiveBayesian.php';
 
 $nb  = new suxNaiveBayesian();
-$vec_id = 2;
+$vec_id = 3;
 
 
 ?>
@@ -321,7 +321,7 @@ foreach($cats as $key => $val) {
 Document Ã  supprimer :
 <select name='docid'>
 <?php
-$refs = $nb->getDocuments();
+$refs = $nb->getDocumentIds();
 foreach ($refs as $key => $val) {
     echo "<option value='".$key."'>".$key." - ".$val['category_id']."</option>\n";
 
