@@ -238,7 +238,7 @@ class suxRSS extends DOMDocument {
 	private function parse($rss_url, $timestamp = null) {
 
         // Sanity check
-        if (!ctype_digit(strval($timestamp))) $timestamp = null;
+        $timestamp = filter_var($timestamp, FILTER_VALIDATE_INT);
 
         // --------------------------------------------------------------------
         // Extablish Conditional GET and Timeout context

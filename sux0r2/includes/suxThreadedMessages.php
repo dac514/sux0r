@@ -41,7 +41,7 @@ class suxThreadedMessages {
 
 
     // Saves a message to the database
-    function saveMessage($users_id, $subject, $body, $parent_id = 0) {
+    function saveMessage($users_id, $subject, $body, $parent_id = null ) {
 
         /*
         The first message in a thread has thread_pos = 0.
@@ -59,7 +59,7 @@ class suxThreadedMessages {
         */
 
         // Sanity check
-        if (!ctype_digit(strval($parent_id))) $parent_id = 0;
+        $parent_id = filter_var($parent_id, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
 
         // Begin transaction
         $this->db->beginTransaction();
@@ -141,7 +141,7 @@ class suxThreadedMessages {
     function getThread($thread_id = null) {
 
         // Sanity check
-        if (!ctype_digit(strval($thread_id))) $thread_id = null;
+        $thread_id = filter_var($thread_id, FILTER_VALIDATE_INT);
 
         // order the messages by their thread_id and their position
         $query = "SELECT id, users_id, subject, LENGTH(body) AS body_length, posted_on, level FROM {$this->db_table} ";
@@ -171,7 +171,7 @@ class suxThreadedMessages {
     function getMessage($id) {
 
         // Sanity check
-        if (!ctype_digit(strval($id))) throw new Exception('Invalid message id');
+        if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid message id');
 
         $st = $this->db->prepare("SELECT * FROM {$this->db_table} WHERE id = ? ");
         $st->execute(array($id));
@@ -190,7 +190,7 @@ class suxThreadedMessages {
     function getUserMessages($users_id) {
 
         // Sanity check
-        if (!ctype_digit(strval($users_id))) throw new Exception('Invalid user id');
+        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
 
         // order the messages by their thread_id and their position
         $query = "SELECT id, thread_id, users_id, subject, LENGTH(body) AS body_length, posted_on FROM {$this->db_table} ";

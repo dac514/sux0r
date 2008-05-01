@@ -395,6 +395,11 @@ class suxNaiveBayesian {
         $total_tokens = 0;
         $ncat = 0;
 
+        // Sanity check, convert to UTF-8 plaintext
+        include_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
+        $converter = new suxHtml2UTF8($document);
+        $document = $converter->getText();
+
         $categories = $this->getCategories($vector_id);
         $tokens = $this->parseTokens($document);
 
