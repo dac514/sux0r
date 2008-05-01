@@ -196,6 +196,27 @@ class suxFunct {
     }
 
 
+
+    /**
+    * Sanitize HTML
+    *
+    * @param string $html the html to sanitize
+    * @return string sanitized html
+    */
+    static function sanitizeHtml($html) {
+
+        $config = array(
+            'safe' => 1,
+            'deny_attribute' => 'on*, style',
+            'clean_ms_char' => 2,
+            );
+
+        include(dirname(__FILE__) . '/symbionts/htmLawed/htmLawed.php');
+        return htmLawed($html);
+
+    }
+
+
 }
 
 ?>
