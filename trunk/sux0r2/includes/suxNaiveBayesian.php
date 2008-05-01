@@ -287,16 +287,16 @@ class suxNaiveBayesian {
     /**
     * @return array key = ids, values = array(keys = 'category_id', 'content')
     */
-    function getDocuments() {
+    function getDocumentIds() {
 
         $documents = array();
-        $st = $this->db->query('SELECT * FROM bayes_documents ORDER BY id ASC ');
+        $st = $this->db->query('SELECT id, bayes_categories_id FROM bayes_documents ORDER BY id ASC ');
 
         foreach ($st->fetchAll() as $row) {
 
             $documents[$row['id']] = array(
                 'category_id' => $row['bayes_categories_id'],
-                'content'  => $row['body_plaintext'],
+                'body_length'  => $row['body_length'],
                 );
         }
 
