@@ -293,7 +293,7 @@ class suxRSS extends DOMDocument {
             $out_channel = array();
 			preg_match("'<channel.*?>(.*?)</channel>'si", $rss_content, $out_channel);
 			foreach($this->channeltags as $channeltag) {
-				$temp = $this->myPregMatch("'<$channeltag.*?>(.*?)</$channeltag>'si", $out_channel[1]);
+				$temp = $this->myPregMatch("'<$channeltag.*?>(.*?)</$channeltag>'si", @$out_channel[1]);
 				if ($temp != '') $result[$channeltag] = $temp; // Set only if not empty
 			}
 
@@ -335,20 +335,11 @@ class suxRSS extends DOMDocument {
 			foreach($rss_items as $rss_item) {
 				// If number of items is lower then limit: Parse one item
 				if ($i < $this->items_limit || $this->items_limit == 0) {
-					foreach($this->itemtags as $itemtag) {
+
+                    foreach($this->itemtags as $itemtag) {
 						$temp = $this->myPregMatch("'<$itemtag.*?>(.*?)</$itemtag>'si", $rss_item);
 						if ($temp != '') $result['items'][$i][$itemtag] = $temp; // Set only if not empty
 					}
-
-					if (!empty($result['items'][$i]['description'])) {
-                        // Don't trust data from external website, sanitize
-						$result['items'][$i]['description'] = suxFunct::sanitizeHtml($result['items'][$i]['description']);
-                    }
-
-					if (!empty($result['items'][$i]['title'])) {
-                        // Don't trust data from external website, sanitize
-						$result['items'][$i]['title'] = suxFunct::sanitizeHtml($result['items'][$i]['title']);
-                    }
 
                     // If date_format is specified and pubDate is valid
 					if ($this->date_format != '' && ($timestamp = strtotime($result['items'][$i]['pubDate'])) !==-1) {
@@ -361,8 +352,8 @@ class suxRSS extends DOMDocument {
 				}
 			}
 
-
-
+            // Don't trust data from external website, sanitize
+            array_walk_recursive($result, array($this, 'sanitizeByReference'));
 
 			$result['items_count'] = $i;
 			return $result;
@@ -372,6 +363,22 @@ class suxRSS extends DOMDocument {
 			return false;
 		}
 	}
+
+
+    /**
+	* array_walk_recursive wrapper to sanitizeHtml()
+    *
+    * array_walk needs to be working with the actual values of the array,
+    * so the parameter of funcname is specified as a reference (i.e. &)
+    *
+    * @param string &$value
+	*/
+    private function sanitizeByReference(&$value) {
+
+        $value = suxFunct::sanitizeHtml($value);
+
+    }
+
 }
 
 ?>
