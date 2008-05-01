@@ -25,6 +25,8 @@
 *
 */
 
+require_once(dirname(__FILE__) . '/suxFunct.php');
+
 class suxRSS extends DOMDocument {
 
     // --------------------------------------------------------------------
@@ -45,9 +47,6 @@ class suxRSS extends DOMDocument {
 
     // Allows limit number of returned items. 0 (zero) means "no limit"
 	public $items_limit = 0;
-
-    // Set stripHTML = true to strip HTML code from RSS content.
-	public $stripHTML = false;
 
     // All pubDate and lastBuildDate data will be converted to specified
     // date/time format. The format is fully compatible with PHP function date()
@@ -149,10 +148,12 @@ class suxRSS extends DOMDocument {
             $timefile = filemtime($cache_file);
             $timedif = time() - $timefile;
             if ($timedif < $this->cache_time) {
-                // USe Cache
+                // Use Cache
                 $result = unserialize(file_get_contents($cache_file));
             }
         }
+
+
         if ($result) $result['cached'] = 1; // Succesful Cache
         else {
             // No cache was found, or used
@@ -165,6 +166,18 @@ class suxRSS extends DOMDocument {
                 }
                 $result['cached'] = 0;
             }
+        }
+
+
+        if (!$result && is_file($cache_file)) {
+
+            // Still no result, ,probably recieved a  304 (not modified)
+            // response from the server, use the cache
+
+            touch($cache_file); // Reset time for caching
+            $result = unserialize(file_get_contents($cache_file));
+            $result['cached'] = 1;
+
         }
 
 		return $result;
@@ -245,7 +258,7 @@ class suxRSS extends DOMDocument {
         // --------------------------------------------------------------------
 
         if ($timestamp) $modified = gmdate('D, d M Y H:i:s', $timestamp) . ' GMT';
-        else $modified = gmdate('D, d M Y H:i:s') . ' GMT';
+        else $modified = null;
 
         $opts = array(
             'http'=> array(
@@ -260,7 +273,7 @@ class suxRSS extends DOMDocument {
         // Parse
         // --------------------------------------------------------------------
 
-        if ($rss_content = file_get_contents($rss_url, null, $ctx)) {
+        if ($rss_content = @file_get_contents($rss_url, null, $ctx)) {
 
 			// Parse document encoding
 			$result['encoding'] = $this->myPregMatch("'encoding=[\'\"](.*?)[\'\"]'si", $rss_content);
@@ -327,13 +340,15 @@ class suxRSS extends DOMDocument {
 						if ($temp != '') $result['items'][$i][$itemtag] = $temp; // Set only if not empty
 					}
 
-                    // Strip HTML tags and other bullshit from DESCRIPTION
-					if ($this->stripHTML && $result['items'][$i]['description'])
-						$result['items'][$i]['description'] = strip_tags($this->unhtmlentities(strip_tags($result['items'][$i]['description'])));
+					if (!empty($result['items'][$i]['description'])) {
+                        // Don't trust data from external website, sanitize
+						$result['items'][$i]['description'] = suxFunct::sanitizeHtml($result['items'][$i]['description']);
+                    }
 
-                    // Strip HTML tags and other bullshit from TITLE
-					if ($this->stripHTML && $result['items'][$i]['title'])
-						$result['items'][$i]['title'] = strip_tags($this->unhtmlentities(strip_tags($result['items'][$i]['title'])));
+					if (!empty($result['items'][$i]['title'])) {
+                        // Don't trust data from external website, sanitize
+						$result['items'][$i]['title'] = suxFunct::sanitizeHtml($result['items'][$i]['title']);
+                    }
 
                     // If date_format is specified and pubDate is valid
 					if ($this->date_format != '' && ($timestamp = strtotime($result['items'][$i]['pubDate'])) !==-1) {
@@ -345,6 +360,9 @@ class suxRSS extends DOMDocument {
 					$i++;
 				}
 			}
+
+
+
 
 			$result['items_count'] = $i;
 			return $result;
