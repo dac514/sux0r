@@ -110,7 +110,7 @@ class suxThreadedMessages {
         if(!$thread_id) $thread_id = 1;
 
         // Convert to UTF-8 plaintext
-        include_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
+        include(dirname(__FILE__) . '/suxHtml2UTF8.php');
         $converter = new suxHtml2UTF8($body);
         $body_plaintext = $converter->getText();
 

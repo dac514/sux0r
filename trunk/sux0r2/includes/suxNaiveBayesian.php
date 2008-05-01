@@ -235,7 +235,7 @@ class suxNaiveBayesian {
     function trainDocument($category_id, $content) {
 
         // Sanity check, convert to UTF-8 plaintext
-        include_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
+        include(dirname(__FILE__) . '/suxHtml2UTF8.php');
         $converter = new suxHtml2UTF8($content);
         $content = $converter->getText();
 
@@ -396,7 +396,7 @@ class suxNaiveBayesian {
         $ncat = 0;
 
         // Sanity check, convert to UTF-8 plaintext
-        include_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
+        include(dirname(__FILE__) . '/suxHtml2UTF8.php');
         $converter = new suxHtml2UTF8($document);
         $document = $converter->getText();
 
