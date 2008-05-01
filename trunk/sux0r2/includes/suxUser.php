@@ -38,7 +38,7 @@ class suxUser {
 
     function getUser($id, $full_profile = false) {
 
-        if (!ctype_digit(strval($id))) throw new Exception('Invalid user id');
+        if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
 
         $st = $this->db->prepare('SELECT id, nickname, email FROM users WHERE id = ? ');
         $st->execute(array($id));
@@ -63,7 +63,7 @@ class suxUser {
         $st->execute(array($nickname));
         $id = $st->fetchColumn();
 
-        if (ctype_digit(strval($id))) return $this->getUser($id, $full_profile);
+        if (filter_var($id, FILTER_VALIDATE_INT)) return $this->getUser($id, $full_profile);
         else return false;
 
     }
@@ -75,7 +75,7 @@ class suxUser {
         $st->execute(array($email));
         $id = $st->fetchColumn();
 
-        if (ctype_digit(strval($id))) return $this->getUser($id, $full_profile);
+        if (filter_var($id, FILTER_VALIDATE_INT)) return $this->getUser($id, $full_profile);
         else return false;
 
     }
@@ -117,7 +117,7 @@ class suxUser {
     function setUser(array $info, $id = null) {
 
         // Sanity check
-        if ($id != null && !ctype_digit(strval($id))) throw new Exception('Invalid user id');
+        if ($id != null && !filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
         unset($info['id'], $info['users_id']); // Don't allow spoofing of the id in the array
         unset($info['accesslevel']); // Don't allow accesslevel changes with this function
 
