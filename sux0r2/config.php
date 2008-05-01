@@ -43,6 +43,12 @@ $CONFIG['DSN'] =  array(
 
 $CONFIG['REALM'] = 'users@sux0r.org';
 
+// A salt used to create data verification hashes. Any random word will do.
+// If a malicious user discovers your salt, this offers no real protection.
+// Guard the salt zealously, change it as needed.
+
+$CONFIG['SALT'] = 'flyingturtle';
+
 // Sux0r modules may cache templates, set the duration in seconds below.
 
 $CONFIG['CACHE_LIFETIME'] = 3600;
