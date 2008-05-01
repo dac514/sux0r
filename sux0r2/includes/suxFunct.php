@@ -212,7 +212,7 @@ class suxFunct {
             );
 
         include(dirname(__FILE__) . '/symbionts/htmLawed/htmLawed.php');
-        return htmLawed($html);
+        return htmLawed($html, $config);
 
     }
 
