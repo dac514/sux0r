@@ -71,7 +71,7 @@ if (get_magic_quotes_gpc() && (!ini_get('magic_quotes_sybase'))) {
 }
 
 // Initialize suxDB
-require_once($GLOBALS['CONFIG']['PATH'] . 'includes/suxDB.php');
+require_once($GLOBALS['CONFIG']['PATH'] . '/includes/suxDB.php');
 suxDB::$dsn = $GLOBALS['CONFIG']['DSN'];
 
 ?>

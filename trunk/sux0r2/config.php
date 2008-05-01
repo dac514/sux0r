@@ -61,6 +61,6 @@ $CONFIG['TIMEZONE'] = 'America/Montreal';
 /* Extra */
 
 // Debug
-include_once($CONFIG['PATH'] . 'includes/symbionts/dBug.php');
+include_once($CONFIG['PATH'] . '/includes/symbionts/dBug.php');
 
 ?>
