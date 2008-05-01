@@ -22,6 +22,8 @@
 *
 */
 
+require_once(dirname(__FILE__) . '/suxFunct.php');
+
 class suxUser {
 
     protected $db;

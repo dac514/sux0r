@@ -208,7 +208,6 @@ class suxFunct {
         $config = array(
             'safe' => 1,
             'deny_attribute' => 'on*, style',
-            'clean_ms_char' => 2,
             );
 
         include(dirname(__FILE__) . '/symbionts/htmLawed/htmLawed.php');
