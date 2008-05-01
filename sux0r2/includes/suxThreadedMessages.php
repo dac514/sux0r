@@ -24,6 +24,8 @@
 * @license    http://www.gnu.org/licenses/agpl.html
 */
 
+require_once(dirname(__FILE__) . '/suxFunct.php');
+
 class suxThreadedMessages {
 
     public $db_table = 'messages';
@@ -109,7 +111,10 @@ class suxThreadedMessages {
         // Sanity check
         if(!$thread_id) $thread_id = 1;
 
-        // Convert to UTF-8 plaintext
+        // Sanitize HTML
+        $body = suxFunct::sanitizeHtml($body);
+
+        // Convert and copy to UTF-8 plaintext
         include(dirname(__FILE__) . '/suxHtml2UTF8.php');
         $converter = new suxHtml2UTF8($body);
         $body_plaintext = $converter->getText();
