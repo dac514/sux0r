@@ -9,16 +9,16 @@ error_reporting (E_ALL | E_STRICT); // Error reporting for developers
 /* Configuration variables */
 
 // The auto-detected path to your sux0r installation.
-// If you set this yourself, make sure to use a trailing slash!
+// If you set this yourself, no trailing slash!
 
-$CONFIG['PATH'] = dirname(__FILE__) . '/';
+$CONFIG['PATH'] = dirname(__FILE__);
 
 // The url suffix to your site. For example, if your site is
-// http://www.sux0r.org/ then '/' is appropriate. If your site is
-// http://domain.com/my/sux0r/ then '/my/sux0r/ is the correct value.
-// Make sure to use a trailing slash!
+// http://www.sux0r.org/ then '' is appropriate. If your site is
+// http://domain.com/my/sux0r/ then '/my/sux0r' is the correct value.
+// No trailing slash!
 
-$CONFIG['URL'] = '/';
+$CONFIG['URL'] = '';
 
 // An array containing PDO compatible database DSN [key => value] pairs.
 // Sux0r is theoretically able to span multiple databases, but ordinarily

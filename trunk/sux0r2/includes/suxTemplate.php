@@ -49,14 +49,14 @@ class suxTemplate extends Smarty {
 
         $this->plugins_dir = array(
             'plugins', // the default under SMARTY_DIR
-            $GLOBALS['CONFIG']['PATH'] . 'includes/symbionts/SmartyAddons/plugins',
+            $GLOBALS['CONFIG']['PATH'] . '/includes/symbionts/SmartyAddons/plugins',
             );
 
         // --------------------------------------------------------------------
         // Compile directory
         // --------------------------------------------------------------------
 
-        $compile_dir = $GLOBALS['CONFIG']['PATH'] . "temporary/templates_c/$partition/$module/";
+        $compile_dir = $GLOBALS['CONFIG']['PATH'] . "/temporary/templates_c/$partition/$module/";
         if(!is_dir($compile_dir) && !mkdir($compile_dir, 0777, true)) {
             throw new Exception('Missing compile dir ' . $compile_dir);
         }
@@ -67,7 +67,7 @@ class suxTemplate extends Smarty {
         // Cache directory and variables
         // --------------------------------------------------------------------
 
-        $cache_dir = $GLOBALS['CONFIG']['PATH'] . "temporary/cache/$partition/$module/";
+        $cache_dir = $GLOBALS['CONFIG']['PATH'] . "/temporary/cache/$partition/$module/";
         if(!is_dir($cache_dir) && !mkdir($cache_dir, 0777, true)) {
             throw new Exception('Missing cache dir ' . $cache_dir);
         }
@@ -80,8 +80,8 @@ class suxTemplate extends Smarty {
         // --------------------------------------------------------------------
 
         // Assume the templates are located in templates directory
-        $template_dir = $GLOBALS['CONFIG']['PATH'] . "templates/$partition/$module/";
-        $template_dir_fallback = $GLOBALS['CONFIG']['PATH'] . "templates/default/$module/";
+        $template_dir = $GLOBALS['CONFIG']['PATH'] . "/templates/$partition/$module/";
+        $template_dir_fallback = $GLOBALS['CONFIG']['PATH'] . "/templates/default/$module/";
 
         if($partition != 'default' && !is_dir($template_dir)) {
             // We didn't find anything, but the partition wasn't default, let's try with default
@@ -91,8 +91,8 @@ class suxTemplate extends Smarty {
         if(!is_dir($template_dir)) {
 
             //  Still nothing, maybe they are in the module's template directory under $partition
-            $template_dir = $GLOBALS['CONFIG']['PATH'] . "modules/$module/templates/$partition/";
-            $template_dir_fallback = $GLOBALS['CONFIG']['PATH'] . "modules/$module/templates/default/";
+            $template_dir = $GLOBALS['CONFIG']['PATH'] . "/modules/$module/templates/$partition/";
+            $template_dir_fallback = $GLOBALS['CONFIG']['PATH'] . "/modules/$module/templates/default/";
 
             if($partition != 'default' && !is_dir($template_dir)) {
                 // Still nothing, but the partition wasn't default, let's try with default
