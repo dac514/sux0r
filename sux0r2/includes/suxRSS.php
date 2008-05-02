@@ -3,7 +3,7 @@
 /**
 * suxRSS
 *
-* This program is free software: you can redistribute it and/or modify
+* This program is free software: you can redistribute it and/or modifyc
 * it under the terms of the GNU Affero General Public License as
 * published by the Free Software Foundation, either version 3 of the
 * License, or (at your option) any later version.
@@ -40,10 +40,9 @@ class suxRSS extends DOMDocument {
     public $cache_dir = '/tmp';
 
     // Allows to set how to proceed CDATA information.
-    // nochange = default value; don't make any changes
-    // strip = completely strip CDATA information
     // content = get CDATA content (without CDATA tag)
-	public $CDATA = 'nochange';
+    // nochange = don't make any changes
+	public $CDATA = 'content';
 
     // Allows limit number of returned items. 0 (zero) means "no limit"
 	public $items_limit = 0;
@@ -205,14 +204,11 @@ class suxRSS extends DOMDocument {
             // Get CDATA content (without CDATA tag)
             $out[1] = strtr($out[1], array('<![CDATA['=>'', ']]>'=>''));
         }
-        elseif ($this->CDATA == 'strip') {
-            // Strip CDATA
-            $out[1] = strtr($out[1], array('<![CDATA['=>'', ']]>'=>''));
-        }
 
         // If not UTF-8, convert to UTF-8
-        if (mb_strtoupper($this->rsscp) != 'UTF-8')
-            $out[1] = iconv($this->rsscp, 'UTF-8//TRANSLIT', $out[1]);
+        if (mb_strtoupper($this->rsscp) != 'UTF-8') {
+            $out[1] = @mb_convert_encoding($out[1], 'UTF-8', $this->rsscp);
+        }
 
         // Return result
         return trim($out[1]);
@@ -242,10 +238,6 @@ class suxRSS extends DOMDocument {
                 // Get CDATA content (without CDATA tag)
                 $concat .= strtr($val, array('<![CDATA['=>'', ']]>'=>''));
             }
-            elseif ($this->CDATA == 'strip') {
-                // Strip CDATA
-                $concat .= strtr($val, array('<![CDATA['=>'', ']]>'=>''));
-            }
             else {
                 $concat .= $val;
             }
@@ -255,8 +247,9 @@ class suxRSS extends DOMDocument {
         $concat = rtrim($concat, ', '); // Remove trailing comma
 
         // If not UTF-8, convert to UTF-8
-        if (mb_strtoupper($this->rsscp) != 'UTF-8')
-            $concat = iconv($this->rsscp, 'UTF-8//TRANSLIT', $concat);
+        if (mb_strtoupper($this->rsscp) != 'UTF-8') {
+            $concat = @mb_convert_encoding($concat, 'UTF-8', $this->rsscp);
+        }
 
         // Return result
         return trim($concat);
