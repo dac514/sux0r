@@ -486,19 +486,16 @@ class suxNaiveBayesian {
 
         $string = mb_strtolower($string);
 
-        // TODO:
-        // We're splitting on "word characters" which is good for latin
-        // writing with punctuation and spaces. But what about Chinese,
+        // \w means alphanumeric characters.
+        // Usually, non-English letters and numbers are included.
+        // \W is the negated version of \w
+        //
+        // TODO: We're splitting on "anything that isn't a word" which is good
+        // for languages with punctuation and spaces. But what about Chinese,
         // Japanese, and other languages that don't use them? How do we
         // identify tokens in those cases?
 
-        /*
-        // \w means alphanumeric characters.
-        // Usually, non-English letters and numbers are included.
-        // In the case of preg_split, they are not included. Booooo!
-        $rawtokens = preg_split("/[^\w]+/u", $string);
-        */
-        $rawtokens = preg_split('/[\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e]+/u', $string);
+        $rawtokens = mb_split("\W", $string);
 
         //. Get stopwords
         if (is_readable(dirname(__FILE__) . "/symbionts/stopwords/{$this->l10n}.txt")) {
