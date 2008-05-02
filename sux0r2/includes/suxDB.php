@@ -122,8 +122,7 @@ class suxDB {
             $placeholders .= ($useValues ? ":$value, " : ":$key, ");
         }
 
-        // Remove Trailing Coma
-        $column = rtrim($column, ', ');
+        $column = rtrim($column, ', '); // Remove Trailing Coma
         $placeholders = rtrim($placeholders, ', ');
         $query = $query . $column . ') ' . $placeholders . ') ';
 
@@ -154,7 +153,7 @@ class suxDB {
         }
 
         $where = " WHERE $id_column = :$id_column";
-        $placeholders = rtrim($placeholders, ', ');
+        $placeholders = rtrim($placeholders, ', '); // Remove Trailing Coma
         $query = $query . $column . $placeholders . $where;
 
         return $query;

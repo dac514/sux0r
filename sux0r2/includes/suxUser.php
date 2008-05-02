@@ -22,8 +22,6 @@
 *
 */
 
-require_once(dirname(__FILE__) . '/suxFunct.php');
-
 class suxUser {
 
     protected $db;
@@ -118,34 +116,46 @@ class suxUser {
 
     function setUser(array $info, $id = null) {
 
-        // Sanity check
+        // --------------------------------------------------------------------
+        // Sanitize
+        // --------------------------------------------------------------------
+
         if ($id != null && !filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+
         unset($info['id'], $info['users_id']); // Don't allow spoofing of the id in the array
         unset($info['accesslevel']); // Don't allow accesslevel changes with this function
-
 
         // Encrypt the password
         if (!empty($info['password'])) {
             if (empty($info['nickname'])) throw new Exception('No nickname provided');
+            require_once(dirname(__FILE__) . '/suxFunct.php');
             $info['password'] = suxFunct::encrypt_pw($info['nickname'], $info['password']);
         }
 
-
         // Move users table info to $user array
         $user = array();
+
         // Nickname
-        if (!empty($info['nickname'])) $user['nickname'] = $info['nickname'];
+        if (!empty($info['nickname'])) $user['nickname'] = strip_tags($info['nickname']);
         unset($info['nickname']);
+
         // Email
-        if (!empty($info['email'])) $user['email'] = $info['email'];
+        if (!empty($info['email'])) $user['email'] = filter_var($info['email'], FILTER_SANITIZE_EMAIL);
         unset($info['email']);
+
         // Encrypted password
         if (!empty($info['password'])) $user['password'] = $info['password'];
         unset($info['password']);
 
-        // ----------------------------------------------------------------------------
-        // Sql
-        // ----------------------------------------------------------------------------
+        // The rest
+        foreach ($info as $key => $val) {
+            if ($key == 'url') $info[$key] = filter_var($val, FILTER_SANITIZE_URL);
+            else $info[$key] = strip_tags($val);
+        }
+
+        // --------------------------------------------------------------------
+        // Go!
+        // --------------------------------------------------------------------
 
         // Begin transaction
         $this->db->beginTransaction();
@@ -246,6 +256,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+
 CREATE TABLE `users_info` (
   `id` int(11) NOT NULL auto_increment,
   `users_id` int(11) NOT NULL,
@@ -264,7 +275,8 @@ CREATE TABLE `users_info` (
   `timezone` varchar(255) default NULL,
   `pavatar` varchar(255) default NULL,
   `microid` varchar(255) default NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `users_id` (`users_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 */

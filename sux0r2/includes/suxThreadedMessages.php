@@ -24,11 +24,7 @@
 * @license    http://www.gnu.org/licenses/agpl.html
 */
 
-require_once(dirname(__FILE__) . '/suxFunct.php');
-
 class suxThreadedMessages {
-
-    public $db_table = 'messages';
 
     protected $db;
     protected $inTransaction = false;
@@ -60,8 +56,30 @@ class suxThreadedMessages {
         thread_pos value incremented by 1 (to make room for N).
         */
 
-        // Sanity check
+        // -------------------------------------------------------------------
+        // Sanitize
+        // -------------------------------------------------------------------
+
+        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+
+        // Parent_id
         $parent_id = filter_var($parent_id, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+
+        // No HTML in subject
+        $subject = strip_tags($subject);
+
+        // Sanitize HTML in body
+        require_once(dirname(__FILE__) . '/suxFunct.php');
+        $body = suxFunct::sanitizeHtml($body);
+
+        // Convert and copy body to UTF-8 plaintext
+        require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
+        $converter = new suxHtml2UTF8($body);
+        $body_plaintext = $converter->getText();
+
+        // -------------------------------------------------------------------
+        // Go!
+        // -------------------------------------------------------------------
 
         // Begin transaction
         $this->db->beginTransaction();
@@ -70,7 +88,7 @@ class suxThreadedMessages {
         if ($parent_id) {
 
             // Get thread_id, level, and thread_pos from parent
-            $st = $this->db->prepare("SELECT thread_id, level, thread_pos FROM {$this->db_table} WHERE id = ? ");
+            $st = $this->db->prepare('SELECT thread_id, level, thread_pos FROM messages WHERE id = ? ');
             $st->execute(array($parent_id));
             $parent = $st->fetch();
 
@@ -78,7 +96,7 @@ class suxThreadedMessages {
             $level = $parent['level'] + 1;
 
             // what is the biggest thread_pos in this thread among messages with the same parent?
-            $st = $this->db->prepare("SELECT MAX(thread_pos) FROM {$this->db_table} WHERE thread_id = ? AND parent_id = ? ");
+            $st = $this->db->prepare('SELECT MAX(thread_pos) FROM messages WHERE thread_id = ? AND parent_id = ? ');
             $st->execute(array($parent['thread_id'], $parent_id));
             $thread_pos = $st->fetchColumn(0);
 
@@ -92,7 +110,7 @@ class suxThreadedMessages {
             }
 
             // increment the thread_pos of all messages in the thread that come after this one
-            $st = $this->db->prepare("UPDATE {$this->db_table} SET thread_pos = thread_pos + 1 WHERE thread_id = ? AND thread_pos >= ? ");
+            $st = $this->db->prepare('UPDATE messages SET thread_pos = thread_pos + 1 WHERE thread_id = ? AND thread_pos >= ? ');
             $st->execute(array($parent['thread_id'], $thread_pos));
 
             // the new message should be saved with the parent's thread_id
@@ -104,20 +122,12 @@ class suxThreadedMessages {
             // The message is not a reply, so it's the start of a new thread
             $level = 0;
             $thread_pos = 0;
-            $thread_id = $this->db->query("SELECT MAX(thread_id) + 1 FROM {$this->db_table} ")->fetchColumn(0);
+            $thread_id = $this->db->query('SELECT MAX(thread_id) + 1 FROM messages ')->fetchColumn(0);
 
         }
 
         // Sanity check
         if(!$thread_id) $thread_id = 1;
-
-        // Sanitize HTML
-        $body = suxFunct::sanitizeHtml($body);
-
-        // Convert and copy to UTF-8 plaintext
-        include(dirname(__FILE__) . '/suxHtml2UTF8.php');
-        $converter = new suxHtml2UTF8($body);
-        $body_plaintext = $converter->getText();
 
         // Insert the message into the database
         $insert = array(
@@ -131,7 +141,7 @@ class suxThreadedMessages {
             'body_html' => $body,
             'body_plaintext' => $body_plaintext,
             );
-        $query = suxDB::prepareInsertQuery($this->db_table, $insert);
+        $query = suxDB::prepareInsertQuery('messages', $insert);
         $st = $this->db->prepare($query);
         $st->execute($insert);
 
@@ -149,7 +159,7 @@ class suxThreadedMessages {
         $thread_id = filter_var($thread_id, FILTER_VALIDATE_INT);
 
         // order the messages by their thread_id and their position
-        $query = "SELECT id, users_id, subject, LENGTH(body) AS body_length, posted_on, level FROM {$this->db_table} ";
+        $query = 'SELECT id, users_id, subject, LENGTH(body) AS body_length, posted_on, level FROM messages ';
         if ($thread_id) $query .= 'WHERE thread_id = ? ';
         $query .= 'ORDER BY thread_id, thread_pos ';
 
@@ -178,7 +188,7 @@ class suxThreadedMessages {
         // Sanity check
         if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid message id');
 
-        $st = $this->db->prepare("SELECT * FROM {$this->db_table} WHERE id = ? ");
+        $st = $this->db->prepare('SELECT * FROM messages WHERE id = ? ');
         $st->execute(array($id));
 
         $message = $st->fetch();
@@ -198,7 +208,7 @@ class suxThreadedMessages {
         if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
 
         // order the messages by their thread_id and their position
-        $query = "SELECT id, thread_id, users_id, subject, LENGTH(body) AS body_length, posted_on FROM {$this->db_table} ";
+        $query = 'SELECT id, thread_id, users_id, subject, LENGTH(body) AS body_length, posted_on FROM messages ';
         $query .= 'WHERE users_id = ? ';
         $query .= 'ORDER BY posted_on DESC ';
 

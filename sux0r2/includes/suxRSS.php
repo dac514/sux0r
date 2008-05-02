@@ -25,8 +25,6 @@
 *
 */
 
-require_once(dirname(__FILE__) . '/suxFunct.php');
-
 class suxRSS extends DOMDocument {
 
     // --------------------------------------------------------------------
@@ -403,6 +401,7 @@ class suxRSS extends DOMDocument {
         // Reverse htmlentities, we want usable html
         $value = html_entity_decode(stripslashes($value), ENT_QUOTES, 'UTF-8');
         // Sanitize
+        require_once(dirname(__FILE__) . '/suxFunct.php');
         $value = suxFunct::sanitizeHtml($value);
 
     }

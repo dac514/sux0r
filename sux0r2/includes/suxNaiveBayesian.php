@@ -63,6 +63,9 @@ class suxNaiveBayesian {
 
         if (mb_strlen($vector) > $this->max_vector_length) return false;
 
+        // Sanitize
+        $vector = strip_tags($vector);
+
         try {
             $st = $this->db->prepare('INSERT INTO bayes_vectors (vector) VALUES (?) ');
             return $st->execute(array($vector));
@@ -80,6 +83,8 @@ class suxNaiveBayesian {
     * @return bool
     */
     function removeVector($vector_id) {
+
+        if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
 
         // Get the category ids for this vector
         $categories = array();
@@ -154,6 +159,10 @@ class suxNaiveBayesian {
     function addCategory($category, $vector_id) {
 
         if (mb_strlen($category) > $this->max_category_length) return false;
+        if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
+
+        // Sanitize
+        $category = strip_tags($category);
 
         try {
             $st = $this->db->prepare('INSERT INTO bayes_categories (category, bayes_vectors_id) VALUES (?, ?) ');
@@ -172,6 +181,8 @@ class suxNaiveBayesian {
     * @return bool
     */
     function removeCategory($category_id) {
+
+        if (!filter_var($category_id, FILTER_VALIDATE_INT)) return false;
 
         $this->db->beginTransaction();
         $this->inTransaction = true;
@@ -234,8 +245,10 @@ class suxNaiveBayesian {
     */
     function trainDocument($category_id, $content) {
 
-        // Sanity check, convert to UTF-8 plaintext
-        include(dirname(__FILE__) . '/suxHtml2UTF8.php');
+        if (!filter_var($category_id, FILTER_VALIDATE_INT)) return false;
+
+        // Sanitize to UTF-8 plaintext
+        require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
         $converter = new suxHtml2UTF8($content);
         $content = $converter->getText();
 
@@ -262,6 +275,8 @@ class suxNaiveBayesian {
     * @return bool
     */
     function untrainDocument($document_id) {
+
+        if (!filter_var($document_id, FILTER_VALIDATE_INT)) return false;
 
         $this->db->beginTransaction();
         $this->inTransaction = true;
@@ -391,14 +406,16 @@ class suxNaiveBayesian {
     */
     function categorize($document, $vector_id) {
 
+        if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
+
+        // Sanity check, convert to UTF-8 plaintext
+        require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
+        $converter = new suxHtml2UTF8($document);
+        $document = $converter->getText();
+
         $scores = array();
         $total_tokens = 0;
         $ncat = 0;
-
-        // Sanity check, convert to UTF-8 plaintext
-        include(dirname(__FILE__) . '/suxHtml2UTF8.php');
-        $converter = new suxHtml2UTF8($document);
-        $document = $converter->getText();
 
         $categories = $this->getCategories($vector_id);
         $tokens = $this->parseTokens($document);
@@ -564,6 +581,7 @@ class suxNaiveBayesian {
     * @return bool
     */
     private function updateToken($token, $count, $category_id) {
+
 
         $token_count = $this->getTokenCount($token, $category_id);
 

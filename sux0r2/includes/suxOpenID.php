@@ -872,6 +872,8 @@ class suxOpenID {
     */
     function destroyAssocHandle($id) {
 
+        if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
+
         $this->debug("Destroying session: $id");
 
         // While we're in here, delete expired associations
@@ -891,6 +893,8 @@ class suxOpenID {
     * @return array
     */
     function newAssoc($expiration) {
+
+        if (!filter_var($expiration, FILTER_VALIDATE_INT)) return array(false, false);
 
         // While we're in here, delete expired associations
         $st = $this->db->prepare('DELETE FROM openid_associations WHERE expiration < ? ');
