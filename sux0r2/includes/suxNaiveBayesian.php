@@ -468,7 +468,19 @@ class suxNaiveBayesian {
         $tokens    = array();
 
         $string = mb_strtolower($string);
-        // $rawtokens = preg_split("/[^\w]+/u", $string); // Doesn't work as expected?
+
+        // TODO:
+        // We're splitting on "word characters" which is good for latin
+        // writing with punctuation and spaces. But what about Chinese,
+        // Japanese, and other languages that don't use them? How do we
+        // identify tokens in those cases?
+
+        /*
+        // \w means alphanumeric characters.
+        // Usually, non-English letters and numbers are included.
+        // In the case of preg_split, they are not included. Booooo!
+        $rawtokens = preg_split("/[^\w]+/u", $string);
+        */
         $rawtokens = preg_split('/[\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e]+/u', $string);
 
         //. Get stopwords
@@ -476,7 +488,7 @@ class suxNaiveBayesian {
             $this->ignore_list = file(dirname(__FILE__) . "/symbionts/stopwords/{$this->l10n}.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         }
 
-        // Generic internet cruft for good measure
+        // Append generic internet cruft for good measure
         array_push($this->ignore_list, 'http', 'https', 'mailto', 'www', 'com', 'net', 'org', 'biz', 'info');
 
         // remove unwanted tokens
