@@ -197,47 +197,70 @@ class suxRSS extends DOMDocument {
         $out = array();
 		preg_match($pattern, $subject, $out);
 
-		// if there is some result... process it and return it
-		if(isset($out[1])) {
+        // if there is NO result, return empty string
+		if(!isset($out[1])) return '';
 
-			if ($this->CDATA == 'content') {
-                // Get CDATA content (without CDATA tag)
-				$out[1] = strtr($out[1], array('<![CDATA['=>'', ']]>'=>''));
-			}
-            elseif ($this->CDATA == 'strip') {
-                // Strip CDATA
-				$out[1] = strtr($out[1], array('<![CDATA['=>'', ']]>'=>''));
-			}
+        // Otherwise, there is some result... process it and return it
+        if ($this->CDATA == 'content') {
+            // Get CDATA content (without CDATA tag)
+            $out[1] = strtr($out[1], array('<![CDATA['=>'', ']]>'=>''));
+        }
+        elseif ($this->CDATA == 'strip') {
+            // Strip CDATA
+            $out[1] = strtr($out[1], array('<![CDATA['=>'', ']]>'=>''));
+        }
 
-			// If not UTF-8, convert to UTF-8
-			if (mb_strtoupper($this->rsscp) != 'UTF-8')
-                $out[1] = iconv($this->rsscp, 'UTF-8//TRANSLIT', $out[1]);
+        // If not UTF-8, convert to UTF-8
+        if (mb_strtoupper($this->rsscp) != 'UTF-8')
+            $out[1] = iconv($this->rsscp, 'UTF-8//TRANSLIT', $out[1]);
 
-            // Return result
-			return trim($out[1]);
-		}
-        else {
-            // if there is NO result, return empty string
-			return '';
-		}
+        // Return result
+        return trim($out[1]);
+
 	}
 
 
 	/**
-	* Replace HTML entities &something; by real characters
+	* Modification of preg_match_all(), see myPregMatch()
     *
-    * @param string $string
+    * @param string $pattern regular expression
+    * @param string $subject subject
     * @return string
 	*/
-	private function unhtmlentities($string) {
-		// Get HTML entities table
-		$trans_tbl = get_html_translation_table(HTML_ENTITIES, ENT_QUOTES);
-		// Flip keys<==>values
-		$trans_tbl = array_flip($trans_tbl);
-		// Add support for &apos; entity (missing in HTML_ENTITIES)
-		$trans_tbl += array('&apos;' => "'");
-		// Replace entities by values
-		return strtr($string, $trans_tbl);
+	private function myPregMatchAll($pattern, $subject) {
+
+        $out = array();
+		preg_match_all($pattern, $subject, $out);
+
+		// if there is NO result, return empty string
+		if(!isset($out[1])) return '';
+
+        // Otherwise, there is some result... process it and return it
+        $concat = '';
+        foreach($out[1] as $val) {
+            if ($this->CDATA == 'content') {
+                // Get CDATA content (without CDATA tag)
+                $concat .= strtr($val, array('<![CDATA['=>'', ']]>'=>''));
+            }
+            elseif ($this->CDATA == 'strip') {
+                // Strip CDATA
+                $concat .= strtr($val, array('<![CDATA['=>'', ']]>'=>''));
+            }
+            else {
+                $concat .= $val;
+            }
+            $concat .= ', '; // Seperate with a comma
+        }
+
+        $concat = rtrim($concat, ', '); // Remove trailing comma
+
+        // If not UTF-8, convert to UTF-8
+        if (mb_strtoupper($this->rsscp) != 'UTF-8')
+            $concat = iconv($this->rsscp, 'UTF-8//TRANSLIT', $concat);
+
+        // Return result
+        return trim($concat);
+
 	}
 
 
@@ -333,12 +356,21 @@ class suxRSS extends DOMDocument {
 			$i = 0;
 			$result['items'] = array(); // create array even if there are no items
 			foreach($rss_items as $rss_item) {
+
 				// If number of items is lower then limit: Parse one item
 				if ($i < $this->items_limit || $this->items_limit == 0) {
 
                     foreach($this->itemtags as $itemtag) {
-						$temp = $this->myPregMatch("'<$itemtag.*?>(.*?)</$itemtag>'si", $rss_item);
-						if ($temp != '') $result['items'][$i][$itemtag] = $temp; // Set only if not empty
+
+                        $pattern = "'<$itemtag.*?>(.*?)</$itemtag>'si";
+                        if ($itemtag == 'category') {
+                            // Concatenate for category
+                            $temp = $this->myPregMatchAll($pattern, $rss_item);
+                        }
+                        else $temp = $this->myPregMatch($pattern, $rss_item);
+
+                        if (!empty($temp)) $result['items'][$i][$itemtag] = $temp; // Stack
+
 					}
 
                     // If date_format is specified and pubDate is valid
@@ -352,7 +384,7 @@ class suxRSS extends DOMDocument {
 				}
 			}
 
-            // Don't trust data from external website, sanitize
+            // Don't trust data from external website, sanitize everything
             array_walk_recursive($result, array($this, 'sanitizeByReference'));
 
 			$result['items_count'] = $i;
@@ -375,6 +407,9 @@ class suxRSS extends DOMDocument {
 	*/
     private function sanitizeByReference(&$value) {
 
+        // Reverse htmlentities, we want usable html
+        $value = html_entity_decode(stripslashes($value), ENT_QUOTES, 'UTF-8');
+        // Sanitize
         $value = suxFunct::sanitizeHtml($value);
 
     }
