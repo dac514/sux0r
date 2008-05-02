@@ -210,7 +210,7 @@ class suxFunct {
             'deny_attribute' => 'on*, style',
             );
 
-        include_once(dirname(__FILE__) . '/symbionts/htmLawed/htmLawed.php');
+        require_once(dirname(__FILE__) . '/symbionts/htmLawed/htmLawed.php');
         return htmLawed($html, $config);
 
     }
