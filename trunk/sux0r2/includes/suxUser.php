@@ -24,23 +24,137 @@
 
 class suxUser {
 
+
+    public $max_failures = 4; // Maximum authetication failures allowed
+
     protected $db;
     protected $inTransaction = false;
+
 
     /**
     * @param string $key a key from our suxDB DSN
     */
     function __construct($key = null) {
+
     	$this->db = suxDB::get($key);
         set_exception_handler(array($this, 'logAndDie'));
+
     }
+
+
+    /**
+    * Perform a user authorization
+    *
+    * @param string $auth_domain, the domain value for WWW-Authenticate
+    * @return bool
+    */
+    function authenticate($auth_domain) {
+
+        // try to get the digest headers - what a PITA!
+        if (function_exists('apache_request_headers') && ini_get('safe_mode') == false) {
+            $arh = apache_request_headers();
+            $hdr = (isset($arh['Authorization']) ? $arh['Authorization'] : null);
+
+        }
+        elseif (isset($_SERVER['PHP_AUTH_DIGEST'])) {
+            $hdr = $_SERVER['PHP_AUTH_DIGEST'];
+
+        }
+        elseif (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+            $hdr = $_SERVER['HTTP_AUTHORIZATION'];
+
+        }
+        elseif (isset($_ENV['PHP_AUTH_DIGEST'])) {
+            $hdr = $_ENV['PHP_AUTH_DIGEST'];
+
+        }
+        elseif (isset($_REQUEST['auth'])) {
+            $hdr = stripslashes(urldecode($_REQUEST['auth']));
+
+        }
+        else {
+            $hdr = null;
+        }
+
+        $digest = mb_substr($hdr,0,7) == 'Digest '
+		? mb_substr($hdr, mb_strpos($hdr, ' ') + 1)
+		: $hdr;
+
+        $stale = false;
+        $ok = '';
+
+        // is the user trying to log in?
+        if (!is_null($digest) && $this->loginCheck() === false) {
+
+            $hdr = array();
+
+            // decode the Digest authorization headers
+            $mtx = array();
+            preg_match_all('/(\w+)=(?:"([^"]+)"|([^\s,]+))/', $digest, $mtx, PREG_SET_ORDER);
+
+            foreach ($mtx as $m)
+                $hdr[$m[1]] = $m[2] ? $m[2] : $m[3];
+
+
+            if (isset($_SESSION['uniqid']) && $hdr['nonce'] != $_SESSION['uniqid']) {
+                $stale = true;
+                unset($_SESSION['uniqid']);
+            }
+
+            if (!isset($_SESSION['failures'])) $_SESSION['failures'] = 0;
+
+            $auth_user = $this->getUserByNickname($hdr['username']);
+            if ($auth_user && !empty($auth_user['password']) && !$stale) {
+
+                // the entity body should always be null in this case
+                $entity_body = '';
+                $a1 = mb_strtolower($auth_user['password']);
+                $a2 = $hdr['qop'] == 'auth-int'
+				? md5(implode(':', array($_SERVER['REQUEST_METHOD'], $hdr['uri'], md5($entity_body))))
+				: md5(implode(':', array($_SERVER['REQUEST_METHOD'], $hdr['uri'])));
+                $ok = md5(implode(':', array($a1, $hdr['nonce'], $hdr['nc'], $hdr['cnonce'], $hdr['qop'], $a2)));
+
+                if ($hdr['response'] == $ok) {
+                    // successful login!
+                    unset($_SESSION['uniqid'], $_SESSION['failures']);
+                    $this->setSession($hdr['username'], true);
+                    return true;
+                }
+
+            }
+
+            // Password problems, boot this user
+            if (strcmp($hdr['nc'], 4) > 0 || $_SESSION['failures'] > $this->max_failures) {
+                // too many failures
+                return false;
+            }
+
+            // Log failed login
+            $_SESSION['failures']++;
+
+        }
+
+        // if we get this far the user is not authorized, so send the headers
+        $uid = uniqid(mt_rand(1,9));
+        $_SESSION['uniqid'] = $uid;
+
+        if (headers_sent())
+            throw new Exception('Headers already sent');
+
+        header('HTTP/1.0 401 Unauthorized');
+        header(sprintf('WWW-Authenticate: Digest qop="auth-int, auth", realm="%s", domain="%s", nonce="%s", opaque="%s", stale="%s", algorithm="MD5"', $GLOBALS['CONFIG']['REALM'], $auth_domain, $uid, md5($GLOBALS['CONFIG']['REALM']), $stale ? 'true' : 'false'));
+
+        return false;
+
+    }
+
 
 
     function getUser($id, $full_profile = false) {
 
         if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
 
-        $st = $this->db->prepare('SELECT id, nickname, email FROM users WHERE id = ? ');
+        $st = $this->db->prepare('SELECT * FROM users WHERE id = ? ');
         $st->execute(array($id));
         $user = $st->fetch(PDO::FETCH_ASSOC);
 
@@ -57,7 +171,7 @@ class suxUser {
     }
 
 
-    function getUserByNickame($nickname, $full_profile = false) {
+    function getUserByNickname($nickname, $full_profile = false) {
 
         $st = $this->db->prepare('SELECT id FROM users WHERE nickname = ? ');
         $st->execute(array($nickname));
@@ -128,8 +242,7 @@ class suxUser {
         // Encrypt the password
         if (!empty($info['password'])) {
             if (empty($info['nickname'])) throw new Exception('No nickname provided');
-            require_once(dirname(__FILE__) . '/suxFunct.php');
-            $info['password'] = suxFunct::encrypt_pw($info['nickname'], $info['password']);
+            $info['password'] = $this->encryptPw($info['nickname'], $info['password']);
         }
 
         // Move users table info to $user array
@@ -210,6 +323,108 @@ class suxUser {
         $this->inTransaction = false;
 
         return true;
+
+    }
+
+
+    /**
+    * Check if a user is logged in
+    *
+    * @param string $redirect a URL to rediect to if the security check fails
+    * @return bool
+    */
+    function loginCheck($redirect = null) {
+
+        $proceed = false;
+
+        if (!empty($_SESSION['users_id']) &&  !empty($_SESSION['nickname']) && !empty($_SESSION['token'])) {
+            if ($this->tokenCheck($_SESSION['users_id'], $_SESSION['token'])) {
+                $proceed = true;
+            }
+        }
+
+        if (!$proceed && $redirect) {
+            require_once(dirname(__FILE__) . '/suxFunct.php');
+            suxFunct::killSession();
+            suxFunct::redirect($redirect);
+            exit;
+        }
+
+        return $proceed;
+
+    }
+
+
+    /**
+    * Check if a token is valid
+    *
+    * @param int $id user id
+    * @param string $id token
+    * @return bool
+    */
+    private function tokenCheck($id, $token) {
+
+        if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
+
+        $st = $this->db->prepare('SELECT password FROM users WHERE id = ? ');
+        $st->execute(array($id));
+        $row = $st->fetch();
+
+        if (empty($row['password'])) {
+            // TODO, No password because this user is Open ID Enabled?
+            return false;
+        }
+        elseif ($token != md5($row['password'] . @$GLOBALS['CONFIG']['SALT'])) {
+            return false;
+        }
+
+        return true;
+
+    }
+
+
+    function setSession($id, $nickname = false) {
+
+        if ($nickname) $user = $this->getUserByNickname($id);
+        else $user = $this->getUser($id);
+
+        session_regenerate_id();
+        $_SESSION['users_id'] = $user['id'];
+        $_SESSION['nickname'] = $user['nickname'];
+        $_SESSION['token'] = md5($user['password'] . @$GLOBALS['CONFIG']['SALT']);
+
+    }
+
+
+    /**
+    * Perform one-way encryption of a password
+    *
+    * @param string the username
+    * @param string the password to encrypt
+    * @return string
+    */
+    private function encryptPw($nickname, $password) {
+
+        if (!isset($GLOBALS['CONFIG']['REALM'])) {
+            die("Something is wrong, can't encrypt password without realm.");
+        }
+        return md5("{$nickname}:{$GLOBALS['CONFIG']['REALM']}:{$password}");
+
+    }
+
+
+    /**
+    * Generate a random password
+    *
+    * @return string
+    */
+    private function generatePw() {
+
+        $new_pw = '';
+        for ($i = 0; $i < 8; $i++) {
+            $new_pw .= chr(mt_rand(33, 126));
+        }
+        return $new_pw;
 
     }
 

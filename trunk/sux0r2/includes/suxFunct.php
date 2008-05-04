@@ -32,38 +32,6 @@ class suxFunct {
     // Static Functions
     // ------------------------------------------------------------------------
 
-    /**
-    * Perform one-way encryption of a password
-    *
-    * @param string the username
-    * @param string the password to encrypt
-    * @return string
-    */
-    static function encryptPw($nickname, $password) {
-
-        if (!isset($GLOBALS['CONFIG']['REALM'])) {
-            die("Something is wrong, can't encrypt password without realm.");
-        }
-        return md5("{$nickname}:{$GLOBALS['CONFIG']['REALM']}:{$password}");
-
-    }
-
-
-    /**
-    * Generate a random password
-    *
-    * @return string
-    */
-    static function generatePw() {
-
-        $new_pw = '';
-        for ($i = 0; $i < 8; $i++) {
-            $new_pw .= chr(mt_rand(33, 126));
-        }
-        return $new_pw;
-
-    }
-
 
     /**
     * Kill $_SESSION
