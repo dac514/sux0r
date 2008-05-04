@@ -42,116 +42,16 @@ class suxUser {
     }
 
 
-    /**
-    * Perform a user authorization
-    *
-    * @param string $auth_domain, the domain value for WWW-Authenticate
-    * @return bool
-    */
-    function authenticate($auth_domain) {
 
-        // try to get the digest headers - what a PITA!
-        if (function_exists('apache_request_headers') && ini_get('safe_mode') == false) {
-            $arh = apache_request_headers();
-            $hdr = (isset($arh['Authorization']) ? $arh['Authorization'] : null);
+    function getUser($id = null, $full_profile = false) {
 
-        }
-        elseif (isset($_SERVER['PHP_AUTH_DIGEST'])) {
-            $hdr = $_SERVER['PHP_AUTH_DIGEST'];
-
-        }
-        elseif (isset($_SERVER['HTTP_AUTHORIZATION'])) {
-            $hdr = $_SERVER['HTTP_AUTHORIZATION'];
-
-        }
-        elseif (isset($_ENV['PHP_AUTH_DIGEST'])) {
-            $hdr = $_ENV['PHP_AUTH_DIGEST'];
-
-        }
-        elseif (isset($_REQUEST['auth'])) {
-            $hdr = stripslashes(urldecode($_REQUEST['auth']));
-
-        }
-        else {
-            $hdr = null;
+        // This user
+        if (!$id) {
+            if ($this->loginCheck()) $id = $_SESSION['users_id'];
+            else return false;
         }
 
-        $digest = mb_substr($hdr,0,7) == 'Digest '
-		? mb_substr($hdr, mb_strpos($hdr, ' ') + 1)
-		: $hdr;
-
-        $stale = false;
-        $ok = '';
-
-        // is the user trying to log in?
-        if (!is_null($digest) && $this->loginCheck() === false) {
-
-            $hdr = array();
-
-            // decode the Digest authorization headers
-            $mtx = array();
-            preg_match_all('/(\w+)=(?:"([^"]+)"|([^\s,]+))/', $digest, $mtx, PREG_SET_ORDER);
-
-            foreach ($mtx as $m)
-                $hdr[$m[1]] = $m[2] ? $m[2] : $m[3];
-
-
-            if (isset($_SESSION['uniqid']) && $hdr['nonce'] != $_SESSION['uniqid']) {
-                $stale = true;
-                unset($_SESSION['uniqid']);
-            }
-
-            if (!isset($_SESSION['failures'])) $_SESSION['failures'] = 0;
-
-            $auth_user = $this->getUserByNickname($hdr['username']);
-            if ($auth_user && !empty($auth_user['password']) && !$stale) {
-
-                // the entity body should always be null in this case
-                $entity_body = '';
-                $a1 = mb_strtolower($auth_user['password']);
-                $a2 = $hdr['qop'] == 'auth-int'
-				? md5(implode(':', array($_SERVER['REQUEST_METHOD'], $hdr['uri'], md5($entity_body))))
-				: md5(implode(':', array($_SERVER['REQUEST_METHOD'], $hdr['uri'])));
-                $ok = md5(implode(':', array($a1, $hdr['nonce'], $hdr['nc'], $hdr['cnonce'], $hdr['qop'], $a2)));
-
-                if ($hdr['response'] == $ok) {
-                    // successful login!
-                    unset($_SESSION['uniqid'], $_SESSION['failures']);
-                    $this->setSession($hdr['username'], true);
-                    return true;
-                }
-
-            }
-
-            // Password problems, boot this user
-            if (strcmp($hdr['nc'], 4) > 0 || $_SESSION['failures'] > $this->max_failures) {
-                // too many failures
-                return false;
-            }
-
-            // Log failed login
-            $_SESSION['failures']++;
-
-        }
-
-        // if we get this far the user is not authorized, so send the headers
-        $uid = uniqid(mt_rand(1,9));
-        $_SESSION['uniqid'] = $uid;
-
-        if (headers_sent())
-            throw new Exception('Headers already sent');
-
-        header('HTTP/1.0 401 Unauthorized');
-        header(sprintf('WWW-Authenticate: Digest qop="auth-int, auth", realm="%s", domain="%s", nonce="%s", opaque="%s", stale="%s", algorithm="MD5"', $GLOBALS['CONFIG']['REALM'], $auth_domain, $uid, md5($GLOBALS['CONFIG']['REALM']), $stale ? 'true' : 'false'));
-
-        return false;
-
-    }
-
-
-
-    function getUser($id, $full_profile = false) {
-
+        // Any user
         if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
 
         $st = $this->db->prepare('SELECT * FROM users WHERE id = ? ');
@@ -356,6 +256,113 @@ class suxUser {
 
 
     /**
+    * Perform a login using Digest Access Authentication
+    *
+    * @param string $auth_domain, the domain value for WWW-Authenticate
+    * @return bool
+    */
+    function authenticate($auth_domain) {
+
+        // Try to get the digest headers
+        if (function_exists('apache_request_headers') && ini_get('safe_mode') == false) {
+            $arh = apache_request_headers();
+            $hdr = (isset($arh['Authorization']) ? $arh['Authorization'] : null);
+
+        }
+        elseif (isset($_SERVER['PHP_AUTH_DIGEST'])) {
+            $hdr = $_SERVER['PHP_AUTH_DIGEST'];
+
+        }
+        elseif (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+            $hdr = $_SERVER['HTTP_AUTHORIZATION'];
+
+        }
+        elseif (isset($_ENV['PHP_AUTH_DIGEST'])) {
+            $hdr = $_ENV['PHP_AUTH_DIGEST'];
+
+        }
+        elseif (isset($_REQUEST['auth'])) {
+            $hdr = stripslashes(urldecode($_REQUEST['auth']));
+
+        }
+        else {
+            $hdr = null;
+        }
+
+        $digest = mb_substr($hdr,0,7) == 'Digest '
+		? mb_substr($hdr, mb_strpos($hdr, ' ') + 1)
+		: $hdr;
+
+        $stale = false;
+        $ok = '';
+
+        // is the user trying to log in?
+        if (!is_null($digest) && $this->loginCheck() === false) {
+
+            $hdr = array();
+
+            // decode the Digest authorization headers
+            $mtx = array();
+            preg_match_all('/(\w+)=(?:"([^"]+)"|([^\s,]+))/', $digest, $mtx, PREG_SET_ORDER);
+
+            foreach ($mtx as $m)
+                $hdr[$m[1]] = $m[2] ? $m[2] : $m[3];
+
+
+            if (isset($_SESSION['uniqid']) && $hdr['nonce'] != $_SESSION['uniqid']) {
+                $stale = true;
+                unset($_SESSION['uniqid']);
+            }
+
+            if (!isset($_SESSION['failures'])) $_SESSION['failures'] = 0;
+
+            $auth_user = $this->getUserByNickname($hdr['username']);
+            if ($auth_user && !empty($auth_user['password']) && !$stale) {
+
+                // the entity body should always be null in this case
+                $entity_body = '';
+                $a1 = mb_strtolower($auth_user['password']);
+                $a2 = $hdr['qop'] == 'auth-int'
+				? md5(implode(':', array($_SERVER['REQUEST_METHOD'], $hdr['uri'], md5($entity_body))))
+				: md5(implode(':', array($_SERVER['REQUEST_METHOD'], $hdr['uri'])));
+                $ok = md5(implode(':', array($a1, $hdr['nonce'], $hdr['nc'], $hdr['cnonce'], $hdr['qop'], $a2)));
+
+                if ($hdr['response'] == $ok) {
+                    // successful login!
+                    unset($_SESSION['uniqid'], $_SESSION['failures']);
+                    $this->setSession($hdr['username'], true);
+                    return true;
+                }
+
+            }
+
+            // Password problems, boot this user
+            if (strcmp($hdr['nc'], 4) > 0 || $_SESSION['failures'] > $this->max_failures) {
+                // too many failures
+                return false;
+            }
+
+            // Log failed login
+            $_SESSION['failures']++;
+
+        }
+
+        // if we get this far the user is not authorized, so send the headers
+        $uid = uniqid(mt_rand(1,9));
+        $_SESSION['uniqid'] = $uid;
+
+        if (headers_sent())
+            throw new Exception('Headers already sent');
+
+        header('HTTP/1.0 401 Unauthorized');
+        header(sprintf('WWW-Authenticate: Digest qop="auth-int, auth", realm="%s", domain="%s", nonce="%s", opaque="%s", stale="%s", algorithm="MD5"', $GLOBALS['CONFIG']['REALM'], $auth_domain, $uid, md5($GLOBALS['CONFIG']['REALM']), $stale ? 'true' : 'false'));
+
+        return false;
+
+    }
+
+
+    /**
     * Check if a token is valid
     *
     * @param int $id user id
@@ -383,7 +390,7 @@ class suxUser {
     }
 
 
-    function setSession($id, $nickname = false) {
+    private function setSession($id, $nickname = false) {
 
         if ($nickname) $user = $this->getUserByNickname($id);
         else $user = $this->getUser($id);
