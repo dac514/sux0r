@@ -25,10 +25,13 @@
 *
 */
 
+
+require_once(dirname(__FILE__) . '/suxUser.php');
+
 class suxOpenID {
 
     public $profile = array();
-    public $sreg = array ();
+    public $sreg = array();
 
     protected $db;
     protected $inTransaction = false;
@@ -39,6 +42,8 @@ class suxOpenID {
 
     private $g;
     private $p;
+
+    private $user; // suxUser
 
     /**
     * Constructor
@@ -63,8 +68,9 @@ class suxOpenID {
         // Setup
         // --------------------------------------------------------------------
 
-    	$this->db = suxDB::get($key);
-        set_exception_handler(array($this, 'logAndDie'));
+        $this->db = suxDB::get($key); // Db
+        set_exception_handler(array($this, 'logAndDie')); // Exception
+        $this->user = new suxUser(); // User
 
         // Defined by OpenID spec
         // http://openid.net/specs/openid-authentication-1_1.html
@@ -82,29 +88,21 @@ class suxOpenID {
         // OpenID Setup user
         $this->profile = array(
 
-            // Basic Config - Required
-            // auth_password is md5(username:realm:password)
-            'auth_username'	=> 	'test',
-            'auth_password' =>	md5("test:{$GLOBALS['CONFIG']['REALM']}:test"),
-
-            // Advanced Config
-            'auth_realm'	=>$GLOBALS['CONFIG']['REALM'],
+            // Set a default IDP URL
             'idp_url'	=>	$this->getIdpUrl(),
+            // the domain value for WWW-Authenticate
             'auth_domain' => $this->getReqUrl() . ' ' . $this->getIdpUrl(),
+            // lifetime of shared secret
             'lifetime'	=>	1440,
+            // Use bcmath?
             'use_bcmath' => true,
 
             // Debug
-            'debug'		=>	true,
+            'debug'		=>	false,
             'logfile'	=>	'/tmp/suxOpenID.debug.log',
 
-            // Do not override
-            'authorized'    => false,
+            // Determine the requested URL, DO NOT OVERRIDE
             'req_url' => $this->getReqUrl(),
-
-            // Optional Config
-            // 	'microid'	=>	array('user@site.com', 'http://delegator.url'),
-            //	'pavatar'	=>	'http://your.site.com/path/pavatar.img',
 
             );
 
@@ -228,7 +226,7 @@ class suxOpenID {
         if (empty($_GET['openid_mode']) || $_GET['openid_mode'] != 'checkid_immediate') {
             $this->error500();
         }
-        $this->checkid(false);
+        $this->checkid($wait = false);
     }
 
 
@@ -240,7 +238,7 @@ class suxOpenID {
         if (empty($_GET['openid_mode']) || $_GET['openid_mode'] != 'checkid_setup') {
             $this->error500();
         }
-        $this->checkid(true);
+        $this->checkid($wait = true);
     }
 
 
@@ -252,8 +250,6 @@ class suxOpenID {
 
         $this->debug("checkid: wait? $wait");
 
-        // This is a user session
-        $this->userSession();
 
         /* Get the OpenID Request Parameters */
 
@@ -297,8 +293,25 @@ class suxOpenID {
                 $this->error500('Invalid trust_root: "' . $trust_root . '"');
         }
 
+        // make sure i am this identifier
+        if ($identity != $this->profile['idp_url']) {
 
-        if ($wait && (! session_is_registered('openid_accepted_url') || $_SESSION['openid_accepted_url'] != $trust_root)) {
+            $this->debug("Invalid identity: $identity");
+            $this->debug("IdP URL: " . $this->profile['idp_url']);
+
+            $this->errorGet($return_to, "Invalid identity: '$identity'");
+
+        }
+
+
+        // Establish trust
+        if ($this->user->loginCheck() && $this->checkTrusted($_SESSION['users_id'], $trust_root)) {
+
+            // The user trusts this URL
+            $_SESSION['openid_accepted_url'] = $trust_root;
+
+        }
+        else if ($wait && (! session_is_registered('openid_accepted_url') || $_SESSION['openid_accepted_url'] != $trust_root)) {
 
             // checkid_setup_mode()
 
@@ -314,14 +327,6 @@ class suxOpenID {
             $this->wrapRefresh($this->profile['idp_url'] . $q . 'openid.mode=accept');
         }
 
-        // make sure i am this identifier
-        if ($identity != $this->profile['idp_url']) {
-
-            $this->debug("Invalid identity: $identity");
-            $this->debug("IdP URL: " . $this->profile['idp_url']);
-
-            $this->errorGet($return_to, "Invalid identity: '$identity'");
-        }
 
         // begin setting up return keys
         $keys = array(
@@ -329,15 +334,11 @@ class suxOpenID {
             );
 
         // if the user is not logged in, transfer to the authorization mode
-        if ($this->profile['authorized'] === false || $identity != $_SESSION['openid_auth_url']) {
-
-            // Currently users can only be logged in to one url at a time
-            $_SESSION['openid_auth_username'] = null;
-            $_SESSION['openid_auth_url'] = null;
+        if ($this->user->loginCheck() === false) {
 
             if ($wait) {
-                unset($_SESSION['openid_uniqid']);
 
+                unset($_SESSION['openid_uniqid']);
                 $_SESSION['openid_cancel_auth_url'] = $return_to;
                 $_SESSION['openid_post_auth_url'] = $this->profile['req_url'];
 
@@ -356,6 +357,9 @@ class suxOpenID {
 
         }
         else {
+
+            // Trust URL
+            $this->trustUrl($_SESSION['users_id'], $_SESSION['openid_accepted_url']);
 
             // the user is logged in
             // remove the refresh URLs if set
@@ -483,8 +487,6 @@ class suxOpenID {
     */
     function accept_mode() {
 
-        // this is a user session
-        $this->userSession();
 
         // the user needs refresh urls in their session to access this mode
         if (empty($_SESSION['openid_post_accept_url']) || empty($_SESSION['openid_cancel_accept_url']) || empty($_SESSION['openid_unaccepted_url']))
@@ -518,124 +520,29 @@ class suxOpenID {
     */
     function authorize_mode() {
 
-        // this is a user session
-        $this->userSession();
-
         // the user needs refresh urls in their session to access this mode
         if (empty($_SESSION['openid_post_auth_url']) || empty($_SESSION['openid_cancel_auth_url']))
             $this->error500('You may not access this mode directly.');
 
-        // try to get the digest headers - what a PITA!
-        if (function_exists('apache_request_headers') && ini_get('safe_mode') == false) {
-            $arh = apache_request_headers();
-            $hdr = (isset($arh['Authorization']) ? $arh['Authorization'] : null);
+        if ($this->user->authenticate($this->profile['auth_domain'])) {
 
-        } elseif (isset($_SERVER['PHP_AUTH_DIGEST'])) {
-            $hdr = $_SERVER['PHP_AUTH_DIGEST'];
+            // Success!
+            $this->wrapRefresh($_SESSION['openid_post_auth_url']);
 
-        } elseif (isset($_SERVER['HTTP_AUTHORIZATION'])) {
-            $hdr = $_SERVER['HTTP_AUTHORIZATION'];
-
-        } elseif (isset($_ENV['PHP_AUTH_DIGEST'])) {
-            $hdr = $_ENV['PHP_AUTH_DIGEST'];
-
-        } elseif (isset($_REQUEST['auth'])) {
-            $hdr = stripslashes(urldecode($_REQUEST['auth']));
-
-        } else {
-            $hdr = null;
         }
+        else {
 
-        $this->debug('Authorization header: ' . $hdr);
-        $digest = mb_substr($hdr,0,7) == 'Digest '
-		?  mb_substr($hdr, mb_strpos($hdr, ' ') + 1)
-		: $hdr;
-
-        $stale = false;
-
-        // is the user trying to log in?
-        if (! is_null($digest) && $this->profile['authorized'] === false) {
-            $this->debug('Digest headers: ' . $digest);
-            $hdr = array();
-
-            // decode the Digest authorization headers
-            $mtx = array();
-            preg_match_all('/(\w+)=(?:"([^"]+)"|([^\s,]+))/', $digest, $mtx, PREG_SET_ORDER);
-
-            foreach ($mtx as $m)
-                $hdr[$m[1]] = $m[2] ? $m[2] : $m[3];
-
-            $this->debug($hdr, 'Parsed digest headers:');
-
-            if (isset($_SESSION['openid_uniqid']) && $hdr['nonce'] != $_SESSION['openid_uniqid']) {
-                $stale = true;
-                unset($_SESSION['openid_uniqid']);
+            // Too many password failures?
+            if (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->user->max_failures) {
+                $this->errorGet($_SESSION['openid_cancel_auth_url'], 'Too many password failures. Double check your authorization realm. You must restart your browser to try again.');
             }
 
-            if (! isset($_SESSION['openid_failures']))
-                $_SESSION['openid_failures'] = 0;
-
-            if ($this->profile['auth_username'] == $hdr['username'] && ! $stale) {
-
-                // the entity body should always be null in this case
-                $entity_body = '';
-                $a1 = mb_strtolower($this->profile['auth_password']);
-                $a2 = $hdr['qop'] == 'auth-int'
-				? md5(implode(':', array($_SERVER['REQUEST_METHOD'], $hdr['uri'], md5($entity_body))))
-				: md5(implode(':', array($_SERVER['REQUEST_METHOD'], $hdr['uri'])));
-                $ok = md5(implode(':', array($a1, $hdr['nonce'], $hdr['nc'], $hdr['cnonce'], $hdr['qop'], $a2)));
-
-                // successful login!
-                if ($hdr['response'] == $ok) {
-
-                    $this->debug('Authentication successful');
-                    $this->debug('User session is: ' . session_id());
-
-                    $_SESSION['openid_auth_username'] = $hdr['username'];
-                    $_SESSION['openid_auth_url'] = $this->profile['idp_url'];
-
-                    $this->profile['authorized'] = true;
-
-                    // return to the refresh url if they get in
-                    $this->wrapRefresh($_SESSION['openid_post_auth_url']);
-
-
-                }
-                elseif (strcmp($hdr['nc'], 4) > 0 || $_SESSION['openid_failures'] > 4) {
-                    // too many failures
-                    $this->debug('Too many password failures');
-
-                    $this->errorGet($_SESSION['openid_cancel_auth_url'], 'Too many password failures. Double check your authorization realm. You must restart your browser to try again.');
-
-                }
-                else {
-                    // failed login
-                    $_SESSION['openid_failures']++;
-
-                    $this->debug('Login failed: ' . $hdr['response'] . ' != ' . $ok);
-                    $this->debug('Fail count: ' . $_SESSION['openid_failures']);
-                }
-            }
+            // Cancelled
+            $q = mb_strpos($_SESSION['openid_cancel_auth_url'], '?') ? '&' : '?';
+            $this->wrapRefresh($_SESSION['openid_cancel_auth_url'] . $q . 'openid.mode=cancel');
 
         }
-        elseif (is_null($digest) && $this->profile['authorized'] === false && isset($_SESSION['openid_uniqid'])) {
-            $this->error500('Missing expected authorization header.');
-        }
 
-        // if we get this far the user is not authorized, so send the headers
-        $uid = uniqid(mt_rand(1,9));
-        $_SESSION['openid_uniqid'] = $uid;
-
-        $this->debug('Prompting user to log in. Stale? ' . $stale);
-
-        if (headers_sent())
-            throw new Exception('authorize_mode: Headers already sent');
-
-        header('HTTP/1.0 401 Unauthorized');
-        header(sprintf('WWW-Authenticate: Digest qop="auth-int, auth", realm="%s", domain="%s", nonce="%s", opaque="%s", stale="%s", algorithm="MD5"', $this->profile['auth_realm'], $this->profile['auth_domain'], $uid, md5($this->profile['auth_realm']), $stale ? 'true' : 'false'));
-        $q = mb_strpos($_SESSION['openid_cancel_auth_url'], '?') ? '&' : '?';
-
-        $this->wrapRefresh($_SESSION['openid_cancel_auth_url'] . $q . 'openid.mode=cancel');
     }
 
 
@@ -660,10 +567,8 @@ class suxOpenID {
     */
     function id_res_mode () {
 
-        $this->userSession();
-
-        if ($this->profile['authorized'])
-            $this->wrapHtml('You are logged in as ' . $_SESSION['openid_auth_username']);
+        if ($this->user->loginCheck())
+            $this->wrapHtml('You are logged in as ' . $_SESSION['nickname']);
 
         $this->wrapHtml('You are not logged in');
     }
@@ -674,9 +579,7 @@ class suxOpenID {
     */
     function login_mode () {
 
-        $this->userSession();
-
-        if ($this->profile['authorized']) $this->id_res_mode();
+        if ($this->user->loginCheck()) $this->id_res_mode();
 
         $keys = array(
             'mode' => 'checkid_setup',
@@ -689,39 +592,13 @@ class suxOpenID {
     }
 
 
-    /**
-    * Allow a user to perform a static logout
-    */
-    function logout_mode () {
-
-        $this->userSession();
-
-        if (!$this->profile['authorized']) $this->wrapHtml('You were not logged in');
-
-        if (isset($_SESSION) && is_array($_SESSION)) {
-            foreach ($_SESSION as $key => $val) {
-                if (preg_match('/^openid_/', $key)) {
-                    unset($_SESSION[$key]);
-                }
-            }
-        }
-
-        $this->debug('User session destroyed.');
-
-        if (headers_sent())
-            throw new Exception('logout_mode: Headers already sent');
-
-        header('HTTP/1.0 401 Unauthorized');
-        $this->wrapRefresh($this->profile['idp_url']);
-    }
-
 
     /**
     * The default information screen
     */
     function no_mode () {
 
-        $this->wrapHtml('This is an OpenID server endpoint. For more information, see http://openid.net/<br/>Server: <b>' . $this->profile['idp_url'] . '</b><br/>Realm: <b>' . $this->profile['auth_realm'] . '</b><br/><a href="' . $this->profile['idp_url'] . '?openid.mode=login">Login</a>  | <a href="' . $this->profile['idp_url'] . '?openid.mode=test">Test</a>');
+        $this->wrapHtml('This is an OpenID server endpoint. For more information, see http://openid.net/<br/>Server: <b>' . $this->profile['idp_url'] . '</b><br/>Realm: <b>' . $GLOBALS['CONFIG']['REALM'] . '</b><br/><a href="' . $this->profile['idp_url'] . '?openid.mode=login">Login</a>  | <a href="' . $this->profile['idp_url'] . '?openid.mode=test">Test</a>');
     }
 
 
@@ -845,30 +722,55 @@ class suxOpenID {
 
 
     /**
-    * Debug logging
-    * @param mixed $x
-    * @param string $m
+    * Check if a url is trusted by user
+    * @param int $id user id
+    * @param string $id url
+    * @return bool
     */
-    function debug($x, $m = null) {
+    function checkTrusted($id, $url) {
 
-        if (empty($this->profile['debug']) || $this->profile['debug'] === false) return true;
+        if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
 
-        if (is_array($x)) {
-            ob_start();
-            print_r($x);
-            $x = $m . ($m != null ? "\n" : '') . ob_get_clean();
+        $st = $this->db->prepare('SELECT COUNT(*) FROM openid_trusted WHERE users_id = ? AND auth_url = ? ');
+        $st->execute(array($id, $url));
 
-        } else {
-            $x .= "\n";
+        if ($st->fetchColumn() > 0) return true;
+        else return false;
+
+    }
+
+
+    /**
+    * trust a url
+    * @param int $id user id
+    * @param string $id url
+    * @return bool
+    */
+    function trustUrl($id, $url) {
+
+        if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
+        $url = filter_var($url, FILTER_SANITIZE_URL);
+
+        $trusted = array(
+            'users_id' => $id,
+            'auth_url' => $url,
+            );
+
+        $st = $this->db->prepare('SELECT COUNT(*) FROM openid_trusted WHERE users_id = :users_id AND auth_url = :auth_url ');
+        $st->execute($trusted);
+
+        if (!$st->fetchColumn()) {
+            $query = suxDB::prepareInsertQuery('openid_trusted', $trusted);
+            $st = $this->db->prepare($query);
+            $st->execute($trusted);
         }
 
-        error_log($x . "\n", 3, $this->profile['logfile']);
     }
 
 
     /**
     * Destroy a consumer's assoc handle
-    * @param string $id
+    * @param int $id
     */
     function destroyAssocHandle($id) {
 
@@ -883,6 +785,24 @@ class suxOpenID {
         // Delete association
         $st = $this->db->prepare('DELETE FROM openid_associations WHERE id = ? ');
         $st->execute(array($id));
+
+    }
+
+
+    /**
+    * Destroy openid session info
+    */
+    function destroySession() {
+
+        if (isset($_SESSION) && is_array($_SESSION)) {
+            foreach ($_SESSION as $key => $val) {
+                if (preg_match('/^openid_/', $key)) {
+                    unset($_SESSION[$key]);
+                }
+            }
+        }
+
+        $this->debug('OpenID session info destroyed.');
 
     }
 
@@ -1048,19 +968,6 @@ class suxOpenID {
 
 
     /**
-    * Create a user session
-    */
-    function userSession() {
-
-        $this->profile['authorized'] = (isset($_SESSION['openid_auth_username']) && $_SESSION['openid_auth_username'] == $this->profile['auth_username'])
-        ? true
-        : false;
-
-        $this->debug('Started user session: ' . session_id() . ' Auth? ' . $this->profile['authorized']);
-    }
-
-
-    /**
     * Get the URL of the current script
     * @return string url
     */
@@ -1099,6 +1006,28 @@ class suxOpenID {
         }
 
         return "http$s://$host$p$path";
+    }
+
+
+    /**
+    * Debug logging
+    * @param mixed $x
+    * @param string $m
+    */
+    function debug($x, $m = null) {
+
+        if (empty($this->profile['debug']) || $this->profile['debug'] === false) return true;
+
+        if (is_array($x)) {
+            ob_start();
+            print_r($x);
+            $x = $m . ($m != null ? "\n" : '') . ob_get_clean();
+
+        } else {
+            $x .= "\n";
+        }
+
+        error_log($x . "\n", 3, $this->profile['logfile']);
     }
 
 
@@ -1368,6 +1297,7 @@ class suxOpenID {
 
 }
 
+
 /*
 
 -- Database
@@ -1377,7 +1307,26 @@ CREATE TABLE `openid_associations` (
   `expiration` int(11) NOT NULL,
   `shared_secret` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+CREATE TABLE `openid_trusted` (
+  `id` int(11) NOT NULL auto_increment,
+  `auth_url` varchar(255) NOT NULL,
+  `users_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `authorized` (`auth_url`,`users_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+CREATE TABLE `openid_users` (
+  `id` int(11) NOT NULL auto_increment,
+  `openid_url` varchar(255) NOT NULL,
+  `users_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `openid_url` (`openid_url`),
+  KEY `users_id` (`users_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 */
 
