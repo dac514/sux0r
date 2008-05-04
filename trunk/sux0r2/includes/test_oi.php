@@ -2,9 +2,11 @@
 
 require_once '../config.php';
 require_once '../initialize.php';
+include_once 'suxUser.php';
 include_once 'suxOpenID.php';
 
-$openID = new suxOpenID();
+$user = new suxUser();
+$openID = new suxOpenID($user);
 
 // ----------------------------------------------------------------------------
 // Assign stuff to profile array?

@@ -26,8 +26,6 @@
 */
 
 
-require_once(dirname(__FILE__) . '/suxUser.php');
-
 class suxOpenID {
 
     public $profile = array();
@@ -48,7 +46,7 @@ class suxOpenID {
     /**
     * Constructor
     */
-    function __construct($key = null) {
+    function __construct(suxUser $user, $key = null) {
 
 
         // --------------------------------------------------------------------
@@ -70,7 +68,7 @@ class suxOpenID {
 
         $this->db = suxDB::get($key); // Db
         set_exception_handler(array($this, 'logAndDie')); // Exception
-        $this->user = new suxUser(); // User
+        $this->user = $user; // User
 
         // Defined by OpenID spec
         // http://openid.net/specs/openid-authentication-1_1.html
