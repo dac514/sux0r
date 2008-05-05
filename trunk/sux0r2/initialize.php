@@ -23,8 +23,8 @@
 
 
 // Enforce minimum version of PHP 5.2
-if (preg_replace('/[a-z-]/i', '', phpversion()) < '5.2') {
-    die('sux0r requires PHP 5.2, or higher.');
+if (preg_replace('/[a-z-]/i', '', phpversion()) < '5.2.3') {
+    die('sux0r requires PHP 5.2.3, or higher.');
 }
 
 // Enforce config

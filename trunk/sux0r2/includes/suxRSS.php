@@ -95,9 +95,9 @@ class suxRSS extends DOMDocument {
 
         $channel= $root->appendChild($this->createElement('channel'));
 
-        $channel->appendChild($this->createElement('title', $title));
-        $channel->appendChild($this->createElement('link', $link));
-        $channel->appendChild($this->createElement('description', $description));
+        $channel->appendChild($this->createElement('title', htmlspecialchars($title, ENT_QUOTES, 'UTF-8', false)));
+        $channel->appendChild($this->createElement('link', htmlspecialchars($link, ENT_QUOTES, 'UTF-8', false)));
+        $channel->appendChild($this->createElement('description', htmlspecialchars($description, ENT_QUOTES, 'UTF-8', false)));
 
         $this->channel = $channel;
 
@@ -114,9 +114,9 @@ class suxRSS extends DOMDocument {
     public function addItem($title, $link, $description) {
 
         $item = $this->createElement('item');
-        @$item->appendChild($this->createElement('title', $title));
-        @$item->appendChild($this->createElement('link', $link));
-        @$item->appendChild($this->createElement('description', $description));
+        $item->appendChild($this->createElement('title', htmlspecialchars($title, ENT_QUOTES, 'UTF-8', false)));
+        $item->appendChild($this->createElement('link', htmlspecialchars($link, ENT_QUOTES, 'UTF-8', false)));
+        $item->appendChild($this->createElement('description', htmlspecialchars($description, ENT_QUOTES, 'UTF-8', false)));
 
         $this->channel->appendChild($item);
     }

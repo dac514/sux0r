@@ -96,7 +96,7 @@ class suxOpenID {
             'use_bcmath' => true,
 
             // Debug
-            'debug'		=>	false,
+            'debug'		=>	true,
             'logfile'	=>	'/tmp/suxOpenID.debug.log',
 
             // Determine the requested URL, DO NOT OVERRIDE
@@ -105,15 +105,17 @@ class suxOpenID {
             );
 
         $this->sreg = array (
-            //	'nickname'		=> 'Joe',
-            //	'email'			=> 'joe@example.com',
-            //	'fullname'		=> 'Joe Example',
-            //	'dob'			=> '1970-10-31',
-            //	'gender'		=> 'M',
-            //	'postcode'		=> '22000',
-            //	'country'		=> 'US',
-            //	'language'		=> 'en',
-            //	'timezone'		=> 'America/New_York'
+
+            	'nickname'		=> 'Joe',
+            	'email'			=> 'joe@example.com',
+            	'fullname'		=> 'Joe Example',
+            	'dob'			=> '1970-10-31',
+            	'gender'		=> 'M',
+            	'postcode'		=> '22000',
+            	'country'		=> 'US',
+            	'language'		=> 'en',
+            	'timezone'		=> 'America/New_York'
+
             );
 
     }
@@ -451,7 +453,7 @@ class suxOpenID {
         $_POST['openid_mode'] = 'id_res';
         $tokens = '';
         foreach (explode(',', $signed) as $param) {
-            $post = preg_replace('/\./', '_', $param);
+            $post = str_replace('.', '_', $param);
             $tokens .= sprintf("%s:%s\n", $param, $_POST['openid_' . $post]);
         }
 
@@ -563,31 +565,124 @@ class suxOpenID {
     /**
     * Show a user if they are logged in or not
     */
-    function id_res_mode () {
+    function id_res_mode() {
 
-        if ($this->user->loginCheck())
+        if (!empty($_GET['openid_identity']) && $this->complete($_GET['openid_identity'])) {
+            // $this->user->getUserByOpenID($VAR);
             $this->wrapHtml('You are logged in as ' . $_SESSION['nickname']);
+        }
+        else {
+            $this->wrapHtml('You are not logged in');
+        }
 
-        $this->wrapHtml('You are not logged in');
     }
 
 
     /**
     * Allow a user to perform a static login
     */
-    function login_mode () {
+    function login_mode($openid_url = null) {
 
-        if ($this->user->loginCheck()) $this->id_res_mode();
+        // debug
+        // $openid_url = 'http://dac514.myopenid.com/';
+
+        if (!$openid_url) $openid_url = $this->profile['idp_url']; // Log into myself
+        else $openid_url = filter_var($openid_url, FILTER_SANITIZE_URL);
+
+        if ($this->user->loginCheck()) {
+            // Already logged in
+            $this->wrapHtml('You are logged in as ' . $_SESSION['nickname']);
+            exit;
+        }
+
+        $this->forward($openid_url);
+
+    }
+
+
+    /**
+    * Forward
+    */
+    function forward($openid_url) {
+
+        if (!filter_var($openid_url, FILTER_VALIDATE_URL)) throw new Exception ('Invalid URL');
+
+        // TODO
+        // $_SESSION['openid_url'] = $openid_url; // Maybe done in openId already
 
         $keys = array(
             'mode' => 'checkid_setup',
-            'identity' => $this->profile['idp_url'],
-            'return_to' => $this->profile['idp_url']
+            'identity' => $openid_url,
+            'return_to' => $this->profile['idp_url'],
             );
 
-        $this->wrapLocation($this->profile['idp_url'], $keys);
+        $u = $this->user->getUserByOpenID($openid_url);
+        if (!$u) {
+
+            $keys['sreg_required'] = 'nickname,email';
+            $keys['sreg_optional'] = 'fullname,dob,gender,postcode,country,language,timezone';
+
+        }
+
+        // Check for server/delegate, TODO: Improve this
+        $tmp = file_get_contents($openid_url);
+        preg_match( "<link rel=\"openid.server\" href=\"(.*?)\" />", $tmp, $found);
+        if (!empty($found[1])) $url = filter_var($found[1], FILTER_SANITIZE_URL);
+        else $url = $openid_url;
+
+        $this->wrapLocation($url, $keys);
 
     }
+
+
+    /**
+    * Complete
+    */
+    function complete($openid_url) {
+
+        if (!filter_var($openid_url, FILTER_VALIDATE_URL)) throw new Exception ('Invalid URL');
+
+        $auth = false;
+
+        // Check for server/delegate, TODO: Improve this
+        $tmp = file_get_contents($openid_url);
+        preg_match( "<link rel=\"openid.server\" href=\"(.*?)\" />", $tmp, $found);
+        if (!empty($found[1])) $url = filter_var($found[1], FILTER_SANITIZE_URL);
+        else $url = $openid_url;
+
+        $keys = array(
+            'mode' => 'check_authentication',
+            'assoc_handle' => !empty($_GET['openid_assoc_handle']) ? $_GET['openid_assoc_handle'] : null,
+            'sig' => !empty($_GET['openid_sig']) ?  $_GET['openid_sig'] : null,
+            'signed' => !empty($_GET['openid_signed']) ? $_GET['openid_signed'] : null,
+            );
+
+        if (!empty($_GET['openid_signed'])) foreach (explode(',', $_GET['openid_signed']) as $param) {
+            $param = str_replace('.', '_', $param);
+            if ($param != 'mode') {
+                $tmp = 'openid_' . $param;
+                $keys[$param] = $_GET[$tmp];
+            }
+        }
+
+        $body = http_build_query($this->appendOpenID($keys));
+        $opts = array(
+            'http'=> array(
+                'method' => 'POST',
+                'header' => 'Content-Type: application/x-www-form-urlencoded',
+                'content' => $body,
+                )
+            );
+        $ctx = stream_context_create($opts);
+        $resp = file_get_contents($url, null, $ctx);
+
+        if (preg_match( '/is_valid:true/', $resp)) $auth = true;
+
+        return $auth;
+
+    }
+
+
 
 
 
@@ -754,7 +849,8 @@ class suxOpenID {
             'auth_url' => $url,
             );
 
-        $st = $this->db->prepare('SELECT COUNT(*) FROM openid_trusted WHERE users_id = :users_id AND auth_url = :auth_url ');
+        $query = suxDB::prepareCountQuery('openid_trusted', $trusted);
+        $st = $this->db->prepare($query);
         $st->execute($trusted);
 
         if (!$st->fetchColumn()) {
@@ -1194,7 +1290,7 @@ class suxOpenID {
         <head>
         <title>suxOpenID</title>
         <meta content="text/html; charset=utf-8" http-equiv="content-type" />
-        <meta http-equiv="refresh" content="0;url=' . $url . '">
+        <meta http-equiv="refresh" content="10;url=' . $url . '">
         <meta name="robots" content="noindex,nofollow" />
         </head>
         <body>
