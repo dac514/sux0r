@@ -103,6 +103,29 @@ class suxDB {
 
 
     /**
+    * Autogenerate SQL COUNT query with PDO named placeholders
+    *
+    * @param string $table the name of a table to insert into
+    * @param array $form a list where the keys (optionally values) are database column names and placeholders
+    * @param bool $useValues use the keys or the values as placeholders? Default is keys
+    * @return string PDO formated prepared statement
+    */
+    static function prepareCountQuery($table, array $form, $useValues = false) {
+
+        $query = "SELECT COUNT(*) FROM {$table} WHERE ";
+
+        foreach ($form as $key => $value ) {
+            $query .= ($useValues ? "$value = :$value " : "$key = :$key ");
+            $query .= 'AND ';
+        }
+
+        $query = rtrim($query, 'AND '); // Remove trailing AND
+
+        return $query;
+    }
+
+
+    /**
     * Autogenerate SQL INSERT query with PDO named placeholders
     *
     * @param string $table the name of a table to insert into
@@ -122,7 +145,7 @@ class suxDB {
             $placeholders .= ($useValues ? ":$value, " : ":$key, ");
         }
 
-        $column = rtrim($column, ', '); // Remove Trailing Coma
+        $column = rtrim($column, ', '); // Remove trailing Coma
         $placeholders = rtrim($placeholders, ', ');
         $query = $query . $column . ') ' . $placeholders . ') ';
 
@@ -153,7 +176,7 @@ class suxDB {
         }
 
         $where = " WHERE $id_column = :$id_column";
-        $placeholders = rtrim($placeholders, ', '); // Remove Trailing Coma
+        $placeholders = rtrim($placeholders, ', '); // Remove trailing Coma
         $query = $query . $column . $placeholders . $where;
 
         return $query;

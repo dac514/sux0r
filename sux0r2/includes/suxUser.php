@@ -66,6 +66,10 @@ class suxUser {
             $user = array_merge($user, $tmp); // Merge
         }
 
+        // Rename id key
+        $user['users_id'] = $user['id'];
+        unset($user['id']);
+
         return $user;
 
     }
@@ -125,7 +129,6 @@ class suxUser {
         return $st->fetchAll(PDO::FETCH_ASSOC);
 
     }
-
 
 
     function setUser(array $info, $id = null) {
@@ -225,6 +228,111 @@ class suxUser {
         return true;
 
     }
+
+
+    // -----------------------------------------------------------------------
+    // Open ID
+    // -----------------------------------------------------------------------
+
+
+    function getUserByOpenID($openid_url, $full_profile = false) {
+
+        // TODO: Improve SANITIZE_URL to canonicalized form for robust lookup
+        // (i.e. so if users enter their OpenID slightly differently, we can still map it to their account).
+        $openid_url = filter_var($openid_url, FILTER_SANITIZE_URL);
+
+        $st = $this->db->prepare('SELECT users_id FROM openid_users WHERE openid_url = ? ');
+        $st->execute(array($openid_url));
+        $id = $st->fetchColumn();
+
+        if (filter_var($id, FILTER_VALIDATE_INT)) return $this->getUser($id, $full_profile);
+        else return false;
+
+    }
+
+
+    function getOpenIDs($id = null) {
+
+        // This user
+        if (!$id) {
+            if ($this->loginCheck()) $id = $_SESSION['users_id'];
+            else return false;
+        }
+
+        // Any user
+        if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+
+        // Get the Ids
+        $st = $this->db->prepare('SELECT id, openid_url FROM openid_users WHERE users_id = ? ');
+        $st->execute(array($id));
+        $openids = $st->fetchAll(PDO::FETCH_ASSOC);
+
+        return $openids;
+
+    }
+
+
+    function attachOpenID($openid_url, $id = null) {
+
+        // This user
+        if (!$id) {
+            if ($this->loginCheck()) $id = $_SESSION['users_id'];
+            else return false;
+        }
+
+        // Any user
+        if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+
+        // TODO: Improve SANITIZE_URL to canonicalized form for robust lookup
+        // (i.e. so if users enter their OpenID slightly differently, we can still map it to their account).
+        $openid_url = filter_var($openid_url, FILTER_SANITIZE_URL);
+
+        // Sql
+        $oid = array(
+            'users_id' => $id,
+            'openid_url' => $openid_url,
+            );
+
+        $query = suxDB::prepareCountQuery('openid_users', $oid);
+        $st = $this->db->prepare($query);
+        $st->execute($oid);
+
+        if (!$st->fetchColumn()) {
+            // Insert
+            $query = suxDB::prepareInsertQuery('openid_users', $oid);
+            $st = $this->db->prepare($query);
+            $st->execute($oid);
+        }
+
+
+    }
+
+
+    function detachOpenID($openid_url, $id = null) {
+
+        // This user
+        if (!$id) {
+            if ($this->loginCheck()) $id = $_SESSION['users_id'];
+            else return false;
+        }
+
+        // Any user
+        if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+
+        // TODO: Improve SANITIZE_URL to canonicalized form for robust lookup
+        // (i.e. so if users enter their OpenID slightly differently, we can still map it to their account).
+        $openid_url = filter_var($openid_url, FILTER_SANITIZE_URL);
+
+        $query = 'DELETE FROM openid_users WHERE openid_url = ? AND users_id = ? ';
+        $st = $this->db->prepare($query);
+        $st->execute(array($openid_url, $id));
+
+    }
+
+
+    // -----------------------------------------------------------------------
+    // Security
+    // -----------------------------------------------------------------------
 
 
     /**
@@ -396,7 +504,7 @@ class suxUser {
         else $user = $this->getUser($id);
 
         session_regenerate_id();
-        $_SESSION['users_id'] = $user['id'];
+        $_SESSION['users_id'] = $user['users_id'];
         $_SESSION['nickname'] = $user['nickname'];
         $_SESSION['token'] = md5($user['password'] . @$GLOBALS['CONFIG']['SALT']);
 
