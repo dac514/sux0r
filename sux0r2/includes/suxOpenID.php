@@ -357,7 +357,9 @@ class suxOpenID {
         else {
 
             // Trust URL
-            $this->trustUrl($_SESSION['users_id'], $_SESSION['openid_accepted_url']);
+            if (isset($_SESSION['openid_always_trust']) && $_SESSION['openid_always_trust'] == 'yes') {
+                $this->trustUrl($_SESSION['users_id'], $_SESSION['openid_accepted_url']);
+            }
 
             // the user is logged in
             // remove the refresh URLs if set
@@ -493,6 +495,15 @@ class suxOpenID {
         // has the user accepted the trust_root?
         $accepted = (!empty($_REQUEST['accepted'])) ? $_REQUEST['accepted'] : null;
 
+        // Unset just in case
+        unset($_SESSION['openid_always_trust']);
+
+        if ($accepted === 'always') {
+            // refresh back to post_accept_url
+            $_SESSION['openid_accepted_url'] = $_SESSION['openid_unaccepted_url'];
+            $_SESSION['openid_always_trust'] = 'yes';
+            $this->wrapRefresh($_SESSION['openid_post_accept_url']);
+        }
         if ($accepted === 'yes') {
             // refresh back to post_accept_url
             $_SESSION['openid_accepted_url'] = $_SESSION['openid_unaccepted_url'];
@@ -506,10 +517,11 @@ class suxOpenID {
 
         // if neither, offer the trust request
         $q = mb_strpos($this->profile['req_url'], '?') ? '&' : '?';
+        $always = $this->profile['req_url'] . $q . 'accepted=always';
         $yes = $this->profile['req_url'] . $q . 'accepted=yes';
         $no  = $this->profile['req_url'] . $q . 'accepted=no';
 
-        $this->wrapHtml('The client site you are attempting to log into has requested that you trust the following URL:<br/><b>' . $_SESSION['openid_unaccepted_url'] . '</b><br/><br/>Do you wish to continue?<br/><a href="' . $yes . '">Yes</a> | <a href="' . $no . '">No</a>');
+        $this->wrapHtml('The client site you are attempting to log into has requested that you trust the following URL:<br/><b>' . $_SESSION['openid_unaccepted_url'] . '</b><br /><br/>Do you wish to continue?<br/><a href="' . $always . '">Always</a> | <a href="' . $yes . '">Yes</a> | <a href="' . $no . '">No</a>');
     }
 
 
@@ -785,6 +797,7 @@ class suxOpenID {
 
         // Check for server/delegate, TODO: Improve this
         $tmp = file_get_contents($openid_url);
+        $found = array();
         preg_match( "<link rel=\"openid.server\" href=\"(.*?)\" />", $tmp, $found);
         if (!empty($found[1])) $url = filter_var($found[1], FILTER_SANITIZE_URL);
         else $url = $openid_url;
@@ -807,6 +820,7 @@ class suxOpenID {
 
         // Check for server/delegate, TODO: Improve this
         $tmp = @file_get_contents($openid_url);
+        $found = array();
         preg_match( "<link rel=\"openid.server\" href=\"(.*?)\" />", $tmp, $found);
         if (!empty($found[1])) $url = filter_var($found[1], FILTER_SANITIZE_URL);
         else $url = $openid_url;
@@ -929,7 +943,7 @@ class suxOpenID {
         $st->execute(array(time()));
 
         // Delete association
-        $st = $this->db->prepare('DELETE FROM openid_secrets WHERE id = ? ');
+        $st = $this->db->prepare('DELETE FROM openid_secrets WHERE id = ? LIMIT 1 ');
         $st->execute(array($id));
 
     }

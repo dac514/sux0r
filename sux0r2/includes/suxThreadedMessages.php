@@ -152,6 +152,71 @@ class suxThreadedMessages {
     }
 
 
+    // Edit a message already in the database
+    function editMessage($messages_id, $users_id, $subject, $body) {
+
+        // -------------------------------------------------------------------
+        // Sanitize
+        // -------------------------------------------------------------------
+
+        if (!filter_var($messages_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid message id');
+
+        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+
+        // No HTML in subject
+        $subject = strip_tags($subject);
+
+        // Sanitize HTML in body
+        require_once(dirname(__FILE__) . '/suxFunct.php');
+        $body = suxFunct::sanitizeHtml($body);
+
+        // Convert and copy body to UTF-8 plaintext
+        require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
+        $converter = new suxHtml2UTF8($body);
+        $body_plaintext = $converter->getText();
+
+        // -------------------------------------------------------------------
+        // Go
+        // -------------------------------------------------------------------
+
+        $query = 'SELECT subject, body_html, body_plaintext FROM messages WHERE id = ? ';
+        $st = $this->db->prepare($query);
+        $st->execute(array($messages_id));
+        $editing = $st->fetch(PDO::FETCH_ASSOC);
+
+        if (!$editing) throw new Exception('No message to edit?');
+
+        // Begin transaction
+        $this->db->beginTransaction();
+        $this->inTransaction = true;
+
+        // Keep a history of edits
+        $editing['messages_id'] = $messages_id;
+        $editing['users_id'] = $users_id;
+        $editing['edited_on'] = date('c');
+        $query = suxDB::prepareInsertQuery('messages_history', $editing);
+        $st = $this->db->prepare($query);
+        $st->execute($editing);
+
+        // Update the message
+        $update = array(
+            'id' => $messages_id,
+            'subject' => $subject,
+            'body_html' => $body,
+            'body_plaintext' => $body_plaintext,
+            );
+
+        $query = suxDB::prepareUpdateQuery('messages', $update);
+        $st = $this->db->prepare($query);
+        $st->execute($update);
+
+        // Commit
+        $this->db->commit();
+        $this->inTransaction = false;
+
+    }
+
+
     // Gets an array of all messages
     function getThread($thread_id = null) {
 
@@ -259,15 +324,27 @@ class suxThreadedMessages {
 
 CREATE TABLE `messages` (
   `id` int(11) NOT NULL auto_increment,
-  `posted_on` datetime NOT NULL,
   `users_id` int(11) NOT NULL,
   `subject` varchar(255) NOT NULL,
   `body_html` text NOT NULL,
   `body_plaintext` text NOT NULL,
   `thread_id` int(11) NOT NULL,
-  `parent_id` int(11) NOT NULL,
+  `parent_id` int(11) default NULL,
   `level` int(11) NOT NULL,
   `thread_pos` int(11) NOT NULL,
+  `posted_on` datetime NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+CREATE TABLE `messages_history` (
+  `id` int(11) NOT NULL auto_increment,
+  `messages_id` int(11) NOT NULL,
+  `users_id` int(11) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `body_html` text NOT NULL,
+  `body_plaintext` text NOT NULL,
+  `edited_on` datetime NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

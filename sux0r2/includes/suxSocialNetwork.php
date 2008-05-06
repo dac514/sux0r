@@ -118,16 +118,26 @@ class suxSocialNetwork {
             // UPDATE
             $query = 'UPDATE socialnetwork SET relationship = :relationship WHERE users_id = :users_id AND friend_users_id = :friend_users_id ';
             $st = $this->db->prepare($query);
-            $st->execute($socialnetwork);
+            return $st->execute($socialnetwork);
 
         }
         else {
             // INSERT
             $query = suxDB::prepareInsertQuery('socialnetwork', $socialnetwork);
             $st = $this->db->prepare($query);
-            $st->execute($socialnetwork);
+            return $st->execute($socialnetwork);
         }
 
+
+    }
+
+
+    function deleteRelationship($id) {
+
+        if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
+
+        $st = $this->db->prepare('DELETE FROM socialnetwork WHERE id = ? LIMIT 1 ');
+        return $st->execute(array($id));
 
     }
 
