@@ -99,7 +99,7 @@ class suxNaiveBayesian {
 
         $count = 0;
 
-        $st = $this->db->prepare('DELETE FROM bayes_vectors WHERE id = ? ');
+        $st = $this->db->prepare('DELETE FROM bayes_vectors WHERE id = ? LIMIT 1 ');
         $st->execute(array($vector_id));
         $count += $st->rowCount();
 
@@ -189,7 +189,7 @@ class suxNaiveBayesian {
 
         $count = 0;
 
-        $st = $this->db->prepare('DELETE FROM bayes_categories WHERE id = ? ');
+        $st = $this->db->prepare('DELETE FROM bayes_categories WHERE id = ? LIMIT 1 ');
         $st->execute(array($category_id));
         $count += $st->rowCount();
 
@@ -668,7 +668,7 @@ class suxNaiveBayesian {
     */
     private function removeDocument($document_id) {
 
-        $st = $this->db->prepare('DELETE FROM bayes_documents WHERE id = ? ');
+        $st = $this->db->prepare('DELETE FROM bayes_documents WHERE id = ? LIMIT 1 ');
         return $st->execute(array($document_id));
 
     }
