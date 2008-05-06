@@ -88,15 +88,13 @@ class suxOpenID {
 
             // Set a default IDP URL
             'idp_url'	=>	$this->getIdpUrl(),
-            // the domain value for WWW-Authenticate
-            'auth_domain' => $this->getReqUrl() . ' ' . $this->getIdpUrl(),
             // lifetime of shared secret
             'lifetime'	=>	1440,
             // Use bcmath?
             'use_bcmath' => true,
 
             // Debug
-            'debug'		=>	true,
+            'debug'		=>	false,
             'logfile'	=>	'/tmp/suxOpenID.debug.log',
 
             // Determine the requested URL, DO NOT OVERRIDE
@@ -105,7 +103,7 @@ class suxOpenID {
             );
 
         $this->sreg = array (
-
+                /*
             	'nickname'		=> 'Joe',
             	'email'			=> 'joe@example.com',
             	'fullname'		=> 'Joe Example',
@@ -115,7 +113,7 @@ class suxOpenID {
             	'country'		=> 'US',
             	'language'		=> 'en',
             	'timezone'		=> 'America/New_York'
-
+                */
             );
 
     }
@@ -524,7 +522,7 @@ class suxOpenID {
         if (empty($_SESSION['openid_post_auth_url']) || empty($_SESSION['openid_cancel_auth_url']))
             $this->error500('You may not access this mode directly.');
 
-        if ($this->user->authenticate($this->profile['auth_domain'])) {
+        if (!$this->user->loginCheck() && $this->user->authenticate()) {
 
             // Success!
             $this->wrapRefresh($_SESSION['openid_post_auth_url']);
@@ -534,7 +532,7 @@ class suxOpenID {
 
             // Too many password failures?
             if (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->user->max_failures) {
-                $this->errorGet($_SESSION['openid_cancel_auth_url'], 'Too many password failures. Double check your authorization realm. You must restart your browser to try again.');
+                $this->errorGet($_SESSION['openid_cancel_auth_url'], 'Too many password failures. You must restart your browser to try again.');
             }
 
             // Cancelled
@@ -567,19 +565,70 @@ class suxOpenID {
     */
     function id_res_mode() {
 
+        /* Assert truthiness of openid_identity and act accordingly */
+
         if (!empty($_GET['openid_identity']) && $this->complete($_GET['openid_identity'])) {
-            // $this->user->getUserByOpenID($VAR);
-            $this->wrapHtml('You are logged in as ' . $_SESSION['nickname']);
+
+            // Success, a maze of if/else follows...
+
+            $this->destroyOpenIDSession();
+            $u = $this->user->getUserByOpenID($_GET['openid_identity']);
+            if ($u) {
+
+                if ($this->user->loginCheck() && $_SESSION['users_id'] != $u['users_id']) {
+                    // Wrong openid?
+                    $this->wrapHtml('Error, this openid already belongs to another user and is not yours?');
+                }
+                else if (!$this->user->loginCheck() && $this->user->authenticate() || $this->user->loginCheck()) {
+                    // Login this user
+                    $this->wrapHtml('You are logged in as ' . $_SESSION['nickname']);
+                }
+
+                // Too many password failures?
+                if (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->user->max_failures) {
+                    $this->wrapHtml('Too many password failures. You must restart your browser to try again.');
+                }
+
+            }
+            elseif ($this->user->loginCheck()) {
+
+                // This must be this users id, attach it
+                $this->user->attachOpenID($_GET['openid_identity']);
+                $this->wrapHtml('OpenID added, you are ' . $_SESSION['nickname']);
+
+            }
+            else {
+                // Sign-in
+                new dBug($_REQUEST);
+                echo 'TODO: Redirect to sign-in page';
+                exit;
+            }
+
+        }
+        elseif (!empty($_GET['openid_identity'])) {
+
+            // Failure
+            $this->destroyOpenIDSession();
+            $this->wrapHtml('Sorry, verification of your openid failed: ' . $_GET['openid_identity']);
+
         }
         else {
-            $this->wrapHtml('You are not logged in');
+
+            // Otherwise, provide useless info
+            $this->destroyOpenIDSession();
+            if ($this->user->loginCheck()) $this->wrapHtml('You are logged in as ' . $_SESSION['nickname']);
+            else $this->wrapHtml('You are not logged in');
+
         }
 
     }
 
 
+
     /**
-    * Allow a user to perform a static login
+    * Allow a user to perform a login
+    *
+    * @param string $openid_url
     */
     function login_mode($openid_url = null) {
 
@@ -589,101 +638,10 @@ class suxOpenID {
         if (!$openid_url) $openid_url = $this->profile['idp_url']; // Log into myself
         else $openid_url = filter_var($openid_url, FILTER_SANITIZE_URL);
 
-        if ($this->user->loginCheck()) {
-            // Already logged in
-            $this->wrapHtml('You are logged in as ' . $_SESSION['nickname']);
-            exit;
-        }
-
+        // Pass this to dumb consumer...
         $this->forward($openid_url);
 
     }
-
-
-    /**
-    * Forward
-    */
-    function forward($openid_url) {
-
-        if (!filter_var($openid_url, FILTER_VALIDATE_URL)) throw new Exception ('Invalid URL');
-
-        // TODO
-        // $_SESSION['openid_url'] = $openid_url; // Maybe done in openId already
-
-        $keys = array(
-            'mode' => 'checkid_setup',
-            'identity' => $openid_url,
-            'return_to' => $this->profile['idp_url'],
-            );
-
-        $u = $this->user->getUserByOpenID($openid_url);
-        if (!$u) {
-
-            $keys['sreg_required'] = 'nickname,email';
-            $keys['sreg_optional'] = 'fullname,dob,gender,postcode,country,language,timezone';
-
-        }
-
-        // Check for server/delegate, TODO: Improve this
-        $tmp = file_get_contents($openid_url);
-        preg_match( "<link rel=\"openid.server\" href=\"(.*?)\" />", $tmp, $found);
-        if (!empty($found[1])) $url = filter_var($found[1], FILTER_SANITIZE_URL);
-        else $url = $openid_url;
-
-        $this->wrapLocation($url, $keys);
-
-    }
-
-
-    /**
-    * Complete
-    */
-    function complete($openid_url) {
-
-        if (!filter_var($openid_url, FILTER_VALIDATE_URL)) throw new Exception ('Invalid URL');
-
-        $auth = false;
-
-        // Check for server/delegate, TODO: Improve this
-        $tmp = file_get_contents($openid_url);
-        preg_match( "<link rel=\"openid.server\" href=\"(.*?)\" />", $tmp, $found);
-        if (!empty($found[1])) $url = filter_var($found[1], FILTER_SANITIZE_URL);
-        else $url = $openid_url;
-
-        $keys = array(
-            'mode' => 'check_authentication',
-            'assoc_handle' => !empty($_GET['openid_assoc_handle']) ? $_GET['openid_assoc_handle'] : null,
-            'sig' => !empty($_GET['openid_sig']) ?  $_GET['openid_sig'] : null,
-            'signed' => !empty($_GET['openid_signed']) ? $_GET['openid_signed'] : null,
-            );
-
-        if (!empty($_GET['openid_signed'])) foreach (explode(',', $_GET['openid_signed']) as $param) {
-            $param = str_replace('.', '_', $param);
-            if ($param != 'mode') {
-                $tmp = 'openid_' . $param;
-                $keys[$param] = $_GET[$tmp];
-            }
-        }
-
-        $body = http_build_query($this->appendOpenID($keys));
-        $opts = array(
-            'http'=> array(
-                'method' => 'POST',
-                'header' => 'Content-Type: application/x-www-form-urlencoded',
-                'content' => $body,
-                )
-            );
-        $ctx = stream_context_create($opts);
-        $resp = file_get_contents($url, null, $ctx);
-
-        if (preg_match( '/is_valid:true/', $resp)) $auth = true;
-
-        return $auth;
-
-    }
-
-
-
 
 
     /**
@@ -794,6 +752,100 @@ class suxOpenID {
 
 
     // ----------------------------------------------------------------------------
+    // Dumb stateless consumer
+    // ----------------------------------------------------------------------------
+
+    /**
+    * Forward
+    *
+    * @param string $openid_url
+    */
+    function forward($openid_url) {
+
+        if (!filter_var($openid_url, FILTER_VALIDATE_URL)) throw new Exception ('Invalid URL');
+
+        // TODO:
+        // get association, store key, fix $this->complete() to do calculations
+        // locally, become a smart consumer... I need the help of someone smarter than me :(
+        // WTF is dh_consumer_public = base64(btwoc(g ^ x mod p)) in PHP5? (What is x?!)
+        // See: http://openid.net/specs/openid-authentication-1_1.html#mode_associate
+
+        $keys = array(
+            'mode' => 'checkid_setup',
+            'identity' => $openid_url,
+            'return_to' => $this->profile['idp_url'],
+            );
+
+        $u = $this->user->getUserByOpenID($openid_url);
+        if (!$u) {
+            // We don't know this user, ask for sreg info
+            $keys['sreg_required'] = 'nickname,email';
+            $keys['sreg_optional'] = 'fullname,dob,gender,postcode,country,language,timezone';
+        }
+
+        // Check for server/delegate, TODO: Improve this
+        $tmp = file_get_contents($openid_url);
+        preg_match( "<link rel=\"openid.server\" href=\"(.*?)\" />", $tmp, $found);
+        if (!empty($found[1])) $url = filter_var($found[1], FILTER_SANITIZE_URL);
+        else $url = $openid_url;
+
+        $this->wrapLocation($url, $keys);
+
+    }
+
+
+    /**
+    * Complete
+    *
+    * @param string $openid_url
+    */
+    function complete($openid_url) {
+
+        if (!filter_var($openid_url, FILTER_VALIDATE_URL)) throw new Exception ('Invalid URL');
+
+        $auth = false;
+
+        // Check for server/delegate, TODO: Improve this
+        $tmp = @file_get_contents($openid_url);
+        preg_match( "<link rel=\"openid.server\" href=\"(.*?)\" />", $tmp, $found);
+        if (!empty($found[1])) $url = filter_var($found[1], FILTER_SANITIZE_URL);
+        else $url = $openid_url;
+
+        $keys = array(
+            'mode' => 'check_authentication',
+            'assoc_handle' => !empty($_GET['openid_assoc_handle']) ? $_GET['openid_assoc_handle'] : null,
+            'sig' => !empty($_GET['openid_sig']) ?  $_GET['openid_sig'] : null,
+            'signed' => !empty($_GET['openid_signed']) ? $_GET['openid_signed'] : null,
+            );
+
+        // Send all the openid response parameters from the openid.signed list
+        if (!empty($_GET['openid_signed'])) foreach (explode(',', $_GET['openid_signed']) as $param) {
+            $param = str_replace('.', '_', $param);
+            if ($param != 'mode') {
+                $tmp = 'openid_' . $param;
+                $keys[$param] = $_GET[$tmp];
+            }
+        }
+
+        $body = http_build_query($this->appendOpenID($keys));
+        $opts = array(
+            'http'=> array(
+                'method' => 'POST',
+                'header' => 'Content-Type: application/x-www-form-urlencoded',
+                'content' => $body,
+                )
+            );
+        $ctx = stream_context_create($opts);
+        $resp = @file_get_contents($url, null, $ctx);
+
+        if (preg_match( '/is_valid:true/', $resp)) $auth = true;
+
+        return $auth;
+
+    }
+
+
+    // ----------------------------------------------------------------------------
     // Support functions
     // ----------------------------------------------------------------------------
 
@@ -873,11 +925,11 @@ class suxOpenID {
         $this->debug("Destroying session: $id");
 
         // While we're in here, delete expired associations
-        $st = $this->db->prepare('DELETE FROM openid_associations WHERE expiration < ? ');
+        $st = $this->db->prepare('DELETE FROM openid_secrets WHERE expiration < ? ');
         $st->execute(array(time()));
 
         // Delete association
-        $st = $this->db->prepare('DELETE FROM openid_associations WHERE id = ? ');
+        $st = $this->db->prepare('DELETE FROM openid_secrets WHERE id = ? ');
         $st->execute(array($id));
 
     }
@@ -886,7 +938,7 @@ class suxOpenID {
     /**
     * Destroy openid session info
     */
-    function destroySession() {
+    function destroyOpenIDSession() {
 
         if (isset($_SESSION) && is_array($_SESSION)) {
             foreach ($_SESSION as $key => $val) {
@@ -911,12 +963,12 @@ class suxOpenID {
         if (!filter_var($expiration, FILTER_VALIDATE_INT)) return array(false, false);
 
         // While we're in here, delete expired associations
-        $st = $this->db->prepare('DELETE FROM openid_associations WHERE expiration < ? ');
+        $st = $this->db->prepare('DELETE FROM openid_secrets WHERE expiration < ? ');
         $st->execute(array(time()));
 
         // Establish a shared secret
         $shared_secret = $this->newSecret();
-        $st = $this->db->prepare('INSERT INTO openid_associations (expiration, shared_secret) VALUES (?, ?) ');
+        $st = $this->db->prepare('INSERT INTO openid_secrets (expiration, shared_secret) VALUES (?, ?) ');
         $st->execute(array($expiration, base64_encode($shared_secret)));
         $id = $this->db->lastInsertId();
 
@@ -933,7 +985,7 @@ class suxOpenID {
     */
     function secret($id) {
 
-        $st = $this->db->prepare('SELECT expiration, shared_secret FROM openid_associations WHERE id = ? ');
+        $st = $this->db->prepare('SELECT expiration, shared_secret FROM openid_secrets WHERE id = ? ');
         $st->execute(array($id));
         $row = $st->fetch();
 
@@ -1290,7 +1342,7 @@ class suxOpenID {
         <head>
         <title>suxOpenID</title>
         <meta content="text/html; charset=utf-8" http-equiv="content-type" />
-        <meta http-equiv="refresh" content="10;url=' . $url . '">
+        <meta http-equiv="refresh" content="0;url=' . $url . '">
         <meta name="robots" content="noindex,nofollow" />
         </head>
         <body>
@@ -1396,7 +1448,7 @@ class suxOpenID {
 
 -- Database
 
-CREATE TABLE `openid_associations` (
+CREATE TABLE `openid_secrets` (
   `id` int(11) NOT NULL auto_increment,
   `expiration` int(11) NOT NULL,
   `shared_secret` varchar(255) NOT NULL,

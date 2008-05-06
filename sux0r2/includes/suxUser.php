@@ -369,7 +369,7 @@ class suxUser {
     * @param string $auth_domain, the domain value for WWW-Authenticate
     * @return bool
     */
-    function authenticate($auth_domain) {
+    function authenticate() {
 
         // Try to get the digest headers
         if (function_exists('apache_request_headers') && ini_get('safe_mode') == false) {
@@ -463,7 +463,7 @@ class suxUser {
             throw new Exception('Headers already sent');
 
         header('HTTP/1.0 401 Unauthorized');
-        header(sprintf('WWW-Authenticate: Digest qop="auth-int, auth", realm="%s", domain="%s", nonce="%s", opaque="%s", stale="%s", algorithm="MD5"', $GLOBALS['CONFIG']['REALM'], $auth_domain, $uid, md5($GLOBALS['CONFIG']['REALM']), $stale ? 'true' : 'false'));
+        header(sprintf('WWW-Authenticate: Digest qop="auth-int, auth", realm="%s", domain="%s", nonce="%s", opaque="%s", stale="%s", algorithm="MD5"', $GLOBALS['CONFIG']['REALM'], $GLOBALS['CONFIG']['URL'] . '/', $uid, md5($GLOBALS['CONFIG']['REALM']), $stale ? 'true' : 'false'));
 
         return false;
 

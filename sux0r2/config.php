@@ -18,7 +18,7 @@ $CONFIG['PATH'] = dirname(__FILE__);
 // http://domain.com/my/sux0r/ then '/my/sux0r' is the correct value.
 // No trailing slash!
 
-$CONFIG['URL'] = '';
+$CONFIG['URL'] = '/sux0r2';
 
 // An array containing PDO compatible database DSN [key => value] pairs.
 // Sux0r is theoretically able to span multiple databases, but ordinarily
