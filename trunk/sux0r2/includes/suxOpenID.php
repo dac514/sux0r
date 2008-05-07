@@ -31,8 +31,11 @@ class suxOpenID {
     public $profile = array();
     public $sreg = array();
 
+    // Database suff
     protected $db;
     protected $inTransaction = false;
+    protected $db_table_sec = 'openid_secrets';
+    protected $db_table_trust = 'openid_trusted';
 
     protected $assoc_types = array();
     protected $session_types = array();
@@ -890,7 +893,7 @@ class suxOpenID {
 
         if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
 
-        $st = $this->db->prepare('SELECT COUNT(*) FROM openid_trusted WHERE users_id = ? AND auth_url = ? ');
+        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_trust} WHERE users_id = ? AND auth_url = ? ");
         $st->execute(array($id, $url));
 
         if ($st->fetchColumn() > 0) return true;
@@ -915,12 +918,12 @@ class suxOpenID {
             'auth_url' => $url,
             );
 
-        $query = suxDB::prepareCountQuery('openid_trusted', $trusted);
+        $query = suxDB::prepareCountQuery($this->db_table_trust, $trusted);
         $st = $this->db->prepare($query);
         $st->execute($trusted);
 
         if (!$st->fetchColumn()) {
-            $query = suxDB::prepareInsertQuery('openid_trusted', $trusted);
+            $query = suxDB::prepareInsertQuery($this->db_table_trust, $trusted);
             $st = $this->db->prepare($query);
             $st->execute($trusted);
         }
@@ -939,11 +942,11 @@ class suxOpenID {
         $this->debug("Destroying session: $id");
 
         // While we're in here, delete expired associations
-        $st = $this->db->prepare('DELETE FROM openid_secrets WHERE expiration < ? ');
+        $st = $this->db->prepare("DELETE FROM {$this->db_table_sec} WHERE expiration < ? ");
         $st->execute(array(time()));
 
         // Delete association
-        $st = $this->db->prepare('DELETE FROM openid_secrets WHERE id = ? LIMIT 1 ');
+        $st = $this->db->prepare("DELETE FROM {$this->db_table_sec} WHERE id = ? LIMIT 1 ");
         $st->execute(array($id));
 
     }
@@ -977,12 +980,12 @@ class suxOpenID {
         if (!filter_var($expiration, FILTER_VALIDATE_INT)) return array(false, false);
 
         // While we're in here, delete expired associations
-        $st = $this->db->prepare('DELETE FROM openid_secrets WHERE expiration < ? ');
+        $st = $this->db->prepare("DELETE FROM {$this->db_table_sec} WHERE expiration < ? ");
         $st->execute(array(time()));
 
         // Establish a shared secret
         $shared_secret = $this->newSecret();
-        $st = $this->db->prepare('INSERT INTO openid_secrets (expiration, shared_secret) VALUES (?, ?) ');
+        $st = $this->db->prepare("INSERT INTO {$this->db_table_sec} (expiration, shared_secret) VALUES (?, ?) ");
         $st->execute(array($expiration, base64_encode($shared_secret)));
         $id = $this->db->lastInsertId();
 
@@ -999,7 +1002,7 @@ class suxOpenID {
     */
     function secret($id) {
 
-        $st = $this->db->prepare('SELECT expiration, shared_secret FROM openid_secrets WHERE id = ? ');
+        $st = $this->db->prepare("SELECT expiration, shared_secret FROM {$this->db_table_sec} WHERE id = ? ");
         $st->execute(array($id));
         $row = $st->fetch();
 
@@ -1478,15 +1481,6 @@ CREATE TABLE `openid_trusted` (
   UNIQUE KEY `authorized` (`auth_url`,`users_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-
-CREATE TABLE `openid_users` (
-  `id` int(11) NOT NULL auto_increment,
-  `openid_url` varchar(255) NOT NULL,
-  `users_id` int(11) NOT NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `openid_url` (`openid_url`),
-  KEY `users_id` (`users_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 */
 

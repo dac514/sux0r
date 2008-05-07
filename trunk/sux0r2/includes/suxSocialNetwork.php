@@ -27,8 +27,10 @@
 
 class suxSocialNetwork {
 
+    // Database suff
     protected $db;
     protected $inTransaction = false;
+    protected $db_table = 'socialnetwork';
 
     // Enum (zero or one value)
     private $xfn_identity = array('me');
@@ -105,7 +107,7 @@ class suxSocialNetwork {
         // Go!
         // --------------------------------------------------------------------
 
-        $st = $this->db->prepare('SELECT COUNT(*) FROM socialnetwork WHERE users_id = ? AND friend_users_id = ? ');
+        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table} WHERE users_id = ? AND friend_users_id = ? ");
         $st->execute(array($uid, $fid));
 
         $socialnetwork = array(
@@ -116,14 +118,14 @@ class suxSocialNetwork {
 
         if ($st->fetchColumn() > 0) {
             // UPDATE
-            $query = 'UPDATE socialnetwork SET relationship = :relationship WHERE users_id = :users_id AND friend_users_id = :friend_users_id ';
+            $query = "UPDATE {$this->db_table} SET relationship = :relationship WHERE users_id = :users_id AND friend_users_id = :friend_users_id ";
             $st = $this->db->prepare($query);
             return $st->execute($socialnetwork);
 
         }
         else {
             // INSERT
-            $query = suxDB::prepareInsertQuery('socialnetwork', $socialnetwork);
+            $query = suxDB::prepareInsertQuery($this->db_table, $socialnetwork);
             $st = $this->db->prepare($query);
             return $st->execute($socialnetwork);
         }
@@ -136,7 +138,7 @@ class suxSocialNetwork {
 
         if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
 
-        $st = $this->db->prepare('DELETE FROM socialnetwork WHERE id = ? LIMIT 1 ');
+        $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE id = ? LIMIT 1 ");
         return $st->execute(array($id));
 
     }
