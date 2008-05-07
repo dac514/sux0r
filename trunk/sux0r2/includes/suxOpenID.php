@@ -893,7 +893,7 @@ class suxOpenID {
 
         if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
 
-        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_trust} WHERE users_id = ? AND auth_url = ? ");
+        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_trust} WHERE users_id = ? AND auth_url = ? LIMIT 1 ");
         $st->execute(array($id, $url));
 
         if ($st->fetchColumn() > 0) return true;
@@ -918,7 +918,7 @@ class suxOpenID {
             'auth_url' => $url,
             );
 
-        $query = suxDB::prepareCountQuery($this->db_table_trust, $trusted);
+        $query = suxDB::prepareCountQuery($this->db_table_trust, $trusted) . 'LIMIT 1 ';
         $st = $this->db->prepare($query);
         $st->execute($trusted);
 

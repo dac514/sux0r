@@ -549,7 +549,7 @@ class suxNaiveBayesian {
     */
     private function tokenExists($token) {
 
-        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_tok} WHERE token = ? ");
+        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_tok} WHERE token = ? LIMIT 1 ");
         $st->execute(array($token));
         return ($st->fetchColumn() > 0 ? true : false);
 
@@ -725,7 +725,8 @@ CREATE TABLE `bayes_documents` (
   `id` int(11) NOT NULL auto_increment,
   `bayes_categories_id` int(11) NOT NULL,
   `body_plaintext` text NOT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY  (`id`),
+  KEY `bayes_categories_id` (`bayes_categories_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 

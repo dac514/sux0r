@@ -297,7 +297,7 @@ class suxUser {
             'openid_url' => $openid_url,
             );
 
-        $query = suxDB::prepareCountQuery($this->db_table_openid, $oid);
+        $query = suxDB::prepareCountQuery($this->db_table_openid, $oid) . 'LIMIT 1 ';
         $st = $this->db->prepare($query);
         $st->execute($oid);
 
@@ -540,7 +540,7 @@ class suxUser {
     private function generatePw() {
 
         $new_pw = '';
-        for ($i = 0; $i < 8; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $new_pw .= chr(mt_rand(33, 126));
         }
         return $new_pw;
