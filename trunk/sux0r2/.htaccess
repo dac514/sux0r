@@ -1,0 +1,37 @@
+# sux0r settings:
+
+# Custom 404 Error
+# ErrorDocument 404 /index.php
+
+<IfModule mod_rewrite.c>
+
+    RewriteEngine on
+
+    # To redirect all users to access the site WITH the 'www.' prefix,
+    # (http://example.com/... will be redirected to http://www.example.com/...)
+    # adapt and uncomment the following:
+    # RewriteCond %{HTTP_HOST} ^domain\.com$ [NC]
+    # RewriteRule ^(.*)$ http://www.domain.com/$1 [L,R=301]
+
+    # To redirect all users to access the site WITHOUT the 'www.' prefix,
+    # (http://www.example.com/... will be redirected to http://example.com/...)
+    # uncomment and adapt the following:
+    # RewriteCond %{HTTP_HOST} ^www\.domain\.com$ [NC]
+    # RewriteRule ^(.*)$ http://domain.com/$1 [L,R=301]
+
+    # Modify the RewriteBase if you are using sux0r in a subdirectory or in a
+    # VirtualDocumentRoot and the rewrite rules are not working properly.
+    # For example if your site is at http://domain.com/my/sux0r uncomment and
+    # modify the following line:
+    # RewriteBase /my/sux0r
+
+    # If your site is running in a VirtualDocumentRoot at http://domain.com/,
+    # uncomment the following line:
+    # RewriteBase /
+
+    # Rewrite URLs of the form 'index.php?c=x'.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php?c=$1 [L,QSA]
+
+</IfModule>
