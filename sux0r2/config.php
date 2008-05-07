@@ -20,6 +20,11 @@ $CONFIG['PATH'] = dirname(__FILE__);
 
 $CONFIG['URL'] = '/sux0r2';
 
+// Use clean Url?
+// If apache rewrite rules aren't working for you, change to false
+
+$CONFIG['CLEAN_URL'] = true;
+
 // An array containing PDO compatible database DSN [key => value] pairs.
 // Sux0r is theoretically able to span multiple databases, but ordinarily
 // there should be one ['default' => $dsn] pointing to your one database..
