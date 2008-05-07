@@ -121,7 +121,7 @@ class suxDB {
 
         $query = rtrim($query, 'AND '); // Remove trailing AND
 
-        return $query;
+        return "$query "; // Add space, just incase
     }
 
 
@@ -149,7 +149,7 @@ class suxDB {
         $placeholders = rtrim($placeholders, ', ');
         $query = $query . $column . ') ' . $placeholders . ') ';
 
-        return $query;
+        return "$query "; // Add space, just incase
     }
 
 
@@ -179,7 +179,7 @@ class suxDB {
         $placeholders = rtrim($placeholders, ', '); // Remove trailing Coma
         $query = $query . $column . $placeholders . $where;
 
-        return $query;
+        return "$query "; // Add space, just incase
 
     }
 
