@@ -24,8 +24,12 @@
 
 class suxCalendar {
 
+    // Database suff
     protected $db;
     protected $inTransaction = false;
+    protected $db_table = 'calendar';
+    protected $db_table_dates = 'calendar_dates';
+
 
     /**
     * @param string $key a key from our suxDB DSN

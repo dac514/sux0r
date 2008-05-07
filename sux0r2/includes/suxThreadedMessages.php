@@ -26,8 +26,11 @@
 
 class suxThreadedMessages {
 
+    // Database stuff
     protected $db;
     protected $inTransaction = false;
+    protected $db_table = 'messages';
+    protected $db_table_hist = 'messages_history';
 
     /**
     * @param string $key a key from our suxDB DSN
@@ -88,7 +91,7 @@ class suxThreadedMessages {
         if ($parent_id) {
 
             // Get thread_id, level, and thread_pos from parent
-            $st = $this->db->prepare('SELECT thread_id, level, thread_pos FROM messages WHERE id = ? ');
+            $st = $this->db->prepare("SELECT thread_id, level, thread_pos FROM {$this->db_table} WHERE id = ? ");
             $st->execute(array($parent_id));
             $parent = $st->fetch();
 
@@ -96,7 +99,7 @@ class suxThreadedMessages {
             $level = $parent['level'] + 1;
 
             // what is the biggest thread_pos in this thread among messages with the same parent?
-            $st = $this->db->prepare('SELECT MAX(thread_pos) FROM messages WHERE thread_id = ? AND parent_id = ? ');
+            $st = $this->db->prepare("SELECT MAX(thread_pos) FROM {$this->db_table} WHERE thread_id = ? AND parent_id = ? ");
             $st->execute(array($parent['thread_id'], $parent_id));
             $thread_pos = $st->fetchColumn(0);
 
@@ -110,7 +113,7 @@ class suxThreadedMessages {
             }
 
             // increment the thread_pos of all messages in the thread that come after this one
-            $st = $this->db->prepare('UPDATE messages SET thread_pos = thread_pos + 1 WHERE thread_id = ? AND thread_pos >= ? ');
+            $st = $this->db->prepare("UPDATE {$this->db_table} SET thread_pos = thread_pos + 1 WHERE thread_id = ? AND thread_pos >= ? ");
             $st->execute(array($parent['thread_id'], $thread_pos));
 
             // the new message should be saved with the parent's thread_id
@@ -122,7 +125,7 @@ class suxThreadedMessages {
             // The message is not a reply, so it's the start of a new thread
             $level = 0;
             $thread_pos = 0;
-            $thread_id = $this->db->query('SELECT MAX(thread_id) + 1 FROM messages ')->fetchColumn(0);
+            $thread_id = $this->db->query("SELECT MAX(thread_id) + 1 FROM {$this->db_table} ")->fetchColumn(0);
 
         }
 
@@ -134,14 +137,14 @@ class suxThreadedMessages {
             'thread_id' => $thread_id,
             'parent_id' => $parent_id,
             'thread_pos' => $thread_pos,
-            'posted_on' => date('c'),
+            'published_on' => date('c'),
             'level' => $level,
             'users_id' => $users_id,
             'subject' => $subject,
             'body_html' => $body,
             'body_plaintext' => $body_plaintext,
             );
-        $query = suxDB::prepareInsertQuery('messages', $insert);
+        $query = suxDB::prepareInsertQuery($this->db_table, $insert);
         $st = $this->db->prepare($query);
         $st->execute($insert);
 
@@ -179,7 +182,7 @@ class suxThreadedMessages {
         // Go
         // -------------------------------------------------------------------
 
-        $query = 'SELECT subject, body_html, body_plaintext FROM messages WHERE id = ? ';
+        $query = "SELECT subject, body_html, body_plaintext FROM {$this->db_table} WHERE id = ? ";
         $st = $this->db->prepare($query);
         $st->execute(array($messages_id));
         $editing = $st->fetch(PDO::FETCH_ASSOC);
@@ -194,7 +197,7 @@ class suxThreadedMessages {
         $editing['messages_id'] = $messages_id;
         $editing['users_id'] = $users_id;
         $editing['edited_on'] = date('c');
-        $query = suxDB::prepareInsertQuery('messages_history', $editing);
+        $query = suxDB::prepareInsertQuery($this->db_table_hist, $editing);
         $st = $this->db->prepare($query);
         $st->execute($editing);
 
@@ -206,7 +209,7 @@ class suxThreadedMessages {
             'body_plaintext' => $body_plaintext,
             );
 
-        $query = suxDB::prepareUpdateQuery('messages', $update);
+        $query = suxDB::prepareUpdateQuery($this->db_table, $update);
         $st = $this->db->prepare($query);
         $st->execute($update);
 
@@ -224,7 +227,7 @@ class suxThreadedMessages {
         $thread_id = filter_var($thread_id, FILTER_VALIDATE_INT);
 
         // order the messages by their thread_id and their position
-        $query = 'SELECT id, users_id, subject, LENGTH(body) AS body_length, posted_on, level FROM messages ';
+        $query = "SELECT id, users_id, subject, LENGTH(body) AS body_length, published_on, level FROM {$this->db_table} ";
         if ($thread_id) $query .= 'WHERE thread_id = ? ';
         $query .= 'ORDER BY thread_id, thread_pos ';
 
@@ -253,7 +256,7 @@ class suxThreadedMessages {
         // Sanity check
         if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid message id');
 
-        $st = $this->db->prepare('SELECT * FROM messages WHERE id = ? ');
+        $st = $this->db->prepare("SELECT * FROM {$this->db_table} WHERE id = ? ");
         $st->execute(array($id));
 
         $message = $st->fetch();
@@ -273,9 +276,9 @@ class suxThreadedMessages {
         if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
 
         // order the messages by their thread_id and their position
-        $query = 'SELECT id, thread_id, users_id, subject, LENGTH(body) AS body_length, posted_on FROM messages ';
+        $query = "SELECT id, thread_id, users_id, subject, LENGTH(body) AS body_length, published_on FROM {$this->db_table} ";
         $query .= 'WHERE users_id = ? ';
-        $query .= 'ORDER BY posted_on DESC ';
+        $query .= 'ORDER BY published_on DESC ';
 
         $st = $this->db->prepare($query);
         $st->execute(array($users_id));
@@ -332,7 +335,7 @@ CREATE TABLE `messages` (
   `parent_id` int(11) default NULL,
   `level` int(11) NOT NULL,
   `thread_pos` int(11) NOT NULL,
-  `posted_on` datetime NOT NULL,
+  `published_on` datetime NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

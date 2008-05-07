@@ -27,8 +27,12 @@ class suxUser {
 
     public $max_failures = 4; // Maximum authetication failures allowed
 
+    // Database suff
     protected $db;
     protected $inTransaction = false;
+    protected $db_table = 'users';
+    protected $db_table_info = 'users_info';
+    protected $db_table_openid = 'users_openid';
 
 
     /**
@@ -54,12 +58,12 @@ class suxUser {
         // Any user
         if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
 
-        $st = $this->db->prepare('SELECT * FROM users WHERE id = ? ');
+        $st = $this->db->prepare("SELECT * FROM {$this->db_table} WHERE id = ? ");
         $st->execute(array($id));
         $user = $st->fetch(PDO::FETCH_ASSOC);
 
         if ($full_profile) {
-            $st = $this->db->prepare('SELECT * FROM users_info WHERE users_id = ? ');
+            $st = $this->db->prepare("SELECT * FROM {$this->db_table_info} WHERE users_id = ? ");
             $st->execute(array($id));
             $tmp = $st->fetch(PDO::FETCH_ASSOC);
             unset($tmp['id'], $tmp['users_id']); // Unset ids
@@ -77,7 +81,7 @@ class suxUser {
 
     function getUserByNickname($nickname, $full_profile = false) {
 
-        $st = $this->db->prepare('SELECT id FROM users WHERE nickname = ? ');
+        $st = $this->db->prepare("SELECT id FROM {$this->db_table} WHERE nickname = ? ");
         $st->execute(array($nickname));
         $id = $st->fetchColumn();
 
@@ -89,7 +93,7 @@ class suxUser {
 
     function getUserByEmail($email, $full_profile = false) {
 
-        $st = $this->db->prepare('SELECT id FROM users WHERE email = ? ');
+        $st = $this->db->prepare("SELECT id FROM {$this->db_table} WHERE email = ? ");
         $st->execute(array($email));
         $id = $st->fetchColumn();
 
@@ -101,29 +105,29 @@ class suxUser {
 
     function getUsers() {
 
-        $q = '
+        $q = "
         SELECT
-        users.id,
-        users.nickname,
-        users.email,
-        users_info.given_name,
-        users_info.family_name,
-        users_info.street_address,
-        users_info.locality,
-        users_info.region,
-        users_info.postcode,
-        users_info.country,
-        users_info.tel,
-        users_info.url,
-        users_info.dob,
-        users_info.gender,
-        users_info.language,
-        users_info.timezone,
-        users_info.pavatar,
-        users_info.microid
-        FROM users LEFT JOIN users_info
-        ON users.id = users_info.users_id
-        ';
+        {$this->db_table}.id,
+        {$this->db_table}.nickname,
+        {$this->db_table}.email,
+        {$this->db_table_info}.given_name,
+        {$this->db_table_info}.family_name,
+        {$this->db_table_info}.street_address,
+        {$this->db_table_info}.locality,
+        {$this->db_table_info}.region,
+        {$this->db_table_info}.postcode,
+        {$this->db_table_info}.country,
+        {$this->db_table_info}.tel,
+        {$this->db_table_info}.url,
+        {$this->db_table_info}.dob,
+        {$this->db_table_info}.gender,
+        {$this->db_table_info}.language,
+        {$this->db_table_info}.timezone,
+        {$this->db_table_info}.pavatar,
+        {$this->db_table_info}.microid
+        FROM {$this->db_table} LEFT JOIN {$this->db_table_info}
+        ON {$this->db_table}.id = {$this->db_table_info}.users_id
+        ";
 
         $st = $this->db->query($q);
         return $st->fetchAll(PDO::FETCH_ASSOC);
@@ -182,14 +186,14 @@ class suxUser {
 
                 // Insert user
 
-                $query = suxDB::prepareInsertQuery('users', $user);
+                $query = suxDB::prepareInsertQuery($this->db_table, $user);
                 $st = $this->db->prepare($query);
                 $st->execute($user);
 
                 $id = $this->db->lastInsertId();
                 $info['users_id'] = $id;
 
-                $query = suxDB::prepareInsertQuery('users_info', $info);
+                $query = suxDB::prepareInsertQuery($this->db_table_info, $info);
                 $st = $this->db->prepare($query);
                 $st->execute($info);
 
@@ -198,13 +202,13 @@ class suxUser {
 
                 // Update user
 
-                $query = suxDB::prepareUpdateQuery('users', $user);
+                $query = suxDB::prepareUpdateQuery($this->db_table, $user);
                 $st = $this->db->prepare($query);
                 $st->execute($user);
 
                 $info['users_id'] = $id;
 
-                $query = suxDB::prepareUpdateQuery('users_info', $info, 'users_id');
+                $query = suxDB::prepareUpdateQuery($this->db_table_info, $info, 'users_id');
                 $st = $this->db->prepare($query);
                 $st->execute($info);
 
@@ -241,7 +245,7 @@ class suxUser {
         // (i.e. so if users enter their OpenID slightly differently, we can still map it to their account).
         $openid_url = filter_var($openid_url, FILTER_SANITIZE_URL);
 
-        $st = $this->db->prepare('SELECT users_id FROM openid_users WHERE openid_url = ? ');
+        $st = $this->db->prepare("SELECT users_id FROM {$this->db_table_openid} WHERE openid_url = ? ");
         $st->execute(array($openid_url));
         $id = $st->fetchColumn();
 
@@ -263,7 +267,7 @@ class suxUser {
         if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
 
         // Get the Ids
-        $st = $this->db->prepare('SELECT id, openid_url FROM openid_users WHERE users_id = ? ');
+        $st = $this->db->prepare("SELECT id, openid_url FROM {$this->db_table_openid} WHERE users_id = ? ");
         $st->execute(array($id));
         $openids = $st->fetchAll(PDO::FETCH_ASSOC);
 
@@ -293,13 +297,13 @@ class suxUser {
             'openid_url' => $openid_url,
             );
 
-        $query = suxDB::prepareCountQuery('openid_users', $oid);
+        $query = suxDB::prepareCountQuery($this->db_table_openid, $oid);
         $st = $this->db->prepare($query);
         $st->execute($oid);
 
         if (!$st->fetchColumn()) {
             // Insert
-            $query = suxDB::prepareInsertQuery('openid_users', $oid);
+            $query = suxDB::prepareInsertQuery($this->db_table_openid, $oid);
             $st = $this->db->prepare($query);
             $st->execute($oid);
         }
@@ -323,7 +327,7 @@ class suxUser {
         // (i.e. so if users enter their OpenID slightly differently, we can still map it to their account).
         $openid_url = filter_var($openid_url, FILTER_SANITIZE_URL);
 
-        $query = 'DELETE FROM openid_users WHERE openid_url = ? AND users_id = ? ';
+        $query = "DELETE FROM {$this->db_table_openid} WHERE openid_url = ? AND users_id = ? ";
         $st = $this->db->prepare($query);
         $st->execute(array($openid_url, $id));
 
@@ -481,7 +485,7 @@ class suxUser {
 
         if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
 
-        $st = $this->db->prepare('SELECT password FROM users WHERE id = ? ');
+        $st = $this->db->prepare("SELECT password FROM {$this->db_table} WHERE id = ? ");
         $st->execute(array($id));
         $row = $st->fetch();
 
@@ -607,6 +611,16 @@ CREATE TABLE `users_info` (
   `microid` varchar(255) default NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `users_id` (`users_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+CREATE TABLE `users_openid` (
+  `id` int(11) NOT NULL auto_increment,
+  `openid_url` varchar(255) NOT NULL,
+  `users_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `openid_url` (`openid_url`),
+  KEY `users_id` (`users_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 */

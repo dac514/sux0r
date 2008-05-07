@@ -36,7 +36,7 @@ class suxHtml2UTF8 {
     /**
     *  Contains the HTML content to convert.
     *
-    *  @var string $html
+    *  @param string $html
     */
     public $html;
 
@@ -44,7 +44,7 @@ class suxHtml2UTF8 {
     /**
     *  Contains the converted, formatted UTF-8 text
     *
-    *  @var string $text
+    *  @param string $text
     */
     public $text;
 
@@ -52,8 +52,7 @@ class suxHtml2UTF8 {
     /**
     *  Contains the base URL that relative links should resolve to.
     *
-    *  @var string $url
-    *  @access public
+    *  @param string $url
     */
     public $url;
 
@@ -62,8 +61,7 @@ class suxHtml2UTF8 {
     *  List of preg* regular expression patterns to search for,
     *  used in conjunction with $replace.
     *
-    *  @var array $search
-    *  @access public
+    *  @param array $search
     *  @see $replace
     */
     private $search = array(
@@ -98,8 +96,7 @@ class suxHtml2UTF8 {
     /**
     *  List of pattern replacements corresponding to patterns searched.
     *
-    *  @var array $replace
-    *  @access public
+    *  @param array $replace
     *  @see $search
     */
     private $replace = array(
@@ -134,8 +131,7 @@ class suxHtml2UTF8 {
     /**
     *  Indicates whether content in the $html variable has been converted yet.
     *
-    *  @var boolean $converted
-    *  @access private
+    *  @param boolean $converted
     *  @see $html, $text
     */
     private $converted = false;
@@ -144,8 +140,7 @@ class suxHtml2UTF8 {
     /**
     *  Contains URL addresses from links to be rendered in plain UTF-8 text.
     *
-    *  @var string $link_list
-    *  @access private
+    *  @param string $link_list
     *  @see buildLinkList()
     */
     private $link_list = '';
@@ -155,8 +150,7 @@ class suxHtml2UTF8 {
     *  Number of valid links detected in the text, used for plain UTF-8 text
     *  display (rendered similar to footnotes).
     *
-    *  @var integer $link_count
-    *  @access private
+    *  @param integer $link_count
     *  @see buildLinkList()
     */
     private $link_count = 0;

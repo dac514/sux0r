@@ -32,8 +32,13 @@ class suxNaiveBayesian {
     public $l10n = 'en'; // Used to include language specific stopwords file
     public $ignore_list = array(); // Stopwords list
 
+    // Database suff
     protected $db;
     protected $inTransaction = false;
+    protected $db_table_vec = 'bayes_vectors';
+    protected $db_table_cat = 'bayes_categories';
+    protected $db_table_doc = 'bayes_documents';
+    protected $db_table_tok = 'bayes_tokens';
 
     // If you change these, then you need to adjust your database columns
     private $min_token_length = 3;
@@ -67,7 +72,7 @@ class suxNaiveBayesian {
         $vector = strip_tags($vector);
 
         try {
-            $st = $this->db->prepare('INSERT INTO bayes_vectors (vector) VALUES (?) ');
+            $st = $this->db->prepare("INSERT INTO {$this->db_table_vec} (vector) VALUES (?) ");
             return $st->execute(array($vector));
         }
         catch (Exception $e) {
@@ -88,7 +93,7 @@ class suxNaiveBayesian {
 
         // Get the category ids for this vector
         $categories = array();
-        $st = $this->db->prepare('SELECT id FROM bayes_categories WHERE bayes_vectors_id = ? ');
+        $st = $this->db->prepare("SELECT id FROM {$this->db_table_cat} WHERE bayes_vectors_id = ? ");
         $st->execute(array($vector_id));
         foreach ($st->fetchAll() as $row) {
             $categories[] = $row['id'];
@@ -99,22 +104,22 @@ class suxNaiveBayesian {
 
         $count = 0;
 
-        $st = $this->db->prepare('DELETE FROM bayes_vectors WHERE id = ? LIMIT 1 ');
+        $st = $this->db->prepare("DELETE FROM {$this->db_table_vec} WHERE id = ? LIMIT 1 ");
         $st->execute(array($vector_id));
         $count += $st->rowCount();
 
-        $st = $this->db->prepare('DELETE FROM bayes_categories WHERE bayes_vectors_id = ? ');
+        $st = $this->db->prepare("DELETE FROM {$this->db_table_cat} WHERE bayes_vectors_id = ? ");
         $st->execute(array($vector_id));
         $count += $st->rowCount();
 
         foreach ($categories as $val) {
-            $st = $this->db->prepare('DELETE FROM bayes_documents WHERE bayes_categories_id = ? ');
+            $st = $this->db->prepare("DELETE FROM {$this->db_table_doc} WHERE bayes_categories_id = ? ");
             $st->execute(array($val));
             $count += $st->rowCount();
         }
 
         foreach ($categories as $val) {
-            $st = $this->db->prepare('DELETE FROM bayes_tokens WHERE bayes_categories_id = ? ');
+            $st = $this->db->prepare("DELETE FROM {$this->db_table_tok} WHERE bayes_categories_id = ? ");
             $st->execute(array($val));
             $count += $st->rowCount();
         }
@@ -134,7 +139,7 @@ class suxNaiveBayesian {
     function getVectors() {
 
         $vectors = array();
-        $st = $this->db->query('SELECT * FROM bayes_vectors ORDER BY vector ASC ');
+        $st = $this->db->query("SELECT * FROM {$this->db_table_vec} ORDER BY vector ASC ");
 
         foreach ($st->fetchAll() as $row) {
             $vectors[$row['id']] = array(
@@ -165,7 +170,7 @@ class suxNaiveBayesian {
         $category = strip_tags($category);
 
         try {
-            $st = $this->db->prepare('INSERT INTO bayes_categories (category, bayes_vectors_id) VALUES (?, ?) ');
+            $st = $this->db->prepare("INSERT INTO {$this->db_table_cat} (category, bayes_vectors_id) VALUES (?, ?) ");
             return $st->execute(array($category, $vector_id));
         }
         catch (Exception $e) {
@@ -189,15 +194,15 @@ class suxNaiveBayesian {
 
         $count = 0;
 
-        $st = $this->db->prepare('DELETE FROM bayes_categories WHERE id = ? LIMIT 1 ');
+        $st = $this->db->prepare("DELETE FROM {$this->db_table_cat} WHERE id = ? LIMIT 1 ");
         $st->execute(array($category_id));
         $count += $st->rowCount();
 
-        $st = $this->db->prepare('DELETE FROM bayes_documents WHERE bayes_categories_id = ? ');
+        $st = $this->db->prepare("DELETE FROM {$this->db_table_doc} WHERE bayes_categories_id = ? ");
         $st->execute(array($category_id));
         $count += $st->rowCount();
 
-        $st = $this->db->prepare('DELETE FROM bayes_tokens WHERE bayes_categories_id = ? ');
+        $st = $this->db->prepare("DELETE FROM {$this->db_table_tok} WHERE bayes_categories_id = ? ");
         $st->execute(array($category_id));
         $count += $st->rowCount();
 
@@ -217,7 +222,7 @@ class suxNaiveBayesian {
     function getCategories($vector_id) {
 
         $categories = array();
-        $st = $this->db->prepare('SELECT * FROM bayes_categories WHERE bayes_vectors_id = ? ORDER BY category ASC ');
+        $st = $this->db->prepare("SELECT * FROM {$this->db_table_cat} WHERE bayes_vectors_id = ? ORDER BY category ASC ");
         $st->execute(array($vector_id));
 
         foreach ($st->fetchAll() as $row) {
@@ -305,7 +310,7 @@ class suxNaiveBayesian {
     function getDocumentIds() {
 
         $documents = array();
-        $st = $this->db->query('SELECT id, bayes_categories_id FROM bayes_documents ORDER BY id ASC ');
+        $st = $this->db->query("SELECT id, bayes_categories_id FROM {$this->db_table_doc} ORDER BY id ASC ");
 
         foreach ($st->fetchAll() as $row) {
 
@@ -334,18 +339,18 @@ class suxNaiveBayesian {
 
         // Get vector_ids that are actually being used
         $vectors = array();
-        $q = 'SELECT bayes_vectors_id FROM bayes_categories GROUP BY bayes_vectors_id ';
+        $q = "SELECT bayes_vectors_id FROM {$this->db_table_cat} GROUP BY bayes_vectors_id ";
         $st = $this->db->query($q);
         foreach ($st->fetchAll() as $row) {
             $vectors[] = $row['bayes_vectors_id'];
         }
 
         // Join to categories
-        $q = 'SELECT bayes_tokens.bayes_categories_id, SUM(bayes_tokens.count) AS total
-        FROM bayes_tokens INNER JOIN bayes_categories
-        ON bayes_tokens.bayes_categories_id = bayes_categories.id
-        WHERE bayes_categories.bayes_vectors_id = ?
-        GROUP BY bayes_tokens.bayes_categories_id ';
+        $q = "SELECT {$this->db_table_tok}.bayes_categories_id, SUM({$this->db_table_tok}.count) AS total
+        FROM {$this->db_table_tok} INNER JOIN {$this->db_table_cat}
+        ON {$this->db_table_tok}.bayes_categories_id = {$this->db_table_cat}.id
+        WHERE {$this->db_table_cat}.bayes_vectors_id = ?
+        GROUP BY {$this->db_table_tok}.bayes_categories_id ";
 
         // Constrain to individual vectors
         foreach ($vectors as $vector_id) {
@@ -361,14 +366,14 @@ class suxNaiveBayesian {
 
             // If there are no tokens, reset everything
             if ($total_tokens == 0) {
-                $st = $this->db->prepare('UPDATE bayes_categories SET token_count = 0, probability = 0 WHERE bayes_vectors_id = ? ');
+                $st = $this->db->prepare("UPDATE {$this->db_table_cat} SET token_count = 0, probability = 0 WHERE bayes_vectors_id = ? ");
                 $st->execute(array($vector_id));
                 continue;
             }
 
             // Get all categories
             $categories = array();
-            $st = $this->db->prepare('SELECT id FROM bayes_categories WHERE bayes_vectors_id = ? ');
+            $st = $this->db->prepare("SELECT id FROM {$this->db_table_cat} WHERE bayes_vectors_id = ? ");
             $st->execute(array($vector_id));
 
             foreach ($st->fetchAll() as $row) {
@@ -378,7 +383,7 @@ class suxNaiveBayesian {
             // Repeat $q, update probabilities
             $st = $this->db->prepare($q);
             $st->execute(array($vector_id));
-            $st2 = $this->db->prepare('UPDATE bayes_categories SET token_count = ?, probability = ? WHERE id = ? AND bayes_vectors_id = ? ');
+            $st2 = $this->db->prepare("UPDATE {$this->db_table_cat} SET token_count = ?, probability = ? WHERE id = ? AND bayes_vectors_id = ? ");
             foreach ($st->fetchAll() as $row) {
                 $proba = $row['total']/$total_tokens;
                 $st2->execute(array($row['total'], $proba, $row['bayes_categories_id'], $vector_id));
@@ -386,7 +391,7 @@ class suxNaiveBayesian {
             }
 
             // If there are categories with no tokens, reset those categories
-            $st = $this->db->prepare('UPDATE bayes_categories SET token_count = 0, probability = 0 WHERE id = ? AND bayes_vectors_id = ? ');
+            $st = $this->db->prepare("UPDATE {$this->db_table_cat} SET token_count = 0, probability = 0 WHERE id = ? AND bayes_vectors_id = ? ");
             foreach ($categories as $key => $val) {
                 $st->execute(array($key, $vector_id));
             }
@@ -544,7 +549,7 @@ class suxNaiveBayesian {
     */
     private function tokenExists($token) {
 
-        $st = $this->db->prepare('SELECT COUNT(*) FROM bayes_tokens WHERE token = ? ');
+        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_tok} WHERE token = ? ");
         $st->execute(array($token));
         return ($st->fetchColumn() > 0 ? true : false);
 
@@ -560,7 +565,7 @@ class suxNaiveBayesian {
 
         $count = 0;
 
-        $st = $this->db->prepare('SELECT * FROM bayes_tokens WHERE token = ? AND bayes_categories_id = ? ');
+        $st = $this->db->prepare("SELECT * FROM {$this->db_table_tok} WHERE token = ? AND bayes_categories_id = ? ");
         $st->execute(array($token, $category_id));
 
         if ($row = $st->fetch()) {
@@ -584,12 +589,12 @@ class suxNaiveBayesian {
 
         if ($token_count == 0) {
 
-            $st = $this->db->prepare('INSERT INTO bayes_tokens (token, bayes_categories_id, count) VALUES (?, ?, ?) ');
+            $st = $this->db->prepare("INSERT INTO {$this->db_table_tok} (token, bayes_categories_id, count) VALUES (?, ?, ?) ");
             return $st->execute(array($token, $category_id, $count));
 
         } else {
 
-            $st = $this->db->prepare('UPDATE bayes_tokens SET count = count + ? WHERE bayes_categories_id = ? AND token = ? ');
+            $st = $this->db->prepare("UPDATE {$this->db_table_tok} SET count = count + ? WHERE bayes_categories_id = ? AND token = ? ");
             $st->bindValue(1, $count, PDO::PARAM_INT);
             $st->bindValue(2, $category_id);
             $st->bindValue(3, $token);
@@ -612,12 +617,12 @@ class suxNaiveBayesian {
 
         if ($token_count != 0 && ($token_count-$count) <= 0) {
 
-            $st = $this->db->prepare('DELETE FROM bayes_tokens WHERE token = ? AND bayes_categories_id = ? ');
+            $st = $this->db->prepare("DELETE FROM {$this->db_table_tok} WHERE token = ? AND bayes_categories_id = ? ");
             return $st->execute(array($token, $category_id));
 
         } else {
 
-            $st = $this->db->prepare('UPDATE bayes_tokens SET count = count - ? WHERE bayes_categories_id = ? AND token = ? ');
+            $st = $this->db->prepare("UPDATE {$this->db_table_tok} SET count = count - ? WHERE bayes_categories_id = ? AND token = ? ");
             $st->bindValue(1, $count, PDO::PARAM_INT);
             $st->bindValue(2, $category_id);
             $st->bindValue(3, $token);
@@ -635,7 +640,7 @@ class suxNaiveBayesian {
     */
     private function saveDocument($category_id, $content) {
 
-        $st = $this->db->prepare('INSERT INTO bayes_documents (bayes_categories_id, body_plaintext) VALUES (?, ?) ');
+        $st = $this->db->prepare("INSERT INTO {$this->db_table_doc} (bayes_categories_id, body_plaintext) VALUES (?, ?) ");
         return $st->execute(array($category_id, $content));
 
     }
@@ -649,7 +654,7 @@ class suxNaiveBayesian {
 
         $ref = array();
 
-        $st = $this->db->prepare('SELECT * FROM bayes_documents WHERE id = ?');
+        $st = $this->db->prepare("SELECT * FROM {$this->db_table_doc} WHERE id = ?");
         $st->execute(array($document_id));
 
         if ($row = $st->fetch()) {
@@ -668,7 +673,7 @@ class suxNaiveBayesian {
     */
     private function removeDocument($document_id) {
 
-        $st = $this->db->prepare('DELETE FROM bayes_documents WHERE id = ? LIMIT 1 ');
+        $st = $this->db->prepare("DELETE FROM {$this->db_table_doc} WHERE id = ? LIMIT 1 ");
         return $st->execute(array($document_id));
 
     }

@@ -5,7 +5,7 @@ require_once '../initialize.php';
 include_once 'suxNaiveBayesian.php';
 
 $nb  = new suxNaiveBayesian();
-$vec_id = 3;
+$vec_id = 8;
 
 
 ?>
