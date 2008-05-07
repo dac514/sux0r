@@ -1,3 +1,27 @@
+Version 3.0.8 (2008-04-30)
+	Fixed bug where IE would produce an error if textareas without names where converted.
+	Fixed bug where editor wasn't forced empty when there was only a single br or empty paragraph left.
+	Fixed bug where IE would produce an warning message if object elements where produced in the media plugins preview running on https.
+	Fixed bug where new addVer function didn't handle hash items correctly. Patch contributed by Mirek Burkon.
+	Fixed bug where font_size_style_values option wasn't applied correctly to fonts inside the editor.
+	Fixed bug where image selection could be lost if a image was edited using context menu on IE.
+	Fixed bug where style values wasn't updated properly due to an invalid regexp.
+	Fixed bug where IE 6 where displaying warning message about insecure items when inserting an image while using https. Patch contributed by Norifumi Sunaoka.
+	Fixed bug where IE was producing an auto save message if you selected a color from the color split button.
+	Fixed bug where backspace sometimes would move the caret to the end of the previous block in Gecko.
+	Fixed bug where the rowlayout manager didn't work as described in the documentation.
+	Fixed bug where the default options for the fullpage plugin wasn't applied correctly.
+	Fixed bug where selection would jump one character if you applied a styles to a words in non IE browsers.
+	Fixed bug where undo levels wasn't added correctly if you went back in undo history and added a new event.
+	Fixed bug where font size dropdown didn't mark the selected size in IE.
+	Fixed bug where the size of the editor was determined using clientWidth instead of offsetWidth.
+	Fixed so the onchange event doesn't fire on the initial undo level, it will also fire when the editor is blurred.
+	Fixed so the advhr plugin produces XHTML valid output instead of non standard attributes.
+	Fixed so blockquote gets converted into [quote] in when the bbcode plugin is enabled.
+	Fixed so theme_advanced_font_sizes can be named for example Font 1=1, Font 2=2 etc.
+	Fixed so editor_selector/editor_deselector can be regexps. By default only strings are allowed not part regexps like before.
+	Fixed so that the version suffix is optional. It still requires the build process so you need to export it manually.
+	Fixed so it's possible to tab to table cells in non Gecko browsers and also produce new rows if you tab at the end of a table. Contributed by Josh Peek.
 Version 3.0.7 (2008-04-14)
 	Added new version suffix to all internal GET requests to make sure that the users cache gets cleared correctly.
 	Fixed issue with isDirty returning true event if it wasn't dirty on IE due to changes in tables during initialization.
