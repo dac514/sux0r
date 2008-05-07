@@ -107,7 +107,7 @@ class suxSocialNetwork {
         // Go!
         // --------------------------------------------------------------------
 
-        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table} WHERE users_id = ? AND friend_users_id = ? ");
+        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table} WHERE users_id = ? AND friend_users_id = ? LIMIT 1 ");
         $st->execute(array($uid, $fid));
 
         $socialnetwork = array(

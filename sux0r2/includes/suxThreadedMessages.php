@@ -42,7 +42,7 @@ class suxThreadedMessages {
 
 
     // Saves a message to the database
-    function saveMessage($users_id, $subject, $body, $parent_id = null ) {
+    function saveMessage($users_id, $title, $body, $parent_id = null ) {
 
         /*
         The first message in a thread has thread_pos = 0.
@@ -68,8 +68,8 @@ class suxThreadedMessages {
         // Parent_id
         $parent_id = filter_var($parent_id, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
 
-        // No HTML in subject
-        $subject = strip_tags($subject);
+        // No HTML in title
+        $title = strip_tags($title);
 
         // Sanitize HTML in body
         require_once(dirname(__FILE__) . '/suxFunct.php');
@@ -140,7 +140,7 @@ class suxThreadedMessages {
             'published_on' => date('c'),
             'level' => $level,
             'users_id' => $users_id,
-            'subject' => $subject,
+            'title' => $title,
             'body_html' => $body,
             'body_plaintext' => $body_plaintext,
             );
@@ -156,7 +156,7 @@ class suxThreadedMessages {
 
 
     // Edit a message already in the database
-    function editMessage($messages_id, $users_id, $subject, $body) {
+    function editMessage($messages_id, $users_id, $title, $body) {
 
         // -------------------------------------------------------------------
         // Sanitize
@@ -166,8 +166,8 @@ class suxThreadedMessages {
 
         if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
 
-        // No HTML in subject
-        $subject = strip_tags($subject);
+        // No HTML in title
+        $title = strip_tags($title);
 
         // Sanitize HTML in body
         require_once(dirname(__FILE__) . '/suxFunct.php');
@@ -182,7 +182,7 @@ class suxThreadedMessages {
         // Go
         // -------------------------------------------------------------------
 
-        $query = "SELECT subject, body_html, body_plaintext FROM {$this->db_table} WHERE id = ? ";
+        $query = "SELECT title, body_html, body_plaintext FROM {$this->db_table} WHERE id = ? ";
         $st = $this->db->prepare($query);
         $st->execute(array($messages_id));
         $editing = $st->fetch(PDO::FETCH_ASSOC);
@@ -204,7 +204,7 @@ class suxThreadedMessages {
         // Update the message
         $update = array(
             'id' => $messages_id,
-            'subject' => $subject,
+            'title' => $title,
             'body_html' => $body,
             'body_plaintext' => $body_plaintext,
             );
@@ -227,7 +227,7 @@ class suxThreadedMessages {
         $thread_id = filter_var($thread_id, FILTER_VALIDATE_INT);
 
         // order the messages by their thread_id and their position
-        $query = "SELECT id, users_id, subject, LENGTH(body) AS body_length, published_on, level FROM {$this->db_table} ";
+        $query = "SELECT id, users_id, title, LENGTH(body) AS body_length, published_on, level FROM {$this->db_table} ";
         if ($thread_id) $query .= 'WHERE thread_id = ? ';
         $query .= 'ORDER BY thread_id, thread_pos ';
 
@@ -276,7 +276,7 @@ class suxThreadedMessages {
         if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
 
         // order the messages by their thread_id and their position
-        $query = "SELECT id, thread_id, users_id, subject, LENGTH(body) AS body_length, published_on FROM {$this->db_table} ";
+        $query = "SELECT id, thread_id, users_id, title, LENGTH(body) AS body_length, published_on FROM {$this->db_table} ";
         $query .= 'WHERE users_id = ? ';
         $query .= 'ORDER BY published_on DESC ';
 
@@ -328,7 +328,7 @@ class suxThreadedMessages {
 CREATE TABLE `messages` (
   `id` int(11) NOT NULL auto_increment,
   `users_id` int(11) NOT NULL,
-  `subject` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
   `body_html` text NOT NULL,
   `body_plaintext` text NOT NULL,
   `thread_id` int(11) NOT NULL,
@@ -336,20 +336,24 @@ CREATE TABLE `messages` (
   `level` int(11) NOT NULL,
   `thread_pos` int(11) NOT NULL,
   `published_on` datetime NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  PRIMARY KEY  (`id`),
+  KEY `thread_id` (`thread_id`),
+  KEY `users_id` (`users_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
 CREATE TABLE `messages_history` (
   `id` int(11) NOT NULL auto_increment,
   `messages_id` int(11) NOT NULL,
   `users_id` int(11) NOT NULL,
-  `subject` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
   `body_html` text NOT NULL,
   `body_plaintext` text NOT NULL,
   `edited_on` datetime NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  PRIMARY KEY  (`id`),
+  KEY `messages_id` (`messages_id`),
+  KEY `users_id` (`users_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
 */
