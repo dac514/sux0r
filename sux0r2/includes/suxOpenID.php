@@ -90,7 +90,7 @@ class suxOpenID {
         $this->profile = array(
 
             // Set a default IDP URL
-            'idp_url'	=>	$this->getIdpUrl(),
+            'my_url'	=>	$this->getIdpUrl(),
             // lifetime of shared secret
             'lifetime'	=>	1440,
             // Use bcmath?
@@ -295,10 +295,10 @@ class suxOpenID {
         }
 
         // make sure i am this identifier
-        if ($identity != $this->profile['idp_url']) {
+        if ($identity != $this->profile['my_url']) {
 
             $this->debug("Invalid identity: $identity");
-            $this->debug("IdP URL: " . $this->profile['idp_url']);
+            $this->debug("IdP URL: " . $this->profile['my_url']);
 
             $this->errorGet($return_to, "Invalid identity: '$identity'");
 
@@ -324,8 +324,8 @@ class suxOpenID {
             $this->debug('Cancel URL: ' . $_SESSION['openid_cancel_accept_url']);
             $this->debug('Post URL: ' . $_SESSION['openid_post_accept_url']);
 
-            $q = mb_strpos($this->profile['idp_url'], '?') ? '&' : '?';
-            $this->wrapRefresh($this->profile['idp_url'] . $q . 'openid.mode=accept');
+            $q = mb_strpos($this->profile['my_url'], '?') ? '&' : '?';
+            $this->wrapRefresh($this->profile['my_url'] . $q . 'openid.mode=accept');
         }
 
 
@@ -347,12 +347,12 @@ class suxOpenID {
                 $this->debug('Cancel URL: ' . $_SESSION['openid_cancel_auth_url']);
                 $this->debug('Post URL: ' . $_SESSION['openid_post_auth_url']);
 
-                $q = mb_strpos($this->profile['idp_url'], '?') ? '&' : '?';
-                $this->wrapRefresh($this->profile['idp_url'] . $q . 'openid.mode=authorize');
+                $q = mb_strpos($this->profile['my_url'], '?') ? '&' : '?';
+                $this->wrapRefresh($this->profile['my_url'] . $q . 'openid.mode=authorize');
             }
             else {
 
-                $keys['user_setup_url'] = $this->profile['idp_url'];
+                $keys['user_setup_url'] = $this->profile['my_url'];
             }
 
 
@@ -386,7 +386,7 @@ class suxOpenID {
                 list ($assoc_handle, $shared_secret) = $this->newAssoc($lifetime);
             }
 
-            $keys['identity'] = $this->profile['idp_url'];
+            $keys['identity'] = $this->profile['my_url'];
             $keys['assoc_handle'] = $assoc_handle;
             $keys['return_to'] = $return_to;
 
@@ -650,7 +650,7 @@ class suxOpenID {
         // debug
         // $openid_url = 'http://dac514.myopenid.com/';
 
-        if (!$openid_url) $openid_url = $this->profile['idp_url']; // Log into myself
+        if (!$openid_url) $openid_url = $this->profile['my_url']; // Log into myself
         else $openid_url = filter_var($openid_url, FILTER_SANITIZE_URL);
 
         // Pass this to dumb consumer...
@@ -664,7 +664,15 @@ class suxOpenID {
     */
     function no_mode () {
 
-        $this->wrapHtml('This is an OpenID server endpoint. For more information, see http://openid.net/<br/>Server: <b>' . $this->profile['idp_url'] . '</b><br/>Realm: <b>' . $GLOBALS['CONFIG']['REALM'] . '</b><br/><a href="' . $this->profile['idp_url'] . '?openid.mode=login">Login</a>  | <a href="' . $this->profile['idp_url'] . '?openid.mode=test">Test</a>');
+        $q = mb_strpos($this->profile['my_url'], '?') ? '&' : '?';
+
+        $html = 'This is an OpenID server endpoint. For more information, see http://openid.net/<br/>Server: <b>' . $this->profile['my_url'] . '</b><br/>Realm: <b>' . $GLOBALS['CONFIG']['REALM'] . '</b><br/>';
+        $html .= '<a href="' . $this->profile['my_url'] . $q . 'openid.mode=login">Login</a>';
+        if ($this->profile['debug']) {
+            $html .' | <a href="' . $this->profile['my_url'] . $q . 'openid.mode=test">Test</a>';
+        }
+
+        $this->wrapHtml($html);
     }
 
 
@@ -672,6 +680,11 @@ class suxOpenID {
     * Testing for setup
     */
     function test_mode () {
+
+        if (!$this->profile['debug']) {
+            $this->wrapHtml('Sorry, debug mode is currently disabled.');
+            exit;
+        }
 
         @ini_set('max_execution_time', 180);
 
@@ -788,7 +801,7 @@ class suxOpenID {
         $keys = array(
             'mode' => 'checkid_setup',
             'identity' => $openid_url,
-            'return_to' => $this->profile['idp_url'],
+            'return_to' => $this->profile['my_url'],
             );
 
         $u = $this->user->getUserByOpenID($openid_url);
@@ -1328,12 +1341,13 @@ class suxOpenID {
     */
     function wrapHtml($message) {
 
+        // <link rel="openid.server" href="' . $this->profile['req_url'] . '" />
+        // <link rel="openid.delegate" href="' . $this->profile['my_url'] . '" />
+
         echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
         <html>
         <head>
         <title>suxOpenID</title>
-        <link rel="openid.server" href="' . $this->profile['req_url'] . '" />
-        <link rel="openid.delegate" href="' . $this->profile['idp_url'] . '" />
         <meta content="text/html; charset=utf-8" http-equiv="content-type" />
         <meta name="robots" content="noindex,nofollow" />
         </head>
