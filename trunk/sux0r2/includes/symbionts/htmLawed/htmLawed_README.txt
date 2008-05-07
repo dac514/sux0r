@@ -1053,6 +1053,8 @@ There are '$config' parameters like 'css_expression' that are not affected by th
 
 If a value for a parameter auto-set through 'safe' is still manually provided, then that value can over-ride the auto-set value. E.g., with '$config["safe"] = 1' and '$config["elements"] = "*+script"', 'script', but not 'applet', is allowed.
 
+A page illustrating the efficacy of htmLawed's anti-XSS abilities with 'safe' set to '1' against XSS vectors listed by RSnake:- http://ha.ckers.org/xss.html may be available here:- http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/rsnake/RSnakeXSSTest.htm.
+
 
 -- 3.7  Using a hook function --------------------------------------o
 

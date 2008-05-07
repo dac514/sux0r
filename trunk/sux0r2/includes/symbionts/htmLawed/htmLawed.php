@@ -39,7 +39,7 @@ else{
 }
 $cf['elements'] =& $ec;
 // config: denied attributes
-$cf['deny_attribute'] = !empty($cf['deny_attribute']) ? array_flip(explode(',', str_replace(array("\n", "\r", "\t", ' '), '', $cf['deny_attribute']. (!empty($cf['safe']) ? 'on*' : '')))) : (!empty($cf['safe']) ? array('on*'=>1) : array());
+$cf['deny_attribute'] = !empty($cf['deny_attribute']) ? array_flip(explode(',', str_replace(array("\n", "\r", "\t", ' '), '', $cf['deny_attribute']. (!empty($cf['safe']) ? ',on*' : '')))) : (!empty($cf['safe']) ? array('on*'=>1) : array());
 if(isset($cf['deny_attribute']['on*'])){
  unset($cf['deny_attribute']['on*']);
  $cf['deny_attribute'] += array('onblur'=>1, 'onchange'=>1, 'onclick'=>1, 'ondblclick'=>1, 'onfocus'=>1, 'onkeydown'=>1, 'onkeypress'=>1, 'onkeyup'=>1, 'onmousedown'=>1, 'onmousemove'=>1, 'onmouseout'=>1, 'onmouseover'=>1, 'onmouseup'=>1, 'onreset'=>1, 'onselect'=>1, 'onsubmit'=>1);
