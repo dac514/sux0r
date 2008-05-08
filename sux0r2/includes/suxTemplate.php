@@ -25,7 +25,10 @@ require_once(dirname(__FILE__) . '/symbionts/Smarty/libs/Smarty.class.php');
 
 class suxTemplate extends Smarty {
 
+    public $module;
+    public $partition;
     public $template_dir_fallback;
+
 
     /**
     * Constructor
@@ -33,7 +36,10 @@ class suxTemplate extends Smarty {
     * @param string $module
     * @param string $partition
     */
-    function __construct($module, $partition = 'default') {
+    function __construct($module, $partition = 'sux0r') {
+
+        // Call parent
+        parent::__construct();
 
         // --------------------------------------------------------------------
         // Sanity Check
@@ -51,6 +57,23 @@ class suxTemplate extends Smarty {
             'plugins', // the default under SMARTY_DIR
             $GLOBALS['CONFIG']['PATH'] . '/includes/symbionts/SmartyAddons/plugins',
             );
+
+        // --------------------------------------------------------------------
+        // Setup
+        // --------------------------------------------------------------------
+
+        $this->setModule($module, $partition);
+
+    }
+
+
+    /**
+    * Set the template for a module
+    *
+    * @param string $module
+    * @param string $partition
+    */
+    function setModule($module, $partition = 'sux0r') {
 
         // --------------------------------------------------------------------
         // Compile directory
@@ -73,7 +96,7 @@ class suxTemplate extends Smarty {
         }
         $this->cache_dir = $cache_dir;
         $this->cache_lifetime = $GLOBALS['CONFIG']['CACHE_LIFETIME'];
-        $this->caching = 0; // Caching off by default, enabled by module if needed
+        $this->caching = 0; // Caching off by default, enable in module if needed
 
         // --------------------------------------------------------------------
         // Template directory
@@ -81,20 +104,20 @@ class suxTemplate extends Smarty {
 
         // Assume the templates are located in templates directory
         $template_dir = $GLOBALS['CONFIG']['PATH'] . "/templates/$partition/$module/";
-        $template_dir_fallback = $GLOBALS['CONFIG']['PATH'] . "/templates/default/$module/";
+        $template_dir_fallback = $GLOBALS['CONFIG']['PATH'] . "/templates/sux0r/$module/";
 
-        if($partition != 'default' && !is_dir($template_dir)) {
+        if($partition != 'sux0r' && !is_dir($template_dir)) {
             // We didn't find anything, but the partition wasn't default, let's try with default
             $template_dir = $template_dir_fallback;
         }
 
         if(!is_dir($template_dir)) {
 
-            //  Still nothing, maybe they are in the module's template directory under $partition
+            //  Still nothing, maybe they are in the module's directory
             $template_dir = $GLOBALS['CONFIG']['PATH'] . "/modules/$module/templates/$partition/";
-            $template_dir_fallback = $GLOBALS['CONFIG']['PATH'] . "/modules/$module/templates/default/";
+            $template_dir_fallback = $GLOBALS['CONFIG']['PATH'] . "/modules/$module/templates/sux0r/";
 
-            if($partition != 'default' && !is_dir($template_dir)) {
+            if($partition != 'sux0r' && !is_dir($template_dir)) {
                 // Still nothing, but the partition wasn't default, let's try with default
                 $template_dir = $template_dir_fallback;
             }
@@ -105,8 +128,37 @@ class suxTemplate extends Smarty {
             }
         }
 
+        $this->module = $module;
+        $this->partition = $partition;
         $this->template_dir = $template_dir;
         $this->template_dir_fallback = $template_dir_fallback;
+
+    }
+
+
+    /**
+    * Get the language array
+    *
+    * @param string $module
+    * @param string $partition
+    * @return array $gtext
+    */
+    function getLanguage($lang) {
+
+        $gtext = array();
+
+        // Default to english in case other language files are incomplete
+        $default = $GLOBALS['CONFIG']['PATH'] . "/modules/{$this->module}/languages/en.php";
+        // Second language will overwrite/merge with first
+        $requested = $GLOBALS['CONFIG']['PATH'] . "/modules/{$this->module}/languages/$lang.php";
+
+        if (!is_readable($default)) return false; // no default, something is wrong
+        else include($default);
+
+        if ($lang != 'en' && is_readable($requested)) include($requested);
+
+        if (!is_array($gtext) || !count($gtext)) return false; // something is wrong
+        else return $gtext;
 
     }
 

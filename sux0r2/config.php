@@ -8,6 +8,14 @@ error_reporting (E_ALL | E_STRICT); // Error reporting for developers
 
 /* Configuration variables */
 
+// An array containing PDO compatible database DSN [key => value] pairs.
+// Sux0r is theoretically able to span multiple databases, but ordinarily
+// there should be one ['default' => $dsn] pointing to your one database..
+
+$CONFIG['DSN'] =  array(
+    'default' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
+    );
+
 // The auto-detected path to your sux0r installation.
 // If you set this yourself, no trailing slash!
 
@@ -20,18 +28,18 @@ $CONFIG['PATH'] = dirname(__FILE__);
 
 $CONFIG['URL'] = '/sux0r2';
 
+// Default language for site, uses a 2 letter l10n ISO-CODE naming convention
+
+$CONFIG['LANGUAGE'] = 'en';
+
+// Default partition for site
+
+$CONFIG['PARTITION'] = 'sux0r';
+
 // Use clean Url?
 // If apache rewrite rules aren't working for you, change to false
 
 $CONFIG['CLEAN_URL'] = true;
-
-// An array containing PDO compatible database DSN [key => value] pairs.
-// Sux0r is theoretically able to span multiple databases, but ordinarily
-// there should be one ['default' => $dsn] pointing to your one database..
-
-$CONFIG['DSN'] =  array(
-    'default' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
-    );
 
 // The realm for Digest Access Authentication. This value, along with a
 // username, encrypts and stores passwords as HA1 = MD5(username:realm:password)
