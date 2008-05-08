@@ -22,7 +22,7 @@
 */
 
 
-// Enforce minimum version of PHP 5.2
+// Enforce minimum version of PHP 5.2.3
 if (preg_replace('/[a-z-]/i', '', phpversion()) < '5.2.3') {
     die('sux0r requires PHP 5.2.3, or higher.');
 }
