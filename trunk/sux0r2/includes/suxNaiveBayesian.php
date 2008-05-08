@@ -29,7 +29,7 @@
 class suxNaiveBayesian {
 
 
-    public $l10n = 'en'; // Used to include language specific stopwords file
+    public $lang = 'en'; // Used to include language specific stopwords file
     public $ignore_list = array(); // Stopwords list
 
     // Database suff
@@ -503,8 +503,8 @@ class suxNaiveBayesian {
         $rawtokens = mb_split("\W", $string);
 
         //. Get stopwords
-        if (is_readable(dirname(__FILE__) . "/symbionts/stopwords/{$this->l10n}.txt")) {
-            $this->ignore_list = file(dirname(__FILE__) . "/symbionts/stopwords/{$this->l10n}.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        if (is_readable(dirname(__FILE__) . "/symbionts/stopwords/{$this->lang}.txt")) {
+            $this->ignore_list = file(dirname(__FILE__) . "/symbionts/stopwords/{$this->lang}.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         }
 
         // Append generic internet cruft for good measure

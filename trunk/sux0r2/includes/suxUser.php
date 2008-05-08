@@ -66,8 +66,10 @@ class suxUser {
             $st = $this->db->prepare("SELECT * FROM {$this->db_table_info} WHERE users_id = ? ");
             $st->execute(array($id));
             $tmp = $st->fetch(PDO::FETCH_ASSOC);
-            unset($tmp['id'], $tmp['users_id']); // Unset ids
-            $user = array_merge($user, $tmp); // Merge
+            if (is_array($tmp)) {
+                unset($tmp['id'], $tmp['users_id']); // Unset ids
+                $user = array_merge($user, $tmp); // Merge
+            }
         }
 
         // Rename id key
