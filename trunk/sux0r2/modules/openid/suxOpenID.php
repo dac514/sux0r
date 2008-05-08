@@ -25,8 +25,14 @@
 *
 */
 
+require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
+require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
+require_once(dirname(__FILE__) . '/../../includes/suxUrl.php');
 
 class suxOpenID {
+
+    public $gtext = array(); // Language
+    public $tpl; // Template
 
     public $profile = array();
     public $sreg = array();
@@ -49,7 +55,7 @@ class suxOpenID {
     /**
     * Constructor
     */
-    function __construct(suxUser $user, $key = null) {
+    function __construct(suxUser $user, $dbKey = null) {
 
 
         // --------------------------------------------------------------------
@@ -69,9 +75,11 @@ class suxOpenID {
         // Setup
         // --------------------------------------------------------------------
 
-        $this->db = suxDB::get($key); // Db
+        $this->db = suxDB::get($dbKey); // Db
         set_exception_handler(array($this, 'logAndDie')); // Exception
         $this->user = $user; // User
+        $this->tpl = new suxTemplate('openid', $GLOBALS['CONFIG']['PARTITION']); // Template
+        $this->gtext = $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']); // Language
 
         // Defined by OpenID spec
         // http://openid.net/specs/openid-authentication-1_1.html
@@ -90,7 +98,7 @@ class suxOpenID {
         $this->profile = array(
 
             // Set a default IDP URL
-            'my_url'	=>	$this->getIdpUrl(),
+            'my_url'	=>	suxUrl::make('openid', true),
             // lifetime of shared secret
             'lifetime'	=>	1440,
             // Use bcmath?
@@ -119,7 +127,9 @@ class suxOpenID {
                 */
             );
 
+
     }
+
 
     // ----------------------------------------------------------------------------
     // Runmode functions / OpenID Authentication 1.1 / are not camelCase()
@@ -480,8 +490,74 @@ class suxOpenID {
     }
 
 
+   /**
+    * Show a user if they are logged in or not
+    */
+    function id_res_mode() {
+
+        /* Assert truthiness of openid_identity and act accordingly */
+
+        if (!empty($_GET['openid_identity']) && $this->complete($_GET['openid_identity'])) {
+
+            // Success, a maze of if/else follows...
+
+            $this->destroyOpenIDSession();
+            require_once(dirname(__FILE__) . '/../../includes/suxFunct.php');
+
+            $u = $this->user->getUserByOpenID($_GET['openid_identity']);
+            if ($u) {
+
+                if ($this->user->loginCheck() && $_SESSION['users_id'] != $u['users_id']) {
+                    // Wrong openid?
+                    $this->wrapHtml($this->gtext['error_id_conflict']);
+                }
+                else if (!$this->user->loginCheck() && $this->user->authenticate() || $this->user->loginCheck()) {
+                    // Send this user to their own page
+                    suxFunct::redirect(suxUrl::make('/user/profile/' . $_SESSION['nickname'], true));
+                }
+
+                // Too many password failures?
+                if (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->user->max_failures) {
+                    $this->wrapHtml($this->gtext['error_pw_fail']);
+                }
+
+            }
+            elseif ($this->user->loginCheck()) {
+
+                // This must be this users id, attach it
+                $this->user->attachOpenID($_GET['openid_identity']);
+
+                // Send this user to their own page
+                suxFunct::redirect(suxUrl::make('/user/profile/' . $_SESSION['nickname'] . '/openid_attached', true));
+
+            }
+            else {
+                // Sign-in
+                suxFunct::redirect(suxUrl::make('/user/register/openid', true));
+            }
+
+        }
+        elseif (!empty($_GET['openid_identity'])) {
+
+            // Failure
+            $this->destroyOpenIDSession();
+            $this->wrapHtml($this->gtext['error_failed'] . ': ' . $_GET['openid_identity']);
+
+        }
+        else {
+
+            // Otherwise, provide useless info
+            $this->destroyOpenIDSession();
+            if ($this->user->loginCheck()) $this->wrapHtml($this->gtext['logged_in'] . ' ' . $_SESSION['nickname']);
+            else $this->wrapHtml($this->gtext['not_logged_in']);
+
+        }
+
+    }
+
+
     // ----------------------------------------------------------------------------
-    // Runmode functions / Not Sure
+    // Supplemental runmode functions accessible from controller
     // ----------------------------------------------------------------------------
 
 
@@ -493,7 +569,7 @@ class suxOpenID {
 
         // the user needs refresh urls in their session to access this mode
         if (empty($_SESSION['openid_post_accept_url']) || empty($_SESSION['openid_cancel_accept_url']) || empty($_SESSION['openid_unaccepted_url']))
-            $this->error500('You may not access this mode directly.');
+            $this->error500($this->gtext['error_directly']);
 
         // has the user accepted the trust_root?
         $accepted = (!empty($_REQUEST['accepted'])) ? $_REQUEST['accepted'] : null;
@@ -524,7 +600,15 @@ class suxOpenID {
         $yes = $this->profile['req_url'] . $q . 'accepted=yes';
         $no  = $this->profile['req_url'] . $q . 'accepted=no';
 
-        $this->wrapHtml('The client site you are attempting to log into has requested that you trust the following URL:<br/><b>' . $_SESSION['openid_unaccepted_url'] . '</b><br /><br/>Do you wish to continue?<br/><a href="' . $always . '">Always</a> | <a href="' . $yes . '">Yes</a> | <a href="' . $no . '">No</a>');
+        $r = new suxRenderer();
+        $r->text = $this->gtext;
+        $r->text['unaccepted_url'] = $_SESSION['openid_unaccepted_url'];
+        $r->text['always_url'] = $always;
+        $r->text['yes_url'] = $yes;
+        $r->text['no_url'] = $no;
+
+        $this->tpl->assign_by_ref('r', $r);
+        $this->wrapHtml($this->tpl->fetch('accept.tpl'));
     }
 
 
@@ -535,7 +619,7 @@ class suxOpenID {
 
         // the user needs refresh urls in their session to access this mode
         if (empty($_SESSION['openid_post_auth_url']) || empty($_SESSION['openid_cancel_auth_url']))
-            $this->error500('You may not access this mode directly.');
+            $this->error500($this->gtext['error_directly']);
 
         if (!$this->user->loginCheck() && $this->user->authenticate()) {
 
@@ -547,7 +631,7 @@ class suxOpenID {
 
             // Too many password failures?
             if (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->user->max_failures) {
-                $this->errorGet($_SESSION['openid_cancel_auth_url'], 'Too many password failures. You must restart your browser to try again.');
+                $this->errorGet($_SESSION['openid_cancel_auth_url'], $this->gtext['error_pw_fail']);
             }
 
             // Cancelled
@@ -563,7 +647,7 @@ class suxOpenID {
     *  Handle a consumer's request for cancellation.
     */
     function cancel_mode () {
-        $this->wrapHtml('Request cancelled.');
+        $this->wrapHtml($this->gtext['cancelled']);
     }
 
 
@@ -573,71 +657,6 @@ class suxOpenID {
     function error_mode () {
         isset($_REQUEST['openid_error']) ? $this->wrapHtml($_REQUEST['openid_error']) : $this->error500();
     }
-
-
-    /**
-    * Show a user if they are logged in or not
-    */
-    function id_res_mode() {
-
-        /* Assert truthiness of openid_identity and act accordingly */
-
-        if (!empty($_GET['openid_identity']) && $this->complete($_GET['openid_identity'])) {
-
-            // Success, a maze of if/else follows...
-
-            $this->destroyOpenIDSession();
-            $u = $this->user->getUserByOpenID($_GET['openid_identity']);
-            if ($u) {
-
-                if ($this->user->loginCheck() && $_SESSION['users_id'] != $u['users_id']) {
-                    // Wrong openid?
-                    $this->wrapHtml('Error, this openid already belongs to another user and is not yours?');
-                }
-                else if (!$this->user->loginCheck() && $this->user->authenticate() || $this->user->loginCheck()) {
-                    // Login this user
-                    $this->wrapHtml('You are logged in as ' . $_SESSION['nickname']);
-                }
-
-                // Too many password failures?
-                if (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->user->max_failures) {
-                    $this->wrapHtml('Too many password failures. You must restart your browser to try again.');
-                }
-
-            }
-            elseif ($this->user->loginCheck()) {
-
-                // This must be this users id, attach it
-                $this->user->attachOpenID($_GET['openid_identity']);
-                $this->wrapHtml('OpenID added, you are ' . $_SESSION['nickname']);
-
-            }
-            else {
-                // Sign-in
-                new dBug($_REQUEST);
-                echo 'TODO: Redirect to sign-in page';
-                exit;
-            }
-
-        }
-        elseif (!empty($_GET['openid_identity'])) {
-
-            // Failure
-            $this->destroyOpenIDSession();
-            $this->wrapHtml('Sorry, verification of your openid failed: ' . $_GET['openid_identity']);
-
-        }
-        else {
-
-            // Otherwise, provide useless info
-            $this->destroyOpenIDSession();
-            if ($this->user->loginCheck()) $this->wrapHtml('You are logged in as ' . $_SESSION['nickname']);
-            else $this->wrapHtml('You are not logged in');
-
-        }
-
-    }
-
 
 
     /**
@@ -666,13 +685,19 @@ class suxOpenID {
 
         $q = mb_strpos($this->profile['my_url'], '?') ? '&' : '?';
 
-        $html = 'This is an OpenID server endpoint. For more information, see http://openid.net/<br/>Server: <b>' . $this->profile['my_url'] . '</b><br/>Realm: <b>' . $GLOBALS['CONFIG']['REALM'] . '</b><br/>';
-        $html .= '<a href="' . $this->profile['my_url'] . $q . 'openid.mode=login">Login</a>';
-        if ($this->profile['debug']) {
-            $html .' | <a href="' . $this->profile['my_url'] . $q . 'openid.mode=test">Test</a>';
-        }
+        // Template
+        $r = new suxRenderer();
+        $r->text = $this->gtext;
+        $r->text['server_url'] = $this->profile['my_url'];
+        $r->text['realm_id'] = $GLOBALS['CONFIG']['REALM'];
+        $r->text['login_url'] = $this->profile['my_url'] . $q . 'openid.mode=login';
+        $r->text['test_url'] = $this->profile['my_url'] . $q . 'openid.mode=test';
+        $r->bool['profile'] = $this->profile['debug'];
 
-        $this->wrapHtml($html);
+        $this->tpl->assign_by_ref('r', $r);
+        $this->tpl->display('no_mode.tpl');
+        exit;
+
     }
 
 
@@ -788,7 +813,7 @@ class suxOpenID {
     *
     * @param string $openid_url
     */
-    function forward($openid_url) {
+    private function forward($openid_url) {
 
         if (!filter_var($openid_url, FILTER_VALIDATE_URL)) throw new Exception ('Invalid URL');
 
@@ -828,7 +853,7 @@ class suxOpenID {
     *
     * @param string $openid_url
     */
-    function complete($openid_url) {
+    private function complete($openid_url) {
 
         if (!filter_var($openid_url, FILTER_VALIDATE_URL)) throw new Exception ('Invalid URL');
 
@@ -885,7 +910,7 @@ class suxOpenID {
     * @param array $array
     * @return array
     */
-    function appendOpenID($array) {
+    private function appendOpenID($array) {
 
         $r = array();
         foreach ($array as $key => $val) {
@@ -902,7 +927,7 @@ class suxOpenID {
     * @param string $id url
     * @return bool
     */
-    function checkTrusted($id, $url) {
+    private function checkTrusted($id, $url) {
 
         if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
 
@@ -921,7 +946,7 @@ class suxOpenID {
     * @param string $id url
     * @return bool
     */
-    function trustUrl($id, $url) {
+    private function trustUrl($id, $url) {
 
         if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
         $url = filter_var($url, FILTER_SANITIZE_URL);
@@ -948,7 +973,7 @@ class suxOpenID {
     * Destroy a consumer's assoc handle
     * @param int $id
     */
-    function destroyAssocHandle($id) {
+    private function destroyAssocHandle($id) {
 
         if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
 
@@ -968,7 +993,7 @@ class suxOpenID {
     /**
     * Destroy openid session info
     */
-    function destroyOpenIDSession() {
+    private function destroyOpenIDSession() {
 
         if (isset($_SESSION) && is_array($_SESSION)) {
             foreach ($_SESSION as $key => $val) {
@@ -988,7 +1013,7 @@ class suxOpenID {
     * @param integer $expiration
     * @return array
     */
-    function newAssoc($expiration) {
+    private function newAssoc($expiration) {
 
         if (!filter_var($expiration, FILTER_VALIDATE_INT)) return array(false, false);
 
@@ -1013,7 +1038,7 @@ class suxOpenID {
     * @param string $handle assoc_handle to look up
     * @return array (shared_secret, expiration_time)
     */
-    function secret($id) {
+    private function secret($id) {
 
         $st = $this->db->prepare("SELECT expiration, shared_secret FROM {$this->db_table_sec} WHERE id = ? ");
         $st->execute(array($id));
@@ -1038,7 +1063,7 @@ class suxOpenID {
     * Create a new shared secret
     * @return string
     */
-    function newSecret() {
+    private function newSecret() {
 
         $r = '';
         for($i=0; $i<20; $i++)
@@ -1059,8 +1084,7 @@ class suxOpenID {
     * @param string $child
     * @return bool
     */
-    function urlDescends($child, $parent) {
-
+    private function urlDescends($child, $parent) {
 
         if ($child == $parent) return true;
 
@@ -1123,7 +1147,7 @@ class suxOpenID {
     * @param string $b
     * @return int
     */
-    function strDiffAt($a, $b) {
+    private function strDiffAt($a, $b) {
 
         if ($a == $b) return -1;
 
@@ -1142,33 +1166,11 @@ class suxOpenID {
     }
 
 
-
-    /**
-    * Get the URL of the current script
-    * @return string url
-    */
-    function getIdpUrl() {
-
-        $s = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] ? 's' : '';
-        $host = $_SERVER['SERVER_NAME'];
-        $port = $_SERVER['SERVER_PORT'];
-        $path = $_SERVER['PHP_SELF'];
-
-        if (($s && $port == "443") || (!$s && $port == "80") || preg_match("/:$port\$/", $host)) {
-            $p = '';
-        } else {
-            $p = ':' . $port;
-        }
-
-        return "http$s://$host$p$path";
-    }
-
-
     /**
     * Get the requested url
     * @return string url
     */
-    function getReqUrl() {
+    private function getReqUrl() {
 
         $s = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] ? 's' : '';
         $host = $_SERVER['HTTP_HOST'];
@@ -1190,7 +1192,7 @@ class suxOpenID {
     * @param mixed $x
     * @param string $m
     */
-    function debug($x, $m = null) {
+    private function debug($x, $m = null) {
 
         if (empty($this->profile['debug']) || $this->profile['debug'] === false) return true;
 
@@ -1216,7 +1218,7 @@ class suxOpenID {
     * @param integer max
     * @return integer
     */
-    function random($max) {
+    private function random($max) {
         if (strlen($max) < 4)
             return mt_rand(1, $max - 1);
 
@@ -1235,7 +1237,7 @@ class suxOpenID {
     * @return string
     * @url http://openidenabled.com Borrowed from PHP-OpenID
     */
-    function bin($n) {
+    private function bin($n) {
         $bytes = array();
         while (bccomp($n, 0) > 0) {
             array_unshift($bytes, bcmod($n, 256));
@@ -1259,7 +1261,7 @@ class suxOpenID {
     * @return integer
     * @url http://openidenabled.com Borrowed from PHP-OpenID
     */
-    function long($b) {
+    private function long($b) {
         $bytes = array_merge(unpack('C*', $b));
         $n = 0;
         foreach ($bytes as $byte) {
@@ -1276,7 +1278,7 @@ class suxOpenID {
     * @param string $b
     * @return string
     */
-    function x_or($a, $b) {
+    private function x_or($a, $b) {
 
         $r = '';
         for ($i = 0; $i < strlen($b); $i++) {
@@ -1296,7 +1298,7 @@ class suxOpenID {
     * Return a key-value pair in plain text
     * @param array $keys
     */
-    function wrapKv($keys) {
+    private function wrapKv($keys) {
 
         $this->debug($keys, 'Wrapped key/vals');
 
@@ -1317,7 +1319,7 @@ class suxOpenID {
     * @param string $url
     * @param array $keys
     */
-    function wrapLocation($url, $keys) {
+    private function wrapLocation($url, $keys) {
 
         $keys = $this->appendOpenID($keys);
         $this->debug($keys, 'Location keys');
@@ -1339,25 +1341,16 @@ class suxOpenID {
     * @global string $charset
     * @param string $message
     */
-    function wrapHtml($message) {
+    private function wrapHtml($message) {
 
-        // <link rel="openid.server" href="' . $this->profile['req_url'] . '" />
-        // <link rel="openid.delegate" href="' . $this->profile['my_url'] . '" />
+        // Template
+        $r = new suxRenderer();
+        $r->text['message'] = $message;
 
-        echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-        <html>
-        <head>
-        <title>suxOpenID</title>
-        <meta content="text/html; charset=utf-8" http-equiv="content-type" />
-        <meta name="robots" content="noindex,nofollow" />
-        </head>
-        <body>
-        <p>' . $message . '</p>
-        </body>
-        </html>
-        ';
+        $this->tpl->assign_by_ref('r', $r);
+        $this->tpl->display('message.tpl');
+        exit;
 
-        exit(0);
     }
 
 
@@ -1366,25 +1359,19 @@ class suxOpenID {
     * @global string $charset
     * @param string $url
     */
-    function wrapRefresh($url) {
+    private function wrapRefresh($url) {
 
-        echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-        <html>
-        <head>
-        <title>suxOpenID</title>
-        <meta content="text/html; charset=utf-8" http-equiv="content-type" />
-        <meta http-equiv="refresh" content="0;url=' . $url . '">
-        <meta name="robots" content="noindex,nofollow" />
-        </head>
-        <body>
-        <p>Redirecting to <a href="' . $url . '">' . $url . '</a></p>
-        </body>
-        </html>
-        ';
+        // Template
+        $r = new suxRenderer();
+        $r->text = $this->gtext;
+        $r->text['url'] = $url;
+
+        $this->tpl->assign_by_ref('r', $r);
+        $this->tpl->display('refresh.tpl');
 
         $this->debug('Refresh: ' . $url);
 
-        exit(0);
+        exit;
     }
 
 
@@ -1396,7 +1383,7 @@ class suxOpenID {
     * Return an error message to the consumer
     * @param string $message
     */
-    function errorGet($url, $message = 'Bad Request') {
+    private function errorGet($url, $message = 'Bad Request') {
         $this->wrapLocation($url, array('mode' => 'error', 'error' => $message));
     }
 
@@ -1405,7 +1392,7 @@ class suxOpenID {
     * Return an error message to the consumer
     * @param string $message
     */
-    function errorPost($message = 'Bad Request') {
+    private function errorPost($message = 'Bad Request') {
 
         if (headers_sent())
             throw new Exception('errorPost: Headers already sent');
@@ -1421,7 +1408,7 @@ class suxOpenID {
     * Return an error message to the user
     * @param string $message
     */
-    function error400 ( $message = 'Bad Request' ) {
+    private function error400 ( $message = 'Bad Request' ) {
         header("HTTP/1.1 400 Bad Request");
         $this->wrapHtml($message);
     }
@@ -1431,7 +1418,7 @@ class suxOpenID {
     * Return an error message to the user
     * @param string $message
     */
-    function error403 ( $message = 'Forbidden' ) {
+    private function error403 ( $message = 'Forbidden' ) {
         header("HTTP/1.1 403 Forbidden");
         $this->wrapHtml($message);
     }
@@ -1441,7 +1428,7 @@ class suxOpenID {
     * Return an error message to the user
     * @param string $message
     */
-    function error500($message = 'Internal Server Error' ) {
+    private function error500($message = 'Internal Server Error' ) {
         header("HTTP/1.1 500 Internal Server Error");
         $this->wrapHtml($message);
     }
