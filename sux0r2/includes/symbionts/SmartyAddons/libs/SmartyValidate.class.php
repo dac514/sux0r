@@ -25,6 +25,8 @@
  * @author Monte Ohrt <monte at newdigitalgroup dot com>
  * @package SmartyValidate
  * @version 2.9
+ *
+ * Modified by sux0r development group for E_STRICT compliance
  */
 
 if(!defined('SMARTY_VALIDATE_DEFAULT_FORM'))
@@ -44,7 +46,7 @@ class SmartyValidate {
      * @param obj    $smarty the smarty object
      * @param string $reset reset the default form?
      */
-    function connect(&$smarty, $reset = false) {
+    static function connect(&$smarty, $reset = false) {
         if(SmartyValidate::is_valid_smarty_object($smarty)) {
             SmartyValidate::_object_instance('Smarty', $smarty);
             SmartyValidate::register_form(SMARTY_VALIDATE_DEFAULT_FORM, $reset);
@@ -59,7 +61,7 @@ class SmartyValidate {
      *
      * @param obj    $smarty_obj the smarty object
      */
-    function is_valid_smarty_object(&$smarty_obj) {
+    static function is_valid_smarty_object(&$smarty_obj) {
         return (is_object($smarty_obj) && (strtolower(get_class($smarty_obj)) == 'smarty' || is_subclass_of($smarty_obj, 'smarty')));
 
     }
@@ -68,7 +70,7 @@ class SmartyValidate {
      * clear the entire SmartyValidate session
      *
      */
-    function disconnect() {
+    static function disconnect() {
         unset($_SESSION['SmartyValidate']);
         SmartyValidate::_object_instance('-', $_dummy);
     }
@@ -79,7 +81,7 @@ class SmartyValidate {
      * @param string $form the name of the form being validated
      * @param string $reset reset an already registered form?
      */
-    function register_form($form, $reset = false) {
+    static function register_form($form, $reset = false) {
         if(SmartyValidate::is_registered_form($form) && !$reset) {
             return false;
         } else {
@@ -99,7 +101,7 @@ class SmartyValidate {
      *
      * @param string $form the name of the form being validated
      */
-    function unregister_form($form) {
+    static function unregister_form($form) {
         unset($_SESSION['SmartyValidate'][$form]);
     }
 
@@ -108,11 +110,11 @@ class SmartyValidate {
      *
      * @param string $form the name of the form being validated
      */
-    function is_registered_form($form = SMARTY_VALIDATE_DEFAULT_FORM) {
+    static function is_registered_form($form = SMARTY_VALIDATE_DEFAULT_FORM) {
         return isset($_SESSION['SmartyValidate'][$form]);
     }
 
-    function _failed_fields(&$formvars, $form = SMARTY_VALIDATE_DEFAULT_FORM, $revalidate = false)
+    static function _failed_fields(&$formvars, $form = SMARTY_VALIDATE_DEFAULT_FORM, $revalidate = false)
     {
         // keep track of failed fields
         static $_failed_fields = array();
@@ -255,7 +257,7 @@ class SmartyValidate {
      * @param string $formvars the array of submitted for variables
      * @param string $form the name of the form being validated
      */
-    function is_valid(&$formvars, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
+    static function is_valid(&$formvars, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
 
         static $_is_valid = array();
 
@@ -298,7 +300,7 @@ class SmartyValidate {
      *
      * @param string $func_name the function being registered
      */
-    function register_object($object_name, &$object) {
+    static function register_object($object_name, &$object) {
         if(!is_object($object)) {
             trigger_error("SmartyValidate: [register_object] not a valid object.");
             return false;
@@ -311,7 +313,7 @@ class SmartyValidate {
      *
      * @param string $func_name the function being registered
      */
-    function is_registered_object($object_name) {
+    static function is_registered_object($object_name) {
         $_object =& SmartyValidate::_object_instance($object_name, $_dummy);
         return is_object($_object);
     }
@@ -321,7 +323,7 @@ class SmartyValidate {
      *
      * @param string $func_name the function being registered
      */
-    function register_criteria($name, $func_name, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
+    static function register_criteria($name, $func_name, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
         return SmartyValidate::_register_function('criteria', $name, $func_name, $form);
     }
 
@@ -330,7 +332,7 @@ class SmartyValidate {
      *
      * @param string $func_name the function being registered
      */
-    function register_transform($name, $func_name, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
+    static function register_transform($name, $func_name, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
         return SmartyValidate::_register_function('transform', $name, $func_name, $form);
     }
 
@@ -339,7 +341,7 @@ class SmartyValidate {
      *
      * @param string $var the value being booleanized
      */
-    function is_registered_criteria($name, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
+    static function is_registered_criteria($name, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
         if(!SmartyValidate::is_registered_form($form)) {
             trigger_error("SmartyValidate: [is_registered_criteria] form '$form' is not registered.");
             return false;
@@ -352,7 +354,7 @@ class SmartyValidate {
      *
      * @param string $var the value being booleanized
      */
-    function is_registered_transform($name, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
+    static function is_registered_transform($name, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
         if(!SmartyValidate::is_registered_form($form)) {
             trigger_error("SmartyValidate: [is_registered_transform] form '$form' is not registered.");
             return false;
@@ -371,7 +373,7 @@ class SmartyValidate {
      * @param string $transform transform function(s) to apply (optional)
      * @param string $form name of the form (optional)
      */
-    function register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
+    static function register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
         if(!SmartyValidate::is_registered_form($form)) {
             trigger_error("SmartyValidate: [register_validator] form '$form' is not registered.");
             return false;
@@ -409,7 +411,7 @@ class SmartyValidate {
      * @param string $transform the name of the transform function(s)
      * @param string $form name of the form (optional)
      */
-    function set_transform($id, $transform, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
+    static function set_transform($id, $transform, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
 
         if(($_validator_key = SmartyValidate::is_registered_validator($id,$form)) === false) {
             trigger_error("SmartyValidate: [set_transform] validator '$id' is not registered.");
@@ -425,7 +427,7 @@ class SmartyValidate {
      *
      * @param string $id the validator to test
      */
-    function is_registered_validator($id, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
+    static function is_registered_validator($id, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
         if(!SmartyValidate::is_registered_form($form)) {
             trigger_error("SmartyValidate: [is_registered_validator] form '$form' is not registered.");
             return false;
@@ -445,7 +447,7 @@ class SmartyValidate {
      *
      * @param string $id the validator to unregister
      */
-    function unregister_validator($id, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
+    static function unregister_validator($id, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
         if(!SmartyValidate::is_registered_form($form)) {
             return false;
         }
@@ -466,7 +468,7 @@ class SmartyValidate {
      * @param string $page the name of the page being validated
      * @param string $form the name of the form being validated
      */
-    function set_page($page, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
+    static function set_page($page, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
         $_SESSION['SmartyValidate'][$form]['page'] = $page;
         $_SESSION['SmartyValidate'][$form]['is_error'] = false;
         $_SESSION['SmartyValidate'][$form]['is_init'] = true;
@@ -479,7 +481,7 @@ class SmartyValidate {
      * @param string $name the registered name
      * @param string $form the form name
      */
-    function _execute_transform($name, $value, $params, &$formvars, $form) {
+    static function _execute_transform($name, $value, $params, &$formvars, $form) {
 
         if(SmartyValidate::is_registered_transform($name, $form)) {
             $_func_name = SmartyValidate::_get_registered_func_name('transform', $name, $form);
@@ -516,7 +518,7 @@ class SmartyValidate {
      *
      * @param string $func_name the function being registered
      */
-    function _register_function($type, $name, $func_name, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
+    static function _register_function($type, $name, $func_name, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
         if(!SmartyValidate::is_registered_form($form)) {
             trigger_error("SmartyValidate: [register_$type] form '$form' is not registered.");
             return false;
@@ -553,7 +555,7 @@ class SmartyValidate {
      * @param string $name the registered name
      * @param string $form the form name
      */
-    function _get_registered_func_name($type,$name,$form) {
+    static function _get_registered_func_name($type,$name,$form) {
         return isset($_SESSION['SmartyValidate'][$form]['registered_funcs'][$type][$name])
            ? $_SESSION['SmartyValidate'][$form]['registered_funcs'][$type][$name]
            : false;
@@ -565,7 +567,7 @@ class SmartyValidate {
      *
      * @param string $var the value being booleanized
      */
-    function _booleanize($var) {
+    static function _booleanize($var) {
         if(in_array(strtolower($var), array(true, 1, 'true','on','yes','y'),true)) {
             return true;
         }
@@ -579,7 +581,7 @@ class SmartyValidate {
      * @param string $value the value being tested
      * @param string $empty skip empty values or not
      */
-    function _is_valid_criteria($criteria, $value, $empty, &$params, &$formvars, $form) {
+    static function _is_valid_criteria($criteria, $value, $empty, &$params, &$formvars, $form) {
         if(SmartyValidate::is_registered_criteria($criteria,$form)) {
             $_func_name = SmartyValidate::_get_registered_func_name('criteria',$criteria, $form);
         } else {
@@ -616,7 +618,7 @@ class SmartyValidate {
      * @param string $name the object name
      * @param object $object the object being set
      */
-    function &_object_instance($name, &$object) {
+    static function &_object_instance($name, &$object) {
         $return = false;
         static $_objects = array();
         if ($name=='-') {
@@ -639,7 +641,7 @@ class SmartyValidate {
      *
      * @param string $value the value being tested
      */
-    function _smarty_assign($vars = array()) {
+    static function _smarty_assign($vars = array()) {
 
         $_smarty_obj =& SmartyValidate::_object_instance('Smarty', $_dummy);
 
