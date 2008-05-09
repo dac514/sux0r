@@ -339,7 +339,7 @@ CREATE TABLE `messages` (
   PRIMARY KEY  (`id`),
   KEY `thread_id` (`thread_id`),
   KEY `users_id` (`users_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
 CREATE TABLE `messages_history` (
@@ -353,7 +353,7 @@ CREATE TABLE `messages_history` (
   PRIMARY KEY  (`id`),
   KEY `messages_id` (`messages_id`),
   KEY `users_id` (`users_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
 */
