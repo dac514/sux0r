@@ -59,30 +59,7 @@ foreach ($params as $key => $val) {
 // Go!
 // ---------------------------------------------------------------------------
 
-try {
-
-    // Load file
-    if (!include_once(dirname(__FILE__) . "/modules/{$controller}/controller.php")) {
-        throw(new Exception('Failed to initialize controller'));
-    }
-
-    sux($action, $params);
-
-}
-catch (Exception $e) {
-
-    echo 'Something went horribly wrong...';
-    new dBug($controller);
-    new dBug($params);
-
-    $message = "index Error: \n";
-    $message .= $e->getMessage() . "\n";
-    $message .= "File: " . $e->getFile() . "\n";
-    $message .= "Line: " . $e->getLine() . "\n\n";
-    $message .= "Backtrace: \n" . print_r($e->getTrace(), true) . "\n\n";
-    die("<pre>{$message}</pre>");
-
-}
-
+include_once(dirname(__FILE__) . "/modules/{$controller}/controller.php");
+sux($action, $params);
 
 ?>
