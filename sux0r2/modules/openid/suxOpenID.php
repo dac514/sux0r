@@ -81,6 +81,12 @@ class suxOpenID {
         $this->tpl = new suxTemplate('openid', $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->gtext = $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']); // Language
 
+        /*
+        Note:
+        As this module is much more than a user interface,
+        suxRenderer is called only when needed.
+        */
+
         // Defined by OpenID spec
         // http://openid.net/specs/openid-authentication-1_1.html
         // http://openid.net/specs/openid-authentication-1_1.html#pvalue

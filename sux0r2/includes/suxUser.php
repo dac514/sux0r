@@ -175,6 +175,7 @@ class suxUser {
             else $info[$key] = strip_tags($val);
         }
 
+
         // --------------------------------------------------------------------
         // Go!
         // --------------------------------------------------------------------
@@ -183,49 +184,38 @@ class suxUser {
         $this->db->beginTransaction();
         $this->inTransaction = true;
 
-        try {
-            if (!$id) {
+        if (!$id) {
 
-                // Insert user
+            // Insert user
 
-                $query = suxDB::prepareInsertQuery($this->db_table, $user);
-                $st = $this->db->prepare($query);
-                $st->execute($user);
+            $query = suxDB::prepareInsertQuery($this->db_table, $user);
+            $st = $this->db->prepare($query);
+            $st->execute($user);
 
-                $id = $this->db->lastInsertId();
-                $info['users_id'] = $id;
+            $id = $this->db->lastInsertId();
+            $info['users_id'] = $id;
 
-                $query = suxDB::prepareInsertQuery($this->db_table_info, $info);
-                $st = $this->db->prepare($query);
-                $st->execute($info);
-
-            }
-            else {
-
-                // Update user
-
-                $query = suxDB::prepareUpdateQuery($this->db_table, $user);
-                $st = $this->db->prepare($query);
-                $st->execute($user);
-
-                $info['users_id'] = $id;
-
-                $query = suxDB::prepareUpdateQuery($this->db_table_info, $info, 'users_id');
-                $st = $this->db->prepare($query);
-                $st->execute($info);
-
-            }
+            $query = suxDB::prepareInsertQuery($this->db_table_info, $info);
+            $st = $this->db->prepare($query);
+            $st->execute($info);
 
         }
-        catch (Exception $e) {
-            if ($st->errorCode() == 23000) {
-                // SQLSTATE 23000: Constraint violations
-                $this->db->rollback();
-                $this->inTransaction = false;
-                return false;
-            }
-            else throw ($e); // Hot potato
+        else {
+
+            // Update user
+
+            $query = suxDB::prepareUpdateQuery($this->db_table, $user);
+            $st = $this->db->prepare($query);
+            $st->execute($user);
+
+            $info['users_id'] = $id;
+
+            $query = suxDB::prepareUpdateQuery($this->db_table_info, $info, 'users_id');
+            $st = $this->db->prepare($query);
+            $st->execute($info);
+
         }
+
 
         // Commit
         $this->db->commit();
@@ -590,7 +580,7 @@ CREATE TABLE `users` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `nickname` (`nickname`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
 CREATE TABLE `users_info` (
@@ -613,7 +603,7 @@ CREATE TABLE `users_info` (
   `microid` varchar(255) default NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `users_id` (`users_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
 CREATE TABLE `users_openid` (

@@ -27,7 +27,29 @@ function sux($action, $params = null) {
     switch($action)
     {
 
+    case 'register' :
+
+        // --------------------------------------------------------------------
+        // Register
+        // --------------------------------------------------------------------
+
+        include_once('suxRegister.php');
+        $reg = new suxRegister();
+
+        if ($reg->formValidate()) {
+            $reg->formProcess();
+            $reg->formSuccess();
+        }
+        else $reg->formBuild();
+
+        break;
+
+
     case 'profile' : // User profile
+
+        // --------------------------------------------------------------------
+        // Show userp profile
+        // --------------------------------------------------------------------
 
         include_once('suxUserProfile.php');
         if (!empty($params[0])) {
@@ -37,6 +59,10 @@ function sux($action, $params = null) {
         }
 
     default:
+
+        // --------------------------------------------------------------------
+        // Default
+        // --------------------------------------------------------------------
 
         echo 'user';
         break;

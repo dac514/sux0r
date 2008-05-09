@@ -25,10 +25,9 @@ require_once(dirname(__FILE__) . '/symbionts/SmartyAddons/libs/SmartyValidate.cl
 
 class suxValidate extends SmartyValidate {
 
-    /**
-    * Class Constructor
-    */
-    function __construct() { }
+    // Static class, no cloning or instantiating allowed
+    final private function __construct() { }
+    final private function __clone() { }
 
 
     /**
@@ -38,7 +37,7 @@ class suxValidate extends SmartyValidate {
     *
     * @param string $form the name of the form being validated
     */
-    private function token($form) {
+    private static function token($form) {
 
         $_SESSION['SmartyValidate'][$form]['token'] = md5(uniqid(mt_rand(), true));
         $_smarty_obj =& SmartyValidate::_object_instance('Smarty', $_dummy);
@@ -53,7 +52,7 @@ class suxValidate extends SmartyValidate {
      * @param obj    $smarty the smarty object
      * @param string $reset reset the default form?
      */
-    function connect(&$smarty, $reset = false) {
+     static function connect(&$smarty, $reset = false) {
         if(SmartyValidate::is_valid_smarty_object($smarty)) {
             SmartyValidate::_object_instance('Smarty', $smarty);
             self::register_form(SMARTY_VALIDATE_DEFAULT_FORM, $reset);
@@ -70,7 +69,7 @@ class suxValidate extends SmartyValidate {
     * @param string $form the name of the form being validated
     * @param string $reset reset an already registered form?
     */
-    function register_form($form, $reset = false) {
+    static function register_form($form, $reset = false) {
 
          $_ret = false;
 
@@ -98,7 +97,7 @@ class suxValidate extends SmartyValidate {
      * @param string $formvars the array of submitted for variables
      * @param string $form the name of the form being validated
      */
-    function is_valid(&$formvars, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
+    static function is_valid(&$formvars, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
 
         // ------------------------------------------------------------------
         // Begin override
@@ -134,7 +133,7 @@ class suxValidate extends SmartyValidate {
 
         $_ret = null;
         if (empty($formvars['token']) || empty($_SESSION['SmartyValidate'][$form]['token'])) {
-            trigger_error("SmartyValidate: [token] in form '$form' is not set.");
+            // trigger_error("SmartyValidate: [token] in form '$form' is not set.");
             $_ret = false;
         }
         else if ($formvars['token'] != $_SESSION['SmartyValidate'][$form]['token']) {
@@ -156,7 +155,6 @@ class suxValidate extends SmartyValidate {
         $_SESSION['SmartyValidate'][$form]['is_error'] = !$_ret;
 
         $_is_valid[$form] = $_ret;
-
 
         return $_ret;
     }
