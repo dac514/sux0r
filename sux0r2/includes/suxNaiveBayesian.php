@@ -718,7 +718,7 @@ CREATE TABLE `bayes_categories` (
   `token_count` bigint(20) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `grouping` (`category`,`bayes_vectors_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
 CREATE TABLE `bayes_documents` (
@@ -727,7 +727,7 @@ CREATE TABLE `bayes_documents` (
   `body_plaintext` text NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `bayes_categories_id` (`bayes_categories_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
 CREATE TABLE `bayes_tokens` (
@@ -737,14 +737,14 @@ CREATE TABLE `bayes_tokens` (
   `count` bigint(20) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `grouping` (`token`,`bayes_categories_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
 CREATE TABLE `bayes_vectors` (
   `id` int(11) NOT NULL auto_increment,
   `vector` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 */
 
