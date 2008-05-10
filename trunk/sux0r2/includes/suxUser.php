@@ -485,7 +485,7 @@ class suxUser {
             // TODO, No password because this user is Open ID Enabled?
             return false;
         }
-        elseif ($token != md5($row['password'] . @$GLOBALS['CONFIG']['SALT'])) {
+        elseif ($token != md5(date('W') . $row['password'] . @$GLOBALS['CONFIG']['SALT'])) {
             return false;
         }
 
@@ -502,7 +502,7 @@ class suxUser {
         session_regenerate_id();
         $_SESSION['users_id'] = $user['users_id'];
         $_SESSION['nickname'] = $user['nickname'];
-        $_SESSION['token'] = md5($user['password'] . @$GLOBALS['CONFIG']['SALT']);
+        $_SESSION['token'] = md5(date('W') . $user['password'] . @$GLOBALS['CONFIG']['SALT']);
 
     }
 
