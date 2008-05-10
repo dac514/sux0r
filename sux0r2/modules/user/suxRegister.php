@@ -53,6 +53,7 @@ class suxRegister extends suxUser {
         $this->tpl = new suxTemplate('user', $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->gtext = $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']); // Language
         $this->r = new suxRenderer(); // Renderer
+        suxValidate::register_object('this', $this); // Register self to validator
 
     }
 
@@ -62,26 +63,13 @@ class suxRegister extends suxUser {
         if(!empty($_POST) && suxValidate::is_registered_form()) {
             // Validate
             suxValidate::connect($this->tpl);
+
             if(suxValidate::is_valid($_POST)) {
                 suxValidate::disconnect();
                 return true;
             }
         }
 
-        return false;
-
-    }
-
-
-    static function xxxx($value, $empty, &$params, &$formvars) {
-
-        new dBug($value);
-        new dBug($empty);
-        new dBug($params);
-        new dBug($formvars);
-
-
-        // if (!is_array($value)) return false;
         return false;
 
     }
@@ -96,22 +84,21 @@ class suxRegister extends suxUser {
 
             suxValidate::connect($this->tpl, true); // Reset connection
 
-            // Argh, not working...
             // Register our extra criterias
-            // suxValidate::register_object('zzz' , $this);
-            // suxValidate::register_criteria('isDuplicateNickname', 'zzz->xxxx');
-            // suxValidate::register_validator('nickname', 'nickname', 'isDuplicateNickname');
-
+            suxValidate::register_criteria('isDuplicateNickname', 'this->isDuplicateNickname');
+            suxValidate::register_criteria('isDuplicateEmail', 'this->isDuplicateEmail');
 
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
-
-            //suxValidate::register_validator('nickname', 'nickname', 'notEmpty', false, false, 'trim');
+            suxValidate::register_validator('nickname', 'nickname', 'notEmpty', false, false, 'trim');
+            suxValidate::register_validator('nickname2', 'nickname', 'isDuplicateNickname');
             suxValidate::register_validator('email', 'email', 'isEmail', false, false, 'trim');
+            suxValidate::register_validator('email2', 'email', 'isDuplicateEmail');
             suxValidate::register_validator('password', 'password:password_verify', 'isEqual');
 
         }
 
+        // Language
         $this->r->text = $this->gtext;
 
         // Url
@@ -136,6 +123,7 @@ class suxRegister extends suxUser {
 
     }
 
+
     function formProcess() {
 
         unset($_POST['password_verify']);
@@ -143,15 +131,35 @@ class suxRegister extends suxUser {
         $clean['dob'] = "{$_POST['Date_Year']}-{$_POST['Date_Month']}-{$_POST['Date_Day']}";
         unset ($_POST['Date_Year'], $_POST['Date_Month'], $_POST['Date_Day']);
 
-
         $clean = array_merge($clean, $_POST);
-
-
 
         new dBug($this->setUser($clean));
 
         exit;
 
+
+    }
+
+
+    // suxValidate
+    function isDuplicateNickname($value, $empty, &$params, &$formvars) {
+
+        if (empty($formvars['nickname'])) return false;
+
+        $tmp = $this->getUserByNickname($formvars['nickname']);
+        if ($tmp === false ) return true; // No duplicate found
+        else return false;
+
+    }
+
+    // suxValidate
+    function isDuplicateEmail($value, $empty, &$params, &$formvars) {
+
+        if (empty($formvars['email'])) return false;
+
+        $tmp = $this->getUserByEmail($formvars['email']);
+        if ($tmp === false ) return true; // No duplicate found
+        else return false;
 
     }
 
