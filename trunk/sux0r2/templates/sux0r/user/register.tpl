@@ -19,11 +19,13 @@
 
 {$r->text.nickname} :
 {validate id="nickname" message="[ Nickname cannot be empty ]"}
+{validate id="nickname2" message="[ Duplicate nickname ]"}
 <input type="text" name="nickname" value="{$nickname}" />
 <p />
 
 {$r->text.email} :
 {validate id="email" message="[ Invalid email ]"}
+{validate id="email2" message="[ Duplicate email ]"}
 <input type="text" name="email" value="{$email}" />
 <p />
 
