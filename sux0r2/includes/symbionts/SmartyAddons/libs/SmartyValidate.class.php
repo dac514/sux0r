@@ -24,9 +24,7 @@
  * @copyright 2001-2005 New Digital Group, Inc.
  * @author Monte Ohrt <monte at newdigitalgroup dot com>
  * @package SmartyValidate
- * @version 2.9
- *
- * Modified by sux0r development group for E_STRICT compliance
+ * @version 2.9-dev
  */
 
 if(!defined('SMARTY_VALIDATE_DEFAULT_FORM'))
@@ -184,10 +182,10 @@ class SmartyValidate {
                         }
                     }
 
-                    if(is_array($formvars[$_field]) && !$_trans_on_array) {
+                    if(@is_array($formvars[$_field]) && !$_trans_on_array) {
                         if(isset($_field_key)) {
                             // only apply to given key
-                            if(($_new_val = SmartyValidate::_execute_transform($_trans_name, $formvars[$_field][$_field_key], $_sess[$_key], $formvars, $form)) !== false)
+                            if(($_new_val = SmartyValidate::_execute_transform($_trans_name, @$formvars[$_field][$_field_key], $_sess[$_key], $formvars, $form)) !== false)
                                 $formvars[$_field][$_field_key] = $_new_val;
 
                         } else {
@@ -198,7 +196,7 @@ class SmartyValidate {
                             }
                         }
                     } else {
-                         if(($_new_val = SmartyValidate::_execute_transform($_trans_name, $formvars[$_field], $_sess[$_key], $formvars, $form)) !== false)
+                         if(($_new_val = SmartyValidate::_execute_transform($_trans_name, @$formvars[$_field], $_sess[$_key], $formvars, $form)) !== false)
                              $formvars[$_field] = $_new_val;
                     }
                 }
@@ -206,7 +204,7 @@ class SmartyValidate {
 
             if((!isset($formvars[$_field]) && (!isset($_FILES[$_field])))
                 || (
-                    ((is_array($formvars[$_field]) && count($_field) == 0) || (is_string($formvars[$_field]) && strlen($formvars[$_field]) == 0)) && $_empty
+                    ((is_array(@$formvars[$_field]) && count($_field) == 0) || (is_string(@$formvars[$_field]) && strlen($formvars[$_field]) == 0)) && $_empty
                    )
                 ) {
                 // field must exist, or else fails automatically
@@ -221,7 +219,7 @@ class SmartyValidate {
                     $_criteria_on_array = false;
                 }
 
-                if(is_array($formvars[$_field]) && !$_criteria_on_array) {
+                if(is_array(@$formvars[$_field]) && !$_criteria_on_array) {
                     if(isset($_field_key)) {
                         // only apply to given key
                         $_sess[$_key]['valid'] = SmartyValidate::_is_valid_criteria($_val['criteria'], $formvars[$_field][$_field_key], $_empty, $_sess[$_key], $formvars, $form);
@@ -235,7 +233,7 @@ class SmartyValidate {
                         }
                     }
                 } else {
-                    $_sess[$_key]['valid'] = SmartyValidate::_is_valid_criteria($_val['criteria'], $formvars[$_field], $_empty, $_sess[$_key], $formvars, $form);
+                    $_sess[$_key]['valid'] = SmartyValidate::_is_valid_criteria($_val['criteria'], @$formvars[$_field], $_empty, $_sess[$_key], $formvars, $form);
                 }
             }
 
@@ -296,9 +294,9 @@ class SmartyValidate {
     }
 
     /**
-     * register a callable function for form verification
+     * register a callable static function for form verification
      *
-     * @param string $func_name the function being registered
+     * @param string $func_name the static function being registered
      */
     static function register_object($object_name, &$object) {
         if(!is_object($object)) {
@@ -309,9 +307,9 @@ class SmartyValidate {
     }
 
     /**
-     * register a callable function for form verification
+     * register a callable static function for form verification
      *
-     * @param string $func_name the function being registered
+     * @param string $func_name the static function being registered
      */
     static function is_registered_object($object_name) {
         $_object =& SmartyValidate::_object_instance($object_name, $_dummy);
@@ -319,25 +317,25 @@ class SmartyValidate {
     }
 
     /**
-     * register a callable function for form verification
+     * register a callable static function for form verification
      *
-     * @param string $func_name the function being registered
+     * @param string $func_name the static function being registered
      */
     static function register_criteria($name, $func_name, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
         return SmartyValidate::_register_function('criteria', $name, $func_name, $form);
     }
 
     /**
-     * register a callable function for form verification
+     * register a callable static function for form verification
      *
-     * @param string $func_name the function being registered
+     * @param string $func_name the static function being registered
      */
     static function register_transform($name, $func_name, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
         return SmartyValidate::_register_function('transform', $name, $func_name, $form);
     }
 
     /**
-     * test if a criteria function is registered
+     * test if a criteria static function is registered
      *
      * @param string $var the value being booleanized
      */
@@ -350,7 +348,7 @@ class SmartyValidate {
     }
 
     /**
-     * test if a tranform function is registered
+     * test if a tranform static function is registered
      *
      * @param string $var the value being booleanized
      */
@@ -475,7 +473,7 @@ class SmartyValidate {
     }
 
     /**
-     * return actual function name of registered func
+     * return actual static function name of registered func
      *
      * @param string $type the type of func
      * @param string $name the registered name
@@ -492,7 +490,7 @@ class SmartyValidate {
                 if($_plugin_file = $_smarty_obj->_get_plugin_filepath('validate_transform', $name)) {
                     include_once($_plugin_file);
                 } else {
-                    trigger_error("SmartyValidate: [is_valid] transform function '$name' was not found.");
+                    trigger_error("SmartyValidate: [is_valid] transform static function '$name' was not found.");
                     return false;
                 }
             }
@@ -514,9 +512,9 @@ class SmartyValidate {
     }
 
     /**
-     * register a callable function for form verification
+     * register a callable static function for form verification
      *
-     * @param string $func_name the function being registered
+     * @param string $func_name the static function being registered
      */
     static function _register_function($type, $name, $func_name, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
         if(!SmartyValidate::is_registered_form($form)) {
@@ -541,7 +539,7 @@ class SmartyValidate {
                 return false;
             }
         } elseif(!function_exists($func_name)) {
-            trigger_error("SmartyValidate: [register_$type] function '$func_name' does not exist.");
+            trigger_error("SmartyValidate: [register_$type] static function '$func_name' does not exist.");
             return false;
         }
         $_SESSION['SmartyValidate'][$form]['registered_funcs'][$type][$name] = $func_name;
@@ -549,7 +547,7 @@ class SmartyValidate {
     }
 
     /**
-     * return actual function name of registered func
+     * return actual static function name of registered func
      *
      * @param string $type the type of func
      * @param string $name the registered name
@@ -591,7 +589,7 @@ class SmartyValidate {
                 if($_plugin_file = $_smarty_obj->_get_plugin_filepath('validate_criteria', $criteria)) {
                     include_once($_plugin_file);
                 } else {
-                    trigger_error("SmartyValidate: [is_valid] criteria function '$criteria' was not found.");
+                    trigger_error("SmartyValidate: [is_valid] criteria static function '$criteria' was not found.");
                     return false;
                 }
             }
