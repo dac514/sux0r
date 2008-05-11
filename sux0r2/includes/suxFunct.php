@@ -184,6 +184,188 @@ class suxFunct {
     }
 
 
+    /**
+    * Get a key => value array of ISO 639: 2-letter language codes
+    * @return array languages
+    */
+    static function getLanguages() {
+
+        return array(
+            'aa' => 'Afar',
+            'ab' => 'Abkhazian',
+            'af' => 'Afrikaans',
+            'am' => 'Amharic',
+            'ar' => 'Arabic',
+            'as' => 'Assamese',
+            'ay' => 'Aymara',
+            'az' => 'Azerbaijani',
+            'ba' => 'Bashkir',
+            'be' => 'Byelorussian',
+            'bg' => 'Bulgarian',
+            'bh' => 'Bihari',
+            'bi' => 'Bislama',
+            'bn' => 'Bengali',
+            'bo' => 'Tibetan',
+            'br' => 'Breton',
+            'ca' => 'Catalan',
+            'co' => 'Corsican',
+            'cs' => 'Czech',
+            'cy' => 'Welsh',
+            'da' => 'Danish',
+            'de' => 'German',
+            'dz' => 'Bhutani',
+            'el' => 'Greek',
+            'en' => 'English',
+            'eo' => 'Esperanto',
+            'es' => 'Spanish',
+            'et' => 'Estonian',
+            'eu' => 'Basque',
+            'fa' => 'Persian',
+            'fi' => 'Finnish',
+            'fj' => 'Fiji',
+            'fo' => 'Faeroese',
+            'fr' => 'French',
+            'fy' => 'Frisian',
+            'ga' => 'Irish',
+            'gd' => 'Gaelic',
+            'gl' => 'Galician',
+            'gn' => 'Guarani',
+            'gu' => 'Gujarati',
+            'ha' => 'Hausa',
+            'hi' => 'Hindi',
+            'hr' => 'Croatian',
+            'hu' => 'Hungarian',
+            'hy' => 'Armenian',
+            'ia' => 'Interlingua',
+            'ie' => 'Interlingue',
+            'ik' => 'Inupiak',
+            'in' => 'Indonesian',
+            'is' => 'Icelandic',
+            'it' => 'Italian',
+            'iw' => 'Hebrew',
+            'ja' => 'Japanese',
+            'ji' => 'Yiddish',
+            'jw' => 'Javanese',
+            'ka' => 'Georgian',
+            'kk' => 'Kazakh',
+            'kl' => 'Greenlandic',
+            'km' => 'Cambodian',
+            'kn' => 'Kannada',
+            'ko' => 'Korean',
+            'ks' => 'Kashmiri',
+            'ku' => 'Kurdish',
+            'ky' => 'Kirghiz',
+            'la' => 'Latin',
+            'ln' => 'Lingala',
+            'lo' => 'Laothian',
+            'lt' => 'Lithuanian',
+            'lv' => 'Latvian',
+            'mg' => 'Malagasy',
+            'mi' => 'Maori',
+            'mk' => 'Macedonian',
+            'ml' => 'Malayalam',
+            'mn' => 'Mongolian',
+            'mo' => 'Moldavian',
+            'mr' => 'Marathi',
+            'ms' => 'Malay',
+            'mt' => 'Maltese',
+            'my' => 'Burmese',
+            'na' => 'Nauru',
+            'ne' => 'Nepali',
+            'nl' => 'Dutch',
+            'no' => 'Norwegian',
+            'oc' => 'Occitan',
+            'om' => 'Oromo',
+            'or' => 'Oriya',
+            'pa' => 'Punjabi',
+            'pl' => 'Polish',
+            'ps' => 'Pashto',
+            'pt' => 'Portuguese',
+            'qu' => 'Quechua',
+            'rm' => 'Rhaeto-Romance',
+            'rn' => 'Kirundi',
+            'ro' => 'Romanian',
+            'ru' => 'Russian',
+            'rw' => 'Kinyarwanda',
+            'sa' => 'Sanskrit',
+            'sd' => 'Sindhi',
+            'sg' => 'Sangro',
+            'sh' => 'Serbo-Croatian',
+            'si' => 'Singhalese',
+            'sk' => 'Slovak',
+            'sl' => 'Slovenian',
+            'sm' => 'Samoan',
+            'sn' => 'Shona',
+            'so' => 'Somali',
+            'sq' => 'Albanian',
+            'sr' => 'Serbian',
+            'ss' => 'Siswati',
+            'st' => 'Sesotho',
+            'su' => 'Sudanese',
+            'sv' => 'Swedish',
+            'sw' => 'Swahili',
+            'ta' => 'Tamil',
+            'te' => 'Tegulu',
+            'tg' => 'Tajik',
+            'th' => 'Thai',
+            'ti' => 'Tigrinya',
+            'tk' => 'Turkmen',
+            'tl' => 'Tagalog',
+            'tn' => 'Setswana',
+            'to' => 'Tonga',
+            'tr' => 'Turkish',
+            'ts' => 'Tsonga',
+            'tt' => 'Tatar',
+            'tw' => 'Twi',
+            'uk' => 'Ukrainian',
+            'ur' => 'Urdu',
+            'uz' => 'Uzbek',
+            'vi' => 'Vietnamese',
+            'vo' => 'Volapuk',
+            'wo' => 'Wolof',
+            'xh' => 'Xhosa',
+            'yo' => 'Yoruba',
+            'zh' => 'Chinese',
+            'zu' => 'Zulu',
+            );
+
+    }
+
+
+    /**
+    * Get available locales on a *nix system
+    * @return array list of locales
+    */
+    static function getLocales(){
+
+        $output = array();
+        exec('locale -a', $output);
+        return $output;
+
+    }
+
+
+    /**
+    * Set locale in a platform-independent way
+    * @param  string $locale  the locale name ('en_US', 'uk_UA', 'fr_FR' etc)
+    */
+    static function setLocale($locale) {
+
+        @list($lang, $cty) = explode('_', $locale);
+        $locales = array("$locale.UTF-8", "$locale.utf8", $lang);
+        $result = setlocale(LC_ALL, $locales);
+
+        if(!$result)
+            throw new Exception("Unknown Locale name $locale");
+
+        // See if we have successfully set it to UTF-8
+        $result = mb_strtolower($result);
+        if(!mb_strpos($result, 'utf-8') && !mb_strpos($result, 'utf8'))
+            throw new Exception("$locale is not UTF-8: $result");
+
+    }
+
+
 }
 
 ?>
