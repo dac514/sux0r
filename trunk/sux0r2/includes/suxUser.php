@@ -595,7 +595,7 @@ CREATE TABLE `users_info` (
   `country` char(2) default NULL,
   `tel` varchar(255) default NULL,
   `url` varchar(255) default NULL,
-  `dob` char(10) default NULL,
+  `dob` date default NULL,
   `gender` char(1) default NULL,
   `language` char(2) default NULL,
   `timezone` varchar(255) default NULL,
