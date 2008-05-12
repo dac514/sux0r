@@ -110,13 +110,9 @@ class suxRegister extends suxUser {
 
     function formHandoff() {
 
-        $clean['url'] = $_POST['url'];
-
-        $url = suxUrl::make('/openid/register/openid');
-        $q = mb_strpos($url, '?') ? '&' : '?';
-        $suffix = 'openid.mode=register&openid_url=' . $clean['url'];
-
-        suxFunct::redirect($url . $q . $suffix);
+        $q = array('openid.mode' => 'login', 'openid_url' => $_POST['url']);
+        $url = suxUrl::make('/openid/register/openid', $q);
+        suxFunct::redirect($url);
 
     }
 
@@ -127,7 +123,7 @@ class suxRegister extends suxUser {
         if (empty($formvars['url'])) return false;
 
         $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_openid} WHERE openid_url = ? LIMIT 1 ");
-        $st->execute(array($formvars['url']));
+        $st->execute(array(suxFunct::canonicalizeUrl($formvars['url'])));
 
         if ($st->fetchColumn() > 0) return false; // Duplicate found, fail
         else return true;

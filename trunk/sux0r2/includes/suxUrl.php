@@ -29,7 +29,7 @@ class suxUrl {
     final private function __clone() { }
 
 
-    static function make($path, $full = false) {
+    static function make($path, $query = null, $full = false) {
 
         if (!isset($GLOBALS['CONFIG'])) {
             die("Something is wrong, can't initialize without configuration.");
@@ -57,6 +57,11 @@ class suxUrl {
         $tmp .= $GLOBALS['CONFIG']['URL'];
         $tmp .= ($GLOBALS['CONFIG']['CLEAN_URL'] ? '/' : '/index.php?c=');
         $tmp .= $path;
+
+        if (is_array($query) && count($query)) {
+            $q = mb_strpos($tmp, '?') ? '&' : '?';
+            $tmp .= $q . http_build_query($query);
+        }
 
         return $tmp;
 

@@ -104,14 +104,14 @@ class suxOpenID {
         $this->profile = array(
 
             // Set a default IDP URL
-            'my_url'	=>	suxUrl::make('openid', true),
+            'my_url'	=>	suxUrl::make('openid', null, true),
             // lifetime of shared secret
             'lifetime'	=>	1440,
             // Use bcmath?
             'use_bcmath' => true,
 
             // Debug
-            'debug'		=>	true,
+            'debug'		=>	false,
             'logfile'	=>	'/tmp/suxOpenID.debug.log',
 
             // Determine the requested URL, DO NOT OVERRIDE
@@ -520,7 +520,7 @@ class suxOpenID {
                 }
                 else if (!$this->user->loginCheck() && $this->user->authenticate() || $this->user->loginCheck()) {
                     // Send this user to their own page
-                    suxFunct::redirect(suxUrl::make('/user/profile/' . $_SESSION['nickname'], true));
+                    suxFunct::redirect(suxUrl::make('/user/profile/' . $_SESSION['nickname']));
                 }
 
                 // Too many password failures?
@@ -532,12 +532,12 @@ class suxOpenID {
             elseif ($this->user->loginCheck()) {
 
                 // This must be this users id, attach it
-                if ($_GET['openid_identity'] != $this->profile['my_url']) {
+                if (!$this->urlDescends($_GET['openid_identity'], $this->profile['my_url'])) {
                     $this->user->attachOpenID($_GET['openid_identity']);
                 }
 
                 // Send this user to their own page
-                suxFunct::redirect(suxUrl::make('/user/profile/' . $_SESSION['nickname'] . '/openid_attached', true));
+                suxFunct::redirect(suxUrl::make('/user/profile/' . $_SESSION['nickname'] . '/openid_attached'));
 
             }
             else {
@@ -545,7 +545,17 @@ class suxOpenID {
                 // Forward to registration
                 $_SESSION['openid_url_registration'] = $_GET['openid_identity'];
                 $_SESSION['openid_url_integrity'] = md5($_GET['openid_identity'] . @$GLOBALS['CONFIG']['SALT']);
-                suxFunct::redirect(suxUrl::make('/user/register', true));
+
+                // Sreg
+                $query = null;
+                foreach ($_REQUEST as $key => $val) {
+                    if (preg_match('/^openid_sreg_/', $key)) {
+                        $tmp = str_replace('openid_sreg_', '', $key);
+                        $query[$tmp] = $val;
+                    }
+                }
+
+                suxFunct::redirect(suxUrl::make('/user/register', $query));
 
             }
 
@@ -681,31 +691,14 @@ class suxOpenID {
     */
     function login_mode() {
 
-        // Log into myself, pass this to consumer
-        $this->forward($this->profile['my_url']);
-
-    }
-
-
-    /**
-    * Allow a user to register using their own open id
-    *
-    * @param string $openid_url
-    */
-    function register_mode() {
-
-        // Validate the request
-        if (empty($_REQUEST['openid_url'])) {
-            $this->error400();
-        }
-
-        $openid_url = $_REQUEST['openid_url'];
-        $openid_url = filter_var($openid_url, FILTER_SANITIZE_URL);
+        if (!empty($_REQUEST['openid_url'])) $openid_url = filter_var($_REQUEST['openid_url'], FILTER_SANITIZE_URL);
+        else $openid_url = $this->profile['my_url']; // Log into myself
 
         // Pass this to consumer
         $this->forward($openid_url);
 
     }
+
 
 
     /**
@@ -845,6 +838,8 @@ class suxOpenID {
     */
     private function forward($openid_url) {
 
+        $this->debug('Initiating forward() procedure');
+
         if (!filter_var($openid_url, FILTER_VALIDATE_URL)) throw new Exception ('Invalid URL');
 
         // TODO:
@@ -862,16 +857,18 @@ class suxOpenID {
         $u = $this->user->getUserByOpenID($openid_url);
         if (!$u) {
             // We don't know this user, ask for sreg info
-            $keys['sreg_required'] = 'nickname,email';
-            $keys['sreg_optional'] = 'fullname,dob,gender,postcode,country,language,timezone';
+            $keys['sreg.required'] = 'nickname,email';
+            $keys['sreg.optional'] = 'fullname,dob,gender,postcode,country,language,timezone';
         }
 
         // Check for server/delegate, TODO: Improve this
-        $tmp = file_get_contents($openid_url);
+        $tmp = @file_get_contents($openid_url);
         $found = array();
         preg_match( "<link rel=\"openid.server\" href=\"(.*?)\" />", $tmp, $found);
         if (!empty($found[1])) $url = filter_var($found[1], FILTER_SANITIZE_URL);
         else $url = $openid_url;
+
+        $this->debug($keys, "Server URL: $url");
 
         $this->wrapLocation($url, $keys);
 
@@ -884,6 +881,8 @@ class suxOpenID {
     * @param string $openid_url
     */
     private function complete($openid_url) {
+
+        $this->debug('Initiating complete() procedure');
 
         if (!filter_var($openid_url, FILTER_VALIDATE_URL)) throw new Exception ('Invalid URL');
 
@@ -903,6 +902,8 @@ class suxOpenID {
             'signed' => !empty($_GET['openid_signed']) ? $_GET['openid_signed'] : null,
             );
 
+        $this->debug($keys, "Server URL: $url");
+
         // Send all the openid response parameters from the openid.signed list
         if (!empty($_GET['openid_signed'])) foreach (explode(',', $_GET['openid_signed']) as $param) {
             $param = str_replace('.', '_', $param);
@@ -911,6 +912,18 @@ class suxOpenID {
                 $keys[$param] = $_GET[$tmp];
             }
         }
+
+        // Fix sreg
+        foreach ($keys as $key => $val) {
+            if (preg_match('/^sreg_/', $key)) {
+                $tmp = str_replace('sreg_', 'sreg.', $key);
+                $keys[$tmp] = $val;
+                unset($keys[$key]);
+                continue;
+            }
+        }
+
+        $this->debug($keys, "Return signed keys:");
 
         $body = http_build_query($this->appendOpenID($keys));
         $opts = array(
@@ -924,6 +937,8 @@ class suxOpenID {
         $resp = @file_get_contents($url, null, $ctx);
 
         if (preg_match( '/is_valid:true/', $resp)) $auth = true;
+
+        $this->debug('Valid Openid URL = ' . ($auth ? 'true' : 'false'));
 
         return $auth;
 
