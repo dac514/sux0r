@@ -72,7 +72,7 @@
 <p />
 
 {$r->text.country} :
-<input type="text" name="country" value="{$country}" />
+{html_options name='country' options=$r->text.countries selected=$country}
 <p />
 
 {$r->text.tel} :

@@ -119,21 +119,6 @@ class suxOpenID {
 
             );
 
-        $this->sreg = array (
-                /*
-            	'nickname'		=> 'Joe',
-            	'email'			=> 'joe@example.com',
-            	'fullname'		=> 'Joe Example',
-            	'dob'			=> '1970-10-31',
-            	'gender'		=> 'M',
-            	'postcode'		=> '22000',
-            	'country'		=> 'US',
-            	'language'		=> 'en',
-            	'timezone'		=> 'America/New_York'
-                */
-            );
-
-
     }
 
 
@@ -301,7 +286,7 @@ class suxOpenID {
         }
 
         // concatenate required and optional, if they want it we give it
-        $sreg_required .= ',' . $sreg_optional;
+        $sreg_requested = $sreg_required . ',' . $sreg_optional;
 
         // do the trust_root analysis
         if ($trust_root != $return_to) {
@@ -311,7 +296,7 @@ class suxOpenID {
         }
 
         // make sure i am this identifier
-        if ($identity != $this->profile['my_url']) {
+        if (suxFunct::canonicalizeUrl($identity) != suxFunct::canonicalizeUrl($this->profile['my_url'])) {
 
             $this->debug("Invalid identity: $identity");
             $this->debug("IdP URL: " . $this->profile['my_url']);
@@ -412,14 +397,29 @@ class suxOpenID {
                 $tokens .= sprintf("%s:%s\n", $key, $keys[$key]);
 
             // add sreg keys
-            foreach (explode(',', $sreg_required) as $key) {
+            if ($this->user->loginCheck()) {
 
-                if (empty($this->sreg[$key])) continue;
+                $u = $this->user->getUser($_SESSION['users_id'], true);
 
-                $skey = 'sreg.' . $key;
-                $tokens .= sprintf("%s:%s\n", $skey, $this->sreg[$key]);
-                $keys[$skey] = $this->sreg[$key];
-                $fields[] = $skey;
+                $sreg = array (
+                    'nickname' => $u['nickname'],
+                    'email' => $u['email'],
+                    'fullname' => "{$u['given_name']} {$u['family_name']}",
+                    'dob' => $u['dob'],
+                    'gender' => $u['gender'],
+                    'postcode' => $u['postcode'],
+                    'country' => $u['country'],
+                    'language' => $u['language'],
+                    'timezone' => $u['timezone'],
+                    );
+
+                foreach (explode(',', $sreg_requested) as $key) {
+                    $skey = 'sreg.' . $key;
+                    $tokens .= sprintf("%s:%s\n", $skey, $sreg[$key]);
+                    $keys[$skey] = $sreg[$key];
+                    $fields[] = $skey;
+                }
+
             }
 
             $keys['signed'] = implode(',', $fields);

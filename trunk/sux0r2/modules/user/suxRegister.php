@@ -141,6 +141,13 @@ class suxRegister extends suxUser {
         // Url
         $this->r->text['form_url'] = suxUrl::make('/user/register');
 
+        // Countries
+        $this->r->text['countries'][''] = '---';
+        $this->r->text['countries'] = array_merge($this->r->text['countries'], suxFunct::getCountries());
+        foreach ($this->r->text['countries'] as $key => $val) {
+            if (isset($this->gtext["{$key}2"])) $this->r->text['countries'][$key] = $this->gtext["{$key}2"];
+        }
+
         // Genders
         $this->r->text['genders'] = array(
             'm' => $this->gtext['male'],
