@@ -518,26 +518,22 @@ class suxOpenID {
                     // Wrong openid?
                     $this->wrapHtml($this->gtext['error_id_conflict']);
                 }
-                else if (!$this->user->loginCheck() && $this->user->authenticate() || $this->user->loginCheck()) {
-                    // Send this user to their own page
-                    suxFunct::redirect(suxUrl::make('/user/profile/' . $_SESSION['nickname']));
-                }
-
-                // Too many password failures?
-                if (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->user->max_failures) {
-                    $this->wrapHtml($this->gtext['error_pw_fail']);
+                else {
+                    // Log this user in
+                    $this->user->setSession($u['users_id']);
+                    suxFunct::redirect(suxUrl::make('/user/profile/' . $u['nickname']));
                 }
 
             }
             elseif ($this->user->loginCheck()) {
 
-                // This must be this users id, attach it
                 if (!$this->urlDescends($_GET['openid_identity'], $this->profile['my_url'])) {
+                    // This must be this users id, attach it
                     $this->user->attachOpenID($_GET['openid_identity']);
                 }
 
                 // Send this user to their own page
-                suxFunct::redirect(suxUrl::make('/user/profile/' . $_SESSION['nickname'] . '/openid_attached'));
+                suxFunct::redirect(suxUrl::make('/user/profile/' . $_SESSION['nickname']));
 
             }
             else {
