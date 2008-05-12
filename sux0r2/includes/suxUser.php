@@ -289,9 +289,8 @@ class suxUser {
         // Any user
         if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
 
-        // TODO: Improve SANITIZE_URL to canonicalized form for robust lookup
-        // (i.e. so if users enter their OpenID slightly differently, we can still map it to their account).
-        $openid_url = filter_var($openid_url, FILTER_SANITIZE_URL);
+        // Canonicalize url
+        $openid_url = suxFunct::canonicalizeUrl($openid_url);
 
         // Sql
         $oid = array(

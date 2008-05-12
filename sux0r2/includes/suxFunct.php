@@ -366,6 +366,38 @@ class suxFunct {
     }
 
 
+    /**
+    * Canonicalize url
+    * @param  string $url
+    */
+    static function canonicalizeUrl($url) {
+
+        // remove trailing slash
+        $url = rtrim($url, '/');
+
+        // Add http:// if it's missing
+        if (!preg_match('#^https?://#i', $url)) {
+            // Remove ftp://, gopher://, fake://, etc
+            if (mb_strpos($url, '://')) list($garbage, $url) = mb_split('://', $url);
+            // Prepend http
+            $url = 'http://' . $url;
+        }
+
+        // protocol and domain to lowercase (but NOT the rest of the URL),
+        $scheme = parse_url($url, PHP_URL_SCHEME);
+        $url = preg_replace("/$scheme/", mb_strtolower($scheme), $url, 1);
+        $host = parse_url($url, PHP_URL_HOST);
+        $url = preg_replace("/$host/", mb_strtolower($host), $url, 1);
+
+        // Sanitize for good measure
+        $url = filter_var($url, FILTER_SANITIZE_URL);
+
+        return $url;
+
+    }
+
+
 }
+
 
 ?>

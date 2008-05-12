@@ -85,8 +85,31 @@ class suxRegister extends suxUser {
         // --------------------------------------------------------------------
 
         if ($this->isOpenID()) {
+
             $this->r->bool['openid'] = true;
             $this->r->text['openid_url'] = $_SESSION['openid_url_registration'];
+
+            // Sreg
+            if (!empty($_GET['nickname'])) $_POST['nickname'] = $_GET['nickname'];
+            if (!empty($_GET['email'])) $_POST['email'] = $_GET['email'];
+            if (!empty($_GET['fullname'])) {
+                // \w means alphanumeric characters, \W is the negated version of \w
+                $tmp = mb_split("\W", $_GET['fullname']);
+                $_POST['given_name'] = array_shift($tmp);
+                $_POST['family_name'] = array_pop($tmp);
+            }
+            if (!empty($_GET['dob'])) {
+                $tmp = mb_split("-", $_GET['dob']);
+                $_POST['Date_Year'] = array_shift($tmp);
+                $_POST['Date_Month'] = array_shift($tmp);
+                $_POST['Date_Day'] = array_shift($tmp);
+            }
+            if (!empty($_GET['country'])) $_POST['country'] = $_GET['country'];
+            if (!empty($_GET['gender'])) $_POST['gender'] = mb_strtolower($_GET['gender']);
+            if (!empty($_GET['postcode'])) $_POST['postcode'] = $_GET['postcode'];
+            if (!empty($_GET['language'])) $_POST['language'] = mb_strtolower($_GET['language']);
+            if (!empty($_GET['timezone'])) $_POST['timezone'] = $_GET['timezone'];
+
         }
 
         // --------------------------------------------------------------------
@@ -110,10 +133,9 @@ class suxRegister extends suxUser {
             suxValidate::register_validator('nickname2', 'nickname', 'isDuplicateNickname');
             suxValidate::register_validator('email', 'email', 'isEmail', false, false, 'trim');
             suxValidate::register_validator('email2', 'email', 'isDuplicateEmail');
-            if (!$this->r->bool['openid']) suxValidate::register_validator('password', 'password:password_verify', 'isEqual');
+            if (!$this->isOpenID()) suxValidate::register_validator('password', 'password:password_verify', 'isEqual');
 
         }
-
 
 
         // Url
@@ -194,6 +216,8 @@ class suxRegister extends suxUser {
 
 
     function isOpenID() {
+
+        // These session variables are set by the openid module
 
         if (
             !empty($_SESSION['openid_url_registration']) && !empty($_SESSION['openid_url_integrity']) &&
