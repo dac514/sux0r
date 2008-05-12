@@ -76,7 +76,7 @@
 
 {$r->text.dob} :
 {* <input type="text" name="dob" value="{$dob}" /> TODO: Javascript calendar *}
-{html_select_date name="dob" time="$Date_Year-$Date_Month-$Date_Day" field_order='YMD' start_year='-100' reverse_years=true year_empty='---' month_empty='---' day_empty='---'}
+{html_select_date time="$Date_Year-$Date_Month-$Date_Day" field_order='YMD' start_year='-100' reverse_years=true year_empty='---' month_empty='---' day_empty='---'}
 <p />
 
 {$r->text.gender} :
@@ -87,7 +87,7 @@
 <p />
 
 {$r->text.language} :
-<input type="text" name="language" value="{$language}" />
+{html_options name='language' options=$r->text.languages selected=$language}
 <p />
 
 {$r->text.timezone} :

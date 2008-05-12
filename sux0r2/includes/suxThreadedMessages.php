@@ -72,7 +72,6 @@ class suxThreadedMessages {
         $title = strip_tags($title);
 
         // Sanitize HTML in body
-        require_once(dirname(__FILE__) . '/suxFunct.php');
         $body = suxFunct::sanitizeHtml($body);
 
         // Convert and copy body to UTF-8 plaintext
@@ -170,7 +169,6 @@ class suxThreadedMessages {
         $title = strip_tags($title);
 
         // Sanitize HTML in body
-        require_once(dirname(__FILE__) . '/suxFunct.php');
         $body = suxFunct::sanitizeHtml($body);
 
         // Convert and copy body to UTF-8 plaintext

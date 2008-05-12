@@ -348,7 +348,6 @@ class suxUser {
         }
 
         if (!$proceed && $redirect) {
-            require_once(dirname(__FILE__) . '/suxFunct.php');
             suxFunct::killSession();
             suxFunct::redirect($redirect);
             exit;

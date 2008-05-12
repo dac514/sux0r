@@ -32,6 +32,13 @@ if (!isset($GLOBALS['CONFIG'])) {
     die("Something is wrong, can't initialize without configuration.");
 }
 
+// Initialize suxDB
+require_once($GLOBALS['CONFIG']['PATH'] . '/includes/suxDB.php');
+suxDB::$dsn = $GLOBALS['CONFIG']['DSN'];
+
+// Include suxFunct
+require_once($GLOBALS['CONFIG']['PATH'] . '/includes/suxFunct.php');
+
 // Sessions
 ini_set('session.use_only_cookies', true);
 session_start();
@@ -69,9 +76,5 @@ if (get_magic_quotes_gpc() && (!ini_get('magic_quotes_sybase'))) {
     }
     unset($in);
 }
-
-// Initialize suxDB
-require_once($GLOBALS['CONFIG']['PATH'] . '/includes/suxDB.php');
-suxDB::$dsn = $GLOBALS['CONFIG']['DSN'];
 
 ?>
