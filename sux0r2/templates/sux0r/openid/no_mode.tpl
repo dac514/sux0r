@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>suxOpenID</title>
+    <link rel="openid.server" href="{$r->text.server_url}" />
     <meta content="text/html; charset=utf-8" http-equiv="content-type" />
     <meta name="robots" content="noindex,nofollow" />
 </head>
