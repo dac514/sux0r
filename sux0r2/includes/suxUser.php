@@ -243,9 +243,8 @@ class suxUser {
 
     function getUserByOpenID($openid_url, $full_profile = false) {
 
-        // TODO: Improve SANITIZE_URL to canonicalized form for robust lookup
-        // (i.e. so if users enter their OpenID slightly differently, we can still map it to their account).
-        $openid_url = filter_var($openid_url, FILTER_SANITIZE_URL);
+        // Canonicalize url
+        $openid_url = suxFunct::canonicalizeUrl($openid_url);
 
         $st = $this->db->prepare("SELECT users_id FROM {$this->db_table_openid} WHERE openid_url = ? ");
         $st->execute(array($openid_url));
@@ -324,9 +323,8 @@ class suxUser {
         // Any user
         if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
 
-        // TODO: Improve SANITIZE_URL to canonicalized form for robust lookup
-        // (i.e. so if users enter their OpenID slightly differently, we can still map it to their account).
-        $openid_url = filter_var($openid_url, FILTER_SANITIZE_URL);
+        // Canonicalize url
+        $openid_url = suxFunct::canonicalizeUrl($openid_url);
 
         $query = "DELETE FROM {$this->db_table_openid} WHERE openid_url = ? AND users_id = ? ";
         $st = $this->db->prepare($query);
@@ -475,6 +473,63 @@ class suxUser {
 
 
     /**
+    * Set a user session
+    *
+    * @param string $id
+    * @param bool $nickame use nickname instead of users_id
+    */
+    function setSession($id, $nickname = false) {
+
+        if ($nickname) $user = $this->getUserByNickname($id);
+        else $user = $this->getUser($id);
+
+        if (!$user) {
+            suxFunct::killSession();
+            return false;
+        }
+
+        session_regenerate_id();
+        $_SESSION['users_id'] = $user['users_id'];
+        $_SESSION['nickname'] = $user['nickname'];
+        $_SESSION['token'] = md5(date('W') . $user['password'] . @$GLOBALS['CONFIG']['SALT']);
+
+    }
+
+
+    /**
+    * Generate a random password
+    *
+    * @return string
+    */
+    function generatePw() {
+
+        $new_pw = '';
+        for ($i = 0; $i < 10; $i++) {
+            $new_pw .= chr(mt_rand(33, 126));
+        }
+        return $new_pw;
+
+    }
+
+
+    /**
+    * Perform one-way encryption of a password
+    *
+    * @param string the username
+    * @param string the password to encrypt
+    * @return string
+    */
+    function encryptPw($nickname, $password) {
+
+        if (!isset($GLOBALS['CONFIG']['REALM'])) {
+            die("Something is wrong, can't encrypt password without realm.");
+        }
+        return md5("{$nickname}:{$GLOBALS['CONFIG']['REALM']}:{$password}");
+
+    }
+
+
+    /**
     * Check if a token is valid
     *
     * @param int $id user id
@@ -490,7 +545,6 @@ class suxUser {
         $row = $st->fetch();
 
         if (empty($row['password'])) {
-            // TODO, No password because this user is Open ID Enabled?
             return false;
         }
         elseif ($token != md5(date('W') . $row['password'] . @$GLOBALS['CONFIG']['SALT'])) {
@@ -498,52 +552,6 @@ class suxUser {
         }
 
         return true;
-
-    }
-
-
-    private function setSession($id, $nickname = false) {
-
-        if ($nickname) $user = $this->getUserByNickname($id);
-        else $user = $this->getUser($id);
-
-        session_regenerate_id();
-        $_SESSION['users_id'] = $user['users_id'];
-        $_SESSION['nickname'] = $user['nickname'];
-        $_SESSION['token'] = md5(date('W') . $user['password'] . @$GLOBALS['CONFIG']['SALT']);
-
-    }
-
-
-    /**
-    * Perform one-way encryption of a password
-    *
-    * @param string the username
-    * @param string the password to encrypt
-    * @return string
-    */
-    private function encryptPw($nickname, $password) {
-
-        if (!isset($GLOBALS['CONFIG']['REALM'])) {
-            die("Something is wrong, can't encrypt password without realm.");
-        }
-        return md5("{$nickname}:{$GLOBALS['CONFIG']['REALM']}:{$password}");
-
-    }
-
-
-    /**
-    * Generate a random password
-    *
-    * @return string
-    */
-    protected function generatePw() {
-
-        $new_pw = '';
-        for ($i = 0; $i < 10; $i++) {
-            $new_pw .= chr(mt_rand(33, 126));
-        }
-        return $new_pw;
 
     }
 
