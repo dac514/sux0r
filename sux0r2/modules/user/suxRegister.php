@@ -77,6 +77,22 @@ class suxRegister extends suxUser {
 
     function formBuild() {
 
+        // Language
+        $this->r->text = $this->gtext;
+
+        // --------------------------------------------------------------------
+        // Is this Openid?
+        // --------------------------------------------------------------------
+
+        if ($this->isOpenID()) {
+            $this->r->bool['openid'] = true;
+            $this->r->text['openid_url'] = $_SESSION['openid_url_registration'];
+        }
+
+        // --------------------------------------------------------------------
+        // Form logic
+        // --------------------------------------------------------------------
+
         if (!empty($_POST)) $this->tpl->assign($_POST);
         else suxValidate::disconnect();
 
@@ -94,12 +110,11 @@ class suxRegister extends suxUser {
             suxValidate::register_validator('nickname2', 'nickname', 'isDuplicateNickname');
             suxValidate::register_validator('email', 'email', 'isEmail', false, false, 'trim');
             suxValidate::register_validator('email2', 'email', 'isDuplicateEmail');
-            suxValidate::register_validator('password', 'password:password_verify', 'isEqual');
+            if (!$this->r->bool['openid']) suxValidate::register_validator('password', 'password:password_verify', 'isEqual');
 
         }
 
-        // Language
-        $this->r->text = $this->gtext;
+
 
         // Url
         $this->r->text['form_url'] = suxUrl::make('/user/register');
@@ -133,6 +148,10 @@ class suxRegister extends suxUser {
 
     function formProcess() {
 
+        // --------------------------------------------------------------------
+        // Sanitize
+        // --------------------------------------------------------------------
+
         // Redundant password field
         unset($_POST['password_verify']);
 
@@ -146,10 +165,23 @@ class suxRegister extends suxUser {
         }
         unset ($_POST['Date_Year'], $_POST['Date_Month'], $_POST['Date_Day']);
 
-        // The rest
         $clean = array_merge($clean, $_POST);
 
+        // --------------------------------------------------------------------
+        // Openid
+        // --------------------------------------------------------------------
+
+        $openid_url = null;
+        if ($this->isOpenID()) {
+            $clean['password'] = $this->generatePw(); // Random password
+            $clean['openid_url'] = $_SESSION['openid_url_registration']; // Assign
+        }
+
+        // Sql
         $this->setUser($clean);
+
+        // Unset
+        unset($_SESSION['openid_url_registration'], $_SESSION['openid_url_integrity']);
 
     }
 
@@ -157,6 +189,19 @@ class suxRegister extends suxUser {
     function formSuccess() {
 
         echo 'Success!';
+
+    }
+
+
+    function isOpenID() {
+
+        if (
+            !empty($_SESSION['openid_url_registration']) && !empty($_SESSION['openid_url_integrity']) &&
+            (md5($_SESSION['openid_url_registration'] . @$GLOBALS['CONFIG']['SALT']) == $_SESSION['openid_url_integrity']) &&
+            filter_var($_SESSION['openid_url_registration'], FILTER_VALIDATE_URL)
+            ) return true;
+
+        else return false;
 
     }
 

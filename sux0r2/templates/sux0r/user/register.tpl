@@ -29,13 +29,22 @@
 <input type="text" name="email" value="{$email}" />
 <p />
 
-{$r->text.password} :
-{validate id="password" message="[ Passwords do not match ]"}
-<input type="password" name="password" value="{$password}" />
-<p />
 
-{$r->text.password_verify} :
-<input type="password" name="password_verify" value="{$password_verify}" />
+{if $r->bool.openid}
+
+    Openid: {$r->text.openid_url}
+
+{else}
+
+    {$r->text.password} :
+    {validate id="password" message="[ Passwords do not match ]"}
+    <input type="password" name="password" value="{$password}" />
+    <p />
+
+    {$r->text.password_verify} :
+    <input type="password" name="password_verify" value="{$password_verify}" />
+
+{/if}
 <p />
 
 {$r->text.given_name} :
