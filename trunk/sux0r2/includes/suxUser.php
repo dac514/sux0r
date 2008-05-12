@@ -137,6 +137,10 @@ class suxUser {
     }
 
 
+    /**
+    *
+    * @return int users_id
+    */
     function setUser(array $info, $id = null) {
 
         // --------------------------------------------------------------------
@@ -168,6 +172,11 @@ class suxUser {
         // Encrypted password
         if (!empty($info['password'])) $user['password'] = $info['password'];
         unset($info['password']);
+
+        // Move openid_url to variable
+        $openid_url = null;
+        if (!empty($info['openid_url'])) $openid_url = filter_var($info['openid_url'], FILTER_SANITIZE_URL);
+        unset($info['openid_url']);
 
         // The rest
         foreach ($info as $key => $val) {
@@ -216,12 +225,13 @@ class suxUser {
 
         }
 
+        if ($openid_url) $this->attachOpenID($openid_url, $id);
 
         // Commit
         $this->db->commit();
         $this->inTransaction = false;
 
-        return true;
+        return $id;
 
     }
 
@@ -528,7 +538,7 @@ class suxUser {
     *
     * @return string
     */
-    private function generatePw() {
+    protected function generatePw() {
 
         $new_pw = '';
         for ($i = 0; $i < 10; $i++) {

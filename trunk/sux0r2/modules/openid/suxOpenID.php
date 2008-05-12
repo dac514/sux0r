@@ -111,7 +111,7 @@ class suxOpenID {
             'use_bcmath' => true,
 
             // Debug
-            'debug'		=>	false,
+            'debug'		=>	true,
             'logfile'	=>	'/tmp/suxOpenID.debug.log',
 
             // Determine the requested URL, DO NOT OVERRIDE
@@ -505,7 +505,9 @@ class suxOpenID {
 
         if (!empty($_GET['openid_identity']) && $this->complete($_GET['openid_identity'])) {
 
-            // Success, a maze of if/else follows...
+            // Success
+            // we have verified the identity
+            // a maze of if/else follows...
 
             $this->destroyOpenIDSession();
 
@@ -530,16 +532,24 @@ class suxOpenID {
             elseif ($this->user->loginCheck()) {
 
                 // This must be this users id, attach it
-                $this->user->attachOpenID($_GET['openid_identity']);
+                if ($_GET['openid_identity'] != $this->profile['my_url']) {
+                    $this->user->attachOpenID($_GET['openid_identity']);
+                }
 
                 // Send this user to their own page
                 suxFunct::redirect(suxUrl::make('/user/profile/' . $_SESSION['nickname'] . '/openid_attached', true));
 
             }
             else {
-                // Sign-in
-                suxFunct::redirect(suxUrl::make('/user/register/openid', true));
+
+                // Forward to registration
+                $_SESSION['openid_url_registration'] = $_GET['openid_identity'];
+                $_SESSION['openid_url_integrity'] = md5($_GET['openid_identity'] . @$GLOBALS['CONFIG']['SALT']);
+                suxFunct::redirect(suxUrl::make('/user/register', true));
+
             }
+
+
 
         }
         elseif (!empty($_GET['openid_identity'])) {
@@ -669,15 +679,30 @@ class suxOpenID {
     *
     * @param string $openid_url
     */
-    function login_mode($openid_url = null) {
+    function login_mode() {
 
-        // debug
-        // $openid_url = 'http://dac514.myopenid.com/';
+        // Log into myself, pass this to consumer
+        $this->forward($this->profile['my_url']);
 
-        if (!$openid_url) $openid_url = $this->profile['my_url']; // Log into myself
-        else $openid_url = filter_var($openid_url, FILTER_SANITIZE_URL);
+    }
 
-        // Pass this to dumb consumer...
+
+    /**
+    * Allow a user to register using their own open id
+    *
+    * @param string $openid_url
+    */
+    function register_mode() {
+
+        // Validate the request
+        if (empty($_REQUEST['openid_url'])) {
+            $this->error400();
+        }
+
+        $openid_url = $_REQUEST['openid_url'];
+        $openid_url = filter_var($openid_url, FILTER_SANITIZE_URL);
+
+        // Pass this to consumer
         $this->forward($openid_url);
 
     }

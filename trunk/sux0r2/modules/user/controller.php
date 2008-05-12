@@ -33,14 +33,30 @@ function sux($action, $params = null) {
         // Register
         // --------------------------------------------------------------------
 
-        include_once('suxRegister.php');
-        $reg = new suxRegister();
+        if (!empty($params[0]) && $params[0] == 'openid') {
 
-        if ($reg->formValidate()) {
-            $reg->formProcess();
-            $reg->formSuccess();
+            // Openid registration
+            include_once('suxRegisterOpenID.php');
+            $regOpenID = new suxRegister();
+
+            if ($regOpenID->formValidate()) {
+                $regOpenID->formHandoff();
+            }
+            else $regOpenID->formBuild();
+
         }
-        else $reg->formBuild();
+        else {
+
+            // Regular registration
+            include_once('suxRegister.php');
+            $reg = new suxRegister();
+
+            if ($reg->formValidate()) {
+                $reg->formProcess();
+                $reg->formSuccess();
+            }
+            else $reg->formBuild();
+        }
 
         break;
 
