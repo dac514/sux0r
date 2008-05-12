@@ -84,7 +84,7 @@ class suxRegister extends suxUser {
 
             suxValidate::connect($this->tpl, true); // Reset connection
 
-            // Register our extra criterias
+            // Register our additional criterias
             suxValidate::register_criteria('isDuplicateNickname', 'this->isDuplicateNickname');
             suxValidate::register_criteria('isDuplicateEmail', 'this->isDuplicateEmail');
 
@@ -117,26 +117,46 @@ class suxRegister extends suxUser {
             $this->r->text['timezones'][$val] = $val;
         }
 
+        // Languages
+        $this->r->text['languages'][''] = '---';
+        $this->r->text['languages'] = array_merge($this->r->text['languages'], suxFunct::getLanguages());
+        foreach ($this->r->text['languages'] as $key => $val) {
+            if (isset($this->gtext[$key])) $this->r->text['languages'][$key] = $this->gtext[$key];
+        }
+
+        // Template
         $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('register.tpl');
-        exit;
 
     }
 
 
     function formProcess() {
 
+        // Redundant password field
         unset($_POST['password_verify']);
 
-        $clean['dob'] = "{$_POST['Date_Year']}-{$_POST['Date_Month']}-{$_POST['Date_Day']}";
+        // Birthday
+        $clean['dob'] = null;
+        if (!empty($_POST['Date_Year']) && !empty($_POST['Date_Month']) && !empty($_POST['Date_Day'])) {
+            $clean['dob'] = "{$_POST['Date_Year']}-{$_POST['Date_Month']}-{$_POST['Date_Day']}";
+        }
+        if (!filter_var($clean['dob'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => "/^(\d{1,4})-(\d{1,2})-(\d{1,2})$/")))) {
+            unset ($clean['dob']);
+        }
         unset ($_POST['Date_Year'], $_POST['Date_Month'], $_POST['Date_Day']);
 
+        // The rest
         $clean = array_merge($clean, $_POST);
 
-        new dBug($this->setUser($clean));
+        $this->setUser($clean);
 
-        exit;
+    }
 
+
+    function formSuccess() {
+
+        echo 'Success!';
 
     }
 

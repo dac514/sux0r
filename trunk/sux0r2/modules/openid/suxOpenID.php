@@ -508,7 +508,6 @@ class suxOpenID {
             // Success, a maze of if/else follows...
 
             $this->destroyOpenIDSession();
-            require_once(dirname(__FILE__) . '/../../includes/suxFunct.php');
 
             $u = $this->user->getUserByOpenID($_GET['openid_identity']);
             if ($u) {

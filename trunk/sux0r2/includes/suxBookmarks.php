@@ -51,7 +51,6 @@ class suxBookmarks {
         $title = strip_tags($title);
 
         // Sanitize HTML in desc
-        require_once(dirname(__FILE__) . '/suxFunct.php');
         $desc = suxFunct::sanitizeHtml($desc);
 
         // Convert and copy desc to UTF-8 plaintext
