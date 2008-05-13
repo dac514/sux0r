@@ -34,6 +34,7 @@ class suxRolodex {
 
 
     /**
+    * @global array $CONFIG['DSN']
     * @param string $key a key from our suxDB DSN
     */
     function __construct($key = null) {
@@ -45,6 +46,13 @@ class suxRolodex {
     }
 
 
+    /**
+    * Set rolodex
+    *
+    * @param array $info
+    * @param int $id rolodex_id
+    * @return bool
+    */
     function setRolodex(array $info, $id = null) {
 
         // --------------------------------------------------------------------
@@ -56,11 +64,10 @@ class suxRolodex {
         unset($info['id']); // Don't allow spoofing of the id in the array
 
         foreach ($info as $key => $val) {
-            if ($key == 'url') $info[$key] = filter_var($val, FILTER_SANITIZE_URL);
+            if ($key == 'url') $info[$key] = suxFunct::canonicalizeUrl($val);
             elseif ($key == 'email') $info[$key] = filter_var($val, FILTER_SANITIZE_EMAIL);
             else $info[$key] = strip_tags($val); // No Html allowed
         }
-
 
         // --------------------------------------------------------------------
         // Go!

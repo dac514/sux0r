@@ -26,7 +26,6 @@ require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
-require_once(dirname(__FILE__) . '/../../includes/suxUrl.php');
 
 class suxRegister extends suxUser {
 
@@ -34,6 +33,9 @@ class suxRegister extends suxUser {
     public $tpl; // Template
     public $r; // Renderer
 
+    /**
+    * Constructor
+    */
     function __construct($key = null) {
 
         parent::__construct($key); // Call parent
@@ -45,23 +47,29 @@ class suxRegister extends suxUser {
     }
 
 
+    /**
+    * Validate the form
+    *
+    * @return bool
+    */
     function formValidate() {
 
         if(!empty($_POST) && suxValidate::is_registered_form()) {
             // Validate
             suxValidate::connect($this->tpl);
-
             if(suxValidate::is_valid($_POST)) {
                 suxValidate::disconnect();
                 return true;
             }
         }
-
         return false;
 
     }
 
 
+    /**
+    * Build the form and show the template
+    */
     function formBuild() {
 
         // Language
@@ -125,7 +133,7 @@ class suxRegister extends suxUser {
         }
 
         // Url
-        $this->r->text['form_url'] = suxUrl::make('/user/register');
+        $this->r->text['form_url'] = suxFunct::makeUrl('/user/register');
 
         // Countries
         if (!$_POST) $this->tpl->assign('country', $GLOBALS['CONFIG']['COUNTRY']);
@@ -161,6 +169,10 @@ class suxRegister extends suxUser {
     }
 
 
+
+    /**
+    * Process the form
+    */
     function formProcess() {
 
         // --------------------------------------------------------------------
@@ -201,6 +213,9 @@ class suxRegister extends suxUser {
     }
 
 
+    /**
+    * The form was successfuly processed
+    */
     function formSuccess() {
 
         echo 'Success!';
@@ -208,7 +223,45 @@ class suxRegister extends suxUser {
     }
 
 
-    function isOpenID() {
+
+    /**
+    * for suxValidate, check if a duplicate nickname exists
+    *
+    * @return bool
+    */
+    function isDuplicateNickname($value, $empty, &$params, &$formvars) {
+
+        if (empty($formvars['nickname'])) return false;
+
+        $tmp = $this->getUserByNickname($formvars['nickname']);
+        if ($tmp === false ) return true; // No duplicate found
+        else return false;
+
+    }
+
+
+    /**
+    * for suxValidate, check if a duplicate email exists
+    *
+    * @return bool
+    */
+    function isDuplicateEmail($value, $empty, &$params, &$formvars) {
+
+        if (empty($formvars['email'])) return false;
+
+        $tmp = $this->getUserByEmail($formvars['email']);
+        if ($tmp === false ) return true; // No duplicate found
+        else return false;
+
+    }
+
+
+    /**
+    * Check if openid registration is set
+    *
+    * @return bool
+    */
+    private function isOpenID() {
 
         // These session variables are set by the openid module
 
@@ -221,30 +274,6 @@ class suxRegister extends suxUser {
         else return false;
 
     }
-
-
-    // suxValidate
-    function isDuplicateNickname($value, $empty, &$params, &$formvars) {
-
-        if (empty($formvars['nickname'])) return false;
-
-        $tmp = $this->getUserByNickname($formvars['nickname']);
-        if ($tmp === false ) return true; // No duplicate found
-        else return false;
-
-    }
-
-    // suxValidate
-    function isDuplicateEmail($value, $empty, &$params, &$formvars) {
-
-        if (empty($formvars['email'])) return false;
-
-        $tmp = $this->getUserByEmail($formvars['email']);
-        if ($tmp === false ) return true; // No duplicate found
-        else return false;
-
-    }
-
 
 
 

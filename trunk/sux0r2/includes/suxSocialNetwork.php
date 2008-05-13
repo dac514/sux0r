@@ -44,6 +44,9 @@ class suxSocialNetwork {
 
 
     /**
+    * Constructor
+    *
+    * @global array $CONFIG['DSN']
     * @param string $key a key from our suxDB DSN
     */
     function __construct($key = null) {
@@ -55,6 +58,14 @@ class suxSocialNetwork {
     }
 
 
+    /**
+    * Set relationship
+    *
+    * @param int $uid users_id
+    * @param int $fid the users_id of the friend
+    * @param string $rel relationship based on XFN
+    * @return bool
+    */
     function setRelationship($uid, $fid, $rel) {
 
         // --------------------------------------------------------------------
@@ -135,6 +146,12 @@ class suxSocialNetwork {
     }
 
 
+    /**
+    * Delete relationship
+    *
+    * @param int $id users_id
+    * @return bool
+    */
     function deleteRelationship($id) {
 
         if (!filter_var($id, FILTER_VALIDATE_INT)) return false;

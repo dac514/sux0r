@@ -33,6 +33,7 @@ class suxTemplate extends Smarty {
     /**
     * Constructor
     *
+    * @global string $CONFIG['PATH']
     * @param string $module
     * @param string $partition
     */
@@ -40,14 +41,6 @@ class suxTemplate extends Smarty {
 
         // Call parent
         parent::__construct();
-
-        // --------------------------------------------------------------------
-        // Sanity Check
-        // --------------------------------------------------------------------
-
-        if (!isset($GLOBALS['CONFIG'])) {
-            die("Something is wrong, can't initialize without configuration.");
-        }
 
         // --------------------------------------------------------------------
         // Plugins directory
@@ -70,6 +63,8 @@ class suxTemplate extends Smarty {
     /**
     * Set the template for a module
     *
+    * @global string $CONFIG['PATH']
+    * @global string $CONFIG['CACHE_LIFETIME']
     * @param string $module
     * @param string $partition
     */
@@ -139,6 +134,7 @@ class suxTemplate extends Smarty {
     /**
     * Get the language array
     *
+    * @global string $CONFIG['PATH']
     * @param string $module
     * @param string $partition
     * @return array $gtext

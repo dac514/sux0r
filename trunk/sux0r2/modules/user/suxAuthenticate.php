@@ -1,7 +1,7 @@
 <?php
 
 /**
-* suxUserProfile
+* suxAuthenticate
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -23,61 +23,57 @@
 */
 
 require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
-require_once(dirname(__FILE__) . '/../../includes/suxSocialNetwork.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 
-class suxUserProfile extends suxUser {
-
-    public $tpl; // Template
-    private $profile; // User profile array
-
+class suxAuthenticate extends suxUser {
 
     /**
     * Constructor
     */
-    function __construct($nickname, $key = null) {
-
+    function __construct($key = null) {
         // Call parent
         parent::__construct($key);
+    }
 
-        // Template
-        $this->tpl = new suxTemplate('openid', $GLOBALS['CONFIG']['PARTITION']);
-        $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']);
 
-        // Profile
-        $this->profile = $this->getUserByNickname($nickname, true);
-        unset($this->profile['password']); // We don't need this
+
+    /**
+    * Login
+    */
+    function login() {
+
+        if ($this->loginCheck() || !$this->loginCheck() && $this->authenticate()) {
+
+            // Redirect to user page
+            $url = suxFunct::makeUrl('/user/profile/' . $_SESSION['nickname']);
+            suxFunct::redirect($url);
+
+        }
+        else {
+
+            // Too many password failures?
+            if (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->max_failures) {
+                die('Too many password failures');
+            }
+
+            // Cancceled
+            die('Cancelled');
+
+        }
 
     }
 
 
     /**
-    * Decide what to show
+    * Logout
     */
-    function render() {
+    function logout() {
 
-        if ($this->profile) $this->showProfile();
-        else $this->notFound();
+        // Don't kill session (with password failures, perhaps?) if the
+        // user isn't actually logged in.
+        if ($this->loginCheck()) suxFunct::killSession();
 
-    }
-
-
-    /**
-    * Profile not found
-    */
-    private function notFound() {
-
-        echo 'no profile found';
-
-    }
-
-
-    /**
-    * Show profiile
-    */
-    private function showProfile() {
-
-        new dBug($this->profile);
+        // Redirect to homepage
+        suxFunct::redirect(suxFunct::makeUrl('/'));
 
     }
 

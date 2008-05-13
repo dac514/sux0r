@@ -48,6 +48,9 @@ class suxNaiveBayesian {
 
 
     /**
+    * Constructor
+    *
+    * @global array $CONFIG['DSN']
     * @param string $key a key from our suxDB DSN
     */
     function __construct($key = null) {

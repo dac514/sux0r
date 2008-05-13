@@ -33,6 +33,9 @@ class suxThreadedMessages {
     protected $db_table_hist = 'messages_history';
 
     /**
+    * Constructor
+    *
+    * @global array $CONFIG['DSN']
     * @param string $key a key from our suxDB DSN
     */
     function __construct($key = null) {
@@ -44,7 +47,14 @@ class suxThreadedMessages {
     }
 
 
-    // Saves a message to the database
+    /**
+    * Saves a message to the database
+    *
+    * @param int $users_id users_id
+    * @param string $title title
+    * @param string $body body
+    * @param int $parent_id messages_id of parent
+    */
     function saveMessage($users_id, $title, $body, $parent_id = null ) {
 
         /*
@@ -157,7 +167,14 @@ class suxThreadedMessages {
     }
 
 
-    // Edit a message already in the database
+    /**
+    * Edit a message already in the database, backup changes in history table
+    *
+    * @param int $messages_id messages_id
+    * @param int $users_id users_id
+    * @param string $title title
+    * @param string $body body
+    */
     function editMessage($messages_id, $users_id, $title, $body) {
 
         // -------------------------------------------------------------------
@@ -165,7 +182,6 @@ class suxThreadedMessages {
         // -------------------------------------------------------------------
 
         if (!filter_var($messages_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid message id');
-
         if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
 
         // No HTML in title
@@ -221,7 +237,13 @@ class suxThreadedMessages {
     }
 
 
-    // Gets an array of all messages
+
+    /**
+    * Gets an array of all messages
+    *
+    * @param int $thread_id thread_id
+    * @return array
+    */
     function getThread($thread_id = null) {
 
         // Sanity check
@@ -251,7 +273,13 @@ class suxThreadedMessages {
     }
 
 
-    // Get a message by id
+
+    /**
+    * Get a message by id
+    *
+    * @param int $id messages_id
+    * @return array
+    */
     function getMessage($id) {
 
         // Sanity check
@@ -270,7 +298,12 @@ class suxThreadedMessages {
     }
 
 
-    // Gets an array of all the users messgaes
+    /**
+    * Gets an array of all the users messgaes
+    *
+    * @param int $users_id users_id
+    * @return array
+    */
     function getUserMessages($users_id) {
 
         // Sanity check
