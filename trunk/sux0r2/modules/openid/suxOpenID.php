@@ -53,6 +53,12 @@ class suxOpenID {
 
     /**
     * Constructor
+    *
+    * @global array $CONFIG['DSN']
+    * @global string $CONFIG['PARTITION']
+    * @global string $CONFIG['LANGUAGE']
+    * @param object $suxUser suxUser
+    * @param string $key PDO dsn key
     */
     function __construct(suxUser $user, $key = null) {
 

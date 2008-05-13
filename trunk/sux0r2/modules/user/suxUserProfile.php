@@ -34,6 +34,11 @@ class suxUserProfile extends suxUser {
 
     /**
     * Constructor
+    *
+    * @global string $CONFIG['PARTITION']
+    * @global string $CONFIG['LANGUAGE']
+    * @param string $nickname nickname
+    * @param string $key PDO dsn key
     */
     function __construct($nickname, $key = null) {
 

@@ -9,6 +9,16 @@ $gtext['gender'] = 'Gender';
 $gtext['given_name'] = 'First name';
 $gtext['language'] = 'Language';
 $gtext['locality'] = 'City';
+$gtext['logout'] = 'Logout complete';
+
+$gtext['logout2'] = 'Important: As this site uses
+<a href="http://en.wikipedia.org/wiki/Digest_access_authentication">Digest Authentication</a>
+<strong>YOU SHOULD EXIT YOUR BROWSER</strong>. This is because your browser will
+cache your credentials and automatically log you back in the next time it is
+prompted to do so. You will not see the login box, as this will happen
+transparently. The illusion is that it looks like you never actually logged out,
+when in fact you did, and were then logged back in without knowing.';
+
 $gtext['male'] = 'Male';
 $gtext['nickname'] = 'Nickname';
 $gtext['password'] = 'Password';
@@ -22,7 +32,7 @@ $gtext['timezone'] = 'Timezone';
 $gtext['url'] = 'URL';
 
 /*
-// The defults for languages and countries are in english.
+// The defults for languages and countries are english.
 // It is redundant to define these again in this english language file
 // Uncomment these if you want to translate or change them.
 

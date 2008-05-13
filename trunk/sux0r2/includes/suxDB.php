@@ -50,6 +50,11 @@ class suxDB {
     // Static Functions
     // ------------------------------------------------------------------------
 
+    /**
+    * Get a PDO database connection
+    *
+    * @param string $key PDO dsn key
+    */
     static function get($key = null) {
 
         if (!$key) {

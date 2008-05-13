@@ -23,15 +23,30 @@
 */
 
 require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
+require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
+require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
 class suxAuthenticate extends suxUser {
 
+    public $gtext = array(); // Language
+    public $tpl; // Template
+    public $r; // Renderer
+
+
     /**
     * Constructor
+    *
+    * @global string $CONFIG['PARTITION']
+    * @global string $CONFIG['LANGUAGE']
+    * @param string $key PDO dsn key
     */
     function __construct($key = null) {
-        // Call parent
-        parent::__construct($key);
+
+        parent::__construct($key); // Call parent
+        $this->tpl = new suxTemplate('user', $GLOBALS['CONFIG']['PARTITION']); // Template
+        $this->gtext = $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']); // Language
+        $this->r = new suxRenderer(); // Renderer
+
     }
 
 
@@ -72,8 +87,12 @@ class suxAuthenticate extends suxUser {
         // user isn't actually logged in.
         if ($this->loginCheck()) suxFunct::killSession();
 
-        // Redirect to homepage
-        suxFunct::redirect(suxFunct::makeUrl('/'));
+        // Language
+        $this->r->text = $this->gtext;
+
+        // Template
+        $this->tpl->assign_by_ref('r', $this->r);
+        $this->tpl->display('logout.tpl');
 
     }
 
