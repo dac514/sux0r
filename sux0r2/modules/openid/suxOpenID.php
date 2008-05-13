@@ -851,8 +851,8 @@ class suxOpenID {
             );
 
         $u = $this->user->getUserByOpenID($openid_url);
-        if (!$u) {
-            // We don't know this user, ask for sreg info
+        if (!$u && !$this->urlDescends($openid_url, $this->profile['my_url'])) {
+            // We don't know this user, we're also not logging into ourself, ask for sreg info
             $keys['sreg.required'] = 'nickname,email';
             $keys['sreg.optional'] = 'fullname,dob,gender,postcode,country,language,timezone';
         }
