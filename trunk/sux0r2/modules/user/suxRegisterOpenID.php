@@ -27,7 +27,7 @@ require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
-class suxRegister extends suxUser {
+class suxRegisterOpenID extends suxUser {
 
     public $gtext = array(); // Language
     public $tpl; // Template

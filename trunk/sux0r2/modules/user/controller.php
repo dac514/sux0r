@@ -33,9 +33,24 @@ function sux($action, $params = null) {
         // Login
         // --------------------------------------------------------------------
 
-        include_once('suxAuthenticate.php');
-        $auth = new suxAuthenticate();
-        $auth->login();
+        if (!empty($params[0]) && $params[0] == 'openid') {
+
+            // Openid registration
+            include_once('suxLoginOpenID.php');
+            $login = new suxLoginOpenID();
+            if ($login->formValidate()) {
+                $login->formHandoff();
+            }
+            else $login->formBuild();
+
+        }
+        else {
+
+            // Regular login
+            include_once('suxAuthenticate.php');
+            $auth = new suxAuthenticate();
+            $auth->login();
+        }
         break;
 
 
@@ -61,8 +76,7 @@ function sux($action, $params = null) {
 
             // Openid registration
             include_once('suxRegisterOpenID.php');
-            $regOpenID = new suxRegister();
-
+            $regOpenID = new suxRegisterOpenID();
             if ($regOpenID->formValidate()) {
                 $regOpenID->formHandoff();
             }
