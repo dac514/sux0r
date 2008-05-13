@@ -40,6 +40,7 @@ class suxUser {
     */
     function __construct($key = null) {
 
+        if (!$key && !empty($GLOBALS['CONFIG']['DSN']['users'])) $key = 'users';
     	$this->db = suxDB::get($key);
         set_exception_handler(array($this, 'logAndDie'));
 

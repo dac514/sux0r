@@ -32,22 +32,10 @@ class suxUserProfile extends suxUser {
     public $tpl;
     private $profile;
 
-    function __construct($nickname, $dbKey = null) {
-
-        // --------------------------------------------------------------------
-        // Sanity Check
-        // --------------------------------------------------------------------
-
-        if (!isset($GLOBALS['CONFIG'])) {
-            die("Something is wrong, can't initialize without configuration.");
-        }
-
-        // --------------------------------------------------------------------
-        // Go
-        // --------------------------------------------------------------------
+    function __construct($nickname, $key = null) {
 
         // Call parent
-        parent::__construct($dbKey);
+        parent::__construct($key);
 
         // Template
         $this->tpl = new suxTemplate('openid', $GLOBALS['CONFIG']['PARTITION']);

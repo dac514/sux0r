@@ -55,28 +55,12 @@ class suxOpenID {
     /**
     * Constructor
     */
-    function __construct(suxUser $user, $dbKey = null) {
+    function __construct(suxUser $user, $key = null) {
 
-
-        // --------------------------------------------------------------------
-        // Sanity Check
-        // --------------------------------------------------------------------
-
-        if (!isset($GLOBALS['CONFIG'])) {
-            die("Something is wrong, can't initialize without configuration.");
-        }
-
-
-        if (!session_id()) {
-            die("Something is wrong, can't initialize without session_start().");
-        }
-
-        // --------------------------------------------------------------------
-        // Setup
-        // --------------------------------------------------------------------
-
-        $this->db = suxDB::get($dbKey); // Db
+        if (!$key && !empty($GLOBALS['CONFIG']['DSN']['openid'])) $key = 'openid';
+        $this->db = suxDB::get($key); // Db
         set_exception_handler(array($this, 'logAndDie')); // Exception
+
         $this->user = $user; // User
         $this->tpl = new suxTemplate('openid', $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->gtext = $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']); // Language

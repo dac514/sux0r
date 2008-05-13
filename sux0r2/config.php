@@ -9,11 +9,21 @@ error_reporting (E_ALL | E_STRICT); // Error reporting for developers
 /* Configuration variables */
 
 // An array containing PDO compatible database DSN [key => value] pairs.
-// Sux0r is theoretically able to span multiple databases, but ordinarily
+// Sux0r is (theoretically) able to span multiple databases, but ordinarily
 // there should be one ['default' => $dsn] pointing to your one database..
 
 $CONFIG['DSN'] =  array(
     'default' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
+    /*
+    'bayes' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
+    'bookmarks' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
+    'calendar' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
+    'messages' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
+    'openid' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
+    'rolodex' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
+    'socialnetwork' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
+    'users' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
+    */
     );
 
 // The auto-detected path to your sux0r installation.
@@ -29,8 +39,14 @@ $CONFIG['PATH'] = dirname(__FILE__);
 $CONFIG['URL'] = '/sux0r2';
 
 // Default language for site, uses a 2 letter l10n ISO-CODE naming convention
+// See: http://www.loc.gov/standards/iso639-2/php/code_list.php
 
 $CONFIG['LANGUAGE'] = 'en';
+
+// Default country for site, uses a 2 letter l10n ISO-CODE naming convention
+// See: http://www.iso.org/iso/list-en1-semic-2.txt
+
+$CONFIG['COUNTRY'] = 'ca';
 
 // Default partition for site
 
