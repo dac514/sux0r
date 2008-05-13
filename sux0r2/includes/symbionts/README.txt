@@ -6,13 +6,13 @@ Symbionts are 3rd party open source vendors that may or may not be licensed
 under the GNU Affero General Public License (version 3)
 
 These additional open source libraries have their own licensing requirements
-and, as such, should not be directly modified by the sux0r developement group.
+and, as such, should not be directly modified by the sux0r development group.
 
 ------------------------------------------------------------------------------
 Rationale
 ------------------------------------------------------------------------------
 
-Acdording to gnu.org, the GNU AGPL is not compatible with GPLv2. It is also
+According to gnu.org, the GNU AGPL is not compatible with GPLv2. It is also
 technically not compatible with GPLv3 in a strict sense: you cannot take code
 released under the GNU AGPL and use it under the terms of GPLv3, or vice versa.
 
@@ -23,8 +23,8 @@ single project.
 Additionally, most software released under GPLv2 allows you to use the terms
 of later versions of the GPL.
 
-This logic, evidently, can be extended to any GPL compatible licence. A list
-of compatible licences is located at:
+This logic, evidently, can be extended to any GPL compatible license. A list
+of compatible licenses is located at:
 
 http://www.gnu.org/philosophy/license-list.html
 
@@ -45,6 +45,13 @@ dBug
 * Licence: GPL, (version unspecified, assuming GPL 3)
 * Website: http://dbug.ospinto.com/
 * Notes: The PHP file says March 22, 2007 but the website says Dec 04, 2007
+
+
+extJs
+* Path: ./extjs/
+* Version: 2.1.0
+* Licence: GPL 3.0
+* Website: http://extjs.com/
 
 
 htmLawed
