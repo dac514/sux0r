@@ -34,22 +34,9 @@ class suxRegister extends suxUser {
     public $tpl; // Template
     public $r; // Renderer
 
-    function __construct($dbKey = null) {
+    function __construct($key = null) {
 
-        // --------------------------------------------------------------------
-        // Sanity Check
-        // --------------------------------------------------------------------
-
-        if (!isset($GLOBALS['CONFIG'])) {
-            die("Something is wrong, can't initialize without configuration.");
-        }
-
-        // --------------------------------------------------------------------
-        // Go
-        // --------------------------------------------------------------------
-
-        parent::__construct($dbKey); // Call parent
-
+        parent::__construct($key); // Call parent
         $this->tpl = new suxTemplate('user', $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->gtext = $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']); // Language
         $this->r = new suxRenderer(); // Renderer
@@ -137,13 +124,12 @@ class suxRegister extends suxUser {
 
         }
 
-
         // Url
         $this->r->text['form_url'] = suxUrl::make('/user/register');
 
         // Countries
-        $this->r->text['countries'][''] = '---';
-        $this->r->text['countries'] = array_merge($this->r->text['countries'], suxFunct::getCountries());
+        if (!$_POST) $this->tpl->assign('country', $GLOBALS['CONFIG']['COUNTRY']);
+        $this->r->text['countries'] = suxFunct::getCountries();
         foreach ($this->r->text['countries'] as $key => $val) {
             if (isset($this->gtext["{$key}2"])) $this->r->text['countries'][$key] = $this->gtext["{$key}2"];
         }
@@ -155,15 +141,15 @@ class suxRegister extends suxUser {
             );
 
         // Timezones
+        if (!$_POST) $this->tpl->assign('timezone', $GLOBALS['CONFIG']['TIMEZONE']);
         $tz = timezone_identifiers_list();
-        $this->r->text['timezones'][''] = '---';
         foreach ($tz as $val) {
             $this->r->text['timezones'][$val] = $val;
         }
 
         // Languages
-        $this->r->text['languages'][''] = '---';
-        $this->r->text['languages'] = array_merge($this->r->text['languages'], suxFunct::getLanguages());
+        if (!$_POST) $this->tpl->assign('language', $GLOBALS['CONFIG']['LANGUAGE']);
+        $this->r->text['languages'] = suxFunct::getLanguages();
         foreach ($this->r->text['languages'] as $key => $val) {
             if (isset($this->gtext[$key])) $this->r->text['languages'][$key] = $this->gtext[$key];
         }

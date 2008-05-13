@@ -34,8 +34,11 @@ class suxBookmarks {
     * @param string $key a key from our suxDB DSN
     */
     function __construct($key = null) {
+
+        if (!$key && !empty($GLOBALS['CONFIG']['DSN']['bookmarks'])) $key = 'bookmarks';
     	$this->db = suxDB::get($key);
         set_exception_handler(array($this, 'logAndDie'));
+
     }
 
 

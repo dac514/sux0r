@@ -251,6 +251,8 @@ class suxFunct {
 
     /**
     * Get a key => value array of ISO 3166-1 two letter country codes
+    *
+    * @see http://www.iso.org/iso/list-en1-semic-2.txt
     * @return array languages
     */
     static function getCountries() {
@@ -509,6 +511,8 @@ class suxFunct {
 
     /**
     * Get a key => value array of ISO 639 two letter language codes
+    *
+    * @see http://www.loc.gov/standards/iso639-2/php/code_list.php
     * @return array languages
     */
     static function getLanguages() {

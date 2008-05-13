@@ -34,26 +34,13 @@ class suxRegister extends suxUser {
     public $tpl; // Template
     public $r; // Renderer
 
-    function __construct($dbKey = null) {
+    function __construct($key = null) {
 
-        // --------------------------------------------------------------------
-        // Sanity Check
-        // --------------------------------------------------------------------
-
-        if (!isset($GLOBALS['CONFIG'])) {
-            die("Something is wrong, can't initialize without configuration.");
-        }
-
-        // --------------------------------------------------------------------
-        // Go
-        // --------------------------------------------------------------------
-
-        parent::__construct($dbKey); // Call parent
-
+        parent::__construct($key); // Call parent
         $this->tpl = new suxTemplate('user', $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->gtext = $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']); // Language
         $this->r = new suxRenderer(); // Renderer
-        suxValidate::register_object('this', $this);
+        suxValidate::register_object('this', $this); // Register self to validator
 
     }
 
