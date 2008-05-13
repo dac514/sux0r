@@ -27,6 +27,30 @@ function sux($action, $params = null) {
     switch($action)
     {
 
+    case 'login' :
+
+        // --------------------------------------------------------------------
+        // Login
+        // --------------------------------------------------------------------
+
+        include_once('suxAuthenticate.php');
+        $auth = new suxAuthenticate();
+        $auth->login();
+        break;
+
+
+    case 'logout' :
+
+        // --------------------------------------------------------------------
+        // Logout
+        // --------------------------------------------------------------------
+
+        include_once('suxAuthenticate.php');
+        $auth = new suxAuthenticate();
+        $auth->logout();
+        break;
+
+
     case 'register' :
 
         // --------------------------------------------------------------------
@@ -64,7 +88,7 @@ function sux($action, $params = null) {
     case 'profile' : // User profile
 
         // --------------------------------------------------------------------
-        // Show userp profile
+        // Show user profile
         // --------------------------------------------------------------------
 
         include_once('suxUserProfile.php');
@@ -80,7 +104,7 @@ function sux($action, $params = null) {
         // Default
         // --------------------------------------------------------------------
 
-        echo 'user';
+        echo 'user module';
         break;
 
     }

@@ -212,8 +212,9 @@ class suxHtml2UTF8 {
 
 
     /**
-    *  Sets a base URL to handle relative links.
+    * Sets a base URL to handle relative links.
     *
+    * @param string $url url
     */
     function setBaseUrl( $url = '' ) {
         if ( empty($url) ) {

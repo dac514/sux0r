@@ -79,7 +79,7 @@ SmartyValidate
 * Path: ./SmartyAddons/libs/SmartyValidate.class.php
         ./SmartyAddons/plugins/%validate%
         ./SmartyAddons/docs/SmartyValidate/
-* Version: 2.9
+* Version: 2.9-dev
 * Licence: LGPL 2.1
 * Website: http://www.phpinsider.com/php/code/SmartyValidate/
 

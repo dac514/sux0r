@@ -26,7 +26,6 @@ require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
-require_once(dirname(__FILE__) . '/../../includes/suxUrl.php');
 
 class suxRegister extends suxUser {
 
@@ -34,6 +33,9 @@ class suxRegister extends suxUser {
     public $tpl; // Template
     public $r; // Renderer
 
+    /**
+    * Constructor
+    */
     function __construct($key = null) {
 
         parent::__construct($key); // Call parent
@@ -45,23 +47,29 @@ class suxRegister extends suxUser {
     }
 
 
+    /**
+    * Validate the form
+    *
+    * @return bool
+    */
     function formValidate() {
 
         if(!empty($_POST) && suxValidate::is_registered_form()) {
             // Validate
             suxValidate::connect($this->tpl);
-
             if(suxValidate::is_valid($_POST)) {
                 suxValidate::disconnect();
                 return true;
             }
         }
-
         return false;
 
     }
 
 
+    /**
+    * Build the form and show the template
+    */
     function formBuild() {
 
         if (!empty($_POST)) $this->tpl->assign($_POST);
@@ -86,7 +94,7 @@ class suxRegister extends suxUser {
         $this->r->text = $this->gtext;
 
         // Url
-        $this->r->text['form_url'] = suxUrl::make('/user/register/openid');
+        $this->r->text['form_url'] = suxFunct::makeUrl('/user/register/openid');
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
@@ -95,16 +103,24 @@ class suxRegister extends suxUser {
     }
 
 
+
+    /**
+    * Redirect to openid module
+    */
     function formHandoff() {
 
         $q = array('openid.mode' => 'login', 'openid_url' => $_POST['url']);
-        $url = suxUrl::make('/openid/register/openid', $q);
+        $url = suxFunct::makeUrl('/openid/register/openid', $q);
         suxFunct::redirect($url);
 
     }
 
 
-    // suxValidate
+    /**
+    * for suxValidate, check if a duplicate openid url exists
+    *
+    * @return bool
+    */
     function isDuplicateOpenIDUrl($value, $empty, &$params, &$formvars) {
 
         if (empty($formvars['url'])) return false;

@@ -31,6 +31,9 @@ class suxBookmarks {
 
 
     /**
+    * Constructor
+    *
+    * @global array $CONFIG['DSN']
     * @param string $key a key from our suxDB DSN
     */
     function __construct($key = null) {
@@ -42,13 +45,21 @@ class suxBookmarks {
     }
 
 
-  function setBookmark($url, $title, $desc) {
+    /**
+    * Set bookmark
+    *
+    * @param string $url url
+    * @param string $title title
+    * @param string $desc description
+    * @return bool
+    */
+    function setBookmark($url, $title, $desc) {
 
         // --------------------------------------------------------------------
         // Sanitize
         // --------------------------------------------------------------------
 
-        $url = filter_var($url, FILTER_SANITIZE_URL);
+        $url = suxFunct::canonicalizeUrl($url);
 
         // No HTML in title
         $title = strip_tags($title);
@@ -94,6 +105,12 @@ class suxBookmarks {
     }
 
 
+    /**
+    * Delete bookmark
+    *
+    * @param int $id bookmarks_id
+    * @return bool
+    */
     function deleteBookmark($id) {
 
         if (!filter_var($id, FILTER_VALIDATE_INT)) return false;

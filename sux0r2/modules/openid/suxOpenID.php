@@ -27,7 +27,6 @@
 
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
-require_once(dirname(__FILE__) . '/../../includes/suxUrl.php');
 
 class suxOpenID {
 
@@ -88,7 +87,7 @@ class suxOpenID {
         $this->profile = array(
 
             // Set a default IDP URL
-            'my_url'	=>	suxUrl::make('openid', null, true),
+            'my_url'	=>	suxFunct::makeUrl('openid', null, true),
             // lifetime of shared secret
             'lifetime'	=>	1440,
             // Use bcmath?
@@ -385,7 +384,7 @@ class suxOpenID {
 
                 $u = $this->user->getUser($_SESSION['users_id'], true);
 
-                $sreg = array (
+                $sreg = @array (
                     'nickname' => $u['nickname'],
                     'email' => $u['email'],
                     'fullname' => "{$u['given_name']} {$u['family_name']}",
@@ -397,11 +396,22 @@ class suxOpenID {
                     'timezone' => $u['timezone'],
                     );
 
+                // Unset empties
+                foreach ($sreg as $key => $val) {
+                    $val = trim($val);
+                    if (empty($val)) {
+                        unset($sreg[$key]);
+                    }
+                }
+
+                // Sign keys
                 foreach (explode(',', $sreg_requested) as $key) {
                     $skey = 'sreg.' . $key;
-                    $tokens .= sprintf("%s:%s\n", $skey, $sreg[$key]);
-                    $keys[$skey] = $sreg[$key];
-                    $fields[] = $skey;
+                    if (!empty($sreg[$key])) {
+                        $tokens .= sprintf("%s:%s\n", $skey, $sreg[$key]);
+                        $keys[$skey] = $sreg[$key];
+                        $fields[] = $skey;
+                    }
                 }
 
             }
@@ -505,7 +515,7 @@ class suxOpenID {
                 else {
                     // Log this user in
                     $this->user->setSession($u['users_id']);
-                    suxFunct::redirect(suxUrl::make('/user/profile/' . $u['nickname']));
+                    suxFunct::redirect(suxFunct::makeUrl('/user/profile/' . $u['nickname']));
                 }
 
             }
@@ -517,7 +527,7 @@ class suxOpenID {
                 }
 
                 // Send this user to their own page
-                suxFunct::redirect(suxUrl::make('/user/profile/' . $_SESSION['nickname']));
+                suxFunct::redirect(suxFunct::makeUrl('/user/profile/' . $_SESSION['nickname']));
 
             }
             else {
@@ -535,7 +545,7 @@ class suxOpenID {
                     }
                 }
 
-                suxFunct::redirect(suxUrl::make('/user/register', $query));
+                suxFunct::redirect(suxFunct::makeUrl('/user/register', $query));
 
             }
 
@@ -889,7 +899,7 @@ class suxOpenID {
             $param = str_replace('.', '_', $param);
             if ($param != 'mode') {
                 $tmp = 'openid_' . $param;
-                $keys[$param] = $_GET[$tmp];
+                if (isset($_GET[$tmp])) $keys[$param] = $_GET[$tmp];
             }
         }
 

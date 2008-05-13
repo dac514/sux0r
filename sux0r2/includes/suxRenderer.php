@@ -32,19 +32,13 @@ class suxRenderer {
     public $text;
     public $bool;
 
+    /**
+    * Constructor
+    *
+    * @global string $CONFIG['URL']
+    * @global string $CONFIG['PARTITION']
+    */
     function __construct() {
-
-        // --------------------------------------------------------------------
-        // Sanity Check
-        // --------------------------------------------------------------------
-
-        if (!isset($GLOBALS['CONFIG'])) {
-            die("Something is wrong, can't initialize without configuration.");
-        }
-
-        // --------------------------------------------------------------------
-        // Go
-        // --------------------------------------------------------------------
 
         $this->url = $GLOBALS['CONFIG']['URL'];
         $this->partition = $GLOBALS['CONFIG']['PARTITION'];

@@ -66,11 +66,15 @@ class suxRSS extends DOMDocument {
     // --------------------------------------------------------------------
 
 
+    /**
+    * Constructor
+    *
+    */
     function __construct() {
 
         // extends DOMDocument
         parent::__construct();
-        $this->formatOutput = true;
+        $this->formatOutput = true; // DOMDocument
 
     }
 

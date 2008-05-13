@@ -36,6 +36,9 @@ class suxUser {
 
 
     /**
+    * Constructor
+    *
+    * @global array $CONFIG['DSN']
     * @param string $key a key from our suxDB DSN
     */
     function __construct($key = null) {
@@ -47,7 +50,13 @@ class suxUser {
     }
 
 
-
+    /**
+    * Get user
+    *
+    * @param int $id users_id
+    * @param bool $full_profile the entire profile?
+    * @return array|false
+    */
     function getUser($id = null, $full_profile = false) {
 
         // This user
@@ -82,6 +91,13 @@ class suxUser {
     }
 
 
+    /**
+    * Get a user by nickname
+    *
+    * @param string $nickname nickname
+    * @param bool $full_profile the entire profile?
+    * @return array|false
+    */
     function getUserByNickname($nickname, $full_profile = false) {
 
         $st = $this->db->prepare("SELECT id FROM {$this->db_table} WHERE nickname = ? ");
@@ -94,6 +110,13 @@ class suxUser {
     }
 
 
+    /**
+    * Get a user by email
+    *
+    * @param string $email email
+    * @param bool $full_profile the entire profile?
+    * @return array|false
+    */
     function getUserByEmail($email, $full_profile = false) {
 
         $st = $this->db->prepare("SELECT id FROM {$this->db_table} WHERE email = ? ");
@@ -106,6 +129,11 @@ class suxUser {
     }
 
 
+    /**
+    * Get all users
+    *
+    * @return array
+    */
     function getUsers() {
 
         $q = "
@@ -139,7 +167,10 @@ class suxUser {
 
 
     /**
+    * Set user
     *
+    * @param array $info
+    * @param int $id users_id
     * @return int users_id
     */
     function setUser(array $info, $id = null) {
@@ -242,6 +273,13 @@ class suxUser {
     // -----------------------------------------------------------------------
 
 
+    /**
+    * Get a user by openid
+    *
+    * @param string $openid_url url
+    * @param bool $full_profile the entire profile?
+    * @return array|false
+    */
     function getUserByOpenID($openid_url, $full_profile = false) {
 
         // Canonicalize url
@@ -257,6 +295,12 @@ class suxUser {
     }
 
 
+    /**
+    * Get a list of openids by users_id
+    *
+    * @param int $id users_id
+    * @return array
+    */
     function getOpenIDs($id = null) {
 
         // This user
@@ -278,6 +322,12 @@ class suxUser {
     }
 
 
+    /**
+    * Attach an openid to a user
+    *
+    * @param string $openid_url url
+    * @param int $id users_id
+    */
     function attachOpenID($openid_url, $id = null) {
 
         // This user
@@ -313,6 +363,12 @@ class suxUser {
     }
 
 
+    /**
+    * Detach an openid from a user
+    *
+    * @param string $openid_url url
+    * @param int $id users_id
+    */
     function detachOpenID($openid_url, $id = null) {
 
         // This user
@@ -369,6 +425,7 @@ class suxUser {
     /**
     * Perform a login using Digest Access Authentication
     *
+    * @global string $CONFIG['REALM']
     * @param string $auth_domain, the domain value for WWW-Authenticate
     * @return bool
     */
@@ -476,6 +533,7 @@ class suxUser {
     /**
     * Set a user session
     *
+    * @global string $CONFIG['SALT']
     * @param string $id
     * @param bool $nickame use nickname instead of users_id
     */
@@ -516,6 +574,7 @@ class suxUser {
     /**
     * Perform one-way encryption of a password
     *
+    * @global string $CONFIG['REALM']
     * @param string the username
     * @param string the password to encrypt
     * @return string
@@ -533,6 +592,7 @@ class suxUser {
     /**
     * Check if a token is valid
     *
+    * @global string $CONFIG['SALT']
     * @param int $id user id
     * @param string $id token
     * @return bool

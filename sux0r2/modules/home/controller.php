@@ -28,7 +28,7 @@ function sux($action, $params = null) {
     {
 
     default:
-        echo 'homepage';
+        echo 'home module';
         break;
     }
 
