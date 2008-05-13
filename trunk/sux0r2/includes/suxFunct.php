@@ -199,6 +199,7 @@ class suxFunct {
 
     /**
     * Set locale in a platform-independent way
+    *
     * @param  string $locale  the locale name ('en_US', 'uk_UA', 'fr_FR' etc)
     */
     static function setLocale($locale) {
@@ -220,6 +221,7 @@ class suxFunct {
 
     /**
     * Canonicalize url
+    *
     * @param  string $url
     */
     static function canonicalizeUrl($url) {
@@ -245,6 +247,50 @@ class suxFunct {
         $url = filter_var($url, FILTER_SANITIZE_URL);
 
         return $url;
+
+    }
+
+
+    /**
+    * Make url based on $CONFIG['CLEAN'] setting
+    *
+    * @global string $CONFIG['URL']
+    * @global string $CONFIG['CLEAN_URL']
+    * @param string $path controller value in /this/style
+    * @param array $query http_build_query compatible array
+    * @param bool $full return full url?
+    */
+    static function makeUrl($path, $query = null, $full = false) {
+
+        // Fix stupidties
+        $path = trim($path);
+        $path = ltrim($path, '/');
+        $path = rtrim($path, '/');
+
+        $tmp = '';
+        if ($full) {
+            // Autodetect ourself
+            $s = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] ? 's' : '';
+            $host = $_SERVER['SERVER_NAME'];
+            $port = $_SERVER['SERVER_PORT'];
+            if (($s && $port == "443") || (!$s && $port == "80") || preg_match("/:$port\$/", $host)) {
+                $p = '';
+            }
+            else {
+                $p = ':' . $port;
+            }
+            $tmp .= "http$s://$host$p";
+        }
+        $tmp .= $GLOBALS['CONFIG']['URL'];
+        $tmp .= ($GLOBALS['CONFIG']['CLEAN_URL'] ? '/' : '/index.php?c=');
+        $tmp .= $path;
+
+        if (is_array($query) && count($query)) {
+            $q = mb_strpos($tmp, '?') ? '&' : '?';
+            $tmp .= $q . http_build_query($query);
+        }
+
+        return $tmp;
 
     }
 
