@@ -8,6 +8,9 @@ error_reporting (E_ALL | E_STRICT); // Error reporting for developers
 
 /* Configuration variables */
 
+// Site title
+$CONFIG['TITLE'] = 'sux0r';
+
 // An array containing PDO compatible database DSN [key => value] pairs.
 // Sux0r is (theoretically) able to span multiple databases, but ordinarily
 // there should be one ['default' => $dsn] pointing to your one database..

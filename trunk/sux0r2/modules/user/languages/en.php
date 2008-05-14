@@ -12,10 +12,10 @@ $gtext['locality'] = 'City';
 $gtext['logout'] = 'Logout complete';
 
 $gtext['logout2'] = 'Important: As this site uses
-<a href="http://en.wikipedia.org/wiki/Digest_access_authentication">Digest Authentication</a>
-<strong>YOU SHOULD EXIT YOUR BROWSER</strong>. This is because your browser will
-cache your credentials and automatically log you back in the next time it is
-prompted to do so. You will not see the login box, as this will happen
+<a href="http://en.wikipedia.org/wiki/Digest_access_authentication">Digest Access
+Authentication</a> <strong>YOU SHOULD EXIT YOUR BROWSER</strong>. This is because
+your browser will cache your credentials and automatically log you back in the next
+time it is prompted to do so. You will not see the login box, as this will happen
 transparently. The illusion is that it looks like you never actually logged out,
 when in fact you did, and were then logged back in without knowing.';
 

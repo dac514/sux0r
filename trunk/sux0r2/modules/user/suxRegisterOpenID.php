@@ -97,12 +97,16 @@ class suxRegisterOpenID extends suxUser {
         // Language
         $this->r->text = $this->gtext;
 
+        // Title
+        $this->r->title .= ' | Register';
+
         // Url
         $this->r->text['form_url'] = suxFunct::makeUrl('/user/register/openid');
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
-        $this->tpl->display('register_openid.tpl');
+        $output = $this->tpl->assemble('register_openid.tpl');
+        echo $output;
 
     }
 

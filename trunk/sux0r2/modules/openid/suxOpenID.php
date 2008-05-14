@@ -628,8 +628,14 @@ class suxOpenID {
         $r->text['yes_url'] = $yes;
         $r->text['no_url'] = $no;
 
+        $r->header .= "<meta name='robots' content='noindex,nofollow' />\n";
+        $r->bool['analytics'] = false;
+
         $this->tpl->assign_by_ref('r', $r);
-        $this->wrapHtml($this->tpl->fetch('accept.tpl'));
+        // $this->wrapHtml($this->tpl->fetch('accept.tpl'));
+        $output = $this->tpl->assemble('accept.tpl');
+        echo $output;
+        exit;
     }
 
 
@@ -706,6 +712,10 @@ class suxOpenID {
 
         // Template
         $r = new suxRenderer();
+
+        $r->header .= "<link rel='openid.server' href='{$this->profile['my_url']}' />\n";
+        $r->header .= "<meta name='robots' content='noindex,nofollow' />\n";
+
         $r->text = $this->gtext;
         $r->text['server_url'] = $this->profile['my_url'];
         $r->text['realm_id'] = $GLOBALS['CONFIG']['REALM'];
@@ -714,7 +724,8 @@ class suxOpenID {
         $r->bool['profile'] = $this->profile['debug'];
 
         $this->tpl->assign_by_ref('r', $r);
-        $this->tpl->display('no_mode.tpl');
+        $output = $this->tpl->assemble('no_mode.tpl');
+        echo $output;
         exit;
 
     }
@@ -1384,12 +1395,14 @@ class suxOpenID {
     */
     private function wrapHtml($message) {
 
-        // Template
         $r = new suxRenderer();
+        $r->header .= "<meta name='robots' content='noindex,nofollow' />\n";
         $r->text['message'] = $message;
+        $r->bool['analytics'] = false;
 
         $this->tpl->assign_by_ref('r', $r);
-        $this->tpl->display('message.tpl');
+        $output = $this->tpl->assemble('wrap_html.tpl');
+        echo $output;
         exit;
 
     }

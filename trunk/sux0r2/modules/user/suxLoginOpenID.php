@@ -77,7 +77,8 @@ class suxLoginOpenID extends suxRegisterOpenID {
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
-        $this->tpl->display('login_openid.tpl');
+        $output = $this->tpl->assemble('login_openid.tpl');
+        echo $output;
 
     }
 
