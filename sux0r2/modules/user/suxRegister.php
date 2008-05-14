@@ -168,7 +168,8 @@ class suxRegister extends suxUser {
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
-        $this->tpl->display('register.tpl');
+        $output = $this->tpl->assemble('register.tpl');
+        echo $output;
 
     }
 

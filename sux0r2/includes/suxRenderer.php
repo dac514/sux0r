@@ -27,10 +27,14 @@
 
 class suxRenderer {
 
-    public $url;
-    public $partition;
-    public $text;
-    public $bool;
+    public $url; // URL Prefix
+    public $partition; // sux0r parition name
+    public $title; // Variable to put between <title> tags
+    public $header; // Variable to keep header/text
+    public $text; // Variable to keep body/text
+    public $footer; // Variable to keep footer/text
+    public $bool; // Variable to keep bool values
+
 
     /**
     * Constructor
@@ -42,6 +46,8 @@ class suxRenderer {
 
         $this->url = $GLOBALS['CONFIG']['URL'];
         $this->partition = $GLOBALS['CONFIG']['PARTITION'];
+        $this->title = $GLOBALS['CONFIG']['TITLE'];
+        $this->bool['analytics'] = true;
 
     }
 

@@ -92,7 +92,8 @@ class suxAuthenticate extends suxUser {
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
-        $this->tpl->display('logout.tpl');
+        $output = $this->tpl->assemble('logout.tpl');
+        echo $output;
 
     }
 
