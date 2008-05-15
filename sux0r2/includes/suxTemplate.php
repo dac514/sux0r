@@ -165,28 +165,30 @@ class suxTemplate extends Smarty {
     * @global string $CONFIG['PARTITION']
     * @param string|array $tpl templates
     * @param string $cache_id
+    * @param string $compile_id
+    * @param boolean $display
     */
-    function assemble($tpl, $cache_id = null) {
+    function assemble($tpl, $cache_id = null, $compile_id = null, $display = false) {
 
         $tmp = '';
 
         // Header
         $path = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $GLOBALS['CONFIG']['PARTITION'];
         if (!file_exists("$path/header.tpl")) $path = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r';
-        $tmp .= $this->fetch("file:$path/header.tpl");
+        $tmp .= $this->fetch("file:$path/header.tpl", $cache_id, $compile_id, $display);
 
         // Templates
         if (is_array($tpl)) foreach ($tpl as $val) {
-            $tmp .= $this->fetch($val, $cache_id);
+            $tmp .= $this->fetch($val, $cache_id, $compile_id, $display);
         }
         else {
-            $tmp .= $this->fetch($tpl, $cache_id);
+            $tmp .= $this->fetch($tpl, $cache_id, $compile_id, $display);
         }
 
         // Footer
         $path = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $GLOBALS['CONFIG']['PARTITION'];
         if (!file_exists("$path/footer.tpl")) $path = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r';
-        $tmp .= $this->fetch("file:$path/footer.tpl");
+        $tmp .= $this->fetch("file:$path/footer.tpl", $cache_id, $compile_id, $display);
 
         return $tmp;
 
