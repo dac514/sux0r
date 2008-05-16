@@ -20,6 +20,7 @@ transparently. The illusion is that it looks like you never actually logged out,
 when in fact you did, and were then logged back in without knowing.';
 
 $gtext['male'] = 'Male';
+$gtext['name'] = 'Name';
 $gtext['nickname'] = 'Nickname';
 $gtext['password'] = 'Password';
 $gtext['password_verify'] = 'Verify password';

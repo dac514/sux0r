@@ -69,9 +69,6 @@ class suxLoginOpenID extends suxRegisterOpenID {
 
         }
 
-        // Language
-        $this->r->text = $this->gtext;
-
         // Url
         $this->r->text['form_url'] = suxFunct::makeUrl('/user/login/openid');
 

@@ -25,7 +25,7 @@
 require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
+require_once('renderer.php');
 
 class suxRegister extends suxUser {
 
@@ -45,7 +45,8 @@ class suxRegister extends suxUser {
         parent::__construct($key); // Call parent
         $this->tpl = new suxTemplate('user', $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->gtext = $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']); // Language
-        $this->r = new suxRenderer(); // Renderer
+        $this->r = new renderer(); // Renderer
+        $this->r->text =& $this->gtext; // Language
         suxValidate::register_object('this', $this); // Register self to validator
 
     }
@@ -75,9 +76,6 @@ class suxRegister extends suxUser {
     * Build the form and show the template
     */
     function formBuild() {
-
-        // Language
-        $this->r->text = $this->gtext;
 
         // --------------------------------------------------------------------
         // Is this Openid?
@@ -123,48 +121,31 @@ class suxRegister extends suxUser {
             suxValidate::connect($this->tpl, true); // Reset connection
 
             // Register our additional criterias
+            suxValidate::register_criteria('invalidCharacters', 'this->invalidCharacters');
             suxValidate::register_criteria('isDuplicateNickname', 'this->isDuplicateNickname');
             suxValidate::register_criteria('isDuplicateEmail', 'this->isDuplicateEmail');
 
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
             suxValidate::register_validator('nickname', 'nickname', 'notEmpty', false, false, 'trim');
-            suxValidate::register_validator('nickname2', 'nickname', 'isDuplicateNickname');
+            suxValidate::register_validator('nickname2', 'nickname', 'invalidCharacters');
+            suxValidate::register_validator('nickname3', 'nickname', 'isDuplicateNickname');
             suxValidate::register_validator('email', 'email', 'isEmail', false, false, 'trim');
             suxValidate::register_validator('email2', 'email', 'isDuplicateEmail');
-            if (!$this->isOpenID()) suxValidate::register_validator('password', 'password:password_verify', 'isEqual');
+            if (!$this->isOpenID()) {
+                suxValidate::register_validator('password', 'password:6:-1', 'isLength');
+                suxValidate::register_validator('password2', 'password:password_verify', 'isEqual');
+            }
 
         }
 
         // Url
         $this->r->text['form_url'] = suxFunct::makeUrl('/user/register');
 
-        // Countries
-        if (!$_POST) $this->tpl->assign('country', $GLOBALS['CONFIG']['COUNTRY']);
-        $this->r->text['countries'] = suxFunct::getCountries();
-        foreach ($this->r->text['countries'] as $key => $val) {
-            if (isset($this->gtext["{$key}2"])) $this->r->text['countries'][$key] = $this->gtext["{$key}2"];
-        }
-
-        // Genders
-        $this->r->text['genders'] = array(
-            'm' => $this->gtext['male'],
-            'f' => $this->gtext['female'],
-            );
-
-        // Timezones
-        if (!$_POST) $this->tpl->assign('timezone', $GLOBALS['CONFIG']['TIMEZONE']);
-        $tz = timezone_identifiers_list();
-        foreach ($tz as $val) {
-            $this->r->text['timezones'][$val] = $val;
-        }
-
-        // Languages
-        if (!$_POST) $this->tpl->assign('language', $GLOBALS['CONFIG']['LANGUAGE']);
-        $this->r->text['languages'] = suxFunct::getLanguages();
-        foreach ($this->r->text['languages'] as $key => $val) {
-            if (isset($this->gtext[$key])) $this->r->text['languages'][$key] = $this->gtext[$key];
-        }
+        // Defaults
+        if (!$_POST) $this->tpl->assign('country', $GLOBALS['CONFIG']['COUNTRY']); // Country
+        if (!$_POST) $this->tpl->assign('timezone', $GLOBALS['CONFIG']['TIMEZONE']); // Timezone
+        if (!$_POST) $this->tpl->assign('language', $GLOBALS['CONFIG']['LANGUAGE']); // Languages
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
@@ -224,6 +205,21 @@ class suxRegister extends suxUser {
     function formSuccess() {
 
         echo 'Success!';
+
+    }
+
+
+    /**
+    * for suxValidate, check for invalid characters
+    *
+    * @return bool
+    */
+    function invalidCharacters($value, $empty, &$params, &$formvars) {
+
+        if (empty($formvars['nickname'])) return false;
+
+        if (!preg_match('/^(\w|\-)+$/', $formvars['nickname'])) return false; // Invalid characters
+        else return true;
 
     }
 

@@ -285,7 +285,9 @@ class suxOpenID {
         }
 
         // make sure i am this identifier
-        if (suxFunct::canonicalizeUrl($identity) != suxFunct::canonicalizeUrl($this->profile['my_url'])) {
+        //if (suxFunct::canonicalizeUrl($identity) != suxFunct::canonicalizeUrl($this->profile['my_url'])) {
+        if (!mb_strpos($identity, 'user/profile') ||
+            !$this->urlDescends(suxFunct::canonicalizeUrl($identity), suxFunct::canonicalizeUrl(suxFunct::makeURL('/', null, true)))) {
 
             $this->debug("Invalid identity: $identity");
             $this->debug("IdP URL: " . $this->profile['my_url']);
@@ -622,7 +624,7 @@ class suxOpenID {
         $no  = $this->profile['req_url'] . $q . 'accepted=no';
 
         $r = new suxRenderer();
-        $r->text = $this->gtext;
+        $r->text =& $this->gtext;
         $r->text['unaccepted_url'] = $_SESSION['openid_unaccepted_url'];
         $r->text['always_url'] = $always;
         $r->text['yes_url'] = $yes;
@@ -693,10 +695,11 @@ class suxOpenID {
     */
     function login_mode() {
 
-        if (!empty($_REQUEST['openid_url'])) $openid_url = filter_var($_REQUEST['openid_url'], FILTER_SANITIZE_URL);
-        else $openid_url = $this->profile['my_url']; // Log into myself
+        if (empty($_REQUEST['openid_url'])) $this->error500($this->gtext['error_directly']);
+
 
         // Pass this to consumer
+        $openid_url = filter_var($_REQUEST['openid_url'], FILTER_SANITIZE_URL);
         $this->forward($openid_url);
 
     }
@@ -716,12 +719,12 @@ class suxOpenID {
         $r->header .= "<link rel='openid.server' href='{$this->profile['my_url']}' />\n";
         $r->header .= "<meta name='robots' content='noindex,nofollow' />\n";
 
-        $r->text = $this->gtext;
+        $r->text =& $this->gtext;
         $r->text['server_url'] = $this->profile['my_url'];
         $r->text['realm_id'] = $GLOBALS['CONFIG']['REALM'];
-        $r->text['login_url'] = $this->profile['my_url'] . $q . 'openid.mode=login';
+        $r->text['login_url'] = suxFunct::makeUrl('/user/login/openid');
         $r->text['test_url'] = $this->profile['my_url'] . $q . 'openid.mode=test';
-        $r->bool['profile'] = $this->profile['debug'];
+        $r->bool['debug'] = $this->profile['debug'];
 
         $this->tpl->assign_by_ref('r', $r);
         $output = $this->tpl->assemble('no_mode.tpl');
@@ -838,6 +841,7 @@ class suxOpenID {
     // Dumb stateless consumer
     // ----------------------------------------------------------------------------
 
+
     /**
     * Forward
     *
@@ -868,12 +872,8 @@ class suxOpenID {
             $keys['sreg.optional'] = 'fullname,dob,gender,postcode,country,language,timezone';
         }
 
-        // Check for server/delegate, TODO: Improve this
-        $tmp = @file_get_contents($openid_url);
-        $found = array();
-        preg_match( "<link rel=\"openid.server\" href=\"(.*?)\" />", $tmp, $found);
-        if (!empty($found[1])) $url = filter_var($found[1], FILTER_SANITIZE_URL);
-        else $url = $openid_url;
+        // Check for server/delegate
+        $url = $this->discover($openid_url);
 
         $this->debug($keys, "Server URL: $url");
 
@@ -896,11 +896,7 @@ class suxOpenID {
         $auth = false;
 
         // Check for server/delegate, TODO: Improve this
-        $tmp = @file_get_contents($openid_url);
-        $found = array();
-        preg_match( "<link rel=\"openid.server\" href=\"(.*?)\" />", $tmp, $found);
-        if (!empty($found[1])) $url = filter_var($found[1], FILTER_SANITIZE_URL);
-        else $url = $openid_url;
+        $url = $this->discover($openid_url);
 
         $keys = array(
             'mode' => 'check_authentication',
@@ -948,6 +944,33 @@ class suxOpenID {
         $this->debug('Valid Openid URL = ' . ($auth ? 'true' : 'false'));
 
         return $auth;
+
+    }
+
+
+    /**
+    * Discover
+    *
+    * @param string $openid_url a url
+    * @return string
+    */
+    private function discover($openid_url) {
+
+        // TODO: Improve this
+        // Check for server/delegate,
+        $url = $openid_url;
+        $tmp = @file_get_contents($openid_url);
+        $found = array();
+        // Try
+        preg_match('/<link[^>]*rel=(["\'])openid.server\\1[^>]*href=(["\'])([^"\']+)\\2[^>]*\/?>/i', $tmp, $found);
+        if (!empty($found[3])) $url = filter_var($found[3], FILTER_SANITIZE_URL);
+        else {
+            // And try again
+            preg_match('/<link[^>]*href=(["\'])([^"\']+)\\1[^>]*rel=(["\'])openid.server\\3[^>]*\/?>/i', $tmp, $found);
+            if (!empty($found[2])) $url = filter_var($found[2], FILTER_SANITIZE_URL);
+        }
+
+        return $url;
 
     }
 
@@ -1417,7 +1440,7 @@ class suxOpenID {
 
         // Template
         $r = new suxRenderer();
-        $r->text = $this->gtext;
+        $r->text =& $this->gtext;
         $r->text['url'] = $url;
 
         $this->tpl->assign_by_ref('r', $r);

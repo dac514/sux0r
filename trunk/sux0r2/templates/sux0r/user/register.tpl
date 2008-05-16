@@ -9,7 +9,8 @@
 
 {$r->text.nickname} :
 {validate id="nickname" message="[ Nickname cannot be empty ]"}
-{validate id="nickname2" message="[ Duplicate nickname ]"}
+{validate id="nickname2" message="[ Invalid characters ]"}
+{validate id="nickname3" message="[ Duplicate nickname ]"}
 <input type="text" name="nickname" value="{$nickname}" />
 <p />
 
@@ -27,7 +28,8 @@
 {else}
 
     {$r->text.password} :
-    {validate id="password" message="[ Passwords do not match ]"}
+    {validate id="password" message="[ Minimum 6 characters  ]"}
+    {validate id="password2" message="[ Passwords do not match ]"}
     <input type="password" name="password" value="{$password}" />
     <p />
 
@@ -62,7 +64,7 @@
 <p />
 
 {$r->text.country} :
-{html_options name='country' options=$r->text.countries selected=$country}
+{html_options name='country' options=$r->getCountries() selected=$country}
 <p />
 
 {$r->text.tel} :
@@ -79,18 +81,18 @@
 <p />
 
 {$r->text.gender} :
-{html_radios name='gender' options=$r->text.genders selected=$gender assign=tmp}
+{html_radios name='gender' options=$r->getGenders() selected=$gender assign=tmp}
 {foreach from=$tmp item=v}
     <span class="someClass">{$v}</span>
 {/foreach}
 <p />
 
 {$r->text.language} :
-{html_options name='language' options=$r->text.languages selected=$language}
+{html_options name='language' options=$r->getLanguages() selected=$language}
 <p />
 
 {$r->text.timezone} :
-{html_options name='timezone' options=$r->text.timezones selected=$timezone}
+{html_options name='timezone' options=$r->getTimezones() selected=$timezone}
 <p />
 
 <input type="submit" value="{$r->text.submit}" />
