@@ -9,7 +9,7 @@
 {$r->text.url} :
 {validate id="url" message="[ URL cannot be empty ]"}
 {validate id="url2" message="[ Invalid URL ]"}
-{validate id="url3" message="[ Duplicate Url]"}
+{validate id="url3" message="[ Duplicate Url ]"}
 <input type="text" name="url" value="{$url}" />
 <p />
 

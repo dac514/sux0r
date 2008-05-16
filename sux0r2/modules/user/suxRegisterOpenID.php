@@ -46,6 +46,7 @@ class suxRegisterOpenID extends suxUser {
         $this->tpl = new suxTemplate('user', $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->gtext = $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']); // Language
         $this->r = new suxRenderer(); // Renderer
+        $this->r->text =& $this->gtext; // Language
         suxValidate::register_object('this', $this); // Register self to validator
 
     }
@@ -94,8 +95,6 @@ class suxRegisterOpenID extends suxUser {
 
         }
 
-        // Language
-        $this->r->text = $this->gtext;
 
         // Title
         $this->r->title .= ' | Register';

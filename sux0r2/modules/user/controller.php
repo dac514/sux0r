@@ -108,7 +108,8 @@ function sux($action, $params = null) {
         include_once('suxUserProfile.php');
         if (!empty($params[0])) {
             $u = new suxUserProfile($params[0]);
-            $u->render();
+            if ($u->profile) $u->displayProfile();
+            else $u->notFound();
             break;
         }
 

@@ -25,12 +25,15 @@
 require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxSocialNetwork.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
+require_once('renderer.php');
 
 class suxUserProfile extends suxUser {
 
+    public $gtext = array(); // Language
     public $tpl; // Template
-    private $profile; // User profile array
+    public $r; // Renderer
 
+    public $profile; // User profile array
 
     /**
     * Constructor
@@ -42,27 +45,43 @@ class suxUserProfile extends suxUser {
     */
     function __construct($nickname, $key = null) {
 
-        // Call parent
-        parent::__construct($key);
-
-        // Template
-        $this->tpl = new suxTemplate('openid', $GLOBALS['CONFIG']['PARTITION']);
-        $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']);
+        parent::__construct($key); // Call parent
+        $this->tpl = new suxTemplate('user', $GLOBALS['CONFIG']['PARTITION']); // Template
+        $this->gtext = $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']); // Language
+        $this->r = new renderer(); // Renderer
+        $this->r->text =& $this->gtext; // Language
 
         // Profile
-        $this->profile = $this->getUserByNickname($nickname, true);
+        $this->profile = $this->getUserByNickname($nickname);
         unset($this->profile['password']); // We don't need this
 
     }
 
 
     /**
-    * Decide what to show
+    * Display user profile
     */
-    function render() {
+    function displayProfile() {
 
-        if ($this->profile) $this->showProfile();
-        else $this->notFound();
+        $this->tpl->caching = 1; // Enable cache
+        $cache_id = "profile_{$this->profile['nickname']}_";
+        if(!$this->tpl->is_cached('profile.tpl', $cache_id)) {
+
+            $fullprofile = $this->getUser($this->profile['users_id'], true);
+            unset($fullprofile['password']); // We don't need this
+
+            $this->r->profile =& $fullprofile;
+            $this->r->title .= " | {$fullprofile['nickname']}";
+
+            $this->r->header .= $this->r->getOpenIDMeta();
+
+
+            $this->tpl->assign_by_ref('r', $this->r);
+
+        }
+
+        $output = $this->tpl->assemble('profile.tpl', $cache_id);
+        echo $output;
 
     }
 
@@ -70,19 +89,10 @@ class suxUserProfile extends suxUser {
     /**
     * Profile not found
     */
-    private function notFound() {
+    function notFound() {
 
         echo 'no profile found';
-
-    }
-
-
-    /**
-    * Show profiile
-    */
-    private function showProfile() {
-
-        new dBug($this->profile);
+        exit;
 
     }
 

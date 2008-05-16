@@ -46,6 +46,7 @@ class suxAuthenticate extends suxUser {
         $this->tpl = new suxTemplate('user', $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->gtext = $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']); // Language
         $this->r = new suxRenderer(); // Renderer
+        $this->r->text =& $this->gtext; // Language
 
     }
 
@@ -87,8 +88,6 @@ class suxAuthenticate extends suxUser {
         // user isn't actually logged in.
         if ($this->loginCheck()) suxFunct::killSession();
 
-        // Language
-        $this->r->text = $this->gtext;
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
