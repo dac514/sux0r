@@ -6,7 +6,7 @@
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
 * published by the Free Software Foundation, either version 3 of the
-* License, or (at your option) any later version.
+* License, or (at your option) any later version.a
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -457,10 +457,7 @@ class suxUser {
             $hdr = null;
         }
 
-        $digest = mb_substr($hdr,0,7) == 'Digest '
-		? mb_substr($hdr, mb_strpos($hdr, ' ') + 1)
-		: $hdr;
-
+        $digest = (mb_substr($hdr,0,7) == 'Digest ') ? mb_substr($hdr, mb_strpos($hdr, ' ') + 1) : $hdr;
         $stale = false;
         $ok = '';
 
@@ -477,7 +474,7 @@ class suxUser {
                 $hdr[$m[1]] = $m[2] ? $m[2] : $m[3];
 
 
-            if (isset($_SESSION['uniqid']) && $hdr['nonce'] != $_SESSION['uniqid']) {
+            if (isset($_SESSION['uniqid']) && ($hdr['nonce'] != $_SESSION['uniqid'] || $_SERVER['REQUEST_TIME'] - hexdec(substr($hdr['nonce'], 0, 8)) > 300)) {
                 $stale = true;
                 unset($_SESSION['uniqid']);
             }
@@ -505,7 +502,7 @@ class suxUser {
             }
 
             // Password problems, boot this user
-            if (strcmp($hdr['nc'], 4) > 0 || $_SESSION['failures'] > $this->max_failures) {
+            if (strcmp(hexdec($hdr['nc']), 4) > 0 || $_SESSION['failures'] > $this->max_failures) {
                 // too many failures
                 return false;
             }
@@ -516,7 +513,7 @@ class suxUser {
         }
 
         // if we get this far the user is not authorized, so send the headers
-        $uid = uniqid(mt_rand(1,9));
+        $uid = sprintf("%08x", time()) . uniqid(mt_rand(1,9));
         $_SESSION['uniqid'] = $uid;
 
         if (headers_sent())
