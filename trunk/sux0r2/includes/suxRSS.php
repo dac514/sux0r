@@ -272,7 +272,7 @@ class suxRSS extends DOMDocument {
         $timestamp = filter_var($timestamp, FILTER_VALIDATE_INT);
 
         // --------------------------------------------------------------------
-        // Extablish Conditional GET and Timeout context
+        // Extablish Conditional GET
         // --------------------------------------------------------------------
 
         if ($timestamp) $modified = gmdate('D, d M Y H:i:s', $timestamp) . ' GMT';
@@ -281,7 +281,6 @@ class suxRSS extends DOMDocument {
         $opts = array(
             'http'=> array(
                 'header' => "If-Modified-Since: $modified\r\n",
-                'timeout' => 120,
                 )
             );
 
