@@ -41,6 +41,7 @@ class suxRenderer {
     *
     * @global string $CONFIG['URL']
     * @global string $CONFIG['PARTITION']
+    * @global string $CONFIG['TITLE']
     */
     function __construct() {
 
