@@ -6,7 +6,7 @@
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
 * published by the Free Software Foundation, either version 3 of the
-* License, or (at your option) any later version.a
+* License, or (at your option) any later version.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -425,6 +425,9 @@ class suxUser {
     /**
     * Perform a login using Digest Access Authentication
     *
+    * Inspired by:
+    * CJ Niemira: http://siege.org/projects/phpMyID/
+    *
     * @global string $CONFIG['REALM']
     * @param string $auth_domain, the domain value for WWW-Authenticate
     * @return bool
@@ -435,7 +438,6 @@ class suxUser {
         if (function_exists('apache_request_headers') && ini_get('safe_mode') == false) {
             $arh = apache_request_headers();
             $hdr = (isset($arh['Authorization']) ? $arh['Authorization'] : null);
-
         }
         elseif (isset($_SERVER['PHP_AUTH_DIGEST'])) {
             $hdr = $_SERVER['PHP_AUTH_DIGEST'];
