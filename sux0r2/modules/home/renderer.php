@@ -1,7 +1,7 @@
 <?php
 
 /**
-* controller for home module
+* custom home module renderer
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -22,18 +22,46 @@
 *
 */
 
-function sux($action, $params = null) {
+require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
-    switch($action)
-    {
+class renderer extends suxRenderer {
 
-    default:
-        include_once('suxHome.php');
-        $home = new suxHome();
-        $home->display();
+
+    /**
+    * Constructor
+    */
+    function __construct() {
+        parent::__construct(); // Call parent
+    }
+
+
+    function someWittyName1() {
+
+        $tmp = '
+        <style>
+        .leftside { width: 478px; }
+        </style>
+        ';
+
+        return $tmp;
 
     }
 
+    function someWittyName2() {
+
+        $tmp = '
+        <style>
+        .leftside { width: 738px; }
+        .rightside { margin-top: 10px; }
+        </style>
+        ';
+
+        return $tmp;
+
+    }
+
+
 }
+
 
 ?>

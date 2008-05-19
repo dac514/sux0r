@@ -1,0 +1,164 @@
+.clear {
+    clear: both;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* Navigation Container */
+
+#navcontainer {
+    width: 100%;
+    float: left;
+    background-color: #ff0000;
+}
+
+#navcontainer ul {
+    padding: 0;
+}
+
+#navcontainer ul li {
+    display: inline;
+}
+
+#navcontainer ul {
+    margin: 0;
+    padding: 0 0 0 7%;
+    color: #ffffff;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+#navcontainer ul li a {
+    padding: 0.2em 12px;
+    background-color: #ff0000;
+    color: #ffffff;
+    text-decoration: none;
+    float: left;
+    border-right: 1px solid #ffffff;
+}
+
+#navcontainer ul li a:hover {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+#navlist li a:hover, #navlist li a:active {
+    color: #ffffff;
+    background: #000000;
+
+}
+
+#navlist li a:hover, #navlist a#current {
+    color: #cccccc;
+    background: #000000;
+}
+
+
+/* Float Right */
+
+.floatright {
+    float: right;
+    width: 83px;
+    margin: 0 0 10px 10px;
+    background-color: #fff;
+    padding: 10px;
+    border-top: 1px solid #999999;
+    border-right: 2px solid #555555;
+    border-bottom: 2px solid #555555;
+    border-left: 1px solid #999999;
+    margin-right: 10px;
+
+}
+
+div.floatright img {
+    border-top: 2px solid #555555;
+    border-right: 1px solid #999999;
+    border-bottom: 1px solid #999999;
+    border-left: 2px solid #555555;
+}
+
+/* Container */
+
+.suxContainer {
+    border-top: 3px solid #dddddd;
+    border-right: 3px solid #dddddd;
+    border-bottom: 3px solid #dddddd;
+    border-left: 3px solid #dddddd;
+    width: 98%;
+    margin: 10px auto 0px auto;
+
+}
+
+.suxContainer h2 {
+    background-color: #cccccc;
+    /* Shorthand: margin-top margin-right margin-bottom margin-left */
+    margin: 0 0 20px 0;
+    padding: 5px 0 5px 5px;
+    border-bottom: 1px solid black;
+
+}
+
+.suxContainer p {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+
+/* Bottom Corners */
+
+b.bb, b.bb b {
+    display: block;
+    height: 10px;
+    font-size: 1px;
+    background:url(../assets/corners.gif) no-repeat;
+    position:relative;
+}
+
+b.bb {
+    background-position:0 0px;
+    top:3px;
+    left: -3px;
+}
+
+b.bb b {
+    background-position:100% -10px;
+    left: 6px;
+}
+
+/* My shit, minimal tables */
+
+body {
+    margin: 0px;
+    background-color: #cccccc;
+}
+
+body, tr, td {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    text-align: left;
+}
+
+#encompasser {
+    width: 98%;
+    margin: 1%;
+}
+
+#proselytizer {
+    text-align: center;
+    margin-left: auto;
+    margin-right :auto;
+    width: 962px;
+    background-color: #ffffff;
+    border-collapse: collapse;
+    border: 3px solid #dddddd;
+
+}
+
+.header h1 {
+    margin-left: 10px;
+}
+
+.footer {
+    margin: 10px;
+}
+
