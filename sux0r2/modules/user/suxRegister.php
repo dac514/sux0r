@@ -33,6 +33,8 @@ class suxRegister extends suxUser {
     public $tpl; // Template
     public $r; // Renderer
 
+    private $module = 'user'; // Module
+
     /**
     * Constructor
     *
@@ -43,9 +45,9 @@ class suxRegister extends suxUser {
     function __construct($key = null) {
 
         parent::__construct($key); // Call parent
-        $this->tpl = new suxTemplate('user', $GLOBALS['CONFIG']['PARTITION']); // Template
+        $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->gtext = $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']); // Language
-        $this->r = new renderer(); // Renderer
+        $this->r = new renderer($this->module); // Renderer
         $this->r->text =& $this->gtext; // Language
         suxValidate::register_object('this', $this); // Register self to validator
 

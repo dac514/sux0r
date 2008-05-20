@@ -26,9 +26,6 @@ require_once('suxRegisterOpenID.php');
 
 class suxLoginOpenID extends suxRegisterOpenID {
 
-    public $gtext = array(); // Language
-    public $tpl; // Template
-    public $r; // Renderer
 
     /**
     * Constructor

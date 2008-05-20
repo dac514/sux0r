@@ -2,7 +2,7 @@
 <table id="proselytizer" >
 	<tr>
 		<td colspan="2" style="vertical-align:top;">
-			<div class="header">
+			<div id="header">
 
                 <h1>sux0r - it sux0rs up all the web</h1>
 
@@ -21,8 +21,16 @@
 		</td>
 	</tr>
 	<tr>
+        <td style="vertical-align:top;">
+			<div id="leftside">
+
+            Lorem ipsum dolor sit amet, consec tetuer Lorem ipsum dolor sit amet
+
+
+			</div>
+		</td>
 		<td style="vertical-align:top;">
-			<div class="leftside">
+			<div id="rightside">
 
                 <div class="suxContainer">
                     <h2>Title</h2>
@@ -52,18 +60,10 @@
 
 			</div>
 		</td>
-		<td style="vertical-align:top;">
-			<div class="rightside">
-
-            <p>Lorem ipsum dolor sit amet, consec tetuer Lorem ipsum dolor sit amet</p>
-
-
-			</div>
-		</td>
 	</tr>
 	<tr>
 		<td colspan="2" style="vertical-align:bottom;">
-			<div class="footer">
+			<div id="footer">
 			Footer
 			</div>
 		</td>

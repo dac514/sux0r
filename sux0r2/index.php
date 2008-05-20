@@ -26,7 +26,7 @@ require_once(dirname(__FILE__) . '/config.php');
 require_once (dirname(__FILE__) . '/initialize.php');
 
 // ---------------------------------------------------------------------------
-// Sanity check
+// Prepare
 // ---------------------------------------------------------------------------
 
 // Defaults
@@ -43,8 +43,12 @@ if (!empty($_GET['c'])) {
 
 // Pre-sanitize controller
 $controller = mb_strtolower($controller);
-if (!preg_match('/^(\w|\-)+$/', $controller)) $controller = 'home';
-if (!is_file(dirname(__FILE__) . "/modules/{$controller}/controller.php")) $controller = 'home';
+if (!preg_match('/^(\w|\-)+$/', $controller) || !is_file(dirname(__FILE__) . "/modules/{$controller}/controller.php")) {
+    // A static page to avoid stupidities like infinite loops
+    if (!headers_sent()) header("HTTP/1.0 404 Not Found");
+    echo file_get_contents(dirname(__FILE__) . '/404.html');
+    exit;
+}
 
 // Pre-sanitize action
 $action = mb_strtolower($action);

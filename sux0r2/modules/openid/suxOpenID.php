@@ -50,6 +50,8 @@ class suxOpenID {
     private $p;
 
     private $user; // suxUser
+    private $module = 'openid'; // Module
+
 
     /**
     * Constructor
@@ -67,7 +69,7 @@ class suxOpenID {
         set_exception_handler(array($this, 'logAndDie')); // Exception
 
         $this->user = $user; // User
-        $this->tpl = new suxTemplate('openid', $GLOBALS['CONFIG']['PARTITION']); // Template
+        $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->gtext = $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']); // Language
 
         /*
@@ -623,7 +625,7 @@ class suxOpenID {
         $yes = $this->profile['req_url'] . $q . 'accepted=yes';
         $no  = $this->profile['req_url'] . $q . 'accepted=no';
 
-        $r = new suxRenderer();
+        $r = new suxRenderer($this->module);
         $r->text =& $this->gtext;
         $r->text['unaccepted_url'] = $_SESSION['openid_unaccepted_url'];
         $r->text['always_url'] = $always;
@@ -714,7 +716,7 @@ class suxOpenID {
         $q = mb_strpos($this->profile['my_url'], '?') ? '&' : '?';
 
         // Template
-        $r = new suxRenderer();
+        $r = new suxRenderer($this->module);
 
         $r->header .= "<link rel='openid.server' href='{$this->profile['my_url']}' />\n";
         $r->header .= "<meta name='robots' content='noindex,nofollow' />\n";
@@ -1418,7 +1420,7 @@ class suxOpenID {
     */
     private function wrapHtml($message) {
 
-        $r = new suxRenderer();
+        $r = new suxRenderer($this->module);
         $r->header .= "<meta name='robots' content='noindex,nofollow' />\n";
         $r->text['message'] = $message;
         $r->bool['analytics'] = false;
@@ -1439,7 +1441,7 @@ class suxOpenID {
     private function wrapRefresh($url) {
 
         // Template
-        $r = new suxRenderer();
+        $r = new suxRenderer($this->module);
         $r->text =& $this->gtext;
         $r->text['url'] = $url;
 

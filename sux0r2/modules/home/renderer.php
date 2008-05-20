@@ -29,9 +29,11 @@ class renderer extends suxRenderer {
 
     /**
     * Constructor
+    *
+    * @param string $module
     */
-    function __construct() {
-        parent::__construct(); // Call parent
+    function __construct($module) {
+        parent::__construct($module); // Call parent
     }
 
 
@@ -39,7 +41,7 @@ class renderer extends suxRenderer {
 
         $tmp = '
         <style>
-        .leftside { width: 478px; }
+        #leftside { width: 478px; }
         </style>
         ';
 
@@ -51,8 +53,8 @@ class renderer extends suxRenderer {
 
         $tmp = '
         <style>
-        .leftside { width: 738px; }
-        .rightside { margin-top: 10px; }
+        #leftside { margin: 10px; }
+        #rightside { width: 738px; }
         </style>
         ';
 

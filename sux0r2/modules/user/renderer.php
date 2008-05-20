@@ -32,9 +32,11 @@ class renderer extends suxRenderer {
 
     /**
     * Constructor
+    *
+    * @param string $module
     */
-    function __construct() {
-        parent::__construct(); // Call parent
+    function __construct($module) {
+        parent::__construct($module); // Call parent
     }
 
 
