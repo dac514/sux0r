@@ -34,6 +34,7 @@ class suxUserProfile extends suxUser {
     public $r; // Renderer
 
     public $profile; // User profile array
+    private $module = 'user'; // Module
 
     /**
     * Constructor
@@ -46,9 +47,9 @@ class suxUserProfile extends suxUser {
     function __construct($nickname, $key = null) {
 
         parent::__construct($key); // Call parent
-        $this->tpl = new suxTemplate('user', $GLOBALS['CONFIG']['PARTITION']); // Template
+        $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->gtext = $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']); // Language
-        $this->r = new renderer(); // Renderer
+        $this->r = new renderer($this->module); // Renderer
         $this->r->text =& $this->gtext; // Language
 
         // Profile

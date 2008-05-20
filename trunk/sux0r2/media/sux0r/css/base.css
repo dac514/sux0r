@@ -54,32 +54,9 @@
 }
 
 
-/* Float Right */
+/* Widget */
 
-.floatright {
-    float: right;
-    width: 83px;
-    margin: 0 0 10px 10px;
-    background-color: #fff;
-    padding: 10px;
-    border-top: 1px solid #999999;
-    border-right: 2px solid #555555;
-    border-bottom: 2px solid #555555;
-    border-left: 1px solid #999999;
-    margin-right: 10px;
-
-}
-
-div.floatright img {
-    border-top: 2px solid #555555;
-    border-right: 1px solid #999999;
-    border-bottom: 1px solid #999999;
-    border-left: 2px solid #555555;
-}
-
-/* Container */
-
-.suxContainer {
+.widget {
     border-top: 3px solid #dddddd;
     border-right: 3px solid #dddddd;
     border-bottom: 3px solid #dddddd;
@@ -89,18 +66,43 @@ div.floatright img {
 
 }
 
-.suxContainer h2 {
+.widget h2 {
     background-color: #cccccc;
-    /* Shorthand: margin-top margin-right margin-bottom margin-left */
+    color: #000000;
     margin: 0 0 20px 0;
     padding: 5px 0 5px 5px;
     border-bottom: 1px solid black;
 
 }
 
-.suxContainer p {
+.widget h2 a:link, .widget h2 a:visited, .widget h2 a:active {
+    color: #000000;
+    text-decoration: none;
+}
+
+
+.widget p {
     margin-left: 10px;
     margin-right: 10px;
+}
+
+.widget .floatright {
+    float: right;
+    margin: 0 0 10px 10px;
+    background-color: #ffffff;
+    padding: 10px;
+    border-top: 1px solid #999999;
+    border-right: 2px solid #555555;
+    border-bottom: 2px solid #555555;
+    border-left: 1px solid #999999;
+    margin-right: 10px;
+}
+
+.widget div.floatright img {
+    border-top: 2px solid #555555;
+    border-right: 1px solid #999999;
+    border-bottom: 1px solid #999999;
+    border-left: 2px solid #555555;
 }
 
 
@@ -154,11 +156,11 @@ body, tr, td {
 
 }
 
-.header h1 {
+#header h1 {
     margin-left: 10px;
 }
 
-.footer {
+#footer {
     margin: 10px;
 }
 

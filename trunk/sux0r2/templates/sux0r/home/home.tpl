@@ -2,7 +2,7 @@
 <table id="proselytizer">
 	<tr>
 		<td colspan="2" style="vertical-align:top;">
-			<div class="header">
+			<div id="header">
 
                 <h1>sux0r - it sux0rs up all the web</h1>
 
@@ -22,20 +22,12 @@
 	</tr>
 	<tr>
 		<td style="vertical-align:top;">
-			<div class="leftside">
+			<div id="leftside">
 
-                <div class="suxContainer">
-                    <h2>Title</h2>
-                    <div class="floatright">
-                        <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="80" height="80"><br>
-                        Caption
-                    </div>
-                    <p>Lorem ipsum dolor sit amet, consectetuer...</p>
-                    <div class="clear"></div>
-                    <b class="bb"><b></b></b>
-                </div>
+            {$r->widget('Title', 'Lorem ipsum dolor sit amet, consectetuer...', 'www.trotch.com', 'http://images.slashdot.org/topics/topicsecurity.gif', 'Caption my big ass caption')}
 
-                <div class="suxContainer">
+
+                <div class="widget">
                     <h2>Lorem ipsum</h2>
                     <div class="floatright">
                     <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="80" height="80"><br>
@@ -53,12 +45,12 @@
 			</div>
 		</td>
 		<td style="vertical-align:top;">
-			<div class="rightside">
+			<div id="rightside">
 
-                <div class="suxContainer">
+                <div class="widget">
                     <h2>Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, consectetuer</h2>
                     <div class="floatright">
-                    <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="80" height="80"><br>
+                    <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="120" height="120"><br>
                     Caption
                     </div>
                     <p>Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer
@@ -81,7 +73,7 @@
 	</tr>
 	<tr>
 		<td colspan="2" style="vertical-align:bottom;">
-			<div class="footer">
+			<div id="footer">
 			Footer
 			</div>
 		</td>

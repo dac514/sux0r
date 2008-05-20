@@ -158,6 +158,7 @@ class suxTemplate extends Smarty {
 
     }
 
+
     /**
     * Assemble template(s) into XHTML document with header and footer
     *
@@ -166,34 +167,42 @@ class suxTemplate extends Smarty {
     * @param string|array $tpl templates
     * @param string $cache_id
     * @param string $compile_id
-    * @param boolean $display
+    * @return string the html code
     */
-    function assemble($tpl, $cache_id = null, $compile_id = null, $display = false) {
+    function assemble($tpl, $cache_id = null, $compile_id = null) {
+
+        // This function assumes you did
+        // $this->tpl->assign_by_ref('r', $this->r);
+        // Or some variation thereof, before calling it.
 
         $tmp = '';
 
         // Header
         $path = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $GLOBALS['CONFIG']['PARTITION'];
         if (!file_exists("$path/header.tpl")) $path = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r';
-        $tmp .= $this->fetch("file:$path/header.tpl", $cache_id, $compile_id, $display);
+        $tmp .= $this->fetch("file:$path/header.tpl", $cache_id, $compile_id);
 
         // Templates
         if (is_array($tpl)) foreach ($tpl as $val) {
-            $tmp .= $this->fetch($val, $cache_id, $compile_id, $display);
+            $tmp .= $this->fetch($val, $cache_id, $compile_id);
         }
         else {
-            $tmp .= $this->fetch($tpl, $cache_id, $compile_id, $display);
+            $tmp .= $this->fetch($tpl, $cache_id, $compile_id);
         }
 
         // Footer
         $path = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $GLOBALS['CONFIG']['PARTITION'];
         if (!file_exists("$path/footer.tpl")) $path = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r';
-        $tmp .= $this->fetch("file:$path/footer.tpl", $cache_id, $compile_id, $display);
+        $tmp .= $this->fetch("file:$path/footer.tpl", $cache_id, $compile_id);
 
         return $tmp;
 
     }
 
+
+    // --------------------------------------------------------------------
+    // Override Smarty Functions
+    // --------------------------------------------------------------------
 
     /**
     * Override Smarty fetch() function to look for content in various places

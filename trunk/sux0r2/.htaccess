@@ -1,7 +1,7 @@
 # sux0r settings:
 
 # Custom 404 Error
-# ErrorDocument 404 /index.php
+ErrorDocument 404 /sux0r2/404.html
 
 <IfModule mod_rewrite.c>
 

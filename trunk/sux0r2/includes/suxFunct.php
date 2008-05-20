@@ -238,9 +238,9 @@ class suxFunct {
         }
 
         // protocol and domain to lowercase (but NOT the rest of the URL),
-        $scheme = parse_url($url, PHP_URL_SCHEME);
+        $scheme = @parse_url($url, PHP_URL_SCHEME);
         $url = preg_replace("/$scheme/", mb_strtolower($scheme), $url, 1);
-        $host = parse_url($url, PHP_URL_HOST);
+        $host = @parse_url($url, PHP_URL_HOST);
         $url = preg_replace("/$host/", mb_strtolower($host), $url, 1);
 
         // Sanitize for good measure

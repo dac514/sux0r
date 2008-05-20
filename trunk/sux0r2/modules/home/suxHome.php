@@ -31,17 +31,22 @@ class suxHome {
     public $tpl; // Template
     public $r; // Renderer
 
+    private $user; // suxUser
+    private $module = 'home'; // Module
+
     /**
     * Constructor
     *
     * @global string $CONFIG['PARTITION']
     * @global string $CONFIG['LANGUAGE']
     */
-    function __construct() {
+    function __construct(suxUser $user) {
 
-        $this->tpl = new suxTemplate('home', $GLOBALS['CONFIG']['PARTITION']); // Template
+        $this->user = $user; // User
+
+        $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->gtext = $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']); // Language
-        $this->r = new renderer(); // Renderer
+        $this->r = new renderer($this->module); // Renderer
         $this->r->text =& $this->gtext; // Language
 
     }

@@ -28,8 +28,13 @@ function sux($action, $params = null) {
     {
 
     default:
+
+        require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
         include_once('suxHome.php');
-        $home = new suxHome();
+
+        $user = new suxUser();
+        $home = new suxHome($user);
+
         $home->display();
 
     }
