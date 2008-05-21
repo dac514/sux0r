@@ -8,3 +8,4 @@
     {$r->header}
 </head>
 <body>
+<div id="encompasser">

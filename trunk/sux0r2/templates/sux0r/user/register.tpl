@@ -1,3 +1,5 @@
+<div id="proselytizer">
+
 {if $validate.default.is_error !== false}
 <p>The form was not submitted, see errors below:</p>
 {/if}
@@ -99,3 +101,5 @@
 <p />
 
 </form>
+
+</div>
