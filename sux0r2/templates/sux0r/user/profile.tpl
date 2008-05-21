@@ -1,3 +1,4 @@
+<div id="proselytizer">
 
 {$r->text.nickname} : {$r->profile.nickname} <br />
 {$r->text.email} : {mailto address=$r->profile.email  encode='javascript'} <br />
@@ -57,3 +58,5 @@
 {$r->profile.pavatar}
 {$r->profile.microid}
 *}
+
+</div>

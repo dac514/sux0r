@@ -34,8 +34,8 @@ class suxRenderer {
     public $partition; // sux0r parition name
     public $title; // Variable to put between <title> tags
     public $header; // Variable to keep header/text
+    public $nav; // Variable to keep navlist
     public $text; // Variable to keep body/text
-    public $footer; // Variable to keep footer/text
     public $bool; // Variable to keep bool values
 
 
@@ -124,6 +124,34 @@ class suxRenderer {
         $tpl->assign('content', $content);
 
         return $tpl->fetch("file:$path/widget.tpl");
+
+    }
+
+
+    /**
+    * Construct a navigation container
+    *
+    * @param array $list key => name, val => url
+    * @param string $selected match against key to add css selected
+    * @return string the html code
+    */
+    function navlist($list, $selected = null) {
+
+        if (!is_array($list)) return null;
+
+        $html = "<div id='navcontainer'>\n";
+        $html .= "<ul id='navlist'>\n";
+
+        foreach ($list as $key => $val) {
+            if ($key == $selected) $html .= "<li><a href='{$val}' class='selected'>{$key}</a></li>\n";
+            else $html .= "<li><a href='{$val}'>{$key}</a></li>\n";
+        }
+
+        $html .= "</ul>\n";
+        $html .= "</div>\n";
+        $html .= "<div class='clear'></div>\n";
+
+        return $html;
 
     }
 

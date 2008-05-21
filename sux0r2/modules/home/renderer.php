@@ -34,6 +34,15 @@ class renderer extends suxRenderer {
     */
     function __construct($module) {
         parent::__construct($module); // Call parent
+
+        // Test
+        $this->nav = array(
+            'Item One' => '#',
+            'Item Two' => 'cake',
+            'Item Three' => '#',
+            'Item Four' => 'http://www.trotch.com',
+            );
+
     }
 
 

@@ -1,4 +1,3 @@
-<div id="encompasser">
 <table id="proselytizer">
 	<tr>
 		<td colspan="2" style="vertical-align:top;">
@@ -6,16 +5,7 @@
 
                 <h1>sux0r - it sux0rs up all the web</h1>
 
-                <div id="navcontainer">
-                    <ul id="navlist">
-                    <li id="active"><a href="#" id="current">Item one</a></li>
-                    <li><a href="#">Item two</a></li>
-                    <li><a href="#">Item three</a></li>
-                    <li><a href="#">Item four</a></li>
-                    <li><a href="#">Item five</a></li>
-                    </ul>
-                </div>
-                <div class="clear"></div>
+                {$r->navlist($r->nav, 'Item One')}
 
 			</div>
 		</td>
@@ -24,7 +14,7 @@
 		<td style="vertical-align:top;">
 			<div id="leftside">
 
-            {$r->widget('Title', 'Lorem ipsum dolor sit amet, consectetuer...', 'www.trotch.com', 'http://images.slashdot.org/topics/topicsecurity.gif', 'Caption my big ass caption')}
+            {$r->widget('Title', '<p>Lorem ipsum dolor sit amet, consectetuer...</p>', 'www.trotch.com', 'http://localhost:8888/sux0r2/media/sux0r/pavatars/bunker.jpg', 'Caption my big ass caption')}
 
 
                 <div class="widget">
@@ -79,4 +69,3 @@
 		</td>
 	</tr>
 </table>
-</div>
