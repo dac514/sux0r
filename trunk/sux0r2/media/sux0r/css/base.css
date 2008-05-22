@@ -1,10 +1,95 @@
-.clear {
+/* {{{ Defaults */
+
+body {
+    margin: 0px;
+    background-color: #cccccc;
+}
+
+body, tr, td {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    text-align: left;
+}
+
+a:link, a:visited, a:active {
+    font-weight: bold;
+    color: #000000;
+    text-decoration: underline;
+}
+
+a:hover {
+    color: #ffffff;
+    background: #000000;
+}
+
+#encompasser {
+    width: 98%;
+    margin: 1%;
+}
+
+#proselytizer {
+    width: 962px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #ffffff;
+    border: 3px solid #dddddd;
+}
+
+div#proselytizer {
+    width: 942px;
+    padding: 10px;
+}
+
+table#proselytizer {
+    border-collapse: collapse;
+    text-align: center;
+}
+
+#header h1 {
+    float: left;
+    margin-left: 10px;
+}
+
+#header .userinfo {
+    float: right;
+    margin-top: 3px;
+    margin-right: 5px;
+
+}
+
+#header img.openidLogin {
+    border: 0;
+    vertical-align: middle;
+}
+
+
+#footer {
+    margin: 10px;
+}
+
+.openidInput {
+    background: url("../assets/openid_icon.gif") no-repeat 0 50%;
+    padding-left: 18px !important;
+    padding-top: .2em !important;
+}
+
+.thumbnail {
+    float: left;
+    border: 1px solid #999999;
+    margin: 0 15px 15px 0;
+    padding: 5px;
+}
+
+.clearboth {
     clear: both;
     height: 1px;
     overflow: hidden;
 }
 
-/* Navigation Container */
+/* }}} */
+
+
+/* {{{ Horizontal Navigation Container */
 
 #navcontainer {
     width: 100%;
@@ -47,8 +132,48 @@
     background: #000000;
 }
 
+/* }}} */
 
-/* Widget */
+
+/* {{{ Vertical Menu Container */
+
+.menucontainer {
+
+}
+
+.menucontainer ul {
+    margin-left: 0;
+    padding-left: 0;
+    list-style-type: none;
+    font-weight: bold;
+}
+
+.menucontainer a {
+    display: block;
+    padding: 3px;
+    background-color: #ff0000;
+    border-bottom: 1px solid #eee;
+}
+
+.menucontainer a:link, .menulist a:visited {
+    color: #EEE;
+    text-decoration: none;
+}
+
+.menucontainer a:hover {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.menucontainer a.selected {
+    color: #cccccc;
+    background: #000000;
+}
+
+/* }}} */
+
+
+/* {{{ Widget */
 
 .widget {
     border-top: 3px solid #dddddd;
@@ -99,7 +224,6 @@
     border-left: 2px solid #555555;
 }
 
-
 /* Bottom Corners */
 
 b.bb, b.bb b {
@@ -121,47 +245,5 @@ b.bb b {
     left: 6px;
 }
 
-/* My shit, minimal tables */
-
-body {
-    margin: 0px;
-    background-color: #cccccc;
-}
-
-body, tr, td {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    text-align: left;
-}
-
-#encompasser {
-    width: 98%;
-    margin: 1%;
-}
-
-#proselytizer {
-    margin-left: auto;
-    margin-right :auto;
-    width: 962px;
-    background-color: #ffffff;
-    border: 3px solid #dddddd;
-}
-
-table#proselytizer {
-    border-collapse: collapse;
-    text-align: center;
-}
-
-div#proselytizer {
-    width: 942px;
-    padding: 10px;
-}
-
-#header h1 {
-    margin-left: 10px;
-}
-
-#footer {
-    margin: 10px;
-}
+/* }}} */
 

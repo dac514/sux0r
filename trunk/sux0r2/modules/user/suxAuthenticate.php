@@ -72,8 +72,11 @@ class suxAuthenticate extends suxUser {
                 die('Too many password failures');
             }
 
-            // Cancceled
-            die('Cancelled');
+            // Echo spaces to make headers_sent == true in redirect() function
+            // as it seems to conflift with authenticate procedure
+
+            echo str_repeat(' ', 40000);
+            suxFunct::redirect(suxFunct::makeUrl('/home'));
 
         }
 
