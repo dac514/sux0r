@@ -5,6 +5,6 @@
 {if $caption && $width}<div style="width:{$width}px;">{$caption}</div>{/if}
 </div>{/if}
 {$content}
-<div class="clear"></div>
+<div class="clearboth"></div>
 <b class="bb"><b></b></b>
 </div>

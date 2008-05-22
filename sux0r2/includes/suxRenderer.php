@@ -149,9 +149,24 @@ class suxRenderer {
 
         $html .= "</ul>\n";
         $html .= "</div>\n";
-        $html .= "<div class='clear'></div>\n";
+        $html .= "<div class='clearboth'></div>\n";
 
         return $html;
+
+    }
+
+
+    /**
+    * Make URL Wrapper
+    *
+    * @param string $path controller value in /this/style
+    * @param array $query http_build_query compatible array
+    * @param bool $full return full url?
+    * @return string url
+    */
+    function makeUrl($path, $query = null, $full = false) {
+
+        return suxFunct::makeUrl($path, $query, $full);
 
     }
 

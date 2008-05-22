@@ -259,6 +259,7 @@ class suxFunct {
     * @param string $path controller value in /this/style
     * @param array $query http_build_query compatible array
     * @param bool $full return full url?
+    * @return string url
     */
     static function makeUrl($path, $query = null, $full = false) {
 
