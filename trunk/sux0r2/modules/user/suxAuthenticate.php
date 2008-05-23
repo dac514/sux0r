@@ -69,11 +69,15 @@ class suxAuthenticate extends suxUser {
 
             // Too many password failures?
             if (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->max_failures) {
-                die('Too many password failures');
+                $this->tpl->assign_by_ref('r', $this->r);
+                $output = $this->tpl->assemble('pw_failures.tpl');
+                echo $output;
+                die();
             }
 
-            // Echo spaces to make headers_sent == true in redirect() function
-            // as it seems to conflift with authenticate procedure
+
+            // Threre's a conflift with authenticate procedure and header('Location:')
+            // The workaround is to echo some spaces and force javascript redirect
 
             echo str_repeat(' ', 40000);
             suxFunct::redirect(suxFunct::makeUrl('/home'));

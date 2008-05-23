@@ -4,7 +4,7 @@
     <meta content="text/html;charset=UTF-8" http-equiv="content-type" />
     <title>{$r->title}</title>
     <link rel="icon" type="image/png" href="{$r->url}/media/{$r->partition}/assets/favicon.png" />
-    <link rel="stylesheet" type="text/css" href="{$r->url}/media/{$r->partition}/css/base.css" />
+    {$r->stylesheets}
     {$r->header}
 </head>
 <body>

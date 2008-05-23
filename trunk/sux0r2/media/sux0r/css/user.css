@@ -1,0 +1,31 @@
+label {
+    width: 8em;
+    float: left;
+    text-align: right;
+    margin-right: 0.5em;
+    display: block;
+}
+
+input, select {
+    width: 350px;
+}
+
+.openidInput {
+    background: url("../assets/openid_icon.gif") no-repeat 0 50%;
+    padding-left: 18px !important;
+    padding-top: .2em !important;
+}
+
+/* Revert */
+
+.htmlRadios label {
+    width: auto;
+    float: none;
+    text-align: left;
+    display: inline;
+
+}
+
+.htmlRadios input, .htmlSelectDate select {
+    width: auto;
+}

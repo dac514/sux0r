@@ -67,12 +67,6 @@ table#proselytizer {
     margin: 10px;
 }
 
-.openidInput {
-    background: url("../assets/openid_icon.gif") no-repeat 0 50%;
-    padding-left: 18px !important;
-    padding-top: .2em !important;
-}
-
 .thumbnail {
     float: left;
     border: 1px solid #999999;
@@ -80,11 +74,50 @@ table#proselytizer {
     padding: 5px;
 }
 
+fieldset {
+    border: 1px solid #000000;
+}
+
+legend {
+    color: #ffffff;
+    background: #ff0000;
+    border: 1px solid #ffffff;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+input, select {
+    color: #000000;
+    background: #dddddd;
+    border: 1px solid #333333;
+}
+
+
+.button {
+    color: #ffffff;
+    background: #ff0000;
+    border: 2px outset #cccccc;
+    width: auto;
+}
+
+.errorWarning {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.error {
+    color: #ff0000;
+    font-weight: bold;
+}
+
 .clearboth {
     clear: both;
     height: 1px;
     overflow: hidden;
 }
+
 
 /* }}} */
 
@@ -195,10 +228,8 @@ table#proselytizer {
 }
 
 .widget h2 a:link, .widget h2 a:visited, .widget h2 a:active {
-    color: #000000;
     text-decoration: none;
 }
-
 
 .widget p {
     margin-left: 10px;

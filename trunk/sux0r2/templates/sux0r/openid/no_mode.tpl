@@ -8,6 +8,9 @@
 {$r->text.no_mode}<br />
 {$r->text.server}: <b>{$r->text.server_url}</b><br />
 {$r->text.realm}: <b>{$r->text.realm_id}</b><br />
+</p>
+
+<p>
 <a href="{$r->text.login_url}">{$r->text.login}</a>
 {if $r->bool.debug} | <a href="{$r->text.test_url}">{$r->text.test}</a>{/if}
 </p>

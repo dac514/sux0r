@@ -29,11 +29,15 @@ require_once('suxTemplate.php');
 
 class suxRenderer {
 
+    // Text
     public $url; // URL Prefix
     public $module; // Module
     public $partition; // sux0r parition name
     public $title; // Variable to put between <title> tags
+    public $stylesheets; // Variable to keep stylesheets/text
     public $header; // Variable to keep header/text
+
+    // Arrays
     public $nav; // Variable to keep navlist
     public $text; // Variable to keep body/text
     public $bool; // Variable to keep bool values
@@ -42,6 +46,7 @@ class suxRenderer {
     /**
     * Constructor
     *
+    * @global string $CONFIG['PATH']
     * @global string $CONFIG['URL']
     * @global string $CONFIG['PARTITION']
     * @global string $CONFIG['TITLE']
@@ -49,11 +54,18 @@ class suxRenderer {
     */
     function __construct($module) {
 
+        // Defaults
         $this->url = $GLOBALS['CONFIG']['URL'];
         $this->module = $module;
         $this->partition = $GLOBALS['CONFIG']['PARTITION'];
         $this->title = $GLOBALS['CONFIG']['TITLE'];
         $this->bool['analytics'] = true;
+
+        // Stylesheets
+        $this->stylesheets = "<link rel='stylesheet' type='text/css' href='{$this->url}/media/{$this->partition}/css/base.css' />\n";
+        if (file_exists($GLOBALS['CONFIG']['PATH'] . "/media/{$this->partition}/css/{$this->module}.css")) {
+            $this->stylesheets .= "<link rel='stylesheet' type='text/css' href='{$this->url}/media/{$this->partition}/css/{$this->module}.css' />\n";
+        }
 
     }
 

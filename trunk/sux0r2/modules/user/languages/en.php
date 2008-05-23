@@ -5,6 +5,19 @@ $gtext['dob'] = 'Birthday';
 $gtext['email'] = 'Email';
 $gtext['family_name'] = ' Last name';
 $gtext['female'] = 'Female';
+
+$gtext['form_error'] = 'The form was not submitted, see errors below';
+$gtext['form_error_1'] = 'Nickname cannot be empty';
+$gtext['form_error_2'] = 'Invalid characters';
+$gtext['form_error_3'] = 'Duplicate nickname';
+$gtext['form_error_4'] = 'Invalid email';
+$gtext['form_error_5'] = 'Duplicate email';
+$gtext['form_error_6'] = 'Minimum 6 characters';
+$gtext['form_error_7'] = 'Passwords do not match';
+$gtext['form_error_8'] = 'URL cannot be empty';
+$gtext['form_error_9'] = 'Invalid URL';
+$gtext['form_error_10'] = 'Duplicate URL';
+
 $gtext['gender'] = 'Gender';
 $gtext['given_name'] = 'First name';
 $gtext['language'] = 'Language';
@@ -22,15 +35,22 @@ when in fact you did, and were then logged back in without knowing.';
 $gtext['male'] = 'Male';
 $gtext['name'] = 'Name';
 $gtext['nickname'] = 'Nickname';
+$gtext['openid_login'] = 'OpenID Login';
+$gtext['openid_reg'] = 'OpenID Registration';
 $gtext['password'] = 'Password';
 $gtext['password_verify'] = 'Verify password';
 $gtext['postcode'] = 'Zip/Postal Code';
+$gtext['pw_failure'] = 'Too many password failures';
+$gtext['pw_failure_2'] = 'Too many password failures. You must restart your browser to try again.';
+$gtext['reg'] = 'Registration';
 $gtext['region'] = 'State/Province';
 $gtext['street_address'] = 'Address';
 $gtext['submit'] = 'Submit';
 $gtext['tel'] = 'Telephone';
 $gtext['timezone'] = 'Timezone';
 $gtext['url'] = 'URL';
+
+
 
 /*
 // The defults for languages and countries are english.
