@@ -1,105 +1,148 @@
 <div id="proselytizer">
 
-{if $validate.default.is_error !== false}
-<p>The form was not submitted, see errors below:</p>
-{/if}
-<p />
-
-
 <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8">
 <input type="hidden" name="token" value="{$token}" />
 
-{$r->text.nickname} :
-{validate id="nickname" message="[ Nickname cannot be empty ]"}
-{validate id="nickname2" message="[ Invalid characters ]"}
-{validate id="nickname3" message="[ Duplicate nickname ]"}
-<input type="text" name="nickname" value="{$nickname}" />
-<p />
+<fieldset>
+<legend>{$r->text.reg}</legend>
 
-{$r->text.email} :
-{validate id="email" message="[ Invalid email ]"}
-{validate id="email2" message="[ Duplicate email ]"}
+{if $validate.default.is_error !== false}
+<p class="errorWarning">{$r->text.form_error} :</p>
+{/if}
+
+<p>
+{strip}
+    {capture name=error1}
+    {validate id="nickname" message=$r->text.form_error_1}
+    {validate id="nickname2" message=$r->text.form_error_2}
+    {validate id="nickname3" message=$r->text.form_error_3}
+    {/capture}
+{/strip}
+
+<label for="nickname" {if $smarty.capture.error1}class="error"{/if} >* {$r->text.nickname} :</label>
+<input type="text" name="nickname" value="{$nickname}" />
+{$smarty.capture.error1}
+</p>
+
+<p>
+{strip}
+    {capture name=error2}
+    {validate id="email" message=$r->text.form_error_4}
+    {validate id="email2" message=$r->text.form_error_5}
+    {/capture}
+{/strip}
+
+<label for="email" {if $smarty.capture.error2}class="error"{/if} >* {$r->text.email} :</label>
 <input type="text" name="email" value="{$email}" />
-<p />
+{$smarty.capture.error2}
+</p>
 
 
 {if $r->bool.openid}
 
-    Openid: {$r->text.openid_url}
+    <p>
+    <label>OpenID :</label> {$r->text.openid_url}
+    </p>
 
 {else}
 
-    {$r->text.password} :
-    {validate id="password" message="[ Minimum 6 characters  ]"}
-    {validate id="password2" message="[ Passwords do not match ]"}
-    <input type="password" name="password" value="{$password}" />
-    <p />
+    <p>
+    {strip}
+        {capture name=error3}
+        {validate id="password" message=$r->text.form_error_6}
+        {validate id="password2" message=$r->text.form_error_7}
+        {/capture}
+    {/strip}
 
-    {$r->text.password_verify} :
+    <label for="password" {if $smarty.capture.error3}class="error"{/if}>* {$r->text.password} :</label>
+    <input type="password" name="password" value="{$password}" />
+    {$smarty.capture.error3}
+    </p>
+
+    <p>
+    <label for="password_verify">{$r->text.password_verify} :</label>
     <input type="password" name="password_verify" value="{$password_verify}" />
+    </p>
 
 {/if}
-<p />
 
-{$r->text.given_name} :
+
+<p>
+<label for="given_name">{$r->text.given_name} :</label>
 <input type="text" name="given_name" value="{$given_name}" />
-<p />
+</p>
 
-{$r->text.family_name} :
+<p>
+<label for="family_name">{$r->text.family_name} :</label>
 <input type="text" name="family_name" value="{$family_name}" />
-<p />
+</p>
 
-{$r->text.street_address} :
+<p>
+<label for="street_address">{$r->text.street_address} :</label>
 <input type="text" name="street_address" value="{$street_address}" />
-<p />
+</p>
 
-{$r->text.locality} :
+<p>
+<label for="locality">{$r->text.locality} :</label>
 <input type="text" name="locality" value="{$locality}" />
-<p />
+</p>
 
-{$r->text.region} :
+<p>
+<label for="region">{$r->text.region} :</label>
 <input type="text" name="region" value="{$region}" />
-<p />
+</p>
 
-{$r->text.postcode} :
+<p>
+<label for="postcode">{$r->text.postcode} :</label>
 <input type="text" name="postcode" value="{$postcode}" />
-<p />
+</p>
 
-{$r->text.country} :
+<p>
+<label for="country">{$r->text.country} :</label>
 {html_options name='country' options=$r->getCountries() selected=$country}
-<p />
+</p>
 
-{$r->text.tel} :
+<p>
+<label for="tel">{$r->text.tel} :</label>
 <input type="text" name="tel" value="{$tel}" />
-<p />
+</p>
 
-{$r->text.url} :
+<p>
+<label for="url">{$r->text.url} :</label>
 <input type="text" name="url" value="{$url}" />
-<p />
+</p>
 
-{$r->text.dob} :
-{* <input type="text" name="dob" value="{$dob}" /> TODO: Javascript calendar *}
+<p>
+<label>{$r->text.dob} :</label>
+<span class="htmlSelectDate">
 {html_select_date time="$Date_Year-$Date_Month-$Date_Day" field_order='YMD' start_year='-100' reverse_years=true year_empty='---' month_empty='---' day_empty='---'}
-<p />
+</span>
+</p>
 
-{$r->text.gender} :
-{html_radios name='gender' options=$r->getGenders() selected=$gender assign=tmp}
-{foreach from=$tmp item=v}
-    <span class="someClass">{$v}</span>
-{/foreach}
-<p />
 
-{$r->text.language} :
+<p>
+<label for="gender">{$r->text.gender} :</label>
+<span class="htmlRadios">
+{html_radios name='gender' options=$r->getGenders() selected=$gender}
+</span>
+</p>
+
+
+<p>
+<label for="language">{$r->text.language} :</label>
 {html_options name='language' options=$r->getLanguages() selected=$language}
-<p />
+</p>
 
-{$r->text.timezone} :
+<p>
+<label for="timezone">{$r->text.timezone} :</label>
 {html_options name='timezone' options=$r->getTimezones() selected=$timezone}
-<p />
+</p>
 
-<input type="submit" value="{$r->text.submit}" />
-<p />
+<p>
+<label>&nbsp;</label><input type="submit" class="button" value="{$r->text.submit}" />
+</p>
 
+</fieldset>
 </form>
 
 </div>

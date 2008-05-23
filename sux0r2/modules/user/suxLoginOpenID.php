@@ -38,11 +38,24 @@ class suxLoginOpenID extends suxRegisterOpenID {
 
         parent::__construct($key); // Call suxRegisterOpenID
 
-        // If this user is already logged in, redirect to user page
         if ($this->loginCheck()) {
+
+            // If this user is already logged in, redirect to user page
             $url = suxFunct::makeUrl('/user/profile/' . $_SESSION['nickname']);
             suxFunct::redirect($url);
+
         }
+        elseif (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->max_failures) {
+
+            // Too many password failures?
+            $this->tpl->assign_by_ref('r', $this->r);
+            $output = $this->tpl->assemble('pw_failures.tpl');
+            echo $output;
+            die();
+
+        }
+
+
 
     }
 
