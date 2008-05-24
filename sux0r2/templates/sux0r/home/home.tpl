@@ -4,14 +4,7 @@
 			<div id="header">
 
                 <h1>sux0r - it sux0rs up all the web</h1>
-
-                <div class="userinfo">
-                    <a href="{$r->makeUrl("/user/login")}">Login</a>
-                    <a href="{$r->makeUrl("/user/login/openid")}"><img src="{$r->url}/media/{$r->partition}/assets/openid_icon.gif" alt="OpenID Login" class="openidLogin" /></a> |
-                    <a href="{$r->makeUrl("/user/register")}">Register</a>
-                    <a href="{$r->makeUrl("/user/register/openid")}"><img src="{$r->url}/media/{$r->partition}/assets/openid_icon.gif" alt="OpenID Login" class="openidLogin" /></a>
-                </div>
-
+                {$r->userinfo()}
                 {$r->navlist($r->nav, 'Item One')}
 
 			</div>

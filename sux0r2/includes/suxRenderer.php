@@ -29,9 +29,11 @@ require_once('suxTemplate.php');
 
 class suxRenderer {
 
+    public $module; // Module
+    public $lang; // Language
+
     // Text
     public $url; // URL Prefix
-    public $module; // Module
     public $partition; // sux0r parition name
     public $title; // Variable to put between <title> tags
     public $stylesheets; // Variable to keep stylesheets/text
@@ -46,17 +48,23 @@ class suxRenderer {
     /**
     * Constructor
     *
+    * @global string $CONFIG['LANGUAGE']
     * @global string $CONFIG['PATH']
     * @global string $CONFIG['URL']
     * @global string $CONFIG['PARTITION']
     * @global string $CONFIG['TITLE']
     * @param string $module
     */
-    function __construct($module) {
+    function __construct($module, $lang = null) {
+
+        $this->module = $module; // Module
+
+        // Language
+        if ($lang) $this->lang = $lang;
+        else $this->lang = $GLOBALS['CONFIG']['LANGUAGE'];
 
         // Defaults
         $this->url = $GLOBALS['CONFIG']['URL'];
-        $this->module = $module;
         $this->partition = $GLOBALS['CONFIG']['PARTITION'];
         $this->title = $GLOBALS['CONFIG']['TITLE'];
         $this->bool['analytics'] = true;
@@ -126,22 +134,54 @@ class suxRenderer {
         // Template
         $tpl = new suxTemplate($this->module);
 
-        $path = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $GLOBALS['CONFIG']['PARTITION'];
-        if (!file_exists("$path/widget.tpl")) $path = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r';
-
         $tpl->assign('title', $title);
         $tpl->assign('image', $image);
         $tpl->assign('caption', $caption);
         $tpl->assign('width', $width);
         $tpl->assign('content', $content);
 
+        $path = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $GLOBALS['CONFIG']['PARTITION'];
+        if (!file_exists("$path/widget.tpl")) $path = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r';
         return $tpl->fetch("file:$path/widget.tpl");
 
     }
 
 
     /**
-    * Construct a navigation container
+    * Construct a userinfo div
+    *
+    * @global string $CONFIG['PATH']
+    * @global string $CONFIG['PARTITION']
+    * @return string the html code
+    */
+    function userinfo() {
+
+        // Template
+        $tpl = new suxTemplate($this->module);
+
+        if (!empty($_SESSION['nickname'])) {
+            $tpl->assign('nickname', $_SESSION['nickname']);
+            $tpl->assign('url_profile', suxFunct::makeUrl('/user/profile/' . $_SESSION['nickname']));
+        }
+
+        $tpl->assign('text', $this->gtext());
+        $tpl->assign('url', $this->url);
+        $tpl->assign('partition', $this->partition);
+        $tpl->assign('url_login', suxFunct::makeUrl('/user/login'));
+        $tpl->assign('url_login_openid', suxFunct::makeUrl('/user/login/openid'));
+        $tpl->assign('url_logout', suxFunct::makeUrl('/user/logout'));
+        $tpl->assign('url_register', suxFunct::makeUrl('/user/register'));
+        $tpl->assign('url_register_openid', suxFunct::makeUrl('/user/register/openid'));
+
+        $path = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $GLOBALS['CONFIG']['PARTITION'];
+        if (!file_exists("$path/userinfo.tpl")) $path = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r';
+        return $tpl->fetch("file:$path/userinfo.tpl");
+
+    }
+
+
+    /**
+    * Construct a navigation div
     *
     * @param array $list key => name, val => url
     * @param string $selected match against key to add css selected
@@ -179,6 +219,23 @@ class suxRenderer {
     function makeUrl($path, $query = null, $full = false) {
 
         return suxFunct::makeUrl($path, $query, $full);
+
+    }
+
+
+    /**
+    * Get language specific text
+    *
+    * @return array gtext
+    */
+    private function gtext() {
+
+        $gtext = null;
+        $default = dirname(__FILE__) . '/languages/en.php';
+        $requested = dirname(__FILE__) . "/languages/{$this->lang}.php";
+        if (is_readable($default)) include($default);
+        if ($this->lang != 'en' && is_readable($requested)) include($requested);
+        return $gtext;
 
     }
 
