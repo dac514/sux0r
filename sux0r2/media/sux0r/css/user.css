@@ -1,5 +1,5 @@
 label {
-    width: 8em;
+    width: 140px;
     float: left;
     text-align: right;
     margin-right: 0.5em;
@@ -8,6 +8,10 @@ label {
 
 input, select {
     width: 350px;
+}
+
+input.captcha {
+    width: 175px;
 }
 
 .openidInput {
