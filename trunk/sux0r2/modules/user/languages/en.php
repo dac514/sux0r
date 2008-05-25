@@ -1,9 +1,10 @@
 <?php
 
+$gtext['captcha'] = 'Anti-spam code';
 $gtext['country'] = 'Country';
 $gtext['dob'] = 'Birthday';
 $gtext['email'] = 'Email';
-$gtext['family_name'] = ' Last name';
+$gtext['family_name'] = 'Last name';
 $gtext['female'] = 'Female';
 
 $gtext['form_error'] = 'The form was not submitted, see errors below';
@@ -17,6 +18,7 @@ $gtext['form_error_7'] = 'Passwords do not match';
 $gtext['form_error_8'] = 'URL cannot be empty';
 $gtext['form_error_9'] = 'Invalid URL';
 $gtext['form_error_10'] = 'Duplicate URL';
+$gtext['form_error_11'] = 'Invalid captcha';
 
 $gtext['gender'] = 'Gender';
 $gtext['given_name'] = 'First name';
@@ -25,7 +27,7 @@ $gtext['locality'] = 'City';
 $gtext['logout'] = 'Logout complete';
 
 $gtext['logout2'] = 'Important: As this site uses
-<a href="http://en.wikipedia.org/wiki/Digest_access_authentication">Digest Access
+<a href="http://en.wikipedia.org/wiki/Digest_access_authentication">HTTP Digest
 Authentication</a> <strong>YOU SHOULD EXIT YOUR BROWSER</strong>. This is because
 your browser will cache your credentials and automatically log you back in the next
 time it is prompted to do so. You will not see the login box, as this will happen
