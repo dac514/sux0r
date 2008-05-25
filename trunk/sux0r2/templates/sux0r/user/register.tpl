@@ -12,29 +12,29 @@
 
 <p>
 {strip}
-    {capture name=error1}
+    {capture name=error}
     {validate id="nickname" message=$r->text.form_error_1}
     {validate id="nickname2" message=$r->text.form_error_2}
     {validate id="nickname3" message=$r->text.form_error_3}
     {/capture}
 {/strip}
 
-<label for="nickname" {if $smarty.capture.error1}class="error"{/if} >* {$r->text.nickname} :</label>
+<label for="nickname" {if $smarty.capture.error}class="error"{/if} >* {$r->text.nickname} :</label>
 <input type="text" name="nickname" value="{$nickname}" />
-{$smarty.capture.error1}
+{$smarty.capture.error}
 </p>
 
 <p>
 {strip}
-    {capture name=error2}
+    {capture name=error}
     {validate id="email" message=$r->text.form_error_4}
     {validate id="email2" message=$r->text.form_error_5}
     {/capture}
 {/strip}
 
-<label for="email" {if $smarty.capture.error2}class="error"{/if} >* {$r->text.email} :</label>
+<label for="email" {if $smarty.capture.error}class="error"{/if} >* {$r->text.email} :</label>
 <input type="text" name="email" value="{$email}" />
-{$smarty.capture.error2}
+{$smarty.capture.error}
 </p>
 
 
@@ -48,15 +48,15 @@
 
     <p>
     {strip}
-        {capture name=error3}
+        {capture name=error}
         {validate id="password" message=$r->text.form_error_6}
         {validate id="password2" message=$r->text.form_error_7}
         {/capture}
     {/strip}
 
-    <label for="password" {if $smarty.capture.error3}class="error"{/if}>* {$r->text.password} :</label>
+    <label for="password" {if $smarty.capture.error}class="error"{/if}>* {$r->text.password} :</label>
     <input type="password" name="password" value="{$password}" />
-    {$smarty.capture.error3}
+    {$smarty.capture.error}
     </p>
 
     <p>
@@ -136,6 +136,20 @@
 <p>
 <label for="timezone">{$r->text.timezone} :</label>
 {html_options name='timezone' options=$r->getTimezones() selected=$timezone}
+</p>
+
+<p>
+{strip}
+    {capture name=error}
+    {validate id="captcha" message=$r->text.form_error_11}
+    {/capture}
+{/strip}
+<label for="captcha" {if $smarty.capture.error}class="error"{/if} >* {$r->text.captcha} :</label>
+<img src="{$r->url}/modules/captcha/image.php" alt="Captcha" />
+<br />
+<label>&nbsp;</label>
+<input type="text" name="captcha" class="captcha"/>
+{$smarty.capture.error}
 </p>
 
 <p>

@@ -126,6 +126,7 @@ class suxRegister extends suxUser {
             suxValidate::register_criteria('invalidCharacters', 'this->invalidCharacters');
             suxValidate::register_criteria('isDuplicateNickname', 'this->isDuplicateNickname');
             suxValidate::register_criteria('isDuplicateEmail', 'this->isDuplicateEmail');
+            suxValidate::register_criteria('isValidCaptcha', 'this->isValidCaptcha');
 
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
@@ -138,6 +139,7 @@ class suxRegister extends suxUser {
                 suxValidate::register_validator('password', 'password:6:-1', 'isLength');
                 suxValidate::register_validator('password2', 'password:password_verify', 'isEqual');
             }
+            suxValidate::register_validator('captcha', 'captcha', 'isValidCaptcha');
 
         }
 
@@ -166,6 +168,10 @@ class suxRegister extends suxUser {
         // --------------------------------------------------------------------
         // Sanitize
         // --------------------------------------------------------------------
+
+        // Captcha
+        unset($_SESSION['captcha']);
+        unset($_POST['captcha']);
 
         // Redundant password field
         unset($_POST['password_verify']);
@@ -278,6 +284,21 @@ class suxRegister extends suxUser {
 
     }
 
+
+    /**
+    * for suxValidate, check for matching Captcha
+    *
+    * @return bool
+    */
+    function isValidCaptcha($value, $empty, &$params, &$formvars) {
+
+        if (empty($formvars['captcha'])) return false;
+        if (empty($_SESSION['captcha'])) return false;
+
+        if (mb_strtolower($_SESSION['captcha']) == mb_strtolower($formvars['captcha'])) return true;
+        else return false;
+
+    }
 
 
 }
