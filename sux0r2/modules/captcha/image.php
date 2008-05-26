@@ -1,6 +1,6 @@
 <?php
 
-// TODO
+// TODO:
 // Make this accessible for the visually impaired
 
 require_once(dirname(__FILE__) . '/../../includes/symbionts/jpgraph/src/jpgraph_antispam.php');

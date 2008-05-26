@@ -1,25 +1,36 @@
 <?php
 
 /**
- * suxValidate
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @author     Dac Chartrand <dac.chartrand@gmail.com>
- * @copyright  2008 sux0r development group
- * @license    http://www.gnu.org/licenses/agpl.html
- */
+* suxValidate
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as
+* published by the Free Software Foundation, either version 3 of the
+* License, or (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Affero General Public License for more details.
+*
+* You should have received a copy of the GNU Affero General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*
+* @author     Dac Chartrand <dac.chartrand@gmail.com>
+* @copyright  2008 sux0r development group
+* @license    http://www.gnu.org/licenses/agpl.html
+*/
+
+
+/*
+
+suxValidate extends SmartyValidate.
+
+suxValidate protects against form spoofing and makes sure that a form submission
+is intentional by adding a hidden form field with a one-time token, storing this
+token in the user's SmartyValidate session.
+
+*/
 
 require_once(dirname(__FILE__) . '/symbionts/SmartyAddons/libs/SmartyValidate.class.php');
 
@@ -47,12 +58,12 @@ class suxValidate extends SmartyValidate {
 
 
     /**
-     * Override connect(): initialize the validator
-     *
-     * @param obj    $smarty the smarty object
-     * @param string $reset reset the default form?
-     */
-     static function connect(&$smarty, $reset = false) {
+    * Override connect(): initialize the validator
+    *
+    * @param obj    $smarty the smarty object
+    * @param string $reset reset the default form?
+    */
+    static function connect(&$smarty, $reset = false) {
         if(SmartyValidate::is_valid_smarty_object($smarty)) {
             SmartyValidate::_object_instance('Smarty', $smarty);
             self::register_form(SMARTY_VALIDATE_DEFAULT_FORM, $reset);
@@ -71,32 +82,32 @@ class suxValidate extends SmartyValidate {
     */
     static function register_form($form, $reset = false) {
 
-         $_ret = false;
+        $_ret = false;
 
-         if (!(SmartyValidate::is_registered_form($form) && !$reset)) {
+        if (!(SmartyValidate::is_registered_form($form) && !$reset)) {
 
-             $_SESSION['SmartyValidate'][$form] = array();
-             $_SESSION['SmartyValidate'][$form]['registered_funcs']['criteria'] = array();
-             $_SESSION['SmartyValidate'][$form]['registered_funcs']['transform'] = array();
-             $_SESSION['SmartyValidate'][$form]['validators'] = array();
-             $_SESSION['SmartyValidate'][$form]['is_error'] = false;
-             $_SESSION['SmartyValidate'][$form]['is_init'] = true;
-             SmartyValidate::_smarty_assign();
-             self::token($form);
-             $_ret = true;
+            $_SESSION['SmartyValidate'][$form] = array();
+            $_SESSION['SmartyValidate'][$form]['registered_funcs']['criteria'] = array();
+            $_SESSION['SmartyValidate'][$form]['registered_funcs']['transform'] = array();
+            $_SESSION['SmartyValidate'][$form]['validators'] = array();
+            $_SESSION['SmartyValidate'][$form]['is_error'] = false;
+            $_SESSION['SmartyValidate'][$form]['is_init'] = true;
+            SmartyValidate::_smarty_assign();
+            self::token($form);
+            $_ret = true;
 
-         }
-         return $_ret;
+        }
+        return $_ret;
 
-     }
+    }
 
 
     /**
     * Override is_valid(): validate the form
-     *
-     * @param string $formvars the array of submitted for variables
-     * @param string $form the name of the form being validated
-     */
+    *
+    * @param string $formvars the array of submitted for variables
+    * @param string $form the name of the form being validated
+    */
     static function is_valid(&$formvars, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
 
         // ------------------------------------------------------------------

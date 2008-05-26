@@ -34,8 +34,8 @@ class suxRSS extends DOMDocument {
     // Cache interval in seconds
 	public $cache_time = 3600;
 
-    // Folder in which cached data should be stored
-    public $cache_dir = '/tmp';
+    // Folder in which cached data should be stored, set in constructor
+    public $cache_dir = null;
 
     // Allows to set how to proceed CDATA information.
     // content = get CDATA content (without CDATA tag)
@@ -72,9 +72,11 @@ class suxRSS extends DOMDocument {
     */
     function __construct() {
 
-        // extends DOMDocument
-        parent::__construct();
+        parent::__construct(); // DOMDocument
         $this->formatOutput = true; // DOMDocument
+
+        // Cache
+        $this->cache_dir = dirname(__FILE__)  . '/../temporary/rss_cache';
 
     }
 
@@ -135,7 +137,7 @@ class suxRSS extends DOMDocument {
 	function getRSS($rss_url) {
 
         // Sanity Check
-        if (!$this->cache_dir || !is_dir($this->cache_dir)) {
+        if (!$this->cache_dir || !is_dir($this->cache_dir) && !mkdir($this->cache_dir, 0777, true)) {
             throw new Exception('Invalid cache directory');
         }
 

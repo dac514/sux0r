@@ -1,3 +1,5 @@
+{include file=$r->path_to_header}
+
 <div id="proselytizer">
 
 <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8">
@@ -32,3 +34,5 @@
 </form>
 
 </div>
+
+{include file=$r->path_to_footer}

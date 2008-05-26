@@ -59,12 +59,12 @@ class suxHome {
 
         $this->r->header .= $this->r->someWittyName1();
         $this->tpl->assign_by_ref('r', $this->r);
-        $output = $this->tpl->assemble('home.tpl');
+        $output = $this->tpl->fetch('home.tpl');
 
         // Test
         //$this->r->header .= $this->r->someWittyName2();
         //$this->tpl->assign_by_ref('r', $this->r);
-        //$output = $this->tpl->assemble('home2.tpl');
+        //$output = $this->tpl->fetch('home2.tpl');
 
         echo $output;
 

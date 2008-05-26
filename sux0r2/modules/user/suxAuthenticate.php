@@ -70,8 +70,7 @@ class suxAuthenticate extends suxUser {
             // Too many password failures?
             if (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->max_failures) {
                 $this->tpl->assign_by_ref('r', $this->r);
-                $output = $this->tpl->assemble('pw_failures.tpl');
-                echo $output;
+                $this->tpl->display('pw_failures.tpl');
                 die();
             }
 
@@ -99,8 +98,7 @@ class suxAuthenticate extends suxUser {
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
-        $output = $this->tpl->assemble('logout.tpl');
-        echo $output;
+        $this->tpl->display('logout.tpl');
 
     }
 
