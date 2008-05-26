@@ -1,6 +1,6 @@
 {*
    Shared component called from suxRenderer.
-   Because of this, it is an exception and does not use the $r-> convention.
+   Because of this, it does not use the $r-> convention.
 *}
 
 <div class="widget">

@@ -22,6 +22,10 @@ a:hover {
     background: #000000;
 }
 
+a.noBg {
+    background: none;
+}
+
 #encompasser {
     width: 98%;
     margin: 1%;

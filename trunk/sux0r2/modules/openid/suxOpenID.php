@@ -637,8 +637,7 @@ class suxOpenID {
 
         $this->tpl->assign_by_ref('r', $r);
         // $this->wrapHtml($this->tpl->fetch('accept.tpl'));
-        $output = $this->tpl->assemble('accept.tpl');
-        echo $output;
+        $this->tpl->display('accept.tpl');
         exit;
     }
 
@@ -729,8 +728,7 @@ class suxOpenID {
         $r->bool['debug'] = $this->profile['debug'];
 
         $this->tpl->assign_by_ref('r', $r);
-        $output = $this->tpl->assemble('no_mode.tpl');
-        echo $output;
+        $this->tpl->display('no_mode.tpl');
         exit;
 
     }
@@ -1426,8 +1424,7 @@ class suxOpenID {
         $r->bool['analytics'] = false;
 
         $this->tpl->assign_by_ref('r', $r);
-        $output = $this->tpl->assemble('wrap_html.tpl');
-        echo $output;
+        $this->tpl->display('wrap_html.tpl');
         exit;
 
     }

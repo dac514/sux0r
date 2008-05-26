@@ -22,6 +22,7 @@
 *
 */
 
+require_once(dirname(__FILE__) . '/../../includes/symbionts/calendar.php');
 require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxSocialNetwork.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
@@ -65,24 +66,29 @@ class suxUserProfile extends suxUser {
     function displayProfile() {
 
         $this->tpl->caching = 1; // Enable cache
-        $cache_id = "profile_{$this->profile['nickname']}_";
+        $cache_id = "{$this->profile['nickname']}_";
+
         if(!$this->tpl->is_cached('profile.tpl', $cache_id)) {
 
+            // Profile
             $fullprofile = $this->getUser($this->profile['users_id'], true);
             unset($fullprofile['password']); // We don't need this
-
             $this->r->profile =& $fullprofile;
+
+            // Title
             $this->r->title .= " | {$fullprofile['nickname']}";
 
+            // OpenID Server meta tags
             $this->r->header .= $this->r->getOpenIDMeta();
 
+            // TODO: Calendar
+            $this->r->text['calendar'] = generate_calendar(2008, 5);
 
             $this->tpl->assign_by_ref('r', $this->r);
 
         }
 
-        $output = $this->tpl->assemble('profile.tpl', $cache_id);
-        echo $output;
+        $this->tpl->display('profile.tpl', $cache_id);
 
     }
 

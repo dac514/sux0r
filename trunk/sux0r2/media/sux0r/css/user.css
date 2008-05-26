@@ -1,3 +1,40 @@
+#leftside {
+    width: 160px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#middle {
+    width: 468px;
+}
+
+#rightside {
+    width: 250px;
+}
+
+img.rssIcon {
+    border: 0;
+    vertical-align: top;
+}
+
+.calendar, .calendar caption {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.calendar th, .calendar td {
+        text-align: center;
+}
+
+.calendar-month {
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+}
+
+
 label {
     width: 140px;
     float: left;

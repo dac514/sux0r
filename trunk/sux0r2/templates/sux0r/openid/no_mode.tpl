@@ -1,3 +1,5 @@
+{include file=$r->path_to_header}
+
 <div id="proselytizer">
 
 <p>
@@ -16,3 +18,5 @@
 </p>
 
 </div>
+
+{include file=$r->path_to_footer}

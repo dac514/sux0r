@@ -1,3 +1,5 @@
+{include file=$r->path_to_header}
+
 <table id="proselytizer">
 	<tr>
 		<td colspan="2" style="vertical-align:top;">
@@ -101,3 +103,6 @@
 		</td>
 	</tr>
 </table>
+
+
+{include file=$r->path_to_footer}

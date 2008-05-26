@@ -2,9 +2,12 @@
 
 /* Error reporting */
 
-error_reporting (E_ALL | E_STRICT); // Error reporting for developers
-// error_reporting (E_ALL ^ E_NOTICE); // Error reporting for hosts
+// Development
+error_reporting(E_ALL | E_STRICT);
+include_once(dirname(__FILE__)  . '/includes/symbionts/dBug.php');
 
+// Hosting
+// error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 
 /* Configuration variables */
 
@@ -88,11 +91,5 @@ $CONFIG['CACHE_LIFETIME'] = 900;
 // Timzeone, pick yours from the list available at http://php.net/manual/en/timezones.php
 
 $CONFIG['TIMEZONE'] = 'America/Montreal';
-
-
-/* Extra */
-
-// Debug
-include_once($CONFIG['PATH'] . '/includes/symbionts/dBug.php');
 
 ?>

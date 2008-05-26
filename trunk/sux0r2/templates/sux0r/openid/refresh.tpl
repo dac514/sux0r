@@ -10,7 +10,7 @@
 
     {* This template is a special case. We do not want to pollute it with
     unecessary style sheets and whatnot, so the entire XHTML document is
-    represented and displayed as opposed to assembled *}
+    represented and displayed as opposed to assembled from shared templates *}
 
     <p>{$r->text.redirect} <a href="{$r->text.url}">{$r->text.url}</a></p>
 

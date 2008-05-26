@@ -31,6 +31,8 @@ class suxRenderer {
 
     public $module; // Module
     public $lang; // Language
+    public $path_to_header; // Full path to header.tpl
+    public $path_to_footer; // Full path to footer.tpl
 
     // Text
     public $url; // URL Prefix
@@ -62,6 +64,12 @@ class suxRenderer {
         // Language
         if ($lang) $this->lang = $lang;
         else $this->lang = $GLOBALS['CONFIG']['LANGUAGE'];
+
+        // Path to header & Footer Templates
+        $this->path_to_header = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $GLOBALS['CONFIG']['PARTITION'] . '/header.tpl';
+        if (!file_exists($this->path_to_header)) $this->path_to_header = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r/header.tpl';
+        $this->path_to_footer = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $GLOBALS['CONFIG']['PARTITION'] . '/footer.tpl';
+        if (!file_exists($this->path_to_footer)) $this->path_to_footer = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r/footer.tpl';
 
         // Defaults
         $this->url = $GLOBALS['CONFIG']['URL'];
