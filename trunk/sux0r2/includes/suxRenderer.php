@@ -31,8 +31,8 @@ class suxRenderer {
 
     public $module; // Module
     public $lang; // Language
-    public $path_to_header; // Full path to header.tpl
-    public $path_to_footer; // Full path to footer.tpl
+    public $xhtml_header; // Full path to xhtml_header.tpl
+    public $xhtml_footer; // Full path to xhtml_footer.tpl
 
     // Text
     public $url; // URL Prefix
@@ -65,11 +65,11 @@ class suxRenderer {
         if ($lang) $this->lang = $lang;
         else $this->lang = $GLOBALS['CONFIG']['LANGUAGE'];
 
-        // Path to header & Footer Templates
-        $this->path_to_header = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $GLOBALS['CONFIG']['PARTITION'] . '/header.tpl';
-        if (!file_exists($this->path_to_header)) $this->path_to_header = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r/header.tpl';
-        $this->path_to_footer = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $GLOBALS['CONFIG']['PARTITION'] . '/footer.tpl';
-        if (!file_exists($this->path_to_footer)) $this->path_to_footer = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r/footer.tpl';
+        // Path to XTHML header & footer templates
+        $this->xhtml_header = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $GLOBALS['CONFIG']['PARTITION'] . '/xhtml_header.tpl';
+        if (!file_exists($this->xhtml_header)) $this->xhtml_header = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r/xhtml_header.tpl';
+        $this->xhtml_footer = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $GLOBALS['CONFIG']['PARTITION'] . '/xhtml_footer.tpl';
+        if (!file_exists($this->xhtml_footer)) $this->xhtml_footer = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r/xhtml_footer.tpl';
 
         // Defaults
         $this->url = $GLOBALS['CONFIG']['URL'];

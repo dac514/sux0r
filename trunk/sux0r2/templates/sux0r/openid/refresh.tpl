@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>{$r->title}</title>
-    <meta content="text/html;charset=utf-8" http-equiv="content-type" />
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
     <meta http-equiv="refresh" content="0;url={$r->text.url}">
     <meta name="robots" content="noindex,nofollow" />
 </head>

@@ -1,4 +1,4 @@
-{include file=$r->path_to_header}
+{include file=$r->xhtml_header}
 
 <table id="proselytizer" >
 	<tr>
@@ -126,4 +126,4 @@
 	</tr>
 </table>
 
-{include file=$r->path_to_footer}
+{include file=$r->xhtml_footer}

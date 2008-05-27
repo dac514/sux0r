@@ -40,7 +40,7 @@ a.noBg {
 }
 
 div#proselytizer {
-    width: 942px;
+    width: 936px;
     padding: 10px;
 }
 
@@ -51,7 +51,7 @@ table#proselytizer {
 
 #header h1 {
     float: left;
-    margin-left: 10px;
+    margin: 10px;
 }
 
 #header .userinfo {
@@ -64,11 +64,6 @@ table#proselytizer {
 #header img.openidLogin {
     border: 0;
     vertical-align: middle;
-}
-
-
-#footer {
-    margin: 10px;
 }
 
 .thumbnail {
@@ -217,9 +212,8 @@ input, select {
     border-right: 3px solid #dddddd;
     border-bottom: 3px solid #dddddd;
     border-left: 3px solid #dddddd;
-    width: 98%;
-    margin: 10px auto 0px auto;
-
+    width: 100%;
+    margin-top: 10px;
 }
 
 .widget h2 {

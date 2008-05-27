@@ -57,7 +57,6 @@ class suxHome {
     */
     function display() {
 
-        $this->r->header .= $this->r->someWittyName1();
         $this->tpl->assign_by_ref('r', $this->r);
         $output = $this->tpl->fetch('home.tpl');
 
