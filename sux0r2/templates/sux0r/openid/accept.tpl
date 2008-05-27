@@ -1,4 +1,4 @@
-{include file=$r->path_to_header}
+{include file=$r->xhtml_header}
 
 <div id="proselytizer">
 
@@ -12,4 +12,4 @@
 
 </div>
 
-{include file=$r->path_to_footer}
+{include file=$r->xhtml_footer}

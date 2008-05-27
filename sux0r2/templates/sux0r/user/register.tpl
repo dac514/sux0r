@@ -1,12 +1,14 @@
-{include file=$r->path_to_header}
+{include file=$r->xhtml_header}
 
 <div id="proselytizer">
+
+<fieldset>
+<legend>{$r->text.reg}</legend>
 
 <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8">
 <input type="hidden" name="token" value="{$token}" />
 
-<fieldset>
-<legend>{$r->text.reg}</legend>
+
 
 {if $validate.default.is_error !== false}
 <p class="errorWarning">{$r->text.form_error} :</p>
@@ -158,9 +160,12 @@
 <label>&nbsp;</label><input type="submit" class="button" value="{$r->text.submit}" />
 </p>
 
-</fieldset>
 </form>
+
+</fieldset>
 
 </div>
 
-{include file=$r->path_to_footer}
+
+
+{include file=$r->xhtml_footer}

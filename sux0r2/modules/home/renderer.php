@@ -46,18 +46,6 @@ class renderer extends suxRenderer {
     }
 
 
-    function someWittyName1() {
-
-        $tmp = '
-        <style>
-        #leftside { width: 478px; }
-        </style>
-        ';
-
-        return $tmp;
-
-    }
-
     function someWittyName2() {
 
         $tmp = '
