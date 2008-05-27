@@ -245,6 +245,7 @@ class suxUser {
 
             // Update user
 
+            $user['id'] = $id;
             $query = suxDB::prepareUpdateQuery($this->db_table, $user);
             $st = $this->db->prepare($query);
             $st->execute($user);

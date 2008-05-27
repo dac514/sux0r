@@ -3,7 +3,7 @@
 <div id="proselytizer">
 
 <fieldset>
-<legend>{$r->text.reg}</legend>
+<legend>{if $r->bool.edit}{$r->text.editing} : {$nickname}</a>{else}{$r->text.reg}{/if}</legend>
 
 <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8">
 <input type="hidden" name="token" value="{$token}" />
@@ -24,7 +24,7 @@
 {/strip}
 
 <label for="nickname" {if $smarty.capture.error}class="error"{/if} >* {$r->text.nickname} :</label>
-<input type="text" name="nickname" value="{$nickname}" />
+<input type="text" name="nickname" value="{$nickname}" {if $r->bool.edit}readonly="readonly"{/if} />
 {$smarty.capture.error}
 </p>
 
@@ -142,19 +142,21 @@
 {html_options name='timezone' options=$r->getTimezones() selected=$timezone}
 </p>
 
-<p>
-{strip}
-    {capture name=error}
-    {validate id="captcha" message=$r->text.form_error_11}
-    {/capture}
-{/strip}
-<label for="captcha" {if $smarty.capture.error}class="error"{/if} >* {$r->text.captcha} :</label>
-<img src="{$r->url}/modules/captcha/image.php" alt="Captcha" />
-<br />
-<label>&nbsp;</label>
-<input type="text" name="captcha" class="captcha"/>
-{$smarty.capture.error}
-</p>
+{if !$r->bool.edit}
+    <p>
+    {strip}
+        {capture name=error}
+        {validate id="captcha" message=$r->text.form_error_11}
+        {/capture}
+    {/strip}
+    <label for="captcha" {if $smarty.capture.error}class="error"{/if} >* {$r->text.captcha} :</label>
+    <img src="{$r->url}/modules/captcha/image.php" alt="Captcha" />
+    <br />
+    <label>&nbsp;</label>
+    <input type="text" name="captcha" class="captcha"/>
+    {$smarty.capture.error}
+    </p>
+{/if}
 
 <p>
 <label>&nbsp;</label><input type="submit" class="button" value="{$r->text.submit}" />

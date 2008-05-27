@@ -70,7 +70,7 @@ class suxUserProfile extends suxUser {
 
         if(!$this->tpl->is_cached('profile.tpl', $cache_id)) {
 
-            // Profile
+            // Full Profile
             $fullprofile = $this->getUser($this->profile['users_id'], true);
             unset($fullprofile['password']); // We don't need this
             $this->r->profile =& $fullprofile;
