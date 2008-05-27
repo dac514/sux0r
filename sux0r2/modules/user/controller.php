@@ -37,11 +37,11 @@ function sux($action, $params = null) {
 
             // Openid registration
             include_once('suxLoginOpenID.php');
-            $login = new suxLoginOpenID();
-            if ($login->formValidate()) {
-                $login->formHandoff();
+            $auth = new suxLoginOpenID();
+            if ($auth->formValidate()) {
+                $auth->formHandoff();
             }
-            else $login->formBuild();
+            else $auth->formBuild();
 
         }
         else {
@@ -76,11 +76,11 @@ function sux($action, $params = null) {
 
             // Openid registration
             include_once('suxRegisterOpenID.php');
-            $regOpenID = new suxRegisterOpenID();
-            if ($regOpenID->formValidate()) {
-                $regOpenID->formHandoff();
+            $reg = new suxRegisterOpenID();
+            if ($reg->formValidate()) {
+                $reg->formHandoff();
             }
-            else $regOpenID->formBuild();
+            else $reg->formBuild();
 
         }
         else {
@@ -97,6 +97,26 @@ function sux($action, $params = null) {
         }
 
         break;
+
+
+    case 'edit' : // User profile
+
+        // --------------------------------------------------------------------
+        // Edit Registration
+        // --------------------------------------------------------------------
+
+            // Edit profile registration
+            include_once('suxRegister.php');
+            $reg = new suxRegister('edit');
+
+            if ($reg->formValidate()) {
+                $reg->formProcess();
+                $reg->formSuccess();
+            }
+            else $reg->formBuild();
+
+            break;
+
 
 
     case 'profile' : // User profile

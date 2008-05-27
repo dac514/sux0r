@@ -33,6 +33,7 @@ class suxRegister extends suxUser {
     public $tpl; // Template
     public $r; // Renderer
 
+    private $mode;
     private $module = 'user'; // Module
 
     /**
@@ -42,7 +43,7 @@ class suxRegister extends suxUser {
     * @global string $CONFIG['LANGUAGE']
     * @param string $key PDO dsn key
     */
-    function __construct($key = null) {
+    function __construct($mode = 'register', $key = null) {
 
         parent::__construct($key); // Call parent
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
@@ -50,6 +51,9 @@ class suxRegister extends suxUser {
         $this->r = new renderer($this->module); // Renderer
         $this->r->text =& $this->gtext; // Language
         suxValidate::register_object('this', $this); // Register self to validator
+
+        // Edit mode
+        if ($mode == 'edit' && $this->loginCheck(suxfunct::makeUrl('/user/register'))) $this->mode = 'edit';
 
     }
 
@@ -80,36 +84,71 @@ class suxRegister extends suxUser {
     function formBuild() {
 
         // --------------------------------------------------------------------
-        // Is this Openid?
+        // Get existing user info if available
         // --------------------------------------------------------------------
 
+        $u = array();
+
         if ($this->isOpenID()) {
+
+            // OpenID Registration
 
             $this->r->bool['openid'] = true;
             $this->r->text['openid_url'] = $_SESSION['openid_url_registration'];
 
             // Sreg
-            if (!empty($_GET['nickname'])) $_POST['nickname'] = $_GET['nickname'];
-            if (!empty($_GET['email'])) $_POST['email'] = $_GET['email'];
+
+            if (!empty($_GET['nickname'])) $u['nickname'] = $_GET['nickname'];
+            if (!empty($_GET['email'])) $u['email'] = $_GET['email'];
             if (!empty($_GET['fullname'])) {
                 // \w means alphanumeric characters, \W is the negated version of \w
                 $tmp = mb_split("\W", $_GET['fullname']);
-                $_POST['given_name'] = array_shift($tmp);
-                $_POST['family_name'] = array_pop($tmp);
+                $u['given_name'] = array_shift($tmp);
+                $u['family_name'] = array_pop($tmp);
             }
             if (!empty($_GET['dob'])) {
                 $tmp = mb_split("-", $_GET['dob']);
-                $_POST['Date_Year'] = array_shift($tmp);
-                $_POST['Date_Month'] = array_shift($tmp);
-                $_POST['Date_Day'] = array_shift($tmp);
+                $u['Date_Year'] = array_shift($tmp);
+                $u['Date_Month'] = array_shift($tmp);
+                $u['Date_Day'] = array_shift($tmp);
             }
-            if (!empty($_GET['country'])) $_POST['country'] = $_GET['country'];
-            if (!empty($_GET['gender'])) $_POST['gender'] = mb_strtolower($_GET['gender']);
-            if (!empty($_GET['postcode'])) $_POST['postcode'] = $_GET['postcode'];
-            if (!empty($_GET['language'])) $_POST['language'] = mb_strtolower($_GET['language']);
-            if (!empty($_GET['timezone'])) $_POST['timezone'] = $_GET['timezone'];
+            if (!empty($_GET['country'])) $u['country'] = mb_strtolower($_GET['country']);
+            if (!empty($_GET['gender'])) $u['gender'] = mb_strtolower($_GET['gender']);
+            if (!empty($_GET['postcode'])) $u['postcode'] = $_GET['postcode'];
+            if (!empty($_GET['language'])) $u['language'] = mb_strtolower($_GET['language']);
+            if (!empty($_GET['timezone'])) $u['timezone'] = $_GET['timezone'];
 
         }
+        elseif ($this->mode == 'edit') {
+
+            // Edit mode
+
+            $u = $this->getUser(null, true);
+
+            // Unset
+            unset($u['password']);
+            unset($u['accesslevel']);
+            unset($u['pavatar']);
+            unset($u['microid']);
+
+            // Dob
+            if (!empty($u['dob'])) {
+                $tmp = mb_split("-", $u['dob']);
+                $u['Date_Year'] = array_shift($tmp);
+                $u['Date_Month'] = array_shift($tmp);
+                $u['Date_Day'] = array_shift($tmp);
+            }
+            unset($u['dob']);
+
+            // Country
+            if (!empty($u['country'])) {
+                $u['country'] = mb_strtolower($u['country']);
+            }
+
+        }
+
+        // Assign user
+        $this->tpl->assign($u);
 
         // --------------------------------------------------------------------
         // Form logic
@@ -135,21 +174,57 @@ class suxRegister extends suxUser {
             suxValidate::register_validator('nickname3', 'nickname', 'isDuplicateNickname');
             suxValidate::register_validator('email', 'email', 'isEmail', false, false, 'trim');
             suxValidate::register_validator('email2', 'email', 'isDuplicateEmail');
+
+            // --------------------------------------------------------------------
+            // Validators with special conditions
+            // --------------------------------------------------------------------
+
+            // Passwords
             if (!$this->isOpenID()) {
-                suxValidate::register_validator('password', 'password:6:-1', 'isLength');
-                suxValidate::register_validator('password2', 'password:password_verify', 'isEqual');
+
+                if ($this->mode == 'edit') {
+                    // Empty is ok in edit mode
+                    suxValidate::register_validator('password', 'password:6:-1', 'isLength', true, false, 'trim');
+                    suxValidate::register_validator('password2', 'password:password_verify', 'isEqual', true);
+                }
+                else {
+                    suxValidate::register_validator('password', 'password:6:-1', 'isLength', false, false, 'trim');
+                    suxValidate::register_validator('password2', 'password:password_verify', 'isEqual');
+                }
+
             }
-            suxValidate::register_validator('captcha', 'captcha', 'isValidCaptcha');
+
+            // Captcha
+            if ($this->mode != 'edit') suxValidate::register_validator('captcha', 'captcha', 'isValidCaptcha');
+
 
         }
 
-        // Url
-        $this->r->text['form_url'] = suxFunct::makeUrl('/user/register');
+        // --------------------------------------------------------------------
+        // DONE: Form Logic
+        // --------------------------------------------------------------------
+
 
         // Defaults
-        if (!$_POST) $this->tpl->assign('country', $GLOBALS['CONFIG']['COUNTRY']); // Country
-        if (!$_POST) $this->tpl->assign('timezone', $GLOBALS['CONFIG']['TIMEZONE']); // Timezone
-        if (!$_POST) $this->tpl->assign('language', $GLOBALS['CONFIG']['LANGUAGE']); // Languages
+
+        if (!$this->tpl->get_template_vars('country'))
+            $this->tpl->assign('country', $GLOBALS['CONFIG']['COUNTRY']); // Country
+        if (!$this->tpl->get_template_vars('timezone'))
+            $this->tpl->assign('timezone', $GLOBALS['CONFIG']['TIMEZONE']); // Timezone
+        if (!$this->tpl->get_template_vars('language'))
+            $this->tpl->assign('language', $GLOBALS['CONFIG']['LANGUAGE']); // Languages
+
+
+
+        // Additional variables
+
+        $this->r->text['form_url'] = suxFunct::makeUrl('/user/register'); // Register
+
+        // Overrides for edit mode
+        if ($this->mode == 'edit') {
+            $this->r->text['form_url'] = suxFunct::makeUrl('/user/edit'); // Edit
+            $this->r->bool['edit'] = true;
+        }
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
@@ -185,20 +260,41 @@ class suxRegister extends suxUser {
         }
         unset ($_POST['Date_Year'], $_POST['Date_Month'], $_POST['Date_Day']);
 
-        $clean = array_merge($clean, $_POST);
+        // --------------------------------------------------------------------
+        // Edit Mode
+        // --------------------------------------------------------------------
+
+        if ($this->mode == 'edit') {
+
+            if ($_POST['nickname'] != $_SESSION['nickname']) {
+                // TODO:
+                // Security check
+                // Only an administrator can modify other users
+            }
+
+            $u = $this->getUserByNickname($_POST['nickname']);
+            if (!$u) throw new Exception('Invalid user');
+            $id = $u['users_id'];
+
+        }
 
         // --------------------------------------------------------------------
         // Openid
         // --------------------------------------------------------------------
 
-        $openid_url = null;
         if ($this->isOpenID()) {
             $clean['password'] = $this->generatePw(); // Random password
             $clean['openid_url'] = $_SESSION['openid_url_registration']; // Assign
         }
 
-        // Sql
-        $this->setUser($clean);
+        // --------------------------------------------------------------------
+        // SQL
+        // --------------------------------------------------------------------
+
+        $clean = array_merge($clean, $_POST);
+
+        if (isset($id) && filter_var($id, FILTER_VALIDATE_INT)) $this->setUser($clean, $id);
+        else $this->setUser($clean);
 
         // Unset
         unset($_SESSION['openid_url_registration'], $_SESSION['openid_url_integrity']);
@@ -243,7 +339,15 @@ class suxRegister extends suxUser {
 
         $tmp = $this->getUserByNickname($formvars['nickname']);
         if ($tmp === false ) return true; // No duplicate found
-        else return false;
+
+        if($this->mode == 'edit') {
+            if ($formvars['nickname'] == $_SESSION['nickname']) {
+                // This is a user editing themseleves, this is OK
+                return true;
+            }
+        }
+
+        return false; // Fail
 
     }
 
@@ -259,7 +363,16 @@ class suxRegister extends suxUser {
 
         $tmp = $this->getUserByEmail($formvars['email']);
         if ($tmp === false ) return true; // No duplicate found
-        else return false;
+
+        if($this->mode == 'edit') {
+            $u = $this->getUser();
+            if ($formvars['email'] == $u['email']) {
+                // This is a user editing themseleves, this is OK
+                return true;
+            }
+        }
+
+        return false; // Fail
 
     }
 

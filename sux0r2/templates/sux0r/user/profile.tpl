@@ -20,7 +20,7 @@
             <div class='menucontainer'>
             <ul class='menulist'>
             <li><a href='#' class='selected'>{$r->profile.nickname}</a></li>
-            <li><a href='#'>Edit Profile</a></li>
+            <li><a href='{$r->makeUrl('/user/edit')}'>Edit Profile</a></li>
             <li><a href='#'>Edit Avatar</a></li>
             <li><a href='#'>Edit Friends</a></li>
             </ul>

@@ -95,13 +95,11 @@ class suxAuthenticate extends suxUser {
         // user isn't actually logged in.
         if ($this->loginCheck()) suxFunct::killSession();
 
-
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('logout.tpl');
 
     }
-
 
 
 }
