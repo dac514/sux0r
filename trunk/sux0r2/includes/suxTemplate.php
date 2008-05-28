@@ -131,33 +131,6 @@ class suxTemplate extends Smarty {
     }
 
 
-    /**
-    * Get the language array
-    *
-    * @global string $CONFIG['PATH']
-    * @param string $module
-    * @param string $partition
-    * @return array $gtext
-    */
-    function getLanguage($lang) {
-
-        $gtext = array();
-
-        // Default to english in case other language files are incomplete
-        $default = $GLOBALS['CONFIG']['PATH'] . "/modules/{$this->module}/languages/en.php";
-        // Second language will overwrite/merge with first
-        $requested = $GLOBALS['CONFIG']['PATH'] . "/modules/{$this->module}/languages/$lang.php";
-
-        if (!is_readable($default)) return false; // no default, something is wrong
-        else include($default);
-
-        if ($lang != 'en' && is_readable($requested)) include($requested);
-
-        if (!is_array($gtext) || !count($gtext)) return false; // something is wrong
-        else return $gtext;
-
-    }
-
 
     // --------------------------------------------------------------------
     // Override Smarty Functions

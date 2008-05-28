@@ -57,12 +57,12 @@ class suxRenderer {
     * @global string $CONFIG['TITLE']
     * @param string $module
     */
-    function __construct($module, $lang = null) {
+    function __construct($module) {
 
         $this->module = $module; // Module
 
         // Language
-        if ($lang) $this->lang = $lang;
+        if (!empty($_SESSION['language'])) $this->lang = $_SESSION['language'];
         else $this->lang = $GLOBALS['CONFIG']['LANGUAGE'];
 
         // Path to XTHML header & footer templates

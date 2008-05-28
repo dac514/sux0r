@@ -142,7 +142,7 @@ class suxRSS extends DOMDocument {
         }
 
         // Go
-        $cache_file = $this->cache_dir . '/rsscache_' . md5($rss_url);
+        $cache_file = $this->cache_dir . '/' . md5($rss_url);
         $result = false;
         $timefile = null;
 
@@ -174,7 +174,7 @@ class suxRSS extends DOMDocument {
 
         if (!$result && is_file($cache_file)) {
 
-            // Still no result, ,probably recieved a  304 (not modified)
+            // Still no result, probably recieved a  304 (not modified)
             // response from the server, use the cache
 
             touch($cache_file); // Reset time for caching

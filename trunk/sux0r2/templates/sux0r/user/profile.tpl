@@ -16,13 +16,12 @@
 
             <p>Lorem ipsum dolor sit amet, consec tetuer Lorem ipsum dolor sit amet</p>
 
+
             <!-- menu -->
             <div class='menucontainer'>
             <ul class='menulist'>
-            <li><a href='#' class='selected'>{$r->profile.nickname}</a></li>
-            <li><a href='{$r->makeUrl('/user/edit')}'>Edit Profile</a></li>
-            <li><a href='#'>Edit Avatar</a></li>
-            <li><a href='#'>Edit Friends</a></li>
+            <li><a href='{$r->makeUrl('/user/profile')}/{$r->profile.nickname}' class='selected'>{$r->profile.nickname}</a></li>
+            {insert name="editMenu" nickname=$r->profile.nickname}
             </ul>
             </div>
             <div class='clearboth'></div>
