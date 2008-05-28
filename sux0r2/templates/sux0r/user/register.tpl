@@ -8,8 +8,6 @@
 <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8">
 <input type="hidden" name="token" value="{$token}" />
 
-
-
 {if $validate.default.is_error !== false}
 <p class="errorWarning">{$r->text.form_error} :</p>
 {/if}

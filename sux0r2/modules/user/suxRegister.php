@@ -272,9 +272,14 @@ class suxRegister extends suxUser {
                 // Only an administrator can modify other users
             }
 
+            // Get users_id
             $u = $this->getUserByNickname($_POST['nickname']);
             if (!$u) throw new Exception('Invalid user');
             $id = $u['users_id'];
+
+            // Clear approptiate template caches
+            $cache_id = $_POST['nickname'];
+            $this->tpl->clear_cache('profile.tpl', $cache_id);
 
         }
 
