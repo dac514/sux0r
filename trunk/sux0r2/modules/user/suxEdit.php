@@ -1,7 +1,7 @@
 <?php
 
 /**
-* suxRegister
+* suxEdit
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -27,13 +27,15 @@ require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('renderer.php');
 
-class suxRegister extends suxUser {
+class suxEdit extends suxUser {
 
     public $gtext = array(); // Language
     public $tpl; // Template
     public $r; // Renderer
 
-    private $mode;
+    private $mode = 'register';
+    private $users_id = null;
+
     private $module = 'user'; // Module
 
     /**
@@ -43,7 +45,7 @@ class suxRegister extends suxUser {
     * @global string $CONFIG['LANGUAGE']
     * @param string $key PDO dsn key
     */
-    function __construct($mode = 'register', $key = null) {
+    function __construct($mode = 'register', $user = null, $key = null) {
 
         parent::__construct($key); // Call parent
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
@@ -52,8 +54,29 @@ class suxRegister extends suxUser {
         $this->r->text =& $this->gtext; // Language
         suxValidate::register_object('this', $this); // Register self to validator
 
+        // -------------------------------------------------------------------
         // Edit mode
-        if ($mode == 'edit' && $this->loginCheck(suxfunct::makeUrl('/user/register'))) $this->mode = 'edit';
+        // -------------------------------------------------------------------
+
+        if ($mode == 'edit') {
+
+            // Redirect if invalid
+            if ($this->loginCheck(suxfunct::makeUrl('/user/register'))) {
+                $this->mode = 'edit';
+            }
+
+            if ($user != $_SESSION['nickname']) {
+
+                // TODO:
+                // Security check
+                // Only an administrator can modify other users
+
+                $u = $this->getUserByNickname($user);
+                if ($u) $this->users_id = $u['users_id'];
+
+            }
+
+        }
 
     }
 
@@ -123,7 +146,7 @@ class suxRegister extends suxUser {
 
             // Edit mode
 
-            $u = $this->getUser(null, true);
+            $u = $this->getUser($this->users_id, true);
 
             // Unset
             unset($u['password']);
@@ -215,20 +238,19 @@ class suxRegister extends suxUser {
             $this->tpl->assign('language', $GLOBALS['CONFIG']['LANGUAGE']); // Languages
 
 
-
         // Additional variables
 
         $this->r->text['form_url'] = suxFunct::makeUrl('/user/register'); // Register
 
         // Overrides for edit mode
         if ($this->mode == 'edit') {
-            $this->r->text['form_url'] = suxFunct::makeUrl('/user/edit'); // Edit
+            $this->r->text['form_url'] = suxFunct::makeUrl('/user/edit/' . @$u['nickname']); // Edit
             $this->r->bool['edit'] = true;
         }
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
-        $this->tpl->display('register.tpl');
+        $this->tpl->display('edit.tpl');
 
     }
 
@@ -346,7 +368,8 @@ class suxRegister extends suxUser {
         if ($tmp === false ) return true; // No duplicate found
 
         if($this->mode == 'edit') {
-            if ($formvars['nickname'] == $_SESSION['nickname']) {
+            $u = $this->getUser($this->users_id);
+            if ($formvars['nickname'] == $u['nickname']) {
                 // This is a user editing themseleves, this is OK
                 return true;
             }
@@ -370,7 +393,7 @@ class suxRegister extends suxUser {
         if ($tmp === false ) return true; // No duplicate found
 
         if($this->mode == 'edit') {
-            $u = $this->getUser();
+            $u = $this->getUser($this->users_id);
             if ($formvars['email'] == $u['email']) {
                 // This is a user editing themseleves, this is OK
                 return true;
