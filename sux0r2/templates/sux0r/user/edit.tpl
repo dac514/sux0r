@@ -166,6 +166,4 @@
 
 </div>
 
-
-
 {include file=$r->xhtml_footer}

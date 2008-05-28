@@ -49,7 +49,7 @@ class suxLoginOpenID extends suxRegisterOpenID {
 
             // Too many password failures?
             $this->tpl->assign_by_ref('r', $this->r);
-            $this->tpl->display('pw_failures.tpl');
+            $this->tpl->display('pw_failure.tpl');
             die();
 
         }

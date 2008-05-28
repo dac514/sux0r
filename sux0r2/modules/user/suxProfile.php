@@ -1,7 +1,7 @@
 <?php
 
 /**
-* suxUserProfile
+* suxProfile
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -28,7 +28,7 @@ require_once(dirname(__FILE__) . '/../../includes/suxSocialNetwork.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once('renderer.php');
 
-class suxUserProfile extends suxUser {
+class suxProfile extends suxUser {
 
     public $gtext = array(); // Language
     public $tpl; // Template

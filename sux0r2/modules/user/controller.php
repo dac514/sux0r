@@ -86,8 +86,8 @@ function sux($action, $params = null) {
         else {
 
             // Regular registration
-            include_once('suxRegister.php');
-            $reg = new suxRegister();
+            include_once('suxEdit.php');
+            $reg = new suxEdit();
 
             if ($reg->formValidate()) {
                 $reg->formProcess();
@@ -105,9 +105,11 @@ function sux($action, $params = null) {
         // Edit Registration
         // --------------------------------------------------------------------
 
+            $user = !empty($params[0]) ? $params[0]: null;
+
             // Edit profile registration
-            include_once('suxRegister.php');
-            $reg = new suxRegister('edit');
+            include_once('suxEdit.php');
+            $reg = new suxEdit('edit', $user);
 
             if ($reg->formValidate()) {
                 $reg->formProcess();
@@ -125,9 +127,9 @@ function sux($action, $params = null) {
         // Show user profile
         // --------------------------------------------------------------------
 
-        include_once('suxUserProfile.php');
+        include_once('suxProfile.php');
         if (!empty($params[0])) {
-            $u = new suxUserProfile($params[0]);
+            $u = new suxProfile($params[0]);
             if ($u->profile) $u->displayProfile();
             else $u->notFound();
             break;
