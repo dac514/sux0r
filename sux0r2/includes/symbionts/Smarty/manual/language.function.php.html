@@ -1,0 +1,291 @@
+<HTML
+><HEAD
+><TITLE
+>{php}</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Built-in Functions"
+HREF="language.builtin.functions.html"><LINK
+REL="PREVIOUS"
+TITLE="{literal}"
+HREF="language.function.literal.html"><LINK
+REL="NEXT"
+TITLE="{section},{sectionelse}"
+HREF="language.function.section.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.function.literal.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 7. Built-in Functions</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.function.section.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.function.php"
+></A
+>{php}</H1
+><P
+>&#13;  The <TT
+CLASS="varname"
+>{php}</TT
+> tags allow PHP code to be embedded directly into the template. They
+  will not be escaped, regardless of the <A
+HREF="variable.php.handling.html"
+><TT
+CLASS="parameter"
+><I
+>$php_handling</I
+></TT
+></A
+> setting. This
+  is for advanced users only, not normally needed and not recommended.
+ </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Technical Note: </B
+>
+   To access PHP variables in <TT
+CLASS="varname"
+>{php}</TT
+> blocks you will need to use the PHP
+   <A
+HREF="http://php.net/global"
+TARGET="_top"
+><TT
+CLASS="literal"
+>global</TT
+></A
+>
+   keyword.
+</P
+></BLOCKQUOTE
+></DIV
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN2383"
+></A
+><P
+><B
+>Example 7-28. php code within {php} tags</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{php}
+   // including a php script directly from the template.
+   include('/path/to/display_weather.php');
+{/php}</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN2386"
+></A
+><P
+><B
+>Example 7-29. {php} tags with global and assigning a variable</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+{*&nbsp;this&nbsp;template&nbsp;includes&nbsp;a&nbsp;{php}&nbsp;block&nbsp;that&nbsp;assign's&nbsp;the&nbsp;variable&nbsp;$varX&nbsp;*}<br />{php}<br />&nbsp;&nbsp;&nbsp;global&nbsp;$foo,&nbsp;$bar;<br />&nbsp;&nbsp;&nbsp;if($foo&nbsp;==&nbsp;$bar){<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo&nbsp;'This&nbsp;will&nbsp;be&nbsp;sent&nbsp;to&nbsp;browser';<br />&nbsp;&nbsp;&nbsp;}<br />&nbsp;&nbsp;//&nbsp;assign&nbsp;a&nbsp;variable&nbsp;to&nbsp;Smarty<br />&nbsp;&nbsp;$this-&gt;assign('varX','Toffee');<br />{/php}<br />{*&nbsp;output&nbsp;the&nbsp;variable&nbsp;*}<br />&lt;strong&gt;{$varX}&lt;/strong&gt;&nbsp;is&nbsp;my&nbsp;fav&nbsp;ice&nbsp;cream&nbsp;:-)</span>
+</code></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;  See also
+  <A
+HREF="variable.php.handling.html"
+><TT
+CLASS="parameter"
+><I
+>$php_handling</I
+></TT
+></A
+>,
+  <A
+HREF="language.function.include.php.html"
+><TT
+CLASS="varname"
+>{include_php}</TT
+></A
+>,
+  <A
+HREF="language.function.include.html"
+><TT
+CLASS="varname"
+>{include}</TT
+></A
+>,
+  <A
+HREF="language.function.insert.html"
+><TT
+CLASS="varname"
+>{insert}</TT
+></A
+>
+  and
+  <A
+HREF="tips.componentized.templates.html"
+>componentized templates</A
+>.
+ </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.function.literal.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.function.section.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>{literal}</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.builtin.functions.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>{section},{sectionelse}</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,313 @@
+<HTML
+><HEAD
+><TITLE
+>Debugging Console</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Smarty For Template Designers"
+HREF="smarty.for.designers.html"><LINK
+REL="PREVIOUS"
+TITLE="Config Files"
+HREF="config.files.html"><LINK
+REL="NEXT"
+TITLE="Smarty For Programmers"
+HREF="smarty.for.programmers.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="config.files.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="smarty.for.programmers.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="chapter.debugging.console"
+></A
+>Chapter 10. Debugging Console</H1
+><P
+>&#13;  There is a debugging console included with Smarty. The console informs you
+  of all the
+  <A
+HREF="language.function.include.html"
+>included</A
+> templates,
+  <A
+HREF="api.assign.html"
+>assigned</A
+> variables and
+  <A
+HREF="language.config.variables.html"
+>config</A
+>
+  file variables for the current invocation of the template. A template file
+  named <TT
+CLASS="literal"
+>debug.tpl</TT
+> is included with the distribution of
+  Smarty which controls the formatting of the console.
+  </P
+><P
+>&#13;  Set  <A
+HREF="variable.debugging.html"
+><TT
+CLASS="parameter"
+><I
+>$debugging</I
+></TT
+></A
+>
+  to <TT
+CLASS="constant"
+>TRUE</TT
+> in Smarty, and if needed set <A
+HREF="variable.debug.tpl.html"
+>&#13;  <TT
+CLASS="parameter"
+><I
+>$debug_tpl</I
+></TT
+></A
+> to the template resource path to
+  <TT
+CLASS="literal"
+>debug.tpl</TT
+> (this is in <A
+HREF="smarty.constants.html#constant.smarty.dir"
+>&#13;  <TT
+CLASS="constant"
+>SMARTY_DIR</TT
+></A
+> by default).
+  When you load the page, a Javascript console window will pop up
+  and give you the names of all the included templates and assigned variables
+  for the current page.</P
+><P
+>To see the available variables for a particular
+  template, see the <A
+HREF="language.function.debug.html"
+>&#13;  <TT
+CLASS="varname"
+>{debug}</TT
+></A
+> template function.
+  To disable the debugging console, set
+  <A
+HREF="variable.debugging.html"
+><TT
+CLASS="parameter"
+><I
+>$debugging</I
+></TT
+></A
+> to
+  <TT
+CLASS="constant"
+>FALSE</TT
+>. You can also temporarily turn on the debugging console by putting
+  <TT
+CLASS="literal"
+>SMARTY_DEBUG</TT
+> in the URL if you enable this option with
+  <A
+HREF="variable.debugging.ctrl.html"
+><TT
+CLASS="parameter"
+><I
+>$debugging_ctrl</I
+></TT
+>
+  </A
+>.
+ </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Technical Note: </B
+>
+   The debugging console does not work when you use the
+   <A
+HREF="api.fetch.html"
+><TT
+CLASS="varname"
+>fetch()</TT
+></A
+>
+   API, only when using  <A
+HREF="api.display.html"
+>&#13;   <TT
+CLASS="varname"
+>display()</TT
+></A
+>.
+   It is a set of javascript statements added
+   to the very bottom of the generated template. If you do not like javascript,
+   you can edit the <TT
+CLASS="literal"
+>debug.tpl</TT
+> template to format the output
+   however you like.  Debug data is not cached and <TT
+CLASS="literal"
+>debug.tpl</TT
+>
+    info is not included in the output of the debug console.
+  </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+   The load times of each template and config file are in seconds, or
+   fractions thereof.
+  </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;    See also
+    <A
+HREF="troubleshooting.html"
+>troubleshooting</A
+>,
+    <A
+HREF="variable.error.reporting.html"
+>&#13;    <TT
+CLASS="parameter"
+><I
+>$error_reporting</I
+></TT
+></A
+>
+    and
+    <A
+HREF="api.trigger.error.html"
+><TT
+CLASS="varname"
+>trigger_error()</TT
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="config.files.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="smarty.for.programmers.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Config Files</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="smarty.for.designers.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Smarty For Programmers</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

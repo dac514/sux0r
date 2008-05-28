@@ -1,0 +1,565 @@
+<HTML
+><HEAD
+><TITLE
+>Troubleshooting</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Appendixes"
+HREF="appendixes.html"><LINK
+REL="PREVIOUS"
+TITLE="Appendixes"
+HREF="appendixes.html"><LINK
+REL="NEXT"
+TITLE="Tips & Tricks"
+HREF="tips.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="appendixes.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="tips.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="troubleshooting"
+></A
+>Chapter 17. Troubleshooting</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="troubleshooting.html#smarty.php.errors"
+>Smarty/PHP errors</A
+></DT
+></DL
+></DIV
+><P
+></P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="smarty.php.errors"
+></A
+>Smarty/PHP errors</H1
+><P
+>&#13;    Smarty can catch many errors such as missing tag attributes
+    or malformed variable names. If this happens, you will see an error
+    similar to the following:
+   </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN7593"
+></A
+><P
+><B
+>Example 17-1. Smarty errors</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>Warning: Smarty: [in index.tpl line 4]: syntax error: unknown tag - '%blah'
+       in /path/to/smarty/Smarty.class.php on line 1041
+
+Fatal error: Smarty: [in index.tpl line 28]: syntax error: missing section name
+       in /path/to/smarty/Smarty.class.php on line 1041</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;    Smarty shows you the template name, the line number and the error.
+    After that, the error consists of the actual line number in the Smarty
+    class that the error occured.
+   </P
+><P
+>&#13;    There are certain errors that Smarty cannot catch, such as missing
+    close tags. These types of errors usually end up in PHP compile-time
+    parsing errors.
+   </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN7598"
+></A
+><P
+><B
+>Example 17-2. PHP parsing errors</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>Parse error: parse error in /path/to/smarty/templates_c/index.tpl.php on line 75</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;    When you encounter a PHP parsing error, the error line number will
+    correspond to the compiled PHP script, NOT the template itself. Usually
+    you can look at the template and spot the syntax error. Here are some
+    common things to look for: missing close tags for
+    <A
+HREF="language.function.if.html"
+><TT
+CLASS="varname"
+>{if}{/if}</TT
+></A
+> or
+    <A
+HREF="language.function.if.html"
+><TT
+CLASS="varname"
+>{section}{/section}</TT
+>
+    </A
+>, or syntax of logic within an <TT
+CLASS="varname"
+>{if}</TT
+> tag. If you
+    can't find the error, you might have to open the compiled PHP file and
+    go to the line number to figure out where the corresponding error is in
+    the template.
+   </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN7607"
+></A
+><P
+><B
+>Example 17-3. Other common errors</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>Warning: Smarty error: unable to read resource: "index.tpl" in...
+or
+Warning: Smarty error: unable to read resource: "site.conf" in...</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;    <P
+></P
+><UL
+><LI
+><P
+>&#13;      The <A
+HREF="api.variables.html#variable.template.dir"
+>&#13;      <TT
+CLASS="parameter"
+><I
+>$template_dir</I
+></TT
+></A
+> is incorrect, doesn't exist or
+      the file <TT
+CLASS="filename"
+>index.tpl</TT
+> is not in the
+      <TT
+CLASS="filename"
+>templates/</TT
+> directory
+      </P
+></LI
+><LI
+><P
+>&#13;        A <A
+HREF="language.function.config.load.html"
+>&#13;        <TT
+CLASS="varname"
+>{config_load}</TT
+></A
+>
+        function is within a template (or
+        <A
+HREF="api.config.load.html"
+><TT
+CLASS="varname"
+>config_load()</TT
+></A
+>
+        has been called) and either
+        <A
+HREF="variable.config.dir.html"
+><TT
+CLASS="parameter"
+><I
+>$config_dir</I
+></TT
+>
+        </A
+>  is incorrect, does not exist or
+        <TT
+CLASS="filename"
+>site.conf</TT
+> is not in the directory.
+        </P
+></LI
+></UL
+>
+    </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>Fatal error: Smarty error: the $compile_dir 'templates_c' does not exist,
+or is not a directory...</PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+><UL
+><LI
+><P
+>&#13;    Either the
+    <A
+HREF="variable.compile.dir.html"
+>&#13;    <TT
+CLASS="parameter"
+><I
+>$compile_dir</I
+></TT
+></A
+>is incorrectly set,
+    the directory does not exist, or <TT
+CLASS="filename"
+>templates_c</TT
+> is a
+    file and not a directory.
+    </P
+></LI
+></UL
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>Fatal error: Smarty error: unable to write to $compile_dir '....</PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+><UL
+><LI
+><P
+>&#13;    The <A
+HREF="variable.compile.dir.html"
+>&#13;   <TT
+CLASS="parameter"
+><I
+>$compile_dir</I
+></TT
+></A
+> is not writable by the web server.
+   See the bottom of the
+    <A
+HREF="installing.smarty.basic.html"
+>installing smarty</A
+> page
+    for more about permissions.
+    </P
+></LI
+></UL
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>Fatal error: Smarty error: the $cache_dir 'cache' does not exist,
+or is not a directory. in /..</PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+><UL
+><LI
+><P
+>&#13;    This means that
+    <A
+HREF="variable.caching.html"
+>&#13;    <TT
+CLASS="parameter"
+><I
+>$caching</I
+></TT
+></A
+> is enabled and either;
+    the
+    <A
+HREF="variable.cache.dir.html"
+><TT
+CLASS="parameter"
+><I
+>$cache_dir</I
+></TT
+></A
+>
+    is incorrectly set, the directory does not exist,
+    or <TT
+CLASS="filename"
+>cache/</TT
+> is a
+    file and not a directory.
+    </P
+></LI
+></UL
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>Fatal error: Smarty error: unable to write to $cache_dir '/...</PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+><UL
+><LI
+><P
+>&#13;    This means that
+    <A
+HREF="variable.caching.html"
+><TT
+CLASS="parameter"
+><I
+>$caching</I
+></TT
+></A
+> is
+    enabled and the <A
+HREF="variable.cache.dir.html"
+>&#13;    <TT
+CLASS="parameter"
+><I
+>$cache_dir</I
+></TT
+></A
+>
+    is not writable by the web server. See the bottom of the
+    <A
+HREF="installing.smarty.basic.html"
+>installing smarty</A
+> page
+    for permissions.
+    </P
+></LI
+></UL
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;   See also
+   <A
+HREF="chapter.debugging.console.html"
+>debugging</A
+>,
+   <A
+HREF="variable.error.reporting.html"
+>&#13;   <TT
+CLASS="parameter"
+><I
+>$error_reporting</I
+></TT
+></A
+>
+   and
+   <A
+HREF="api.trigger.error.html"
+><TT
+CLASS="varname"
+>trigger_error()</TT
+></A
+>.
+   </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="appendixes.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="tips.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Appendixes</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="appendixes.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Tips &#38; Tricks</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
