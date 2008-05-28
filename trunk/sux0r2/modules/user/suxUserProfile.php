@@ -66,7 +66,7 @@ class suxUserProfile extends suxUser {
     function displayProfile() {
 
         $this->tpl->caching = 1; // Enable cache
-        $cache_id = "{$this->profile['nickname']}_";
+        $cache_id = $this->profile['nickname'];
 
         if(!$this->tpl->is_cached('profile.tpl', $cache_id)) {
 
