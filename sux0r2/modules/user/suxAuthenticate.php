@@ -38,16 +38,15 @@ class suxAuthenticate extends suxUser {
     * Constructor
     *
     * @global string $CONFIG['PARTITION']
-    * @global string $CONFIG['LANGUAGE']
     * @param string $key PDO dsn key
     */
     function __construct($key = null) {
 
         parent::__construct($key); // Call parent
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
-        $this->gtext = $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']); // Language
         $this->r = new suxRenderer($this->module); // Renderer
-        $this->r->text =& $this->gtext; // Language
+        $this->gtext = suxFunct::gtext($this->module); // Language
+        $this->r->text =& $this->gtext;
 
     }
 

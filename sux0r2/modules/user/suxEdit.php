@@ -42,16 +42,15 @@ class suxEdit extends suxUser {
     * Constructor
     *
     * @global string $CONFIG['PARTITION']
-    * @global string $CONFIG['LANGUAGE']
     * @param string $key PDO dsn key
     */
     function __construct($mode = 'register', $user = null, $key = null) {
 
         parent::__construct($key); // Call parent
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
-        $this->gtext = $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']); // Language
         $this->r = new renderer($this->module); // Renderer
-        $this->r->text =& $this->gtext; // Language
+        $this->gtext = suxFunct::gtext($this->module); // Language
+        $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
         // -------------------------------------------------------------------
@@ -323,8 +322,15 @@ class suxEdit extends suxUser {
         if (isset($id) && filter_var($id, FILTER_VALIDATE_INT)) $this->setUser($clean, $id);
         else $this->setUser($clean);
 
-        // Unset
+        // --------------------------------------------------------------------
+        // Cleanup
+        // --------------------------------------------------------------------
+
         unset($_SESSION['openid_url_registration'], $_SESSION['openid_url_integrity']);
+
+        if ($this->mode == 'edit' && $_POST['nickname'] == $_SESSION['nickname']) {
+            $this->setSession($_POST['nickname'], true);
+        }
 
     }
 

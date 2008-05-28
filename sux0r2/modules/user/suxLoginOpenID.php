@@ -30,8 +30,6 @@ class suxLoginOpenID extends suxRegisterOpenID {
     /**
     * Constructor
     *
-    * @global string $CONFIG['PARTITION']
-    * @global string $CONFIG['LANGUAGE']
     * @param string $key PDO dsn key
     */
     function __construct($key = null) {

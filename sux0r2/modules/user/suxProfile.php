@@ -41,7 +41,6 @@ class suxProfile extends suxUser {
     * Constructor
     *
     * @global string $CONFIG['PARTITION']
-    * @global string $CONFIG['LANGUAGE']
     * @param string $nickname nickname
     * @param string $key PDO dsn key
     */
@@ -49,9 +48,9 @@ class suxProfile extends suxUser {
 
         parent::__construct($key); // Call parent
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
-        $this->gtext = $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']); // Language
         $this->r = new renderer($this->module); // Renderer
-        $this->r->text =& $this->gtext; // Language
+        $this->gtext = suxFunct::gtext($this->module); // Language
+        $this->r->text =& $this->gtext;
 
         // Profile
         $this->profile = $this->getUserByNickname($nickname);

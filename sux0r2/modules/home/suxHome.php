@@ -38,16 +38,15 @@ class suxHome {
     * Constructor
     *
     * @global string $CONFIG['PARTITION']
-    * @global string $CONFIG['LANGUAGE']
     */
     function __construct(suxUser $user) {
 
         $this->user = $user; // User
 
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
-        $this->gtext = $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']); // Language
-        $this->r = new renderer($this->module, $GLOBALS['CONFIG']['LANGUAGE']); // Renderer
-        $this->r->text =& $this->gtext; // Language
+        $this->r = new renderer($this->module); // Renderer
+        $this->gtext = suxFunct::gtext($this->module); // Language
+        $this->r->text =& $this->gtext;
 
     }
 

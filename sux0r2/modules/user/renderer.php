@@ -168,4 +168,33 @@ class renderer extends suxRenderer {
 }
 
 
+// -------------------------------------------------------------------------
+// Smarty {insert} functions
+// -------------------------------------------------------------------------
+
+
+function insert_editMenu($params) {
+
+    if (empty($params['nickname'])) return null;
+
+    $nickname = $params['nickname'];
+
+    if ($nickname != $_SESSION['nickname']) {
+        // TODO:
+        // Security check
+        // Only an administrator can modify other users
+        return null;
+    }
+
+    $text = suxFunct::gtext('user');
+
+    $tmp = '';
+    $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/edit/{$nickname}") . '">' . $text['edit_profile'] . '</a></li>' . "\n";
+    $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/avatar/{$nickname}") . '">' . $text['edit_avatar'] . '</a></li>' . "\n";
+    $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/network/{$nickname}") . '">' . $text['edit_friends'] . '</a></li>' . "\n";
+    return $tmp;
+
+}
+
+
 ?>

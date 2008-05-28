@@ -539,8 +539,8 @@ class suxUser {
     */
     function setSession($id, $nickname = false) {
 
-        if ($nickname) $user = $this->getUserByNickname($id);
-        else $user = $this->getUser($id);
+        if ($nickname) $user = $this->getUserByNickname($id, true);
+        else $user = $this->getUser($id, true);
 
         if (!$user) {
             suxFunct::killSession();
@@ -548,9 +548,11 @@ class suxUser {
         }
 
         session_regenerate_id();
+
         $_SESSION['users_id'] = $user['users_id'];
         $_SESSION['nickname'] = $user['nickname'];
         $_SESSION['token'] = md5(date('W') . $user['password'] . @$GLOBALS['CONFIG']['SALT']);
+        $_SESSION['language'] = $user['language'];
 
     }
 

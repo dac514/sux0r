@@ -58,7 +58,6 @@ class suxOpenID {
     *
     * @global array $CONFIG['DSN']
     * @global string $CONFIG['PARTITION']
-    * @global string $CONFIG['LANGUAGE']
     * @param object $suxUser suxUser
     * @param string $key PDO dsn key
     */
@@ -70,7 +69,7 @@ class suxOpenID {
 
         $this->user = $user; // User
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
-        $this->gtext = $this->tpl->getLanguage($GLOBALS['CONFIG']['LANGUAGE']); // Language
+        $this->gtext = suxFunct::gtext($this->module); // Language
 
         /*
         Note:

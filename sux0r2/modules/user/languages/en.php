@@ -3,6 +3,9 @@
 $gtext['captcha'] = 'Anti-spam code';
 $gtext['country'] = 'Country';
 $gtext['dob'] = 'Birthday';
+$gtext['edit_avatar'] = 'Edit Avatar';
+$gtext['edit_friends'] = 'Edit Friends';
+$gtext['edit_profile'] = 'Edit Profile';
 $gtext['editing'] = 'Editing';
 $gtext['email'] = 'Email';
 $gtext['family_name'] = 'Last name';
