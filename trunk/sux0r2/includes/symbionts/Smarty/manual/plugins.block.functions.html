@@ -1,0 +1,358 @@
+<HTML
+><HEAD
+><TITLE
+>Block Functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Extending Smarty With Plugins"
+HREF="plugins.html"><LINK
+REL="PREVIOUS"
+TITLE="Modifiers"
+HREF="plugins.modifiers.html"><LINK
+REL="NEXT"
+TITLE="Compiler Functions"
+HREF="plugins.compiler.functions.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="plugins.modifiers.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 16. Extending Smarty With Plugins</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="plugins.compiler.functions.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="plugins.block.functions"
+></A
+>Block Functions</H1
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN7350"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>smarty_block_<TT
+CLASS="replaceable"
+><I
+>name</I
+></TT
+></B
+></CODE
+> (array $params, mixed $content, object &#38;$smarty, boolean &#38;$repeat)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Block functions are functions of the form:
+     <TT
+CLASS="literal"
+>{func} .. {/func}</TT
+>. In other words, they enclose a
+     template block and operate on the contents of
+     this block. Block functions take precedence over
+     <A
+HREF="language.custom.functions.html"
+>custom functions</A
+> of
+     the same name, that is, you cannot have both custom function
+     <TT
+CLASS="literal"
+>{func}</TT
+> and block function
+     <TT
+CLASS="literal"
+>{func}..{/func}</TT
+>.
+    </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;     By default your function implementation is called twice by
+     Smarty: once for the opening tag, and once for the closing tag.
+     (See <TT
+CLASS="literal"
+>$repeat</TT
+> below on how to change this.)
+    </P
+></LI
+><LI
+><P
+>&#13;     Only the opening tag of the block function may have
+     <A
+HREF="language.syntax.attributes.html"
+>attributes</A
+>. All
+     attributes passed to template functions from the template are contained
+     in the <TT
+CLASS="parameter"
+><I
+>$params</I
+></TT
+> variable as an associative array.
+     The opening tag attributes are also accessible to your function
+     when processing the closing tag.
+    </P
+></LI
+><LI
+><P
+>&#13;     The value of the <TT
+CLASS="parameter"
+><I
+>$content</I
+></TT
+> variable depends on
+     whether your function is called for the opening or closing tag. In case
+     of the opening tag, it will be <TT
+CLASS="constant"
+>NULL</TT
+>, and in case of
+     the closing tag it will be the contents of the template block.
+     Note that the template block will have already been processed by
+     Smarty, so all you will receive is the template output, not the
+     template source.
+    </P
+></LI
+><LI
+><P
+>&#13;     The parameter <TT
+CLASS="parameter"
+><I
+>$repeat</I
+></TT
+> is passed by
+     reference to the function implementation and provides a
+     possibility for it to control how many times the block is
+     displayed. By default <TT
+CLASS="parameter"
+><I
+>$repeat</I
+></TT
+> is
+     <TT
+CLASS="constant"
+>TRUE</TT
+> at the first call of the block-function (the opening tag)
+     and <TT
+CLASS="constant"
+>FALSE</TT
+> on all subsequent calls to the block function
+     (the block's closing tag).
+     Each time the function implementation returns with
+     <TT
+CLASS="parameter"
+><I
+>$repeat</I
+></TT
+> being <TT
+CLASS="constant"
+>TRUE</TT
+>, the contents between
+     <TT
+CLASS="literal"
+>{func}...{/func}</TT
+> are evaluated and the function
+     implementation is called again with the new block contents in the parameter
+     <TT
+CLASS="parameter"
+><I
+>$content</I
+></TT
+>.
+	</P
+></LI
+></UL
+><P
+>&#13;     If you have nested block functions, it's possible to find out what the
+     parent block function is by accessing
+     <TT
+CLASS="literal"
+>$smarty-&#62;_tag_stack</TT
+> variable. Just do a
+     <A
+HREF="http://php.net/var_dump"
+TARGET="_top"
+><TT
+CLASS="varname"
+>var_dump()</TT
+></A
+>
+     on it and the structure should be apparent.
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN7394"
+></A
+><P
+><B
+>Example 16-5. block function</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #FF8000">/*<br />&nbsp;*&nbsp;Smarty&nbsp;plugin<br />&nbsp;*&nbsp;-------------------------------------------------------------<br />&nbsp;*&nbsp;File:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;block.translate.php<br />&nbsp;*&nbsp;Type:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;block<br />&nbsp;*&nbsp;Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;translate<br />&nbsp;*&nbsp;Purpose:&nbsp;&nbsp;translate&nbsp;a&nbsp;block&nbsp;of&nbsp;text<br />&nbsp;*&nbsp;-------------------------------------------------------------<br />&nbsp;*/<br /></span><span style="color: #007700">function&nbsp;</span><span style="color: #0000BB">smarty_block_translate</span><span style="color: #007700">(</span><span style="color: #0000BB">$params</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$content</span><span style="color: #007700">,&nbsp;&amp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">,&nbsp;&amp;</span><span style="color: #0000BB">$repeat</span><span style="color: #007700">)<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #FF8000">//&nbsp;only&nbsp;output&nbsp;on&nbsp;the&nbsp;closing&nbsp;tag<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">if(!</span><span style="color: #0000BB">$repeat</span><span style="color: #007700">){<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(isset(</span><span style="color: #0000BB">$content</span><span style="color: #007700">))&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$lang&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">$params</span><span style="color: #007700">[</span><span style="color: #DD0000">'lang'</span><span style="color: #007700">];<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #FF8000">//&nbsp;do&nbsp;some&nbsp;intelligent&nbsp;translation&nbsp;thing&nbsp;here&nbsp;with&nbsp;$content<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">return&nbsp;</span><span style="color: #0000BB">$translation</span><span style="color: #007700">;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13; See also:
+ <A
+HREF="api.register.block.html"
+><TT
+CLASS="varname"
+>register_block()</TT
+></A
+>,
+ <A
+HREF="api.unregister.block.html"
+><TT
+CLASS="varname"
+>unregister_block()</TT
+></A
+>.
+</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="plugins.modifiers.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="plugins.compiler.functions.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Modifiers</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="plugins.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Compiler Functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

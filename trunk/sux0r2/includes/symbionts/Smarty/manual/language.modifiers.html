@@ -1,0 +1,683 @@
+<HTML
+><HEAD
+><TITLE
+>Variable Modifiers</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Smarty For Template Designers"
+HREF="smarty.for.designers.html"><LINK
+REL="PREVIOUS"
+TITLE="{$smarty} reserved variable"
+HREF="language.variables.smarty.html"><LINK
+REL="NEXT"
+TITLE="cat"
+HREF="language.modifier.cat.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.variables.smarty.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.modifier.cat.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="language.modifiers"
+></A
+>Chapter 5. Variable Modifiers</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="language.modifiers.html#language.modifier.capitalize"
+>capitalize</A
+></DT
+><DT
+><A
+HREF="language.modifier.cat.html"
+>cat</A
+></DT
+><DT
+><A
+HREF="language.modifier.count.characters.html"
+>count_characters</A
+></DT
+><DT
+><A
+HREF="language.modifier.count.paragraphs.html"
+>count_paragraphs</A
+></DT
+><DT
+><A
+HREF="language.modifier.count.sentences.html"
+>count_sentences</A
+></DT
+><DT
+><A
+HREF="language.modifier.count.words.html"
+>count_words</A
+></DT
+><DT
+><A
+HREF="language.modifier.date.format.html"
+>date_format</A
+></DT
+><DT
+><A
+HREF="language.modifier.default.html"
+>default</A
+></DT
+><DT
+><A
+HREF="language.modifier.escape.html"
+>escape</A
+></DT
+><DT
+><A
+HREF="language.modifier.indent.html"
+>indent</A
+></DT
+><DT
+><A
+HREF="language.modifier.lower.html"
+>lower</A
+></DT
+><DT
+><A
+HREF="language.modifier.nl2br.html"
+>nl2br</A
+></DT
+><DT
+><A
+HREF="language.modifier.regex.replace.html"
+>regex_replace</A
+></DT
+><DT
+><A
+HREF="language.modifier.replace.html"
+>replace</A
+></DT
+><DT
+><A
+HREF="language.modifier.spacify.html"
+>spacify</A
+></DT
+><DT
+><A
+HREF="language.modifier.string.format.html"
+>string_format</A
+></DT
+><DT
+><A
+HREF="language.modifier.strip.html"
+>strip</A
+></DT
+><DT
+><A
+HREF="language.modifier.strip.tags.html"
+>strip_tags</A
+></DT
+><DT
+><A
+HREF="language.modifier.truncate.html"
+>truncate</A
+></DT
+><DT
+><A
+HREF="language.modifier.upper.html"
+>upper</A
+></DT
+><DT
+><A
+HREF="language.modifier.wordwrap.html"
+>wordwrap</A
+></DT
+></DL
+></DIV
+><P
+>&#13;  Variable modifiers can be applied to
+  <A
+HREF="language.syntax.variables.html"
+>variables</A
+>,
+  <A
+HREF="language.custom.functions.html"
+>custom functions</A
+> or strings.
+  To apply a modifier, specify the value followed by a <TT
+CLASS="literal"
+>|</TT
+>
+  (pipe) and the modifier name. A modifier may accept additional parameters
+  that affect its behavior. These parameters follow the modifer name and are
+  separated by a <TT
+CLASS="literal"
+>:</TT
+> (colon). Also,
+  <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>all php-functions can be used as modifiers implicitly</I
+></SPAN
+>
+  (more below) and modifiers can be
+  <A
+HREF="language.combining.modifiers.html"
+>combined</A
+>.
+  .
+ </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN625"
+></A
+><P
+><B
+>Example 5-1. Modifier examples</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{* apply modifier to a variable *}
+{$title|upper}
+
+{* modifier with parameters *}
+{$title|truncate:40:'...'}
+
+{* apply modifier to a function parameter *}
+{html_table loop=$myvar|upper}
+
+{* with parameters *}
+{html_table loop=$myvar|truncate:40:'...'}
+
+{* apply modifier to literal string *}
+{'foobar'|upper}
+
+{* using date_format to format the current date *}
+{$smarty.now|date_format:"%Y/%m/%d"}
+
+{* apply modifier to a custom function *}
+{mailto|upper address='smarty@example.com'}
+
+{* using  php's str_repeat *}
+{'='|str_repeat:80}
+
+{* php's count *}
+{$myArray|@count}
+
+{* php's shuffle on servers's ip *}
+{$smarty.server.SERVER_ADDR|shuffle}
+
+(* this will uppercase and truncate the whole array *}
+&#60;select name="name_id"&#62;
+{html_options output=$myArray|upper|truncate:20}
+&#60;/select&#62;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+></P
+><UL
+><LI
+><P
+>&#13;  If you apply a modifier to an array variable instead of a single value variable,
+  the modifier will be applied to every value in that array. If you really want
+  the modifier to work on an entire array as a value, you must prepend the
+  modifier name with a <TT
+CLASS="literal"
+>@</TT
+> symbol.
+  <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Example: </B
+><TT
+CLASS="literal"
+>{$articleTitle|@count}</TT
+> - will print out the number of
+  elements in the <TT
+CLASS="parameter"
+><I
+>$articleTitle</I
+></TT
+> array using the php
+  <A
+HREF="http://php.net/count"
+TARGET="_top"
+><TT
+CLASS="varname"
+>count()</TT
+></A
+>
+  function as a modifier.
+  </P
+></BLOCKQUOTE
+></DIV
+>
+  </P
+></LI
+><LI
+><P
+>&#13;  Modifiers are autoloaded from the <A
+HREF="variable.plugins.dir.html"
+><TT
+CLASS="parameter"
+><I
+>$plugins_dir</I
+></TT
+></A
+>
+  or can be registered explicitly with the <A
+HREF="api.register.modifier.html"
+><TT
+CLASS="varname"
+>register_modifier()</TT
+></A
+>
+  function. The later is useful for sharing a function between
+   php scripts and smarty templates.
+  </P
+></LI
+><LI
+><P
+>&#13;  All php-functions can be used as modifiers implicitly, as demonstrated in the
+  example above.
+  However, using php-functions as modifiers has two little pitfalls:
+   <P
+></P
+><UL
+><LI
+><P
+>First - sometimes the order of the function-parameters is
+   not the desirable one. Formatting <TT
+CLASS="literal"
+>$foo</TT
+>  with
+   <TT
+CLASS="literal"
+>{"%2.f"|sprintf:$foo}</TT
+> actually
+   works, but asks for the more intuitive, like
+   <TT
+CLASS="literal"
+>{$foo|string_format:"%2.f"}</TT
+> that is provided by
+   the Smarty distribution.
+  </P
+></LI
+><LI
+><P
+>&#13;   Secondly - if <A
+HREF="variable.security.html"
+>&#13;   <TT
+CLASS="parameter"
+><I
+>$security</I
+></TT
+></A
+> is enabled, all php-functions that
+   are to be used as modifiers have to be declared trusted in the
+   <TT
+CLASS="literal"
+>MODIFIER_FUNCS</TT
+> element of the
+   <A
+HREF="variable.security.settings.html"
+>&#13;   <TT
+CLASS="parameter"
+><I
+>$security_settings</I
+></TT
+></A
+> array.
+  </P
+></LI
+></UL
+>
+ </P
+></LI
+></UL
+><P
+>&#13;  See also
+  <A
+HREF="api.register.modifier.html"
+><TT
+CLASS="varname"
+>register_modifier()</TT
+></A
+>,
+  <A
+HREF="language.combining.modifiers.html"
+>combining modifiers</A
+>.
+  and
+  <A
+HREF="plugins.html"
+>extending smarty with plugins</A
+>
+ </P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.modifier.capitalize"
+></A
+>capitalize</H1
+><P
+>&#13;     This is used to capitalize the first letter of all words in a variable.
+     This is similar to the PHP <A
+HREF="http://php.net/ucfirst"
+TARGET="_top"
+>&#13;   <TT
+CLASS="varname"
+>ucfirst()</TT
+></A
+> function.
+  </P
+><DIV
+CLASS="informaltable"
+><A
+NAME="AEN670"
+></A
+><P
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Parameter Position</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Type</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Required</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Default</TH
+><TH
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Description</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>1</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>boolean</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>No</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><TT
+CLASS="constant"
+>FALSE</TT
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>This determines whether or not words with
+      digits will be uppercased</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN692"
+></A
+><P
+><B
+>Example 5-2. capitalize</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /><br />$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'articleTitle'</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'next&nbsp;x-men&nbsp;film,&nbsp;x3,&nbsp;delayed.'</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+><P
+>&#13;    Where the template is:
+   </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{$articleTitle}
+{$articleTitle|capitalize}
+{$articleTitle|capitalize:true}</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;    Will output:
+   </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>next x-men film, x3, delayed.
+Next X-Men Film, x3, Delayed.
+Next X-Men Film, X3, Delayed.</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>See also
+   <A
+HREF="language.modifier.lower.html"
+><TT
+CLASS="varname"
+>lower</TT
+></A
+>
+   and
+   <A
+HREF="language.modifier.upper.html"
+><TT
+CLASS="varname"
+>upper</TT
+></A
+>
+   </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.variables.smarty.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.modifier.cat.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>{$smarty} reserved variable</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="smarty.for.designers.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>cat</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

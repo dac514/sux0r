@@ -1,0 +1,1354 @@
+<HTML
+><HEAD
+><TITLE
+>{foreach},{foreachelse}</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Built-in Functions"
+HREF="language.builtin.functions.html"><LINK
+REL="PREVIOUS"
+TITLE="{config_load}"
+HREF="language.function.config.load.html"><LINK
+REL="NEXT"
+TITLE="{if},{elseif},{else}"
+HREF="language.function.if.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.function.config.load.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 7. Built-in Functions</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.function.if.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.function.foreach"
+></A
+>{foreach},{foreachelse}</H1
+><P
+>&#13;  <TT
+CLASS="varname"
+>{foreach}</TT
+> is used to loop over an
+   <SPAN
+CLASS="bold"
+><B
+CLASS="emphasis"
+>associative array</B
+></SPAN
+> as well a numerically-indexed array,
+   unlike <A
+HREF="language.function.section.html"
+><TT
+CLASS="varname"
+>{section}</TT
+></A
+>
+  which is for looping over <SPAN
+CLASS="bold"
+><B
+CLASS="emphasis"
+>numerically-indexed arrays only</B
+></SPAN
+>.
+  The syntax for
+   <TT
+CLASS="varname"
+>{foreach}</TT
+> is much easier than
+   <A
+HREF="language.function.section.html"
+><TT
+CLASS="varname"
+>{section}</TT
+></A
+>,
+   but as a tradeoff it <SPAN
+CLASS="bold"
+><B
+CLASS="emphasis"
+>can only be used
+   for a single array</B
+></SPAN
+>. Every <TT
+CLASS="varname"
+>{foreach}</TT
+> tag must be
+   paired with a closing <TT
+CLASS="varname"
+>{/foreach}</TT
+> tag.
+   </P
+><DIV
+CLASS="informaltable"
+><A
+NAME="AEN1724"
+></A
+><P
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Attribute Name</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Type</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Required</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Default</TH
+><TH
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Description</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>from</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>array</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Yes</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>n/a</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>The array you are looping through</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>item</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Yes</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>n/a</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>The name of the variable that is the current
+      element</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>key</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>No</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>n/a</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>The name of the variable that is the current key</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>name</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>No</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>n/a</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>The name of the foreach loop for accessing
+      foreach properties</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+><P
+></P
+><UL
+><LI
+><P
+>&#13;   Required attributes are <TT
+CLASS="parameter"
+><I
+>from</I
+></TT
+> and <TT
+CLASS="parameter"
+><I
+>item</I
+></TT
+>.
+   </P
+></LI
+><LI
+><P
+>&#13;   The <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+> of the <TT
+CLASS="varname"
+>{foreach}</TT
+> loop can be anything
+   you like, made up of letters, numbers and underscores, like
+    <A
+HREF="http://php.net/language.variables"
+TARGET="_top"
+>PHP variables</A
+>.
+   </P
+></LI
+><LI
+><P
+>&#13;   <TT
+CLASS="varname"
+>{foreach}</TT
+> loops can be nested, and the nested
+   <TT
+CLASS="varname"
+>{foreach}</TT
+> names must be unique from each other.
+   </P
+></LI
+><LI
+><P
+>&#13;   The <TT
+CLASS="parameter"
+><I
+>from</I
+></TT
+> attribute, usually an array of values,
+   determines the number of times <TT
+CLASS="varname"
+>{foreach}</TT
+> will loop.
+   </P
+></LI
+><LI
+><P
+>&#13;   <TT
+CLASS="varname"
+>{foreachelse}</TT
+> is executed when there are no
+   values in the <TT
+CLASS="parameter"
+><I
+>from</I
+></TT
+> variable.
+   </P
+></LI
+><LI
+><P
+>&#13;      <TT
+CLASS="varname"
+>{foreach}</TT
+> loops also have their own variables that handle properties.
+      These are accessed with:
+      <A
+HREF="language.variables.smarty.html#language.variables.smarty.loops"
+>&#13;      <TT
+CLASS="parameter"
+><I
+>{$smarty.foreach.name.property}</I
+></TT
+></A
+> with
+      <SPAN
+CLASS="QUOTE"
+>"name"</SPAN
+> being the
+      <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+> attribute.
+      </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>The <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+> attribute is only required when
+      you want to access a <TT
+CLASS="varname"
+>{foreach</TT
+>} property, unlike
+      <A
+HREF="language.function.section.html"
+><TT
+CLASS="varname"
+>{section}</TT
+></A
+>.
+      Accessing a <TT
+CLASS="varname"
+>{foreach}</TT
+> property with <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+>
+      undefined does not throw an error, but leads to unpredictable results instead.
+      </P
+></BLOCKQUOTE
+></DIV
+></LI
+><LI
+><P
+>&#13;    <TT
+CLASS="varname"
+>{foreach}</TT
+> properties are
+    <A
+HREF="language.function.foreach.html#foreach.property.index"
+><TT
+CLASS="parameter"
+><I
+>index</I
+></TT
+></A
+>,
+    <A
+HREF="language.function.foreach.html#foreach.property.iteration"
+><TT
+CLASS="parameter"
+><I
+>iteration</I
+></TT
+></A
+>,
+    <A
+HREF="language.function.foreach.html#foreach.property.first"
+><TT
+CLASS="parameter"
+><I
+>first</I
+></TT
+></A
+>,
+    <A
+HREF="language.function.foreach.html#foreach.property.last"
+><TT
+CLASS="parameter"
+><I
+>last</I
+></TT
+></A
+>,
+    <A
+HREF="language.function.foreach.html#foreach.property.show"
+><TT
+CLASS="parameter"
+><I
+>show</I
+></TT
+></A
+>,
+    <A
+HREF="language.function.foreach.html#foreach.property.total"
+><TT
+CLASS="parameter"
+><I
+>total</I
+></TT
+></A
+>.
+    </P
+></LI
+></UL
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN1820"
+></A
+><P
+><B
+>Example 7-5. The <TT
+CLASS="parameter"
+><I
+>item</I
+></TT
+> attribute</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br />$arr&nbsp;</span><span style="color: #007700">=&nbsp;array(</span><span style="color: #0000BB">1000</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">1001</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">1002</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'myArray'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$arr</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+><P
+>Template to output <TT
+CLASS="parameter"
+><I
+>$myArray</I
+></TT
+> in an un-ordered list</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#60;ul&#62;
+{foreach from=$myArray item=foo}
+    &#60;li&#62;{$foo}&#60;/li&#62;
+{/foreach}
+&#60;/ul&#62;</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;   The above example will output:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#60;ul&#62;
+    &#60;li&#62;1000&#60;/li&#62;
+    &#60;li&#62;1001&#60;/li&#62;
+    &#60;li&#62;1002&#60;/li&#62;
+&#60;/ul&#62;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN1829"
+></A
+><P
+><B
+>Example 7-6. Demonstrates the <TT
+CLASS="parameter"
+><I
+>item</I
+></TT
+> and <TT
+CLASS="parameter"
+><I
+>key</I
+></TT
+> attributes</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br />$arr&nbsp;</span><span style="color: #007700">=&nbsp;array(</span><span style="color: #0000BB">9&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Tennis'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">3&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Swimming'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">8&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Coding'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'myArray'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$arr</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+><P
+>Template to output <TT
+CLASS="parameter"
+><I
+>$myArray</I
+></TT
+> as key/val pair,
+   like PHP's <A
+HREF="http://php.net/foreach"
+TARGET="_top"
+><TT
+CLASS="varname"
+>foreach</TT
+></A
+>.</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#60;ul&#62;
+{foreach from=$myArray key=k item=v}
+   &#60;li&#62;{$k}: {$v}&#60;/li&#62;
+{/foreach}
+&#60;/ul&#62;</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;   The above example will output:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#60;ul&#62;
+    &#60;li&#62;9: Tennis&#60;/li&#62;
+    &#60;li&#62;3: Swimming&#60;/li&#62;
+    &#60;li&#62;8: Coding&#60;/li&#62;
+&#60;/ul&#62;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN1841"
+></A
+><P
+><B
+>Example 7-7. {foreach} with associative <TT
+CLASS="parameter"
+><I
+>item</I
+></TT
+> attribute</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br />$items_list&nbsp;</span><span style="color: #007700">=&nbsp;array(</span><span style="color: #0000BB">23&nbsp;</span><span style="color: #007700">=&gt;&nbsp;array(</span><span style="color: #DD0000">'no'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #0000BB">2456</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'label'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Salad'</span><span style="color: #007700">),<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">96&nbsp;</span><span style="color: #007700">=&gt;&nbsp;array(</span><span style="color: #DD0000">'no'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #0000BB">4889</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'label'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Cream'</span><span style="color: #007700">)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'items'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$items_list</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+><P
+>Template to output <TT
+CLASS="parameter"
+><I
+>$items</I
+></TT
+> with
+   <TT
+CLASS="parameter"
+><I
+>$myId</I
+></TT
+> in the url</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#60;ul&#62;
+{foreach from=$items key=myId item=i}
+  &#60;li&#62;&#60;a href="item.php?id={$myId}"&#62;{$i.no}: {$i.label}&#60;/li&#62;
+{/foreach}
+&#60;/ul&#62;</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;   The above example will output:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#60;ul&#62;
+  &#60;li&#62;&#60;a href="item.php?id=23"&#62;2456: Salad&#60;/li&#62;
+  &#60;li&#62;&#60;a href="item.php?id=96"&#62;4889: Cream&#60;/li&#62;
+&#60;/ul&#62;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN1851"
+></A
+><P
+><B
+>Example 7-8. {foreach} with nested <TT
+CLASS="parameter"
+><I
+>item</I
+></TT
+> and <TT
+CLASS="parameter"
+><I
+>key</I
+></TT
+></B
+></P
+><P
+>Assign an array to Smarty, the key contains the key for each looped value.</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br />&nbsp;$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'contacts'</span><span style="color: #007700">,&nbsp;array(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array(</span><span style="color: #DD0000">'phone'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'1'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'fax'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'2'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'cell'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'3'</span><span style="color: #007700">),<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array(</span><span style="color: #DD0000">'phone'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'555-4444'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'fax'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'555-3333'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'cell'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'760-1234'</span><span style="color: #007700">)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;));<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+><P
+>The template to output <TT
+CLASS="parameter"
+><I
+>$contact</I
+></TT
+>.</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{foreach name=outer item=contact from=$contacts}
+  &#60;hr /&#62;
+  {foreach key=key item=item from=$contact}
+    {$key}: {$item}&#60;br /&#62;
+  {/foreach}
+{/foreach}</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;   The above example will output:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#60;hr /&#62;
+  phone: 1&#60;br /&#62;
+  fax: 2&#60;br /&#62;
+  cell: 3&#60;br /&#62;
+&#60;hr /&#62;
+  phone: 555-4444&#60;br /&#62;
+  fax: 555-3333&#60;br /&#62;
+  cell: 760-1234&#60;br /&#62;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN1862"
+></A
+><P
+><B
+>Example 7-9. Database example with {foreachelse}</B
+></P
+><P
+>A database (eg PEAR or ADODB) example of a search script, the query results assigned to Smarty</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br />&nbsp;&nbsp;$search_condition&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">"where&nbsp;name&nbsp;like&nbsp;'$foo%'&nbsp;"</span><span style="color: #007700">;<br />&nbsp;&nbsp;</span><span style="color: #0000BB">$sql&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'select&nbsp;contact_id,&nbsp;name,&nbsp;nick&nbsp;from&nbsp;contacts&nbsp;'</span><span style="color: #007700">.</span><span style="color: #0000BB">$search_condition</span><span style="color: #007700">.</span><span style="color: #DD0000">'&nbsp;order&nbsp;by&nbsp;name'</span><span style="color: #007700">;<br />&nbsp;&nbsp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'results'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$db</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getAssoc</span><span style="color: #007700">(</span><span style="color: #0000BB">$sql</span><span style="color: #007700">)&nbsp;);<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+><P
+>The template which display <SPAN
+CLASS="QUOTE"
+>"None found"</SPAN
+>
+  if no results with <TT
+CLASS="varname"
+>{foreachelse}</TT
+>.</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{foreach key=cid item=con from=$results}
+    &#60;a href="contact.php?contact_id={$cid}"&#62;{$con.name} - {$con.nick}&#60;/a&#62;&#60;br /&#62;
+{foreachelse}
+    No items were found in the search
+{/foreach}</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="foreach.property.index"
+></A
+>.index</H2
+><P
+>&#13;   <TT
+CLASS="parameter"
+><I
+>index</I
+></TT
+> contains the current array index, starting with zero.
+  </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN1874"
+></A
+><P
+><B
+>Example 7-10. <TT
+CLASS="parameter"
+><I
+>index</I
+></TT
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+{*&nbsp;The&nbsp;header&nbsp;block&nbsp;is&nbsp;output&nbsp;every&nbsp;five&nbsp;rows&nbsp;*}<br />&lt;table&gt;<br />{foreach&nbsp;from=$items&nbsp;key=myId&nbsp;item=i&nbsp;name=foo}<br />&nbsp;&nbsp;{if&nbsp;$smarty.foreach.foo.index&nbsp;%&nbsp;5&nbsp;==&nbsp;0}<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;tr&gt;&lt;th&gt;Title&lt;/th&gt;&lt;/tr&gt;<br />&nbsp;&nbsp;{/if}<br />&nbsp;&nbsp;&lt;tr&gt;&lt;td&gt;{$i.label}&lt;/td&gt;&lt;/tr&gt;<br />{/foreach}<br />&lt;/table&gt;</span>
+</code></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="foreach.property.iteration"
+></A
+>.iteration</H2
+><P
+>&#13;   <TT
+CLASS="parameter"
+><I
+>iteration</I
+></TT
+> contains the current loop iteration and always
+   starts at one, unlike <A
+HREF="language.function.foreach.html#foreach.property.index"
+><TT
+CLASS="parameter"
+><I
+>index</I
+></TT
+></A
+>.
+   It is incremented by one on each iteration.
+  </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN1884"
+></A
+><P
+><B
+>Example 7-11. <TT
+CLASS="parameter"
+><I
+>iteration</I
+></TT
+> and <TT
+CLASS="parameter"
+><I
+>index</I
+></TT
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+{*&nbsp;this&nbsp;will&nbsp;output&nbsp;0|1,&nbsp;1|2,&nbsp;2|3,&nbsp;...&nbsp;etc&nbsp;*}<br />{foreach&nbsp;from=$myArray&nbsp;item=i&nbsp;name=foo}<br />{$smarty.foreach.foo.index}|{$smarty.foreach.foo.iteration},<br />{/foreach}</span>
+</code></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="foreach.property.first"
+></A
+>.first</H2
+><P
+>&#13;   <TT
+CLASS="parameter"
+><I
+>first</I
+></TT
+> is <TT
+CLASS="constant"
+>TRUE</TT
+> if the current <TT
+CLASS="varname"
+>{foreach}</TT
+>
+   iteration is the initial one.
+  </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN1895"
+></A
+><P
+><B
+>Example 7-12. <TT
+CLASS="parameter"
+><I
+>first</I
+></TT
+> property example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+{*&nbsp;show&nbsp;LATEST&nbsp;on&nbsp;the&nbsp;first&nbsp;item,&nbsp;otherwise&nbsp;the&nbsp;id&nbsp;*}<br />&lt;table&gt;<br />{foreach&nbsp;from=$items&nbsp;key=myId&nbsp;item=i&nbsp;name=foo}<br />&lt;tr&gt;<br />&nbsp;&nbsp;&lt;td&gt;{if&nbsp;$smarty.foreach.foo.first}LATEST{else}{$myId}{/if}&lt;/td&gt;<br />&nbsp;&nbsp;&lt;td&gt;{$i.label}&lt;/td&gt;<br />&lt;/tr&gt;<br />{/foreach}<br />&lt;/table&gt;</span>
+</code></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="foreach.property.last"
+></A
+>.last</H2
+><P
+>&#13;   <TT
+CLASS="parameter"
+><I
+>last</I
+></TT
+> is set to <TT
+CLASS="constant"
+>TRUE</TT
+> if the current
+   <TT
+CLASS="varname"
+>{foreach}</TT
+> iteration is the final one.
+  </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN1905"
+></A
+><P
+><B
+>Example 7-13. <TT
+CLASS="parameter"
+><I
+>last</I
+></TT
+> property example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+{*&nbsp;Add&nbsp;horizontal&nbsp;rule&nbsp;at&nbsp;end&nbsp;of&nbsp;list&nbsp;*}<br />{foreach&nbsp;from=$items&nbsp;key=part_id&nbsp;item=prod&nbsp;name=products}<br />&nbsp;&nbsp;&lt;a&nbsp;href="#{$part_id}"&gt;{$prod}&lt;/a&gt;{if&nbsp;$smarty.foreach.products.last}&lt;hr&gt;{else},{/if}<br />{foreachelse}<br />&nbsp;&nbsp;...&nbsp;content&nbsp;...<br />{/foreach}</span>
+</code></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="foreach.property.show"
+></A
+>.show</H2
+><P
+>&#13;   <TT
+CLASS="parameter"
+><I
+>show</I
+></TT
+> is used as a parameter to <TT
+CLASS="varname"
+>{foreach}</TT
+>.
+   <TT
+CLASS="parameter"
+><I
+>show</I
+></TT
+> is a boolean value. If
+   <TT
+CLASS="constant"
+>FALSE</TT
+>, the <TT
+CLASS="varname"
+>{foreach}</TT
+> will not be displayed.
+   If there is a <TT
+CLASS="varname"
+>{foreachelse}</TT
+> present, that will be alternately displayed.
+  </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="foreach.property.total"
+></A
+>.total</H2
+><P
+>&#13;   <TT
+CLASS="parameter"
+><I
+>total</I
+></TT
+> contains the number of iterations that this
+   <TT
+CLASS="varname"
+>{foreach}</TT
+>  will loop.
+   This can be used inside or after the <TT
+CLASS="varname"
+>{foreach}</TT
+>.
+  </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN1924"
+></A
+><P
+><B
+>Example 7-14. <TT
+CLASS="parameter"
+><I
+>total</I
+></TT
+> property example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+{*&nbsp;show&nbsp;rows&nbsp;returned&nbsp;at&nbsp;end&nbsp;*}<br />{foreach&nbsp;from=$items&nbsp;key=part_id&nbsp;item=prod&nbsp;name=foo}<br />{$prod.name&gt;&lt;hr/&gt;<br />{if&nbsp;$smarty.foreach.foo.last}<br />&nbsp;&nbsp;&lt;div&nbsp;id="total"&gt;{$smarty.foreach.foo.total}&nbsp;items&lt;/div&gt;<br />{/if}<br />{foreachelse}<br />&nbsp;...&nbsp;something&nbsp;else&nbsp;...<br />{/foreach}</span>
+</code></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;   See also <A
+HREF="language.function.section.html"
+><TT
+CLASS="varname"
+>{section}</TT
+></A
+>
+   and  <A
+HREF="language.variables.smarty.html#language.variables.smarty.loops"
+><TT
+CLASS="parameter"
+><I
+>$smarty.foreach</I
+></TT
+></A
+>.
+  </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.function.config.load.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.function.if.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>{config_load}</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.builtin.functions.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>{if},{elseif},{else}</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
