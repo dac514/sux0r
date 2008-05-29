@@ -1,8 +1,6 @@
 {include file=$r->xhtml_header}
 
-<div id="proselytizer">
-
-
+<div id="proselytizer"><div id="middle">
 
 {if $r->bool.edit}
 
@@ -22,7 +20,6 @@
 
 {/if}
 
-
-</div>
+</div></div>
 
 {include file=$r->xhtml_footer}

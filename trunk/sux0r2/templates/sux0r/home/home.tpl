@@ -6,8 +6,8 @@
 			<div id="header">
 
                 <h1>sux0r - it sux0rs up all the web</h1>
-                {$r->userinfo()}
-                {$r->navlist($r->nav, 'Item One')}
+                {insert name="userInfo"}
+                {$r->navlist()}
 
 			</div>
             <div class="clearboth"></div>

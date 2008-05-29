@@ -245,8 +245,9 @@ class suxEdit extends suxUser {
         if ($this->mode == 'edit') {
             $this->r->text['form_url'] = suxFunct::makeUrl('/user/edit/' . @$u['nickname']); // Edit
             $this->r->bool['edit'] = true;
-            $this->r->text['back_url'] = $this->getPreviousURL();
         }
+
+        $this->r->text['back_url'] = $this->getPreviousURL();
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);

@@ -1,6 +1,6 @@
 {include file=$r->xhtml_header}
 
-<div id="proselytizer">
+<div id="proselytizer"><div id="middle">
 
 <p>
 <img src="{$r->url}/media/{$r->partition}/assets/openid_logo.png" alt="OpenID Logo" />
@@ -17,6 +17,6 @@
 {if $r->bool.debug} | <a href="{$r->text.test_url}">{$r->text.test}</a>{/if}
 </p>
 
-</div>
+</div></div>
 
 {include file=$r->xhtml_footer}

@@ -100,8 +100,9 @@ class suxRegisterOpenID extends suxUser {
         // Title
         $this->r->title .= ' | Register';
 
-        // Url
+        // Urls
         $this->r->text['form_url'] = suxFunct::makeUrl('/user/register/openid');
+        $this->r->text['back_url'] = $this->getPreviousURL();
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
@@ -137,6 +138,27 @@ class suxRegisterOpenID extends suxUser {
 
         if ($st->fetchColumn() > 0) return false; // Duplicate found, fail
         else return true;
+
+    }
+
+
+    /**
+    * Get this user's previous URL
+    *
+    * @return bool
+    */
+    protected function getPreviousURL() {
+
+        $url = suxFunct::makeUrl('/home'); // Some default
+
+        if (isset($_SESSION['breadcrumbs'])) foreach($_SESSION['breadcrumbs'] as $val) {
+            if (!preg_match('#^user/[login|logout|register|edit]#i', $val)) {
+                $url = suxFunct::makeUrl($val); // Overwrite
+                break;
+            }
+        }
+
+        return $url;
 
     }
 

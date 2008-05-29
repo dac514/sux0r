@@ -5,9 +5,12 @@
 		<td colspan="3" style="vertical-align:top;">
 			<div id="header">
 
-                Header
+                <h1>Profile of: {$r->profile.nickname}</h1>
+                {insert name="userInfo"}
+                {$r->navlist()}
 
 			</div>
+            <div class="clearboth"></div>
 		</td>
 	</tr>
 	<tr>
@@ -30,7 +33,7 @@
 			</div>
 		</td>
 		<td style="vertical-align:top;">
-			<div id="middle">
+			<div id="middle2">
 
             {capture name=profile}
 
