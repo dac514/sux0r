@@ -69,6 +69,8 @@ class suxFunct {
             </script>
             ";
         }
+
+        exit; // Quit script
     }
 
 

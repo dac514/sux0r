@@ -38,9 +38,17 @@ class suxLoginOpenID extends suxRegisterOpenID {
 
         if ($this->loginCheck()) {
 
-            // If this user is already logged in, redirect to user page
-            $url = suxFunct::makeUrl('/user/profile/' . $_SESSION['nickname']);
-            suxFunct::redirect($url);
+            // Redirect to previous page
+            if (isset($_SESSION['breadcrumbs'])) {
+                foreach($_SESSION['breadcrumbs'] as $val) {
+                    if (!preg_match('#^user/[login|logout|register|edit]#i', $val)) {
+                        suxFunct::redirect(suxFunct::makeUrl($val));
+                    }
+                }
+            }
+
+            // Nothing of value was found, redirect to user page
+            suxFunct::redirect(suxFunct::makeUrl('/user/profile/' . $_SESSION['nickname']));
 
         }
         elseif (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->max_failures) {
