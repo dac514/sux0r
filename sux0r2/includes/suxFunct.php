@@ -305,17 +305,25 @@ class suxFunct {
     * @global string $CONFIG['LANGUAGE']
     * @return array $gtext
     */
-    static function gtext($module) {
+    static function gtext($module = null) {
 
         $gtext = array();
 
         if (!empty($_SESSION['language'])) $lang = $_SESSION['language'];
         else $lang = $GLOBALS['CONFIG']['LANGUAGE'];
 
-        // Default to english in case other language files are incomplete
-        $default = $GLOBALS['CONFIG']['PATH'] . "/modules/{$module}/languages/en.php";
-        // Second language will overwrite/merge with first
-        $requested = $GLOBALS['CONFIG']['PATH'] . "/modules/{$module}/languages/$lang.php";
+        if ($module) {
+
+            $default = $GLOBALS['CONFIG']['PATH'] . "/modules/{$module}/languages/en.php";
+            $requested = $GLOBALS['CONFIG']['PATH'] . "/modules/{$module}/languages/$lang.php";
+
+        }
+        else {
+
+            $default = dirname(__FILE__) . "/languages/en.php";
+            $requested = dirname(__FILE__) . "/languages/$lang.php";
+
+        }
 
         if (!is_readable($default)) return false; // no default, something is wrong
         else include($default);

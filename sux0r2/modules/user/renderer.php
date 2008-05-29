@@ -185,6 +185,12 @@ class renderer extends suxRenderer {
 // Smarty {insert} functions
 // -------------------------------------------------------------------------
 
+/**
+* Render editMenu
+*
+* @param array $params smarty {insert} parameters
+* @return string html
+*/
 function insert_editMenu($params) {
 
     if (empty($params['nickname'])) return null;

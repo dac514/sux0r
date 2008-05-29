@@ -2,6 +2,16 @@
 
 <div id="proselytizer">
 
+{* Header *}
+<div id="header">
+    {insert name="userInfo"}
+</div>
+<div class="clearboth"></div>
+
+
+{* Content *}
+<div id="middle">
+
 <fieldset>
 <legend>{if $r->bool.edit}{$r->text.editing} : {$nickname}</a>{else}{$r->text.reg}{/if}</legend>
 
@@ -158,13 +168,15 @@
 
 <p>
 <label>&nbsp;</label>
-{if $r->bool.edit}<input type="button" class="button" value="{$r->text.cancel}" onclick="document.location='{$r->text.back_url}';" />{/if}
+<input type="button" class="button" value="{$r->text.cancel}" onclick="document.location='{$r->text.back_url}';" />
 <input type="submit" class="button" value="{$r->text.submit}" />
 </p>
 
 </form>
 
 </fieldset>
+
+</div>
 
 </div>
 

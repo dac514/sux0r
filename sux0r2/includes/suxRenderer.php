@@ -38,8 +38,9 @@ class suxRenderer {
     public $url; // Site URL Prefix, e.g. /my/sux0r
     public $partition; // sux0r parition name
     public $title; // Variable to put between <title> tags
-    public $stylesheets; // Variable to keep stylesheets/text
-    public $header; // Variable to keep header/text
+    public $stylesheets; // Variable to put stylesheets/text
+    public $header; // Variable to put header/text
+    public $nav_selected; // Selected key for $nav array
 
     // Arrays
     public $nav; // Variable to keep navlist
@@ -156,55 +157,42 @@ class suxRenderer {
 
 
     /**
-    * Construct a userinfo div
-    *
-    * @global string $CONFIG['PATH']
-    * @global string $CONFIG['PARTITION']
-    * @return string the html code
-    */
-    function userinfo() {
-
-        // Template
-        $tpl = new suxTemplate($this->module);
-
-        if (!empty($_SESSION['nickname'])) {
-            $tpl->assign('nickname', $_SESSION['nickname']);
-            $tpl->assign('url_profile', suxFunct::makeUrl('/user/profile/' . $_SESSION['nickname']));
-        }
-
-        $tpl->assign('text', $this->gtext());
-        $tpl->assign('url', $this->url);
-        $tpl->assign('partition', $this->partition);
-        $tpl->assign('url_login', suxFunct::makeUrl('/user/login'));
-        $tpl->assign('url_login_openid', suxFunct::makeUrl('/user/login/openid'));
-        $tpl->assign('url_logout', suxFunct::makeUrl('/user/logout'));
-        $tpl->assign('url_register', suxFunct::makeUrl('/user/register'));
-        $tpl->assign('url_register_openid', suxFunct::makeUrl('/user/register/openid'));
-
-        $path = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $GLOBALS['CONFIG']['PARTITION'];
-        if (!file_exists("$path/userinfo.tpl")) $path = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r';
-        return $tpl->fetch("file:$path/userinfo.tpl");
-
-    }
-
-
-    /**
     * Construct a navigation div
     *
     * @param array $list key => name, val => url
-    * @param string $selected match against key to add css selected
     * @return string the html code
     */
-    function navlist($list, $selected = null) {
-
-        if (!is_array($list)) return null;
+    function navlist($list = null) {
 
         $html = "<div id='navcontainer'>\n";
         $html .= "<ul id='navlist'>\n";
 
-        foreach ($list as $key => $val) {
-            if ($key == $selected) $html .= "<li><a href='{$val}' class='selected'>{$key}</a></li>\n";
-            else $html .= "<li><a href='{$val}'>{$key}</a></li>\n";
+        if (!is_array($list)) {
+            $text = suxFunct::gtext();
+            if (isset($text['navcontainer'])) $list = $text['navcontainer'];
+        }
+
+
+        if (is_array($list)) {
+
+            // Make an educated guess as to which controller we are currently in?
+            $compare = null;
+            if (!empty($_GET['c'])) {
+                $params = explode('/', $_GET['c']);
+                $compare = array_shift($params);
+                $compare = trim($GLOBALS['CONFIG']['URL'] . "/$compare", '/');
+            }
+
+            // Compare with the list
+            foreach ($list as $key => $val) {
+                if ($compare && preg_match("#^$compare#", ltrim($val, '/'))) {
+                    $html .= "<li><a href='{$val}' class='selected'>{$key}</a></li>\n";
+                }
+                else {
+                    $html .= "<li><a href='{$val}'>{$key}</a></li>\n";
+                }
+            }
+
         }
 
         $html .= "</ul>\n";
@@ -219,7 +207,7 @@ class suxRenderer {
     /**
     * Make URL Wrapper
     *
-    * @param string $path controller value in /this/style
+    * @param string $path controler value in /this/style
     * @param array $query http_build_query compatible array
     * @param bool $full return full url?
     * @return string url
@@ -231,22 +219,60 @@ class suxRenderer {
     }
 
 
-    /**
-    * Get language specific text
-    *
-    * @return array gtext
-    */
-    private function gtext() {
+}
 
-        $gtext = null;
-        $default = dirname(__FILE__) . '/languages/en.php';
-        $requested = dirname(__FILE__) . "/languages/{$this->lang}.php";
-        if (is_readable($default)) include($default);
-        if ($this->lang != 'en' && is_readable($requested)) include($requested);
-        return $gtext;
+
+// -------------------------------------------------------------------------
+// Smarty {insert} functions
+// -------------------------------------------------------------------------
+
+/**
+* Render userInfo
+*
+* @global string $CONFIG['URL']
+* @global string $CONFIG['PARTITION']
+* @param array $params smarty {insert} parameters
+* @return string html
+*/
+function insert_userInfo($params) {
+
+    unset($params); // Not used
+
+    $text = suxFunct::gtext(); // Text
+
+    $url = $GLOBALS['CONFIG']['URL'];
+    $url_logout = suxFunct::makeUrl('/user/logout');
+    if (!empty($_SESSION['partition'])) $partition = $_SESSION['partition'];
+    else $partition = $GLOBALS['CONFIG']['PARTITION'];
+
+    $tmp = '';
+    $tmp .= '<div class="userinfo">' . "\n";
+
+    if (!empty($_SESSION['nickname'])) {
+
+        $url_profile = suxFunct::makeUrl('/user/profile/' . $_SESSION['nickname']);
+
+        $tmp .= "<strong>{$text['welcome']}:</strong> <a href='{$url_profile}'>{$_SESSION['nickname']}</a> | ";
+        $tmp .= "<a href='{$url_logout}'>{$text['logout']}</a> \n";
+
+    }
+    else {
+
+        $url_login = suxFunct::makeUrl('/user/login');
+        $url_login_openid = suxFunct::makeUrl('/user/login/openid');
+        $url_register = suxFunct::makeUrl('/user/register');
+        $url_register_openid = suxFunct::makeUrl('/user/register/openid');
+
+        $tmp .= "<a href='{$url_login}'>{$text['login']}</a> ";
+        $tmp .= "<a class='noBg' href='{$url_login_openid}'><img src='{$url}/media/{$partition}/assets/openid_icon.gif' alt='OpenID Login' class='openidLogin' /></a> | ";
+        $tmp .= "<a href='{$url_register}'>{$text['register']}</a> ";
+        $tmp .= "<a class='noBg' href='{$url_register_openid}'><img src='{$url}/media/{$partition}/assets/openid_icon.gif' alt='OpenID Login' class='openidLogin' /></a> \n";
 
     }
 
+    $tmp .= '</div>' . "\n";
+
+    return $tmp;
 
 }
 

@@ -2,6 +2,15 @@
 
 <div id="proselytizer">
 
+{* Header *}
+<div id="header">
+    {insert name="userInfo"}
+</div>
+<div class="clearboth"></div>
+
+{* Content *}
+<div id="middle">
+
 <fieldset>
 <legend>{$r->text.openid_reg}</legend>
 
@@ -27,12 +36,15 @@
 </p>
 
 <p>
+<input type="button" class="button" value="{$r->text.cancel}" onclick="document.location='{$r->text.back_url}';" />
 <input type="submit" value="{$r->text.submit}" class="button" />
 </p>
 
 </form>
 
 </fieldset>
+
+</div>
 
 </div>
 
