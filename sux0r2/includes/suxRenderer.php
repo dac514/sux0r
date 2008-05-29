@@ -35,7 +35,7 @@ class suxRenderer {
     public $xhtml_footer; // Full path to xhtml_footer.tpl
 
     // Text
-    public $url; // URL Prefix
+    public $url; // Site URL Prefix, e.g. /my/sux0r
     public $partition; // sux0r parition name
     public $title; // Variable to put between <title> tags
     public $stylesheets; // Variable to keep stylesheets/text

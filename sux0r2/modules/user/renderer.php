@@ -165,6 +165,19 @@ class renderer extends suxRenderer {
     }
 
 
+    /**
+    * Get a refresh meta tag
+    *
+    * @return string
+    */
+    function getRefreshMeta($url) {
+
+        // 5 seconds
+        return '<meta http-equiv="refresh" content="5;url=' . $url . '">';
+
+    }
+
+
 }
 
 

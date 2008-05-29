@@ -157,7 +157,9 @@
 {/if}
 
 <p>
-<label>&nbsp;</label><input type="submit" class="button" value="{$r->text.submit}" />
+<label>&nbsp;</label>
+{if $r->bool.edit}<input type="button" class="button" value="{$r->text.cancel}" onclick="document.location='{$r->text.back_url}';" />{/if}
+<input type="submit" class="button" value="{$r->text.submit}" />
 </p>
 
 </form>

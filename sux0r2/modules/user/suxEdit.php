@@ -245,6 +245,7 @@ class suxEdit extends suxUser {
         if ($this->mode == 'edit') {
             $this->r->text['form_url'] = suxFunct::makeUrl('/user/edit/' . @$u['nickname']); // Edit
             $this->r->bool['edit'] = true;
+            $this->r->text['back_url'] = $this->getPreviousURL();
         }
 
         // Template
@@ -340,7 +341,18 @@ class suxEdit extends suxUser {
     */
     function formSuccess() {
 
-        echo 'Success!';
+        // Edit mode?
+        if ($this->mode == 'edit') {
+
+            $this->r->bool['edit'] = true;
+            $this->r->text['back_url'] = $this->getPreviousURL();
+            $this->r->header .= $this->r->getRefreshMeta($this->r->text['back_url']);
+
+        }
+
+        // Template
+        $this->tpl->assign_by_ref('r', $this->r);
+        $this->tpl->display('success.tpl');
 
     }
 
@@ -412,6 +424,22 @@ class suxEdit extends suxUser {
 
 
     /**
+    * for suxValidate, check for matching Captcha
+    *
+    * @return bool
+    */
+    function isValidCaptcha($value, $empty, &$params, &$formvars) {
+
+        if (empty($formvars['captcha'])) return false;
+        if (empty($_SESSION['captcha'])) return false;
+
+        if (mb_strtolower($_SESSION['captcha']) == mb_strtolower($formvars['captcha'])) return true;
+        else return false;
+
+    }
+
+
+    /**
     * Check if openid registration is set
     *
     * @return bool
@@ -432,17 +460,22 @@ class suxEdit extends suxUser {
 
 
     /**
-    * for suxValidate, check for matching Captcha
+    * Get this user's previous URL
     *
     * @return bool
     */
-    function isValidCaptcha($value, $empty, &$params, &$formvars) {
+    private function getPreviousURL() {
 
-        if (empty($formvars['captcha'])) return false;
-        if (empty($_SESSION['captcha'])) return false;
+        $url = suxFunct::makeUrl('/home'); // Some default
 
-        if (mb_strtolower($_SESSION['captcha']) == mb_strtolower($formvars['captcha'])) return true;
-        else return false;
+        if (isset($_SESSION['breadcrumbs'])) foreach($_SESSION['breadcrumbs'] as $val) {
+            if (!preg_match('#^user/[login|logout|register|edit]#i', $val)) {
+                $url = suxFunct::makeUrl($val); // Overwrite
+                break;
+            }
+        }
+
+        return $url;
 
     }
 
