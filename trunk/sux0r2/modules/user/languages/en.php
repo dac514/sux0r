@@ -1,5 +1,7 @@
 <?php
 
+$gtext['back'] = 'Back';
+$gtext['cancel'] = 'Cancel';
 $gtext['captcha'] = 'Anti-spam code';
 $gtext['country'] = 'Country';
 $gtext['dob'] = 'Birthday';
@@ -47,16 +49,18 @@ $gtext['openid_reg'] = 'OpenID Registration';
 $gtext['password'] = 'Password';
 $gtext['password_verify'] = 'Verify password';
 $gtext['postcode'] = 'Zip/Postal Code';
-
 $gtext['previous_page'] = 'Back to previous page';
-
 $gtext['pw_failure'] = 'Too many password failures';
 $gtext['pw_failure_2'] = 'Too many password failures. You must restart your browser to try again.';
 $gtext['reg'] = 'Registration';
 $gtext['region'] = 'State/Province';
 $gtext['street_address'] = 'Address';
 $gtext['submit'] = 'Submit';
+$gtext['success'] = 'Success!';
+$gtext['success_edit'] = 'Everything seems fine. You will be redirected in 5 seconds.';
+$gtext['success_register'] = 'Thank you for completing the registration form. You may now log in.';
 $gtext['tel'] = 'Telephone';
+$gtext['thanks'] = 'Thank you for registering';
 $gtext['timezone'] = 'Timezone';
 $gtext['url'] = 'URL';
 

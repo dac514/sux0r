@@ -60,11 +60,10 @@ class suxAuthenticate extends suxUser {
         if ($this->loginCheck() || !$this->loginCheck() && $this->authenticate()) {
 
             // Redirect to previous page
-            if (isset($_SESSION['breadcrumbs'])) {
-                foreach($_SESSION['breadcrumbs'] as $val) {
-                    if (!preg_match('#^user/[login|logout|register|edit]#i', $val)) {
-                        suxFunct::redirect(suxFunct::makeUrl($val));
-                    }
+            if (isset($_SESSION['breadcrumbs'])) foreach($_SESSION['breadcrumbs'] as $val) {
+                if (!preg_match('#^user/[login|logout|register|edit]#i', $val)) {
+                    suxFunct::redirect(suxFunct::makeUrl($val));
+                    break;
                 }
             }
 
