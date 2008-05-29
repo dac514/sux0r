@@ -59,9 +59,17 @@ class suxAuthenticate extends suxUser {
 
         if ($this->loginCheck() || !$this->loginCheck() && $this->authenticate()) {
 
-            // Redirect to user page
-            $url = suxFunct::makeUrl('/user/profile/' . $_SESSION['nickname']);
-            suxFunct::redirect($url);
+            // Redirect to previous page
+            if (isset($_SESSION['breadcrumbs'])) {
+                foreach($_SESSION['breadcrumbs'] as $val) {
+                    if (!preg_match('#^user/[login|logout|register|edit]#i', $val)) {
+                        suxFunct::redirect(suxFunct::makeUrl($val));
+                    }
+                }
+            }
+
+            // Nothing of value was found, redirect to user page
+            suxFunct::redirect(suxFunct::makeUrl('/user/profile/' . $_SESSION['nickname']));
 
         }
         else {
@@ -73,8 +81,8 @@ class suxAuthenticate extends suxUser {
                 die();
             }
 
-
-            // Threre's a conflift with authenticate procedure and header('Location:')
+            // Note:
+            // Threre's a conflift with the authenticate procedure and header('Location:')
             // The workaround is to echo some spaces and force javascript redirect
 
             echo str_repeat(' ', 40000);

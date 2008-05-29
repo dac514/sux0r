@@ -26,13 +26,14 @@ $gtext['form_error_11'] = 'Invalid captcha';
 
 $gtext['gender'] = 'Gender';
 $gtext['given_name'] = 'First name';
+$gtext['homepage'] = 'Back to homepage';
 $gtext['language'] = 'Language';
 $gtext['locality'] = 'City';
 $gtext['logout'] = 'Logout complete';
 
-$gtext['logout2'] = 'Important: As this site uses
+$gtext['logout2'] = 'As this site uses
 <a href="http://en.wikipedia.org/wiki/Digest_access_authentication">HTTP Digest
-Authentication</a> <strong>YOU SHOULD EXIT YOUR BROWSER</strong>. This is because
+Authentication</a> you should exit your browser. This is because
 your browser will cache your credentials and automatically log you back in the next
 time it is prompted to do so. You will not see the login box, as this will happen
 transparently. The illusion is that it looks like you never actually logged out,
@@ -46,6 +47,9 @@ $gtext['openid_reg'] = 'OpenID Registration';
 $gtext['password'] = 'Password';
 $gtext['password_verify'] = 'Verify password';
 $gtext['postcode'] = 'Zip/Postal Code';
+
+$gtext['previous_page'] = 'Back to previous page';
+
 $gtext['pw_failure'] = 'Too many password failures';
 $gtext['pw_failure_2'] = 'Too many password failures. You must restart your browser to try again.';
 $gtext['reg'] = 'Registration';

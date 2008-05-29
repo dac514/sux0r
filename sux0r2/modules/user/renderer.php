@@ -172,14 +172,11 @@ class renderer extends suxRenderer {
 // Smarty {insert} functions
 // -------------------------------------------------------------------------
 
-
 function insert_editMenu($params) {
 
     if (empty($params['nickname'])) return null;
 
-    $nickname = $params['nickname'];
-
-    if ($nickname != $_SESSION['nickname']) {
+    if ($params['nickname'] != $_SESSION['nickname']) {
         // TODO:
         // Security check
         // Only an administrator can modify other users
@@ -189,9 +186,9 @@ function insert_editMenu($params) {
     $text = suxFunct::gtext('user');
 
     $tmp = '';
-    $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/edit/{$nickname}") . '">' . $text['edit_profile'] . '</a></li>' . "\n";
-    $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/avatar/{$nickname}") . '">' . $text['edit_avatar'] . '</a></li>' . "\n";
-    $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/network/{$nickname}") . '">' . $text['edit_friends'] . '</a></li>' . "\n";
+    $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/edit/{$params['nickname']}") . '">' . $text['edit_profile'] . '</a></li>' . "\n";
+    $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/avatar/{$params['nickname']}") . '">' . $text['edit_avatar'] . '</a></li>' . "\n";
+    $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/network/{$params['nickname']}") . '">' . $text['edit_friends'] . '</a></li>' . "\n";
     return $tmp;
 
 }

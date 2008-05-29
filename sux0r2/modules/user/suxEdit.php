@@ -298,10 +298,6 @@ class suxEdit extends suxUser {
             if (!$u) throw new Exception('Invalid user');
             $id = $u['users_id'];
 
-            // Clear approptiate template caches
-            $cache_id = $_POST['nickname'];
-            $this->tpl->clear_cache('profile.tpl', $cache_id);
-
         }
 
         // --------------------------------------------------------------------
@@ -328,6 +324,10 @@ class suxEdit extends suxUser {
 
         unset($_SESSION['openid_url_registration'], $_SESSION['openid_url_integrity']);
 
+        // Clear approptiate template caches
+        $this->tpl->clear_cache('profile.tpl', $_POST['nickname']);
+
+        // Reset session
         if ($this->mode == 'edit' && $_POST['nickname'] == $_SESSION['nickname']) {
             $this->setSession($_POST['nickname'], true);
         }
