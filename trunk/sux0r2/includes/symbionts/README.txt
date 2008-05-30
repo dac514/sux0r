@@ -47,13 +47,6 @@ dBug
 * Notes: The PHP file says March 22, 2007 but the website says Dec 04, 2007
 
 
-extJs
-* Path: ./extjs/
-* Version: 2.1.0
-* Licence: GPL 3.0
-* Website: http://extjs.com/
-
-
 htmLawed
 * Path: ./htmLawed/
 * Version: 1.0.7
