@@ -1,6 +1,6 @@
 /*
-htmLawed_README.txt (1 May 2008)
-htmLawed 1.0.7, 1 May 2008
+htmLawed_README.txt, 27 May 2008
+htmLawed 1.0.8, 27 May 2008
 Copyright Santosh Patnaik
 GPLv3 license
 A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -47,6 +47,7 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
   3.6  Simple configuration directive for most `safe` HTML
   3.7  Using a hook function
   3.8  Obtaining `finalized` parameter values
+  3.9  Retaining non-HTML tags in input with mixed markup
 4  Other
   4.1  Support
   4.2  Known issues
@@ -547,15 +548,17 @@ htmLawed's main objective is to make the input text `more` HTML-standard complia
 
 *  htmLawed is meant for input that goes into the 'body' of HTML documents. HTML's head-level elements are not supported, nor are the frameset elements 'frameset', 'frame' and 'noframes'.
 
-*  htmLawed doesn't `beautify` HTML code text by formatting it with indentations, etc.
+*  htmLawed doesn't `beautify` HTML code text by formatting it with indentations, etc. It does, however, properly white-space tag content (remving line-breaks, tabs, etc.).
 
 *  It cannot transform the non-standard 'embed' elements to the standard-compliant 'object' elements. Yet, it can allow 'embed' elements if permitted ('embed' is widely used and supported).
 
 *  The only non-standard element that may be permitted is 'embed'; others like 'noembed' and 'nobr' cannot be permitted without modifying the htmLawed code.
 
-*  It cannot handle input that has non-HTML code like 'SVG' and 'MathML'. One way around is to break the input into pieces and passing only those without non-HTML code to htmLawed. Another may be to some how take advantage of the '$config["and_mark"]' parameter (see section:- #3.2).
+*  It cannot handle input that has non-HTML code like 'SVG' and 'MathML'. One way around is to break the input into pieces and passing only those without non-HTML code to htmLawed. Another is described in section:- #3.9. A third way may be to some how take advantage of the '$config["and_mark"]' parameter (see section:- #3.2).
 
 *  By default, htmLawed won't check many attribute values for standard compliance. E.g., 'width="20m"' with the dimension in non-standard 'm' is let through. Implementing universal and strict attribute value checks can make htmLawed slow and resource-intensive. Admins can partially implement such features using '$spec'.
+
+*  The attributes, deprecated (which can be transformed too) or not, that it supports are largely those that are in the specs. Only very few of the proprietary attributes are supported.
 
 *  Except for contained URLs and dynamic expressions (also optional), htmLawed does not check CSS style property values. Again, this keeps htmLawed fast. Admins can partially implement this feature using '$spec'. Perhaps the best option is to disallow 'style' but allow 'class' attributes with the right 'oneof' or 'match' values for 'class', and have the various class style properties in '.css' CSS stylesheet files.
 
@@ -602,11 +605,13 @@ htmLawed removes all null and other HTML-invalid characters ('#x00' to '#x08', '
 
 Valid characters in HTML are '#x9', '#xa', '#xd', and '#x20' to '#x10ffff'. Characters that are discouraged (see section:- #5.1) but not invalid are not removed.
 
-However, with '$config["clean_ms_char"]' set as '1' or '2', most of the discouraged characters (code-points 127 to 159) that many Microsoft applications incorrectly use (often as as per the 'Windows 1252' encoding system), and the character for code-point '133', are converted to appropriate decimal numerical entities -- see appendix in section:- #5.4. This can help avoid some display issues arising from copying-pasting of content.
+However, with '$config["clean_ms_char"]' set as '1' or '2', most of the discouraged characters (code-points 127 to 159) that many Microsoft applications incorrectly use (often as as per the 'Windows 1252' or 'Cp-1252' encoding system), and the character for code-point '133', are converted to appropriate decimal numerical entities -- see appendix in section:- #5.4. This can help avoid some display issues arising from copying-pasting of content.
 
 With '$config["clean_ms_char"]' set as '2', characters '#x82', '#x91', and '#x92' (for special single-quotes), and '#x84', '#x93', and '#x94' (for special double-quotes) are converted to ordinary single and double quotes respectively and not to entities.
 
-The character values are replaced with entities/characters and not character values referred to by the entities/characters to keep this task independent of the character-encoding of input text. This parameter need not be used if authors do not copy-paste Microsoft-created text.
+The character values are replaced with entities/characters and not character values referred to by the entities/characters to keep this task independent of the character-encoding of input text.
+
+The '$config["clean_ms_char"]' parameter need not be used if authors do not copy-paste Microsoft-created text or if the input text is not believed to use the 'Windows 1252' or 'Cp-1252' encoding. Further, the input form and the web-pages displaying it or its content should have the character encoding appropriately marked-up.
 
 
 -- 3.2  Character references/entities ------------------------------o
@@ -635,6 +640,8 @@ htmLawed (function 'hl_ent()'):
 *Note*: If '$config["and_mark"]' is set, and set to a value other than '0', then the '&' characters in the original input are replaced with the '\x06' control character ('&' characters introduced by htmLawed, e.g., after converting '<' to '&lt;', are not affected). This allows one to distinguish, say, an '&gt;' introduced by htmLawed and an '&gt;' put in by the input writer, and can be helpful in further processing of the htmLawed-processed text (e.g., to identify the character sequence 'o(><)o' to generate an emoticon image). When this feature is active, admins should ensure that the htmLawed output is not directly used in web pages or XML documents as the presence of the '\x06' control character can break documents. Before use in such documents, and preferably before any storage, any remaining '\x06' should be changed back to '&', e.g., with:
 
     $final = str_replace("\x06", '&', $prelim);
+
+Also, see section:- #3.9.
 
 
 -- 3.3  HTML elements ----------------------------------------------o
@@ -928,7 +935,7 @@ Note that these `empty` (`minimized`) attributes are always assigned lower-cased
 .. 3.4.6  Transformation of deprecated attributes ..................o
 
 
-If '$config["no_deprecated_attr"]' is '0', then deprecated attributes (see appendix in section:- #5.2) are removed and, in most cases, their values are transformed to CSS style properties and added to the 'style' attributes (function 'hl_tag()').
+If '$config["no_deprecated_attr"]' is '0', then deprecated attributes (see appendix in section:- #5.2) are removed and, in most cases, their values are transformed to CSS style properties and added to the 'style' attributes (function 'hl_tag()'). Except for 'bordercolor' for 'table', 'tr' and 'td', the scores of proprietary attributes that were never part of any cross-browser standard are not supported.
 
 *Note*: The attribute 'target' for 'a' is allowed even though it is not in XHTML 1.0 specs. This is because of the attribute's wide-spread use and browser-support, and because the attribute is valid in XHTML 1.1 onwards.
 
@@ -936,6 +943,7 @@ If '$config["no_deprecated_attr"]' is '0', then deprecated attributes (see appen
 
 *  bgcolor - E.g., 'bgcolor="#ffffff"' becomes 'background-color: #ffffff'
 *  border - E.g., 'height= "10"' becomes 'height: 10px'
+*  bordercolor - E.g., 'bordercolor=#999999' becomes 'border-color: #999999;'
 *  compact - 'font-size: 85%'
 *  clear - E.g., 'clear="all" becomes 'clear: both'
 
@@ -1072,6 +1080,22 @@ htmLawed can be made to assign the `finalized` '$config' and '$spec' values to a
 The values, which are also post-hook function (if any), can be used to auto-generate information (on, e.g., the elements that are permitted) for input writers.
 
 
+-- 3.9  Retaining non-HTML tags in input with mixed markup ---------o
+
+
+htmLawed does not remove certain characters that though invalid are nevertheless discouraged in HTML documents as per the specs (see section:- #5.1). This can be utilized to deal with input that contains mixed markup. Input that may have HTML markup as well as some other markup that is based on the '<', '>' and '&' characters is considered to have mixed markup. The non-HTML markup can be rather proprietary (like markup for emoticons/smileys), or standard (like MathML or SVG). Or it can be programming code meant for execution/evaluation (such as embedded PHP code).
+
+To deal with such mixed markup, the input text can be pre-processed to hide the non-HTML markup by specifically replacing the '<', '>' and '&' characters with some of the discouraged characters. Post-htmLawed processing, the replacements are reverted.
+
+An example (HTML + PHP):
+
+    $text = preg_replace('`<\?php(.+?)\?>`sm', "\x83?php\\1?\x84", $text);
+    $processed = htmLawed($text);
+    $processed = preg_replace('`\x83\?php(.+?)\?\x84`sm', '<?php$1?>', $processed);
+
+Admins may also be able to use '$config["and_mark"]' to deal with mixed markup; see section:- #3.2.
+ 
+
 == 4  Other =======================================================oo
 
 
@@ -1094,19 +1118,21 @@ Readers are advised to cross-check information given in this document.
 -- 4.3  Change-log -------------------------------------------------o
 
 
+v1.0.8 - 15 May 2008. 'bordercolor' attribute for 'table', 'td' and 'tr'
+
 v1.0.7 - 1 May 2008. 'wmode' attribute for 'embed'; '$config["show_setting"]' introduced; improved 'elements' evaluation
 
 v1.0.6 - 20 April 2008. '$config["and_mark"]' introduced
 
 v1.0.5 - 12 March 2008. 'style' URL schemes essentially disallowed when $config 'safe' is on; improved regex for CSS expression search
 
-v1.0.4 - 10 March 2008. Improved corrections for 'blockquote', 'form', 'map' and 'noscript', and documentation
+v1.0.4 - 10 March 2008. Improved corrections for 'blockquote', 'form', 'map' and 'noscript'
 
 v1.0.3 - 3 March 2008. Improved documentation; character entities for soft-hyphens are now replaced with spaces (instead of being removed); a bug allowing 'td' directly inside 'table' fixed; 'safe' '$config' parameter added
 
-v1.0.2 - 13 February 2008. Improved implementation for '$config["keep_bad"]' and documentation
+v1.0.2 - 13 February 2008. Improved implementation for '$config["keep_bad"]'
 
-v1.0.1 - 7 November 2007. Improved regex for identifying URLs, protocols and dynamic expressions ('hl_tag()' and 'hl_prot()'); no error display with 'hl_regex()'; documentation change; other, minor
+v1.0.1 - 7 November 2007. Improved regex for identifying URLs, protocols and dynamic expressions ('hl_tag()' and 'hl_prot()'); no error display with 'hl_regex()'
 
 v1.0 - 2 November 2007. First release
 
@@ -1187,7 +1213,7 @@ These are not invalid, even though some validators may issue messages stating ot
 
 Valid attribute-element combinations as per W3C specs:
 
-*  includes deprecated attributes (marked '^'), and attributes for the non-standard 'embed' element (marked '*')
+*  includes deprecated attributes (marked '^'), attributes for the non-standard 'embed' element (marked '*'), and the proprietary 'bordercolor' (marked '~')
 *  only non-frameset, HTML body elements
 *  'name' for 'a' and 'map', and 'lang' are invalid in XHTML 1.1
 *  'target' is valid for 'a' in XHTML 1.1 and higher
@@ -1204,6 +1230,7 @@ archive - applet, object
 axis - td, th
 bgcolor - embed, table^, tr^, td^, th^
 border - table, img^, object^
+bordercolor~ - table, td, tr
 cellpadding - table
 cellspacing - table
 char - col, colgroup, tbody, td, tfoot, th, thead, tr

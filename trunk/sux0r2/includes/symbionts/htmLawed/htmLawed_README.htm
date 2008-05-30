@@ -86,6 +86,7 @@ span.totop a, span.totop a:visited {color: #6699cc;}
 &#160; <span class="toc-item"><a href="#s3.6"><span class="item-no">3.6</span>&#160; Simple configuration directive for most <em>safe</em>&#160;HTML</a></span><br />
 &#160; <span class="toc-item"><a href="#s3.7"><span class="item-no">3.7</span>&#160; Using a hook function</a></span><br />
 &#160; <span class="toc-item"><a href="#s3.8"><span class="item-no">3.8</span>&#160; Obtaining <em>finalized</em>&#160;parameter values</a></span><br />
+&#160; <span class="toc-item"><a href="#s3.9"><span class="item-no">3.9</span>&#160; Retaining non-HTML tags in input with mixed markup</a></span><br />
 <span class="toc-item"><a href="#s4"><span class="item-no">4</span>&#160; Other</a></span><br />
 &#160; <span class="toc-item"><a href="#s4.1"><span class="item-no">4.1</span>&#160; Support</a></span><br />
 &#160; <span class="toc-item"><a href="#s4.2"><span class="item-no">4.2</span>&#160; Known issues</a></span><br />
@@ -107,8 +108,8 @@ span.totop a, span.totop a:visited {color: #6699cc;}
 
 <div id="body">
 <br />
-<div class="comment">htmLawed_README.txt (1 May 2008)<br />
-htmLawed 1.0.7, 1 May 2008<br />
+<div class="comment">htmLawed_README.txt, 27 May 2008<br />
+htmLawed 1.0.8, 27 May 2008<br />
 Copyright Santosh Patnaik<br />
 GPLv3 license<br />
 A PHP Labware internal utility &#45; <a href="http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed">http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed</a>&#160;</div>
@@ -654,15 +655,17 @@ htmLawed's main objective is to make the input text <em>more</em>&#160;HTML-stan
 <br />
 * &#160;htmLawed is meant for input that goes into the <span class="term">body</span>&#160;of HTML documents. HTML's head-level elements are not supported, nor are the frameset elements <span class="term">frameset</span>, <span class="term">frame</span>&#160;and <span class="term">noframes</span>.<br />
 <br />
-* &#160;htmLawed doesn't <em>beautify</em>&#160;HTML code text by formatting it with indentations, etc.<br />
+* &#160;htmLawed doesn't <em>beautify</em>&#160;HTML code text by formatting it with indentations, etc. It does, however, properly white-space tag content (remving line-breaks, tabs, etc.).<br />
 <br />
 * &#160;It cannot transform the non-standard <span class="term">embed</span>&#160;elements to the standard-compliant <span class="term">object</span>&#160;elements. Yet, it can allow <span class="term">embed</span>&#160;elements if permitted (<span class="term">embed</span>&#160;is widely used and supported).<br />
 <br />
 * &#160;The only non-standard element that may be permitted is <span class="term">embed</span>; others like <span class="term">noembed</span>&#160;and <span class="term">nobr</span>&#160;cannot be permitted without modifying the htmLawed code.<br />
 <br />
-* &#160;It cannot handle input that has non-HTML code like <span class="term">SVG</span>&#160;and <span class="term">MathML</span>. One way around is to break the input into pieces and passing only those without non-HTML code to htmLawed. Another may be to some how take advantage of the <span class="term">$config["and_mark"]</span>&#160;parameter (see <a href="#s3.2">section 3.2</a>).<br />
+* &#160;It cannot handle input that has non-HTML code like <span class="term">SVG</span>&#160;and <span class="term">MathML</span>. One way around is to break the input into pieces and passing only those without non-HTML code to htmLawed. Another is described in <a href="#s3.9">section 3.9</a>. A third way may be to some how take advantage of the <span class="term">$config["and_mark"]</span>&#160;parameter (see <a href="#s3.2">section 3.2</a>).<br />
 <br />
 * &#160;By default, htmLawed won't check many attribute values for standard compliance. E.g., <span class="term">width="20m"</span>&#160;with the dimension in non-standard <span class="term">m</span>&#160;is let through. Implementing universal and strict attribute value checks can make htmLawed slow and resource-intensive. Admins can partially implement such features using <span class="term">$spec</span>.<br />
+<br />
+* &#160;The attributes, deprecated (which can be transformed too) or not, that it supports are largely those that are in the specs. Only very few of the proprietary attributes are supported.<br />
 <br />
 * &#160;Except for contained URLs and dynamic expressions (also optional), htmLawed does not check CSS style property values. Again, this keeps htmLawed fast. Admins can partially implement this feature using <span class="term">$spec</span>. Perhaps the best option is to disallow <span class="term">style</span>&#160;but allow <span class="term">class</span>&#160;attributes with the right <span class="term">oneof</span>&#160;or <span class="term">match</span>&#160;values for <span class="term">class</span>, and have the various class style properties in <span class="term">.css</span>&#160;CSS stylesheet files.<br />
 <br />
@@ -716,11 +719,13 @@ htmLawed removes all null and other HTML-invalid characters (<span class="term">
 <br />
 Valid characters in HTML are <span class="term">#x9</span>, <span class="term">#xa</span>, <span class="term">#xd</span>, and <span class="term">#x20</span>&#160;to <span class="term">#x10ffff</span>. Characters that are discouraged (see <a href="#s5.1">section 5.1</a>) but not invalid are not removed.<br />
 <br />
-However, with <span class="term">$config["clean_ms_char"]</span>&#160;set as <span class="term">1</span>&#160;or <span class="term">2</span>, most of the discouraged characters (code-points 127 to 159) that many Microsoft applications incorrectly use (often as as per the <span class="term">Windows 1252</span>&#160;encoding system), and the character for code-point <span class="term">133</span>, are converted to appropriate decimal numerical entities -- see appendix in <a href="#s5.4">section 5.4</a>. This can help avoid some display issues arising from copying-pasting of content.<br />
+However, with <span class="term">$config["clean_ms_char"]</span>&#160;set as <span class="term">1</span>&#160;or <span class="term">2</span>, most of the discouraged characters (code-points 127 to 159) that many Microsoft applications incorrectly use (often as as per the <span class="term">Windows 1252</span> or <span class="term">Cp-1252</span>&#160;encoding system), and the character for code-point <span class="term">133</span>, are converted to appropriate decimal numerical entities -- see appendix in <a href="#s5.4">section 5.4</a>. This can help avoid some display issues arising from copying-pasting of content.<br />
 <br />
 With <span class="term">$config["clean_ms_char"]</span>&#160;set as <span class="term">2</span>, characters <span class="term">#x82</span>, <span class="term">#x91</span>, and <span class="term">#x92</span>&#160;(for special single-quotes), and <span class="term">#x84</span>, <span class="term">#x93</span>, and <span class="term">#x94</span>&#160;(for special double-quotes) are converted to ordinary single and double quotes respectively and not to entities.<br />
 <br />
-The character values are replaced with entities/characters and not character values referred to by the entities/characters to keep this task independent of the character-encoding of input text. This parameter need not be used if authors do not copy-paste Microsoft-created text.<br />
+The character values are replaced with entities/characters and not character values referred to by the entities/characters to keep this task independent of the character-encoding of input text.<br />
+<br />
+The <span class="term">$config["clean_ms_char"]</span> parameter need not be used if authors do not copy-paste Microsoft-created text or if the input text is not believed to use the <span class="term">Windows 1252</span> or <span class="term">Cp-1252</span> encoding. Further, the input form and the web-pages displaying it or its content should have the character encoding appropriately marked-up.<br />
 
 </div>
 <div class="sub-section"><h3>
@@ -752,6 +757,8 @@ htmLawed (function <span class="term">hl_ent()</span>):<br />
 
 <code class="code">&#160; &#160; $final = str_replace("\x06", &#39;&amp;&#39;, $prelim);</code>
 <br />
+<br />
+Also, see <a href="#s3.9">section 3.9</a>.<br />
 
 </div>
 <div class="sub-section"><h3>
@@ -1148,7 +1155,7 @@ Note that these <em>empty</em>&#160;(<em>minimized</em>) attributes are always a
 <a name="s3.4.6" id="s3.4.6"></a><span class="item-no">3.4.6</span>&#160; Transformation of deprecated attributes
 </h4><span class="totop"><a href="#peak">(to top)</a></span><br style="clear: both;" />
 <br />
-If <span class="term">$config["no_deprecated_attr"]</span>&#160;is <span class="term">0</span>, then deprecated attributes (see appendix in <a href="#s5.2">section 5.2</a>) are removed and, in most cases, their values are transformed to CSS style properties and added to the <span class="term">style</span>&#160;attributes (function <span class="term">hl_tag()</span>).<br />
+If <span class="term">$config["no_deprecated_attr"]</span>&#160;is <span class="term">0</span>, then deprecated attributes (see appendix in <a href="#s5.2">section 5.2</a>) are removed and, in most cases, their values are transformed to CSS style properties and added to the <span class="term">style</span>&#160;attributes (function <span class="term">hl_tag()</span>). Except for <span class="term">bordercolor</span>&#160;for <span class="term">table</span>, <span class="term">tr</span>&#160;and <span class="term">td</span>, the scores of proprietary attributes that were never part of any cross-browser standard are not supported.<br />
 <br />
 <strong>Note</strong>: The attribute <span class="term">target</span>&#160;for <span class="term">a</span>&#160;is allowed even though it is not in XHTML 1.0 specs. This is because of the attribute's wide-spread use and browser-support, and because the attribute is valid in XHTML 1.1 onwards.<br />
 <br />
@@ -1156,6 +1163,7 @@ If <span class="term">$config["no_deprecated_attr"]</span>&#160;is <span class="
 <br />
 * &#160;bgcolor - E.g., <span class="term">bgcolor="#ffffff"</span>&#160;becomes <span class="term">background-color&#58; #ffffff</span><br />
 * &#160;border - E.g., <span class="term">height= "10"</span>&#160;becomes <span class="term">height&#58; 10px</span><br />
+* &#160;bordercolor - E.g., <span class="term">bordercolor=#999999</span>&#160;becomes <span class="term">border-color&#58; #999999;</span><br />
 * &#160;compact - <span class="term">font-size&#58; 85%</span><br />
 * &#160;clear - E.g., 'clear="all" becomes <span class="term">clear&#58; both</span><br />
 <br />
@@ -1379,6 +1387,29 @@ htmLawed can be made to assign the <em>finalized</em>&#160;<span class="term">$c
 The values, which are also post-hook function (if any), can be used to auto-generate information (on, e.g., the elements that are permitted) for input writers.<br />
 
 </div>
+<div class="sub-section"><h3>
+<a name="s3.9" id="s3.9"></a><span class="item-no">3.9</span>&#160; Retaining non-HTML tags in input with mixed markup
+</h3><span class="totop"><a href="#peak">(to top)</a></span><br style="clear: both;" />
+<br />
+htmLawed does not remove certain characters that though invalid are nevertheless discouraged in HTML documents as per the specs (see <a href="#s5.1">section 5.1</a>). This can be utilized to deal with input that contains mixed markup. Input that may have HTML markup as well as some other markup that is based on the <span class="term">&lt;</span>, <span class="term">&gt;</span>&#160;and <span class="term">&amp;</span>&#160;characters is considered to have mixed markup. The non-HTML markup can be rather proprietary (like markup for emoticons/smileys), or standard (like MathML or SVG). Or it can be programming code meant for execution/evaluation (such as embedded PHP code).<br />
+<br />
+To deal with such mixed markup, the input text can be pre-processed to hide the non-HTML markup by specifically replacing the <span class="term">&lt;</span>, <span class="term">&gt;</span>&#160;and <span class="term">&amp;</span>&#160;characters with some of the discouraged characters. Post-htmLawed processing, the replacements are reverted.<br />
+<br />
+An example (HTML + PHP):<br />
+<br />
+
+<code class="code">&#160; &#160; $text = preg_replace(&#39;&#96;&lt;\?php(.+?)\?&gt;&#96;sm&#39;, "\x83?php\\1?\x84", $text);</code>
+<br />
+
+<code class="code">&#160; &#160; $processed = htmLawed($text);</code>
+<br />
+
+<code class="code">&#160; &#160; $processed = preg_replace(&#39;&#96;\x83\?php(.+?)\?\x84&#96;sm&#39;, &#39;&lt;?php$1?&gt;&#39;, $processed);</code>
+<br />
+<br />
+Admins may also be able to use <span class="term">$config["and_mark"]</span>&#160;to deal with mixed markup; see <a href="#s3.2">section 3.2</a>.<br />
+
+</div>
 </div>
 <div class="section"><h2>
 <a name="s4" id="s4"></a><span class="item-no">4</span>&#160; Other
@@ -1405,19 +1436,21 @@ Readers are advised to cross-check information given in this document.<br />
 <a name="s4.3" id="s4.3"></a><span class="item-no">4.3</span>&#160; Change-log
 </h3><span class="totop"><a href="#peak">(to top)</a></span><br style="clear: both;" />
 <br />
+v1.0.8 - 15 May 2008. <span class="term">bordercolor</span>&#160;attribute for <span class="term">table</span>, <span class="term">td</span>&#160;and <span class="term">tr</span><br />
+<br />
 v1.0.7 - 1 May 2008. <span class="term">wmode</span>&#160;attribute for <span class="term">embed</span>; <span class="term">$config["show_setting"]</span>&#160;introduced; improved <span class="term">elements</span>&#160;evaluation<br />
 <br />
 v1.0.6 - 20 April 2008. <span class="term">$config["and_mark"]</span>&#160;introduced<br />
 <br />
 v1.0.5 - 12 March 2008. <span class="term">style</span>&#160;URL schemes essentially disallowed when $config <span class="term">safe</span>&#160;is on; improved regex for CSS expression search<br />
 <br />
-v1.0.4 - 10 March 2008. Improved corrections for <span class="term">blockquote</span>, <span class="term">form</span>, <span class="term">map</span>&#160;and <span class="term">noscript</span>, and documentation<br />
+v1.0.4 - 10 March 2008. Improved corrections for <span class="term">blockquote</span>, <span class="term">form</span>, <span class="term">map</span>&#160;and <span class="term">noscript</span><br />
 <br />
 v1.0.3 - 3 March 2008. Improved documentation; character entities for soft-hyphens are now replaced with spaces (instead of being removed); a bug allowing <span class="term">td</span>&#160;directly inside <span class="term">table</span>&#160;fixed; <span class="term">safe</span>&#160;<span class="term">$config</span>&#160;parameter added<br />
 <br />
-v1.0.2 - 13 February 2008. Improved implementation for <span class="term">$config["keep_bad"]</span>&#160;and documentation<br />
+v1.0.2 - 13 February 2008. Improved implementation for <span class="term">$config["keep_bad"]</span><br />
 <br />
-v1.0.1 - 7 November 2007. Improved regex for identifying URLs, protocols and dynamic expressions (<span class="term">hl_tag()</span>&#160;and <span class="term">hl_prot()</span>); no error display with <span class="term">hl_regex()</span>; documentation change; other, minor<br />
+v1.0.1 - 7 November 2007. Improved regex for identifying URLs, protocols and dynamic expressions (<span class="term">hl_tag()</span>&#160;and <span class="term">hl_prot()</span>); no error display with <span class="term">hl_regex()</span><br />
 <br />
 v1.0 - 2 November 2007. First release<br />
 
@@ -1508,7 +1541,7 @@ These are not invalid, even though some validators may issue messages stating ot
 <br />
 Valid attribute-element combinations as per W3C specs:<br />
 <br />
-* &#160;includes deprecated attributes (marked <span class="term">^</span>), and attributes for the non-standard <span class="term">embed</span>&#160;element (marked <span class="term">&#42;</span>)<br />
+* &#160;includes deprecated attributes (marked <span class="term">^</span>), attributes for the non-standard <span class="term">embed</span>&#160;element (marked <span class="term">&#42;</span>), and the proprietary <span class="term">bordercolor</span>&#160;(marked <span class="term">~</span>)<br />
 * &#160;only non-frameset, HTML body elements<br />
 * &#160;<span class="term">name</span>&#160;for <span class="term">a</span>&#160;and <span class="term">map</span>, and <span class="term">lang</span>&#160;are invalid in XHTML 1.1<br />
 * &#160;<span class="term">target</span>&#160;is valid for <span class="term">a</span>&#160;in XHTML 1.1 and higher<br />
@@ -1525,6 +1558,7 @@ archive - applet, object<br />
 axis - td, th<br />
 bgcolor - embed, table^, tr^, td^, th^<br />
 border - table, img^, object^<br />
+bordercolor~ - table, td, tr<br />
 cellpadding - table<br />
 cellspacing - table<br />
 char - col, colgroup, tbody, td, tfoot, th, thead, tr<br />
@@ -1744,7 +1778,7 @@ The last two are for compatibility with pre-existing code using the <span class=
 </div>
 </div>
 <br />
-<hr /><br /><br /><span class="subtle"><small>HTM version of <em><a href="htmLawed_README.txt">htmLawed_README.txt</a></em> generated on 03 May, 2008 using <a href="http://www.bioinformatics.org/phplabware/internal_utilities">rTxt2htm</a> from PHP Labware</small></span>
+<hr /><br /><br /><span class="subtle"><small>HTM version of <em><a href="htmLawed_README.txt">htmLawed_README.txt</a></em> generated on 16 May, 2008 using <a href="http://www.bioinformatics.org/phplabware/internal_utilities">rTxt2htm</a> from PHP Labware</small></span>
 </div><!-- ended div body -->
 </div><!-- ended div top -->
 </body>

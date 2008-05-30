@@ -57,15 +57,17 @@ dBug
 
 htmLawed
 * Path: ./htmLawed/
-* Version: 1.0.7
+* Version: 1.0.8
 * Licence: GPL 3
 * Website: http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/index.php
+
 
 JpGraph
 * Path: ./jpgraph/
 * Version: 2.3
 * Licence: QPL 1.0
 * Website: http://www.aditus.nu/jpgraph/
+
 
 Smarty
 * Path: ./Smarty/
