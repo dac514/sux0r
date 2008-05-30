@@ -1,6 +1,18 @@
 {include file=$r->xhtml_header}
 
-<div id="proselytizer"><div id="middle">
+<div id="proselytizer">
+
+{* Header *}
+<div id="header">
+    {insert name="userInfo"}
+</div>
+<div class="clearboth"></div>
+
+
+{* Content *}
+<div id="middle">
+
+<fieldset>
 
 <p>
 <img src="{$r->url}/media/{$r->partition}/assets/openid_logo.png" alt="OpenID Logo" />
@@ -13,9 +25,12 @@
 </p>
 
 <p>
-<a href="{$r->text.login_url}">{$r->text.login}</a>
+<a href="{$r->makeUrl('/user/login/openid')}">{$r->text.login}</a>
 {if $r->bool.debug} | <a href="{$r->text.test_url}">{$r->text.test}</a>{/if}
+ | <a href="{$r->makeUrl('/home')}">{$r->text.homepage}</a>
 </p>
+
+</fieldset>
 
 </div></div>
 

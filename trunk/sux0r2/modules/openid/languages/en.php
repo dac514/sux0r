@@ -8,6 +8,7 @@ $gtext['error_directly']  = 'You may not access this mode directly.';
 $gtext['error_id_conflict'] = 'Error, this OpenID already belongs to another user.';
 $gtext['error_pw_fail'] = 'Too many password failures. You must restart your browser to try again.';
 $gtext['error_failed'] = 'Sorry, verification of your OpenID failed';
+$gtext['homepage'] = 'Homepage';
 $gtext['logged_in'] = 'You are logged in as';
 $gtext['login'] = 'Login';
 $gtext['no'] = 'No';

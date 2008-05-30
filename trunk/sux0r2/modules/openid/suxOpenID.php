@@ -635,9 +635,8 @@ class suxOpenID {
         $r->bool['analytics'] = false;
 
         $this->tpl->assign_by_ref('r', $r);
-        // $this->wrapHtml($this->tpl->fetch('accept.tpl'));
         $this->tpl->display('accept.tpl');
-        exit;
+
     }
 
 
@@ -722,13 +721,11 @@ class suxOpenID {
         $r->text =& $this->gtext;
         $r->text['server_url'] = $this->profile['my_url'];
         $r->text['realm_id'] = $GLOBALS['CONFIG']['REALM'];
-        $r->text['login_url'] = suxFunct::makeUrl('/user/login/openid');
         $r->text['test_url'] = $this->profile['my_url'] . $q . 'openid.mode=test';
         $r->bool['debug'] = $this->profile['debug'];
 
         $this->tpl->assign_by_ref('r', $r);
         $this->tpl->display('no_mode.tpl');
-        exit;
 
     }
 
@@ -740,7 +737,6 @@ class suxOpenID {
 
         if (!$this->profile['debug']) {
             $this->wrapHtml('Sorry, debug mode is currently disabled.');
-            exit;
         }
 
         @ini_set('max_execution_time', 180);
@@ -1384,7 +1380,7 @@ class suxOpenID {
             printf("%s:%s\n", $key, $value);
         }
 
-        exit(0);
+        exit;
     }
 
 
@@ -1406,7 +1402,7 @@ class suxOpenID {
 
         $this->debug('Location: ' . $url . $q . http_build_query($keys));
 
-        exit(0);
+        exit;
     }
 
 
@@ -1474,7 +1470,7 @@ class suxOpenID {
 
         header("HTTP/1.1 400 Bad Request");
         echo ('error:' . $message);
-        exit(0);
+        exit;
 
     }
 
