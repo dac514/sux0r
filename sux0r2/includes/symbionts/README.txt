@@ -34,7 +34,7 @@ Pro-tip
 
 Use the following command when updating 3rd party vendors:
 
-rsync -rcv --delete --cvs-exclude /source /dest
+rsync -rcv --delete --cvs-exclude /source/ /dest
 
 ------------------------------------------------------------------------------
 3rd Party Vendors, in alphabetical order
@@ -99,6 +99,6 @@ Stopwords
 
 TinyMCE
 * Path: ./tinymce/
-* Version: 3.0.7
+* Version: 3.0.8
 * Licence: LGPL 2.1
 * Website: http://tinymce.moxiecode.com/
