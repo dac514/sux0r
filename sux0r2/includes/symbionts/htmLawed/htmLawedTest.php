@@ -1,8 +1,8 @@
 <?php
 
 /*
-htmLawedTest.php
-htmLawed 1.0.7, 1 May 2008
+htmLawedTest.php, 28 May 2008
+htmLawed 1.0.8, 27 May 2008
 Copyright Santosh Patnaik
 GPLv3 license
 A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -29,7 +29,9 @@ ini_set('session.gc_maxlifetime', $_slife * 60);
 ini_set('session.use_only_cookies', 1);
 ini_set('session.cookie_lifetime', 0);
 session_start();
-if(!isset($_SESSION['token'])){$_SESSION['token'] = md5(uniqid(rand(), 1));}
+if(!isset($_SESSION['token'])){
+ $_SESSION['token'] = md5(uniqid(rand(), 1));
+}
 
 // slashes
 if(get_magic_quotes_gpc()){
@@ -42,11 +44,15 @@ set_magic_quotes_runtime(0);
 
 // token for anti-CSRF
 if(count($_POST)){
- if($_POST['token'] != $_SESSION['token'] or empty($_POST[$_sid]) or $_POST[$_sid] != session_id() or empty($_COOKIE[$_sid]) or $_COOKIE[$_sid] != session_id()){$_POST = array();}
+ if((empty($_GET['pre']) and ($_POST['token'] != $_SESSION['token'] or empty($_POST[$_sid]) or $_POST[$_sid] != session_id() or empty($_COOKIE[$_sid]) or $_COOKIE[$_sid] != session_id())) or ($_POST[$_sid] != session_id())){
+  $_POST = array();
+ }
 }
-$_SESSION['token'] = md5(uniqid(rand(), 1));
-$token = $_SESSION['token'];
-session_regenerate_id(1);
+if(empty($_GET['pre'])){
+ $_SESSION['token'] = md5(uniqid(rand(), 1));
+ $token = $_SESSION['token'];
+ session_regenerate_id(1);
+}
 
 // compress
 if(function_exists('gzencode') && isset($_SERVER['HTTP_ACCEPT_ENCODING']) && preg_match('`gzip|deflate`i', $_SERVER['HTTP_ACCEPT_ENCODING']) && !ini_get('zlib.output_compression')){
@@ -55,7 +61,7 @@ if(function_exists('gzencode') && isset($_SERVER['HTTP_ACCEPT_ENCODING']) && pre
 
 // HTM for unprocessed
 if(isset($_POST['inputH'])){
- echo '<html><head><title>htmLawed test: HTML view of unprocessed input</title></head><body style="margin:0; padding: 0;"><p style="background-color: black; color: white; padding: 2px;">&nbsp; Rendering of unprocessed input without an HTML doctype or charset declaration &nbsp; &nbsp; <small><a style="color: white; text-decoration: none;" href="1" onclick="javascript:window.close(this); return false;">close window</a> | <a style="color: white; text-decoration: none;" href="htmLawedTest.php" onclick="javascript: window.open(\'htmLawedTest.php\', \'main\'); window.close(this); return false;">htmLawed test page</a></small></p><div>', $_POST['inputH'], '</div></body></html>';
+ echo '<html><head><title>htmLawed test: HTML view of unprocessed input</title></head><body style="margin:0; padding: 0;"><p style="background-color: black; color: white; padding: 2px;">&nbsp; Rendering of unprocessed input without an HTML doctype or charset declaration &nbsp; &nbsp; <small><a style="color: white; text-decoration: none;" href="1" onclick="javascript:window.close(this); return false;">close window</a> | <a style="color: white; text-decoration: none;" href="htmLawedTest.php" onclick="javascript: window.open(\'htmLawedTest.php\', \'hlmain\'); window.close(this); return false;">htmLawed test page</a></small></p><div>', $_POST['inputH'], '</div></body></html>';
  exit;
 }
 
@@ -67,11 +73,54 @@ $limit_exceeded = isset($_POST['text'][$_limit]) ? 1 : 0;
 $pre_mem = memory_get_usage();
 $validation = (!empty($_POST[$_sid]) and isset($_POST['w3c_validate'][0])) ? 1 : 0;
 include './htmLawed.php';
+
+function hexdump($d){
+// Mainly by Aidan Lister <aidan@php.net>, Peter Waller <iridum@php.net>
+ $hexi = '';
+ $ascii = '';
+ echo '<pre>';
+ $offset = 0;
+ $len = strlen($d);
+ for($i=$j=0; $i<$len; $i++)
+ {
+  // Convert to hexidecimal
+  $hexi .= sprintf("%02X ", ord($d[$i]));
+  // Replace non-viewable bytes with '.'
+  if(ord($d[$i]) >= 32){
+   $ascii .= htmlspecialchars($d[$i]);
+  }else{
+   $ascii .= '.';
+  } 
+  // Add extra column spacing
+  if($j == 7){
+   $hexi .= ' ';
+   $ascii .= '  ';
+  }
+  // Add row
+  if(++$j == 16 || $i == $len-1){
+   // Join the hexi / ascii output
+   echo sprintf("%04X   %-49s   %s", $offset, $hexi, $ascii);   
+   // Reset vars
+   $hexi = $ascii = '';
+   $offset += 16;
+   $j = 0;  
+   // Add newline   
+   if ($i !== $len-1){
+    echo "\n";
+   }
+  }
+ }
+ echo '</pre>';
+}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang="en" xml:lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta name="description" content="htmLawed <?php echo hl_version();?> test page" /><style type="text/css"><!--/*--><![CDATA[/*><!--*/
+<html lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo htmlspecialchars($_POST['enc'][3]); ?>" />
+<meta name="description" content="htmLawed <?php echo hl_version();?> test page" />
+<style type="text/css"><!--/*--><![CDATA[/*><!--*/
 a, a.resizer{text-decoration:none;}
 a:hover, a.resizer:hover{color:red;}
 a.resizer{color:green; float:right;}
@@ -79,22 +128,26 @@ body{background-color:#efefef;}
 body, button, div, html, input, p{font-size:13px; font-family:'Lucida grande', Verdana, Arial, Helvetica, sans-serif;}
 button, input{font-size: 85%;}
 div.help{border-top: 1px dotted gray; margin-top: 15px; padding-top: 15px; color:#999999;}
-#inputC, #inputF, #inputR, #outputF, #outputH, #outputR{display:block;}
+#inputC, #inputD, #inputF, #inputR, #outputD, #outputF, #outputH, #outputR{display:block;}
 #inputC{background-color:white; border:1px gray solid; padding:3px;}
-#inputR{overflow:auto; background-color:#ffffee; border:1px #cccc99 solid; padding:3px;}
-#inputC, #inputR, #outputR, textarea{font-size:100%; font-family:'Bitstream vera sans mono', 'courier new', 'courier', monospace;}
+#inputD{overflow:auto; background-color:#ffff99; border:1px #cc9966 solid; padding:3px;}
+#inputR{overflow:auto; background-color:#ffffcc; border:1px #ffcc99 solid; padding:3px;}
+#inputC, #inputD, #inputR, #outputD, #outputR, textarea{font-size:100%; font-family:'Bitstream vera sans mono', 'courier new', 'courier', monospace;}
+#outputD{overflow:auto; background-color: #99ffcc; border:1px #66cc99 solid; padding:3px;} 
 #outputH{overflow:auto; background-color:white; padding:3px; border:1px #dcdcdc solid;} 
-#outputR{overflow:auto; background-color: #efffef; border:1px #99cc99 solid; padding:3px;} 
+#outputR{overflow:auto; background-color: #ccffcc; border:1px #99cc99 solid; padding:3px;} 
 span.cmtcdata{color: orange;}
 span.ctag{color:red;}
+span.ent{border-bottom:1px dotted #999999;}
 span.etag{color:purple;}
 span.help{color:#999999;}
 span.newline{color:#dcdcdc;}
 span.notice{color:green;}
 span.otag{color:blue;}
 #topmost{margin:auto; width:98%;}
-/*]]>*/--></style><script type="text/javascript"><!--//--><![CDATA[//><!-- 
-window.name = 'main';
+/*]]>*/--></style>
+<script type="text/javascript"><!--//--><![CDATA[//><!-- 
+window.name = 'hlmain';
 function hl(i){
  <?php if(!$_hilite){echo 'return;'; }?>
  var e = document.getElementById(i);
@@ -102,6 +155,7 @@ function hl(i){
  run(e, '</[a-z1-6]+>', 'ctag');
  run(e, '<[a-z]+(?:[^>]*)/>', 'etag');
  run(e, '<[a-z1-6]+(?:[^>]*)>', 'otag');
+ run(e, '&[#a-z0-9]+;', 'ent');
  run(e, '<!(?:(?:--(?:.|\n)*?--)|(?:\\[CDATA\\[(?:.|\n)*?\\]\\]))>', 'cmtcdata');
 }
 function sndProc(){
@@ -134,7 +188,8 @@ function run(e, q, c){
  if(e.firstChild == null){
   var m = q.exec(e.data);
   if(m){
-   var v = m[0]; var k2 = e.splitText(m.index);
+   var v = m[0];
+   var k2 = e.splitText(m.index);
    var k3 = k2.splitText(v.length);
    var s = e.ownerDocument.createElement('span');
    e.parentNode.replaceChild(s, k2);
@@ -151,6 +206,20 @@ function run(e, q, c){
     var s = k.ownerDocument.createElement('span');
     k.parentNode.replaceChild(s, k2);
     s.className = c; s.appendChild(k2);
+   }
+  }
+  else if(c == 'ent' && k.nodeType == 1){
+   var d = k.firstChild;
+   if(d){
+    var m = q.exec(d.data);
+    if(m){
+     var v = m[0];
+     var d2 = d.splitText(m.index);
+     var d3 = d2.splitText(v.length);
+     var s = d.ownerDocument.createElement('span');
+     d.parentNode.replaceChild(s, d2);
+     s.className = c; s.appendChild(d2);
+    }
    }
   }
  }
@@ -173,19 +242,24 @@ function sndUnproc(){
  var i = document.getElementById('text');
  if(!i){return;}
  i = i.value;
- var w = window.open('htmLawedTest.php?pre=1', 'prehtm');
+ i = i.replace(/>/g, '&gt;');
+ i = i.replace(/</g, '&lt;');
+ i = i.replace(/"/g, '&quot;');
+ var w = window.open('htmLawedTest.php?pre=1', 'hlprehtm');
  var f = document.createElement('form');
+ f.enctype = 'application/x-www-form-urlencoded';
  f.method = 'post';
  f.acceptCharset = '<?php echo htmlspecialchars($_POST['enc']); ?>';
  if(f.style){f.style.display = 'none';}
  else{f.visibility = 'hidden';}
  f.innerHTML = '<p style="display:none;"><input style="display:none;" type="hidden" name="token" id="token" value="<?php echo $token; ?>" /><input style="display:none;" type="hidden" name="<?php echo htmlspecialchars($_sid); ?>" id="<?php echo htmlspecialchars($_sid); ?>" value="' + readCookie('<?php echo htmlspecialchars($_sid); ?>') + '" /><input style="display:none;" type="hidden" name="inputH" id="inputH" value="'+ i+ '" /></p>';
  f.action = 'htmLawedTest.php?pre=1';
- f.target = 'prehtm';
+ f.target = 'hlprehtm';
+ f.method = 'post';
  var b = document.getElementsByTagName('body')[0];
  b.appendChild(f);
  f.submit();
- w.focus();
+ w.focus;
 }
 function sndValidn(id, type){
  var i = document.getElementById(id);
@@ -284,7 +358,8 @@ tRs = {
 };
 tRs.adEv(window, 'load', tRs.adBtn);
 //--><!]]></script>
-<title>htmLawed (<?php echo hl_version();?>) test</title></head>
+<title>htmLawed (<?php echo hl_version();?>) test</title>
+</head>
 <body>
 <div id="topmost">
 
@@ -296,8 +371,10 @@ tRs.adEv(window, 'load', tRs.adBtn);
 <form id="testform" name="testform" action="htmLawedTest.php" method="post" accept-charset="<?php echo htmlspecialchars($_POST['enc']); ?>" style="padding:0; margin: 0; display:inline;">
 
 <div id="inputF" style="display: block;">
+
 <input type="hidden" name="token" id="token" value="<?php echo $token; ?>" />
-<div><textarea id="text" class="textarea" name="text" rows="5" cols="100" style="width: 100%;"><?php echo htmlspecialchars($_POST['text']);?></textarea></div><input type="submit" id="submitF" name="submitF" value="Process" style="float:left;" title="filter using htmLawed" onclick="javascript: sndProc(); return false;" onkeypress="javascript: sndProc(); return false;" />
+<div><textarea id="text" class="textarea" name="text" rows="5" cols="100" style="width: 100%;"><?php echo htmlspecialchars($_POST['text']);?></textarea></div>
+<input type="submit" id="submitF" name="submitF" value="Process" style="float:left;" title="filter using htmLawed" onclick="javascript: sndProc(); return false;" onkeypress="javascript: sndProc(); return false;" />
 
 <?php
 if($do){
@@ -327,14 +404,25 @@ else{
 ?>
 
 <span style="float:right;" class="notice"><span style="font-size: 85%;">Encoding: </span><input type="text" size="8" id="enc" name="enc" style="vertical-align: middle;" value="<?php echo htmlspecialchars($_POST['enc']); ?>" title="IANA-recognized name of the input character-set; can be multiple ;- or space-separated values" /></span>
+
 </div>
 <br style="clear:both;" />
 
 <?php
-if($limit_exceeded){echo '<br /><strong>Input text is too long!</strong><br />';}
+if($limit_exceeded){
+ echo '<br /><strong>Input text is too long!</strong><br />';
+}
 ?>
 
-<br /><a href="htmLawedTest.php" title="[toggle visibility] htmLawed configuration" onclick="javascript:toggle('inputC'); return false;"><span class="notice">Settings &raquo;</span></a><div id="inputC" style="display: none;"><table summary="none"><tr><td><span class="help" title="$config argument">Config:</span></td><td>
+<br />
+
+<a href="htmLawedTest.php" title="[toggle visibility] htmLawed configuration" onclick="javascript:toggle('inputC'); return false;"><span class="notice">Settings &raquo;</span></a>
+
+<div id="inputC" style="display: none;">
+<table summary="none">
+<tr>
+<td><span class="help" title="$config argument">Config:</span></td>
+<td>
  
 <?php
 $cfg = array(
@@ -428,7 +516,7 @@ if($do){
  $st = microtime(); 
  $out = htmLawed($_POST['text'], $cfg, $_POST['spec']); 
  $et = microtime();
- echo '<br /><a href="htmLawedTest.php" title="[toggle visibility] syntax-highlighted" onclick="javascript:toggle(\'inputR\'); return false;"><span class="notice">Input code &raquo;</span></a> <span class="help" title="tags estimated as half of total &gt; and &lt; chars; values may be inaccurate for non-ASCII text"><small><big>', strlen($_POST['text']), '</big> chars, ~<big>', round((substr_count($_POST['text'], '>') + substr_count($_POST['text'], '<'))/2), '</big> tags</small></span><div id="inputR" style="display: none;">', str_replace(array("\t", "\r\n", "\r", '&', '  ', '<', '>', "\n"), array('    ', "\n", "\n", '&amp;', ' &#160;', '&lt;', '&gt;', '<span class="newline">&#172;</span><br />'), $_POST['text']), '</div><script type="text/javascript">hl(\'inputR\');</script><br /><a href="htmLawedTest.php" title="[toggle visibility] suitable for copy-paste" onclick="javascript:toggle(\'outputF\'); return false;"><span class="notice">Output &raquo;</span></a> <span class="help" title="approx., server-specific value excluding the \'include()\' call"><small>htmLawed processing time <big>', number_format(((substr($et,0,9)) + (substr($et,-10)) - (substr($st,0,9)) - (substr($st,-10))),4), '</big> s</small></span>', (($mem = memory_get_peak_usage()) !== false ? '<span class="help"><small>, peak memory usage <big>'. round(($mem-$pre_mem)/1048576, 2). '</big> <small>MB</small>' : ''), '</small></span><div id="outputF"  style="display: block;"><div><textarea id="text2" class="textarea" name="text2" rows="5" cols="100" style="width: 100%;">', htmlspecialchars($out), '</textarea></div><button type="button" onclick="javascript:document.getElementById(\'text2\').focus();document.getElementById(\'text2\').select()" title="select all to copy" style="float:right;">Select all</button>';
+ echo '<br /><a href="htmLawedTest.php" title="[toggle visibility] syntax-highlighted" onclick="javascript:toggle(\'inputR\'); return false;"><span class="notice">Input code &raquo;</span></a> <span class="help" title="tags estimated as half of total &gt; and &lt; chars; values may be inaccurate for non-ASCII text"><small><big>', strlen($_POST['text']), '</big> chars, ~<big>', round((substr_count($_POST['text'], '>') + substr_count($_POST['text'], '<'))/2), '</big> tags</small></span><div id="inputR" style="display: none;">', str_replace(array("\t", "\r\n", "\r", '&', '  ', '<', '>', "\n"), array('    ', "\n", "\n", '&amp;', ' &#160;', '&lt;', '&gt;', '<span class="newline">&#172;</span><br />'), $_POST['text']), '</div><script type="text/javascript">hl(\'inputR\');</script><br /><a href="htmLawedTest.php" title="[toggle visibility] hexdump; non-viewable characters like line-returns are shown as dots" onclick="javascript:toggle(\'inputD\'); return false;"><span class="notice">Input binary &raquo;</span></a><div id="inputD" style="display: none;">', hexdump($_POST['text']), '</div><br /><a href="htmLawedTest.php" title="[toggle visibility] suitable for copy-paste" onclick="javascript:toggle(\'outputF\'); return false;"><span class="notice">Output &raquo;</span></a> <span class="help" title="approx., server-specific value excluding the \'include()\' call"><small>htmLawed processing time <big>', number_format(((substr($et,0,9)) + (substr($et,-10)) - (substr($st,0,9)) - (substr($st,-10))),4), '</big> s</small></span>', (($mem = memory_get_peak_usage()) !== false ? '<span class="help"><small>, peak memory usage <big>'. round(($mem-$pre_mem)/1048576, 2). '</big> <small>MB</small>' : ''), '</small></span><div id="outputF"  style="display: block;"><div><textarea id="text2" class="textarea" name="text2" rows="5" cols="100" style="width: 100%;">', htmlspecialchars($out), '</textarea></div><button type="button" onclick="javascript:document.getElementById(\'text2\').focus();document.getElementById(\'text2\').select()" title="select all to copy" style="float:right;">Select all</button>';
  if($_w3c_validate && $validation)
  {
 ?>
@@ -438,14 +526,18 @@ if($do){
   
 <?php
  }
- echo '</div><br /><a href="htmLawedTest.php" title="[toggle visibility] syntax-highlighted" onclick="javascript:toggle(\'outputR\'); return false;"><span class="notice">Output code &raquo;</span></a><div id="outputR" style="display: block;">', str_replace(array("\t", "\r\n", "\r", '&', '  ', '<', '>', "\n"), array('    ', "\n", "\n", '&amp;', ' &#160;', '&lt;', '&gt;', '<span class="newline">&#172;</span><br />'), $out), '</div><script type="text/javascript">hl(\'outputR\');</script><br /><a href="htmLawedTest.php" title="[toggle visibility] XHTML 1 Transitional doctype" onclick="javascript:toggle(\'outputH\'); return false;"><span class="notice">Output rendered &raquo;</span></a><div id="outputH" style="display: block;">', $out, '</div>';
+ echo '</div><br /><a href="htmLawedTest.php" title="[toggle visibility] syntax-highlighted" onclick="javascript:toggle(\'outputR\'); return false;"><span class="notice">Output code &raquo;</span></a><div id="outputR" style="display: block;">', str_replace(array("\t", "\r\n", "\r", '&', '  ', '<', '>', "\n"), array('    ', "\n", "\n", '&amp;', ' &#160;', '&lt;', '&gt;', '<span class="newline">&#172;</span><br />'), $out), '</div><script type="text/javascript">hl(\'outputR\');</script><br /><a href="htmLawedTest.php" title="[toggle visibility] hexdump; non-viewable characters like line-returns are shown as dots" onclick="javascript:toggle(\'outputD\'); return false;"><span class="notice">Output binary &raquo;</span></a><div id="outputD" style="display: none;">', hexdump($out), '</div><br /><a href="htmLawedTest.php" title="[toggle visibility] XHTML 1 Transitional doctype" onclick="javascript:toggle(\'outputH\'); return false;"><span class="notice">Output rendered &raquo;</span></a><div id="outputH" style="display: block;">', $out, '</div>';
 }
 else{
 ?>
 
 <br />
+
 <div class="help">Use with a Javascript- and cookie-enabled, relatively new version of a common browser.
+
 <?php echo (file_exists('./htmLawed_TESTCASE.txt') ? '<br /><br />You can use text from <a href="htmLawed_TESTCASE.txt"><span class="notice">this test-case</span></a> in the input. Set the character-set encoding of the browser to Unicode/utf-8 before copying.' : ''); ?>
+
+<br /><br />For more about the anti-XSS capability of htmLawed, see <a href="http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/rsnake/RSnakeXSSTest.htm"><span class="notice">this page</span></a>.
 <br /><br />Change <em>Encoding</em> to reflect the character encoding of the input text. Even then, some characters may not display properly because of variable browser support and because of the form interface
 <br /><br />Refer to the htmLawed documentation (<a href="htmLawed_README.htm"><span class="notice">htm</span></a>/<a href="htmLawed_README.txt"><span class="notice">txt</span></a>) for details about <em>Settings</em>, and htmLawed's behavior and limitations.
 <br /><br />For <em>Settings</em>, incorrectly-specified values like regular expressions are silently ignored. One or more settings form-fields may have been disabled.<br /><br />Hovering the mouse over some of the text can provide additional information in some browsers.
@@ -466,4 +558,6 @@ if($_w3c_validate){
 }
 ?>
 
-</div></body></html>
+</div>
+</body>
+</html>
