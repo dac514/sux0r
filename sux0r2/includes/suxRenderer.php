@@ -159,6 +159,8 @@ class suxRenderer {
     /**
     * Construct a navigation div
     *
+    * @global bool $CONFIG['CLEAN_URL']
+    * @global string $CONFIG['URL']
     * @param array $list key => name, val => url
     * @return string the html code
     */
@@ -175,17 +177,20 @@ class suxRenderer {
 
         if (is_array($list)) {
 
-            // Make an educated guess as to which controller we are currently in?
-            $compare = null;
+            // Make an educated guess as to which controller we are currently using?
+            $compare = 'home';
             if (!empty($_GET['c'])) {
                 $params = explode('/', $_GET['c']);
                 $compare = array_shift($params);
-                $compare = trim($GLOBALS['CONFIG']['URL'] . "/$compare", '/');
             }
 
-            // Compare with the list
+            if (!$GLOBALS['CONFIG']['CLEAN_URL']) $compare = "?c=$compare";
+            else $compare = ltrim($GLOBALS['CONFIG']['URL'] . "/$compare", '/');
+
+            // new dBug($compare);
             foreach ($list as $key => $val) {
-                if ($compare && preg_match("#^$compare#", ltrim($val, '/'))) {
+                //new dBug($val);
+                if ($compare && mb_strpos($val, $compare)) {
                     $html .= "<li><a href='{$val}' class='selected'>{$key}</a></li>\n";
                 }
                 else {
