@@ -29,6 +29,14 @@ of compatible licenses is located at:
 http://www.gnu.org/philosophy/license-list.html
 
 ------------------------------------------------------------------------------
+Pro-tip
+------------------------------------------------------------------------------
+
+Use the following command when updating 3rd party vendors:
+
+rsync -rcv --delete --cvs-exclude /source /dest
+
+------------------------------------------------------------------------------
 3rd Party Vendors, in alphabetical order
 ------------------------------------------------------------------------------
 
