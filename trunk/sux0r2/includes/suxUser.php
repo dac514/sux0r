@@ -154,8 +154,6 @@ class suxUser {
         {$this->db_table_info}.gender,
         {$this->db_table_info}.language,
         {$this->db_table_info}.timezone,
-        {$this->db_table_info}.pavatar,
-        {$this->db_table_info}.microid
         FROM {$this->db_table} LEFT JOIN {$this->db_table_info}
         ON {$this->db_table}.id = {$this->db_table_info}.users_id
         ";
@@ -645,55 +643,5 @@ class suxUser {
 
 
 }
-
-/*
-
--- Database
-
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL auto_increment,
-  `nickname` varchar(64) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `accesslevel` int(11) NOT NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `nickname` (`nickname`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-
-CREATE TABLE `users_info` (
-  `id` int(11) NOT NULL auto_increment,
-  `users_id` int(11) NOT NULL,
-  `given_name` varchar(255) default NULL,
-  `family_name` varchar(255) default NULL,
-  `street_address` varchar(255) default NULL,
-  `locality` varchar(255) default NULL,
-  `region` varchar(255) default NULL,
-  `postcode` varchar(255) default NULL,
-  `country` char(2) default NULL,
-  `tel` varchar(255) default NULL,
-  `url` varchar(255) default NULL,
-  `dob` date default NULL,
-  `gender` char(1) default NULL,
-  `language` char(2) default NULL,
-  `timezone` varchar(255) default NULL,
-  `pavatar` varchar(255) default NULL,
-  `microid` varchar(255) default NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `users_id` (`users_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-
-CREATE TABLE `users_openid` (
-  `id` int(11) NOT NULL auto_increment,
-  `openid_url` varchar(255) NOT NULL,
-  `users_id` int(11) NOT NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `openid_url` (`openid_url`),
-  KEY `users_id` (`users_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-*/
 
 ?>

@@ -190,19 +190,4 @@ class suxSocialNetwork {
 
 }
 
-/*
-
--- Database
-
-CREATE TABLE `socialnetwork` (
-  `id` int(11) NOT NULL auto_increment,
-  `users_id` int(11) NOT NULL,
-  `friend_users_id` int(11) NOT NULL,
-  `relationship` varchar(255) default NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `friendship` (`users_id`,`friend_users_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-*/
-
 ?>

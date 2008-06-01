@@ -72,29 +72,4 @@ class suxCalendar {
 
 }
 
-/*
-
--- Database
-
-CREATE TABLE `calendar` (
-  `id` int(11) NOT NULL auto_increment,
-  `summary` varchar(255) NOT NULL,
-  `description_html` text,
-  `description_plaintext` text,
-  `location` text,
-  `url` varchar(255) default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-
-CREATE TABLE `calendar_dates` (
-  `id` int(11) NOT NULL auto_increment,
-  `calendar_id` int(11) NOT NULL,
-  `dtstart` datetime NOT NULL,
-  `dtend` datetime default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-*/
-
 ?>
