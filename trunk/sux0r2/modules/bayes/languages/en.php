@@ -1,0 +1,5 @@
+<?php
+
+$gtext['back'] = 'Back';
+
+?>
