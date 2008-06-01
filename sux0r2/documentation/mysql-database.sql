@@ -336,8 +336,6 @@ CREATE TABLE `users_info` (
   `gender` char(1) default NULL,
   `language` char(2) default NULL,
   `timezone` varchar(255) default NULL,
-  `pavatar` varchar(255) default NULL,
-  `microid` varchar(255) default NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `users_id` (`users_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;

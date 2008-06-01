@@ -712,46 +712,4 @@ class suxNaiveBayesian {
 
 }
 
-/*
-
--- Database
-
-CREATE TABLE `bayes_categories` (
-  `id` int(11) NOT NULL auto_increment,
-  `category` varchar(64) NOT NULL,
-  `bayes_vectors_id` int(11) NOT NULL,
-  `probability` double NOT NULL default '0',
-  `token_count` bigint(20) NOT NULL default '0',
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `grouping` (`category`,`bayes_vectors_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-
-CREATE TABLE `bayes_documents` (
-  `id` int(11) NOT NULL auto_increment,
-  `bayes_categories_id` int(11) NOT NULL,
-  `body_plaintext` text NOT NULL,
-  PRIMARY KEY  (`id`),
-  KEY `bayes_categories_id` (`bayes_categories_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-
-CREATE TABLE `bayes_tokens` (
-  `id` int(11) NOT NULL auto_increment,
-  `token` varchar(64) NOT NULL,
-  `bayes_categories_id` int(11) NOT NULL,
-  `count` bigint(20) NOT NULL default '0',
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `grouping` (`token`,`bayes_categories_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-
-CREATE TABLE `bayes_vectors` (
-  `id` int(11) NOT NULL auto_increment,
-  `vector` varchar(255) NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-*/
-
 ?>

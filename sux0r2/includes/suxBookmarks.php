@@ -149,21 +149,4 @@ class suxBookmarks {
 
 }
 
-/*
-
--- Database
-
-CREATE TABLE `bookmarks` (
-  `id` int(11) NOT NULL auto_increment,
-  `url` varchar(255) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `description_html` text,
-  `description_plaintext` text,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `url` (`url`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-
-*/
-
 ?>

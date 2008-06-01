@@ -150,8 +150,6 @@ class suxEdit extends suxUser {
             // Unset
             unset($u['password']);
             unset($u['accesslevel']);
-            unset($u['pavatar']);
-            unset($u['microid']);
 
             // Dob
             if (!empty($u['dob'])) {

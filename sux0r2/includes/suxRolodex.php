@@ -133,31 +133,4 @@ class suxRolodex {
 
 }
 
-/*
-
--- Database
-
-CREATE TABLE `rolodex` (
-  `id` int(11) NOT NULL,
-  `organization_name` varchar(255) NOT NULL,
-  `organization_unit` varchar(255) default NULL,
-  `post_office_box` varchar(255) default NULL,
-  `extended_address` varchar(255) default NULL,
-  `street_address` varchar(255) default NULL,
-  `locality` varchar(255) default NULL,
-  `region` varchar(255) default NULL,
-  `postal_code` varchar(255) default NULL,
-  `country_name` varchar(255) default NULL,
-  `tel` varchar(255) default NULL,
-  `email` varchar(255) default NULL,
-  `url` varchar(255) default NULL,
-  `photo` varchar(255) default NULL,
-  `latitude` varchar(255) default NULL,
-  `longitude` varchar(255) default NULL,
-  `note` text,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-*/
-
 ?>
