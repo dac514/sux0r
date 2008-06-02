@@ -30,11 +30,10 @@ class suxLoginOpenID extends suxRegisterOpenID {
     /**
     * Constructor
     *
-    * @param string $key PDO dsn key
     */
-    function __construct($key = null) {
+    function __construct() {
 
-        parent::__construct($key); // Call suxRegisterOpenID
+        parent::__construct(); // Call suxRegisterOpenID
 
         if ($this->loginCheck()) {
 

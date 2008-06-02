@@ -42,11 +42,10 @@ class suxProfile extends suxUser {
     *
     * @global string $CONFIG['PARTITION']
     * @param string $nickname nickname
-    * @param string $key PDO dsn key
     */
-    function __construct($nickname, $key = null) {
+    function __construct($nickname) {
 
-        parent::__construct($key); // Call parent
+        parent::__construct(); // Call parent
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->r = new renderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
