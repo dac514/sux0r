@@ -319,16 +319,17 @@ foreach($cats as $key => $val) {
 <fieldset>
 <input type='hidden' name='action' value='untrain'/>
 Document Ã  supprimer :
+<?php
+$refs = $nb->getDocumentIds($vec_id );
+// new dBug($refs);
+?>
 <select name='docid'>
 <?php
-$refs = $nb->getDocumentIds();
 foreach ($refs as $key => $val) {
-    echo "<option value='".$key."'>".$key." - ".$val['category_id']."</option>\n";
+    echo "<option value='".$key."'>{$val['category']}, {$val['body_length']} bytes</option>\n";
 
 }
-
 ?>
-
 </select>
 <input type='submit'  value='Supprimer ce document' />
 </fieldset>

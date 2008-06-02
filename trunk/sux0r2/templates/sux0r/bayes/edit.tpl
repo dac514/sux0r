@@ -13,16 +13,19 @@
     <div id="middle">
 
         <fieldset>
-        <legend>Bayesian Categories</legend>
+        <legend>Categories</legend>
 
-        {* Add a vector *}
+
+        {if $validate.default.is_error !== false}
+        {* || validate.myform.is_error !== false || validate.myform2.is_error !== false || validate.myform3.is_error !== false *}
+        <p class="errorWarning">{$r->text.form_error} :</p>
+        {/if}
+
+
+        {* Add a vector  ---------------------------------------------------- *}
 
         <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8">
         <input type="hidden" name="token" value="{$token}" />
-
-        {if $validate.default.is_error !== false}
-        <p class="errorWarning">{$r->text.form_error} :</p>
-        {/if}
 
         <p>
         {strip}
@@ -40,14 +43,10 @@
         </form>
 
 
-        {* Add a category *}
+        {* Add a category --------------------------------------------------- *}
 
         <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8">
         <input type="hidden" name="token" value="{$token}" />
-
-        {if $validate.default.is_error !== false}
-        <p class="errorWarning">{$r->text.form_error} :</p>
-        {/if}
 
         <p>
         {strip}
@@ -66,7 +65,61 @@
         </form>
 
 
+        {* Remove a category ------------------------------------------------ *}
+
+        <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8">
+        <input type="hidden" name="token" value="{$token}" />
+
+        <p>
+        {strip}
+            {capture name=error}
+            {* validate id="vector" message=$r->text.form_error_1 *}
+            {/capture}
+        {/strip}
+
+        <label for="vector" {if $smarty.capture.error}class="error"{/if} > Remove category :</label>
+        {html_options name='vector' options=$r->todo selected=$language}
+        {$smarty.capture.error}
+        <input type="submit" class="button" value="Delete" />
+        </p>
+
+        </form>
+
+
+        {* Remove a vector -------------------------------------------------- *}
+
+        <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8">
+        <input type="hidden" name="token" value="{$token}" />
+
+        <p>
+        {strip}
+            {capture name=error}
+            {* validate id="vector" message=$r->text.form_error_1 *}
+            {/capture}
+        {/strip}
+
+        <label for="vector" {if $smarty.capture.error}class="error"{/if} > Remove vector :</label>
+        {html_options name='vector' options=$r->todo selected=$language}
+        {$smarty.capture.error}
+        <input type="submit" class="button" value="Delete" />
+        </p>
+
+        </form>
+
         </fieldset>
+
+        <p />
+        <fieldset>
+        <legend>Documents</legend>
+        <p>Todo, documents</p>
+        </fieldset>
+
+        <p />
+        <fieldset>
+        <legend>Shared</legend>
+        <p>Todo, shared</p>
+        </fieldset>
+
 
     </div>
 

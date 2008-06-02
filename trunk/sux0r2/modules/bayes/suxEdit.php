@@ -52,6 +52,9 @@ class suxEdit extends suxUser {
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
+        // Redirect if not logged in
+        $this->loginCheck(suxfunct::makeUrl('/user/register'));
+
         if ($user != $_SESSION['nickname']) {
 
             // TODO:
@@ -75,9 +78,18 @@ class suxEdit extends suxUser {
     function formValidate() {
 
         if(!empty($_POST) && suxValidate::is_registered_form()) {
+            // TODO:
+            // || !suxValidate::is_registered_form('myform')
+            // || !suxValidate::is_registered_form('myform2')
+            // || !suxValidate::is_registered_form('myform3')
+
             // Validate
             suxValidate::connect($this->tpl);
             if(suxValidate::is_valid($_POST)) {
+                // TODO:
+                // || !suxValidate::is_valid($_POST, 'myform')
+                // || !suxValidate::is_valid($_POST, 'myform2')
+                // || !suxValidate::is_valid($_POST, 'myform3')
                 suxValidate::disconnect();
                 return true;
             }
@@ -107,9 +119,19 @@ class suxEdit extends suxUser {
         if (!empty($_POST)) $this->tpl->assign($_POST);
         else suxValidate::disconnect();
 
+
         if (!suxValidate::is_registered_form()) {
+            // || !suxValidate::is_registered_form('myform')
+            // || !suxValidate::is_registered_form('myform2')
+            // || !suxValidate::is_registered_form('myform3')
 
             suxValidate::connect($this->tpl, true); // Reset connection
+
+            // TODO:
+            // SmartyValidate::register_form('default'); // Automatic
+            // SmartyValidate::register_form('myform');
+            // SmartyValidate::register_form('myform2');
+            // SmartyValidate::register_form('myform3');
 
             // Register our additional criterias
             // suxValidate::register_criteria('invalidCharacters', 'this->invalidCharacters');

@@ -227,6 +227,8 @@ class suxNaiveBayesian {
     */
     function getCategories($vector_id) {
 
+        if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
+
         $categories = array();
         $st = $this->db->prepare("SELECT * FROM {$this->db_table_cat} WHERE bayes_vectors_id = ? ORDER BY category ASC ");
         $st->execute(array($vector_id));
@@ -311,17 +313,32 @@ class suxNaiveBayesian {
 
 
     /**
-    * @return array key = ids, values = array(keys = 'category_id', 'content')
+    * @param int $vector_id vector id
+    * @return array key = ids, values = array(keys = 'category_id', ,'category', 'body_length')
     */
-    function getDocumentIds() {
+    function getDocumentIds($vector_id) {
+
+        if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
+
+        $query = "SELECT
+        {$this->db_table_doc}.id,
+        {$this->db_table_doc}.bayes_categories_id,
+        {$this->db_table_cat}.category,
+        LENGTH({$this->db_table_doc}.body_plaintext) AS body_length
+        FROM {$this->db_table_doc}
+        INNER JOIN {$this->db_table_cat} ON {$this->db_table_doc}.bayes_categories_id = {$this->db_table_cat}.id
+        INNER JOIN {$this->db_table_vec} ON {$this->db_table_cat}.bayes_vectors_id = {$this->db_table_vec}.id
+        WHERE {$this->db_table_vec}.id = ? ";
+
+        $st = $this->db->prepare($query);
+        $st->execute(array($vector_id));
 
         $documents = array();
-        $st = $this->db->query("SELECT id, bayes_categories_id FROM {$this->db_table_doc} ORDER BY id ASC ");
-
         foreach ($st->fetchAll() as $row) {
 
             $documents[$row['id']] = array(
                 'category_id' => $row['bayes_categories_id'],
+                'category' => $row['category'],
                 'body_length'  => $row['body_length'],
                 );
         }

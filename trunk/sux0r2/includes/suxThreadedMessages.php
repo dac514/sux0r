@@ -250,7 +250,7 @@ class suxThreadedMessages {
         $thread_id = filter_var($thread_id, FILTER_VALIDATE_INT);
 
         // order the messages by their thread_id and their position
-        $query = "SELECT id, users_id, title, LENGTH(body) AS body_length, published_on, level FROM {$this->db_table} ";
+        $query = "SELECT id, users_id, title, LENGTH(body_plaintext) AS body_length, published_on, level FROM {$this->db_table} ";
         if ($thread_id) $query .= 'WHERE thread_id = ? ';
         $query .= 'ORDER BY thread_id, thread_pos ';
 
@@ -310,7 +310,7 @@ class suxThreadedMessages {
         if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
 
         // order the messages by their thread_id and their position
-        $query = "SELECT id, thread_id, users_id, title, LENGTH(body) AS body_length, published_on FROM {$this->db_table} ";
+        $query = "SELECT id, thread_id, users_id, title, LENGTH(body_plaintext) AS body_length, published_on FROM {$this->db_table} ";
         $query .= 'WHERE users_id = ? ';
         $query .= 'ORDER BY published_on DESC ';
 
