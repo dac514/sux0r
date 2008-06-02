@@ -42,11 +42,10 @@ class suxEdit extends suxUser {
     * Constructor
     *
     * @global string $CONFIG['PARTITION']
-    * @param string $key PDO dsn key
     */
-    function __construct($mode = 'register', $user = null, $key = null) {
+    function __construct($mode = 'register', $user = null) {
 
-        parent::__construct($key); // Call parent
+        parent::__construct(); // Call parent
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->r = new renderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
