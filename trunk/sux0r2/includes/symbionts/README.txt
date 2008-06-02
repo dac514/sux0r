@@ -40,11 +40,11 @@ rsync -rcv --delete --cvs-exclude /source/ /dest
 3rd Party Vendors, in alphabetical order
 ------------------------------------------------------------------------------
 
-PHP Calendar
-* Path: ./calendar.php
-* Version: 2.3
-* Licence: Artistic License
-* Website: http://keithdevens.com/software/php_calendar
+Cropper
+* Path: ./cropper/
+* Version: 1.2.0
+* Licence: BSD
+* Website: http://www.defusion.org.uk/
 
 
 dBug
@@ -67,6 +67,20 @@ JpGraph
 * Version: 2.3
 * Licence: QPL 1.0
 * Website: http://www.aditus.nu/jpgraph/
+
+
+PHP Calendar
+* Path: ./calendar.php
+* Version: 2.3
+* Licence: Artistic License
+* Website: http://keithdevens.com/software/php_calendar
+
+
+Scriptaculous
+* Path: ./scriptaculous/
+* Version: 1.8.1
+* Licence: MIT
+* Website: http://script.aculo.us/
 
 
 Smarty
