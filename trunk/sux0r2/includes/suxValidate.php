@@ -48,11 +48,11 @@ class suxValidate extends SmartyValidate {
     *
     * @param string $form the name of the form being validated
     */
-    private static function token($form) {
+    private static function token() {
 
-        $_SESSION['SmartyValidate'][$form]['token'] = md5(uniqid(mt_rand(), true));
+        $_SESSION['SmartyValidate'][SMARTY_VALIDATE_DEFAULT_FORM]['token'] = md5(uniqid(mt_rand(), true));
         $_smarty_obj =& SmartyValidate::_object_instance('Smarty', $_dummy);
-        $_smarty_obj->assign('token', $_SESSION['SmartyValidate'][$form]['token']);
+        $_smarty_obj->assign('token', $_SESSION['SmartyValidate'][SMARTY_VALIDATE_DEFAULT_FORM]['token']);
 
     }
 
@@ -93,7 +93,7 @@ class suxValidate extends SmartyValidate {
             $_SESSION['SmartyValidate'][$form]['is_error'] = false;
             $_SESSION['SmartyValidate'][$form]['is_init'] = true;
             SmartyValidate::_smarty_assign();
-            self::token($form);
+            self::token();
             $_ret = true;
 
         }
@@ -143,15 +143,15 @@ class suxValidate extends SmartyValidate {
         // ------------------------------------------------------------------
 
         $_ret = null;
-        if (empty($formvars['token']) || empty($_SESSION['SmartyValidate'][$form]['token'])) {
-            // trigger_error("SmartyValidate: [token] in form '$form' is not set.");
+        if (empty($formvars['token']) || empty($_SESSION['SmartyValidate'][SMARTY_VALIDATE_DEFAULT_FORM]['token'])) {
+            trigger_error("SmartyValidate: [token] is not set.");
             $_ret = false;
         }
-        else if ($formvars['token'] != $_SESSION['SmartyValidate'][$form]['token']) {
+        else if ($formvars['token'] != $_SESSION['SmartyValidate'][SMARTY_VALIDATE_DEFAULT_FORM]['token']) {
             $_ret = false;
         }
         unset($formvars['token']);
-        self::token($form);
+        self::token();
         if ($_ret === false) return $_ret;
 
         // ------------------------------------------------------------------
