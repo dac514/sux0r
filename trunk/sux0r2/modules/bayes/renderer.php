@@ -23,11 +23,16 @@
 */
 
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
+require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
+require_once(dirname(__FILE__) . '/../../includes/suxNaiveBayesian.php');
 
 class renderer extends suxRenderer {
 
 
     public $profile = array(); // User profile
+
+    private $user; // User object
+    private $nb; // Naive Bayesian Object
 
 
     /**
@@ -37,6 +42,55 @@ class renderer extends suxRenderer {
     */
     function __construct($module) {
         parent::__construct($module); // Call parent
+
+        $this->user = new suxUser();
+        $this->nb = new suxNaiveBayesian();
+
+    }
+
+
+    /**
+    * Get vectors
+    *
+    * @return array
+    */
+    function getVectors() {
+
+        $tmp = array();
+        foreach ($this->nb->getVectors() as $key => $val) {
+            if (!in_array($val['vector'], $tmp)) $tmp[$key] = $val['vector'];
+            else $tmp[$key] = "{$val['vector']} (id:$key)";
+        }
+        return $tmp;
+
+    }
+
+
+    /**
+    * Get categories
+    *
+    * @return array
+    */
+    function getCategories() {
+
+        // Create a dropdown with <optgroup> array
+
+        $tmp = array();
+        foreach ($this->nb->getVectors() as $key => $val) {
+
+            $x = "{$val['vector']}";
+            if (isset($tmp[$x])) $x = "{$val['vector']} (id:$key)";
+            $y = array();
+            foreach ($this->nb->getCategories($key) as $key2 => $val2) {
+                $y[$key2] = "{$val2['category']}";
+            }
+
+
+            $tmp[$x] = $y;
+        }
+
+        return $tmp;
+
     }
 
 

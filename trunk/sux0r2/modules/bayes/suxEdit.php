@@ -23,6 +23,7 @@
 */
 
 require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
+require_once(dirname(__FILE__) . '/../../includes/suxNaiveBayesian.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('renderer.php');
@@ -32,6 +33,7 @@ class suxEdit extends suxUser {
     public $gtext = array(); // Language
     public $tpl; // Template
     public $r; // Renderer
+    public $nb; // Naive Bayesian Object
 
     private $users_id = null;
 
@@ -43,14 +45,17 @@ class suxEdit extends suxUser {
     * @global string $CONFIG['PARTITION']
     * @param string $key PDO dsn key
     */
-    function __construct($user = null, $key = null) {
+    function __construct($user = null) {
 
-        parent::__construct($key); // Call parent
+        parent::__construct(); // Call parent
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->r = new renderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
+
+        // Naive Bayesian
+        $this->nb = new suxNaiveBayesian();
 
         // Redirect if not logged in
         $this->loginCheck(suxfunct::makeUrl('/user/register'));
@@ -77,23 +82,21 @@ class suxEdit extends suxUser {
     */
     function formValidate() {
 
-        if(!empty($_POST) && suxValidate::is_registered_form()) {
-            // TODO:
-            // || !suxValidate::is_registered_form('myform')
-            // || !suxValidate::is_registered_form('myform2')
-            // || !suxValidate::is_registered_form('myform3')
+        if(!empty($_POST['action'])) {
 
-            // Validate
-            suxValidate::connect($this->tpl);
-            if(suxValidate::is_valid($_POST)) {
-                // TODO:
-                // || !suxValidate::is_valid($_POST, 'myform')
-                // || !suxValidate::is_valid($_POST, 'myform2')
-                // || !suxValidate::is_valid($_POST, 'myform3')
-                suxValidate::disconnect();
-                return true;
+            $action = filter_var($_POST['action'], FILTER_SANITIZE_STRING);
+
+            // Add Vector
+            if (suxValidate::is_registered_form($action)) {
+                suxValidate::connect($this->tpl);
+                if (suxValidate::is_valid($_POST, $action)) {
+                    suxValidate::disconnect();
+                    return true;
+                }
             }
+
         }
+
         return false;
 
     }
@@ -108,9 +111,9 @@ class suxEdit extends suxUser {
         // Get existing user info if available
         // --------------------------------------------------------------------
 
-        $u = array();
+        // $u = array();
         // Get stuff from the database
-        $this->tpl->assign($u);
+        // $this->tpl->assign($u);
 
         // --------------------------------------------------------------------
         // Form logic
@@ -119,38 +122,42 @@ class suxEdit extends suxUser {
         if (!empty($_POST)) $this->tpl->assign($_POST);
         else suxValidate::disconnect();
 
-
         if (!suxValidate::is_registered_form()) {
-            // || !suxValidate::is_registered_form('myform')
-            // || !suxValidate::is_registered_form('myform2')
-            // || !suxValidate::is_registered_form('myform3')
 
             suxValidate::connect($this->tpl, true); // Reset connection
 
-            // TODO:
-            // SmartyValidate::register_form('default'); // Automatic
-            // SmartyValidate::register_form('myform');
-            // SmartyValidate::register_form('myform2');
-            // SmartyValidate::register_form('myform3');
+            // Register additional forms
+            SmartyValidate::register_form('addvec');
+            SmartyValidate::register_form('addcat');
+            SmartyValidate::register_form('remcat');
+            SmartyValidate::register_form('remvec');
 
             // Register our additional criterias
             // suxValidate::register_criteria('invalidCharacters', 'this->invalidCharacters');
 
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
-            // suxValidate::register_validator('nickname', 'nickname', 'notEmpty', false, false, 'trim');
-            // suxValidate::register_validator('nickname2', 'nickname', 'invalidCharacters');
+
+            // Add vector
+            suxValidate::register_validator('addvec1', 'vector', 'notEmpty', false, false, 'trim', 'addvec');
+            // Add category
+            suxValidate::register_validator('addcat1', 'category', 'notEmpty', false, true, 'trim', 'addcat');
+            suxValidate::register_validator('addcat2', 'vector', 'isInt', false, false, 'trim', 'addcat');
+            // Remove category
+            suxValidate::register_validator('remcat1', 'category', 'isInt', false, false, 'trim', 'remcat');
+            // Remove vector
+            suxValidate::register_validator('remvec1', 'vector', 'isInt', false, false, 'trim', 'remvec');
+
 
         }
 
-
         // Additional variables
-        $this->r->text['form_url'] = suxFunct::makeUrl('/bayes/edit'); // Register
-        // $this->r->text['back_url'] = $this->getPreviousURL();
+        $this->r->text['form_url'] = suxFunct::makeUrl('/bayes/edit');
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('edit.tpl');
+
 
     }
 
@@ -161,17 +168,31 @@ class suxEdit extends suxUser {
     */
     function formProcess() {
 
-        // --------------------------------------------------------------------
-        // Sanitize
-        // --------------------------------------------------------------------
 
-        // Todo
+        switch ($_POST['action'])
+        {
 
-        // --------------------------------------------------------------------
-        // SQL
-        // --------------------------------------------------------------------
+        case 'addvec':
 
-        // $this->addCategory($clean);
+            $this->nb->addVector($_POST['vector']);
+            break;
+
+        case 'addcat':
+
+            $this->nb->addCategory($_POST['category'], $_POST['vector']);
+            break;
+
+        case 'remcat':
+
+            $this->nb->removeCategory($_POST['category']);
+            break;
+
+        case 'remvec':
+
+            $this->nb->removeVector($_POST['vector']);
+            break;
+
+        }
 
 
     }
@@ -182,7 +203,8 @@ class suxEdit extends suxUser {
     */
     function formSuccess() {
 
-        // Success
+        suxFunct::redirect(suxFunct::makeUrl('/bayes/edit'));
+
 
     }
 
