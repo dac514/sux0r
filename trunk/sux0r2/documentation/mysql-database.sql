@@ -81,7 +81,7 @@ CREATE TABLE `bayes_tokens` (
 
 CREATE TABLE `bayes_vectors` (
   `id` int(11) NOT NULL auto_increment,
-  `vector` varchar(255) NOT NULL,
+  `vector` varchar(64) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

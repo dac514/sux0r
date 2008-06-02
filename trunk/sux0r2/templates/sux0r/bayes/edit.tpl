@@ -30,6 +30,7 @@
         {strip}
             {capture name=error}
             {validate id="addvec1" form="addvec" message=$r->text.form_error_1}
+            {validate id="addvec2" form="addvec" message=$r->text.form_error_5}
             {/capture}
         {/strip}
 
@@ -53,12 +54,13 @@
             {capture name=error}
             {validate id="addcat1" form="addcat" message=$r->text.form_error_2}
             {validate id="addcat2" form="addcat" message=$r->text.form_error_1}
+            {validate id="addcat3" form="addcat" message=$r->text.form_error_6}
             {/capture}
         {/strip}
 
         <label for="category" {if $smarty.capture.error}class="error"{/if} > New category :</label>
         <input type="text" name="category" value="{$category}" />
-        {html_options name='vector' options=$r->getVectors() selected=$todo}
+        {html_options name='vector_id' options=$r->getVectors() selected=$vector_id}
         <input type="submit" class="button" value="Add" />
         {$smarty.capture.error}
         </p>
@@ -79,8 +81,8 @@
             {/capture}
         {/strip}
 
-        <label for="category" {if $smarty.capture.error}class="error"{/if} > Remove category :</label>
-        {html_options name='category' options=$r->getCategories() selected=$todo}
+        <label for="category_id" {if $smarty.capture.error}class="error"{/if} > Remove category :</label>
+        {html_options name='category_id' options=$r->getCategories() selected=$category_id}
         <input type="submit" class="button" value="Delete" />
         {$smarty.capture.error}
         </p>
@@ -101,8 +103,8 @@
             {/capture}
         {/strip}
 
-        <label for="vector" {if $smarty.capture.error}class="error"{/if} > Remove vector :</label>
-        {html_options name='vector' options=$r->getVectors() selected=$todo}
+        <label for="vector_id" {if $smarty.capture.error}class="error"{/if} > Remove vector :</label>
+        {html_options name='vector_id' options=$r->getVectors() selected=$vector_id}
         <input type="submit" class="button" value="Delete" />
         {$smarty.capture.error}
         </p>

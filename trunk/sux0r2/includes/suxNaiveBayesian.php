@@ -44,7 +44,7 @@ class suxNaiveBayesian {
     private $min_token_length = 3;
     private $max_token_length = 64;
     private $max_category_length = 64;
-    private $max_vector_length = 255;
+    private $max_vector_length = 64;
 
 
     /**
@@ -59,6 +59,26 @@ class suxNaiveBayesian {
     	$this->db = suxDB::get($key);
         set_exception_handler(array($this, 'logAndDie'));
 
+    }
+
+
+    // ----------------------------------------------------------------------------
+    // Accessors
+    // ----------------------------------------------------------------------------
+
+    /**
+    * @return int
+    */
+    function getMaxVectorLength() {
+        return $this->max_vector_length;
+    }
+
+
+    /**
+    * @return int
+    */
+    function getMaxCategoryLength() {
+        return $this->max_category_length;
     }
 
 
