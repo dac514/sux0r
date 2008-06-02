@@ -140,13 +140,15 @@ class suxEdit extends suxUser {
 
             // Add vector
             suxValidate::register_validator('addvec1', 'vector', 'notEmpty', false, false, 'trim', 'addvec');
+            suxValidate::register_validator('addvec2', "vector:-1:{$this->nb->getMaxVectorLength()}", 'isLength', false, false, 'trim', 'addvec');
             // Add category
             suxValidate::register_validator('addcat1', 'category', 'notEmpty', false, true, 'trim', 'addcat');
-            suxValidate::register_validator('addcat2', 'vector', 'isInt', false, false, 'trim', 'addcat');
+            suxValidate::register_validator('addcat2', 'vector_id', 'isInt', false, true, 'trim', 'addcat');
+            suxValidate::register_validator('addcat3', "category:-1:{$this->nb->getMaxCategoryLength()}", 'isLength', false, false, 'trim', 'addcat');
             // Remove category
-            suxValidate::register_validator('remcat1', 'category', 'isInt', false, false, 'trim', 'remcat');
+            suxValidate::register_validator('remcat1', 'category_id', 'isInt', false, false, 'trim', 'remcat');
             // Remove vector
-            suxValidate::register_validator('remvec1', 'vector', 'isInt', false, false, 'trim', 'remvec');
+            suxValidate::register_validator('remvec1', 'vector_id', 'isInt', false, false, 'trim', 'remvec');
 
 
         }
@@ -179,17 +181,17 @@ class suxEdit extends suxUser {
 
         case 'addcat':
 
-            $this->nb->addCategory($_POST['category'], $_POST['vector']);
+            $this->nb->addCategory($_POST['category'], $_POST['vector_id']);
             break;
 
         case 'remcat':
 
-            $this->nb->removeCategory($_POST['category']);
+            $this->nb->removeCategory($_POST['category_id']);
             break;
 
         case 'remvec':
 
-            $this->nb->removeVector($_POST['vector']);
+            $this->nb->removeVector($_POST['vector_id']);
             break;
 
         }
