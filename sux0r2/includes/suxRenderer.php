@@ -43,9 +43,9 @@ class suxRenderer {
     public $nav_selected; // Selected key for $nav array
 
     // Arrays
-    public $nav; // Variable to keep navlist
-    public $text; // Variable to keep body/text
-    public $bool; // Variable to keep bool values
+    public $nav = array(); // Variable to keep navlist
+    public $text  = array(); // Variable to keep body/text
+    public $bool = array(); // Variable to keep bool values
 
 
     /**
@@ -85,6 +85,32 @@ class suxRenderer {
         }
 
     }
+
+
+    /**
+    * Assign
+    *
+    * @param string $variable the public variable to work with
+    * @param string $value content
+    * @param string $key key or append
+    */
+    function assign($variable, $value, $key = false) {
+
+        // Array
+        if (is_array($this->$variable)) {
+            if (!$key) return;
+            else {
+                $this->$variable[$key] = $value;
+                return;
+            }
+        }
+
+        // Text
+        if ($key) $this->$variable .= $value; // Append
+        else $this->$variable = $value;
+
+    }
+
 
 
     /**

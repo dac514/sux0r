@@ -56,11 +56,14 @@ class renderer extends suxRenderer {
     */
     function getVectors() {
 
-        $tmp = array();
+        static $tmp = array();
+        if (count($tmp)) return $tmp; // Cache
+
         foreach ($this->nb->getVectors() as $key => $val) {
             if (!in_array($val['vector'], $tmp)) $tmp[$key] = $val['vector'];
             else $tmp[$key] = "{$val['vector']} (id:$key)";
         }
+
         return $tmp;
 
     }
@@ -73,18 +76,18 @@ class renderer extends suxRenderer {
     */
     function getCategories() {
 
-        // Create a dropdown with <optgroup> array
+        static $tmp = array();
+        if (count($tmp)) return $tmp; // Cache
 
-        $tmp = array();
         foreach ($this->nb->getVectors() as $key => $val) {
 
+            // Create a dropdown with <optgroup> array
             $x = "{$val['vector']}";
             if (isset($tmp[$x])) $x = "{$val['vector']} (id:$key)";
             $y = array();
             foreach ($this->nb->getCategories($key) as $key2 => $val2) {
                 $y[$key2] = "{$val2['category']}";
             }
-
 
             $tmp[$x] = $y;
         }
@@ -95,11 +98,46 @@ class renderer extends suxRenderer {
 
 
     /**
+    * Get category stats
+    *
+    * @return string html formated stats
+    */
+    function getCategoryStats() {
+
+        static $tmp = array();
+        if (count($tmp)) return $tmp; // Cache
+
+        $cat = 0;
+        $html = "<div id='bStats'><ul>\n";
+        foreach ($this->nb->getVectors() as $key => $val) {
+            $html .= "<li class='bStatsVec'>{$val['vector']}:</li>\n";
+            $html .= "<ul>\n";
+            foreach ($this->nb->getCategories($key) as $key2 => $val2) {
+                $doc_count = $this->nb->getDocumentCount($key2);
+                $html .= "<li class='bStatsCat'>{$val2['category']}:</li>";
+                $html .= "<ul>\n";
+                $html .= "<li class='bStatsDoc'>Documents: $doc_count</li><li class='bStatsTok'>Tokens: {$val2['token_count']}</li>\n";
+                $html .= "</ul>\n";
+                ++$cat;
+            }
+            $html .= "</ul>\n";
+        }
+        $html .= "</ul></div>\n";
+
+        if (!$cat) return null;
+        else return $html;
+    }
+
+
+    /**
     * Get documents
     *
     * @return array
     */
     function getDocuments() {
+
+        static $tmp = array();
+        if (count($tmp)) return $tmp; // Cache
 
         foreach ($this->nb->getVectors() as $key => $val) {
             foreach ($this->nb->getDocuments($key) as $key2 => $val2) {
@@ -110,7 +148,6 @@ class renderer extends suxRenderer {
         }
 
         return $tmp;
-
 
     }
 

@@ -36,7 +36,6 @@ class suxEdit extends suxUser {
     public $nb; // Naive Bayesian Object
 
     private $users_id = null;
-
     private $module = 'bayes'; // Module
 
     /**
@@ -235,18 +234,6 @@ class suxEdit extends suxUser {
 
 
     }
-
-
-    /**
-    * The form was successfuly processed
-    */
-    function formSuccess() {
-
-        suxFunct::redirect(suxFunct::makeUrl('/bayes/edit'));
-
-
-    }
-
 
 
 }

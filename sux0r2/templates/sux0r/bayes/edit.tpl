@@ -1,47 +1,50 @@
-{include file=$r->xhtml_header}
+{capture name=header}
 
-<script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
-{literal}
-<script type='text/javascript'>
-// <![CDATA[
-function rm(myForm, myWarning) {
-    if(confirm(myWarning)) {
-        var x = document.getElementsByName(myForm);
-        x[0].submit();
-    }
-}
+    <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
+    {literal}
+    <script type='text/javascript'>
+    // <![CDATA[
 
-function getDoc(id) {
-
-    if (id) {
-
-        {/literal}
-        var url = '{$r->url}/modules/bayes/getDoc.php';
-        var pars = 'id=' + id;
-        {literal}
-
-        var myAjax = new Ajax.Updater('placeholder', url, {
-                method: 'get',
-                parameters: pars
-
-        });
-
-        $('placeholder').addClassName('active');
+    function rm(myForm, myWarning) {
+        if(confirm(myWarning)) {
+            var x = document.getElementsByName(myForm);
+            x[0].submit();
+        }
     }
 
-}
-// ]]>
-</script>
-{/literal}
+    function getDoc(id) {
+        if (id) {
+            {/literal}
+            var url = '{$r->url}/modules/bayes/getDoc.php';
+            var pars = 'id=' + id;
+            {literal}
 
-<div id="proselytizer">
+            var myAjax = new Ajax.Updater('placeholder', url, {
+                    method: 'get',
+                    parameters: pars
+            });
+            $('placeholder').addClassName('active');
+            $('placeholder').show();
+        }
+    }
+    // ]]>
+    </script>
+    {/literal}
+{/capture}{strip}
+{$r->assign('header', $smarty.capture.header)}
+{include file=$r->xhtml_header}{/strip}
 
-    {* Header *}
-    <div id="header">
-        {insert name="userInfo"}
-    </div>
-    <div class="clearboth"></div>
-
+<table id="proselytizer" >
+	<tr>
+		<td colspan="2" style="vertical-align:top;">
+			<div id="header">
+            {insert name="userInfo"}
+			</div>
+		</td>
+	</tr>
+	<tr>
+        <td style="vertical-align:top;">
+			<div id="leftside">
 
     {* Content *}
     <div id="middle">
@@ -265,7 +268,44 @@ function getDoc(id) {
         </fieldset>
 
 
-    </div>
+			</div>
+		</td>
+		<td style="vertical-align:top;">
+			<div id="rightside">
+
+            {capture name=stats}{$r->getCategoryStats()}{/capture}
+            {if $smarty.capture.stats}
+            <p>
+            Stats:<br />
+            {$smarty.capture.stats}
+            </p>
+            {/if}
+
+            <p>Synopsis:</p>
+
+            <p>A vector is a list of categories. You must have at least two categories
+            in a vector to do <a href="http://en.wikipedia.org/wiki/Naive_Bayes_classifier">Bayesian classification</a>.</p>
+
+            <p>For example, a vector named <strong>Feelings</strong>
+            could have the categories <strong>Happy</strong>, <strong>Sad</strong> and <strong>Angry</strong>.
+            A vector named <strong>Filter</strong> could have the categories <strong>Spam</strong>
+            and <strong>Not-Spam</strong>.</p>
+
+            <p>In contrast, you wouldn't put <strong>Spam</strong> in the
+            <strong>Feelings</strong> vector because it doesn't belong to that list of categories.</p>
+
+            <p>Once you have <strong>at least two categories</strong> in a vector, you can
+            start classifying items. Please note that <strong>hundreds of documents</strong>
+            need to be trained in each category before any ammount of accuracy is apparent.</p>
+
+
+
+			</div>
+		</td>
+	</tr>
+</table>
+
+
 
 </div>
 
