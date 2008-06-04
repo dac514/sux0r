@@ -1,3 +1,10 @@
+#leftside {
+    width: 738px;
+}
+
+#rightside {
+    margin-right: 10px;
+}
 
 label {
     float: left;
@@ -20,3 +27,34 @@ fieldset {
     height: 140px;
     border: 1px solid #cccccc;
 }
+
+
+#bStats {
+    border: 1px dashed black;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+#bStats ul {
+    margin-left: 0;
+    padding: 0;
+}
+
+
+#bStats .bStatsVec {
+    font-weight: bold;
+    list-style-type: none;
+}
+
+#bStats .bStatsCat {
+    margin-left: 15px;
+}
+
+#bStats .bStatsDoc {
+    margin-left: 30px;
+}
+
+#bStats .bStatsTok {
+    margin-left: 30px;
+}
+

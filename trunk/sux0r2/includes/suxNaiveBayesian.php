@@ -385,6 +385,22 @@ class suxNaiveBayesian {
         return $ref;
     }
 
+
+    /**
+    * @param int $category_id category id
+    * @return int
+    */
+    function getDocumentCount($category_id) {
+
+        if (!filter_var($category_id, FILTER_VALIDATE_INT)) return 0;
+
+        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_doc} WHERE bayes_categories_id = ? ");
+        $st->execute(array($category_id));
+        return $st->fetchColumn();
+
+    }
+
+
     // ----------------------------------------------------------------------------
     // Maths
     // ----------------------------------------------------------------------------
