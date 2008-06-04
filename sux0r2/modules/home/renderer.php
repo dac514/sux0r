@@ -41,7 +41,7 @@ class renderer extends suxRenderer {
 
         $tmp = '
         <style>
-        #leftside { margin: 10px; }
+        #leftside { margin: 10px; width: 160px; }
         #rightside { width: 738px; }
         </style>
         ';
