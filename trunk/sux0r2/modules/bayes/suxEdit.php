@@ -23,10 +23,10 @@
 */
 
 require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
-require_once(dirname(__FILE__) . '/../../includes/suxNaiveBayesian.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('renderer.php');
+require_once('suxNbUser.php');
 
 class suxEdit extends suxUser {
 
@@ -54,7 +54,7 @@ class suxEdit extends suxUser {
         suxValidate::register_object('this', $this); // Register self to validator
 
         // Naive Bayesian
-        $this->nb = new suxNaiveBayesian();
+        $this->nb = new suxNbUser();
 
         // Redirect if not logged in
         $this->loginCheck(suxfunct::makeUrl('/user/register'));
@@ -187,25 +187,34 @@ class suxEdit extends suxUser {
 
         case 'addvec':
 
-            $this->nb->addVector($_POST['vector']);
+            $this->nb->addVectorWithUser($_POST['vector'], $_SESSION['users_id']);
             unset($_POST['vector']);
             break;
 
         case 'addcat':
 
-            $this->nb->addCategory($_POST['category'], $_POST['vector_id']);
+            // Security check
+            if ($this->nb->isVectorOwner($_POST['vector_id'], $_SESSION['users_id'])) {
+                $this->nb->addCategory($_POST['category'], $_POST['vector_id']);
+            }
             unset($_POST['category']);
             break;
 
         case 'remcat':
 
-            $this->nb->removeCategory($_POST['category_id']);
+            // Security check
+            if ($this->nb->isCategoryOwner($_POST['category_id'], $_SESSION['users_id'])) {
+                $this->nb->removeCategory($_POST['category_id']);
+            }
             unset($_POST['category_id']);
             break;
 
         case 'remvec':
 
-            $this->nb->removeVector($_POST['vector_id']);
+            // Security check
+            if ($this->nb->isVectorOwner($_POST['vector_id'], $_SESSION['users_id'])) {
+                $this->nb->removeVectorWithUsers($_POST['vector_id']);
+            }
             unset($_POST['vector_id']);
             break;
 
@@ -220,13 +229,19 @@ class suxEdit extends suxUser {
 
         case 'adddoc':
 
-            $this->nb->trainDocument($_POST['document'], $_POST['category_id']);
+            // Security check
+            if ($this->nb->isTrainer($_POST['category_id'], $_SESSION['users_id'])) {
+                $this->nb->trainDocument($_POST['document'], $_POST['category_id']);
+            }
             unset($_POST['document']);
             break;
 
         case 'remdoc':
 
-            $this->nb->untrainDocument($_POST['document_id']);
+            // Security check
+            if ($this->nb->isDocumentOwner($_POST['document_id'], $_SESSION['users_id'])) {
+                $this->nb->untrainDocument($_POST['document_id']);
+            }
             unset($_POST['document_id']);
             break;
 
