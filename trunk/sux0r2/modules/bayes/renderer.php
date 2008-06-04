@@ -94,6 +94,27 @@ class renderer extends suxRenderer {
     }
 
 
+    /**
+    * Get documents
+    *
+    * @return array
+    */
+    function getDocuments() {
+
+        foreach ($this->nb->getVectors() as $key => $val) {
+            foreach ($this->nb->getDocuments($key) as $key2 => $val2) {
+
+                $tmp[$key2] = "{$key2} - {$val['vector']}, {$val2['category']}";
+
+            }
+        }
+
+        return $tmp;
+
+
+    }
+
+
 
 }
 
