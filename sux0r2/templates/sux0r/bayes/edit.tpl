@@ -294,8 +294,7 @@
             <p>In contrast, you wouldn't put <strong>Spam</strong> in the
             <strong>Feelings</strong> vector because it doesn't belong to that list of categories.</p>
 
-            <p>Once you have <strong>at least two categories</strong> in a vector, you can
-            start classifying items. Please note that <strong>hundreds of documents</strong>
+            <p>Please note that <strong>hundreds of documents</strong>
             need to be trained in each category before any ammount of accuracy is apparent.</p>
 
 
