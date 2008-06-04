@@ -631,7 +631,6 @@ class suxOpenID {
         $r->text['yes_url'] = $yes;
         $r->text['no_url'] = $no;
 
-        $r->header .= "<meta name='robots' content='noindex,nofollow' />\n";
         $r->bool['analytics'] = false;
 
         $this->tpl->assign_by_ref('r', $r);
@@ -714,9 +713,6 @@ class suxOpenID {
 
         // Template
         $r = new suxRenderer($this->module);
-
-        $r->header .= "<link rel='openid.server' href='{$this->profile['my_url']}' />\n";
-        $r->header .= "<meta name='robots' content='noindex,nofollow' />\n";
 
         $r->text =& $this->gtext;
         $r->text['server_url'] = $this->profile['my_url'];
@@ -1414,7 +1410,6 @@ class suxOpenID {
     private function wrapHtml($message) {
 
         $r = new suxRenderer($this->module);
-        $r->header .= "<meta name='robots' content='noindex,nofollow' />\n";
         $r->text['message'] = $message;
         $r->bool['analytics'] = false;
 

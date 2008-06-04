@@ -1,4 +1,9 @@
-{include file=$r->xhtml_header}
+{capture name=header}
+<link rel='openid.server' href='{$r->text.server_url}' />
+<meta name='robots' content='noindex,nofollow' />
+{/capture}{strip}
+{$r->assign('header', $smarty.capture.header)}
+{include file=$r->xhtml_header}{/strip}
 
 <div id="proselytizer">
 
