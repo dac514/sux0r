@@ -129,8 +129,12 @@ class suxEdit extends suxUser {
             // Register additional forms
             SmartyValidate::register_form('addvec');
             SmartyValidate::register_form('addcat');
+            SmartyValidate::register_form('catdoc');
+            SmartyValidate::register_form('adddoc');
             SmartyValidate::register_form('remcat');
             SmartyValidate::register_form('remvec');
+            SmartyValidate::register_form('remdoc');
+
 
             // Register our additional criterias
             // suxValidate::register_criteria('invalidCharacters', 'this->invalidCharacters');
@@ -149,6 +153,14 @@ class suxEdit extends suxUser {
             suxValidate::register_validator('remcat1', 'category_id', 'isInt', false, false, 'trim', 'remcat');
             // Remove vector
             suxValidate::register_validator('remvec1', 'vector_id', 'isInt', false, false, 'trim', 'remvec');
+            // Categorize document
+            suxValidate::register_validator('catdoc1', 'cat_document', 'notEmpty', false, true, 'trim', 'catdoc');
+            suxValidate::register_validator('catdoc2', 'vector_id', 'isInt', false, false, 'trim', 'catdoc');
+            // Add document
+            suxValidate::register_validator('adddoc1', 'document', 'notEmpty', false, true, 'trim', 'adddoc');
+            suxValidate::register_validator('adddoc2', 'category_id', 'isInt', false, false, 'trim', 'adddoc');
+            // Remove document
+            suxValidate::register_validator('remdoc1', 'document_id', 'isInt', false, false, 'trim', 'remdoc');
 
 
         }
@@ -177,21 +189,46 @@ class suxEdit extends suxUser {
         case 'addvec':
 
             $this->nb->addVector($_POST['vector']);
+            unset($_POST['vector']);
             break;
 
         case 'addcat':
 
             $this->nb->addCategory($_POST['category'], $_POST['vector_id']);
+            unset($_POST['category']);
             break;
 
         case 'remcat':
 
             $this->nb->removeCategory($_POST['category_id']);
+            unset($_POST['category_id']);
             break;
 
         case 'remvec':
 
             $this->nb->removeVector($_POST['vector_id']);
+            unset($_POST['vector_id']);
+            break;
+
+        case 'catdoc':
+
+            $scores = $this->nb->categorize($_POST['cat_document'], $_POST['vector_id']);
+            foreach ($scores as $key => $val)
+                $scores[$key] = round($val*100, 2) . ' %';
+            $this->r->text['scores'] = $scores;
+            unset($_POST['cat_document']);
+            break;
+
+        case 'adddoc':
+
+            $this->nb->trainDocument($_POST['document'], $_POST['category_id']);
+            unset($_POST['document']);
+            break;
+
+        case 'remdoc':
+
+            $this->nb->untrainDocument($_POST['document_id']);
+            unset($_POST['document_id']);
             break;
 
         }

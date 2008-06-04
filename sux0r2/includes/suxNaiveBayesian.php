@@ -276,7 +276,7 @@ class suxNaiveBayesian {
     * @param string $content content of the document
     * @return bool
     */
-    function trainDocument($category_id, $content) {
+    function trainDocument($content, $category_id) {
 
         if (!filter_var($category_id, FILTER_VALIDATE_INT)) return false;
 
@@ -336,15 +336,14 @@ class suxNaiveBayesian {
     * @param int $vector_id vector id
     * @return array key = ids, values = array(keys = 'category_id', ,'category', 'body_length')
     */
-    function getDocumentIds($vector_id) {
+    function getDocuments($vector_id) {
 
         if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
 
         $query = "SELECT
         {$this->db_table_doc}.id,
         {$this->db_table_doc}.bayes_categories_id,
-        {$this->db_table_cat}.category,
-        LENGTH({$this->db_table_doc}.body_plaintext) AS body_length
+        {$this->db_table_cat}.category
         FROM {$this->db_table_doc}
         INNER JOIN {$this->db_table_cat} ON {$this->db_table_doc}.bayes_categories_id = {$this->db_table_cat}.id
         INNER JOIN {$this->db_table_vec} ON {$this->db_table_cat}.bayes_vectors_id = {$this->db_table_vec}.id
@@ -359,11 +358,31 @@ class suxNaiveBayesian {
             $documents[$row['id']] = array(
                 'category_id' => $row['bayes_categories_id'],
                 'category' => $row['category'],
-                'body_length'  => $row['body_length'],
                 );
         }
 
         return $documents;
+    }
+
+
+    /**
+    * @param string $document_id document id, must be unique
+    * @return array keys ('category_id', 'content', 'id') values (...)
+    */
+    function getDocument($document_id) {
+
+        $ref = array();
+
+        $st = $this->db->prepare("SELECT * FROM {$this->db_table_doc} WHERE id = ?");
+        $st->execute(array($document_id));
+
+        if ($row = $st->fetch()) {
+            $ref['category_id'] = $row['bayes_categories_id'];
+            $ref['content'] = $row['body_plaintext'];
+            $ref['id'] = $row['id'];
+        }
+
+        return $ref;
     }
 
     // ----------------------------------------------------------------------------
@@ -487,7 +506,10 @@ class suxNaiveBayesian {
             }
         }
 
-        return $this->rescale($scores);
+        $scores = $this->rescale($scores); // Rescale
+        arsort($scores); // Sort
+        return $scores;
+
     }
 
 
@@ -686,27 +708,6 @@ class suxNaiveBayesian {
         $st = $this->db->prepare("INSERT INTO {$this->db_table_doc} (bayes_categories_id, body_plaintext) VALUES (?, ?) ");
         return $st->execute(array($category_id, $content));
 
-    }
-
-
-    /**
-    * @param string $document_id document id, must be unique
-    * @return array keys ('category_id', 'content', 'id') values (...)
-    */
-    private function getDocument($document_id) {
-
-        $ref = array();
-
-        $st = $this->db->prepare("SELECT * FROM {$this->db_table_doc} WHERE id = ?");
-        $st->execute(array($document_id));
-
-        if ($row = $st->fetch()) {
-            $ref['category_id'] = $row['bayes_categories_id'];
-            $ref['content'] = $row['body_plaintext'];
-            $ref['id'] = $row['id'];
-        }
-
-        return $ref;
     }
 
 

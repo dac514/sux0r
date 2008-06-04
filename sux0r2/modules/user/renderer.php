@@ -206,6 +206,7 @@ function insert_editMenu($params) {
 
     $tmp = '';
     $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/edit/{$params['nickname']}") . '">' . $text['edit_profile'] . '</a></li>' . "\n";
+    $tmp .= '<li><a href="' . suxFunct::makeUrl("/bayes/edit") . '">' . $text['edit_bayes'] . '</a></li>' . "\n";
     // TODO
     // $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/edit/{$params['nickname']}/avatar") . '">' . $text['edit_avatar'] . '</a></li>' . "\n";
     // $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/edit/{$params['nickname']}/network") . '">' . $text['edit_friends'] . '</a></li>' . "\n";

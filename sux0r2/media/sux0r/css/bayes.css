@@ -7,3 +7,16 @@ label {
     text-align: right;
 }
 
+fieldset {
+    margin-bottom: 10px;
+}
+
+#placeholder {
+    overflow: auto;
+    margin: 10px;
+}
+
+.active {
+    height: 140px;
+    border: 1px solid #cccccc;
+}

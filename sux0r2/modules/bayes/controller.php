@@ -42,9 +42,8 @@ function sux($action, $params = null) {
 
             if ($reg->formValidate()) {
                 $reg->formProcess();
-                $reg->formSuccess();
             }
-            else $reg->formBuild();
+            $reg->formBuild();
 
             break;
 

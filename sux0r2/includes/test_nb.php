@@ -320,7 +320,7 @@ foreach($cats as $key => $val) {
 <input type='hidden' name='action' value='untrain'/>
 Document Ã  supprimer :
 <?php
-$refs = $nb->getDocumentIds($vec_id );
+$refs = $nb->getDocuments($vec_id );
 // new dBug($refs);
 ?>
 <select name='docid'>
