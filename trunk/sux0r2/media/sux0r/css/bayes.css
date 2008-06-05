@@ -18,14 +18,16 @@ fieldset {
     margin-bottom: 10px;
 }
 
-#placeholder {
-    overflow: auto;
-    margin: 10px;
+#placeholder1, #placeholder2 {
+
 }
 
 .active {
     height: 140px;
+    overflow: auto;
     border: 1px solid #cccccc;
+    margin: 10px;
+    padding: 10px;
 }
 
 
