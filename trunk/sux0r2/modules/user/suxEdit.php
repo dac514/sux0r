@@ -86,6 +86,8 @@ class suxEdit extends suxUser {
     */
     function formValidate() {
 
+        //new dBug($_SESSION);
+
         if(!empty($_POST) && suxValidate::is_registered_form()) {
             // Validate
             suxValidate::connect($this->tpl);
@@ -176,7 +178,15 @@ class suxEdit extends suxUser {
         if (!empty($_POST)) $this->tpl->assign($_POST);
         else suxValidate::disconnect();
 
-        if (!suxValidate::is_registered_form()) {
+        $validators = array(
+            'default' => 'nickname',
+            'default' => 'nickname2',
+            'default' => 'nickname3',
+            'default' => 'email',
+            'default' => 'email2',
+            );
+
+        if (!suxValidate::is_registered_form() || !suxValidate::check_validators($validators)) {
 
             suxValidate::connect($this->tpl, true); // Reset connection
 
@@ -216,8 +226,11 @@ class suxEdit extends suxUser {
             // Captcha
             if ($this->mode != 'edit') suxValidate::register_validator('captcha', 'captcha', 'isValidCaptcha');
 
-
         }
+
+
+        // $var = md5(serialize($_SESSION['SmartyValidate']));
+        // secho $var;
 
         // --------------------------------------------------------------------
         // DONE: Form Logic

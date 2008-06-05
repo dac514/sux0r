@@ -112,6 +112,19 @@ class suxRenderer {
     }
 
 
+    /**
+    * Detect $_POST
+    *
+    * @return bool
+    */
+    function detectPOST() {
+
+        if (isset($_POST) && count($_POST)) return true;
+        else return false;
+
+    }
+
+
 
     /**
     * Constructs a widget
