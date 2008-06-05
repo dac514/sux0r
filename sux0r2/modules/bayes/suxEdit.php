@@ -93,7 +93,6 @@ class suxEdit extends suxUser {
                     return true;
                 }
             }
-
         }
 
         return false;
@@ -121,14 +120,13 @@ class suxEdit extends suxUser {
         if (!empty($_POST)) $this->tpl->assign($_POST);
         else suxValidate::disconnect();
 
-        if (!suxValidate::is_registered_form()) {
+        if (empty($_POST['action']) || !suxValidate::is_registered_form($_POST['action'])) {
 
             suxValidate::connect($this->tpl, true); // Reset connection
 
             // Register additional forms
             SmartyValidate::register_form('addvec');
             SmartyValidate::register_form('addcat');
-            SmartyValidate::register_form('catdoc');
             SmartyValidate::register_form('adddoc');
             SmartyValidate::register_form('remcat');
             SmartyValidate::register_form('remvec');
@@ -152,9 +150,6 @@ class suxEdit extends suxUser {
             suxValidate::register_validator('remcat1', 'category_id', 'isInt', false, false, 'trim', 'remcat');
             // Remove vector
             suxValidate::register_validator('remvec1', 'vector_id', 'isInt', false, false, 'trim', 'remvec');
-            // Categorize document
-            suxValidate::register_validator('catdoc1', 'cat_document', 'notEmpty', false, true, 'trim', 'catdoc');
-            suxValidate::register_validator('catdoc2', 'vector_id', 'isInt', false, false, 'trim', 'catdoc');
             // Add document
             suxValidate::register_validator('adddoc1', 'document', 'notEmpty', false, true, 'trim', 'adddoc');
             suxValidate::register_validator('adddoc2', 'category_id', 'isInt', false, false, 'trim', 'adddoc');
@@ -216,15 +211,6 @@ class suxEdit extends suxUser {
                 $this->nb->removeVectorWithUsers($_POST['vector_id']);
             }
             unset($_POST['vector_id']);
-            break;
-
-        case 'catdoc':
-
-            $scores = $this->nb->categorize($_POST['cat_document'], $_POST['vector_id']);
-            foreach ($scores as $key => $val)
-                $scores[$key] = round($val*100, 2) . ' %';
-            $this->r->text['scores'] = $scores;
-            unset($_POST['cat_document']);
             break;
 
         case 'adddoc':

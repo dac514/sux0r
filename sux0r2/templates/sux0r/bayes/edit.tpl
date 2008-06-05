@@ -12,24 +12,42 @@
         }
     }
 
-    function getDoc(id) {
-        if (id) {
+    function getDoc(doc_id) {
+        if (doc_id) {
             {/literal}
             var url = '{$r->url}/modules/bayes/getDoc.php';
-            var pars = 'id=' + id;
             {literal}
+            var pars = 'id=' + doc_id;
 
-            var myAjax = new Ajax.Updater('placeholder', url, {
+            var myAjax = new Ajax.Updater('placeholder1', url, {
                     method: 'get',
                     parameters: pars
             });
-            $('placeholder').addClassName('active');
-            $('placeholder').show();
+            $('placeholder1').addClassName('active');
+            $('placeholder1').show();
         }
     }
+
+    function getCat(document, vec_id) {
+
+        {/literal}
+        var url = '{$r->url}/modules/bayes/getCat.php';
+        {literal}
+        var pars = { document: document, id: vec_id }
+
+        var myAjax = new Ajax.Updater('placeholder2', url, {
+                method: 'post',
+                parameters: pars
+        });
+        $('placeholder2').addClassName('active');
+        $('placeholder2').show();
+
+    }
+
     // ]]>
     </script>
     {/literal}
+
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
 {include file=$r->xhtml_header}{/strip}
@@ -49,20 +67,11 @@
     {* Content *}
     <div id="middle">
 
-        {if $r->text.scores}
-            <p><table border="1">
-            <thead><tr><th>Categories</th><th>Scores</th></tr></thead>
-            {foreach from=$r->text.scores key=k item=v}
-            <tr><td>{$k}</td><td>{$v}</td></tr>
-            {/foreach}
-            </table></p>
-        {/if}
-
+        <noscript><p class="errorWarning">JavaScript must be enabled to categorize and delete!</p></noscript>
 
         {if $validate.default.is_error !== false}
         <p class="errorWarning">{$r->text.form_error} :</p>
         {/if}
-
 
         <fieldset>
         <legend>Vectors</legend>
@@ -220,7 +229,7 @@
         {$smarty.capture.error}
         </p>
 
-        <div id="placeholder"></div>
+        <div id="placeholder1"></div>
 
         </form>
 
@@ -236,23 +245,20 @@
         {* Categorize document ---------------------------------------------- *}
 
         <form action="{$r->text.form_url}" name="catdoc" method="post" accept-charset="utf-8">
-        <input type="hidden" name="token" value="{$token}" />
-        <input type="hidden" name="action" value="catdoc" />
+
+
 
         <p>
-        {strip}
-            {capture name=error}
-            {validate id="catdoc1" form="catdoc" message=$r->text.form_error_7}
-            {validate id="catdoc2" form="catdoc" message=$r->text.form_error_3}
-            {/capture}
-        {/strip}
-
-        <label for="document" {if $smarty.capture.error}class="error"{/if} > Categorize document :</label>
+        <label for="document" >Categorize document :</label>
         <textarea name="cat_document" cols='50' rows='10'>{$cat_document}</textarea><br />
         <label>&nbsp;</label>{html_options name='vector_id' options=$r->getVectors() selected=$vector_id}
-        <input type="submit" class="button" value="Categorize" />
+        <input type="button" class="button" value="Categorize" onclick="getCat(this.form.cat_document.value, this.form.vector_id.value);" />
         {$smarty.capture.error}
         </p>
+
+        <div id="placeholder2"></div>
+
+
 
         </form>
 
@@ -263,8 +269,78 @@
 
 
         <fieldset>
-        <legend>Shared</legend>
-        <p>Todo, shared</p>
+        <legend>Share</legend>
+
+        {* TODO *}
+
+        <p>
+        <label for="vector_id">Share vector:</label>
+            {html_options name='vector_id' options=$r->getVectors() selected=$vector_id}
+        </p>
+
+        <p>
+        <label for="friends">With friend:</label>
+            <select name="friends">
+            <option value="">conner_bw</option>
+            <option value="">test</option>
+            <option value="">Shie Kasai</option>
+            </select>
+        </p>
+
+        <p>
+        <label for="trainer">&nbsp;</label>
+            <input type="checkbox" name="trainer" value="1" /> Allow user to train documents?
+        </p>
+
+        <p>
+        <label>&nbsp;</label>
+            <input type="submit" class="button" value="Share" />
+        </p>
+
+
+        {* // --------------------------------------------------------------- *}
+
+
+        </fieldset>
+
+        <fieldset>
+        <legend>Manage</legend>
+
+        {* TODO *}
+
+
+        <p>
+        <h3>Some Title</h3>
+        <table border="0" width="100%">
+        <thead>
+        <tr>
+            <th>Vector</th>
+            <th>Owner</th>
+            <th>Is Trainer?</th>
+            <th>Unshare</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr bgcolor="#eeeeee">
+            <td>1</td>
+            <td>2</td>
+            <td><input type="checkbox" name="trainer[1]" value="1" /></td>
+            <td><input type="checkbox" name="unshare[1]" value="1" /></td>
+        </tr>
+        <tr bgcolor="#dddddd">
+            <td>1</td>
+            <td>2</td>
+            <td><input type="checkbox" name="trainer[1]" value="1" /></td>
+            <td><input type="checkbox" name="unshare[1]" value="1" /></td>
+        </tr>
+        </tbody>
+        </table>
+        <center><input type="submit" class="button" value="Submit" /></center>
+        </p>
+
+
+        {* // --------------------------------------------------------------- *}
+
         </fieldset>
 
 
