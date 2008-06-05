@@ -8,7 +8,6 @@
 </div>
 <div class="clearboth"></div>
 
-
 {* Content *}
 <div id="middle">
 
@@ -20,6 +19,8 @@
 
 {if $validate.default.is_error !== false}
 <p class="errorWarning">{$r->text.form_error} :</p>
+{elseif $r->detectPOST()}
+<p class="errorWarning">{$r->text.form_problem} :</p>
 {/if}
 
 <p>
