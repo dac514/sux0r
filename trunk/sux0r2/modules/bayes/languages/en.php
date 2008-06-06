@@ -9,5 +9,10 @@ $gtext['form_error_4'] = 'Category cannot be empty';
 $gtext['form_error_5'] = 'Vector is too long';
 $gtext['form_error_6'] = 'Category is too long';
 $gtext['form_error_7'] = 'Document cannot be empty';
+$gtext['form_error_8'] = 'User cannot be empty';
+$gtext['form_error_9'] = 'Invalid';
+$gtext['form_error_10'] = 'Cannot share vector with self';
+$gtext['form_error_11'] = 'Nothing was selected?';
+
 
 ?>

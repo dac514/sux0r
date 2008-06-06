@@ -33,7 +33,7 @@ class suxEdit extends suxUser {
     public $gtext = array(); // Language
     public $tpl; // Template
     public $r; // Renderer
-    public $nb; // Naive Bayesian Object
+    public $nb; // Naive Bayesian Object / extended
 
     private $users_id = null;
     private $module = 'bayes'; // Module
@@ -128,16 +128,18 @@ class suxEdit extends suxUser {
             suxValidate::connect($this->tpl, true); // Reset connection
 
             // Register additional forms
-            SmartyValidate::register_form('addvec');
-            SmartyValidate::register_form('addcat');
-            SmartyValidate::register_form('adddoc');
-            SmartyValidate::register_form('remcat');
-            SmartyValidate::register_form('remvec');
-            SmartyValidate::register_form('remdoc');
+            suxValidate::register_form('addvec');
+            suxValidate::register_form('addcat');
+            suxValidate::register_form('adddoc');
+            suxValidate::register_form('remcat');
+            suxValidate::register_form('remvec');
+            suxValidate::register_form('remdoc');
+            suxValidate::register_form('sharevec');
+            suxValidate::register_form('unsharevec');
 
 
             // Register our additional criterias
-            // suxValidate::register_criteria('invalidCharacters', 'this->invalidCharacters');
+            suxValidate::register_criteria('invalidShare', 'this->invalidShare', 'sharevec');
 
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
@@ -158,6 +160,15 @@ class suxEdit extends suxUser {
             suxValidate::register_validator('adddoc2', 'category_id', 'isInt', false, false, 'trim', 'adddoc');
             // Remove document
             suxValidate::register_validator('remdoc1', 'document_id', 'isInt', false, false, 'trim', 'remdoc');
+            // Share vector
+            suxValidate::register_validator('sharevec1', 'vector_id', 'isInt', false, false, 'trim', 'sharevec');
+            suxValidate::register_validator('sharevec2', 'users_id', 'isInt', false, false, 'trim', 'sharevec');
+            suxValidate::register_validator('sharevec3', 'trainer:1:1', 'isRange', true, false, 'trim', 'sharevec');
+            suxValidate::register_validator('sharevec4', 'owner:1:1', 'isRange', true, false, 'trim', 'sharevec');
+            suxValidate::register_validator('sharevec5', 'users_id', 'invalidShare', true, false, 'trim', 'sharevec');
+            // Unshare vector
+            suxValidate::register_validator('unsharevec1', 'unshare', 'dummyValid', false, false, null, 'unsharevec');
+
 
 
         }
@@ -236,8 +247,47 @@ class suxEdit extends suxUser {
             unset($clean['document_id']);
             break;
 
+        case 'sharevec' :
+
+            // Security check
+            if ($this->nb->isVectorOwner($clean['vector_id'], $_SESSION['users_id'])) {
+
+                if (!isset($clean['trainer'])) $clean['trainer'] = 0;
+                if (!isset($clean['owner'])) $clean['owner'] = 0;
+
+                $this->nb->shareVector($clean['users_id'], $clean['vector_id'], $clean['trainer'], $clean['owner']);
+
+            }
+            break;
+
+        case 'unsharevec' :
+
+            foreach ($clean['unshare'] as $val) {
+                foreach ($val as $vectors_id => $users_id) {
+                    $this->nb->unshareVector($users_id, $vectors_id);
+                }
+            }
+            break;
+
         }
 
+
+
+    }
+
+
+    /**
+    * for suxValidate, check for an invalid vector share
+    * i.e. cannot share a vector with one's self
+    *
+    * @return bool
+    */
+    function invalidShare($value, $empty, &$params, &$formvars) {
+
+        if (empty($formvars['users_id'])) return false;
+
+        if ($formvars['users_id'] == $_SESSION['users_id']) return false; // Invalid
+        else return true;
 
     }
 

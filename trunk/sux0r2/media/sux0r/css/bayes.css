@@ -30,6 +30,37 @@ fieldset {
     padding: 10px;
 }
 
+/* {{{ Shared vectors table */
+
+.shared {
+    width: 100%;
+}
+
+.shared thead tr {
+    background: #ffffff;
+}
+
+.shared tr {
+    background: #dddddd;
+}
+
+.shared tr.mine {
+    background: #cccccc;
+}
+
+.shared tr.mineToo {
+    background: #eeeeee;
+}
+
+.shared tr td{
+    padding: 5px;
+}
+
+
+/* }}} */
+
+
+/* {{{ Stats */
 
 #bStats {
     border: 1px dashed black;
@@ -60,3 +91,4 @@ fieldset {
     margin-left: 30px;
 }
 
+/* }}} */

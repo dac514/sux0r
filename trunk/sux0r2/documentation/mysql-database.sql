@@ -16,6 +16,21 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `bayes_auth`
+--
+
+CREATE TABLE `bayes_auth` (
+  `id` int(11) NOT NULL auto_increment,
+  `users_id` int(11) NOT NULL,
+  `bayes_vectors_id` int(11) NOT NULL,
+  `owner` tinyint(1) default NULL,
+  `trainer` tinyint(1) default NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `users_bayes_vectors` (`users_id`,`bayes_vectors_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+--
 -- Table structure for table `bayes_categories`
 --
 

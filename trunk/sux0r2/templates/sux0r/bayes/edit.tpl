@@ -113,7 +113,7 @@
         {/strip}
 
         <label for="vector_id" {if $smarty.capture.error}class="error"{/if} > Remove vector :</label>
-        {html_options name='vector_id' options=$r->getVectors() selected=$vector_id}
+        {html_options name='vector_id' options=$r->getUserOwnedVectors() selected=$vector_id}
         <input type="button" class="button" value="Delete" onclick="rm('remvec', 'Are you sure you want to delete this vector?');" />
         {$smarty.capture.error}
         </p>
@@ -145,7 +145,7 @@
 
         <label for="category" {if $smarty.capture.error}class="error"{/if} > New category :</label>
         <input type="text" name="category" value="{$category}" />
-        {html_options name='vector_id' options=$r->getVectors() selected=$vector_id}
+        {html_options name='vector_id' options=$r->getUserOwnedVectors() selected=$vector_id}
         <input type="submit" class="button" value="Add" />
         {$smarty.capture.error}
         </p>
@@ -167,7 +167,7 @@
         {/strip}
 
         <label for="category_id" {if $smarty.capture.error}class="error"{/if} > Remove category :</label>
-        {html_options name='category_id' options=$r->getCategories() selected=$category_id}
+        {html_options name='category_id' options=$r->getUserOwnedCategories() selected=$category_id}
         <input type="button" class="button" value="Delete" onclick="rm('remcat', 'Are you sure you want to delete this category?');" />
         {$smarty.capture.error}
         </p>
@@ -200,7 +200,7 @@
 
         <label for="document" {if $smarty.capture.error}class="error"{/if} > Train document :</label>
         <textarea name="document" cols='50' rows='10'>{$document}</textarea><br />
-        <label>&nbsp;</label>{html_options name='category_id' options=$r->getCategories() selected=$category_id}
+        <label>&nbsp;</label>{html_options name='category_id' options=$r->getUserTrainableCategories() selected=$category_id}
         <input type="submit" class="button" value="Add" />
         {$smarty.capture.error}
         </p>
@@ -223,7 +223,7 @@
 
         <label for="document_id" {if $smarty.capture.error}class="error"{/if} > Untrain document :</label>
         <select name="document_id" onmouseup="getDoc(this.value);">
-        {html_options options=$r->getDocuments() selected=$document_id}
+        {html_options options=$r->getUserOwnedDocuments() selected=$document_id}
         </select>
         <input type="button" class="button" value="Delete" onclick="rm('remdoc', 'Are you sure you want to delete this document?');"/>
         {$smarty.capture.error}
@@ -245,13 +245,12 @@
         {* Categorize document ---------------------------------------------- *}
 
         <form action="{$r->text.form_url}" name="catdoc" method="post" accept-charset="utf-8">
-
-
+        {* This is Ajax, no token or action is needed *}
 
         <p>
         <label for="document" >Categorize document :</label>
         <textarea name="cat_document" cols='50' rows='10'>{$cat_document}</textarea><br />
-        <label>&nbsp;</label>{html_options name='vector_id' options=$r->getVectors() selected=$vector_id}
+        <label>&nbsp;</label>{html_options name='vector_id' options=$r->getUserSharedVectors() selected=$vector_id}
         <input type="button" class="button" value="Categorize" onclick="getCat(this.form.cat_document.value, this.form.vector_id.value);" />
         {$smarty.capture.error}
         </p>
@@ -271,31 +270,53 @@
         <fieldset>
         <legend>Share</legend>
 
-        {* TODO *}
+        {* Share vector ----------------------------------------------------- *}
+
+        <form action="{$r->text.form_url}" name="sharevec" method="post" accept-charset="utf-8">
+        <input type="hidden" name="token" value="{$token}" />
+        <input type="hidden" name="action" value="sharevec" />
 
         <p>
-        <label for="vector_id">Share vector:</label>
-            {html_options name='vector_id' options=$r->getVectors() selected=$vector_id}
+
+        {validate id="sharevec1" form="sharevec" assign="sharevec_error1" message=$r->text.form_error_3}
+        {validate id="sharevec2" form="sharevec" assign="sharevec_error2" message=$r->text.form_error_8}
+        {validate id="sharevec3" form="sharevec" assign="sharevec_error3" message=$r->text.form_error_9}
+        {validate id="sharevec4" form="sharevec" assign="sharevec_error4" message=$r->text.form_error_9}
+        {validate id="sharevec5" form="sharevec" assign="sharevec_error5" message=$r->text.form_error_10}
+
+        <label for="vector_id" {if $sharevec_error1}class="error"{/if} >Share vector:</label>
+            {html_options name='vector_id' options=$r->getUserOwnedVectors() selected=$vector_id}
+            {$sharevec_error1}
         </p>
 
         <p>
-        <label for="friends">With friend:</label>
-            <select name="friends">
-            <option value="">conner_bw</option>
-            <option value="">test</option>
-            <option value="">Shie Kasai</option>
+        <label for="users_id" {if $sharevec_error2 || $sharevec_error5}class="error"{/if}>With friend:</label>
+            {* TODO: Get users from socialnetwork *}
+            <select name="users_id">
+            <option value="1">test</option>
+            <option value="4">conner_bw</option>
             </select>
+            {$sharevec_error2}
+            {$sharevec_error5}
         </p>
 
         <p>
         <label for="trainer">&nbsp;</label>
-            <input type="checkbox" name="trainer" value="1" /> Allow user to train documents?
+            <input type="checkbox" name="trainer" value="1" /> <span {if $sharevec_error3}class="error"{/if}>Allow user to train documents?</span>
+            {$sharevec_error3}
+        </p>
+        <p>
+        <label for="trainer">&nbsp;</label>
+            <input type="checkbox" name="owner" value="1" /> <span {if $sharevec_error4}class="error"{/if}>Owner? (If selected, the user can train documents)</span>
+            {$sharevec_error4}
         </p>
 
         <p>
         <label>&nbsp;</label>
             <input type="submit" class="button" value="Share" />
         </p>
+
+        </form>
 
 
         {* // --------------------------------------------------------------- *}
@@ -304,39 +325,23 @@
         </fieldset>
 
         <fieldset>
-        <legend>Manage</legend>
+        <legend>Unshare</legend>
 
-        {* TODO *}
+        {* Unhare vector ---------------------------------------------------- *}
+
+        <form action="{$r->text.form_url}" name="unsharevec" method="post" accept-charset="utf-8">
+        <input type="hidden" name="token" value="{$token}" />
+        <input type="hidden" name="action" value="unsharevec" />
+
+        {validate id="unsharevec1" form="unsharevec" assign="unsharevec_error1" message=$r->text.form_error_11}
 
 
-        <p>
-        <h3>Some Title</h3>
-        <table border="0" width="100%">
-        <thead>
-        <tr>
-            <th>Vector</th>
-            <th>Owner</th>
-            <th>Is Trainer?</th>
-            <th>Unshare</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr bgcolor="#eeeeee">
-            <td>1</td>
-            <td>2</td>
-            <td><input type="checkbox" name="trainer[1]" value="1" /></td>
-            <td><input type="checkbox" name="unshare[1]" value="1" /></td>
-        </tr>
-        <tr bgcolor="#dddddd">
-            <td>1</td>
-            <td>2</td>
-            <td><input type="checkbox" name="trainer[1]" value="1" /></td>
-            <td><input type="checkbox" name="unshare[1]" value="1" /></td>
-        </tr>
-        </tbody>
-        </table>
-        <center><input type="submit" class="button" value="Submit" /></center>
-        </p>
+        {if $unsharevec_error1}<p class="error">{$unsharevec_error1}</p>{/if}
+
+        {$r->getShareTable()}
+        <center>
+        <input type="button" class="button" value="Unshare" onclick="rm('unsharevec', 'Are you sure you want to unshare these vectors?');"/>
+        </center>
 
 
         {* // --------------------------------------------------------------- *}
@@ -380,8 +385,5 @@
 	</tr>
 </table>
 
-
-
-</div>
 
 {include file=$r->xhtml_footer}
