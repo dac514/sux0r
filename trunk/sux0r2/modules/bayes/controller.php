@@ -40,10 +40,9 @@ function sux($action, $params = null) {
             include_once('suxEdit.php');
             $reg = new suxEdit($user);
 
-            if ($reg->formValidate()) {
-                $reg->formProcess();
-            }
-            $reg->formBuild();
+            if ($reg->formValidate($_POST)) $reg->formProcess($_POST);
+
+            $reg->formBuild($_POST);
 
             break;
 

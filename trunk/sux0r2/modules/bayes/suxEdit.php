@@ -77,18 +77,19 @@ class suxEdit extends suxUser {
     /**
     * Validate the form
     *
+    * @param array $dirty reference to unverified $_POST
     * @return bool
     */
-    function formValidate() {
+    function formValidate(&$dirty) {
 
-        if(!empty($_POST['action'])) {
+        if(!empty($dirty['action'])) {
 
-            $action = filter_var($_POST['action'], FILTER_SANITIZE_STRING);
+            $action = filter_var($dirty['action'], FILTER_SANITIZE_STRING);
 
             // Add Vector
             if (suxValidate::is_registered_form($action)) {
                 suxValidate::connect($this->tpl);
-                if (suxValidate::is_valid($_POST, $action)) {
+                if (suxValidate::is_valid($dirty, $action)) {
                     suxValidate::disconnect();
                     return true;
                 }
@@ -102,8 +103,10 @@ class suxEdit extends suxUser {
 
     /**
     * Build the form and show the template
+    *
+    * @param array $dirty reference to unverified $_POST
     */
-    function formBuild() {
+    function formBuild(&$dirty) {
 
         // --------------------------------------------------------------------
         // Get existing user info if available
@@ -117,10 +120,10 @@ class suxEdit extends suxUser {
         // Form logic
         // --------------------------------------------------------------------
 
-        if (!empty($_POST)) $this->tpl->assign($_POST);
+        if (!empty($dirty)) $this->tpl->assign($dirty);
         else suxValidate::disconnect();
 
-        if (empty($_POST['action']) || !suxValidate::is_registered_form($_POST['action'])) {
+        if (empty($dirty['action']) || !suxValidate::is_registered_form($dirty['action'])) {
 
             suxValidate::connect($this->tpl, true); // Reset connection
 
@@ -173,62 +176,64 @@ class suxEdit extends suxUser {
 
     /**
     * Process the form
+    *
+    * @param array $clean reference to validated $_POST
     */
-    function formProcess() {
+    function formProcess(&$clean) {
 
 
-        switch ($_POST['action'])
+        switch ($clean['action'])
         {
 
         case 'addvec':
 
-            $this->nb->addVectorWithUser($_POST['vector'], $_SESSION['users_id']);
-            unset($_POST['vector']);
-            break;
-
-        case 'addcat':
-
-            // Security check
-            if ($this->nb->isVectorOwner($_POST['vector_id'], $_SESSION['users_id'])) {
-                $this->nb->addCategory($_POST['category'], $_POST['vector_id']);
-            }
-            unset($_POST['category']);
-            break;
-
-        case 'remcat':
-
-            // Security check
-            if ($this->nb->isCategoryOwner($_POST['category_id'], $_SESSION['users_id'])) {
-                $this->nb->removeCategory($_POST['category_id']);
-            }
-            unset($_POST['category_id']);
+            $this->nb->addVectorWithUser($clean['vector'], $_SESSION['users_id']);
+            unset($clean['vector']);
             break;
 
         case 'remvec':
 
             // Security check
-            if ($this->nb->isVectorOwner($_POST['vector_id'], $_SESSION['users_id'])) {
-                $this->nb->removeVectorWithUsers($_POST['vector_id']);
+            if ($this->nb->isVectorOwner($clean['vector_id'], $_SESSION['users_id'])) {
+                $this->nb->removeVectorWithUsers($clean['vector_id']);
             }
-            unset($_POST['vector_id']);
+            unset($clean['vector_id']);
+            break;
+
+        case 'addcat':
+
+            // Security check
+            if ($this->nb->isVectorOwner($clean['vector_id'], $_SESSION['users_id'])) {
+                $this->nb->addCategory($clean['category'], $clean['vector_id']);
+            }
+            unset($clean['category']);
+            break;
+
+        case 'remcat':
+
+            // Security check
+            if ($this->nb->isCategoryOwner($clean['category_id'], $_SESSION['users_id'])) {
+                $this->nb->removeCategory($clean['category_id']);
+            }
+            unset($clean['category_id']);
             break;
 
         case 'adddoc':
 
             // Security check
-            if ($this->nb->isTrainer($_POST['category_id'], $_SESSION['users_id'])) {
-                $this->nb->trainDocument($_POST['document'], $_POST['category_id']);
+            if ($this->nb->isTrainer($clean['category_id'], $_SESSION['users_id'])) {
+                $this->nb->trainDocument($clean['document'], $clean['category_id']);
             }
-            unset($_POST['document']);
+            unset($clean['document']);
             break;
 
         case 'remdoc':
 
             // Security check
-            if ($this->nb->isDocumentOwner($_POST['document_id'], $_SESSION['users_id'])) {
-                $this->nb->untrainDocument($_POST['document_id']);
+            if ($this->nb->isDocumentOwner($clean['document_id'], $_SESSION['users_id'])) {
+                $this->nb->untrainDocument($clean['document_id']);
             }
-            unset($_POST['document_id']);
+            unset($clean['document_id']);
             break;
 
         }
