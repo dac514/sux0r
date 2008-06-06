@@ -3,23 +3,27 @@
 // Ajax
 // Echo the categorization of a document
 
-require_once(dirname(__FILE__) . '/../../config.php');
-require_once(dirname(__FILE__) . '/../../initialize.php');
-require_once(dirname(__FILE__) . '/../../includes/suxNaiveBayesian.php');
-
 // ---------------------------------------------------------------------------
 // Sanitize
 // ---------------------------------------------------------------------------
 
-if (!filter_var($_POST['id'], FILTER_VALIDATE_INT)) {
+if (!filter_var(@$_POST['id'], FILTER_VALIDATE_INT)) {
     echo '<p>Error: Vector cannot be empty</p>';
     exit;
 }
 
-if (!trim($_POST['document'])) {
+if (!trim(@$_POST['document'])) {
     echo '<p>Error: Document cannot be empty</p>';
     exit;
 }
+
+// ---------------------------------------------------------------------------
+// Require
+// ---------------------------------------------------------------------------
+
+require_once(dirname(__FILE__) . '/../../config.php');
+require_once(dirname(__FILE__) . '/../../initialize.php');
+require_once(dirname(__FILE__) . '/../../includes/suxNaiveBayesian.php');
 
 // ---------------------------------------------------------------------------
 // Generate HTML

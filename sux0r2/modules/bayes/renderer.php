@@ -23,16 +23,11 @@
 */
 
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
-require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
-require_once(dirname(__FILE__) . '/../../includes/suxNaiveBayesian.php');
+require_once('suxNbUser.php');
 
 class renderer extends suxRenderer {
 
-
-    public $profile = array(); // User profile
-
-    private $user; // User object
-    private $nb; // Naive Bayesian Object
+    private $nb; // Naive Bayesian Object / extended
 
 
     /**
@@ -42,24 +37,22 @@ class renderer extends suxRenderer {
     */
     function __construct($module) {
         parent::__construct($module); // Call parent
-
-        $this->user = new suxUser();
-        $this->nb = new suxNaiveBayesian();
+        $this->nb = new suxNbUser();
 
     }
 
 
     /**
-    * Get vectors
+    * Get {html_options} formated vectors array
     *
     * @return array
     */
-    function getVectors() {
+    function getUserOwnedVectors() {
 
         static $tmp = array();
         if (count($tmp)) return $tmp; // Cache
 
-        foreach ($this->nb->getVectors() as $key => $val) {
+        foreach ($this->getUserOwnedVectorsArray() as $key => $val) {
             if (!in_array($val['vector'], $tmp)) $tmp[$key] = $val['vector'];
             else $tmp[$key] = "{$val['vector']} (id:$key)";
         }
@@ -70,16 +63,36 @@ class renderer extends suxRenderer {
 
 
     /**
-    * Get categories
+    * Get {html_options} formated vectors array
     *
     * @return array
     */
-    function getCategories() {
+    function getUserSharedVectors() {
 
         static $tmp = array();
         if (count($tmp)) return $tmp; // Cache
 
-        foreach ($this->nb->getVectors() as $key => $val) {
+        foreach ($this->getUserSharedVectorsArray() as $key => $val) {
+            if (!in_array($val['vector'], $tmp)) $tmp[$key] = $val['vector'];
+            else $tmp[$key] = "{$val['vector']} (id:$key)";
+        }
+
+        return $tmp;
+
+    }
+
+
+    /**
+    * Get {html_options} formated categories array
+    *
+    * @return array
+    */
+    function getUserOwnedCategories() {
+
+        static $tmp = array();
+        if (count($tmp)) return $tmp; // Cache
+
+        foreach ($this->getUserOwnedVectorsArray() as $key => $val) {
 
             // Create a dropdown with <optgroup> array
             $x = "{$val['vector']}";
@@ -98,20 +111,72 @@ class renderer extends suxRenderer {
 
 
     /**
+    * Get {html_options} formated categories array
+    *
+    * @return array
+    */
+    function getUserTrainableCategories() {
+
+        static $tmp = array();
+        if (count($tmp)) return $tmp; // Cache
+
+        foreach ($this->getUserTrainableVectorsArray() as $key => $val) {
+
+            // Create a dropdown with <optgroup> array
+            $x = "{$val['vector']}";
+            if (isset($tmp[$x])) $x = "{$val['vector']} (id:$key)";
+            $y = array();
+            foreach ($this->nb->getCategories($key) as $key2 => $val2) {
+                $y[$key2] = "{$val2['category']}";
+            }
+
+            $tmp[$x] = $y;
+        }
+
+        return $tmp;
+
+    }
+
+
+    /**
+    * Get documents
+    *
+    * @return array
+    */
+    function getUserOwnedDocuments() {
+
+        static $tmp = array();
+        if (count($tmp)) return $tmp; // Cache
+
+        foreach ($this->getUserOwnedVectorsArray() as $key => $val) {
+            foreach ($this->nb->getDocuments($key) as $key2 => $val2) {
+
+                $tmp[$key2] = "{$key2} - {$val['vector']}, {$val2['category']}";
+
+            }
+        }
+
+        return $tmp;
+
+    }
+
+
+    /**
     * Get category stats
     *
     * @return string html formated stats
     */
     function getCategoryStats() {
 
-        static $tmp = array();
-        if (count($tmp)) return $tmp; // Cache
+        static $html = null;
+        if ($html) return $html; // Cache
 
         $cat = 0;
         $html = "<div id='bStats'><ul>\n";
-        foreach ($this->nb->getVectors() as $key => $val) {
-            $html .= "<li class='bStatsVec'>{$val['vector']}:</li>\n";
-            $html .= "<ul>\n";
+        foreach ($this->getUserSharedVectorsArray() as $key => $val) {
+            $html .= "<li class='bStatsVec'>{$val['vector']}";
+            if (!$this->nb->isVectorOwner($key, $_SESSION['users_id'])) $html .= ' <em>(shared)</em>';
+            $html .= ":</li>\n<ul>\n";
             foreach ($this->nb->getCategories($key) as $key2 => $val2) {
                 $doc_count = $this->nb->getDocumentCount($key2);
                 $html .= "<li class='bStatsCat'>{$val2['category']}:</li>";
@@ -130,27 +195,140 @@ class renderer extends suxRenderer {
 
 
     /**
-    * Get documents
-    *
-    * @return array
+    * @return string html table
     */
-    function getDocuments() {
+    function getShareTable() {
 
-        static $tmp = array();
-        if (count($tmp)) return $tmp; // Cache
+        static $html = null;
+        if ($html) return $html; // Cache
 
-        foreach ($this->nb->getVectors() as $key => $val) {
-            foreach ($this->nb->getDocuments($key) as $key2 => $val2) {
+        $html .= "<table class='shared'><thead><tr>
+        <th>Vector</th>
+        <th>User</th>
+        <th>Trainer</th>
+        <th>Owner</th>
+        <th>Unshare</th>
+        </tr></thead><tbody>\n";
 
-                $tmp[$key2] = "{$key2} - {$val['vector']}, {$val2['category']}";
+        // Yes, we could have left joined the users table
+        //
+        // But because we can split our data among multiple databases we
+        // can't guarantee that the users tables and the bayes tables are
+        // in the same place, hence this awkwardness
+
+        require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
+        $user = new suxUser();
+
+        // Owned, and the users shared with
+        $vectors = $this->getUserOwnedVectorsArray();
+        foreach ($vectors as $key => $val) {
+
+
+            $html .= "<tr class='mine'>
+            <td>{$val['vector']}</td>
+            <td>{$_SESSION['nickname']}</td>
+            <td>x</td>
+            <td>x</td>
+            <td><em>n/a</em></td>
+            </tr>\n";
+
+            $shared = $this->nb->getVectorShares($key);
+            foreach ($shared as $val2) {
+
+                if ($val2['users_id'] == $_SESSION['users_id']) continue;
+
+                $u = $user->getUser($val2['users_id']);
+
+                $trainer = $val2['trainer'] ? 'x' : null;
+
+                $owner = null;
+                if ($val2['owner']) {
+                    $trainer = 'x'; // Training is implied
+                    $owner = 'x';
+                }
+
+
+                $html .= "<tr>
+                <td>{$val['vector']}</td>
+                <td>{$u['nickname']}</td>
+                <td>{$trainer}</td>
+                <td>{$owner}</td>
+                <td><input type='checkbox' name='unshare[][$key]' value='{$val2['users_id']}' /></td>
+                </tr>\n";
 
             }
+
+
         }
 
-        return $tmp;
+        // Shared, but not owned
+        $vectors = $this->getUserSharedVectorsArray();
+        foreach ($vectors as $key => $val) {
+
+            if ($val['owner']) continue;
+
+            $trainer = $val['trainer'] ? 'x' : null;
+
+            // TODO:
+            // Ajax tooltip on vector -> getOwners.php
+
+            $html .= "<tr class='mineToo'>
+            <td>{$val['vector']}</td>
+            <td>{$_SESSION['nickname']}</td>
+            <td>{$trainer}</td>
+            <td></td>
+            <td><input type='checkbox' name='unshare[][$key]' value='{$_SESSION['users_id']}' /></td>
+            </tr>\n";
+
+        }
+
+        $html .= "</tbody></table>\n";
+
+        return $html;
 
     }
 
+
+    /**
+    * Get vectors, statically cached array
+    *
+    * @return array
+    */
+    private function getUserOwnedVectorsArray() {
+
+        static $vectors = array();
+        if (count($vectors)) return $vectors; // Cache
+        else return $this->nb->getUserOwnedVectors($_SESSION['users_id']);
+
+    }
+
+
+    /**
+    * Get vectors, statically cached array
+    *
+    * @return array
+    */
+    private function getUserTrainableVectorsArray() {
+
+        static $vectors = array();
+        if (count($vectors)) return $vectors; // Cache
+        else return $this->nb->getUserTrainableVectors($_SESSION['users_id']);
+
+    }
+
+
+    /**
+    * Get vectors, statically cached array
+    *
+    * @return array
+    */
+    private function getUserSharedVectorsArray() {
+
+        static $vectors = array();
+        if (count($vectors)) return $vectors; // Cache
+        else return $this->nb->getUserSharedVectors($_SESSION['users_id']);
+
+    }
 
 
 
