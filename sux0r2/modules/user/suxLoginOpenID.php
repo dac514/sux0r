@@ -65,10 +65,12 @@ class suxLoginOpenID extends suxRegisterOpenID {
 
     /**
     * Override: build the form and show the template
+    *
+    * @param array $dirty reference to unverified $_POST
     */
-    function formBuild() {
+    function formBuild(&$dirty) {
 
-        if (!empty($_POST)) $this->tpl->assign($_POST);
+        if (!empty($dirty)) $this->tpl->assign($dirty);
         else suxValidate::disconnect();
 
         if (!suxValidate::is_registered_form()) {

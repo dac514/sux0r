@@ -38,10 +38,9 @@ function sux($action, $params = null) {
             // Openid registration
             include_once('suxLoginOpenID.php');
             $auth = new suxLoginOpenID();
-            if ($auth->formValidate()) {
-                $auth->formHandoff();
-            }
-            else $auth->formBuild();
+
+            if ($auth->formValidate($_POST)) $auth->formHandoff($_POST);
+            else $auth->formBuild($_POST);
 
         }
         else {
@@ -77,10 +76,9 @@ function sux($action, $params = null) {
             // Openid registration
             include_once('suxRegisterOpenID.php');
             $reg = new suxRegisterOpenID();
-            if ($reg->formValidate()) {
-                $reg->formHandoff();
-            }
-            else $reg->formBuild();
+
+            if ($reg->formValidate($_POST)) $reg->formHandoff($_POST);
+            else $reg->formBuild($_POST);
 
         }
         else {
@@ -89,11 +87,13 @@ function sux($action, $params = null) {
             include_once('suxEdit.php');
             $reg = new suxEdit();
 
-            if ($reg->formValidate()) {
-                $reg->formProcess();
+            if ($reg->formValidate($_POST)) {
+
+                $reg->formProcess($_POST);
                 $reg->formSuccess();
+
             }
-            else $reg->formBuild();
+            else $reg->formBuild($_POST, $_GET);
         }
 
         break;
@@ -111,11 +111,13 @@ function sux($action, $params = null) {
             include_once('suxEdit.php');
             $reg = new suxEdit('edit', $user);
 
-            if ($reg->formValidate()) {
-                $reg->formProcess();
+            if ($reg->formValidate($_POST)) {
+
+                $reg->formProcess($_POST);
                 $reg->formSuccess();
+
             }
-            else $reg->formBuild();
+            else $reg->formBuild($_POST, $_GET);
 
             break;
 

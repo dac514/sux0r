@@ -55,14 +55,15 @@ class suxRegisterOpenID extends suxUser {
     /**
     * Validate the form
     *
+    * @param array $dirty reference to unverified $_POST
     * @return bool
     */
-    function formValidate() {
+    function formValidate(&$dirty) {
 
-        if(!empty($_POST) && suxValidate::is_registered_form()) {
+        if(!empty($dirty) && suxValidate::is_registered_form()) {
             // Validate
             suxValidate::connect($this->tpl);
-            if(suxValidate::is_valid($_POST)) {
+            if(suxValidate::is_valid($dirty)) {
                 suxValidate::disconnect();
                 return true;
             }
@@ -74,10 +75,12 @@ class suxRegisterOpenID extends suxUser {
 
     /**
     * Build the form and show the template
+    *
+    * @param array $dirty reference to unverified $_POST
     */
-    function formBuild() {
+    function formBuild(&$dirty) {
 
-        if (!empty($_POST)) $this->tpl->assign($_POST);
+        if (!empty($dirty)) $this->tpl->assign($dirty);
         else suxValidate::disconnect();
 
         if (!suxValidate::is_registered_form()) {
@@ -113,10 +116,12 @@ class suxRegisterOpenID extends suxUser {
 
     /**
     * Redirect to openid module
+    *
+    * @param array $clean reference to validated $_POST
     */
-    function formHandoff() {
+    function formHandoff(&$clean) {
 
-        $q = array('openid.mode' => 'login', 'openid_url' => $_POST['url']);
+        $q = array('openid.mode' => 'login', 'openid_url' => $clean['url']);
         $url = suxFunct::makeUrl('/openid/register/openid', $q);
         suxFunct::redirect($url);
 

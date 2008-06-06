@@ -82,16 +82,15 @@ class suxEdit extends suxUser {
     /**
     * Validate the form
     *
+    * @param array $dirty reference to unverified $_POST
     * @return bool
     */
-    function formValidate() {
+    function formValidate(&$dirty) {
 
-        //new dBug($_SESSION);
-
-        if(!empty($_POST) && suxValidate::is_registered_form()) {
+        if(!empty($dirty) && suxValidate::is_registered_form()) {
             // Validate
             suxValidate::connect($this->tpl);
-            if(suxValidate::is_valid($_POST)) {
+            if(suxValidate::is_valid($dirty)) {
                 suxValidate::disconnect();
                 return true;
             }
@@ -103,8 +102,11 @@ class suxEdit extends suxUser {
 
     /**
     * Build the form and show the template
+    *
+    * @param array $dirty reference to unverified $_POST
+    * @param array $filthy reference to unverified $_GET
     */
-    function formBuild() {
+    function formBuild(&$dirty, &$filthy) {
 
         // --------------------------------------------------------------------
         // Get existing user info if available
@@ -115,31 +117,29 @@ class suxEdit extends suxUser {
         if ($this->isOpenID()) {
 
             // OpenID Registration
-
             $this->r->bool['openid'] = true;
             $this->r->text['openid_url'] = $_SESSION['openid_url_registration'];
 
             // Sreg
-
-            if (!empty($_GET['nickname'])) $u['nickname'] = $_GET['nickname'];
-            if (!empty($_GET['email'])) $u['email'] = $_GET['email'];
-            if (!empty($_GET['fullname'])) {
+            if (!empty($filthy['nickname'])) $u['nickname'] = $filthy['nickname'];
+            if (!empty($filthy['email'])) $u['email'] = $filthy['email'];
+            if (!empty($filthy['fullname'])) {
                 // \w means alphanumeric characters, \W is the negated version of \w
-                $tmp = mb_split("\W", $_GET['fullname']);
+                $tmp = mb_split("\W", $filthy['fullname']);
                 $u['given_name'] = array_shift($tmp);
                 $u['family_name'] = array_pop($tmp);
             }
-            if (!empty($_GET['dob'])) {
-                $tmp = mb_split("-", $_GET['dob']);
+            if (!empty($filthy['dob'])) {
+                $tmp = mb_split("-", $filthy['dob']);
                 $u['Date_Year'] = array_shift($tmp);
                 $u['Date_Month'] = array_shift($tmp);
                 $u['Date_Day'] = array_shift($tmp);
             }
-            if (!empty($_GET['country'])) $u['country'] = mb_strtolower($_GET['country']);
-            if (!empty($_GET['gender'])) $u['gender'] = mb_strtolower($_GET['gender']);
-            if (!empty($_GET['postcode'])) $u['postcode'] = $_GET['postcode'];
-            if (!empty($_GET['language'])) $u['language'] = mb_strtolower($_GET['language']);
-            if (!empty($_GET['timezone'])) $u['timezone'] = $_GET['timezone'];
+            if (!empty($filthy['country'])) $u['country'] = mb_strtolower($filthy['country']);
+            if (!empty($filthy['gender'])) $u['gender'] = mb_strtolower($filthy['gender']);
+            if (!empty($filthy['postcode'])) $u['postcode'] = $filthy['postcode'];
+            if (!empty($filthy['language'])) $u['language'] = mb_strtolower($filthy['language']);
+            if (!empty($filthy['timezone'])) $u['timezone'] = $filthy['timezone'];
 
         }
         elseif ($this->mode == 'edit') {
@@ -175,7 +175,7 @@ class suxEdit extends suxUser {
         // Form logic
         // --------------------------------------------------------------------
 
-        if (!empty($_POST)) $this->tpl->assign($_POST);
+        if (!empty($dirty)) $this->tpl->assign($dirty);
         else suxValidate::disconnect();
 
         $validators = array(
@@ -229,9 +229,6 @@ class suxEdit extends suxUser {
         }
 
 
-        // $var = md5(serialize($_SESSION['SmartyValidate']));
-        // secho $var;
-
         // --------------------------------------------------------------------
         // DONE: Form Logic
         // --------------------------------------------------------------------
@@ -269,8 +266,10 @@ class suxEdit extends suxUser {
 
     /**
     * Process the form
+    *
+    * @param array $clean reference to validated $_POST
     */
-    function formProcess() {
+    function formProcess(&$clean) {
 
         // --------------------------------------------------------------------
         // Sanitize
@@ -278,20 +277,20 @@ class suxEdit extends suxUser {
 
         // Captcha
         unset($_SESSION['captcha']);
-        unset($_POST['captcha']);
+        unset($clean['captcha']);
 
         // Redundant password field
-        unset($_POST['password_verify']);
+        unset($clean['password_verify']);
 
         // Birthday
         $clean['dob'] = null;
-        if (!empty($_POST['Date_Year']) && !empty($_POST['Date_Month']) && !empty($_POST['Date_Day'])) {
-            $clean['dob'] = "{$_POST['Date_Year']}-{$_POST['Date_Month']}-{$_POST['Date_Day']}";
+        if (!empty($clean['Date_Year']) && !empty($clean['Date_Month']) && !empty($clean['Date_Day'])) {
+            $clean['dob'] = "{$clean['Date_Year']}-{$clean['Date_Month']}-{$clean['Date_Day']}";
         }
         if (!filter_var($clean['dob'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => "/^(\d{1,4})-(\d{1,2})-(\d{1,2})$/")))) {
             unset ($clean['dob']);
         }
-        unset ($_POST['Date_Year'], $_POST['Date_Month'], $_POST['Date_Day']);
+        unset ($clean['Date_Year'], $clean['Date_Month'], $clean['Date_Day']);
 
         // --------------------------------------------------------------------
         // Edit Mode
@@ -299,14 +298,14 @@ class suxEdit extends suxUser {
 
         if ($this->mode == 'edit') {
 
-            if ($_POST['nickname'] != $_SESSION['nickname']) {
+            if ($clean['nickname'] != $_SESSION['nickname']) {
                 // TODO:
                 // Security check
                 // Only an administrator can modify other users
             }
 
             // Get users_id
-            $u = $this->getUserByNickname($_POST['nickname']);
+            $u = $this->getUserByNickname($clean['nickname']);
             if (!$u) throw new Exception('Invalid user');
             $id = $u['users_id'];
 
@@ -325,8 +324,6 @@ class suxEdit extends suxUser {
         // SQL
         // --------------------------------------------------------------------
 
-        $clean = array_merge($clean, $_POST);
-
         if (isset($id) && filter_var($id, FILTER_VALIDATE_INT)) $this->setUser($clean, $id);
         else $this->setUser($clean);
 
@@ -337,11 +334,11 @@ class suxEdit extends suxUser {
         unset($_SESSION['openid_url_registration'], $_SESSION['openid_url_integrity']);
 
         // Clear approptiate template caches
-        $this->tpl->clear_cache('profile.tpl', $_POST['nickname']);
+        $this->tpl->clear_cache('profile.tpl', $clean['nickname']);
 
         // Reset session
-        if ($this->mode == 'edit' && $_POST['nickname'] == $_SESSION['nickname']) {
-            $this->setSession($_POST['nickname'], true);
+        if ($this->mode == 'edit' && $clean['nickname'] == $_SESSION['nickname']) {
+            $this->setSession($clean['nickname'], true);
         }
 
     }
