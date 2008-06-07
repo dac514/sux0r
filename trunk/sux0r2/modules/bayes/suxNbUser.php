@@ -282,7 +282,6 @@ class suxNbUser extends suxNaiveBayesian {
         if ($trainer != 1) $trainer = 0;
         if ($owner != 1) $owner = 0;
 
-
         // --------------------------------------------------------------------
         // Go!
         // --------------------------------------------------------------------
@@ -298,7 +297,13 @@ class suxNbUser extends suxNaiveBayesian {
             );
 
         if ($st->fetchColumn() > 0) {
-            // UPDATE
+
+            // Don't allow un-ownership if there is only one owner, probably due to a race condition
+            $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_auth} WHERE bayes_vectors_id = ? ");
+            $st->execute(array($vector_id));
+            if (!$owner && $st->fetchColumn() <= 1) return false;
+
+           // UPDATE
             $query = "UPDATE {$this->db_table_auth}
             SET trainer = :trainer, owner = :owner
             WHERE users_id = :users_id AND bayes_vectors_id = :bayes_vectors_id ";
@@ -307,10 +312,12 @@ class suxNbUser extends suxNaiveBayesian {
 
         }
         else {
+
             // INSERT
             $query = suxDB::prepareInsertQuery($this->db_table_auth, $shared);
             $st = $this->db->prepare($query);
             return $st->execute($shared);
+
         }
 
 
@@ -330,12 +337,11 @@ class suxNbUser extends suxNaiveBayesian {
         // Don't allow unsharing if there is only one owner, probably due to a race condition
         $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_auth} WHERE bayes_vectors_id = ? ");
         $st->execute(array($vector_id));
+        if ($st->fetchColumn() <= 1) return false;
 
-        if ($st->fetchColumn() > 1) {
-            $st = $this->db->prepare("DELETE FROM {$this->db_table_auth} WHERE users_id = ? AND bayes_vectors_id = ? LIMIT 1 ");
-            return $st->execute(array($users_id, $vector_id));
-        }
-        else return false;
+        // DELETE
+        $st = $this->db->prepare("DELETE FROM {$this->db_table_auth} WHERE users_id = ? AND bayes_vectors_id = ? LIMIT 1 ");
+        return $st->execute(array($users_id, $vector_id));
 
     }
 
