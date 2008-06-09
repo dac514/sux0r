@@ -359,7 +359,7 @@ CREATE TABLE `users_info` (
 -- Dumping data for table `users_info`
 --
 
-INSERT INTO `users_info` VALUES (1, 1, 'Test', 'Testing', '', '', '', '', 'ca', '', '', NULL, NULL, 'en', 'America/Montreal', NULL, NULL);
+INSERT INTO `users_info` VALUES (1, 1, 'Test', 'Testing', '', '', '', '', 'ca', '', '', NULL, NULL, 'en', 'America/Montreal');
 
 -- --------------------------------------------------------
 
