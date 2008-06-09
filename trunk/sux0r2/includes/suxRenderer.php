@@ -263,6 +263,102 @@ class suxRenderer {
     }
 
 
+    // -------------------------------------------------------------------------
+    // Javascript
+    // -------------------------------------------------------------------------
+
+
+    /**
+    * TinyMCE Initialization
+    *
+    * @see http://tinymce.moxiecode.com/
+    * @global string $CONFIG['URL']
+    * @param int $width optional width parameter for editor window
+    * @param int $height optional height parameter for editor window
+    * @return string the javascript code
+    */
+    function tinyMceInit($width = 640, $height = 400) {
+
+        $path = $GLOBALS['CONFIG']['URL'] . '/symbtions/tinymce/jscripts/tiny_mce/tiny_mce.js';
+
+        $js = '<script type="text/javascript" src="' . $path . '"></script>
+        <script language="javascript" type="text/javascript">
+        // <![CDATA[
+
+        tinyMCE.init({
+            mode : "textareas",
+            theme : "advanced",
+            editor_selector : "mceEditor",
+            plugins : "paste,media,table,fullscreen,layer,safari",
+            width: ' . $width . ',
+            height: ' . $height . ',
+            theme_advanced_toolbar_location : "top",
+            theme_advanced_toolbar_align : "left",
+            theme_advanced_buttons1 : "bold,italic,underline,justifyleft,justifycenter,justifyright,justifyfull,numlist,bullist,outdent,indent,forecolor,backcolor,fontselect,fontsizeselect",
+            theme_advanced_buttons2 : "undo,redo,pastetext,pasteword,link,unlink,table,image,media,removeformat,cleanup,code,fullscreen",
+            theme_advanced_buttons3 : "",
+            entity_encoding : "raw",
+            relative_urls : false
+        });
+
+        // ]]>
+        </script>';
+        $js .= "\n";
+
+        return $js;
+    }
+
+
+    /**
+    * Cropper Initialization
+    *
+    * @see http://www.defusion.org.uk/code/javascript-image-cropper-ui-using-prototype-scriptaculous/
+    * @global string $CONFIG['URL']
+    * @param int $x ratio width
+    * @param int $y ratio height
+    * @return string the javascript code
+    */
+    function cropperInit($x, $y) {
+
+        global $CONFIG;
+
+        $js = '
+        <script type="text/javascript" src="' . $GLOBALS['CONFIG']['URL'] . '/symbionts/scriptaculous/lib/prototype.js"></script>
+        <script type="text/javascript" src="' . $GLOBALS['CONFIG']['URL'] . '/symbionts/scriptaculous/src/scriptaculous.js"></script>
+        <script type="text/javascript" src="' . $GLOBALS['CONFIG']['URL'] . '/symbionts/cropper/cropper.js"></script>
+        <script type="text/javascript" language="javascript">
+        // <![CDATA[
+
+                function onEndCrop( coords, dimensions ) {
+                    $( "x1" ).value = coords.x1;
+                    $( "y1" ).value = coords.y1;
+                    $( "width" ).value = dimensions.width;
+                    $( "height" ).value = dimensions.height;
+                }
+
+                Event.observe( window, "load", function() {
+                    new Cropper.Img(
+                        "cropperImage",
+                        {
+                            ratioDim: {
+                                x: ' . $x . ',
+                                y: ' . $y . '
+                            },
+                            displayOnInit: true,
+                            onEndCrop: onEndCrop
+                        }
+                    );
+                } );
+
+        // ]]>
+        </script>
+        ';
+
+        return $js;
+
+    }
+
+
 }
 
 
