@@ -7,6 +7,12 @@ ErrorDocument 404 /sux0r2/404.html
 
     RewriteEngine on
 
+    # Restrict access to sux0r files from a single domain,
+    # this is useful for shared servers with addon domains.
+    # Adapt and uncomment the following:
+    # RewriteCond %{HTTP_HOST} !domain.com
+    # RewriteRule (.*) $1 [F]
+
     # To redirect all users to access the site WITH the 'www.' prefix,
     # (http://domain.com/... will be redirected to http://www.domain.com/...)
     # adapt and uncomment the following:
@@ -15,7 +21,7 @@ ErrorDocument 404 /sux0r2/404.html
 
     # To redirect all users to access the site WITHOUT the 'www.' prefix,
     # (http://www.domain.com/... will be redirected to http://domain.com/...)
-    # uncomment and adapt the following:
+    # adapt and uncomment the following:
     # RewriteCond %{HTTP_HOST} ^www\.domain\.com$ [NC]
     # RewriteRule ^(.*)$ http://domain.com/$1 [L,R=301]
 
