@@ -32,9 +32,9 @@ http://www.gnu.org/philosophy/license-list.html
 Pro-tip
 ------------------------------------------------------------------------------
 
-Use the following command when updating 3rd party vendors:
+Use rsync when updating 3rd party vendors, example:
 
-rsync -rcv --delete --cvs-exclude /source/ /dest
+rsync -rcv --delete --cvs-exclude ~/Desktop/tinymce/ ~/Sites/sux0r2/includes/symbionts/tinymce/
 
 ------------------------------------------------------------------------------
 3rd Party Vendors, in alphabetical order
@@ -115,6 +115,6 @@ Stopwords
 
 TinyMCE
 * Path: ./tinymce/
-* Version: 3.0.8
+* Version: 3.0.9
 * Licence: LGPL 2.1
 * Website: http://tinymce.moxiecode.com/
