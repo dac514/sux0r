@@ -12,7 +12,7 @@ $gtext['form_error_7'] = 'Document cannot be empty';
 $gtext['form_error_8'] = 'User cannot be empty';
 $gtext['form_error_9'] = 'Invalid';
 $gtext['form_error_10'] = 'Cannot share vector with self';
-$gtext['form_error_11'] = 'Nothing was selected?';
-
+$gtext['form_error_11'] = 'User does not exist';
+$gtext['form_error_12'] = 'Nothing was selected?';
 
 ?>

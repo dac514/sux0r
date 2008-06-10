@@ -151,33 +151,6 @@ class renderer extends suxRenderer {
     }
 
 
-
-    /**
-    * Get openid.server <link> tag
-    *
-    * @return string
-    */
-    function getOpenIDMeta() {
-
-        $server = suxFunct::makeUrl('/openid', null, true);
-        return '<link rel="openid.server" href="' . $server .'" />' . "\n";
-
-    }
-
-
-    /**
-    * Get a refresh meta tag
-    *
-    * @return string
-    */
-    function getRefreshMeta($url) {
-
-        // 5 seconds
-        return '<meta http-equiv="refresh" content="5;url=' . $url . '">';
-
-    }
-
-
 }
 
 

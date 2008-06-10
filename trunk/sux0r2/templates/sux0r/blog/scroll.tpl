@@ -15,45 +15,37 @@
 	<tr>
         <td style="vertical-align:top;">
 			<div id="leftside">
-
-            Lorem ipsum dolor sit amet, consec tetuer Lorem ipsum dolor sit amet
-
-            <!-- menu -->
-            <div class='menucontainer'>
-            <ul class='menulist'>
-            <li><a href='#' class='selected'>Item One</a></li>
-            <li><a href='cake'>Item Two</a></li>
-            <li><a href='#'>Item Three</a></li>
-            <li><a href='http://www.trotch.com'>Item Four</a></li>
-            </ul>
-            </div>
-            <div class='clearboth'></div>
-
-            <p>Thumbnails?</p>
-
-            <div style="margin-left: 10px;">
-
-            <div class="thumbnail">
-            <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="60" height="60">
-            </div>
-
-            <div class="thumbnail">
-            <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="60" height="60">
-            </div>
-
-            <div class="thumbnail">
-            <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="60" height="60">
-            </div>
-
-            <br class="clearboth" />
-
-            </div>
-
+            
+            <p>
+            Current month<br />
+            Link to article<br /> 
+            Link to article<br /> 
+            Link to article<br /> 
+            Link to article<br />             
+            </p>
+            
+            <p>
+            Most recent comments<br />
+            Link to article#comment<br /> 
+            Link to article#comment<br /> 
+            Link to article#comment<br /> 
+            Link to article#comment<br /> 
+            </p>
 
 			</div>
 		</td>
 		<td style="vertical-align:top;">
 			<div id="rightside">
+            
+            <p>
+            Author: 
+            [ Dropdown ] 
+            Tags: 
+            [ Dropdown ]  
+            Month/Year:
+            [ Dropdown ]
+            [ Go! ]
+            </p>  
 
                 <div class="widget">
                     <h2>Title</h2>
@@ -61,8 +53,12 @@
                         <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="80" height="80"><br>
                         Caption
                     </div>
+                    
+                    <p>Date, Author, Tags</p>
                     <p>Lorem ipsum dolor sit amet, consectetuer...</p>
+                    
                     <div class="clearboth"></div>
+                    <p>Permanent Link, Comments (0), [ Facebook, Digg, etc ], [ Bayesian Categorize ]</p>
                     <b class="bb"><b></b></b>
                 </div>
 
@@ -72,12 +68,15 @@
                     <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="80" height="80"><br>
                     Caption
                     </div>
+                    
+                    <p>Date, Author, Tags</p>
                     <p>Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer
                     Lorem ipsum dolor sit amet, consec tetuer Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer
                     Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consect etuer Lorem ipsum dolor sit amet, consectetuer
                     Lorem ipsum dolor sit amet, consec tetuer Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer
                     </p>
                     <div class="clearboth"></div>
+                    <p>Permanent Link, Comments (0), [ Facebook, Digg, etc ], [ Bayesian Categorize ]</p>
                     <b class="bb"><b></b></b>
                 </div>
 

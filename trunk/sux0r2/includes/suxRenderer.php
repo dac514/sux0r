@@ -267,48 +267,6 @@ class suxRenderer {
     // Javascript
     // -------------------------------------------------------------------------
 
-
-    /**
-    * TinyMCE Initialization
-    *
-    * @see http://tinymce.moxiecode.com/
-    * @global string $CONFIG['URL']
-    * @param int $width optional width parameter for editor window
-    * @param int $height optional height parameter for editor window
-    * @return string the javascript code
-    */
-    function tinyMceInit($width = 640, $height = 400) {
-
-        $path = $GLOBALS['CONFIG']['URL'] . '/symbtions/tinymce/jscripts/tiny_mce/tiny_mce.js';
-
-        $js = '<script type="text/javascript" src="' . $path . '"></script>
-        <script language="javascript" type="text/javascript">
-        // <![CDATA[
-
-        tinyMCE.init({
-            mode : "textareas",
-            theme : "advanced",
-            editor_selector : "mceEditor",
-            plugins : "paste,media,table,fullscreen,layer,safari",
-            width: ' . $width . ',
-            height: ' . $height . ',
-            theme_advanced_toolbar_location : "top",
-            theme_advanced_toolbar_align : "left",
-            theme_advanced_buttons1 : "bold,italic,underline,justifyleft,justifycenter,justifyright,justifyfull,numlist,bullist,outdent,indent,forecolor,backcolor,fontselect,fontsizeselect",
-            theme_advanced_buttons2 : "undo,redo,pastetext,pasteword,link,unlink,table,image,media,removeformat,cleanup,code,fullscreen",
-            theme_advanced_buttons3 : "",
-            entity_encoding : "raw",
-            relative_urls : false
-        });
-
-        // ]]>
-        </script>';
-        $js .= "\n";
-
-        return $js;
-    }
-
-
     /**
     * Cropper Initialization
     *

@@ -1,0 +1,26 @@
+#leftside { 
+    margin: 10px; 
+    width: 160px; 
+}
+
+#rightside { 
+    width: 738px; 
+}
+
+label {
+    float: left;
+    width: auto;
+    margin-right: 0.5em;
+    padding-top: 0.2em;
+    text-align: right;
+}
+
+input, select {
+    width: 350px;
+}
+
+/* Revert */
+
+.htmlSelectDate select, .htmlSelectTime select {
+    width: auto;
+}

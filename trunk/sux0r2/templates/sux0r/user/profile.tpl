@@ -1,4 +1,8 @@
-{include file=$r->xhtml_header}
+{capture name=header}
+<link rel="openid.server" href="{$r->makeUrl('/openid', null, true)}" />
+{/capture}{strip}
+{$r->assign('header', $smarty.capture.header)}
+{include file=$r->xhtml_header}{/strip}
 
 <table id="proselytizer" >
 	<tr>
