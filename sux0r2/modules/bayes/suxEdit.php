@@ -250,7 +250,7 @@ class suxEdit extends suxUser {
         case 'sharevec' :
 
             // Security check
-            if ($this->nb->isVectorOwner($clean['vector_id'], $_SESSION['users_id'])) {
+            if ($this->nb->isVectorOwner($clean['vector_id'], $_SESSION['users_id']) && $this->getUser($clean['users_id'])) {
 
                 if (!isset($clean['trainer'])) $clean['trainer'] = 0;
                 if (!isset($clean['owner'])) $clean['owner'] = 0;
@@ -271,23 +271,22 @@ class suxEdit extends suxUser {
 
         }
 
-
-
     }
 
 
     /**
     * for suxValidate, check for an invalid vector share
-    * i.e. cannot share a vector with one's self
+    * i.e. cannot share a vector with one's self and
+    *
     *
     * @return bool
     */
     function invalidShare($value, $empty, &$params, &$formvars) {
 
         if (empty($formvars['users_id'])) return false;
+        if ($formvars['users_id'] == $_SESSION['users_id']) return false;
 
-        if ($formvars['users_id'] == $_SESSION['users_id']) return false; // Invalid
-        else return true;
+        return true;
 
     }
 

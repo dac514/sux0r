@@ -72,6 +72,8 @@ class suxUser {
         $st->execute(array($id));
         $user = $st->fetch(PDO::FETCH_ASSOC);
 
+        if (!$user) return false; // User doesn't exist?
+
         if ($full_profile) {
             $st = $this->db->prepare("SELECT * FROM {$this->db_table_info} WHERE users_id = ? ");
             $st->execute(array($id));
