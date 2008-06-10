@@ -76,9 +76,6 @@ class suxProfile extends suxUser {
             // Title
             $this->r->title .= " | {$fullprofile['nickname']}";
 
-            // OpenID Server meta tags
-            $this->r->header .= $this->r->getOpenIDMeta();
-
             // TODO: Calendar
             $this->r->text['calendar'] = generate_calendar(2008, 5);
 

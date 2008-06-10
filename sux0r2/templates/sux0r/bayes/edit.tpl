@@ -283,7 +283,8 @@
         {validate id="sharevec3" form="sharevec" assign="sharevec_error3" message=$r->text.form_error_9}
         {validate id="sharevec4" form="sharevec" assign="sharevec_error4" message=$r->text.form_error_9}
         {validate id="sharevec5" form="sharevec" assign="sharevec_error5" message=$r->text.form_error_10}
-
+        {validate id="sharevec6" form="sharevec" assign="sharevec_error6" message=$r->text.form_error_11}
+        
         <label for="vector_id" {if $sharevec_error1}class="error"{/if} >Share vector:</label>
             {html_options name='vector_id' options=$r->getUserOwnedVectors() selected=$vector_id}
             {$sharevec_error1}
@@ -299,6 +300,7 @@
             </select>
             {$sharevec_error2}
             {$sharevec_error5}
+            {$sharevec_error6}
         </p>
 
         <p>
@@ -334,7 +336,7 @@
         <input type="hidden" name="token" value="{$token}" />
         <input type="hidden" name="action" value="unsharevec" />
 
-        {validate id="unsharevec1" form="unsharevec" assign="unsharevec_error1" message=$r->text.form_error_11}
+        {validate id="unsharevec1" form="unsharevec" assign="unsharevec_error1" message=$r->text.form_error_12}
 
 
         {if $unsharevec_error1}<p class="error">{$unsharevec_error1}</p>{/if}

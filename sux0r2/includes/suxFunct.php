@@ -296,6 +296,28 @@ class suxFunct {
         return $tmp;
 
     }
+    
+    
+    /**
+    * Get this user's previous URL
+    *
+    * @param string $preg regular expression
+    * @return bool
+    */
+    static function getPreviousURL($preg) {
+        
+        $url = suxFunct::makeUrl('/home'); // Some default
+        
+        if (isset($_SESSION['breadcrumbs'])) foreach($_SESSION['breadcrumbs'] as $val) {
+            if (!preg_match($preg, $val)) {
+                $url = suxFunct::makeUrl($val); // Overwrite
+                break;
+            }
+        }
+        
+        return $url;
+        
+    }      
 
 
     /**

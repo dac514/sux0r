@@ -36,18 +36,6 @@ require_once(dirname(__FILE__) . '/symbionts/SmartyAddons/libs/SmartyValidate.cl
 
 class suxValidate extends SmartyValidate {
 
-    static function check_validators(array $v) {
-
-        foreach ($v as $key => $val) {
-            if (SmartyValidate::is_registered_validator($val, $key)  === false) {
-                return false;
-            }
-        }
-        return true;
-
-    }
-
-
 
     // Static class, no cloning or instantiating allowed
     final private function __construct() { }
@@ -68,9 +56,6 @@ class suxValidate extends SmartyValidate {
         $_smarty_obj->assign('token', $_SESSION['SmartyValidate'][SMARTY_VALIDATE_DEFAULT_FORM]['token']);
 
     }
-
-
-
 
 
     /**

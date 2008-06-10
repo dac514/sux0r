@@ -32,10 +32,11 @@ class suxEdit extends suxUser {
     public $gtext = array(); // Language
     public $tpl; // Template
     public $r; // Renderer
-
+    
     private $mode = 'register';
     private $users_id = null;
-
+   
+    private $prev_url_preg = '#^user/[login|logout|register|edit]#i';
     private $module = 'user'; // Module
 
     /**
@@ -178,15 +179,7 @@ class suxEdit extends suxUser {
         if (!empty($dirty)) $this->tpl->assign($dirty);
         else suxValidate::disconnect();
 
-        $validators = array(
-            'default' => 'nickname',
-            'default' => 'nickname2',
-            'default' => 'nickname3',
-            'default' => 'email',
-            'default' => 'email2',
-            );
-
-        if (!suxValidate::is_registered_form() || !suxValidate::check_validators($validators)) {
+        if (!suxValidate::is_registered_form()) {
 
             suxValidate::connect($this->tpl, true); // Reset connection
 
@@ -254,7 +247,7 @@ class suxEdit extends suxUser {
             $this->r->bool['edit'] = true;
         }
 
-        $this->r->text['back_url'] = $this->getPreviousURL();
+        $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
@@ -353,8 +346,7 @@ class suxEdit extends suxUser {
         if ($this->mode == 'edit') {
 
             $this->r->bool['edit'] = true;
-            $this->r->text['back_url'] = $this->getPreviousURL();
-            $this->r->header .= $this->r->getRefreshMeta($this->r->text['back_url']);
+            $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
 
         }
 
@@ -463,27 +455,6 @@ class suxEdit extends suxUser {
             ) return true;
 
         else return false;
-
-    }
-
-
-    /**
-    * Get this user's previous URL
-    *
-    * @return bool
-    */
-    private function getPreviousURL() {
-
-        $url = suxFunct::makeUrl('/home'); // Some default
-
-        if (isset($_SESSION['breadcrumbs'])) foreach($_SESSION['breadcrumbs'] as $val) {
-            if (!preg_match('#^user/[login|logout|register|edit]#i', $val)) {
-                $url = suxFunct::makeUrl($val); // Overwrite
-                break;
-            }
-        }
-
-        return $url;
 
     }
 

@@ -28,13 +28,14 @@ require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('renderer.php');
 require_once('suxNbUser.php');
 
-class suxEdit extends suxUser {
+class suxEdit {
 
     public $gtext = array(); // Language
     public $tpl; // Template
     public $r; // Renderer
     public $nb; // Naive Bayesian Object / extended
 
+    private $user; // suxUser
     private $users_id = null;
     private $module = 'bayes'; // Module
 
@@ -46,18 +47,18 @@ class suxEdit extends suxUser {
     */
     function __construct($user = null) {
 
-        parent::__construct(); // Call parent
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->r = new renderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
-        // Naive Bayesian
+        // Objects
+        $this->user = new suxuser();
         $this->nb = new suxNbUser();
 
         // Redirect if not logged in
-        $this->loginCheck(suxfunct::makeUrl('/user/register'));
+        $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
 
         if ($user != $_SESSION['nickname']) {
 
@@ -65,7 +66,7 @@ class suxEdit extends suxUser {
             // Security check
             // Only an administrator can modify other users
 
-            $u = $this->getUserByNickname($user);
+            $u = $this->user->getUserByNickname($user);
             if ($u) $this->users_id = $u['users_id'];
 
         }
@@ -140,7 +141,8 @@ class suxEdit extends suxUser {
 
             // Register our additional criterias
             suxValidate::register_criteria('invalidShare', 'this->invalidShare', 'sharevec');
-
+            suxValidate::register_criteria('userExists', 'this->userExists', 'sharevec');
+            
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
 
@@ -166,6 +168,7 @@ class suxEdit extends suxUser {
             suxValidate::register_validator('sharevec3', 'trainer:1:1', 'isRange', true, false, 'trim', 'sharevec');
             suxValidate::register_validator('sharevec4', 'owner:1:1', 'isRange', true, false, 'trim', 'sharevec');
             suxValidate::register_validator('sharevec5', 'users_id', 'invalidShare', true, false, 'trim', 'sharevec');
+            suxValidate::register_validator('sharevec6', 'users_id', 'userExists', true, false, 'trim', 'sharevec');
             // Unshare vector
             suxValidate::register_validator('unsharevec1', 'unshare', 'dummyValid', false, false, null, 'unsharevec');
 
@@ -248,10 +251,10 @@ class suxEdit extends suxUser {
             break;
 
         case 'sharevec' :
-
+            
             // Security check
-            if ($this->nb->isVectorOwner($clean['vector_id'], $_SESSION['users_id']) && $this->getUser($clean['users_id'])) {
-
+            if ($this->nb->isVectorOwner($clean['vector_id'], $_SESSION['users_id'])) {
+                
                 if (!isset($clean['trainer'])) $clean['trainer'] = 0;
                 if (!isset($clean['owner'])) $clean['owner'] = 0;
 
@@ -278,7 +281,6 @@ class suxEdit extends suxUser {
     * for suxValidate, check for an invalid vector share
     * i.e. cannot share a vector with one's self and
     *
-    *
     * @return bool
     */
     function invalidShare($value, $empty, &$params, &$formvars) {
@@ -289,6 +291,22 @@ class suxEdit extends suxUser {
         return true;
 
     }
+    
+    
+    /**
+    * for suxValidate, check if a user exists
+    * i.e. cannot share a vector with one's self and
+    *
+    * @return bool
+    */
+    function userExists($value, $empty, &$params, &$formvars) {
+
+        if (empty($formvars['users_id'])) return false;
+        if (!$this->user->getUser($formvars['users_id'])) return false;
+
+        return true;
+
+    }    
 
 
 }

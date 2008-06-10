@@ -1,7 +1,7 @@
 <?php
 
 /**
-* suxHome
+* suxBlog
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -22,26 +22,28 @@
 *
 */
 
+require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
+require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once('renderer.php');
 
-class suxHome {
+class suxBlog extends suxThreadedMessages {
 
     public $gtext = array(); // Language
     public $tpl; // Template
     public $r; // Renderer
 
     private $user; // suxUser
-    private $module = 'home'; // Module
+    private $module = 'blog'; // Module
 
     /**
     * Constructor
     *
     * @global string $CONFIG['PARTITION']
     */
-    function __construct(suxUser $user) {
+    function __construct() {
 
-        $this->user = $user; // User
+        $this->user = new suxUser(); // User
 
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->r = new renderer($this->module); // Renderer
@@ -52,12 +54,12 @@ class suxHome {
 
 
     /**
-    * Display home
+    * Display
     */
     function display() {
 
         $this->tpl->assign_by_ref('r', $this->r);
-        $this->tpl->display('home.tpl');
+        $this->tpl->display('scroll.tpl');
 
     }
 
