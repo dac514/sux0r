@@ -33,3 +33,9 @@ input, select {
 .htmlSelectDate select, .htmlSelectTime select {
     width: auto;
 }
+
+input.imageFile {
+    width: auto;
+    border: 0;
+    background: none;
+}

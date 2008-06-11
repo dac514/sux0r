@@ -14,7 +14,7 @@
 <fieldset>
 <legend>Edit</legend>
 
-<form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8">
+<form action="{$r->text.form_url}" name="default" method="post" enctype="multipart/form-data" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />
 
 {if $validate.default.is_error !== false}
@@ -24,26 +24,73 @@
 {/if}
 
 <p>
-<label>{$r->text.dob} Title :</label>
+{strip}
+    {capture name=error}
+    {validate id="title" message="title cannot be empty"}
+    {/capture}
+{/strip}
+<label {if $smarty.capture.error}class="error"{/if} >{$r->text.dob} Title :</label>
 <input type="text" name="title" value="{$title}" />
+{$smarty.capture.error}
 </p>
 
 <p>
-<textarea name="body_html" class="mceEditor">{$body_html}</textarea>
+{strip}
+    {capture name=error}
+    {validate id="image" message="invalid file type, jpg, gif, and png only!"}
+    {/capture}
+{/strip}
+<label {if $smarty.capture.error}class="error"{/if} >Image: </label>
+<input type="file" name="image" class="imageFile" />
+{$smarty.capture.error}
+</p>
+
+
+
+<p>
+{strip}
+    {capture name=error}
+    {validate id="body" message="Body cannot be empty"}
+    {/capture}
+{/strip}
+<span {if $smarty.capture.error}class="error"{/if}>Body: </span> {$smarty.capture.error}
 </p>
 
 <p>
-<label>{$r->text.dob} Date :</label>
+<div>
+TODO: <a href="javascript:;" onmousedown="tinyMCE.execCommand('mceInsertContent',false,'<img src=\'http://www.sux0r.org/pre-alpha.png\' alt=\'sux0r\' />');">[Insert Image]</a>
+</div>
+<textarea name="body" class="mceEditor">{$body}</textarea>
+</p>
+
+
+<p>
+{strip}
+    {capture name=error}
+    {validate id="date" message="invalid date"}
+    {/capture}
+{/strip}
+<label {if $smarty.capture.error}class="error"{/if} >{$r->text.dob} Date :</label>
 <span class="htmlSelectDate">
 {html_select_date time="$Date_Year-$Date_Month-$Date_Day" field_order='YMD' start_year='-3' reverse_years=true}
 </span>
+{$smarty.capture.error}
 </p>
 
 <p>
-<label>{$r->text.dob} Time :</label>
+{strip}
+    {capture name=error}
+    {validate id="time" message="invalid time"}
+    {validate id="time2" message="invalid time"}
+    {validate id="time3" message="invalid time"}
+    {/capture}
+{/strip}
+<label {if $smarty.capture.error}class="error"{/if} >{$r->text.dob} Time :</label>
 <span class="htmlSelectTime">
 {html_select_time time="$Time_Hour:$Time_Minute:$Time_Second" use_24_hours=true}
 </span>
+
+{$smarty.capture.error}
 </p>
 
 <p>

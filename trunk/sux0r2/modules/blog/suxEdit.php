@@ -57,9 +57,9 @@ class suxEdit {
 
         // Redirect if not logged in
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
-         
+
         if (filter_var($id, FILTER_VALIDATE_INT)) {
-            // TODO: 
+            // TODO:
             // Verfiy that we are allowed to edit this
         }
 
@@ -109,9 +109,17 @@ class suxEdit {
             // Register our additional criterias
             //suxValidate::register_criteria('invalidShare', 'this->invalidShare', 'sharevec');
             //suxValidate::register_criteria('userExists', 'this->userExists', 'sharevec');
-            
+
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
+
+            suxValidate::register_validator('title', 'title', 'notEmpty');
+            suxValidate::register_validator('image', 'image:jpg,jpeg,gif,png', 'isFileType', true);
+            suxValidate::register_validator('body', 'body', 'notEmpty');
+            suxValidate::register_validator('date', 'Date:Date_Year:Date_Month:Date_Day', 'isDate', false, false, 'makeDate');
+            suxValidate::register_validator('time', 'Time_Hour', 'isInt');
+            suxValidate::register_validator('time2', 'Time_Minute', 'isInt');
+            suxValidate::register_validator('time3', 'Time_Second', 'isInt');
 
 
         }
@@ -136,11 +144,31 @@ class suxEdit {
     * @param array $clean reference to validated $_POST
     */
     function formProcess(&$clean) {
-        
-        // Do stuff
+
+        // TODO
+
+
+        $clean['published_on'] = "{$clean['Date']} {$clean['Time_Hour']}:{$clean['Time_Minute']}:{$clean['Time_Second']}";
+
+        unset(
+            $clean['Date'],
+            $clean['Date_Year'],
+            $clean['Date_Month'],
+            $clean['Date_Day'],
+            $clean['Time_Hour'],
+            $clean['Time_Minute'],
+            $clean['Time_Second']
+            );
+
+
+        // new dBug($clean);
+        // new dBug($_FILES);
+
+        $msg = new suxThreadedMessages();
+        $msg->saveMessage($_SESSION['users_id'], $clean['title'], $clean['body'], $parent_id = null, $style = true);
 
     }
-    
+
 
 }
 

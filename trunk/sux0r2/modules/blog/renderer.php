@@ -36,21 +36,21 @@ class renderer extends suxRenderer {
         parent::__construct($module); // Call parent
 
     }
-    
-    
+
+
     /**
     * TinyMCE Initialization
     *
     * @see http://tinymce.moxiecode.com/
     * @global string $CONFIG['URL']
-    * @global string $CONFIG['PATH']  
-    * @global string $CONFIG['LANGUAGE']  
+    * @global string $CONFIG['PATH']
+    * @global string $CONFIG['LANGUAGE']
     * @param int $width optional width parameter for editor window
     * @param int $height optional height parameter for editor window
     * @return string the javascript code
     */
     function tinyMceInit() {
-        
+
         // TinyMCE Path
         $path = $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/tinymce/jscripts/tiny_mce/tiny_mce.js';
 
@@ -59,8 +59,8 @@ class renderer extends suxRenderer {
         else $lang = $GLOBALS['CONFIG']['LANGUAGE'];
         // Sanity check
         $test = $GLOBALS['CONFIG']['PATH'] . "/includes/symbionts/tinymce/jscripts/tiny_mce/langs/{$lang}.js";
-        if (!is_file($test)) $lang = 'en'; // Revert back to english    
-                
+        if (!is_file($test)) $lang = 'en'; // Revert back to english
+
         // Javascript
         $js = '<script type="text/javascript" src="' . $path . '"></script>
         <script language="javascript" type="text/javascript">
@@ -78,6 +78,7 @@ class renderer extends suxRenderer {
             theme_advanced_buttons1 : "bold,italic,underline,justifyleft,justifycenter,justifyright,justifyfull,numlist,bullist,outdent,indent,forecolor,backcolor,fontselect,fontsizeselect",
             theme_advanced_buttons2 : "undo,redo,pastetext,pasteword,selectall,link,unlink,table,image,media,removeformat,cleanup,code,fullscreen",
             theme_advanced_buttons3 : "",
+            theme_advanced_statusbar_location : "bottom",
             entity_encoding : "raw",
             language : "' . $lang . '",
             relative_urls : false
@@ -87,8 +88,8 @@ class renderer extends suxRenderer {
         </script>' . "\n";
 
         return $js;
-        
-    }    
+
+    }
 
 
 
