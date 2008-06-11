@@ -15,37 +15,37 @@
 	<tr>
         <td style="vertical-align:top;">
 			<div id="leftside">
-            
+
             <p>
             Current month<br />
-            Link to article<br /> 
-            Link to article<br /> 
-            Link to article<br /> 
-            Link to article<br />             
+            Link to article<br />
+            Link to article<br />
+            Link to article<br />
+            Link to article<br />
             </p>
-            
+
             <p>
             Most recent comments<br />
-            Link to article#comment<br /> 
-            Link to article#comment<br /> 
-            Link to article#comment<br /> 
-            Link to article#comment<br /> 
+            Link to article#comment<br />
+            Link to article#comment<br />
+            Link to article#comment<br />
+            Link to article#comment<br />
             </p>
 
 			</div>
 		</td>
 		<td style="vertical-align:top;">
 			<div id="rightside">
-            
+
             <p>
-            Author: 
-            [ Dropdown ] 
-            Tags: 
-            [ Dropdown ]  
+            Author:
+            [ Dropdown ]
+            Tags:
+            [ Dropdown ]
             Month/Year:
             [ Dropdown ]
             [ Go! ]
-            </p>  
+            </p>
 
                 <div class="widget">
                     <h2>Title</h2>
@@ -53,12 +53,22 @@
                         <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="80" height="80"><br>
                         Caption
                     </div>
-                    
+
                     <p>Date, Author, Tags</p>
                     <p>Lorem ipsum dolor sit amet, consectetuer...</p>
-                    
+
                     <div class="clearboth"></div>
-                    <p>Permanent Link, Comments (0), [ Facebook, Digg, etc ], [ Bayesian Categorize ]</p>
+                    <p>Permanent Link, Comments (0), [ Bayesian Categorize ]</p>
+
+                    <div class="flair"><p>
+                    <a href='http://slashdot.org/slashdot-it.pl?op=basic&url={$url|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/slashdot.gif' alt='Slashdot' width='16' height='16' /></a>
+                    <a href='http://digg.com/submit?url={$url|escape:'url, UTF-8'}&title={$title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/digg.gif' alt='Digg' width='16' height='16' /></a>
+                    <a href='http://www.facebook.com/share.php?u={$url|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/facebook.gif' alt='Facebook' width='16' height='16' /></a>
+                    <a href='http://www.myspace.com/index.cfm?fuseaction=postto&t={$title|escape:'url, UTF-8'}&c=&u={$url|escape:'url, UTF-8'}&l=' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/myspace.gif' alt='Myspace' width='16' height='16' /></a>
+                    <a href='http://www.stumbleupon.com/submit?url={$url|escape:'url, UTF-8'}&title={$title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/stumbleupon.gif' alt='StumbleUpon' width='16' height='16' /></a>
+                    <a href='http://del.icio.us/login/?url={$url|escape:'url, UTF-8'}&title={$title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/delicious.gif' alt='Del.icio.us' width='16' height='16' /></a>
+                    </p></div>
+
                     <b class="bb"><b></b></b>
                 </div>
 
@@ -68,7 +78,7 @@
                     <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="80" height="80"><br>
                     Caption
                     </div>
-                    
+
                     <p>Date, Author, Tags</p>
                     <p>Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer
                     Lorem ipsum dolor sit amet, consec tetuer Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer
