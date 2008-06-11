@@ -71,7 +71,8 @@ class suxProfile extends suxUser {
             // Full Profile
             $fullprofile = $this->getUser($this->profile['users_id'], true);
             unset($fullprofile['password']); // We don't need this
-            $this->r->profile =& $fullprofile;
+            if (!isset($fullprofile['dob']) || $fullprofile['dob'] == '0000-00-00') unset($fullprofile['dob']); // NULL date
+            $this->r->profile =& $fullprofile; // Assign
 
             // Title
             $this->r->title .= " | {$fullprofile['nickname']}";
