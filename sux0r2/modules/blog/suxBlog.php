@@ -58,6 +58,10 @@ class suxBlog extends suxThreadedMessages {
     */
     function display() {
 
+        // Test
+        $this->tpl->assign('url', 'http://www.sux0r.org/');
+        $this->tpl->assign('title', 'sux0r - it sux0rs up all the web');
+
         $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('scroll.tpl');
 

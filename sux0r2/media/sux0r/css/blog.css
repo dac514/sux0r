@@ -1,10 +1,19 @@
-#leftside { 
-    margin: 10px; 
-    width: 160px; 
+#leftside {
+    margin: 10px;
+    width: 160px;
 }
 
-#rightside { 
-    width: 738px; 
+#rightside {
+    width: 738px;
+}
+
+.flair img {
+    border: 0;
+    margin-right: 4px;
+}
+
+.flair a {
+    background: none;
 }
 
 label {
