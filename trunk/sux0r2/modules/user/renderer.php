@@ -98,6 +98,7 @@ class renderer extends suxRenderer {
         foreach ($lang as $key => $val) {
             if (isset($this->text[$key])) $lang[$key] = $this->text[$key];
         }
+        asort($lang);
         return $lang;
 
     }
@@ -131,6 +132,7 @@ class renderer extends suxRenderer {
             // Using key2 because key has several duplicates in 2-letter language codes
             if (isset($this->text["{$key}2"])) $c[$key] = $this->text["{$key}2"];
         }
+        asort($c);
         return $c;
 
     }
