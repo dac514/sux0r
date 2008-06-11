@@ -57,16 +57,32 @@ class suxCropper {
     */
     function display() {
 
-        // Test
-        $this->tpl->assign('x2', 80); // Pavatar
-        $this->tpl->assign('y2', 80);
-        $this->tpl->assign('url_to_source', 'http://www.trotch.com/images/hammer.gif'); // 135 x 290
-        $this->tpl->assign('width_source', 135);
-        $this->tpl->assign('height_source', 290);
+        // TODO:
+
+        $image = 'http://www.trotch.com/images/hammer.gif';
+        $width = 0;
+        $height = 0;
+
+        $image = suxFunct::canonicalizeUrl($image);
+        if (!filter_var($image, FILTER_VALIDATE_URL)) $image = null;
+        if (!preg_match('/\.(jpe?g|gif|png)$/i', $image)) $image = null;
+        if ($image) list($width, $height) = @getimagesize($image);
 
 
-        $this->tpl->assign_by_ref('r', $this->r);
-        $this->tpl->display('cropper.tpl');
+        if ($image && $width && $height) {
+
+            // Test
+            $this->tpl->assign('x2', 80); // Pavatar
+            $this->tpl->assign('y2', 80);
+            $this->tpl->assign('url_to_source', $image); // 135 x 290
+            $this->tpl->assign('width', $width);
+            $this->tpl->assign('height', $height);
+
+            $this->tpl->assign_by_ref('r', $this->r);
+            $this->tpl->display('cropper.tpl');
+
+        }
+
 
     }
 
@@ -81,7 +97,7 @@ class suxCropper {
         // TODO
 
         $path_to_source = '/location/to/source.png';
-        $path_to_dest = '/tmp'; // variable
+        $path_to_dest = '/tmp/dest.png'; // variable
 
         if (!is_writable($path_to_dest)) die('Destination is not writable? ' . $path_to_dest);
 

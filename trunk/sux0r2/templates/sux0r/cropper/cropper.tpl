@@ -6,6 +6,11 @@
 {$r->assign('header', $smarty.capture.header)}
 {include file=$r->xhtml_header}{/strip}
 
+<div id="proselytizer">
+
+<div id="middle">
+
+
 
     <p>
     <form>
@@ -21,10 +26,13 @@
     </p>
 
     <p>
-    <img id="cropperImage" src="{$url_to_source}" alt="Cropper" width="{$width_source}" height="{$height_source}" />
+    <img id="cropperImage" src="{$url_to_source}" alt="Cropper" width="{$width}" height="{$height}" />
     </p>
 
-    <div id="previewArea" style="margin: 20px; 0 0 20px;">xxx</div>
 
+
+</div>
+
+</div>
 
 {include file=$r->xhtml_footer}
