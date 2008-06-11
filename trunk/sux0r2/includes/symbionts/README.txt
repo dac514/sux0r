@@ -34,7 +34,7 @@ Pro-tip
 
 Use rsync when updating 3rd party vendors, example:
 
-rsync -rcv --delete --cvs-exclude ~/Desktop/tinymce/ ~/Sites/sux0r2/includes/symbionts/tinymce/
+rsync -rcvb --backup-dir=/tmp --cvs-exclude --delete ~/Desktop/tinymce/ ~/Sites/sux0r2/includes/symbionts/tinymce/
 
 ------------------------------------------------------------------------------
 3rd Party Vendors, in alphabetical order
