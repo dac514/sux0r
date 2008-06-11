@@ -54,8 +54,9 @@ class suxThreadedMessages {
     * @param string $title title
     * @param string $body body
     * @param int $parent_id messages_id of parent
+    * @param bool $trusted passed on to sanitizeHtml
     */
-    function saveMessage($users_id, $title, $body, $parent_id = null ) {
+    function saveMessage($users_id, $title, $body, $parent_id = null, $trusted = false) {
 
         /*
         The first message in a thread has thread_pos = 0.
@@ -85,7 +86,7 @@ class suxThreadedMessages {
         $title = strip_tags($title);
 
         // Sanitize HTML in body
-        $body = suxFunct::sanitizeHtml($body);
+        $body = suxFunct::sanitizeHtml($body, $trusted);
 
         // Convert and copy body to UTF-8 plaintext
         require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
@@ -174,8 +175,9 @@ class suxThreadedMessages {
     * @param int $users_id users_id
     * @param string $title title
     * @param string $body body
+    * @param bool $trusted passed on to sanitizeHtml
     */
-    function editMessage($messages_id, $users_id, $title, $body) {
+    function editMessage($messages_id, $users_id, $title, $body, $trusted = false) {
 
         // -------------------------------------------------------------------
         // Sanitize
@@ -188,7 +190,7 @@ class suxThreadedMessages {
         $title = strip_tags($title);
 
         // Sanitize HTML in body
-        $body = suxFunct::sanitizeHtml($body);
+        $body = suxFunct::sanitizeHtml($body, $trusted);
 
         // Convert and copy body to UTF-8 plaintext
         require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');

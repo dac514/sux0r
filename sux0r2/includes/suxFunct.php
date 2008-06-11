@@ -171,14 +171,24 @@ class suxFunct {
     * Sanitize HTML
     *
     * @param string $html the html to sanitize
+    * @param bool $style allow most attributes
     * @return string sanitized html
     */
-    static function sanitizeHtml($html) {
+    static function sanitizeHtml($html, $trusted = false) {
 
-        $config = array(
-            'safe' => 1,
-            'deny_attribute' => 'on*,style,',
-            );
+        if ($trusted) {
+            // Exclude script and iframe, let the rest pass
+            $config = array(
+                'elements' => '*-script-iframe',
+                );
+        }
+        else {
+            // Safe
+            $config = array(
+                'safe' => 1,
+                'deny_attribute' => 'on*,style,',
+                );
+        }
 
         require_once(dirname(__FILE__) . '/symbionts/htmLawed/htmLawed.php');
         return htmLawed($html, $config);
@@ -296,8 +306,8 @@ class suxFunct {
         return $tmp;
 
     }
-    
-    
+
+
     /**
     * Get this user's previous URL
     *
@@ -305,19 +315,19 @@ class suxFunct {
     * @return bool
     */
     static function getPreviousURL($preg) {
-        
+
         $url = suxFunct::makeUrl('/home'); // Some default
-        
+
         if (isset($_SESSION['breadcrumbs'])) foreach($_SESSION['breadcrumbs'] as $val) {
             if (!preg_match($preg, $val)) {
                 $url = suxFunct::makeUrl($val); // Overwrite
                 break;
             }
         }
-        
+
         return $url;
-        
-    }      
+
+    }
 
 
     /**
