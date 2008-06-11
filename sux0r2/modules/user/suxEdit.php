@@ -32,10 +32,10 @@ class suxEdit extends suxUser {
     public $gtext = array(); // Language
     public $tpl; // Template
     public $r; // Renderer
-    
+
     private $mode = 'register';
     private $users_id = null;
-   
+
     private $prev_url_preg = '#^user/[login|logout|register|edit]#i';
     private $module = 'user'; // Module
 
@@ -276,12 +276,11 @@ class suxEdit extends suxUser {
         unset($clean['password_verify']);
 
         // Birthday
-        $clean['dob'] = null;
         if (!empty($clean['Date_Year']) && !empty($clean['Date_Month']) && !empty($clean['Date_Day'])) {
             $clean['dob'] = "{$clean['Date_Year']}-{$clean['Date_Month']}-{$clean['Date_Day']}";
         }
-        if (!filter_var($clean['dob'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => "/^(\d{1,4})-(\d{1,2})-(\d{1,2})$/")))) {
-            unset ($clean['dob']);
+        if (isset($clean['dob']) && !filter_var($clean['dob'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => "/^(\d{1,4})-(\d{1,2})-(\d{1,2})$/")))) {
+            $clean['dob'] = null;
         }
         unset ($clean['Date_Year'], $clean['Date_Month'], $clean['Date_Day']);
 
