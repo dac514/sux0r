@@ -58,7 +58,7 @@ CREATE TABLE `bayes_categories` (
 CREATE TABLE `bayes_documents` (
   `id` int(11) NOT NULL auto_increment,
   `bayes_categories_id` int(11) NOT NULL,
-  `body_plaintext` text NOT NULL,
+  `body_plaintext` mediumtext NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `bayes_categories_id` (`bayes_categories_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -176,8 +176,8 @@ CREATE TABLE `messages` (
   `id` int(11) NOT NULL auto_increment,
   `users_id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
-  `body_html` text NOT NULL,
-  `body_plaintext` text NOT NULL,
+  `body_html` mediumtext NOT NULL,
+  `body_plaintext` mediumtext NOT NULL,
   `thread_id` int(11) NOT NULL,
   `parent_id` int(11) default NULL,
   `level` int(11) NOT NULL,
@@ -204,8 +204,8 @@ CREATE TABLE `messages_history` (
   `messages_id` int(11) NOT NULL,
   `users_id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
-  `body_html` text NOT NULL,
-  `body_plaintext` text NOT NULL,
+  `body_html` mediumtext NOT NULL,
+  `body_plaintext` mediumtext NOT NULL,
   `edited_on` datetime NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `messages_id` (`messages_id`),
