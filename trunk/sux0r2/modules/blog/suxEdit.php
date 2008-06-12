@@ -128,11 +128,23 @@ class suxEdit {
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog/edit');
         $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
 
+        if (!$this->tpl->get_template_vars('Date_Year')) {
+            // Today's Date
+            $this->tpl->assign('Date_Year', date('Y'));
+            $this->tpl->assign('Date_Month', date('m'));
+            $this->tpl->assign('Date_Day', date('j'));
+        }
+
+        if (!$this->tpl->get_template_vars('Time_Hour')) {
+            // Current Time
+            $this->tpl->assign('Time_Hour', date('H'));
+            $this->tpl->assign('Time_Minute', date('i'));
+            $this->tpl->assign('Time_Second', date('s'));
+        }
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('edit.tpl');
-
 
     }
 
@@ -160,12 +172,11 @@ class suxEdit {
             $clean['Time_Second']
             );
 
-
         // new dBug($clean);
         // new dBug($_FILES);
 
         $msg = new suxThreadedMessages();
-        $msg->saveMessage($_SESSION['users_id'], $clean['title'], $clean['body'], $parent_id = null, $style = true);
+        $msg->saveMessage($_SESSION['users_id'], $clean['title'], $clean['body'], $clean['published_on'], $parent_id = null, $style = true);
 
     }
 

@@ -53,10 +53,11 @@ class suxThreadedMessages {
     * @param int $users_id users_id
     * @param string $title title
     * @param string $body body
+    * @param string $published_on ISO 8601 date
     * @param int $parent_id messages_id of parent
     * @param bool $trusted passed on to sanitizeHtml
     */
-    function saveMessage($users_id, $title, $body, $parent_id = null, $trusted = false) {
+    function saveMessage($users_id, $title, $body, $published_on = null, $parent_id = null, $trusted = false) {
 
         /*
         The first message in a thread has thread_pos = 0.
@@ -78,6 +79,9 @@ class suxThreadedMessages {
         // -------------------------------------------------------------------
 
         if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+
+        // TODO: Check published_on date format
+        if (!$published_on) $published_on = date('c');
 
         // Parent_id
         $parent_id = filter_var($parent_id, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
@@ -150,7 +154,7 @@ class suxThreadedMessages {
             'thread_id' => $thread_id,
             'parent_id' => $parent_id,
             'thread_pos' => $thread_pos,
-            'published_on' => date('c'),
+            'published_on' => $published_on,
             'level' => $level,
             'users_id' => $users_id,
             'title' => $title,
@@ -175,9 +179,10 @@ class suxThreadedMessages {
     * @param int $users_id users_id
     * @param string $title title
     * @param string $body body
+    * @param string $published_on ISO 8601 date
     * @param bool $trusted passed on to sanitizeHtml
     */
-    function editMessage($messages_id, $users_id, $title, $body, $trusted = false) {
+    function editMessage($messages_id, $users_id, $title, $body, $published_on = null, $trusted = false) {
 
         // -------------------------------------------------------------------
         // Sanitize
@@ -185,6 +190,8 @@ class suxThreadedMessages {
 
         if (!filter_var($messages_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid message id');
         if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+
+        // TODO: Check published_on date format
 
         // No HTML in title
         $title = strip_tags($title);
@@ -227,6 +234,8 @@ class suxThreadedMessages {
             'body_html' => $body,
             'body_plaintext' => $body_plaintext,
             );
+
+        if ($published_on) $update['published_on'] = $published_on;
 
         $query = suxDB::prepareUpdateQuery($this->db_table, $update);
         $st = $this->db->prepare($query);

@@ -72,7 +72,7 @@ TODO: <a href="javascript:;" onmousedown="tinyMCE.execCommand('mceInsertContent'
 {/strip}
 <label {if $smarty.capture.error}class="error"{/if} >{$r->text.dob} Date :</label>
 <span class="htmlSelectDate">
-{html_select_date time="$Date_Year-$Date_Month-$Date_Day" field_order='YMD' start_year='-3' reverse_years=true}
+{html_select_date time="$Date_Year-$Date_Month-$Date_Day" field_order='YMD'  start_year='-5' end_year='+1' }
 </span>
 {$smarty.capture.error}
 </p>
