@@ -169,11 +169,12 @@ class suxUser {
     /**
     * Set user
     *
-    * @param array $info
+    * @param array $info keys match SQL table columns of users and users_info
     * @param int $id users_id
     * @return int users_id
     */
     function setUser(array $info, $id = null) {
+
 
         // --------------------------------------------------------------------
         // Sanitize
@@ -216,6 +217,8 @@ class suxUser {
             else $info[$key] = strip_tags($val);
         }
 
+
+        // We now have two arrays, $user[] and $info[]
 
         // --------------------------------------------------------------------
         // Go!

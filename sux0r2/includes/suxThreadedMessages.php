@@ -51,13 +51,12 @@ class suxThreadedMessages {
     * Saves a message to the database
     *
     * @param int $users_id users_id
-    * @param string $title title
-    * @param string $body body
-    * @param string $published_on ISO 8601 date
+    * @param array $msg required keys => (title, body) optional keys => (published_on)
     * @param int $parent_id messages_id of parent
     * @param bool $trusted passed on to sanitizeHtml
+    * @return int insert id
     */
-    function saveMessage($users_id, $title, $body, $published_on = null, $parent_id = null, $trusted = false) {
+    function saveMessage($users_id, array $msg, $parent_id = null, $trusted = false) {
 
         /*
         The first message in a thread has thread_pos = 0.
@@ -79,23 +78,43 @@ class suxThreadedMessages {
         // -------------------------------------------------------------------
 
         if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+        if (!isset($msg['title']) || !isset($msg['body'])) throw new Exception('Invalid $msg array');
 
-        // TODO: Check published_on date format
-        if (!$published_on) $published_on = date('c');
+        // Users id
+        $clean['users_id'] = $users_id;
 
         // Parent_id
-        $parent_id = filter_var($parent_id, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+        $clean['parent_id'] = filter_var($parent_id, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
 
         // No HTML in title
-        $title = strip_tags($title);
+        $clean['title'] = strip_tags($msg['title']);
 
         // Sanitize HTML in body
-        $body = suxFunct::sanitizeHtml($body, $trusted);
+        $clean['body_html'] = suxFunct::sanitizeHtml($msg['body'], $trusted);
 
         // Convert and copy body to UTF-8 plaintext
         require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
-        $converter = new suxHtml2UTF8($body);
-        $body_plaintext = $converter->getText();
+        $converter = new suxHtml2UTF8($clean['body_html']);
+        $clean['body_plaintext']  = $converter->getText();
+
+        // Image
+        if (isset($msg['image'])) {
+            $clean['image'] = filter_var($msg['image'], FILTER_SANITIZE_STRING);
+        }
+
+        // Draft, boolean / tinyint
+        $clean['draft'] = 0;
+        if (isset($msg['draft'])) $clean['draft'] = 1;
+
+        // Publish date
+        if (isset($msg['published_on'])) {
+            // TODO: Check ISO 8601 date date format
+            $clean['published_on'] = $msg['published_on'];
+        }
+        else $clean['published_on'] = date('c');
+
+
+        // We now have the $clean[] array
 
         // -------------------------------------------------------------------
         // Go!
@@ -105,69 +124,63 @@ class suxThreadedMessages {
         $this->db->beginTransaction();
         $this->inTransaction = true;
 
-        if ($parent_id) {
+        if ($clean['parent_id']) {
 
             // Get thread_id, level, and thread_pos from parent
             $st = $this->db->prepare("SELECT thread_id, level, thread_pos FROM {$this->db_table} WHERE id = ? ");
-            $st->execute(array($parent_id));
+            $st->execute(array($clean['parent_id']));
             $parent = $st->fetch();
 
             // a reply's level is one greater than its parent's
-            $level = $parent['level'] + 1;
+            $clean['level'] = $parent['level'] + 1;
 
             // what is the biggest thread_pos in this thread among messages with the same parent?
             $st = $this->db->prepare("SELECT MAX(thread_pos) FROM {$this->db_table} WHERE thread_id = ? AND parent_id = ? ");
-            $st->execute(array($parent['thread_id'], $parent_id));
-            $thread_pos = $st->fetchColumn(0);
+            $st->execute(array($parent['thread_id'], $clean['parent_id']));
+            $clean['thread_pos'] = $st->fetchColumn(0);
 
-            if ($thread_pos) {
+            if ($clean['thread_pos']) {
                 // this thread_pos goes after the biggest existing one
-                $thread_pos++;
+                $clean['thread_pos']++;
             }
             else {
                 // this is the first reply, so put it right after the parent
-                $thread_pos = $parent['thread_pos'] + 1;
+                $clean['thread_pos'] = $parent['thread_pos'] + 1;
             }
 
             // increment the thread_pos of all messages in the thread that come after this one
             $st = $this->db->prepare("UPDATE {$this->db_table} SET thread_pos = thread_pos + 1 WHERE thread_id = ? AND thread_pos >= ? ");
-            $st->execute(array($parent['thread_id'], $thread_pos));
+            $st->execute(array($parent['thread_id'], $clean['thread_pos']));
 
             // the new message should be saved with the parent's thread_id
-            $thread_id = $parent['thread_id'];
+            $clean['thread_id'] = $parent['thread_id'];
 
         }
         else {
 
             // The message is not a reply, so it's the start of a new thread
-            $level = 0;
-            $thread_pos = 0;
-            $thread_id = $this->db->query("SELECT MAX(thread_id) + 1 FROM {$this->db_table} ")->fetchColumn(0);
+            $clean['level'] = 0;
+            $clean['thread_pos'] = 0;
+            $clean['thread_id'] = $this->db->query("SELECT MAX(thread_id) + 1 FROM {$this->db_table} ")->fetchColumn(0);
 
         }
 
         // Sanity check
-        if(!$thread_id) $thread_id = 1;
+        if(!$clean['thread_id']) $clean['thread_id'] = 1;
 
-        // Insert the message into the database
-        $insert = array(
-            'thread_id' => $thread_id,
-            'parent_id' => $parent_id,
-            'thread_pos' => $thread_pos,
-            'published_on' => $published_on,
-            'level' => $level,
-            'users_id' => $users_id,
-            'title' => $title,
-            'body_html' => $body,
-            'body_plaintext' => $body_plaintext,
-            );
-        $query = suxDB::prepareInsertQuery($this->db_table, $insert);
+        $query = suxDB::prepareInsertQuery($this->db_table, $clean);
         $st = $this->db->prepare($query);
-        $st->execute($insert);
+        $st->execute($clean);
+
+        // MySQL InnoDB with transaction reports the last insert id as 0 after
+        // commit, the real ids are only reported before committing.
+        $insert_id = $this->db->lastInsertId();
 
         // Commit
         $this->db->commit();
         $this->inTransaction = false;
+
+        return $insert_id;
 
     }
 
@@ -177,12 +190,10 @@ class suxThreadedMessages {
     *
     * @param int $messages_id messages_id
     * @param int $users_id users_id
-    * @param string $title title
-    * @param string $body body
-    * @param string $published_on ISO 8601 date
+    * @param array $msg required keys => (title, body) optional keys => (published_on)
     * @param bool $trusted passed on to sanitizeHtml
     */
-    function editMessage($messages_id, $users_id, $title, $body, $published_on = null, $trusted = false) {
+    function editMessage($messages_id, $users_id, array $msg, $trusted = false) {
 
         // -------------------------------------------------------------------
         // Sanitize
@@ -190,27 +201,48 @@ class suxThreadedMessages {
 
         if (!filter_var($messages_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid message id');
         if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+        if (!isset($msg['title']) || !isset($msg['body'])) throw new Exception('Invalid $msg array');
 
-        // TODO: Check published_on date format
+        // Users id
+        $clean['id'] = $messages_id;
+        $clean['users_id'] = $users_id;
 
         // No HTML in title
-        $title = strip_tags($title);
+        $clean['title'] = strip_tags($msg['title']);
 
         // Sanitize HTML in body
-        $body = suxFunct::sanitizeHtml($body, $trusted);
+        $clean['body_html']  = suxFunct::sanitizeHtml($msg['body'], $trusted);
 
         // Convert and copy body to UTF-8 plaintext
         require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
-        $converter = new suxHtml2UTF8($body);
-        $body_plaintext = $converter->getText();
+        $converter = new suxHtml2UTF8($clean['body_html']);
+        $clean['body_plaintext'] = $converter->getText();
+
+        // Image
+        if (isset($msg['image'])) {
+            $clean['image'] = filter_var($msg['image'], FILTER_SANITIZE_STRING);
+        }
+
+        // Draft, boolean / tinyint
+        $clean['draft'] = 0;
+        if (isset($msg['draft'])) $clean['draft'] = 1;
+
+        // Publish date
+        if (isset($msg['published_on'])) {
+            // TODO: Check ISO 8601 date date format
+            $clean['published_on'] = $msg['published_on'];
+        }
+
+
+        // We now have the $clean[] array
 
         // -------------------------------------------------------------------
         // Go
         // -------------------------------------------------------------------
 
-        $query = "SELECT title, body_html, body_plaintext FROM {$this->db_table} WHERE id = ? ";
+        $query = "SELECT title, image, body_html, body_plaintext FROM {$this->db_table} WHERE id = ? ";
         $st = $this->db->prepare($query);
-        $st->execute(array($messages_id));
+        $st->execute(array($clean['id']));
         $editing = $st->fetch(PDO::FETCH_ASSOC);
 
         if (!$editing) throw new Exception('No message to edit?');
@@ -219,27 +251,20 @@ class suxThreadedMessages {
         $this->db->beginTransaction();
         $this->inTransaction = true;
 
-        // Keep a history of edits
-        $editing['messages_id'] = $messages_id;
-        $editing['users_id'] = $users_id;
+        // Create $edit[] array in order to keep a history (wiki style)
+        $editing['messages_id'] = $clean['id'];
+        $editing['users_id'] = $clean['users_id'];
         $editing['edited_on'] = date('c');
         $query = suxDB::prepareInsertQuery($this->db_table_hist, $editing);
         $st = $this->db->prepare($query);
         $st->execute($editing);
 
+        unset($clean['users_id']); // Don't override the original publisher
+
         // Update the message
-        $update = array(
-            'id' => $messages_id,
-            'title' => $title,
-            'body_html' => $body,
-            'body_plaintext' => $body_plaintext,
-            );
-
-        if ($published_on) $update['published_on'] = $published_on;
-
-        $query = suxDB::prepareUpdateQuery($this->db_table, $update);
+        $query = suxDB::prepareUpdateQuery($this->db_table, $clean);
         $st = $this->db->prepare($query);
-        $st->execute($update);
+        $st->execute($clean);
 
         // Commit
         $this->db->commit();

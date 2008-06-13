@@ -29,7 +29,7 @@
     {validate id="title" message="title cannot be empty"}
     {/capture}
 {/strip}
-<label {if $smarty.capture.error}class="error"{/if} >{$r->text.dob} Title :</label>
+<label for="title" {if $smarty.capture.error}class="error"{/if} >{$r->text.dob} Title :</label>
 <input type="text" name="title" value="{$title}" />
 {$smarty.capture.error}
 </p>
@@ -40,7 +40,7 @@
     {validate id="image" message="invalid file type, jpg, gif, and png only!"}
     {/capture}
 {/strip}
-<label {if $smarty.capture.error}class="error"{/if} >Image: </label>
+<label for="image" {if $smarty.capture.error}class="error"{/if} >Image: </label>
 <input type="file" name="image" class="imageFile" />
 {$smarty.capture.error}
 </p>
@@ -63,6 +63,10 @@ TODO: <a href="javascript:;" onmousedown="tinyMCE.execCommand('mceInsertContent'
 <textarea name="body" class="mceEditor">{$body}</textarea>
 </p>
 
+<p>
+<label for="draft">Save as draft:</label>
+<input type="checkbox" name="draft" value="1" {if $draft}checked="checked"{/if} />
+</p>
 
 <p>
 {strip}
@@ -97,9 +101,7 @@ TODO: <a href="javascript:;" onmousedown="tinyMCE.execCommand('mceInsertContent'
 TODO: Tags
 </p>
 
-<p>
-TODO: Save draft?
-</p>
+
 
 
 <p>
