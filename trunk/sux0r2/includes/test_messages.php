@@ -15,10 +15,15 @@ TinyMCE is very easy to integrate into other <span style="font-size: large;">Con
 </div>
 ';
 
+$m['title'] = 'Test';
+$m['body'] = $body;
+// $m['published_on'] = date('c');
 
-// $msg->saveMessage('1', 'Test', $body);
-$msg->saveMessage('1', 'Test', $body, 1);
-// $msg->editMessage(1, 1, 'Test', $body);
+// $id = $msg->saveMessage('1', $m);
+// $id =  $msg->saveMessage('1', $m, 2);
+// $id =  $msg->editMessage(1, 1, $m);
+
+echo $id;
 
 
 ?>

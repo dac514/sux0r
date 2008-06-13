@@ -157,9 +157,6 @@ class suxEdit {
     */
     function formProcess(&$clean) {
 
-        // TODO
-
-
         $clean['published_on'] = "{$clean['Date']} {$clean['Time_Hour']}:{$clean['Time_Minute']}:{$clean['Time_Second']}";
 
         unset(
@@ -172,11 +169,37 @@ class suxEdit {
             $clean['Time_Second']
             );
 
-        // new dBug($clean);
-        // new dBug($_FILES);
+        new dBug($clean);
+        new dBug($_FILES);
 
-        $msg = new suxThreadedMessages();
-        $msg->saveMessage($_SESSION['users_id'], $clean['title'], $clean['body'], $clean['published_on'], $parent_id = null, $style = true);
+        $msg = array(
+                'title' => $clean['title'],
+                'body' => $clean['body'],
+                'published_on' => $clean['published_on'],
+                'draft' => @$clean['draft'],
+            );
+
+
+        // Image?
+        if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
+
+            list($resize, $fullsize) = suxFunct::renameImage($_FILES['image']['name']);
+
+            $msg['image'] = $resize; // Add image to message
+
+            $format = explode('.', $_FILES['image']['name']);
+            $format = strtolower(end($format));
+            $filein = $_FILES['image']['tmp_name'];
+            $resize = "{$GLOBALS['CONFIG']['PATH']}/data/{$this->module}/{$resize}";
+            $fullsize = "{$GLOBALS['CONFIG']['PATH']}/data/{$this->module}/{$fullsize}";
+            suxFunct::resizeImage($format, $filein, $resize, 80, 80);
+            move_uploaded_file($_FILES['image']['tmp_name'], $fullsize);
+
+        }
+
+        // Save new message
+        $blog = new suxThreadedMessages();
+        $blog->saveMessage($_SESSION['users_id'], $msg, $parent_id = null, $style = true);
 
     }
 

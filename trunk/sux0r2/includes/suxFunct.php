@@ -98,6 +98,29 @@ class suxFunct {
 
 
     /**
+    * Assign a unique id to an image file name. Returns an array of filename
+    * conventions
+    *
+    * @param string $name the name of an image file
+    * @return array
+    */
+    static function renameImage($filename) {
+
+        $pattern = '/(\.jpe?g|\.gif|\.png)$/i';
+        $uniqid = time() . substr(md5(microtime()), 0, rand(5, 12));
+
+        $replacement = "_{$uniqid}" . "$1";
+        $resize = preg_replace($pattern, $replacement, $filename);
+
+        $replacement = "_{$uniqid}_fullsize" . "$1";
+        $fullsize = preg_replace($pattern, $replacement, $filename);
+
+        return array($resize, $fullsize);
+
+    }
+
+
+    /**
     * Proprtionally crop and resize an image file
     *
     * @param string $format expect jpg, jpeg, gif, or png
@@ -116,6 +139,31 @@ class suxFunct {
         if (!($format == 'jpeg' || $format == 'gif' || $format == 'png'))  {
             throw new Exception('Invalid image format');
         }
+
+        // --------------------------------------------------------------------
+        // Try to avoid problems with memory limit
+        // --------------------------------------------------------------------
+
+        $size = getimagesize($filein);
+
+        if ($format == 'jpeg') {
+            $fudge = 1.65; // This is a guestimate, your mileage may very
+            $memoryNeeded = round(($size[0] * $size[1] * $size['bits'] * $size['channels'] / 8 + Pow(2, 16)) * $fudge);
+        }
+        else {
+            $memoryNeeded = $size[0] * $size[1];
+            if (isset($size['bits'])) $memoryNeeded = $memoryNeeded * $size['bits'];
+            $memoryNeeded = round($memoryNeeded);
+        }
+
+        if (memory_get_usage() + $memoryNeeded > (int) ini_get('memory_limit') * pow(1024, 2)) {
+            trigger_error('Image is too big, attempting to compensate...', E_USER_WARNING);
+            ini_set('memory_limit', (int) ini_get('memory_limit') + ceil(((memory_get_usage() + $memoryNeeded) - (int) ini_get('memory_limit') * pow(1024, 2)) / pow(1024, 2)) . 'M');
+        }
+
+        // --------------------------------------------------------------------
+        // Proceed with resizing
+        // --------------------------------------------------------------------
 
         $func = 'imagecreatefrom' . $format;
         $image = $func($filein);
@@ -151,6 +199,8 @@ class suxFunct {
         imagealphablending($thumb, true);
         imagecopyresampled($thumb, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
 
+        imagedestroy($image); // Free memory
+
         // Thumbnail
         $thumb2 = imagecreatetruecolor($imagethumbsize_w, $imagethumbsize_h);
         $white = imagecolorallocate($thumb2, 255, 255, 255);
@@ -160,8 +210,12 @@ class suxFunct {
         $h1 = ($height/2) - ($imagethumbsize_h/2);
         imagecopyresampled($thumb2, $thumb, 0, 0, $w1, $h1, $imagethumbsize_w , $imagethumbsize_h ,$imagethumbsize_w, $imagethumbsize_h);
 
+        imagedestroy($thumb); // Free memory
+
         $func = 'image' . $format;
         $func($thumb2, $fileout);
+
+        imagedestroy($thumb2); // Free memory
 
     }
 
