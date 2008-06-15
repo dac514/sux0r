@@ -26,11 +26,12 @@ require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
-class suxAuthenticate extends suxUser {
+class suxAuthenticate {
 
     // Objects
     public $tpl;
     public $r;
+    private $user;
 
     // Variables
     public $gtext = array(); // Language
@@ -44,7 +45,7 @@ class suxAuthenticate extends suxUser {
     */
     function __construct() {
 
-        parent::__construct(); // Call parent
+        $this->user = new suxUser(); // User
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->r = new suxRenderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
@@ -59,7 +60,7 @@ class suxAuthenticate extends suxUser {
     */
     function login() {
 
-        if ($this->loginCheck() || !$this->loginCheck() && $this->authenticate()) {
+        if ($this->user->loginCheck() || !$this->user->loginCheck() && $this->user->authenticate()) {
 
             // Redirect to previous page
             if (isset($_SESSION['breadcrumbs'])) foreach($_SESSION['breadcrumbs'] as $val) {
@@ -76,7 +77,7 @@ class suxAuthenticate extends suxUser {
         else {
 
             // Too many password failures?
-            if (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->max_failures) {
+            if (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->user->max_failures) {
                 $this->tpl->assign_by_ref('r', $this->r);
                 $this->tpl->display('pw_failure.tpl');
                 die();
@@ -101,7 +102,7 @@ class suxAuthenticate extends suxUser {
 
         // Don't kill session (with password failures, perhaps?) if the
         // user isn't actually logged in.
-        if ($this->loginCheck()) suxFunct::killSession();
+        if ($this->user->loginCheck()) suxFunct::killSession();
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
