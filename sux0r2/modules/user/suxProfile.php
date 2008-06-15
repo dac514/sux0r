@@ -28,14 +28,18 @@ require_once(dirname(__FILE__) . '/../../includes/suxSocialNetwork.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once('renderer.php');
 
-class suxProfile extends suxUser {
+class suxProfile {
 
-    public $gtext = array(); // Language
-    public $tpl; // Template
-    public $r; // Renderer
+    // Objects
+    public $tpl;
+    public $r;
+    private $user;
 
+    // Variables
+    public $gtext = array();
     public $profile; // User profile array
-    private $module = 'user'; // Module
+    private $module = 'user';
+
 
     /**
     * Constructor
@@ -45,14 +49,14 @@ class suxProfile extends suxUser {
     */
     function __construct($nickname) {
 
-        parent::__construct(); // Call parent
+        $this->user = new suxUser(); // User
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->r = new renderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
 
         // Profile
-        $this->profile = $this->getUserByNickname($nickname);
+        $this->profile = $this->user->getUserByNickname($nickname);
         unset($this->profile['password']); // We don't need this
 
     }
@@ -69,7 +73,7 @@ class suxProfile extends suxUser {
         if(!$this->tpl->is_cached('profile.tpl', $cache_id)) {
 
             // Full Profile
-            $fullprofile = $this->getUser($this->profile['users_id'], true);
+            $fullprofile = $this->user->getUser($this->profile['users_id'], true);
             unset($fullprofile['password']); // We don't need this
             if (!isset($fullprofile['dob']) || $fullprofile['dob'] == '0000-00-00') unset($fullprofile['dob']); // NULL date
             $this->r->profile =& $fullprofile; // Assign

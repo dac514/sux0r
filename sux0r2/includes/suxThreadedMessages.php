@@ -102,10 +102,6 @@ class suxThreadedMessages {
             $clean['image'] = filter_var($msg['image'], FILTER_SANITIZE_STRING);
         }
 
-        // Draft, boolean / tinyint
-        $clean['draft'] = 0;
-        if (isset($msg['draft'])) $clean['draft'] = 1;
-
         // Publish date
         if (isset($msg['published_on'])) {
             // TODO: Check ISO 8601 date date format
@@ -113,6 +109,20 @@ class suxThreadedMessages {
         }
         else $clean['published_on'] = date('c');
 
+        // Draft, boolean / tinyint
+        $clean['draft'] = 0;
+        if (isset($msg['draft'])) $clean['draft'] = 1;
+
+        // Types of threaded messages
+        $clean['forum'] = 0;
+        $clean['blog'] = 0;
+        $clean['wiki'] = 0;
+        if (isset($msg['forum'])) $clean['forum'] = 1;
+        if (isset($msg['blog'])) $clean['blog'] = 1;
+        if (isset($msg['wiki'])) $clean['wiki'] = 1;
+
+        if (!$clean['forum'] && !$clean['blog'] && !$clean['wiki'])
+            throw new Exception('No message type specified?');
 
         // We now have the $clean[] array
 
@@ -129,7 +139,7 @@ class suxThreadedMessages {
             // Get thread_id, level, and thread_pos from parent
             $st = $this->db->prepare("SELECT thread_id, level, thread_pos FROM {$this->db_table} WHERE id = ? ");
             $st->execute(array($clean['parent_id']));
-            $parent = $st->fetch();
+            $parent = $st->fetch(PDO::FETCH_ASSOC);
 
             // a reply's level is one greater than its parent's
             $clean['level'] = $parent['level'] + 1;
@@ -223,14 +233,29 @@ class suxThreadedMessages {
             $clean['image'] = filter_var($msg['image'], FILTER_SANITIZE_STRING);
         }
 
-        // Draft, boolean / tinyint
-        $clean['draft'] = 0;
-        if (isset($msg['draft'])) $clean['draft'] = 1;
-
         // Publish date
         if (isset($msg['published_on'])) {
             // TODO: Check ISO 8601 date date format
             $clean['published_on'] = $msg['published_on'];
+        }
+
+        // Draft, boolean / tinyint
+        $clean['draft'] = 0;
+        if (isset($msg['draft'])) $clean['draft'] = 1;
+
+
+        // Types of threaded messages
+        if (isset($msg['forum'])) {
+            if ($msg['forum'] == 0) $clean['forum'] = 0;
+            else $clean['forum'] = 1;
+        }
+        if (isset($msg['blog'])) {
+            if ($msg['blog'] == 0) $clean['blog'] = 0;
+            else $clean['blog'] = 1;
+        }
+        if (isset($msg['wiki'])) {
+            if ($msg['wiki'] == 0) $clean['wiki'] = 0;
+            else $clean['wiki'] = 1;
         }
 
 
@@ -240,24 +265,24 @@ class suxThreadedMessages {
         // Go
         // -------------------------------------------------------------------
 
+        // Get $edit[] array in order to keep a history (wiki style)
         $query = "SELECT title, image, body_html, body_plaintext FROM {$this->db_table} WHERE id = ? ";
         $st = $this->db->prepare($query);
         $st->execute(array($clean['id']));
-        $editing = $st->fetch(PDO::FETCH_ASSOC);
+        $edit = $st->fetch(PDO::FETCH_ASSOC);
 
-        if (!$editing) throw new Exception('No message to edit?');
+        if (!$edit) throw new Exception('No message to edit?');
 
         // Begin transaction
         $this->db->beginTransaction();
         $this->inTransaction = true;
 
-        // Create $edit[] array in order to keep a history (wiki style)
-        $editing['messages_id'] = $clean['id'];
-        $editing['users_id'] = $clean['users_id'];
-        $editing['edited_on'] = date('c');
-        $query = suxDB::prepareInsertQuery($this->db_table_hist, $editing);
+        $edit['messages_id'] = $clean['id'];
+        $edit['users_id'] = $clean['users_id'];
+        $edit['edited_on'] = date('c');
+        $query = suxDB::prepareInsertQuery($this->db_table_hist, $edit);
         $st = $this->db->prepare($query);
-        $st->execute($editing);
+        $st->execute($edit);
 
         unset($clean['users_id']); // Don't override the original publisher
 
@@ -300,7 +325,7 @@ class suxThreadedMessages {
 
         // Get the messages
         $messages = array();
-        foreach ($st->fetchAll() as $row) {
+        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
             $messages[] = $row;
         }
 
@@ -324,7 +349,7 @@ class suxThreadedMessages {
         $st = $this->db->prepare("SELECT * FROM {$this->db_table} WHERE id = ? ");
         $st->execute(array($id));
 
-        $message = $st->fetch();
+        $message = $st->fetch(PDO::FETCH_ASSOC);
         if (!$message) {
             throw new Exception('Invalid message id');
         }
@@ -355,7 +380,7 @@ class suxThreadedMessages {
 
         // Get the messages
         $messages = array();
-        foreach ($st->fetchAll() as $row) {
+        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
             $messages[] = $row;
         }
 

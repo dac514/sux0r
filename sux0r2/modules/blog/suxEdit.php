@@ -30,13 +30,17 @@ require_once('renderer.php');
 
 class suxEdit {
 
-    public $gtext = array(); // Language
-    public $tpl; // Template
-    public $r; // Renderer
+    // Objects
+    public $tpl;
+    public $r;
+    private $user;
 
+    // Variables
+    public $gtext = array();
+    private $module = 'blog';
     private $prev_url_preg = '#^blog/[edit]#i';
-    private $user; // suxUser
-    private $module = 'blog'; // Module
+    private $id;
+
 
     /**
     * Constructor
@@ -61,6 +65,7 @@ class suxEdit {
         if (filter_var($id, FILTER_VALIDATE_INT)) {
             // TODO:
             // Verfiy that we are allowed to edit this
+            $this->id = $id;
         }
 
 
@@ -94,6 +99,37 @@ class suxEdit {
     * @param array $dirty reference to unverified $_POST
     */
     function formBuild(&$dirty) {
+
+        $blog = array();
+
+        if ($this->id) {
+
+            $b = new suxThreadedMessages();
+            $tmp = $b->getMessage($this->id);
+
+            $blog['id'] = $tmp['id'];
+            $blog['title'] = $tmp['title'];
+            $blog['image'] = $tmp['image'];
+            $blog['body'] = $tmp['body_html'];
+            $blog['draft'] = $tmp['draft'];
+
+            /*
+            // TODO, publish date
+            $time = $tmp['published_on'];
+
+            $blog['Date_Year'] = '';
+            $blog['Date_Month'] = '';
+            $blog['Date_Day'] = '';
+
+            $blog['Time_Hour']  = '';
+            $blog['Time_Minute']  = '';
+            $blog['Time_Second'] = '';
+            */
+
+        }
+
+        // Assign blog
+        $this->tpl->assign($blog);
 
         // --------------------------------------------------------------------
         // Form logic
@@ -157,36 +193,24 @@ class suxEdit {
     */
     function formProcess(&$clean) {
 
+        // --------------------------------------------------------------------
+        // Sanity check
+        // --------------------------------------------------------------------
+
+        // Message id, edit mode
+        if (isset($clean['id']) && filter_var($clean['id'], FILTER_VALIDATE_INT)) {
+            // TODO: Check to see if this user is allowed to modify this blog
+            // $clean['id'] = false // on fail
+        }
+
+        // Date
         $clean['published_on'] = "{$clean['Date']} {$clean['Time_Hour']}:{$clean['Time_Minute']}:{$clean['Time_Second']}";
-
-        unset(
-            $clean['Date'],
-            $clean['Date_Year'],
-            $clean['Date_Month'],
-            $clean['Date_Day'],
-            $clean['Time_Hour'],
-            $clean['Time_Minute'],
-            $clean['Time_Second']
-            );
-
-        new dBug($clean);
-        new dBug($_FILES);
-
-        $msg = array(
-                'title' => $clean['title'],
-                'body' => $clean['body'],
-                'published_on' => $clean['published_on'],
-                'draft' => @$clean['draft'],
-            );
-
 
         // Image?
         if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
 
             list($resize, $fullsize) = suxFunct::renameImage($_FILES['image']['name']);
-
-            $msg['image'] = $resize; // Add image to message
-
+            $clean['image'] = $resize; // Add image to clean array
             $format = explode('.', $_FILES['image']['name']);
             $format = strtolower(end($format));
             $filein = $_FILES['image']['tmp_name'];
@@ -197,9 +221,30 @@ class suxEdit {
 
         }
 
-        // Save new message
+        // --------------------------------------------------------------------
+        // Create $msg array
+        // --------------------------------------------------------------------
+
+        $msg = array(
+                'title' => $clean['title'],
+                'image' => @$clean['image'],
+                'body' => $clean['body'],
+                'published_on' => $clean['published_on'],
+                'draft' => @$clean['draft'],
+                'blog' => 1,
+            );
+
+        // --------------------------------------------------------------------
+        // Put $msg in database
+        // --------------------------------------------------------------------
+
         $blog = new suxThreadedMessages();
-        $blog->saveMessage($_SESSION['users_id'], $msg, $parent_id = null, $style = true);
+        if ($clean['id']) {
+            $blog->editMessage($clean['id'], $_SESSION['users_id'], $msg, $style = true);
+        }
+        else {
+            $blog->saveMessage($_SESSION['users_id'], $msg, $parent_id = null, $style = true);
+        }
 
     }
 

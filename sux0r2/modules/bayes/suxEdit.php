@@ -30,14 +30,17 @@ require_once('suxNbUser.php');
 
 class suxEdit {
 
-    public $gtext = array(); // Language
-    public $tpl; // Template
-    public $r; // Renderer
-    public $nb; // Naive Bayesian Object / extended
+    // Objects
+    public $tpl;
+    public $r;
+    public $nb;
+    private $user;
 
-    private $user; // suxUser
+    // Variables
+    public $gtext = array();
     private $users_id = null;
     private $module = 'bayes'; // Module
+
 
     /**
     * Constructor
@@ -53,7 +56,6 @@ class suxEdit {
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
-        // Objects
         $this->user = new suxuser();
         $this->nb = new suxNbUser();
 
@@ -142,7 +144,7 @@ class suxEdit {
             // Register our additional criterias
             suxValidate::register_criteria('invalidShare', 'this->invalidShare', 'sharevec');
             suxValidate::register_criteria('userExists', 'this->userExists', 'sharevec');
-            
+
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
 
@@ -251,10 +253,10 @@ class suxEdit {
             break;
 
         case 'sharevec' :
-            
+
             // Security check
             if ($this->nb->isVectorOwner($clean['vector_id'], $_SESSION['users_id'])) {
-                
+
                 if (!isset($clean['trainer'])) $clean['trainer'] = 0;
                 if (!isset($clean['owner'])) $clean['owner'] = 0;
 
@@ -291,8 +293,8 @@ class suxEdit {
         return true;
 
     }
-    
-    
+
+
     /**
     * for suxValidate, check if a user exists
     * i.e. cannot share a vector with one's self and
@@ -306,7 +308,7 @@ class suxEdit {
 
         return true;
 
-    }    
+    }
 
 
 }

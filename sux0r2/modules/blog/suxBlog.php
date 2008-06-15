@@ -29,12 +29,15 @@ require_once('renderer.php');
 
 class suxBlog extends suxThreadedMessages {
 
-    public $gtext = array(); // Language
-    public $tpl; // Template
-    public $r; // Renderer
+    // Objects
+    public $tpl;
+    public $r;
+    private $user;
 
-    private $user; // suxUser
-    private $module = 'blog'; // Module
+    // Variables
+    public $gtext = array();
+    private $module = 'blog';
+
 
     /**
     * Constructor

@@ -183,11 +183,16 @@ CREATE TABLE `messages` (
   `parent_id` int(11) default NULL,
   `level` int(11) NOT NULL,
   `thread_pos` int(11) NOT NULL,
-  `draft` tinyint(1) NOT NULL,
+  `draft` tinyint(1) default NULL,
   `published_on` datetime NOT NULL,
+  `forum` tinyint(1) default NULL,
+  `blog` tinyint(1) default NULL,
+  `wiki` tinyint(1) default NULL,
   PRIMARY KEY  (`id`),
-  KEY `thread_id` (`thread_id`),
-  KEY `users_id` (`users_id`)
+  KEY `users_id` (`users_id`),
+  KEY `thread` (`thread_id`,`thread_pos`),
+  KEY `published` (`published_on`,`draft`),
+  KEY `type` (`forum`,`blog`,`wiki`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --

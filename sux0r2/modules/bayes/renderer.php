@@ -27,7 +27,8 @@ require_once('suxNbUser.php');
 
 class renderer extends suxRenderer {
 
-    private $nb; // Naive Bayesian Object / extended
+    // Objects
+    private $nb;
 
 
     /**

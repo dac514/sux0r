@@ -26,7 +26,7 @@ require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
 class renderer extends suxRenderer {
 
-
+    // Variables
     public $profile = array(); // User profile
 
 
