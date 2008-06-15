@@ -26,12 +26,10 @@ function sux($action, $params = null) {
 
     unset($action, $params); // We don't use these here
 
-    require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
     require_once('suxOpenID.php');
 
-    $user = new suxUser();
-    $openID = new suxOpenID($user);
-    // $openID->profile['debug'] = true;
+    $openID = new suxOpenID();
+    //$openID->profile['debug'] = true;
 
     // Pick a runmode
     $run_mode = (!empty($_REQUEST['openid_mode']) ? $_REQUEST['openid_mode'] : 'no') . '_mode';

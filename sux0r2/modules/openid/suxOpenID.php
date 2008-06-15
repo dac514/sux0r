@@ -25,6 +25,7 @@
 *
 */
 
+require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
@@ -32,6 +33,7 @@ class suxOpenID {
 
     // Objects
     public $tpl;
+    public $r;
     private $user;
 
     // Variables
@@ -55,24 +57,19 @@ class suxOpenID {
     *
     * @global array $CONFIG['DSN']
     * @global string $CONFIG['PARTITION']
-    * @param object $suxUser suxUser
     * @param string $key PDO dsn key
     */
-    function __construct(suxUser $user, $key = null) {
+    function __construct($key = null) {
 
         if (!$key && !empty($GLOBALS['CONFIG']['DSN']['openid'])) $key = 'openid';
         $this->db = suxDB::get($key); // Db
         set_exception_handler(array($this, 'logAndDie')); // Exception
 
-        $this->user = $user; // User
+        $this->user = new suxUser(); // User
+        $this->r = new suxRenderer($this->module); // Renderer
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->gtext = suxFunct::gtext($this->module); // Language
 
-        /*
-        Note:
-        As this module is much more than a user interface,
-        suxRenderer is called only when needed.
-        */
 
         // Defined by OpenID spec
         // http://openid.net/specs/openid-authentication-1_1.html
@@ -621,16 +618,15 @@ class suxOpenID {
         $yes = $this->profile['req_url'] . $q . 'accepted=yes';
         $no  = $this->profile['req_url'] . $q . 'accepted=no';
 
-        $r = new suxRenderer($this->module);
-        $r->text =& $this->gtext;
-        $r->text['unaccepted_url'] = $_SESSION['openid_unaccepted_url'];
-        $r->text['always_url'] = $always;
-        $r->text['yes_url'] = $yes;
-        $r->text['no_url'] = $no;
+        $this->r->text =& $this->gtext;
+        $this->r->text['unaccepted_url'] = $_SESSION['openid_unaccepted_url'];
+        $this->r->text['always_url'] = $always;
+        $this->r->text['yes_url'] = $yes;
+        $this->r->text['no_url'] = $no;
 
-        $r->bool['analytics'] = false;
+        $this->r->bool['analytics'] = false;
 
-        $this->tpl->assign_by_ref('r', $r);
+        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('accept.tpl');
 
     }
@@ -709,15 +705,14 @@ class suxOpenID {
         $q = mb_strpos($this->profile['my_url'], '?') ? '&' : '?';
 
         // Template
-        $r = new suxRenderer($this->module);
 
-        $r->text =& $this->gtext;
-        $r->text['server_url'] = $this->profile['my_url'];
-        $r->text['realm_id'] = $GLOBALS['CONFIG']['REALM'];
-        $r->text['test_url'] = $this->profile['my_url'] . $q . 'openid.mode=test';
-        $r->bool['debug'] = $this->profile['debug'];
+        $this->r->text =& $this->gtext;
+        $this->r->text['server_url'] = $this->profile['my_url'];
+        $this->r->text['realm_id'] = $GLOBALS['CONFIG']['REALM'];
+        $this->r->text['test_url'] = $this->profile['my_url'] . $q . 'openid.mode=test';
+        $this->r->bool['debug'] = $this->profile['debug'];
 
-        $this->tpl->assign_by_ref('r', $r);
+        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('no_mode.tpl');
 
     }
@@ -1406,11 +1401,10 @@ class suxOpenID {
     */
     private function wrapHtml($message) {
 
-        $r = new suxRenderer($this->module);
-        $r->text['message'] = $message;
-        $r->bool['analytics'] = false;
+        $this->r->text['message'] = $message;
+        $this->r->bool['analytics'] = false;
 
-        $this->tpl->assign_by_ref('r', $r);
+        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('wrap_html.tpl');
         exit;
 
@@ -1425,11 +1419,10 @@ class suxOpenID {
     private function wrapRefresh($url) {
 
         // Template
-        $r = new suxRenderer($this->module);
-        $r->text =& $this->gtext;
-        $r->text['url'] = $url;
+        $this->r->text =& $this->gtext;
+        $this->r->text['url'] = $url;
 
-        $this->tpl->assign_by_ref('r', $r);
+        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('refresh.tpl');
 
         $this->debug('Refresh: ' . $url);
