@@ -27,14 +27,17 @@ require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
-class suxRegisterOpenID extends suxUser {
+class suxRegisterOpenID  {
 
-    public $gtext = array(); // Language
-    public $tpl; // Template
-    public $r; // Renderer
+    // Objects
+    public $tpl;
+    public $r;
+    protected $user;
 
+    // Variables
+    public $gtext = array();
     protected $prev_url_preg = '#^user/[login|logout|register|edit]#i';
-    private $module = 'user'; // Module
+    private $module = 'user';
 
     /**
     * Constructor
@@ -43,7 +46,7 @@ class suxRegisterOpenID extends suxUser {
     */
     function __construct() {
 
-        parent::__construct(); // Call parent
+        $this->user = new suxUser(); // User
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->r = new suxRenderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
@@ -138,10 +141,9 @@ class suxRegisterOpenID extends suxUser {
 
         if (empty($formvars['url'])) return false;
 
-        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_openid} WHERE openid_url = ? LIMIT 1 ");
-        $st->execute(array(suxFunct::canonicalizeUrl($formvars['url'])));
+        $user = $this->user->getUserByOpenID(suxFunct::canonicalizeUrl($formvars['url']));
 
-        if ($st->fetchColumn() > 0) return false; // Duplicate found, fail
+        if ($user) return false; // Duplicate found, fail
         else return true;
 
     }

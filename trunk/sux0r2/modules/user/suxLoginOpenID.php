@@ -35,7 +35,7 @@ class suxLoginOpenID extends suxRegisterOpenID {
 
         parent::__construct(); // Call suxRegisterOpenID
 
-        if ($this->loginCheck()) {
+        if ($this->user->loginCheck()) {
 
             // Redirect to previous page
             if (isset($_SESSION['breadcrumbs'])) foreach($_SESSION['breadcrumbs'] as $val) {
@@ -49,7 +49,7 @@ class suxLoginOpenID extends suxRegisterOpenID {
             suxFunct::redirect(suxFunct::makeUrl('/user/profile/' . $_SESSION['nickname']));
 
         }
-        elseif (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->max_failures) {
+        elseif (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->user->max_failures) {
 
             // Too many password failures?
             $this->tpl->assign_by_ref('r', $this->r);
