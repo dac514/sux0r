@@ -28,11 +28,14 @@ require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
 class suxAuthenticate extends suxUser {
 
-    public $gtext = array(); // Language
-    public $tpl; // Template
-    public $r; // Renderer
+    // Objects
+    public $tpl;
+    public $r;
 
+    // Variables
+    public $gtext = array(); // Language
     private $module = 'user'; // Module
+
 
     /**
     * Constructor

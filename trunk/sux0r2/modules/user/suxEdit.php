@@ -27,17 +27,20 @@ require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('renderer.php');
 
-class suxEdit extends suxUser {
+class suxEdit {
 
+    // Objects
+    public $tpl;
+    public $r;
+    private $user;
+
+    // Variables
     public $gtext = array(); // Language
-    public $tpl; // Template
-    public $r; // Renderer
-
     private $mode = 'register';
     private $users_id = null;
-
     private $prev_url_preg = '#^user/[login|logout|register|edit]#i';
-    private $module = 'user'; // Module
+    private $module = 'user';
+
 
     /**
     * Constructor
@@ -46,7 +49,7 @@ class suxEdit extends suxUser {
     */
     function __construct($mode = 'register', $user = null) {
 
-        parent::__construct(); // Call parent
+        $this->user = new suxUser(); // User
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->r = new renderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
@@ -60,7 +63,7 @@ class suxEdit extends suxUser {
         if ($mode == 'edit') {
 
             // Redirect if invalid
-            if ($this->loginCheck(suxfunct::makeUrl('/user/register'))) {
+            if ($this->user->loginCheck(suxfunct::makeUrl('/user/register'))) {
                 $this->mode = 'edit';
             }
 
@@ -70,7 +73,7 @@ class suxEdit extends suxUser {
                 // Security check
                 // Only an administrator can modify other users
 
-                $u = $this->getUserByNickname($user);
+                $u = $this->user->getUserByNickname($user);
                 if ($u) $this->users_id = $u['users_id'];
 
             }
@@ -147,7 +150,7 @@ class suxEdit extends suxUser {
 
             // Edit mode
 
-            $u = $this->getUser($this->users_id, true);
+            $u = $this->user->getUser($this->users_id, true);
 
             // Unset
             unset($u['password']);
@@ -297,7 +300,7 @@ class suxEdit extends suxUser {
             }
 
             // Get users_id
-            $u = $this->getUserByNickname($clean['nickname']);
+            $u = $this->user->getUserByNickname($clean['nickname']);
             if (!$u) throw new Exception('Invalid user');
             $id = $u['users_id'];
 
@@ -308,7 +311,7 @@ class suxEdit extends suxUser {
         // --------------------------------------------------------------------
 
         if ($this->isOpenID()) {
-            $clean['password'] = $this->generatePw(); // Random password
+            $clean['password'] = $this->user->generatePw(); // Random password
             $clean['openid_url'] = $_SESSION['openid_url_registration']; // Assign
         }
 
@@ -316,8 +319,8 @@ class suxEdit extends suxUser {
         // SQL
         // --------------------------------------------------------------------
 
-        if (isset($id) && filter_var($id, FILTER_VALIDATE_INT)) $this->setUser($clean, $id);
-        else $this->setUser($clean);
+        if (isset($id) && filter_var($id, FILTER_VALIDATE_INT)) $this->user->setUser($clean, $id);
+        else $this->user->setUser($clean);
 
         // --------------------------------------------------------------------
         // Cleanup
@@ -330,7 +333,7 @@ class suxEdit extends suxUser {
 
         // Reset session
         if ($this->mode == 'edit' && $clean['nickname'] == $_SESSION['nickname']) {
-            $this->setSession($clean['nickname'], true);
+            $this->user->setSession($clean['nickname'], true);
         }
 
     }
@@ -381,11 +384,11 @@ class suxEdit extends suxUser {
 
         if (empty($formvars['nickname'])) return false;
 
-        $tmp = $this->getUserByNickname($formvars['nickname']);
+        $tmp = $this->user->getUserByNickname($formvars['nickname']);
         if ($tmp === false ) return true; // No duplicate found
 
         if($this->mode == 'edit') {
-            $u = $this->getUser($this->users_id);
+            $u = $this->user->getUser($this->users_id);
             if ($formvars['nickname'] == $u['nickname']) {
                 // This is a user editing themseleves, this is OK
                 return true;
@@ -406,11 +409,11 @@ class suxEdit extends suxUser {
 
         if (empty($formvars['email'])) return false;
 
-        $tmp = $this->getUserByEmail($formvars['email']);
+        $tmp = $this->user->getUserByEmail($formvars['email']);
         if ($tmp === false ) return true; // No duplicate found
 
         if($this->mode == 'edit') {
-            $u = $this->getUser($this->users_id);
+            $u = $this->user->getUser($this->users_id);
             if ($formvars['email'] == $u['email']) {
                 // This is a user editing themseleves, this is OK
                 return true;

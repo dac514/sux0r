@@ -26,6 +26,7 @@ require_once(dirname(__FILE__) . '/../../includes/suxNaiveBayesian.php');
 
 class suxNbUser extends suxNaiveBayesian {
 
+    // Variables
     protected $db_table_auth = 'bayes_auth';
     private $module = 'bayes';
 
@@ -275,13 +276,13 @@ class suxNbUser extends suxNaiveBayesian {
     * @return bool
     */
     function shareVector($users_id, $vector_id, $trainer, $owner) {
-      
+
         if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
         if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
         if ($users_id == $_SESSION['users_id']) return false; // Cannot share a vector with one's self
         if ($trainer != 1) $trainer = 0;
         if ($owner != 1) $owner = 0;
-  
+
         // --------------------------------------------------------------------
         // Go!
         // --------------------------------------------------------------------

@@ -28,12 +28,15 @@ require_once('renderer.php');
 
 class suxCropper {
 
-    public $gtext = array(); // Language
-    public $tpl; // Template
-    public $r; // Renderer
+    // Objects
+    public $tpl;
+    public $r;
+    private $user;
 
-    private $user; // suxUser
-    private $module = 'cropper'; // Module
+    //Variables
+    public $gtext = array();
+    private $module = 'cropper';
+
 
     /**
     * Constructor

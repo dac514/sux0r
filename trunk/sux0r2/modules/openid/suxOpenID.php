@@ -30,27 +30,24 @@ require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
 class suxOpenID {
 
-    public $gtext = array(); // Language
-    public $tpl; // Template
+    // Objects
+    public $tpl;
+    private $user;
 
+    // Variables
+    public $gtext = array();
     public $profile = array();
     public $sreg = array();
-
-    // Database suff
     protected $db;
     protected $inTransaction = false;
     protected $db_table_sec = 'openid_secrets';
     protected $db_table_trust = 'openid_trusted';
-
     protected $assoc_types = array();
     protected $session_types = array();
     protected $bcmath_types = array();
-
     private $g;
     private $p;
-
-    private $user; // suxUser
-    private $module = 'openid'; // Module
+    private $module = 'openid';
 
 
     /**
