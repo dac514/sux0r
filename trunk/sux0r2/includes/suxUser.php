@@ -43,7 +43,7 @@ class suxUser {
 
         if (!$key && !empty($GLOBALS['CONFIG']['DSN']['users'])) $key = 'users';
     	$this->db = suxDB::get($key);
-        set_exception_handler(array($this, 'logAndDie'));
+        set_exception_handler(array($this, 'exceptionHandler'));
 
     }
 
@@ -641,19 +641,14 @@ class suxUser {
     /**
     * @param Exception $e an Exception class
     */
-    function logAndDie(Exception $e) {
+    function exceptionHandler(Exception $e) {
 
         if ($this->db && $this->inTransaction) {
             $this->db->rollback();
             $this->inTransaction = false;
         }
 
-        $message = "suxUser Error: \n";
-        $message .= $e->getMessage() . "\n";
-        $message .= "File: " . $e->getFile() . "\n";
-        $message .= "Line: " . $e->getLine() . "\n\n";
-        $message .= "Backtrace: \n" . print_r($e->getTrace(), true) . "\n\n";
-        die("<pre>{$message}</pre>");
+        throw($e); // Hot potato!
 
     }
 

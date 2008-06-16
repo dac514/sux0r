@@ -24,6 +24,7 @@
 
 require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
+require_once(dirname(__FILE__) . '/../../includes/suxNaiveBayesian.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('renderer.php');
@@ -34,6 +35,8 @@ class suxEdit {
     public $tpl;
     public $r;
     private $user;
+    private $msg;
+    private $nb;
 
     // Variables
     public $gtext = array();
@@ -58,6 +61,8 @@ class suxEdit {
 
         // Objects
         $this->user = new suxuser();
+        $this->msg = new suxThreadedMessages();
+        $this->nb = new suxNaiveBayesian();
 
         // Redirect if not logged in
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
@@ -104,8 +109,7 @@ class suxEdit {
 
         if ($this->id) {
 
-            $b = new suxThreadedMessages();
-            $tmp = $b->getMessage($this->id);
+            $tmp = $this->msg->getMessage($this->id);
 
             $blog['id'] = $tmp['id'];
             $blog['title'] = $tmp['title'];
@@ -113,18 +117,19 @@ class suxEdit {
             $blog['body'] = $tmp['body_html'];
             $blog['draft'] = $tmp['draft'];
 
-            /*
-            // TODO, publish date
-            $time = $tmp['published_on'];
+            // Publish date
+            $matches = array();
+            preg_match("/^(\d{4})-(\d{2})-(\d{2})(.*)(\d{2}):(\d{2}):(\d{2})$/", $tmp['published_on'], $matches);
+            //new dBug($matches);
+            $blog['Date_Year'] = @$matches[1]; // year
+            $blog['Date_Month'] = @$matches[2]; // month
+            $blog['Date_Day'] = @$matches[3]; // day
+            $blog['Time_Hour']  = @$matches[5]; // hour
+            $blog['Time_Minute']  = @$matches[6]; // minutes
+            $blog['Time_Second'] = @$matches[7]; //seconds
 
-            $blog['Date_Year'] = '';
-            $blog['Date_Month'] = '';
-            $blog['Date_Day'] = '';
-
-            $blog['Time_Hour']  = '';
-            $blog['Time_Minute']  = '';
-            $blog['Time_Second'] = '';
-            */
+            // Don't allow spoofing
+            unset($dirty['id']);
 
         }
 
@@ -150,9 +155,9 @@ class suxEdit {
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
 
             if ($this->id) suxValidate::register_validator('integrity', 'integrity:id', 'hasIntegrity');
-            suxValidate::register_validator('title', 'title', 'notEmpty');
+            suxValidate::register_validator('title', 'title', 'notEmpty', false, false, 'trim');
             suxValidate::register_validator('image', 'image:jpg,jpeg,gif,png', 'isFileType', true);
-            suxValidate::register_validator('body', 'body', 'notEmpty');
+            suxValidate::register_validator('body', 'body', 'notEmpty', false, false, 'trim');
             suxValidate::register_validator('date', 'Date:Date_Year:Date_Month:Date_Day', 'isDate', false, false, 'makeDate');
             suxValidate::register_validator('time', 'Time_Hour', 'isInt');
             suxValidate::register_validator('time2', 'Time_Minute', 'isInt');
@@ -239,13 +244,27 @@ class suxEdit {
         // Put $msg in database
         // --------------------------------------------------------------------
 
-        $blog = new suxThreadedMessages();
         if (isset($clean['id'])) {
-            $blog->editMessage($clean['id'], $_SESSION['users_id'], $msg, $style = true);
+            $this->msg->editMessage($clean['id'], $_SESSION['users_id'], $msg, $style = true);
         }
         else {
-            $blog->saveMessage($_SESSION['users_id'], $msg, $parent_id = null, $style = true);
+            $clean['id'] = $this->msg->saveMessage($_SESSION['users_id'], $msg, $parent_id = null, $style = true);
         }
+
+
+        // --------------------------------------------------------------------
+        // Naive Bayesian stuff
+        // --------------------------------------------------------------------
+
+        // 1 - Remove all references to $clean['id'] from link table
+        // 2 - foreach() category {
+        //         train document
+        //         update link table
+        //     }
+
+        echo $this->nb->trainDocument($clean['body'], 1);
+
+
 
     }
 

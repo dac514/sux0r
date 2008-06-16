@@ -22,8 +22,8 @@
 *
 */
 
-require_once(dirname(__FILE__) . '/config.php');
-require_once (dirname(__FILE__) . '/initialize.php');
+require_once(dirname(__FILE__) . '/config.php'); // Configuration
+require_once(dirname(__FILE__) . '/initialize.php'); // Initialization
 
 // ---------------------------------------------------------------------------
 // Prepare
@@ -63,8 +63,13 @@ foreach ($params as $key => $val) {
 // Go!
 // ---------------------------------------------------------------------------
 
-include_once(dirname(__FILE__) . "/modules/{$controller}/controller.php");
-sux($action, $params);
+try {
+    include_once(dirname(__FILE__) . "/modules/{$controller}/controller.php");
+    sux($action, $params);
+}
+catch (Exception $e) {
+    require_once(dirname(__FILE__) . '/exception.php'); // Default exception handler
+}
 
 // ---------------------------------------------------------------------------
 // Breadcrumbs

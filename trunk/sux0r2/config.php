@@ -24,6 +24,7 @@ $CONFIG['DSN'] =  array(
     'bayes' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
     'bookmarks' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
     'calendar' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
+    'link' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
     'messages' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
     'openid' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
     'rolodex' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
