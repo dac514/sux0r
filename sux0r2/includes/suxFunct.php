@@ -147,10 +147,12 @@ class suxFunct {
         $size = getimagesize($filein);
 
         if ($format == 'jpeg') {
+            // Jpeg
             $fudge = 1.65; // This is a guestimate, your mileage may very
             $memoryNeeded = round(($size[0] * $size[1] * $size['bits'] * $size['channels'] / 8 + Pow(2, 16)) * $fudge);
         }
         else {
+            // Not Sure
             $memoryNeeded = $size[0] * $size[1];
             if (isset($size['bits'])) $memoryNeeded = $memoryNeeded * $size['bits'];
             $memoryNeeded = round($memoryNeeded);

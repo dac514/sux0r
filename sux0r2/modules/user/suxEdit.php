@@ -170,6 +170,9 @@ class suxEdit {
                 $u['country'] = mb_strtolower($u['country']);
             }
 
+            // Don't allow spoofing
+            unset($dirty['nickname']);
+
         }
 
         // Assign user
@@ -199,6 +202,9 @@ class suxEdit {
             suxValidate::register_validator('nickname3', 'nickname', 'isDuplicateNickname');
             suxValidate::register_validator('email', 'email', 'isEmail', false, false, 'trim');
             suxValidate::register_validator('email2', 'email', 'isDuplicateEmail');
+            if ($this->mode == 'edit') suxValidate::register_validator('integrity', 'integrity:nickname', 'hasIntegrity');
+
+
 
             // --------------------------------------------------------------------
             // Validators with special conditions
@@ -229,9 +235,7 @@ class suxEdit {
         // DONE: Form Logic
         // --------------------------------------------------------------------
 
-
         // Defaults
-
         if (!$this->tpl->get_template_vars('country'))
             $this->tpl->assign('country', $GLOBALS['CONFIG']['COUNTRY']); // Country
         if (!$this->tpl->get_template_vars('timezone'))

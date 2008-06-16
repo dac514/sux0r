@@ -35,6 +35,12 @@
 <label for="nickname" {if $smarty.capture.error}class="error"{/if} >* {$r->text.nickname} :</label>
 <input type="text" name="nickname" value="{$nickname}" {if $r->bool.edit}readonly="readonly"{/if} />
 {$smarty.capture.error}
+
+{if $r->bool.edit}
+<input type="hidden" name="integrity" value="{$r->integrityHash($nickname)}" />
+{validate id="integrity" message=$r->text.form_error_12}
+{/if}
+
 </p>
 
 <p>

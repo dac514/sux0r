@@ -177,4 +177,45 @@ class suxValidate extends SmartyValidate {
 
 }
 
+
+// -------------------------------------------------------------------------
+// Smarty validate functions
+// -------------------------------------------------------------------------
+
+/**
+* Test if values maintain integrity
+*
+* @global string $CONFIG['SALT']
+* @param string $value the value being tested
+* @param boolean $empty if field can be empty
+* @param array params validate parameter values
+* @param array formvars form var values
+*/
+function smarty_validate_criteria_hasIntegrity($value, $empty, &$params, &$formvars) {
+
+    $compare = '';
+    foreach ($params as $key => $val) {
+        if ($key == 'field') {
+            // get rid of this
+            // it (should be) a hidden field that shouldn't be remembered
+            unset($formvars[$val]);
+            continue;
+        }
+        elseif (preg_match('/^field[2-7]$/', $key)) {
+            // Up to 6 variables can be hashed
+            // see suxValidate->integrityHash()
+            $compare .= $formvars[$val];
+        }
+    }
+    $compare = md5($compare . $GLOBALS['CONFIG']['SALT']);
+
+    if ($value != $compare) return false;
+    else {
+
+        return true;
+    }
+
+}
+
+
 ?>
