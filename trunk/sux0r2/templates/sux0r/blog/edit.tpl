@@ -16,7 +16,12 @@
 
 <form action="{$r->text.form_url}" name="default" method="post" enctype="multipart/form-data" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />
-{if $id}<input type="hidden" name="id" value="{$id}" />{/if}
+
+{if $id}
+<input type="hidden" name="id" value="{$id}" />
+<input type="hidden" name="integrity" value="{$r->integrityHash($id)}" />
+{validate id="integrity" message="integrity failure"}
+{/if}
 
 {if $validate.default.is_error !== false}
 <p class="errorWarning">{$r->text.form_error} :</p>

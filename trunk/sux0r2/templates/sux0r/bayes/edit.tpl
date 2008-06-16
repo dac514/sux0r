@@ -284,14 +284,14 @@
         {validate id="sharevec4" form="sharevec" assign="sharevec_error4" message=$r->text.form_error_9}
         {validate id="sharevec5" form="sharevec" assign="sharevec_error5" message=$r->text.form_error_10}
         {validate id="sharevec6" form="sharevec" assign="sharevec_error6" message=$r->text.form_error_11}
-        
+
         <label for="vector_id" {if $sharevec_error1}class="error"{/if} >Share vector:</label>
             {html_options name='vector_id' options=$r->getUserOwnedVectors() selected=$vector_id}
             {$sharevec_error1}
         </p>
 
         <p>
-        <label for="users_id" {if $sharevec_error2 || $sharevec_error5}class="error"{/if}>With friend:</label>
+        <label for="users_id" {if $sharevec_error2 || $sharevec_error5 || $sharevec_error6}class="error"{/if} >With friend:</label>
             {* TODO: Get users from socialnetwork *}
             <select name="users_id">
             <option value="1">test</option>

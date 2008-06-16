@@ -27,6 +27,7 @@ $gtext['form_error_8'] = 'URL cannot be empty';
 $gtext['form_error_9'] = 'Invalid URL';
 $gtext['form_error_10'] = 'Duplicate URL';
 $gtext['form_error_11'] = 'Invalid captcha';
+$gtext['form_error_12'] = 'Data integrity failure';
 $gtext['form_problem'] = 'The form was not submitted, please try again';
 
 $gtext['gender'] = 'Gender';

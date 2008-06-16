@@ -113,6 +113,25 @@ class suxRenderer {
 
 
     /**
+    * Hash
+    *
+    * @global string $CONFIG['SALT']
+    * @param string $v1
+    * @param string $v2 optional
+    * @param string $v3 optional
+    * @param string $v4 optional
+    * @param string $v5 optional
+    * @param string $v6 optional
+    * @return string md5 hash of variables concatenated with salt
+    */
+    function integrityHash($v1, $v2 = null, $v3 = null, $v4 = null, $v5 = null, $v6 = null) {
+
+        return md5($v1 . $v2 . $v3 . $v4 . $v5 . $v6 . $GLOBALS['CONFIG']['SALT']);
+
+    }
+
+
+    /**
     * Detect $_POST
     *
     * @return bool
@@ -149,7 +168,11 @@ class suxRenderer {
         if ($image) {
             $image = suxFunct::canonicalizeUrl($image);
             if (!filter_var($image, FILTER_VALIDATE_URL)) $image = null;
+            // The server can be crippled if getimagesize() recursively points
+            // to itself (example: . $image = /index.php) so we enforce image
+            // extensions to avoid this
             if (!preg_match('/\.(jpe?g|gif|png)$/i', $image)) $image = null;
+
         }
         if ($url2) {
             $url2 = suxFunct::canonicalizeUrl($url2);

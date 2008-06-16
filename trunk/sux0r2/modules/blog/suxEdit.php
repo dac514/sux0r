@@ -149,6 +149,7 @@ class suxEdit {
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
 
+            if ($this->id) suxValidate::register_validator('integrity', 'integrity:id', 'hasIntegrity');
             suxValidate::register_validator('title', 'title', 'notEmpty');
             suxValidate::register_validator('image', 'image:jpg,jpeg,gif,png', 'isFileType', true);
             suxValidate::register_validator('body', 'body', 'notEmpty');
@@ -161,7 +162,7 @@ class suxEdit {
         }
 
         // Additional variables
-        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/edit');
+        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/edit/' . $this->id);
         $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
 
         if (!$this->tpl->get_template_vars('Date_Year')) {
