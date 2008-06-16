@@ -309,25 +309,38 @@ class suxHtml2UTF8 {
     *  @return string
     */
     private function buildLinkList( $link, $display ) {
-		if ( mb_substr($link, 0, 7) == 'http://' || mb_substr($link, 0, 8) == 'https://' || mb_substr($link, 0, 7) == 'mailto:' ) {
+
+		if (mb_substr($link, 0, 7) == 'http://' || mb_substr($link, 0, 8) == 'https://' || mb_substr($link, 0, 7) == 'mailto:') {
+
+            // Absolute href links
+            $link = suxFunct::canonicalizeUrl($link);
             $this->link_count++;
             $this->link_list .= "[" . $this->link_count . "] $link\n";
             $additional = ' [' . $this->link_count . ']';
-		} elseif ( mb_substr($link, 0, 11) == 'javascript:' ) {
-			// Don't count the link; ignore it
+
+		}
+        elseif (mb_substr($link, 0, 11) == 'javascript:') {
+
+			// Ignore javascript links
 			$additional = '';
-            // what about href="#anchor" ?
-        } else {
+
+        }
+        else {
+
+            // Relative href links
             $this->link_count++;
-            $this->link_list .= "[" . $this->link_count . "] " . $this->url;
+            $this->link_list .= "[" . $this->link_count . "] ";
             if ( mb_substr($link, 0, 1) != '/' ) {
-                $this->link_list .= '/';
+                $link = '/' . $link;
             }
+            $link = suxFunct::canonicalizeUrl($this->url . $link);
             $this->link_list .= "$link\n";
             $additional = ' [' . $this->link_count . ']';
+
         }
 
         return $display . $additional;
+
     }
 
 }

@@ -650,7 +650,7 @@ class suxOpenID {
         else {
 
             // Too many password failures?
-            if (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->user->max_failures) {
+            if ($this->user->maxPasswordFailures()) {
                 $this->errorGet($_SESSION['openid_cancel_auth_url'], $this->gtext['error_pw_fail']);
             }
 

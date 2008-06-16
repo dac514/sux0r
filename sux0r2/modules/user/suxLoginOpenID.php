@@ -49,7 +49,7 @@ class suxLoginOpenID extends suxRegisterOpenID {
             suxFunct::redirect(suxFunct::makeUrl('/user/profile/' . $_SESSION['nickname']));
 
         }
-        elseif (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->user->max_failures) {
+        elseif ($this->user->maxPasswordFailures()) {
 
             // Too many password failures?
             $this->tpl->assign_by_ref('r', $this->r);
