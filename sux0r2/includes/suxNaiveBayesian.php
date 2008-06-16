@@ -57,7 +57,7 @@ class suxNaiveBayesian {
 
         if (!$key && !empty($GLOBALS['CONFIG']['DSN']['bayes'])) $key = 'bayes';
     	$this->db = suxDB::get($key);
-        set_exception_handler(array($this, 'logAndDie'));
+        set_exception_handler(array($this, 'exceptionHandler'));
 
     }
 
@@ -275,6 +275,7 @@ class suxNaiveBayesian {
     * @param string $category_id the category id in which the document should be
     * @param string $content content of the document
     * @return bool
+    * @return int insert id
     */
     function trainDocument($content, $category_id) {
 
@@ -293,13 +294,20 @@ class suxNaiveBayesian {
             $this->updateToken($token, $count, $category_id);
         }
         $this->saveDocument($category_id, $content);
+
+        // MySQL InnoDB with transaction reports the last insert id as 0 after
+        // commit, the real ids are only reported before committing.
+        $insert_id = $this->db->lastInsertId();
+
         $this->updateProbabilities();
 
         $this->db->commit();
         $this->inTransaction = false;
 
         // TODO: Catch Exception and return false instead of logAndDie()?
-        return true;
+
+        return $insert_id;
+
     }
 
 
@@ -328,6 +336,7 @@ class suxNaiveBayesian {
         $this->inTransaction = false;
 
         // TODO: Catch Exception and return false instead of logAndDie()?
+
         return true;
     }
 
@@ -747,19 +756,14 @@ class suxNaiveBayesian {
     /**
     * @param Exception $e an Exception class
     */
-    function logAndDie(Exception $e) {
+    function exceptionHandler(Exception $e) {
 
         if ($this->db && $this->inTransaction) {
             $this->db->rollback();
             $this->inTransaction = false;
         }
 
-        $message = "suxNaiveBayesian Error: \n";
-        $message .= $e->getMessage() . "\n";
-        $message .= "File: " . $e->getFile() . "\n";
-        $message .= "Line: " . $e->getLine() . "\n\n";
-        $message .= "Backtrace: \n" . print_r($e->getTrace(), true) . "\n\n";
-        die("<pre>{$message}</pre>");
+        throw($e); // Hot potato!
 
     }
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
-* suxCalendar
+* suxLink
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -22,27 +22,26 @@
 *
 */
 
-class suxCalendar {
+class suxBookmarks {
 
     // Database suff
     protected $db;
     protected $inTransaction = false;
-    protected $db_table = 'calendar';
-    protected $db_table_dates = 'calendar_dates';
 
 
     /**
+    * Constructor
+    *
     * @global array $CONFIG['DSN']
     * @param string $key a key from our suxDB DSN
     */
     function __construct($key = null) {
 
-        if (!$key && !empty($GLOBALS['CONFIG']['DSN']['calendar'])) $key = 'calendar';
+        if (!$key && !empty($GLOBALS['CONFIG']['DSN']['link'])) $key = 'link';
     	$this->db = suxDB::get($key);
         set_exception_handler(array($this, 'exceptionHandler'));
 
     }
-
 
 
     // ----------------------------------------------------------------------------

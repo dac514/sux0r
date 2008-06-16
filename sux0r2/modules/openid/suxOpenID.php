@@ -63,7 +63,7 @@ class suxOpenID {
 
         if (!$key && !empty($GLOBALS['CONFIG']['DSN']['openid'])) $key = 'openid';
         $this->db = suxDB::get($key); // Db
-        set_exception_handler(array($this, 'logAndDie')); // Exception
+        set_exception_handler(array($this, 'exceptionHandler')); // Exception
 
         $this->user = new suxUser(); // User
         $this->r = new suxRenderer($this->module); // Renderer
@@ -1498,19 +1498,14 @@ class suxOpenID {
     /**
     * @param Exception $e an Exception class
     */
-    function logAndDie(Exception $e) {
+    function exceptionHandler(Exception $e) {
 
         if ($this->db && $this->inTransaction) {
             $this->db->rollback();
             $this->inTransaction = false;
         }
 
-        $message = "suxOpenID Error: \n";
-        $message .= $e->getMessage() . "\n";
-        $message .= "File: " . $e->getFile() . "\n";
-        $message .= "Line: " . $e->getLine() . "\n\n";
-        $message .= "Backtrace: \n" . print_r($e->getTrace(), true) . "\n\n";
-        die("<pre>{$message}</pre>");
+        throw($e); // Hot potato!
 
     }
 
