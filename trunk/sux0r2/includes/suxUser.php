@@ -24,15 +24,13 @@
 
 class suxUser {
 
-
-    public $max_failures = 4; // Maximum authetication failures allowed
-
-    // Database suff
+    // Variables
     protected $db;
     protected $inTransaction = false;
     protected $db_table = 'users';
     protected $db_table_info = 'users_info';
     protected $db_table_openid = 'users_openid';
+    private $max_failures = 4; // Maximum authetication failures allowed
 
 
     /**
@@ -126,6 +124,19 @@ class suxUser {
         $id = $st->fetchColumn();
 
         if (filter_var($id, FILTER_VALIDATE_INT)) return $this->getUser($id, $full_profile);
+        else return false;
+
+    }
+
+
+    /**
+    * Too many password failures?
+    *
+    * @return bool
+    */
+    function maxPasswordFailures() {
+
+        if (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->max_failures) return true;
         else return false;
 
     }

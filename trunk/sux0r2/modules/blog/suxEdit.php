@@ -239,7 +239,7 @@ class suxEdit {
         // --------------------------------------------------------------------
 
         $blog = new suxThreadedMessages();
-        if ($clean['id']) {
+        if (isset($clean['id'])) {
             $blog->editMessage($clean['id'], $_SESSION['users_id'], $msg, $style = true);
         }
         else {
