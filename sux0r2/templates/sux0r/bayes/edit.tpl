@@ -201,7 +201,7 @@
         <label for="document" {if $smarty.capture.error}class="error"{/if} > Train document :</label>
         <textarea name="document" cols='50' rows='10'>{$document}</textarea><br />
         <label>&nbsp;</label>{html_options name='category_id' options=$r->getUserTrainableCategories() selected=$category_id}
-        <input type="submit" class="button" value="Add" />
+        <input type="submit" class="button" value="Train" />
         {$smarty.capture.error}
         </p>
 

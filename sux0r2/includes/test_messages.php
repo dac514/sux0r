@@ -17,11 +17,22 @@ TinyMCE is very easy to integrate into other <span style="font-size: large;">Con
 
 $m['title'] = 'Test';
 $m['body'] = $body;
+$m['blog'] = true;
 // $m['published_on'] = date('c');
 
-// $id = $msg->saveMessage('1', $m);
-// $id =  $msg->saveMessage('1', $m, 2);
-// $id =  $msg->editMessage(1, 1, $m);
+try {
+    // $id = $msg->saveMessage('1', $m);
+    $id =  $msg->saveMessage(1, $m, 4);
+    // $id =  $msg->editMessage(1, 1, $m);
+}
+catch (Exception $e) {
+    $message = 'Error: ';
+    $message .= $e->getMessage() . "\n";
+    $message .= "File: " . $e->getFile() . "\n";
+    $message .= "Line: " . $e->getLine() . "\n\n";
+    $message .= "Backtrace: \n" . print_r($e->getTrace(), true) . "\n\n";
+    die("<pre>{$message}</pre>");
+}
 
 echo $id;
 

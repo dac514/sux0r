@@ -32,6 +32,19 @@ class suxThreadedMessages {
     protected $db_table = 'messages';
     protected $db_table_hist = 'messages_history';
 
+    /*
+    Conventions:
+    forum -> Regular threaded messages
+    blog -> first message in thread is blog, everything else is a "comment"
+    wiki -> First message in thread is wiki, everything else is "discussion"
+
+    Future:
+    slideshow -> Sequence of messages defined by thread
+    */
+
+    private $types = array('forum', 'blog', 'wiki');
+
+
     /**
     * Constructor
     *
@@ -46,17 +59,45 @@ class suxThreadedMessages {
 
     }
 
+    // -------------------------------------------------------------------
+    // Individual messages
+    // -------------------------------------------------------------------
+
+
+    /**
+    * Get a message by id
+    *
+    * @param int $id messages_id
+    * @return array
+    */
+    function getMessage($id) {
+
+        // Sanity check
+        if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid message id');
+
+        $st = $this->db->prepare("SELECT * FROM {$this->db_table} WHERE id = ? LIMIT 1 ");
+        $st->execute(array($id));
+
+        $message = $st->fetch(PDO::FETCH_ASSOC);
+        if (!$message) {
+            throw new Exception('Invalid message id');
+        }
+
+        return $message;
+
+    }
+
 
     /**
     * Saves a message to the database
     *
     * @param int $users_id users_id
-    * @param array $msg required keys => (title, body) optional keys => (published_on)
+    * @param array $msg required keys => (title, body, [forum|blog|wiki]) optional keys => (published_on)
     * @param int $parent_id messages_id of parent
     * @param bool $trusted passed on to sanitizeHtml
     * @return int insert id
     */
-    function saveMessage($users_id, array $msg, $parent_id = null, $trusted = false) {
+    function saveMessage($users_id, array $msg, $parent_id = 0, $trusted = false) {
 
         /*
         The first message in a thread has thread_pos = 0.
@@ -84,7 +125,8 @@ class suxThreadedMessages {
         $clean['users_id'] = $users_id;
 
         // Parent_id
-        $clean['parent_id'] = filter_var($parent_id, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+        $clean['parent_id'] = filter_var($parent_id, FILTER_VALIDATE_INT);
+        if ($clean['parent_id'] === false) $clean['parent_id'] = 0;
 
         // No HTML in title
         $clean['title'] = strip_tags($msg['title']);
@@ -262,7 +304,7 @@ class suxThreadedMessages {
         // We now have the $clean[] array
 
         // -------------------------------------------------------------------
-        // Go
+        // Go!
         // -------------------------------------------------------------------
 
         // Get $edit[] array in order to keep a history (wiki style)
@@ -298,93 +340,249 @@ class suxThreadedMessages {
     }
 
 
+    // -------------------------------------------------------------------
+    // Threaded messages
+    // -------------------------------------------------------------------
+
 
     /**
-    * Gets an array of all messages
+    * Get a thread
+    *
+    * @param int $thread_id thread id
+    * @param bool $long select * or abbreviated data?
+    * @return array
+    */
+    function getThread($thread_id, $long = false) {
+
+        // Sanity check
+        if (!filter_var($thread_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid thread id');
+
+        // SQL Query
+        if ($long) $query = "SELECT * ";
+        else $query = "SELECT id, users_id, thread_id, title, LENGTH(body_plaintext) AS body_length, published_on, level ";
+        $query .= "FROM {$this->db_table} WHERE thread_id = ? AND draft = 0 ORDER BY thread_pos ";
+
+        // Execute
+        $st = $this->db->prepare($query);
+        $st->execute(array($thread_id));
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+
+    }
+
+
+    /**
+    * Get messages by user id
+    *
+    * @param int $users_id users id
+    * @param string $type forum, blog, or wiki
+    * @param bool $long select * or abbreviated data?
+    * @return array
+    */
+    function getMessagesByUser($users_id, $type = null, $long = false) {
+
+        // Sanity check
+        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
+
+        // SQL Query
+        if ($long) $query = "SELECT *, LENGTH(body_plaintext) AS body_length ";
+        else $query = "SELECT id, users_id, thread_id, title, LENGTH(body_plaintext) AS body_length, published_on, level ";
+        $query .= "FROM {$this->db_table} WHERE users_id = ? AND draft = 0 ";
+        if ($type) $query .= "AND {$type} = 1 ";
+        $query .= "ORDER BY published_on DESC ";
+
+        // Execute
+        $st = $this->db->prepare($query);
+        $st->execute(array($users_id));
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+
+    /**
+    * Get first post
+    *
+    * @param int $thread_id thread_id
+    * @param bool $long select * or abbreviated data?
+    * @return array
+    */
+    function getFirstPost($thread_id, $long = false) {
+
+        // Sanity check
+        if (!filter_var($thread_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid thread id');
+
+        // SQL Query
+        if ($long) $query = "SELECT *, LENGTH(body_plaintext) AS body_length ";
+        else $query = "SELECT id, users_id, thread_id, title, LENGTH(body_plaintext) AS body_length, published_on, level ";
+        $query .= "FROM {$this->db_table} WHERE thread_id = ? AND thread_pos = 0 AND draft = 0 ";
+        $query .= "ORDER BY published_on DESC LIMIT 1";
+
+        // Execute
+        $st = $this->db->prepare($query);
+        $st->execute(array($thread_id));
+        return $st->fetch(PDO::FETCH_ASSOC);
+
+    }
+
+
+
+    /**
+    * Get first posts
+    *
+    * @param string $type forum, blog, or wiki
+    * @param bool $long select * or abbreviated data?
+    * @return array
+    */
+    function getFirstPosts($type = null, $long = false) {
+
+        // Sanity check
+        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
+
+        // SQL Query
+        if ($long) $query = "SELECT *, LENGTH(body_plaintext) AS body_length ";
+        else $query = "SELECT id, users_id, thread_id, title, LENGTH(body_plaintext) AS body_length, published_on, level ";
+        $query .= "FROM {$this->db_table} WHERE thread_pos = 0 AND draft = 0 ";
+        if ($type) $query .= "AND {$type} = 1 ";
+        $query .= "ORDER BY published_on DESC ";
+
+        // Execute
+        $st = $this->db->query($query);
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+
+    /**
+    * Get first posts by user id
+    *
+    * @param int $users_id users id
+    * @param string $type forum, blog, or wiki
+    * @param bool $long select * or abbreviated data?
+    * @return array
+    */
+    function getFirstPostsByUser($users_id, $type = null, $long = false) {
+
+        // Sanity check
+        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
+
+        // SQL Query
+        if ($long) $query = "SELECT *, LENGTH(body_plaintext) AS body_length ";
+        else $query = "SELECT id, users_id, thread_id, title, LENGTH(body_plaintext) AS body_length, published_on, level ";
+        $query .= "FROM {$this->db_table} WHERE users_id = ? AND thread_pos = 0 AND draft = 0 ";
+        if ($type) $query .= "AND {$type} = 1 ";
+        $query .= "ORDER BY published_on DESC ";
+
+        // Execute
+        $st = $this->db->prepare($query);
+        $st->execute(array($users_id));
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+
+    /**
+    * Get first posts by month (and year)
+    *
+    * @param int $date date
+    * @param string $type forum, blog, or wiki
+    * @param bool $long select * or abbreviated data?
+    * @return array
+    */
+    function getFirstPostsByMonth($date, $type = null, $long = false) {
+
+        // Sanity check
+        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
+
+        // Get year and month
+        // regex must match '2008-06-18 16:53:29' or '2008-06-18T16:53:29-04:00'
+        $matches = array();
+        $regex = '/^(\d{4})-(0[0-9]|1[0,1,2])-([0,1,2][0-9]|3[0,1]).+(\d{2}):(\d{2}):(\d{2})/';
+        if (!preg_match($regex, $date, $matches)) throw new Exception('Invalid date');
+        else {
+            $date = array();
+            $date['year'] = $matches[1]; // year
+            $date['month'] = $matches[2]; // month
+            $date['day'] = $matches[3]; // day
+            $date['hour']  = $matches[4]; // hour
+            $date['minute']  = $matches[5]; // minutes
+            $date['second'] = $matches[6]; //seconds
+
+        }
+
+        // Get database type
+        $driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
+
+        // SQL Query
+        if ($long) $query = "SELECT *, LENGTH(body_plaintext) AS body_length ";
+        else $query = "SELECT id, users_id, thread_id, title, LENGTH(body_plaintext) AS body_length, published_on, level ";
+        $query .= "FROM {$this->db_table} WHERE thread_pos = 0 AND draft = 0 ";
+        if ($type) $query .= "AND {$type} = 1 ";
+        // Database specific
+        if ($driver == 'mysql') {
+            // MySQL
+            $query .= "AND MONTH(published_on) = {$date['month']} AND YEAR(published_on) = {$date['year']} ";
+            $query .= "AND DAY(published_on) <= {$date['day']} AND TIME(published_on) <= '{$date['hour']}:{$date['minute']}:{$date['second']}' ";
+        }
+        // Order
+        $query .= "ORDER BY published_on DESC ";
+
+        // Execute
+        $st = $this->db->query($query);
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+
+
+    /**
+    * Get latest replies, i.e. thread_pos != 0
+    *
+    * @param string $type forum, blog, or wiki
+    * @param bool $long select * or abbreviated data?
+    * @param int $limit maximum latest replies
+    * @return array
+    */
+    function getRececentComments($type = null, $limit = 10, $long = false) {
+
+        // Sanity check
+        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
+
+        // SQL Query
+        if ($long) $query = "SELECT *, LENGTH(body_plaintext) AS body_length ";
+        else $query = "SELECT id, users_id, thread_id, title, LENGTH(body_plaintext) AS body_length, published_on, level ";
+        $query .= "FROM {$this->db_table} WHERE thread_pos != 0 AND draft = 0 ";
+        if ($type) $query .= "AND {$type} = 1 ";
+        $query .= "ORDER BY published_on DESC ";
+        if ($limit) $query .= "LIMIT {$limit} ";
+
+        // Execute
+        $st = $this->db->prepare($query);
+        $st->execute();
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+
+    /**
+    * Get reply count
     *
     * @param int $thread_id thread_id
     * @return array
     */
-    function getThread($thread_id = null) {
+    function getCommentsCount($thread_id) {
 
         // Sanity check
-        $thread_id = filter_var($thread_id, FILTER_VALIDATE_INT);
+        if (!filter_var($thread_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid thread id');
 
-        // order the messages by their thread_id and their position
-        $query = "SELECT id, users_id, title, LENGTH(body_plaintext) AS body_length, published_on, level FROM {$this->db_table} ";
-        if ($thread_id) $query .= 'WHERE thread_id = ? ';
-        $query .= 'ORDER BY thread_id, thread_pos ';
+        // SQL Query
+        $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE thread_id = ? AND thread_pos != 0 AND draft = 0 ";
 
-        if ($thread_id) {
-            $st = $this->db->prepare($query);
-            $st->execute(array($thread_id));
-        }
-        else {
-            $st = $this->db->query($query);
-        }
-
-        // Get the messages
-        $messages = array();
-        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
-            $messages[] = $row;
-        }
-
-        return $messages;
-
-    }
-
-
-
-    /**
-    * Get a message by id
-    *
-    * @param int $id messages_id
-    * @return array
-    */
-    function getMessage($id) {
-
-        // Sanity check
-        if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid message id');
-
-        $st = $this->db->prepare("SELECT * FROM {$this->db_table} WHERE id = ? ");
-        $st->execute(array($id));
-
-        $message = $st->fetch(PDO::FETCH_ASSOC);
-        if (!$message) {
-            throw new Exception('Invalid message id');
-        }
-
-        return $message;
-
-    }
-
-
-    /**
-    * Gets an array of all the users messgaes
-    *
-    * @param int $users_id users_id
-    * @return array
-    */
-    function getUserMessages($users_id) {
-
-        // Sanity check
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
-
-        // order the messages by their thread_id and their position
-        $query = "SELECT id, thread_id, users_id, title, LENGTH(body_plaintext) AS body_length, published_on FROM {$this->db_table} ";
-        $query .= 'WHERE users_id = ? ';
-        $query .= 'ORDER BY published_on DESC ';
-
+        // Execute
         $st = $this->db->prepare($query);
-        $st->execute(array($users_id));
-
-        // Get the messages
-        $messages = array();
-        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
-            $messages[] = $row;
-        }
-
-        return $messages;
+        $st->execute(array($thread_id));
+        return $st->fetchColumn();
 
     }
 

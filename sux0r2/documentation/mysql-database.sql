@@ -203,7 +203,7 @@ CREATE TABLE `messages` (
   `body_html` mediumtext NOT NULL,
   `body_plaintext` mediumtext NOT NULL,
   `thread_id` int(11) NOT NULL,
-  `parent_id` int(11) default NULL,
+  `parent_id` int(11) NOT NULL,
   `level` int(11) NOT NULL,
   `thread_pos` int(11) NOT NULL,
   `draft` tinyint(1) NOT NULL,

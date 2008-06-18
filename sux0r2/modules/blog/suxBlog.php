@@ -27,12 +27,13 @@ require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once('renderer.php');
 
-class suxBlog extends suxThreadedMessages {
+class suxBlog  {
 
     // Objects
     public $tpl;
     public $r;
     private $user;
+    private $msg;
 
     // Variables
     public $gtext = array();
@@ -46,12 +47,13 @@ class suxBlog extends suxThreadedMessages {
     */
     function __construct() {
 
-        $this->user = new suxUser(); // User
-
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->r = new renderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
+
+        $this->user = new suxUser();
+        $this->msg = new suxThreadedMessages();
 
     }
 
@@ -64,6 +66,14 @@ class suxBlog extends suxThreadedMessages {
         // Test
         $this->tpl->assign('url', 'http://www.sux0r.org/');
         $this->tpl->assign('title', 'sux0r - it sux0rs up all the web');
+
+        // new dBug($this->msg->getThread(3));
+        // new dBug($this->msg->getMessagesByUser(1));
+        // new dBug($this->msg->getFirstPosts());
+        // new dBug($this->msg->getFirstPostsByUser(1, 'blog'));
+        // new dBug($this->msg->getFirstPostsByMonth(date('c'), 'blog'));
+        // new dBug($this->msg->getRececentComments('blog'));
+        // new dBug($this->msg->getCommentsCount(3));
 
         $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('scroll.tpl');

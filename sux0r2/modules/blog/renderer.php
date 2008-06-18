@@ -1,7 +1,7 @@
 <?php
 
 /**
-* custom blog module renderer
+* renderer
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -22,12 +22,17 @@
 *
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
+require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
+require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
 require_once(dirname(__FILE__) . '/../bayes/suxNbUser.php');
+require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
+
 
 class renderer extends suxRenderer {
 
     // Objects
+    private $user;
+    private $msg;
     private $nb;
 
 
@@ -38,10 +43,53 @@ class renderer extends suxRenderer {
     */
     function __construct($module) {
         parent::__construct($module); // Call parent
+        $this->user = new suxUser();
+        $this->msg = new suxThreadedMessages();
         $this->nb = new suxNbUser();
 
     }
 
+    function articles() {
+
+        static $tmp = array();
+        if (count($tmp)) return $tmp; // Cache
+
+        $tmp = $this->msg->getFirstPostsByMonth(date('c'), 'blog', true);
+
+        foreach($tmp as &$val) {
+            $val['comments'] = $this->msg->getCommentsCount($val['thread_id']);
+            $tmp2 = $this->user->getUser($val['users_id']);
+            $val['nickname'] = $tmp2['nickname'];
+        }
+
+        // new dBug($tmp);
+
+        return $tmp;
+
+    }
+
+
+    function recent() {
+
+        $tmp = $this->msg->getRececentComments('blog');
+
+        foreach($tmp as &$val) {
+            $tmp2 = $this->user->getUser($val['users_id']);
+            $val['nickname'] = $tmp2['nickname'];
+            $tmp2 = $this->msg->getFirstPost($val['thread_id']);
+            $val['title_fp'] = $tmp2['title'];
+        }
+
+        // new dBug($tmp);
+
+        return $tmp;
+
+    }
+
+
+    // ------------------------------------------------------------------------
+    // suxEdit
+    // ------------------------------------------------------------------------
 
     /**
     * TinyMCE Initialization
