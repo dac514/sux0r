@@ -69,6 +69,7 @@ try {
 }
 catch (Exception $e) {
     require_once(dirname(__FILE__) . '/exception.php'); // Default exception handler
+    die();
 }
 
 // ---------------------------------------------------------------------------

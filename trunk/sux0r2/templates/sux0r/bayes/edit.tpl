@@ -295,7 +295,7 @@
             {* TODO: Get users from socialnetwork *}
             <select name="users_id">
             <option value="1">test</option>
-            <option value="4">conner_bw</option>
+            <option value="2">conner_bw</option>
             <option value="999">fake user</option>
             </select>
             {$sharevec_error2}

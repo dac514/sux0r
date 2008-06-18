@@ -23,8 +23,12 @@
 */
 
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
+require_once(dirname(__FILE__) . '/../bayes/suxNbUser.php');
 
 class renderer extends suxRenderer {
+
+    // Objects
+    private $nb;
 
 
     /**
@@ -34,6 +38,7 @@ class renderer extends suxRenderer {
     */
     function __construct($module) {
         parent::__construct($module); // Call parent
+        $this->nb = new suxNbUser();
 
     }
 
@@ -88,6 +93,34 @@ class renderer extends suxRenderer {
         </script>' . "\n";
 
         return $js;
+
+    }
+
+
+    /**
+    * @return array
+    */
+    function getUserVectors() {
+
+        $vectors = array();
+        foreach ($this->nb->getVectorsByTrainer($_SESSION['users_id']) as $key => $val) {
+            $vectors[$key] = $val['vector'];
+        }
+        return $vectors;
+
+    }
+
+
+    /**
+    * @return array
+    */
+    function getUserCategories($vector_id) {
+
+        $categories[''] = '---';
+        foreach ($this->nb->getCategoriesByVector($vector_id) as $key => $val) {
+            $categories[$key] = $val['category'];
+        }
+        return $categories;
 
     }
 

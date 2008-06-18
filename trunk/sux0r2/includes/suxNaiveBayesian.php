@@ -97,14 +97,8 @@ class suxNaiveBayesian {
         // Sanitize
         $vector = strip_tags($vector);
 
-        try {
-            $st = $this->db->prepare("INSERT INTO {$this->db_table_vec} (vector) VALUES (?) ");
-            return $st->execute(array($vector));
-        }
-        catch (Exception $e) {
-            if ($st->errorCode() == 23000) return false; // SQLSTATE 23000: Constraint violations
-            else throw ($e); // Hot potato
-        }
+        $st = $this->db->prepare("INSERT INTO {$this->db_table_vec} (vector) VALUES (?) ");
+        return $st->execute(array($vector));
 
     }
 
@@ -121,7 +115,7 @@ class suxNaiveBayesian {
         $categories = array();
         $st = $this->db->prepare("SELECT id FROM {$this->db_table_cat} WHERE bayes_vectors_id = ? ");
         $st->execute(array($vector_id));
-        foreach ($st->fetchAll() as $row) {
+        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
             $categories[] = $row['id'];
         }
 
@@ -164,10 +158,61 @@ class suxNaiveBayesian {
     */
     function getVectors() {
 
-        $vectors = array();
         $st = $this->db->query("SELECT * FROM {$this->db_table_vec} ORDER BY vector ASC ");
 
-        foreach ($st->fetchAll() as $row) {
+        $vectors = array();
+        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $vectors[$row['id']] = array(
+                'vector' => $row['vector'],
+                );
+        }
+        return $vectors;
+    }
+
+
+    /**
+    * @param int $category_id category id
+    * @return array key = id, values = array(keys = 'vector')
+    */
+    function getVectorsByCategory($category_id) {
+
+        if (!filter_var($category_id, FILTER_VALIDATE_INT)) return false;
+
+        $query = "SELECT {$this->db_table_vec}.* FROM {$this->db_table_vec}
+        INNER JOIN {$this->db_table_cat} ON {$this->db_table_vec}.id = {$this->db_table_cat}.bayes_vectors_id
+        WHERE {$this->db_table_cat}.id = ? ";
+
+        $st = $this->db->prepare($query);
+        $st->execute(array($category_id));
+
+        $vectors = array();
+        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $vectors[$row['id']] = array(
+                'vector' => $row['vector'],
+                );
+        }
+        return $vectors;
+    }
+
+
+    /**
+    * @param int $document_id category id
+    * @return array key = id, values = array(keys = 'vector')
+    */
+    function getVectorsByDocument($document_id) {
+
+        if (!filter_var($document_id, FILTER_VALIDATE_INT)) return false;
+
+        $query = "SELECT {$this->db_table_vec}.* FROM {$this->db_table_vec}
+        INNER JOIN {$this->db_table_cat} ON {$this->db_table_vec}.id = {$this->db_table_cat}.bayes_vectors_id
+        INNER JOIN {$this->db_table_doc} ON {$this->db_table_cat}.id = {$this->db_table_doc}.bayes_categories_id
+        WHERE {$this->db_table_doc}.id = ? ";
+
+        $st = $this->db->prepare($query);
+        $st->execute(array($document_id));
+
+        $vectors = array();
+        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
             $vectors[$row['id']] = array(
                 'vector' => $row['vector'],
                 );
@@ -191,6 +236,11 @@ class suxNaiveBayesian {
 
         if (mb_strlen($category) > $this->max_category_length) return false;
         if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
+
+        // Make sure vector exists
+        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_vec} WHERE id = ? LIMIT 1 ");
+        $st->execute(array($vector_id));
+        if ($st->fetchColumn() <= 0) return false;
 
         // Sanitize
         $category = strip_tags($category);
@@ -245,7 +295,7 @@ class suxNaiveBayesian {
     * @param int $vector_id vector id
     * @return array key = category, values = array(keys = 'category', 'vector_id', 'probability', 'token_count')
     */
-    function getCategories($vector_id) {
+    function getCategoriesByVector($vector_id) {
 
         if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
 
@@ -253,7 +303,7 @@ class suxNaiveBayesian {
         $st = $this->db->prepare("SELECT * FROM {$this->db_table_cat} WHERE bayes_vectors_id = ? ORDER BY category ASC ");
         $st->execute(array($vector_id));
 
-        foreach ($st->fetchAll() as $row) {
+        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
             $categories[$row['id']] = array(
                 'category' => $row['category'],
                 'vector_id' => $row['bayes_vectors_id'],
@@ -264,6 +314,38 @@ class suxNaiveBayesian {
 
         return $categories;
     }
+
+
+    /**
+    * @param int $vector_id vector id
+    * @return array key = category, values = array(keys = 'category', 'vector_id', 'probability', 'token_count')
+    */
+    function getCategoriesByDocument($document_id) {
+
+        if (!filter_var($document_id, FILTER_VALIDATE_INT)) return false;
+
+        $categories = array();
+
+        $query = "SELECT
+        {$this->db_table_cat}.* FROM {$this->db_table_cat}
+        INNER JOIN {$this->db_table_doc} ON {$this->db_table_cat}.id = {$this->db_table_doc}.bayes_categories_id
+        WHERE {$this->db_table_doc}.id = ? ORDER BY category ASC ";
+
+        $st = $this->db->prepare($query);
+        $st->execute(array($document_id));
+
+        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $categories[$row['id']] = array(
+                'category' => $row['category'],
+                'vector_id' => $row['bayes_vectors_id'],
+                'probability' => $row['probability'],
+                'token_count'  => $row['token_count'],
+                );
+        }
+
+        return $categories;
+    }
+
 
 
     // ----------------------------------------------------------------------------
@@ -280,6 +362,11 @@ class suxNaiveBayesian {
     function trainDocument($content, $category_id) {
 
         if (!filter_var($category_id, FILTER_VALIDATE_INT)) return false;
+
+        // Make sure category exists
+        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_cat} WHERE id = ? LIMIT 1 ");
+        $st->execute(array($category_id));
+        if ($st->fetchColumn() <= 0) return false;
 
         // Sanitize to UTF-8 plaintext
         require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
@@ -303,8 +390,6 @@ class suxNaiveBayesian {
 
         $this->db->commit();
         $this->inTransaction = false;
-
-        // TODO: Catch Exception and return false instead of logAndDie()?
 
         return $insert_id;
 
@@ -335,17 +420,36 @@ class suxNaiveBayesian {
         $this->db->commit();
         $this->inTransaction = false;
 
-        // TODO: Catch Exception and return false instead of logAndDie()?
-
         return true;
     }
 
 
     /**
-    * @param int $vector_id vector id
-    * @return array key = ids, values = array(keys = 'category_id', ,'category', 'body_length')
+    * @param string $document_id document id, must be unique
+    * @return array keys ('category_id', 'content', 'id') values (...)
     */
-    function getDocuments($vector_id) {
+    function getDocument($document_id) {
+
+        $ref = array();
+
+        $st = $this->db->prepare("SELECT * FROM {$this->db_table_doc} WHERE id = ?");
+        $st->execute(array($document_id));
+
+        if ($row = $st->fetch(PDO::FETCH_ASSOC)) {
+            $ref['category_id'] = $row['bayes_categories_id'];
+            $ref['content'] = $row['body_plaintext'];
+            $ref['id'] = $row['id'];
+        }
+
+        return $ref;
+    }
+
+
+    /**
+    * @param int $vector_id vector id
+    * @return array key = ids, values = array(keys = 'category_id', 'category')
+    */
+    function getDocumentsByVector($vector_id) {
 
         if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
 
@@ -362,7 +466,7 @@ class suxNaiveBayesian {
         $st->execute(array($vector_id));
 
         $documents = array();
-        foreach ($st->fetchAll() as $row) {
+        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
 
             $documents[$row['id']] = array(
                 'category_id' => $row['bayes_categories_id'],
@@ -375,23 +479,34 @@ class suxNaiveBayesian {
 
 
     /**
-    * @param string $document_id document id, must be unique
-    * @return array keys ('category_id', 'content', 'id') values (...)
+    * @param int $category_id category id
+    * @return array key = ids, values = array(keys = 'category_id', 'category')
     */
-    function getDocument($document_id) {
+    function getDocumentsByCategory($category_id) {
 
-        $ref = array();
+        if (!filter_var($category_id, FILTER_VALIDATE_INT)) return false;
 
-        $st = $this->db->prepare("SELECT * FROM {$this->db_table_doc} WHERE id = ?");
-        $st->execute(array($document_id));
+        $query = "SELECT
+        {$this->db_table_doc}.id,
+        {$this->db_table_doc}.bayes_categories_id,
+        {$this->db_table_cat}.category
+        FROM {$this->db_table_doc}
+        INNER JOIN {$this->db_table_cat} ON {$this->db_table_doc}.bayes_categories_id = {$this->db_table_cat}.id
+        WHERE {$this->db_table_cat}.id = ? ";
 
-        if ($row = $st->fetch()) {
-            $ref['category_id'] = $row['bayes_categories_id'];
-            $ref['content'] = $row['body_plaintext'];
-            $ref['id'] = $row['id'];
+        $st = $this->db->prepare($query);
+        $st->execute(array($category_id));
+
+        $documents = array();
+        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
+
+            $documents[$row['id']] = array(
+                'category_id' => $row['bayes_categories_id'],
+                'category' => $row['category'],
+                );
         }
 
-        return $ref;
+        return $documents;
     }
 
 
@@ -399,7 +514,7 @@ class suxNaiveBayesian {
     * @param int $category_id category id
     * @return int
     */
-    function getDocumentCount($category_id) {
+    function getDocumentCountByCategory($category_id) {
 
         if (!filter_var($category_id, FILTER_VALIDATE_INT)) return 0;
 
@@ -428,7 +543,7 @@ class suxNaiveBayesian {
         $vectors = array();
         $q = "SELECT bayes_vectors_id FROM {$this->db_table_cat} GROUP BY bayes_vectors_id ";
         $st = $this->db->query($q);
-        foreach ($st->fetchAll() as $row) {
+        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
             $vectors[] = $row['bayes_vectors_id'];
         }
 
@@ -447,7 +562,7 @@ class suxNaiveBayesian {
 
             $st = $this->db->prepare($q);
             $st->execute(array($vector_id));
-            foreach ($st->fetchAll() as $row) {
+            foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
                 $total_tokens += $row['total'];
             }
 
@@ -463,7 +578,7 @@ class suxNaiveBayesian {
             $st = $this->db->prepare("SELECT id FROM {$this->db_table_cat} WHERE bayes_vectors_id = ? ");
             $st->execute(array($vector_id));
 
-            foreach ($st->fetchAll() as $row) {
+            foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
                 $categories[$row['id']] = true;
             }
 
@@ -471,7 +586,7 @@ class suxNaiveBayesian {
             $st = $this->db->prepare($q);
             $st->execute(array($vector_id));
             $st2 = $this->db->prepare("UPDATE {$this->db_table_cat} SET token_count = ?, probability = ? WHERE id = ? AND bayes_vectors_id = ? ");
-            foreach ($st->fetchAll() as $row) {
+            foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
                 $proba = $row['total']/$total_tokens;
                 $st2->execute(array($row['total'], $proba, $row['bayes_categories_id'], $vector_id));
                 unset($categories[$row['bayes_categories_id']]);
@@ -509,7 +624,7 @@ class suxNaiveBayesian {
         $total_tokens = 0;
         $ncat = 0;
 
-        $categories = $this->getCategories($vector_id);
+        $categories = $this->getCategoriesByVector($vector_id);
         $tokens = $this->parseTokens($document);
 
         foreach ($categories as $data) {
@@ -658,7 +773,7 @@ class suxNaiveBayesian {
         $st = $this->db->prepare("SELECT * FROM {$this->db_table_tok} WHERE token = ? AND bayes_categories_id = ? ");
         $st->execute(array($token, $category_id));
 
-        if ($row = $st->fetch()) {
+        if ($row = $st->fetch(PDO::FETCH_ASSOC)) {
             $count = $row['count'];
         }
 

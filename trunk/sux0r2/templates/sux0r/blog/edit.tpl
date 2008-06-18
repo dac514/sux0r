@@ -81,7 +81,7 @@ TODO: <a href="javascript:;" onmousedown="tinyMCE.execCommand('mceInsertContent'
     {/capture}
 {/strip}
 <label {if $smarty.capture.error}class="error"{/if} >{$r->text.dob} Date :</label>
-<span class="htmlSelectDate">
+<span class="htmlSelect">
 {html_select_date time="$Date_Year-$Date_Month-$Date_Day" field_order='YMD'  start_year='-5' end_year='+1' }
 </span>
 {$smarty.capture.error}
@@ -96,17 +96,25 @@ TODO: <a href="javascript:;" onmousedown="tinyMCE.execCommand('mceInsertContent'
     {/capture}
 {/strip}
 <label {if $smarty.capture.error}class="error"{/if} >{$r->text.dob} Time :</label>
-<span class="htmlSelectTime">
+<span class="htmlSelect">
 {html_select_time time="$Time_Hour:$Time_Minute:$Time_Second" use_24_hours=true}
 </span>
 
 {$smarty.capture.error}
 </p>
 
-<p>
-TODO: Tags
-</p>
+<!-- Bayesian tags -->
 
+{capture name=tags}
+    {foreach from=$r->getUserVectors() key=k item=v}
+    {$v}: <span class="htmlSelect">{html_options name='category_id[]' options=$r->getUserCategories($k) selected=$category_id}</span>
+    {/foreach}
+{/capture}
+
+{if $smarty.capture.tags|trim}
+<p>Tags:</p>
+<p>{$smarty.capture.tags}</p>
+{/if}
 
 
 
