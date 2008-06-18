@@ -88,7 +88,7 @@ class suxDB {
 
                 // MySQL Specfic
                 if (self::$db[$key]->getAttribute(PDO::ATTR_DRIVER_NAME) == 'mysql') {
-                    self::$db[$key]->query("SET NAMES 'utf8'"); // Force UTF-8
+                    self::$db[$key]->query("SET NAMES 'utf8' "); // Force UTF-8
                 }
 
             }

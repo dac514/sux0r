@@ -30,7 +30,7 @@ input, select {
 
 /* Revert */
 
-.htmlSelectDate select, .htmlSelectTime select {
+.htmlSelect select {
     width: auto;
 }
 

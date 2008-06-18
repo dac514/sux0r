@@ -97,9 +97,9 @@ class renderer extends suxRenderer {
 
             // Create a dropdown with <optgroup> array
             $x = "{$val['vector']}";
-            if (isset($tmp[$x])) $x = "{$val['vector']} (id:$key)";
+            if (isset($tmp[$x])) $x = "{$val['vector']} (id:$key)"; // Duplicate vector name, append id to avoid confusion
             $y = array();
-            foreach ($this->nb->getCategories($key) as $key2 => $val2) {
+            foreach ($this->nb->getCategoriesByVector($key) as $key2 => $val2) {
                 $y[$key2] = "{$val2['category']}";
             }
 
@@ -121,13 +121,13 @@ class renderer extends suxRenderer {
         static $tmp = array();
         if (count($tmp)) return $tmp; // Cache
 
-        foreach ($this->getUserTrainableVectorsArray() as $key => $val) {
+        foreach ($this->getVectorsByTrainerArray() as $key => $val) {
 
             // Create a dropdown with <optgroup> array
             $x = "{$val['vector']}";
             if (isset($tmp[$x])) $x = "{$val['vector']} (id:$key)";
             $y = array();
-            foreach ($this->nb->getCategories($key) as $key2 => $val2) {
+            foreach ($this->nb->getCategoriesByVector($key) as $key2 => $val2) {
                 $y[$key2] = "{$val2['category']}";
             }
 
@@ -150,7 +150,7 @@ class renderer extends suxRenderer {
         if (count($tmp)) return $tmp; // Cache
 
         foreach ($this->getUserOwnedVectorsArray() as $key => $val) {
-            foreach ($this->nb->getDocuments($key) as $key2 => $val2) {
+            foreach ($this->nb->getDocumentsByVector($key) as $key2 => $val2) {
 
                 $tmp[$key2] = "{$key2} - {$val['vector']}, {$val2['category']}";
 
@@ -178,8 +178,8 @@ class renderer extends suxRenderer {
             $html .= "<li class='bStatsVec'>{$val['vector']}";
             if (!$this->nb->isVectorOwner($key, $_SESSION['users_id'])) $html .= ' <em>(shared)</em>';
             $html .= ":</li>\n<ul>\n";
-            foreach ($this->nb->getCategories($key) as $key2 => $val2) {
-                $doc_count = $this->nb->getDocumentCount($key2);
+            foreach ($this->nb->getCategoriesByVector($key) as $key2 => $val2) {
+                $doc_count = $this->nb->getDocumentCountByCategory($key2);
                 $html .= "<li class='bStatsCat'>{$val2['category']}:</li>";
                 $html .= "<ul>\n";
                 $html .= "<li class='bStatsDoc'>Documents: $doc_count</li><li class='bStatsTok'>Tokens: {$val2['token_count']}</li>\n";
@@ -233,7 +233,7 @@ class renderer extends suxRenderer {
             <td><em>n/a</em></td>
             </tr>\n";
 
-            $shared = $this->nb->getVectorShares($key);
+            $shared = $this->nb->getVectorAuthorization($key);
             foreach ($shared as $val2) {
 
                 if ($val2['users_id'] == $_SESSION['users_id']) continue;
@@ -299,7 +299,7 @@ class renderer extends suxRenderer {
 
         static $vectors = array();
         if (count($vectors)) return $vectors; // Cache
-        else return $this->nb->getUserOwnedVectors($_SESSION['users_id']);
+        else return $this->nb->getVectorsByOwner($_SESSION['users_id']);
 
     }
 
@@ -309,11 +309,11 @@ class renderer extends suxRenderer {
     *
     * @return array
     */
-    private function getUserTrainableVectorsArray() {
+    private function getVectorsByTrainerArray() {
 
         static $vectors = array();
         if (count($vectors)) return $vectors; // Cache
-        else return $this->nb->getUserTrainableVectors($_SESSION['users_id']);
+        else return $this->nb->getVectorsByTrainer($_SESSION['users_id']);
 
     }
 
@@ -327,7 +327,7 @@ class renderer extends suxRenderer {
 
         static $vectors = array();
         if (count($vectors)) return $vectors; // Cache
-        else return $this->nb->getUserSharedVectors($_SESSION['users_id']);
+        else return $this->nb->getSharedVectors($_SESSION['users_id']);
 
     }
 

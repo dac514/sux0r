@@ -24,7 +24,8 @@
 
 require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
-require_once(dirname(__FILE__) . '/../../includes/suxNaiveBayesian.php');
+require_once(dirname(__FILE__) . '/../bayes/suxNbUser.php');
+require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('renderer.php');
@@ -37,6 +38,7 @@ class suxEdit {
     private $user;
     private $msg;
     private $nb;
+    private $link;
 
     // Variables
     public $gtext = array();
@@ -62,7 +64,8 @@ class suxEdit {
         // Objects
         $this->user = new suxuser();
         $this->msg = new suxThreadedMessages();
-        $this->nb = new suxNaiveBayesian();
+        $this->nb = new suxNbUser();
+        $this->link = new suxLink();
 
         // Redirect if not logged in
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
@@ -109,6 +112,8 @@ class suxEdit {
 
         if ($this->id) {
 
+            // Editing a blog post
+
             $tmp = $this->msg->getMessage($this->id);
 
             $blog['id'] = $tmp['id'];
@@ -128,12 +133,30 @@ class suxEdit {
             $blog['Time_Minute']  = @$matches[6]; // minutes
             $blog['Time_Second'] = @$matches[7]; //seconds
 
+            /*
+            1) Get the `link_bayes_messages` matching this messages_id
+            2) Foreach linking bayes_document_id
+            3) get the categories I can train (nb::isCategoryTrainer($cat_id, $users_id)
+            4) stuff them into {$category_id} for template
+            */
+
+            $links = $this->link->getLinks('link_bayes_messages', 'messages', $blog['id']);
+            foreach($links as $val) {
+                $cat = $this->nb->getCategoriesByDocument($val);
+                foreach ($cat as $key2 => $val2) {
+                    if ($this->nb->isCategoryTrainer($key2, $_SESSION['users_id'])) {
+                        $blog['category_id'][] = $key2;
+                    }
+                }
+            }
+
             // Don't allow spoofing
             unset($dirty['id']);
 
         }
 
         // Assign blog
+        // new dBug($blog);
         $this->tpl->assign($blog);
 
         // --------------------------------------------------------------------
@@ -245,10 +268,16 @@ class suxEdit {
         // --------------------------------------------------------------------
 
         if (isset($clean['id'])) {
-            $this->msg->editMessage($clean['id'], $_SESSION['users_id'], $msg, $style = true);
+
+            // Edit
+            $this->msg->editMessage($clean['id'], $_SESSION['users_id'], $msg, true);
+
         }
         else {
-            $clean['id'] = $this->msg->saveMessage($_SESSION['users_id'], $msg, $parent_id = null, $style = true);
+
+            // New
+            $clean['id'] = $this->msg->saveMessage($_SESSION['users_id'], $msg, null, true);
+
         }
 
 
@@ -256,14 +285,49 @@ class suxEdit {
         // Naive Bayesian stuff
         // --------------------------------------------------------------------
 
-        // 1 - Remove all references to $clean['id'] from link table
-        // 2 - foreach() category {
-        //         train document
-        //         update link table
-        //     }
+        /*
+        `link_bayes_messages` asserts that a message was trained and copied into
+        a bayes document,  it does not imply that it's the same document
 
-        echo $this->nb->trainDocument($clean['body'], 1);
+        When a user edits their own document we can assume that we want
+        the updated document to represent their selected categories
 
+        However, we cannot assume this for the catgories of others.
+
+        Example:
+
+        I write and classify a 5000 word message.
+        Several other users find my post and classify it too.
+        Time passes, I'm drunk, I reduce the post to "Eat shit."
+
+        Now what?
+
+        Deleting all links to a message for which I can train the vector seems
+        the safest bet. All users get to keep what they already classified, and
+        can reclassify the modified document if they wish. They can also
+        manually adjust the eroneous documents in the bayes module.
+        */
+
+        // links[] is an array of $clean['id'] associated bayes_documents ids
+        $links = $this->link->getLinks('link_bayes_messages', 'messages', $clean['id']);
+        foreach($links as $val) {
+            // Get the vector associated with the bayes_document (i.e. $val)
+            $vec = $this->nb->getVectorsByDocument($val);
+            foreach ($vec as $key2 => $val2) {
+                // If the user is allowed to train the vector, we delete all links to the bayes_document (i.e. $val)
+                if ($this->nb->isVectorTrainer($key2, $_SESSION['users_id'])) {
+                    $this->link->deleteLink('link_bayes_messages', 'bayes_documents', $val);
+                }
+            }
+        }
+
+        // category ids submitted by the form
+        foreach($clean['category_id'] as $val) {
+            if (!empty($val) && $this->nb->isCategoryTrainer($val, $_SESSION['users_id'])) {
+                $doc_id = $this->nb->trainDocument($clean['body'], $val);
+                $this->link->setLink('link_bayes_messages', 'bayes_documents', $doc_id, 'messages', $clean['id']);
+            }
+        }
 
 
     }

@@ -23,6 +23,7 @@
 */
 
 require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
+require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('renderer.php');
@@ -35,6 +36,7 @@ class suxEdit {
     public $r;
     public $nb;
     private $user;
+    private $link;
 
     // Variables
     public $gtext = array();
@@ -58,6 +60,7 @@ class suxEdit {
 
         $this->user = new suxuser();
         $this->nb = new suxNbUser();
+        $this->link = new suxLink();
 
         // Redirect if not logged in
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
@@ -211,7 +214,7 @@ class suxEdit {
 
             // Security check
             if ($this->nb->isVectorOwner($clean['vector_id'], $_SESSION['users_id'])) {
-                $this->nb->removeVectorWithUsers($clean['vector_id']);
+                $this->nb->removeVector($clean['vector_id']);
             }
             unset($clean['vector_id']);
             break;
@@ -237,7 +240,7 @@ class suxEdit {
         case 'adddoc':
 
             // Security check
-            if ($this->nb->isTrainer($clean['category_id'], $_SESSION['users_id'])) {
+            if ($this->nb->isCategoryTrainer($clean['category_id'], $_SESSION['users_id'])) {
                 $this->nb->trainDocument($clean['document'], $clean['category_id']);
             }
             unset($clean['document']);
@@ -247,7 +250,12 @@ class suxEdit {
 
             // Security check
             if ($this->nb->isDocumentOwner($clean['document_id'], $_SESSION['users_id'])) {
+                // Untrain
                 $this->nb->untrainDocument($clean['document_id']);
+                // Remove any links to this document in associated link tables
+                foreach ($this->link->getLinkTables('bayes') as $tmp) {
+                    $this->link->deleteLink($tmp, 'bayes_documents', $clean['document_id']);
+                }
             }
             unset($clean['document_id']);
             break;
@@ -256,12 +264,9 @@ class suxEdit {
 
             // Security check
             if ($this->nb->isVectorOwner($clean['vector_id'], $_SESSION['users_id'])) {
-
                 if (!isset($clean['trainer'])) $clean['trainer'] = 0;
                 if (!isset($clean['owner'])) $clean['owner'] = 0;
-
                 $this->nb->shareVector($clean['users_id'], $clean['vector_id'], $clean['trainer'], $clean['owner']);
-
             }
             break;
 

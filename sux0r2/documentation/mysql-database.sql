@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 29, 2008 at 11:29 AM
+-- Generation Time: Jun 17, 2008 at 12:16 PM
 -- Server version: 5.0.41
 -- PHP Version: 5.2.5
 
@@ -29,6 +29,12 @@ CREATE TABLE `bayes_auth` (
   UNIQUE KEY `users_bayes_vectors` (`users_id`,`bayes_vectors_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+--
+-- Dumping data for table `bayes_auth`
+--
+
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `bayes_categories`
@@ -119,7 +125,7 @@ CREATE TABLE `bookmarks` (
   `description_plaintext` text,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `url` (`url`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `bookmarks`
@@ -140,7 +146,7 @@ CREATE TABLE `calendar` (
   `location` text,
   `url` varchar(255) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `calendar`
@@ -159,10 +165,27 @@ CREATE TABLE `calendar_dates` (
   `dtstart` datetime NOT NULL,
   `dtend` datetime default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `calendar_dates`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `link_bayes_messages`
+--
+
+CREATE TABLE `link_bayes_messages` (
+  `messages_id` int(11) NOT NULL,
+  `bayes_documents_id` int(11) NOT NULL,
+  UNIQUE KEY `idx` (`messages_id`,`bayes_documents_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `link_bayes_messages`
 --
 
 
@@ -183,11 +206,11 @@ CREATE TABLE `messages` (
   `parent_id` int(11) default NULL,
   `level` int(11) NOT NULL,
   `thread_pos` int(11) NOT NULL,
-  `draft` tinyint(1) default NULL,
+  `draft` tinyint(1) NOT NULL,
   `published_on` datetime NOT NULL,
-  `forum` tinyint(1) default NULL,
-  `blog` tinyint(1) default NULL,
-  `wiki` tinyint(1) default NULL,
+  `forum` tinyint(1) NOT NULL,
+  `blog` tinyint(1) NOT NULL,
+  `wiki` tinyint(1) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `users_id` (`users_id`),
   KEY `thread` (`thread_id`,`thread_pos`),
@@ -236,7 +259,7 @@ CREATE TABLE `openid_secrets` (
   `expiration` int(11) NOT NULL,
   `shared_secret` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `openid_secrets`
@@ -255,7 +278,7 @@ CREATE TABLE `openid_trusted` (
   `users_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `authorized` (`auth_url`,`users_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `openid_trusted`
@@ -269,7 +292,7 @@ CREATE TABLE `openid_trusted` (
 --
 
 CREATE TABLE `rolodex` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL auto_increment,
   `organization_name` varchar(255) NOT NULL,
   `organization_unit` varchar(255) default NULL,
   `post_office_box` varchar(255) default NULL,
@@ -287,7 +310,7 @@ CREATE TABLE `rolodex` (
   `longitude` varchar(255) default NULL,
   `note` text,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `rolodex`
@@ -307,7 +330,7 @@ CREATE TABLE `socialnetwork` (
   `relationship` varchar(255) default NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `friendship` (`users_id`,`friend_users_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `socialnetwork`
@@ -367,7 +390,7 @@ CREATE TABLE `users_info` (
 -- Dumping data for table `users_info`
 --
 
-INSERT INTO `users_info` VALUES (1, 1, 'Test', 'Testing', '', '', '', '', 'ca', '', '', NULL, NULL, 'en', 'America/Montreal');
+INSERT INTO `users_info` VALUES (1, 1, 'Test', 'User', '', '', '', '', 'ca', '', '', '0000-00-00', 'm', 'en', 'America/Montreal');
 
 -- --------------------------------------------------------
 
@@ -382,7 +405,7 @@ CREATE TABLE `users_openid` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `openid_url` (`openid_url`),
   KEY `users_id` (`users_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `users_openid`
