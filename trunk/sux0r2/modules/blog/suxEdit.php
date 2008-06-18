@@ -122,16 +122,17 @@ class suxEdit {
             $blog['body'] = $tmp['body_html'];
             $blog['draft'] = $tmp['draft'];
 
-            // Publish date
+            // Get publish date
+            // regex must match '2008-06-18 16:53:29' or '2008-06-18T16:53:29-04:00'
             $matches = array();
-            preg_match("/^(\d{4})-(\d{2})-(\d{2})(.*)(\d{2}):(\d{2}):(\d{2})$/", $tmp['published_on'], $matches);
-            //new dBug($matches);
+            $regex = '/^(\d{4})-(0[0-9]|1[0,1,2])-([0,1,2][0-9]|3[0,1]).+(\d{2}):(\d{2}):(\d{2})/';
+            preg_match($regex, $tmp['published_on'], $matches);
             $blog['Date_Year'] = @$matches[1]; // year
             $blog['Date_Month'] = @$matches[2]; // month
             $blog['Date_Day'] = @$matches[3]; // day
-            $blog['Time_Hour']  = @$matches[5]; // hour
-            $blog['Time_Minute']  = @$matches[6]; // minutes
-            $blog['Time_Second'] = @$matches[7]; //seconds
+            $blog['Time_Hour']  = @$matches[4]; // hour
+            $blog['Time_Minute']  = @$matches[5]; // minutes
+            $blog['Time_Second'] = @$matches[6]; //seconds
 
             /*
             1) Get the `link_bayes_messages` matching this messages_id

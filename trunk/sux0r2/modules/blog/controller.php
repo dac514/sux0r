@@ -1,7 +1,7 @@
 <?php
 
 /**
-* controller for blog module
+* controller
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -47,7 +47,7 @@ function sux($action, $params = null) {
             else {
                 $reg->formBuild($_POST);
             }
-            
+
             break;
 
 
@@ -60,7 +60,7 @@ function sux($action, $params = null) {
             // Edit profile registration
             include_once('suxBlog.php');
             $blog = new suxBlog();
-            
+
             $blog->display();
 
     }

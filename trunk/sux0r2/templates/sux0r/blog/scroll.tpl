@@ -17,19 +17,19 @@
 			<div id="leftside">
 
             <p>
-            Current month<br />
-            Link to article<br />
-            Link to article<br />
-            Link to article<br />
-            Link to article<br />
+            Current month:<br />
+            {foreach from=$r->articles() item=foo}
+                <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">{$foo.title}</a><br /><br />
+            {/foreach}
             </p>
 
             <p>
-            Most recent comments<br />
-            Link to article#comment<br />
-            Link to article#comment<br />
-            Link to article#comment<br />
-            Link to article#comment<br />
+            Most recent comments:<br />
+            {foreach from=$r->recent() item=foo}
+                <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}#{$foo.id}">{$foo.title}</a>
+                by <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a>
+                in <strong>{$foo.title_fp}</strong> on {$foo.published_on}<br /><br />
+            {/foreach}
             </p>
 
 			</div>
@@ -47,18 +47,25 @@
             [ Go! ]
             </p>
 
-                <div class="widget">
-                    <h2>Title</h2>
-                    <div class="floatright">
-                        <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="80" height="80"><br>
-                        Caption
-                    </div>
 
-                    <p>Date, Author, Tags</p>
-                    <p>Lorem ipsum dolor sit amet, consectetuer...</p>
+            {* Blog widgets *}
+            {foreach from=$r->articles() item=foo}
+
+                {capture name=blog_url}
+                    {$r->makeUrl('/blog/view', null, true)}/{$foo.thread_id}
+                {/capture}
+
+                {capture name=blog_img}
+                    {if $foo.image}{$r->makeUrl('/', null, true)}/data/blog/{$foo.image}{/if}
+                {/capture}
+
+                {capture name=blog}
+                    <p>{$foo.published_on}, <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a>, TODO: Tags</p>
+                    <p>{$foo.body_html}</p>
 
                     <div class="clearboth"></div>
-                    <p>Permanent Link, Comments (0), [ Bayesian Categorize ]</p>
+                    <p><a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">Permanent Link</a>,
+                    <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}#comments">Comments ({$foo.comments})</a>, TODO: [ Bayesian Categorize ]</p>
 
                     <div class="flair"><p>
                     <a href='http://slashdot.org/slashdot-it.pl?op=basic&url={$url|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/slashdot.gif' alt='Slashdot' width='16' height='16' /></a>
@@ -68,27 +75,14 @@
                     <a href='http://www.stumbleupon.com/submit?url={$url|escape:'url, UTF-8'}&title={$title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/stumbleupon.gif' alt='StumbleUpon' width='16' height='16' /></a>
                     <a href='http://del.icio.us/login/?url={$url|escape:'url, UTF-8'}&title={$title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/delicious.gif' alt='Del.icio.us' width='16' height='16' /></a>
                     </p></div>
+                {/capture}
 
-                    <b class="bb"><b></b></b>
-                </div>
+                {$r->widget($foo.title, $smarty.capture.blog, $smarty.capture.blog_url, $smarty.capture.blog_img)}
 
-                <div class="widget">
-                    <h2>Lorem ipsum</h2>
-                    <div class="floatright">
-                    <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="80" height="80"><br>
-                    Caption
-                    </div>
 
-                    <p>Date, Author, Tags</p>
-                    <p>Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer
-                    Lorem ipsum dolor sit amet, consec tetuer Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer
-                    Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consect etuer Lorem ipsum dolor sit amet, consectetuer
-                    Lorem ipsum dolor sit amet, consec tetuer Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer
-                    </p>
-                    <div class="clearboth"></div>
-                    <p>Permanent Link, Comments (0), [ Facebook, Digg, etc ], [ Bayesian Categorize ]</p>
-                    <b class="bb"><b></b></b>
-                </div>
+            {/foreach}
+
+
 
 			</div>
 		</td>

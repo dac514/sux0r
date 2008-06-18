@@ -303,6 +303,9 @@ class suxFunct {
             if (mb_strpos($url, '://')) list($garbage, $url) = mb_split('://', $url);
             // Prepend http
             $url = 'http://' . $url;
+            if (preg_match('#^http:///#', $url)) {
+                return null; // This is wrong...
+            }
         }
 
         // protocol and domain to lowercase (but NOT the rest of the URL),
@@ -353,6 +356,7 @@ class suxFunct {
         $tmp .= $GLOBALS['CONFIG']['URL'];
         $tmp .= ($GLOBALS['CONFIG']['CLEAN_URL'] ? '/' : '/index.php?c=');
         $tmp .= $path;
+        $tmp = rtrim($tmp, '/'); // In case path is null
 
         if (is_array($query) && count($query)) {
             $q = mb_strpos($tmp, '?') ? '&' : '?';
