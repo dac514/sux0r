@@ -154,6 +154,25 @@ class suxNaiveBayesian {
 
 
     /**
+    * @param string $vector_id vector id, must be unique
+    * @return array
+    */
+    function getVector($vector_id) {
+
+        $st = $this->db->prepare("SELECT * FROM {$this->db_table_vec} WHERE id = ? LIMIT 1 ");
+        $st->execute(array($vector_id));
+
+        $vector = array();
+        if ($row = $st->fetch(PDO::FETCH_ASSOC)) {
+            $vector['id'] = $row['id'];
+            $vector['vector'] = $row['vector'];
+        }
+        return $vector;
+
+    }
+
+
+    /**
     * @return array key = id, values = array(keys = 'vector')
     */
     function getVectors() {
@@ -292,6 +311,47 @@ class suxNaiveBayesian {
 
 
     /**
+    * @param string $category_id category id, must be unique
+    * @return array
+    */
+    function getCategory($category_id) {
+
+        $st = $this->db->prepare("SELECT * FROM {$this->db_table_cat} WHERE id = ? LIMIT 1 ");
+        $st->execute(array($category_id));
+
+        $category = array();
+        if ($row = $st->fetch(PDO::FETCH_ASSOC)) {
+            $category['id'] = $row['id'];
+            $category['category'] = $row['category'];
+            $category['vector_id'] = $row['bayes_vectors_id'];
+            $category['probability'] = $row['probability'];
+            $category['token_count']  = $row['token_count'];
+        }
+        return $category;
+    }
+
+
+    /**
+    * @return array key = category, values = array(keys = 'category', 'vector_id', 'probability', 'token_count')
+    */
+    function getCategories() {
+
+        $st = $this->db->query("SELECT * FROM {$this->db_table_cat} ORDER BY category ASC ");
+
+        $categories = array();
+        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $categories[$row['id']] = array(
+                'category' => $row['category'],
+                'vector_id' => $row['bayes_vectors_id'],
+                'probability' => $row['probability'],
+                'token_count'  => $row['token_count'],
+                );
+        }
+        return $categories;
+    }
+
+
+    /**
     * @param int $vector_id vector id
     * @return array key = category, values = array(keys = 'category', 'vector_id', 'probability', 'token_count')
     */
@@ -324,8 +384,6 @@ class suxNaiveBayesian {
 
         if (!filter_var($document_id, FILTER_VALIDATE_INT)) return false;
 
-        $categories = array();
-
         $query = "SELECT
         {$this->db_table_cat}.* FROM {$this->db_table_cat}
         INNER JOIN {$this->db_table_doc} ON {$this->db_table_cat}.id = {$this->db_table_doc}.bayes_categories_id
@@ -334,7 +392,9 @@ class suxNaiveBayesian {
         $st = $this->db->prepare($query);
         $st->execute(array($document_id));
 
+        $categories = array();
         foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
+
             $categories[$row['id']] = array(
                 'category' => $row['category'],
                 'vector_id' => $row['bayes_vectors_id'],
@@ -409,7 +469,7 @@ class suxNaiveBayesian {
 
         $ref = $this->getDocument($document_id);
         if (count($ref)) {
-            $tokens = $this->parseTokens($ref['content']);
+            $tokens = $this->parseTokens($ref['body']);
             foreach($tokens as $token => $count) {
                 $this->removeToken($token, $count, $ref['category_id']);
             }
@@ -426,38 +486,57 @@ class suxNaiveBayesian {
 
     /**
     * @param string $document_id document id, must be unique
-    * @return array keys ('category_id', 'content', 'id') values (...)
+    * @return array
     */
     function getDocument($document_id) {
 
-        $ref = array();
-
-        $st = $this->db->prepare("SELECT * FROM {$this->db_table_doc} WHERE id = ?");
+        $st = $this->db->prepare("SELECT * FROM {$this->db_table_doc} WHERE id = ? ");
         $st->execute(array($document_id));
 
+        $document = array();
         if ($row = $st->fetch(PDO::FETCH_ASSOC)) {
-            $ref['category_id'] = $row['bayes_categories_id'];
-            $ref['content'] = $row['body_plaintext'];
-            $ref['id'] = $row['id'];
+            $document['id'] = $row['id'];
+            $document['category_id'] = $row['bayes_categories_id'];
+            $document['body'] = $row['body_plaintext'];
         }
+        return $document;
+    }
 
-        return $ref;
+
+    /**
+    * @return array key = ids, values = array(keys = 'category_id', 'body')
+    */
+    function getDocuments() {
+
+        $st = $this->db->query("SELECT * FROM {$this->db_table_doc} ORDER BY id ASC ");
+
+        $documents = array();
+        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $documents[$row['id']] = array(
+                'category_id' => $row['bayes_categories_id'],
+                'body' => $row['body_plaintext'],
+                );
+        }
+        return $documents;
     }
 
 
     /**
     * @param int $vector_id vector id
-    * @return array key = ids, values = array(keys = 'category_id', 'category')
+    * @return array key = ids, values = array(keys = 'category_id', 'body (optional)')
     */
-    function getDocumentsByVector($vector_id) {
+    function getDocumentsByVector($vector_id, $full = false) {
 
         if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
 
-        $query = "SELECT
-        {$this->db_table_doc}.id,
-        {$this->db_table_doc}.bayes_categories_id,
-        {$this->db_table_cat}.category
-        FROM {$this->db_table_doc}
+        if ($full) $query = "SELECT {$this->db_table_doc}.* ";
+        else {
+            $query = "SELECT
+            {$this->db_table_doc}.id,
+            {$this->db_table_doc}.bayes_categories_id ";
+        }
+
+        $query .= "FROM {$this->db_table_doc}
         INNER JOIN {$this->db_table_cat} ON {$this->db_table_doc}.bayes_categories_id = {$this->db_table_cat}.id
         INNER JOIN {$this->db_table_vec} ON {$this->db_table_cat}.bayes_vectors_id = {$this->db_table_vec}.id
         WHERE {$this->db_table_vec}.id = ? ";
@@ -467,11 +546,17 @@ class suxNaiveBayesian {
 
         $documents = array();
         foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
-
-            $documents[$row['id']] = array(
-                'category_id' => $row['bayes_categories_id'],
-                'category' => $row['category'],
-                );
+            if ($full) {
+                $documents[$row['id']] = array(
+                    'category_id' => $row['bayes_categories_id'],
+                    'body' => $row['body_plaintext'],
+                    );
+            }
+            else {
+                $documents[$row['id']] = array(
+                    'category_id' => $row['bayes_categories_id'],
+                    );
+            }
         }
 
         return $documents;
@@ -480,17 +565,19 @@ class suxNaiveBayesian {
 
     /**
     * @param int $category_id category id
-    * @return array key = ids, values = array(keys = 'category_id', 'category')
+    * @return array key = ids, values = array(keys = 'category_id', 'category', 'body (optional)')
     */
-    function getDocumentsByCategory($category_id) {
+    function getDocumentsByCategory($category_id, $full = false) {
 
         if (!filter_var($category_id, FILTER_VALIDATE_INT)) return false;
 
-        $query = "SELECT
-        {$this->db_table_doc}.id,
-        {$this->db_table_doc}.bayes_categories_id,
-        {$this->db_table_cat}.category
-        FROM {$this->db_table_doc}
+        if ($full) $query = "SELECT {$this->db_table_doc}.* ";
+        else {
+            $query = "SELECT
+            {$this->db_table_doc}.id,
+            {$this->db_table_doc}.bayes_categories_id ";
+        }
+        $query .= "FROM {$this->db_table_doc}
         INNER JOIN {$this->db_table_cat} ON {$this->db_table_doc}.bayes_categories_id = {$this->db_table_cat}.id
         WHERE {$this->db_table_cat}.id = ? ";
 
@@ -499,11 +586,17 @@ class suxNaiveBayesian {
 
         $documents = array();
         foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
-
-            $documents[$row['id']] = array(
-                'category_id' => $row['bayes_categories_id'],
-                'category' => $row['category'],
-                );
+            if ($full) {
+                $documents[$row['id']] = array(
+                    'category_id' => $row['bayes_categories_id'],
+                    'body' => $row['body_plaintext'],
+                    );
+            }
+            else {
+                $documents[$row['id']] = array(
+                    'category_id' => $row['bayes_categories_id'],
+                    );
+            }
         }
 
         return $documents;

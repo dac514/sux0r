@@ -49,6 +49,55 @@ class suxNbUser extends suxNaiveBayesian {
     // Get vectors
     // --------------------------------------------------------------------
 
+    /**
+    * Returns a list of users and their permissions to a vector
+    *
+    * @param int $vector_id vectors id
+    * @return array
+    */
+    function getVectorAuthorization($vector_id) {
+
+        if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
+
+        $query = "SELECT users_id, bayes_vectors_id, trainer, owner FROM {$this->db_table_auth} WHERE bayes_vectors_id = ? ";
+        $st = $this->db->prepare($query);
+        $st->execute(array($vector_id));
+
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+
+    /**
+    * Returns a list of vectors and permissions that a user has access to
+    *
+    * @param int $users_id users id
+    * @return array key = id, values = array(keys = vector, trainer, owner)
+    */
+    function getSharedVectors($users_id) {
+
+        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+
+        $query = "SELECT {$this->db_table_vec}.*, {$this->db_table_auth}.trainer, {$this->db_table_auth}.owner FROM {$this->db_table_vec}
+        INNER JOIN {$this->db_table_auth} ON {$this->db_table_vec}.id = {$this->db_table_auth}.bayes_vectors_id
+        WHERE {$this->db_table_auth}.users_id = ?
+        ORDER BY {$this->db_table_vec}.vector ASC ";
+
+        $st = $this->db->prepare($query);
+        $st->execute(array($users_id));
+
+        $vectors = array();
+        foreach ($st->fetchAll() as $row) {
+            $vectors[$row['id']] = array(
+                'vector' => $row['vector'],
+                'trainer' => $row['trainer'],
+                'owner' => $row['owner'],
+                );
+        }
+
+        return $vectors;
+    }
+
 
     /**
     * @param int $users_id users id
@@ -106,16 +155,15 @@ class suxNbUser extends suxNaiveBayesian {
 
 
     /**
-    * Returns a list of vectors and permissions that a user has access to
-    *
     * @param int $users_id users id
-    * @return array key = id, values = array(keys = vector, trainer, owner)
+    * @return array key = id, values = array(keys = vector)
     */
-    function getSharedVectors($users_id) {
+    function getVectorsByUser($users_id) {
 
         if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
 
-        $query = "SELECT {$this->db_table_vec}.*, {$this->db_table_auth}.trainer, {$this->db_table_auth}.owner FROM {$this->db_table_vec}
+        // Note: Owner of a vector implies trainer
+        $query = "SELECT {$this->db_table_vec}.* FROM {$this->db_table_vec}
         INNER JOIN {$this->db_table_auth} ON {$this->db_table_vec}.id = {$this->db_table_auth}.bayes_vectors_id
         WHERE {$this->db_table_auth}.users_id = ?
         ORDER BY {$this->db_table_vec}.vector ASC ";
@@ -127,31 +175,10 @@ class suxNbUser extends suxNaiveBayesian {
         foreach ($st->fetchAll() as $row) {
             $vectors[$row['id']] = array(
                 'vector' => $row['vector'],
-                'trainer' => $row['trainer'],
-                'owner' => $row['owner'],
                 );
         }
 
         return $vectors;
-    }
-
-
-    /**
-    * Returns a list of users and their permissions to a vector
-    *
-    * @param int $vector_id vectors id
-    * @return array
-    */
-    function getVectorAuthorization($vector_id) {
-
-        if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
-
-        $query = "SELECT users_id, bayes_vectors_id, trainer, owner FROM {$this->db_table_auth} WHERE bayes_vectors_id = ? ";
-        $st = $this->db->prepare($query);
-        $st->execute(array($vector_id));
-
-        return $st->fetchAll(PDO::FETCH_ASSOC);
-
     }
 
 
@@ -195,6 +222,29 @@ class suxNbUser extends suxNaiveBayesian {
         INNER JOIN {$this->db_table_vec} ON {$this->db_table_auth}.bayes_vectors_id = {$this->db_table_vec}.id
         WHERE {$this->db_table_auth}.bayes_vectors_id = ? AND {$this->db_table_auth}.users_id = ?
         AND ({$this->db_table_auth}.owner = 1 OR {$this->db_table_auth}.trainer = 1) LIMIT 1 ";
+
+        $st = $this->db->prepare($query);
+        $st->execute(array($vector_id, $users_id));
+        return ($st->fetchColumn() > 0 ? true : false);
+
+    }
+
+
+    /**
+    * @param int $vector_id vector id
+    * @param int $users_id users id
+    * @return bool
+    */
+    function isVectorUser($vector_id, $users_id) {
+
+        if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+
+        // Note: Owner of a vector implies trainer
+        $query = "SELECT COUNT(*) FROM {$this->db_table_auth}
+        INNER JOIN {$this->db_table_vec} ON {$this->db_table_auth}.bayes_vectors_id = {$this->db_table_vec}.id
+        WHERE {$this->db_table_auth}.bayes_vectors_id = ? AND {$this->db_table_auth}.users_id = ?
+        LIMIT 1 ";
 
         $st = $this->db->prepare($query);
         $st->execute(array($vector_id, $users_id));
@@ -248,6 +298,29 @@ class suxNbUser extends suxNaiveBayesian {
 
 
     /**
+    * @param int $category_id category id
+    * @param int $users_id users id
+    * @return bool
+    */
+    function isCategoryUser($category_id, $users_id) {
+
+        if (!filter_var($category_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+
+        // Note: Owner of a vector implies trainer
+        $query = "SELECT COUNT(*) FROM {$this->db_table_auth}
+        INNER JOIN {$this->db_table_cat} ON {$this->db_table_auth}.bayes_vectors_id = {$this->db_table_cat}.bayes_vectors_id
+        WHERE {$this->db_table_cat}.id = ? AND {$this->db_table_auth}.users_id = ?
+        LIMIT 1 ";
+
+        $st = $this->db->prepare($query);
+        $st->execute(array($category_id, $users_id));
+        return ($st->fetchColumn() > 0 ? true : false);
+
+    }
+
+
+    /**
     * @param int $document_id document id
     * @param int $users_id users id
     * @return bool
@@ -285,6 +358,30 @@ class suxNbUser extends suxNaiveBayesian {
         INNER JOIN {$this->db_table_doc} ON {$this->db_table_cat}.id = {$this->db_table_doc}.bayes_categories_id
         WHERE {$this->db_table_doc}.id = ? AND {$this->db_table_auth}.users_id = ?
         AND ({$this->db_table_auth}.owner = 1 OR {$this->db_table_auth}.trainer = 1) LIMIT 1 ";
+
+        $st = $this->db->prepare($query);
+        $st->execute(array($document_id, $users_id));
+        return ($st->fetchColumn() > 0 ? true : false);
+
+    }
+
+
+    /**
+    * @param int $document_id document id
+    * @param int $users_id users id
+    * @return bool
+    */
+    function isDocumentUser($document_id, $users_id) {
+
+        if (!filter_var($document_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+
+        // Note: Owner of a vector implies trainer
+        $query = "SELECT COUNT(*) FROM {$this->db_table_auth}
+        INNER JOIN {$this->db_table_cat} ON {$this->db_table_auth}.bayes_vectors_id = {$this->db_table_cat}.bayes_vectors_id
+        INNER JOIN {$this->db_table_doc} ON {$this->db_table_cat}.id = {$this->db_table_doc}.bayes_categories_id
+        WHERE {$this->db_table_doc}.id = ? AND {$this->db_table_auth}.users_id = ?
+        LIMIT 1 ";
 
         $st = $this->db->prepare($query);
         $st->execute(array($document_id, $users_id));
@@ -390,7 +487,7 @@ class suxNbUser extends suxNaiveBayesian {
     function addVectorWithUser($vector, $users_id) {
 
         /*
-        A rewrite of the entire function instead of calling parent because
+        We rewrite the entire function instead of calling parent because
         we need to use transactions i.e. we don't want risk failing and
         leave a floating vector without any owner
 

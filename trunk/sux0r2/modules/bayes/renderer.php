@@ -151,9 +151,8 @@ class renderer extends suxRenderer {
 
         foreach ($this->getUserOwnedVectorsArray() as $key => $val) {
             foreach ($this->nb->getDocumentsByVector($key) as $key2 => $val2) {
-
-                $tmp[$key2] = "{$key2} - {$val['vector']}, {$val2['category']}";
-
+                $category = $this->nb->getCategory($val2['category_id']);
+                $tmp[$key2] = "{$key2} - {$val['vector']}, {$category['category']}";
             }
         }
 

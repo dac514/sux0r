@@ -12,7 +12,7 @@ if (isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT)) {
     $nb = new suxNaiveBayesian();
     $doc = $nb->getDocument($_GET['id']);
     if ($doc) {
-        echo "<pre>{$doc['content']}</pre>\n";
+        echo "<pre>{$doc['body']}</pre>\n";
     }
 
 }

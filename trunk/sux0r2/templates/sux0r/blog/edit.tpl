@@ -106,15 +106,14 @@ TODO: <a href="javascript:;" onmousedown="tinyMCE.execCommand('mceInsertContent'
 <!-- Bayesian tags -->
 
 {capture name=tags}
-    {foreach from=$r->getUserVectors() key=k item=v}
-    {$v}: <span class="htmlSelect">{html_options name='category_id[]' options=$r->getUserCategories($k) selected=$category_id}</span>
+    {foreach from=$r->getTrainerVectors() key=k item=v}
+    {$v}: <span class="htmlSelect">{html_options name='category_id[]' options=$r->getCategoriesByVector($k) selected=$category_id}</span>
     {/foreach}
 {/capture}
 
 {if $smarty.capture.tags|trim}
-{if $linked}<p>Linked to: {$linked}</p>{/if}
 <p>{$smarty.capture.tags}</p>
-
+{if $linked}<p>Linked to: {$linked}</p>{/if}
 {/if}
 
 
