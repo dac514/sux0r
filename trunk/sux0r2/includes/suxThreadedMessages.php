@@ -522,8 +522,10 @@ class suxThreadedMessages {
         // Database specific
         if ($driver == 'mysql') {
             // MySQL
-            $query .= "AND MONTH(published_on) = {$date['month']} AND YEAR(published_on) = {$date['year']} ";
-            $query .= "AND DAY(published_on) <= {$date['day']} AND TIME(published_on) <= '{$date['hour']}:{$date['minute']}:{$date['second']}' ";
+            $query .=" AND published_on <= '{$date['year']}-{$date['month']}-{$date['day']} {$date['hour']}:{$date['minute']}:{$date['second']}' ";
+        }
+        else {
+            throw new Exception('Unsupported database driver');
         }
         // Order
         $query .= "ORDER BY published_on DESC ";
