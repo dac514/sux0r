@@ -60,13 +60,26 @@
                 {/capture}
 
                 {capture name=blog}
-                    <p>{$foo.published_on}, <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a>, TODO: Tags</p>
+
+                    <!-- Content -->
+                    <p>{$foo.published_on}, <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a>
+
+                    {* Find all bayes categories/tags associated to this document by author
+                    Optionally, find all bayes categories/tags associated to this document. *}
+
+                    {$r->tags($foo.category_id, $foo.users_id)}
+
+                    </p>
+
                     <p>{$foo.body_html}</p>
 
                     <div class="clearboth"></div>
-                    <p><a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">Permanent Link</a>,
-                    <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}#comments">Comments ({$foo.comments})</a>, TODO: [ Bayesian Categorize ]</p>
 
+                    <!-- Permanlink, Comments -->
+                    <p><a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">Permanent Link</a>,
+                    <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}#comments">Comments ({$foo.comments})</a></p>
+
+                    <!-- Flair -->
                     <div class="flair"><p>
                     <a href='http://slashdot.org/slashdot-it.pl?op=basic&url={$url|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/slashdot.gif' alt='Slashdot' width='16' height='16' /></a>
                     <a href='http://digg.com/submit?url={$url|escape:'url, UTF-8'}&title={$title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/digg.gif' alt='Digg' width='16' height='16' /></a>
@@ -75,6 +88,19 @@
                     <a href='http://www.stumbleupon.com/submit?url={$url|escape:'url, UTF-8'}&title={$title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/stumbleupon.gif' alt='StumbleUpon' width='16' height='16' /></a>
                     <a href='http://del.icio.us/login/?url={$url|escape:'url, UTF-8'}&title={$title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/delicious.gif' alt='Del.icio.us' width='16' height='16' /></a>
                     </p></div>
+
+                    <!-- Bayesian tags -->
+                    {capture name=tags}
+                        {foreach from=$r->getUserVectors() key=k item=v}
+                        {$v}: <span class="htmlSelect">{html_options name='category_id[]' options=$r->getCategoriesByVector($k) selected=$foo.category_id}</span>
+                        {/foreach}
+                    {/capture}
+
+                    {if $smarty.capture.tags|trim}
+                    <p>{$smarty.capture.tags}</p>
+                    {if $foo.linked}<p>Linked to: {$foo.linked}</p>{/if}
+                    {/if}
+
                 {/capture}
 
                 {$r->widget($foo.title, $smarty.capture.blog, $smarty.capture.blog_url, $smarty.capture.blog_img)}

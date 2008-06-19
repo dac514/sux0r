@@ -25,6 +25,7 @@
 require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
 require_once(dirname(__FILE__) . '/../bayes/suxNbUser.php');
+require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
 
@@ -34,6 +35,7 @@ class renderer extends suxRenderer {
     private $user;
     private $msg;
     private $nb;
+    private $link;
 
 
     /**
@@ -46,8 +48,34 @@ class renderer extends suxRenderer {
         $this->user = new suxUser();
         $this->msg = new suxThreadedMessages();
         $this->nb = new suxNbUser();
+        $this->link = new suxLink();
 
     }
+
+
+    /**
+    * @return string html
+    */
+    function tags($category_ids, $users_id) {
+
+        if (!$category_ids) return null;
+
+        // Find all bayes categories/tags associated to this document by author
+        // Optionally, find all bayes categories/tags associated to this document.
+
+        $html = '[ Tags: ';
+        foreach($category_ids as $key => $val) {
+            //if ($this->nb->isCategoryOwner($val, $users_id)) {
+                $tmp = $this->nb->getCategory($val);
+                $html .= "{$tmp['category']}, ";
+            //}
+        }
+        $html = rtrim($html, ', ');
+
+        return $html . ' ]';
+
+    }
+
 
     function articles() {
 
@@ -60,6 +88,27 @@ class renderer extends suxRenderer {
             $val['comments'] = $this->msg->getCommentsCount($val['thread_id']);
             $tmp2 = $this->user->getUser($val['users_id']);
             $val['nickname'] = $tmp2['nickname'];
+
+            /*
+            1) Get the `link_bayes_messages` matching this messages_id
+            2) Foreach linking bayes_document_id
+            3) get the categories I can use (nb::isCategoryUser($cat_id, $users_id)
+            4) stuff them into {$category_id} for template, append doc_id to {$link} string
+            */
+
+            $val['linked'] = '';
+            $links = $this->link->getLinks('link_bayes_messages', 'messages', $val['id']);
+            foreach($links as $val2) {
+                $cat = $this->nb->getCategoriesByDocument($val2);
+                foreach ($cat as $key => $val3) {
+                    if ($this->nb->isCategoryUser($key, $_SESSION['users_id'])) {
+                        $val['linked'] .= "$val2, ";
+                        $val['category_id'][] = $key;
+                    }
+                }
+            }
+            $val['linked'] = rtrim($val['linked'], ', '); // Remove trailing comma
+
         }
 
         // new dBug($tmp);
@@ -151,6 +200,21 @@ class renderer extends suxRenderer {
     function getUserVectors() {
 
         $vectors = array();
+        foreach ($this->nb->getVectorsByUser($_SESSION['users_id']) as $key => $val) {
+            $vectors[$key] = $val['vector'];
+        }
+        return $vectors;
+
+    }
+
+
+
+    /**
+    * @return array
+    */
+    function getTrainerVectors() {
+
+        $vectors = array();
         foreach ($this->nb->getVectorsByTrainer($_SESSION['users_id']) as $key => $val) {
             $vectors[$key] = $val['vector'];
         }
@@ -162,7 +226,7 @@ class renderer extends suxRenderer {
     /**
     * @return array
     */
-    function getUserCategories($vector_id) {
+    function getCategoriesByVector($vector_id) {
 
         $categories[''] = '---';
         foreach ($this->nb->getCategoriesByVector($vector_id) as $key => $val) {

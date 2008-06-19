@@ -145,10 +145,10 @@ class suxEdit {
             $blog['linked'] = '';
             foreach($links as $val) {
                 $cat = $this->nb->getCategoriesByDocument($val);
-                foreach ($cat as $key2 => $val2) {
-                    if ($this->nb->isCategoryTrainer($key2, $_SESSION['users_id'])) {
+                foreach ($cat as $key => $val2) {
+                    if ($this->nb->isCategoryTrainer($key, $_SESSION['users_id'])) {
                         $blog['linked'] .= "$val, ";
-                        $blog['category_id'][] = $key2;
+                        $blog['category_id'][] = $key;
                     }
                 }
             }
@@ -317,9 +317,9 @@ class suxEdit {
         foreach($links as $val) {
             // Get the vector associated with the bayes_document (i.e. $val)
             $vec = $this->nb->getVectorsByDocument($val);
-            foreach ($vec as $key2 => $val2) {
+            foreach ($vec as $key => $val2) {
                 // If the user is allowed to train the vector, we delete all links to the bayes_document (i.e. $val)
-                if ($this->nb->isVectorTrainer($key2, $_SESSION['users_id'])) {
+                if ($this->nb->isVectorTrainer($key, $_SESSION['users_id'])) {
                     $this->link->deleteLink('link_bayes_messages', 'bayes_documents', $val);
                 }
             }
