@@ -214,6 +214,14 @@ class suxEdit {
 
             // Security check
             if ($this->nb->isVectorOwner($clean['vector_id'], $_SESSION['users_id'])) {
+                // Remove any links to vector documents in associated link tables
+                $links = $this->link->getLinkTables('bayes');
+                foreach ($this->nb->getDocumentsByVector($clean['vector_id']) as $key => $val) {
+                    foreach ($links as $tmp) {
+                        $this->link->deleteLink($tmp, 'bayes_documents', $key);
+                    }
+                }
+                // Remove vector
                 $this->nb->removeVector($clean['vector_id']);
             }
             unset($clean['vector_id']);
@@ -232,6 +240,14 @@ class suxEdit {
 
             // Security check
             if ($this->nb->isCategoryOwner($clean['category_id'], $_SESSION['users_id'])) {
+                // Remove any links to category documents in associated link tables
+                $links = $this->link->getLinkTables('bayes');
+                foreach ($this->nb->getDocumentsByCategory($clean['category_id']) as $key => $val) {
+                    foreach ($links as $tmp) {
+                        $this->link->deleteLink($tmp, 'bayes_documents', $key);
+                    }
+                }
+                // Remove category
                 $this->nb->removeCategory($clean['category_id']);
             }
             unset($clean['category_id']);
@@ -250,12 +266,12 @@ class suxEdit {
 
             // Security check
             if ($this->nb->isDocumentOwner($clean['document_id'], $_SESSION['users_id'])) {
-                // Untrain
-                $this->nb->untrainDocument($clean['document_id']);
                 // Remove any links to this document in associated link tables
                 foreach ($this->link->getLinkTables('bayes') as $tmp) {
                     $this->link->deleteLink($tmp, 'bayes_documents', $clean['document_id']);
                 }
+                // Remove document
+                $this->nb->untrainDocument($clean['document_id']);
             }
             unset($clean['document_id']);
             break;

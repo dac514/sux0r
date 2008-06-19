@@ -112,8 +112,9 @@ TODO: <a href="javascript:;" onmousedown="tinyMCE.execCommand('mceInsertContent'
 {/capture}
 
 {if $smarty.capture.tags|trim}
-<p>Tags:</p>
+{if $linked}<p>Linked to: {$linked}</p>{/if}
 <p>{$smarty.capture.tags}</p>
+
 {/if}
 
 
