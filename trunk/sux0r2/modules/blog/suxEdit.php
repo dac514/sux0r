@@ -138,18 +138,21 @@ class suxEdit {
             1) Get the `link_bayes_messages` matching this messages_id
             2) Foreach linking bayes_document_id
             3) get the categories I can train (nb::isCategoryTrainer($cat_id, $users_id)
-            4) stuff them into {$category_id} for template
+            4) stuff them into {$category_id} for template, append doc_id to {$link} string
             */
 
             $links = $this->link->getLinks('link_bayes_messages', 'messages', $blog['id']);
+            $blog['linked'] = '';
             foreach($links as $val) {
                 $cat = $this->nb->getCategoriesByDocument($val);
                 foreach ($cat as $key2 => $val2) {
                     if ($this->nb->isCategoryTrainer($key2, $_SESSION['users_id'])) {
+                        $blog['linked'] .= "$val, ";
                         $blog['category_id'][] = $key2;
                     }
                 }
             }
+            $blog['linked'] = rtrim($blog['linked'], ', '); // Remove trailing comma
 
             // Don't allow spoofing
             unset($dirty['id']);
