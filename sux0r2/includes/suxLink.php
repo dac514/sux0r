@@ -84,7 +84,7 @@ class suxLink {
             break;
 
         default:
-            throw new Exception('Unknown database driver');
+            throw new Exception('Unsupported database driver');
 
         }
 
