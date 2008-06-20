@@ -3,8 +3,24 @@
     width: 160px;
 }
 
+#leftside ul {
+    margin-left: 15px;
+    padding: 0;
+}
+
+#leftside li {
+    margin-bottom: 4px;
+}
+
+
 #rightside {
     width: 738px;
+}
+
+#recent {
+    border: 1px dashed black;
+    padding-left: 4px;
+    padding-right: 4px;
 }
 
 .flair img {
