@@ -16,28 +16,29 @@
         <td style="vertical-align:top;">
 			<div id="leftside">
 
-            <p>
-            Current month:<br />
-            {foreach from=$r->articles() item=foo}
-                <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">{$foo.title}</a><br /><br />
-            {/foreach}
-            </p>
+            <p>Current month:</p>
 
-            <p>
-            Most recent comments:<br />
+            <p><ul>
+            {foreach from=$r->articles() item=foo}
+                <li><a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">{$foo.title}</a></li>
+            {/foreach}
+            </ul></p>
+
+            <div id="recent">
+            <p>Most recent comments:</p>
             {foreach from=$r->recent() item=foo}
                 <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}#{$foo.id}">{$foo.title}</a>
                 by <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a>
                 in <strong>{$foo.title_fp}</strong> on {$foo.published_on}<br /><br />
             {/foreach}
-            </p>
+            </div>
 
 			</div>
 		</td>
 		<td style="vertical-align:top;">
 			<div id="rightside">
 
-            <p>
+            {*<p>
             Author:
             [ Dropdown ]
             Tags:
@@ -45,7 +46,7 @@
             Month/Year:
             [ Dropdown ]
             [ Go! ]
-            </p>
+            </p>*}
 
 
             {* Blog widgets *}
@@ -63,9 +64,6 @@
 
                     <!-- Content -->
                     <p>{$foo.published_on}, <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a>
-
-                    {* Find all bayes categories/tags associated to this document by author
-                    Optionally, find all bayes categories/tags associated to this document. *}
 
                     {$r->tags($foo.category_id, $foo.users_id)}
 

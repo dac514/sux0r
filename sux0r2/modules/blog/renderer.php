@@ -44,6 +44,7 @@ class renderer extends suxRenderer {
     * @param string $module
     */
     function __construct($module) {
+
         parent::__construct($module); // Call parent
         $this->user = new suxUser();
         $this->msg = new suxThreadedMessages();
@@ -61,14 +62,13 @@ class renderer extends suxRenderer {
         if (!$category_ids) return null;
 
         // Find all bayes categories/tags associated to this document by author
-        // Optionally, find all bayes categories/tags associated to this document.
 
         $html = '[ Tags: ';
         foreach($category_ids as $key => $val) {
-            //if ($this->nb->isCategoryOwner($val, $users_id)) {
+            if ($this->nb->isCategoryOwner($val, $users_id)) {
                 $tmp = $this->nb->getCategory($val);
                 $html .= "{$tmp['category']}, ";
-            //}
+            }
         }
         $html = rtrim($html, ', ');
 
@@ -200,7 +200,7 @@ class renderer extends suxRenderer {
     function getUserVectors() {
 
         $vectors = array();
-        foreach ($this->nb->getVectorsByUser($_SESSION['users_id']) as $key => $val) {
+        if (!empty($_SESSION['users_id'])) foreach ($this->nb->getVectorsByUser($_SESSION['users_id']) as $key => $val) {
             $vectors[$key] = $val['vector'];
         }
         return $vectors;
