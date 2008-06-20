@@ -44,9 +44,8 @@ if (!empty($_GET['c'])) {
 // Pre-sanitize controller
 $controller = mb_strtolower($controller);
 if (!preg_match('/^(\w|\-)+$/', $controller) || !is_file(dirname(__FILE__) . "/modules/{$controller}/controller.php")) {
-    // A static page to avoid stupidities like infinite loops
-    if (!headers_sent()) header("HTTP/1.0 404 Not Found");
-    echo file_get_contents(dirname(__FILE__) . '/404.html');
+    if (!headers_sent()) header('HTTP/1.0 404 Not Found');
+    echo suxFunct::getIncludeContents(dirname(__FILE__) . '/404.php');
     exit;
 }
 
@@ -69,7 +68,7 @@ try {
 }
 catch (Exception $e) {
     require_once(dirname(__FILE__) . '/exception.php'); // Default exception handler
-    die();
+    exit;
 }
 
 // ---------------------------------------------------------------------------
