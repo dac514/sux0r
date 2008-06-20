@@ -28,6 +28,7 @@ require_once('suxNbUser.php');
 class renderer extends suxRenderer {
 
     // Objects
+    public $gtext = array();
     private $nb;
 
 
@@ -37,7 +38,9 @@ class renderer extends suxRenderer {
     * @param string $module
     */
     function __construct($module) {
+
         parent::__construct($module); // Call parent
+        $this->gtext = suxFunct::gtext($this->module); // Language
         $this->nb = new suxNbUser();
 
     }
@@ -171,17 +174,18 @@ class renderer extends suxRenderer {
         static $html = null;
         if ($html) return $html; // Cache
 
+        $text =& $this->gtext;
         $cat = 0;
         $html = "<div id='bStats'><ul>\n";
         foreach ($this->getUserSharedVectorsArray() as $key => $val) {
             $html .= "<li class='bStatsVec'>{$val['vector']}";
-            if (!$this->nb->isVectorOwner($key, $_SESSION['users_id'])) $html .= ' <em>(shared)</em>';
+            if (!$this->nb->isVectorOwner($key, $_SESSION['users_id'])) $html .= ' <em>(' . $text['shared'] . ')/em>';
             $html .= ":</li>\n<ul>\n";
             foreach ($this->nb->getCategoriesByVector($key) as $key2 => $val2) {
                 $doc_count = $this->nb->getDocumentCountByCategory($key2);
                 $html .= "<li class='bStatsCat'>{$val2['category']}:</li>";
                 $html .= "<ul>\n";
-                $html .= "<li class='bStatsDoc'>Documents: $doc_count</li><li class='bStatsTok'>Tokens: {$val2['token_count']}</li>\n";
+                $html .= "<li class='bStatsDoc'>{$text['documents']}: $doc_count</li><li class='bStatsTok'>{$text['tokens']}: {$val2['token_count']}</li>\n";
                 $html .= "</ul>\n";
                 ++$cat;
             }
@@ -202,12 +206,13 @@ class renderer extends suxRenderer {
         static $html = null;
         if ($html) return $html; // Cache
 
+        $text =& $this->gtext;
         $html .= "<table class='shared'><thead><tr>
-        <th>Vector</th>
-        <th>User</th>
-        <th>Trainer</th>
-        <th>Owner</th>
-        <th>Unshare</th>
+        <th>{$text['vector']}</th>
+        <th>{$text['user']}</th>
+        <th>{$text['trainer']}</th>
+        <th>{$text['owner']}</th>
+        <th>{$text['unshare']}</th>
         </tr></thead><tbody>\n";
 
         // Yes, we could have left joined the users table

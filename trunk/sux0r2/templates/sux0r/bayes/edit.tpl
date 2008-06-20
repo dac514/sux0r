@@ -67,14 +67,12 @@
     {* Content *}
     <div id="middle">
 
-        <noscript><p class="errorWarning">JavaScript must be enabled to categorize and delete!</p></noscript>
-
         {if $validate.default.is_error !== false}
         <p class="errorWarning">{$r->text.form_error} :</p>
         {/if}
 
         <fieldset>
-        <legend>Vectors</legend>
+        <legend>{$r->text.vectors}</legend>
 
         {* Add a vector  ---------------------------------------------------- *}
 
@@ -90,9 +88,9 @@
             {/capture}
         {/strip}
 
-        <label for="vector" {if $smarty.capture.error}class="error"{/if} > New vector :</label>
+        <label for="vector" {if $smarty.capture.error}class="error"{/if} >{$r->text.new_vec} :</label>
         <input type="text" name="vector" value="{$vector}" />
-        <input type="submit" class="button" value="Add" />
+        <input type="submit" class="button" value="{$r->text.add}" />
         {$smarty.capture.error}
         </p>
 
@@ -112,9 +110,9 @@
             {/capture}
         {/strip}
 
-        <label for="vector_id" {if $smarty.capture.error}class="error"{/if} > Remove vector :</label>
+        <label for="vector_id" {if $smarty.capture.error}class="error"{/if} >{$r->text.remove_vec} :</label>
         {html_options name='vector_id' options=$r->getUserOwnedVectors() selected=$vector_id}
-        <input type="button" class="button" value="Delete" onclick="rm('remvec', 'Are you sure you want to delete this vector?');" />
+        <input type="button" class="button" value="{$r->text.delete}" onclick="rm('remvec', '{$r->text.alert_vec}');" />
         {$smarty.capture.error}
         </p>
 
@@ -126,7 +124,7 @@
 
 
         <fieldset>
-        <legend>Categories</legend>
+        <legend>{$r->text.categories}</legend>
 
         {* Add a category --------------------------------------------------- *}
 
@@ -143,10 +141,10 @@
             {/capture}
         {/strip}
 
-        <label for="category" {if $smarty.capture.error}class="error"{/if} > New category :</label>
+        <label for="category" {if $smarty.capture.error}class="error"{/if} >{$r->text.new_cat} :</label>
         <input type="text" name="category" value="{$category}" />
         {html_options name='vector_id' options=$r->getUserOwnedVectors() selected=$vector_id}
-        <input type="submit" class="button" value="Add" />
+        <input type="submit" class="button" value="{$r->text.add}" />
         {$smarty.capture.error}
         </p>
 
@@ -166,9 +164,9 @@
             {/capture}
         {/strip}
 
-        <label for="category_id" {if $smarty.capture.error}class="error"{/if} > Remove category :</label>
+        <label for="category_id" {if $smarty.capture.error}class="error"{/if} >{$r->text.remove_cat} :</label>
         {html_options name='category_id' options=$r->getUserOwnedCategories() selected=$category_id}
-        <input type="button" class="button" value="Delete" onclick="rm('remcat', 'Are you sure you want to delete this category?');" />
+        <input type="button" class="button" value="{$r->text.delete}" onclick="rm('remcat', '{$r->text.alert_cat}');" />
         {$smarty.capture.error}
         </p>
 
@@ -181,7 +179,7 @@
 
 
         <fieldset>
-        <legend>Documents</legend>
+        <legend>{$r->text.documents}</legend>
 
 
         {* Train a document -------------------------------------------------- *}
@@ -198,10 +196,10 @@
             {/capture}
         {/strip}
 
-        <label for="document" {if $smarty.capture.error}class="error"{/if} > Train document :</label>
+        <label for="document" {if $smarty.capture.error}class="error"{/if} >{$r->text.add_doc} :</label>
         <textarea name="document" cols='50' rows='10'>{$document}</textarea><br />
         <label>&nbsp;</label>{html_options name='category_id' options=$r->getUserTrainableCategories() selected=$category_id}
-        <input type="submit" class="button" value="Train" />
+        <input type="submit" class="button" value="{$r->text.train}" />
         {$smarty.capture.error}
         </p>
 
@@ -221,11 +219,11 @@
             {/capture}
         {/strip}
 
-        <label for="document_id" {if $smarty.capture.error}class="error"{/if} > Untrain document :</label>
+        <label for="document_id" {if $smarty.capture.error}class="error"{/if} >{$r->text.remove_doc} :</label>
         <select name="document_id" onmouseup="getDoc(this.value);">
         {html_options options=$r->getUserOwnedDocuments() selected=$document_id}
         </select>
-        <input type="button" class="button" value="Delete" onclick="rm('remdoc', 'Are you sure you want to delete this document?');"/>
+        <input type="button" class="button" value="{$r->text.delete}" onclick="rm('remdoc', '{$r->text.alert_doc}');"/>
         {$smarty.capture.error}
         </p>
 
@@ -240,7 +238,7 @@
 
 
         <fieldset>
-        <legend>Categorize</legend>
+        <legend>{$r->text.categorize}</legend>
 
         {* Categorize document ---------------------------------------------- *}
 
@@ -248,16 +246,14 @@
         {* This is Ajax, no token or action is needed *}
 
         <p>
-        <label for="document" >Categorize document :</label>
+        <label for="document" >{$r->text.cat_doc} :</label>
         <textarea name="cat_document" cols='50' rows='10'>{$cat_document}</textarea><br />
         <label>&nbsp;</label>{html_options name='vector_id' options=$r->getUserSharedVectors() selected=$vector_id}
-        <input type="button" class="button" value="Categorize" onclick="getCat(this.form.cat_document.value, this.form.vector_id.value);" />
+        <input type="button" class="button" value="{$r->text.categorize}" onclick="getCat(this.form.cat_document.value, this.form.vector_id.value);" />
         {$smarty.capture.error}
         </p>
 
         <div id="placeholder2"></div>
-
-
 
         </form>
 
@@ -268,7 +264,7 @@
 
 
         <fieldset>
-        <legend>Share</legend>
+        <legend>{$r->text.share}</legend>
 
         {* Share vector ----------------------------------------------------- *}
 
@@ -285,13 +281,13 @@
         {validate id="sharevec5" form="sharevec" assign="sharevec_error5" message=$r->text.form_error_10}
         {validate id="sharevec6" form="sharevec" assign="sharevec_error6" message=$r->text.form_error_11}
 
-        <label for="vector_id" {if $sharevec_error1}class="error"{/if} >Share vector:</label>
+        <label for="vector_id" {if $sharevec_error1}class="error"{/if} >{$r->text.share_vec} :</label>
             {html_options name='vector_id' options=$r->getUserOwnedVectors() selected=$vector_id}
             {$sharevec_error1}
         </p>
 
         <p>
-        <label for="users_id" {if $sharevec_error2 || $sharevec_error5 || $sharevec_error6}class="error"{/if} >With friend:</label>
+        <label for="users_id" {if $sharevec_error2 || $sharevec_error5 || $sharevec_error6}class="error"{/if} >{$r->text.with} :</label>
             {* TODO: Get users from socialnetwork *}
             <select name="users_id">
             <option value="1">test</option>
@@ -305,18 +301,18 @@
 
         <p>
         <label for="trainer">&nbsp;</label>
-            <input type="checkbox" name="trainer" value="1" /> <span {if $sharevec_error3}class="error"{/if}>Allow user to train documents?</span>
+            <input type="checkbox" name="trainer" value="1" /> <span {if $sharevec_error3}class="error"{/if}>{$r->text.trainer}</span>
             {$sharevec_error3}
         </p>
         <p>
         <label for="trainer">&nbsp;</label>
-            <input type="checkbox" name="owner" value="1" /> <span {if $sharevec_error4}class="error"{/if}>Owner? (If selected, the user can train documents)</span>
+            <input type="checkbox" name="owner" value="1" /> <span {if $sharevec_error4}class="error"{/if}>{$r->text.owner2}</span>
             {$sharevec_error4}
         </p>
 
         <p>
         <label>&nbsp;</label>
-            <input type="submit" class="button" value="Share" />
+            <input type="submit" class="button" value="{$r->text.share}" />
         </p>
 
         </form>
@@ -328,7 +324,7 @@
         </fieldset>
 
         <fieldset>
-        <legend>Unshare</legend>
+        <legend>{$r->text.unshare}</legend>
 
         {* Unhare vector ---------------------------------------------------- *}
 
@@ -338,12 +334,11 @@
 
         {validate id="unsharevec1" form="unsharevec" assign="unsharevec_error1" message=$r->text.form_error_12}
 
-
         {if $unsharevec_error1}<p class="error">{$unsharevec_error1}</p>{/if}
 
         {$r->getShareTable()}
         <center>
-        <input type="button" class="button" value="Unshare" onclick="rm('unsharevec', 'Are you sure you want to unshare these vectors?');"/>
+        <input type="button" class="button" value="{$r->text.unshare}" onclick="rm('unsharevec', '{$r->text.alert_unshare}');"/>
         </center>
 
 
@@ -360,28 +355,16 @@
             {capture name=stats}{$r->getCategoryStats()}{/capture}
             {if $smarty.capture.stats}
             <p>
-            Stats:<br />
+            {$r->text.stats}:<br />
             {$smarty.capture.stats}
             </p>
             {/if}
 
-            <p>Synopsis:</p>
-
-            <p>A vector is a list of categories. You must have at least two categories
-            in a vector to do <a href="http://en.wikipedia.org/wiki/Naive_Bayes_classifier">Bayesian classification</a>.</p>
-
-            <p>For example, a vector named <strong>Feelings</strong>
-            could have the categories <strong>Happy</strong>, <strong>Sad</strong> and <strong>Angry</strong>.
-            A vector named <strong>Filter</strong> could have the categories <strong>Spam</strong>
-            and <strong>Not-Spam</strong>.</p>
-
-            <p>In contrast, you wouldn't put <strong>Spam</strong> in the
-            <strong>Feelings</strong> vector because it doesn't belong to that list of categories.</p>
-
-            <p>Please note that <strong>hundreds of documents</strong>
-            need to be trained in each category before any ammount of accuracy is apparent.</p>
-
-
+            <p>{$r->text.synopsis}:</p>
+            <p>{$r->text.synopsis_1}</p>
+            <p>{$r->text.synopsis_2}</p>
+            <p>{$r->text.synopsis_3}</p>
+            <p>{$r->text.synopsis_4}</p>
 
 			</div>
 		</td>
