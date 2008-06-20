@@ -13,8 +13,6 @@ $gtext['editing'] = 'Editing';
 $gtext['email'] = 'Email';
 $gtext['family_name'] = 'Last name';
 $gtext['female'] = 'Female';
-
-
 $gtext['form_error'] = 'The form was not submitted, see errors below';
 $gtext['form_error_1'] = 'Nickname cannot be empty';
 $gtext['form_error_2'] = 'Invalid characters';
@@ -29,7 +27,6 @@ $gtext['form_error_10'] = 'Duplicate URL';
 $gtext['form_error_11'] = 'Invalid captcha';
 $gtext['form_error_12'] = 'Data integrity failure';
 $gtext['form_problem'] = 'The form was not submitted, please try again';
-
 $gtext['gender'] = 'Gender';
 $gtext['given_name'] = 'First name';
 $gtext['homepage'] = 'Back to homepage';
