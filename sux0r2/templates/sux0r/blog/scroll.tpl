@@ -29,7 +29,8 @@
             {foreach from=$r->recent() item=foo}
                 <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}#{$foo.id}">{$foo.title}</a>
                 by <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a>
-                in <strong>{$foo.title_fp}</strong> on {$foo.published_on}<br /><br />
+                in <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">{$foo.title_fp}</a>
+                on {$foo.published_on}<br /><br />
             {/foreach}
             </div>
 
