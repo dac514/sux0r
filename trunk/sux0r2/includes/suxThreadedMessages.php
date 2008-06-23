@@ -33,16 +33,16 @@ class suxThreadedMessages {
     protected $db_table_hist = 'messages_history';
 
     /*
-    Conventions:
-    forum -> Regular threaded messages
+    Currently:
     blog -> first message in thread is blog, everything else is a "comment"
-    wiki -> First message in thread is wiki, everything else is "discussion"
 
-    Future:
-    slideshow -> Sequence of messages defined by thread
+    Todo:
+    forum -> Regular threaded messages
+    wiki -> First message in thread is wiki, everything else is "discussion"
+    slideshow -> Sequence of messages defined by thread, powerpoint style
     */
 
-    private $types = array('forum', 'blog', 'wiki');
+    private $types = array('blog', 'forum', 'wiki', 'slideshow');
 
 
     /**
@@ -92,7 +92,7 @@ class suxThreadedMessages {
     * Saves a message to the database
     *
     * @param int $users_id users_id
-    * @param array $msg required keys => (title, body, [forum|blog|wiki]) optional keys => (published_on)
+    * @param array $msg required keys => (title, body, [forum|blog|wiki|slideshow]) optional keys => (published_on)
     * @param int $parent_id messages_id of parent
     * @param bool $trusted passed on to sanitizeHtml
     * @return int insert id
@@ -146,7 +146,10 @@ class suxThreadedMessages {
 
         // Publish date
         if (isset($msg['published_on'])) {
-            // TODO: Check ISO 8601 date date format
+            // ISO 8601 date format
+            // regex must match '2008-06-18 16:53:29' or '2008-06-18T16:53:29-04:00'
+            $regex = '/^(\d{4})-(0[0-9]|1[0,1,2])-([0,1,2][0-9]|3[0,1]).+(\d{2}):(\d{2}):(\d{2})/';
+            if (!preg_match($regex, $msg['published_on'])) throw new Exception('Invalid date');
             $clean['published_on'] = $msg['published_on'];
         }
         else $clean['published_on'] = date('c');
@@ -156,14 +159,16 @@ class suxThreadedMessages {
         if (isset($msg['draft'])) $clean['draft'] = 1;
 
         // Types of threaded messages
-        $clean['forum'] = 0;
         $clean['blog'] = 0;
+        $clean['forum'] = 0;
         $clean['wiki'] = 0;
-        if (isset($msg['forum'])) $clean['forum'] = 1;
+        $clean['slideshow'] = 0;
         if (isset($msg['blog'])) $clean['blog'] = 1;
+        if (isset($msg['forum'])) $clean['forum'] = 1;
         if (isset($msg['wiki'])) $clean['wiki'] = 1;
+        if (isset($msg['slideshow'])) $clean['slideshow'] = 1;
 
-        if (!$clean['forum'] && !$clean['blog'] && !$clean['wiki'])
+        if (!$clean['forum'] && !$clean['blog'] && !$clean['wiki'] && !$clean['slideshow'])
             throw new Exception('No message type specified?');
 
         // We now have the $clean[] array
@@ -277,7 +282,10 @@ class suxThreadedMessages {
 
         // Publish date
         if (isset($msg['published_on'])) {
-            // TODO: Check ISO 8601 date date format
+            // ISO 8601 date format
+            // regex must match '2008-06-18 16:53:29' or '2008-06-18T16:53:29-04:00'
+            $regex = '/^(\d{4})-(0[0-9]|1[0,1,2])-([0,1,2][0-9]|3[0,1]).+(\d{2}):(\d{2}):(\d{2})/';
+            if (!preg_match($regex, $msg['published_on'])) throw new Exception('Invalid date');
             $clean['published_on'] = $msg['published_on'];
         }
 
@@ -287,17 +295,21 @@ class suxThreadedMessages {
 
 
         // Types of threaded messages
-        if (isset($msg['forum'])) {
-            if ($msg['forum'] == 0) $clean['forum'] = 0;
-            else $clean['forum'] = 1;
-        }
         if (isset($msg['blog'])) {
             if ($msg['blog'] == 0) $clean['blog'] = 0;
             else $clean['blog'] = 1;
         }
+        if (isset($msg['forum'])) {
+            if ($msg['forum'] == 0) $clean['forum'] = 0;
+            else $clean['forum'] = 1;
+        }
         if (isset($msg['wiki'])) {
             if ($msg['wiki'] == 0) $clean['wiki'] = 0;
             else $clean['wiki'] = 1;
+        }
+        if (isset($msg['slideshow'])) {
+            if ($msg['slideshow'] == 0) $clean['slideshow'] = 0;
+            else $clean['slideshow'] = 1;
         }
 
 
@@ -307,7 +319,7 @@ class suxThreadedMessages {
         // Go!
         // -------------------------------------------------------------------
 
-        // Get $edit[] array in order to keep a history (wiki style)
+        // Get $edit[] array in order to keep a history
         $query = "SELECT title, image, body_html, body_plaintext FROM {$this->db_table} WHERE id = ? ";
         $st = $this->db->prepare($query);
         $st->execute(array($clean['id']));
@@ -375,7 +387,7 @@ class suxThreadedMessages {
     * Get messages by user id
     *
     * @param int $users_id users id
-    * @param string $type forum, blog, or wiki
+    * @param string $type forum, blog, wiki, or slideshow
     * @param bool $long select * or abbreviated data?
     * @return array
     */
@@ -430,7 +442,7 @@ class suxThreadedMessages {
     /**
     * Get first posts
     *
-    * @param string $type forum, blog, or wiki
+    * @param string $type forum, blog, wiki, or slideshow
     * @param bool $long select * or abbreviated data?
     * @return array
     */
@@ -457,7 +469,7 @@ class suxThreadedMessages {
     * Get first posts by user id
     *
     * @param int $users_id users id
-    * @param string $type forum, blog, or wiki
+    * @param string $type forum, blog, wiki, or slideshow
     * @param bool $long select * or abbreviated data?
     * @return array
     */
@@ -486,7 +498,7 @@ class suxThreadedMessages {
     * Get first posts by month (and year)
     *
     * @param int $date date
-    * @param string $type forum, blog, or wiki
+    * @param string $type forum, blog, wiki, or slideshow
     * @param bool $long select * or abbreviated data?
     * @return array
     */
@@ -508,7 +520,6 @@ class suxThreadedMessages {
             $date['hour']  = $matches[4]; // hour
             $date['minute']  = $matches[5]; // minutes
             $date['second'] = $matches[6]; //seconds
-
         }
 
         // Get database type
@@ -541,7 +552,7 @@ class suxThreadedMessages {
     /**
     * Get latest replies, i.e. thread_pos != 0
     *
-    * @param string $type forum, blog, or wiki
+    * @param string $type forum, blog, wiki, or slideshow
     * @param bool $long select * or abbreviated data?
     * @param int $limit maximum latest replies
     * @return array

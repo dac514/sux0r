@@ -211,11 +211,12 @@ CREATE TABLE `messages` (
   `forum` tinyint(1) NOT NULL,
   `blog` tinyint(1) NOT NULL,
   `wiki` tinyint(1) NOT NULL,
+  `slideshow` tinyint(1) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `users_id` (`users_id`),
   KEY `thread` (`thread_id`,`thread_pos`),
   KEY `published` (`published_on`,`draft`),
-  KEY `type` (`forum`,`blog`,`wiki`)
+  KEY `type` (`forum`,`blog`,`wiki`,`slideshow`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
