@@ -1,6 +1,6 @@
 /*
 htmLawed_TESTCASE.txt
-htmLawed 1.0.8, 15 May 2008
+htmLawed 1.0.9, 11 June 2008
 Copyright Santosh Patnaik
 GPLv3 license
 A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -127,7 +127,8 @@ Disallowed tag p
 <strong>Special:</strong> &amp; 3 < 2 & 5>4 and j >i >a & i<j>a<br />
 <strong>Padding:</strong> &#00066; &#066; &#x00066; &#x066; &#x003; &#0003;<br />
 <strong>Malformed:</strong> & #x27;, &x27;, &#x27; &TILDE;, &tilde<br />
-<strong>Invalid:</strong> &#x3;, &#x69000;, &#03;, &#69000;, &bad;<br />
+<strong>Invalid:</strong> &#x3;, &#55296;, &#03;, &#1114112;, &#xffff, &bad;<br />
+<strong>Discouraged characters:</strong> &#x7f;, &#132;, &#64992;, &#1114110;<br />
 <strong>Context:</strong> '&gt;', &lt;?<br />
 <strong>Casing:</strong> &#X27;, &#x27;, &TILDE;, &tilde;
 <br />

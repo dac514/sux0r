@@ -34,7 +34,7 @@ Pro-tip
 
 Use rsync when updating 3rd party vendors, example:
 
-rsync -rcvb --backup-dir=/tmp --cvs-exclude --delete ~/Desktop/tinymce/ ~/Sites/sux0r2/includes/symbionts/tinymce/
+rsync -rcvb --backup-dir=/tmp --cvs-exclude ~/Desktop/tinymce/ ~/Sites/sux0r2/includes/symbionts/tinymce/
 
 ------------------------------------------------------------------------------
 3rd Party Vendors, in alphabetical order
@@ -57,7 +57,7 @@ dBug
 
 htmLawed
 * Path: ./htmLawed/
-* Version: 1.0.8
+* Version: 1.0.9
 * Licence: GPL 3
 * Website: http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/index.php
 
@@ -115,6 +115,6 @@ Stopwords
 
 TinyMCE
 * Path: ./tinymce/
-* Version: 3.0.9 (+ language files)
+* Version: 3.1.0.1 (+ language files)
 * Licence: LGPL 2.1
 * Website: http://tinymce.moxiecode.com/
