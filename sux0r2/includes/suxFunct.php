@@ -253,6 +253,21 @@ class suxFunct {
 
 
     /**
+    * Get the last day of a month
+    * @return string YYYY-MM-DD
+    */
+    static function lastDay($month = '', $year = '') {
+
+        if (empty($month)) $month = date('m');
+        if (empty($year)) $year = date('Y');
+        $result = strtotime("{$year}-{$month}-01");
+        $result = strtotime('-1 second', strtotime('+1 month', $result));
+        return date('Y-m-d', $result);
+
+    }
+
+
+    /**
     * Get available locales on a *nix system
     * @return array list of locales
     */
