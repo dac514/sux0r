@@ -25,20 +25,20 @@
 require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
 require_once(dirname(__FILE__) . '/../bayes/suxNbUser.php');
-require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
 
 class renderer extends suxRenderer {
 
     // Arrays
-    public $fp; // First Posts
+    public $fp = array(); // Array of first posts
+    public $sidelist = array(); // Array of threads in sidebar
+    public $archives = array(); // Array of archives in sidebar
 
     // Objects
     private $user;
     private $msg;
     private $nb;
-    private $link;
 
 
     /**
@@ -52,7 +52,6 @@ class renderer extends suxRenderer {
         $this->user = new suxUser();
         $this->msg = new suxThreadedMessages();
         $this->nb = new suxNbUser();
-        $this->link = new suxLink();
 
     }
 
@@ -80,48 +79,16 @@ class renderer extends suxRenderer {
     }
 
 
-    function articles($date) {
-
-        static $tmp = array();
-        if (count($tmp)) return $tmp; // Cache
-
-        $tmp = $this->msg->getFirstPostsByMonth($date, 'blog', true);
-
-        foreach($tmp as &$val) {
-            $val['comments'] = $this->msg->getCommentsCount($val['thread_id']);
-            $tmp2 = $this->user->getUser($val['users_id']);
-            $val['nickname'] = $tmp2['nickname'];
-
-            /*
-            1) Get the `link_bayes_messages` matching this messages_id
-            2) Foreach linking bayes_document_id
-            3) get the categories I can use (nb::isCategoryUser($cat_id, $users_id)
-            4) stuff them into {$category_id} for template, append doc_id to {$link} string
-            */
-
-            $val['linked'] = '';
-            $links = $this->link->getLinks('link_bayes_messages', 'messages', $val['id']);
-            foreach($links as $val2) {
-                $cat = $this->nb->getCategoriesByDocument($val2);
-                foreach ($cat as $key => $val3) {
-                    if ($this->nb->isCategoryUser($key, $_SESSION['users_id'])) {
-                        $val['linked'] .= "$val2, ";
-                        $val['category_id'][] = $key;
-                    }
-                }
-            }
-            $val['linked'] = rtrim($val['linked'], ', '); // Remove trailing comma
-
-        }
-
-        // new dBug($tmp);
-
-        return $tmp;
-
-    }
-
-
+    /**
+    *
+    * @return array
+    */
     function recent() {
+
+        // Cache
+        static $tmp = null;
+        if (is_array($tmp)) return $tmp;
+        $tmp = array();
 
         $tmp = $this->msg->getRececentComments('blog');
 
@@ -213,6 +180,8 @@ class renderer extends suxRenderer {
 
 
     /**
+    * Used to populate dropdown(s) in suxEdit template
+    *
     * @return array
     */
     function getTrainerVectors() {

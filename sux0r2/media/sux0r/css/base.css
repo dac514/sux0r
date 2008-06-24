@@ -121,6 +121,19 @@ input, select {
 /* }}} */
 
 
+/* {{{ Pager */
+
+.pager {
+    margin-top: 5px;
+}
+
+.pager a, .pager span {
+    margin-right: 5px;
+}
+
+/* }}} */
+
+
 /* {{{ Horizontal Navigation Container */
 
 #navcontainer {
