@@ -326,7 +326,7 @@ class suxEdit {
         }
 
         // category ids submitted by the form
-        foreach($clean['category_id'] as $val) {
+        if (isset($clean['category_id'])) foreach($clean['category_id'] as $val) {
             if (!empty($val) && $this->nb->isCategoryTrainer($val, $_SESSION['users_id'])) {
                 $doc_id = $this->nb->trainDocument($clean['body'], $val);
                 $this->link->setLink('link_bayes_messages', 'bayes_documents', $doc_id, 'messages', $clean['id']);

@@ -54,6 +54,11 @@ function sux($action, $params = null) {
         // --------------------------------------------------------------------
 
     case 'view' :
+
+        if (empty($params[0]) || !filter_var($params[0], FILTER_VALIDATE_INT)) {
+            suxFunct::redirect(suxFunct::makeUrl('/blog'));
+        }
+
         echo 'TODO';
         break;
 
@@ -63,18 +68,40 @@ function sux($action, $params = null) {
         // --------------------------------------------------------------------
 
     case 'author' :
-        echo 'TODO';
-        break;
 
+        if (empty($params[0])) {
+            suxFunct::redirect(suxFunct::makeUrl('/blog'));
+        }
+
+        include_once('suxBlog.php');
+        $blog = new suxBlog();
+        $blog->author($params[0]);
+        break;
 
         // --------------------------------------------------------------------
         // Category
         // --------------------------------------------------------------------
 
     case 'category' :
-        echo 'TODO';
+
+        if (empty($params[0])) {
+            suxFunct::redirect(suxFunct::makeUrl('/blog'));
+        }
+
+        include_once('suxBlog.php');
+        $blog = new suxBlog();
+        $blog->category($params[0]);
         break;
 
+
+    case 'month' :
+
+        $date = !empty($params[0]) ? $params[0]: date('Y-m-d');
+
+        include_once('suxBlog.php');
+        $blog = new suxBlog();
+        $blog->month($date);
+        break;
 
     default:
 
@@ -82,12 +109,10 @@ function sux($action, $params = null) {
         // Default
         // --------------------------------------------------------------------
 
-        $date = !empty($params[0]) ? $params[0]: date('Y-m-d');
-
         include_once('suxBlog.php');
         $blog = new suxBlog();
-
-        $blog->listing($date);
+        $blog->listing();
+        break;
 
     }
 

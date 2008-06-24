@@ -1,9 +1,10 @@
 <?php
 
+$gtext['archives'] = 'Archives';
 $gtext['cancel'] = 'Cancel';
-$gtext['submit'] = 'Submit';
-
 $gtext['form_error'] = 'The form was not submitted, see errors below';
 $gtext['form_problem'] = 'The form was not submitted, please try again';
+$gtext['submit'] = 'Submit';
+$gtext['users'] = 'Authors';
 
 ?>

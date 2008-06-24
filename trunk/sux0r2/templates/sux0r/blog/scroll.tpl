@@ -16,23 +16,56 @@
         <td style="vertical-align:top;">
 			<div id="leftside">
 
-            <p>{$r->text.current_month} :</p>
 
-            <p><ul>
-            {foreach from=$r->fp item=foo}
-                <li><a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">{$foo.title}</a></li>
-            {/foreach}
-            </ul></p>
+                {if $r->sidelist}
+                <p>{$r->text.sidelist_title}</p>
+                <ul>
+                    {foreach from=$r->sidelist item=foo}
+                        <li><a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">{$foo.title}</a></li>
+                    {/foreach}
+                </ul>
+                {/if}
 
-            <div id="recent">
-            <p>Most recent comments:</p>
-            {foreach from=$r->recent() item=foo}
-                <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}#{$foo.id}">{$foo.title}</a>
-                by <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a>
-                in <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">{$foo.title_fp}</a>
-                on {$foo.published_on}<br /><br />
-            {/foreach}
-            </div>
+
+                {if $r->recent()}
+                <div id="recent">
+                <p>Most recent comments:</p>
+                {foreach from=$r->recent() item=foo}
+                    <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}#{$foo.id}">{$foo.title}</a>
+                    by <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a>
+                    in <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">{$foo.title_fp}</a>
+                    on {$foo.published_on}<br /><br />
+                {/foreach}
+                </div>
+                {/if}
+
+
+                {if $r->archives}
+                <div id="archives">
+                <p>{$r->text.archives}</p>
+                <ul>
+                {foreach from=$r->archives item=foo}
+                    {capture name=date assign=date}{$foo.year}-{$foo.month}-01{/capture}
+                    <li><a href="{$r->makeUrl('/blog/month')}/{$date|date_format:"%Y-%m-%d"}">{$date|date_format:"%B %Y"}</a> ({$foo.count})</li>
+                {/foreach}
+                </ul>
+                </div>
+                {/if}
+
+                {if $r->users}
+                <div id="archives">
+                <p>{$r->text.users}</p>
+                <ul>
+                {foreach from=$r->users item=foo}
+                    <li><a href="{$r->makeUrl('/blog/author')}/{$foo.nickname}">{$foo.nickname}</a> ({$foo.count})</li>
+                {/foreach}
+                </ul>
+                </div>
+                {/if}
+
+
+
+
 
 			</div>
 		</td>
@@ -50,7 +83,8 @@
             </p>*}
 
 
-            {* Blog widgets *}
+            {* Blogs *}
+            {if $r->fp}
             {foreach from=$r->fp item=foo}
 
                 {capture name=blog_url}
@@ -107,8 +141,11 @@
 
 
             {/foreach}
+            {else}
+                <p>Not found.</p>
+            {/if}
 
-
+            {$r->text.pager}
 
 			</div>
 		</td>

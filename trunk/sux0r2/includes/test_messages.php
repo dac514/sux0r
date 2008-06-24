@@ -15,14 +15,27 @@ TinyMCE is very easy to integrate into other <span style="font-size: large;">Con
 </div>
 ';
 
+$body = '
+<p>Tools I used for this project:</p>
+<p>
+<ul>
+<li><a href="http://www.jedit.org/">Jedit</a> (with OS X key bindings <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1966713&amp;group_id=588&amp;atid=300588">patch</a>)<br /></li>
+<li><a href="http://www.syntevo.com/smartcvs/index.html">SmartCVS</a><br /></li>
+<li><a href="http://www.mamp.info/en/download.html">MAMP</a><br /></li>
+</ul>
+</p>
+<p>Check them out!</p>
+<p> </p>
+';
+
 $m['title'] = 'Test';
 $m['body'] = $body;
 $m['blog'] = true;
 // $m['published_on'] = date('c');
 
 try {
-    // $id = $msg->saveMessage('1', $m);
-    $id =  $msg->saveMessage(1, $m, 4);
+    $id = $msg->saveMessage('1', $m);
+    // $id =  $msg->saveMessage(1, $m, 4);
     // $id =  $msg->editMessage(1, 1, $m);
 }
 catch (Exception $e) {

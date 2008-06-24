@@ -35,12 +35,12 @@ class suxThreadedMessages {
 
     /*
     Currently:
-    blog -> first message in thread is blog, everything else is a "comment"
+    blog -> first post in thread is blog, everything else is a comment
 
     Todo:
     forum -> Regular threaded messages
-    wiki -> First message in thread is wiki, everything else is "discussion"
-    slideshow -> Sequence of messages defined by thread, powerpoint style
+    wiki -> First post in thread is wiki, everything else is discussion
+    slideshow -> Powerpoint style, sequence of messages defined by thread order,
     */
 
     private $types = array('blog', 'forum', 'wiki', 'slideshow');
@@ -354,95 +354,6 @@ class suxThreadedMessages {
     }
 
 
-    // -------------------------------------------------------------------
-    // Threaded messages
-    // -------------------------------------------------------------------
-
-
-    /**
-    * Get a thread
-    *
-    * @param int $thread_id thread id
-    * @param bool $long select * or abbreviated data?
-    * @param bool $unpub select un-published?
-    * @return array
-    */
-    function getThread($thread_id, $long = false, $unpub = false) {
-
-        // Sanity check
-        if (!filter_var($thread_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid thread id');
-
-        // SQL Query
-        if ($long) $query = "SELECT * ";
-        else $query = "SELECT id, users_id, thread_id, title, LENGTH(body_plaintext) AS body_length, published_on, level ";
-        $query .= "FROM {$this->db_table} WHERE thread_id = ? ";
-
-        if (!$unpub) {
-            // Only show published items
-            $query .= "AND draft = 0 ";
-            if ($this->db_driver == 'mysql') {
-                // MySql
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
-            }
-            else {
-                throw new Exception('Unsupported database driver');
-            }
-        }
-
-        $query .= "ORDER BY thread_pos ";
-
-        // Execute
-        $st = $this->db->prepare($query);
-        $st->execute(array($thread_id));
-        return $st->fetchAll(PDO::FETCH_ASSOC);
-
-
-    }
-
-
-    /**
-    * Get messages by user id
-    *
-    * @param int $users_id users id
-    * @param string $type forum, blog, wiki, or slideshow
-    * @param bool $long select * or abbreviated data?
-    * @param bool $unpub select un-published?
-    * @return array
-    */
-    function getMessagesByUser($users_id, $type = null, $long = false, $unpub = false) {
-
-        // Sanity check
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
-        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
-
-        // SQL Query
-        if ($long) $query = "SELECT *, LENGTH(body_plaintext) AS body_length ";
-        else $query = "SELECT id, users_id, thread_id, title, LENGTH(body_plaintext) AS body_length, published_on, level ";
-        $query .= "FROM {$this->db_table} WHERE users_id = ? ";
-
-        if (!$unpub) {
-            // Only show published items
-            $query .= "AND draft = 0 ";
-            if ($this->db_driver == 'mysql') {
-                // MySql
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
-            }
-            else {
-                throw new Exception('Unsupported database driver');
-            }
-        }
-
-        if ($type) $query .= "AND {$type} = 1 ";
-        $query .= "ORDER BY published_on DESC ";
-
-        // Execute
-        $st = $this->db->prepare($query);
-        $st->execute(array($users_id));
-        return $st->fetchAll(PDO::FETCH_ASSOC);
-
-    }
-
-
     /**
     * Get first post
     *
@@ -483,16 +394,275 @@ class suxThreadedMessages {
     }
 
 
+    // -------------------------------------------------------------------
+    // Threaded messages
+    // -------------------------------------------------------------------
+
+
+    /**
+    * Count a thread
+    *
+    * @param int $thread_id thread id
+    * @param string $type forum, blog, wiki, or slideshow
+    * @param bool $unpub select un-published?
+    * @return array
+    */
+    function countThread($thread_id, $type = null, $unpub = false) {
+
+        // Sanity check
+        if (!filter_var($thread_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid thread id');
+        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
+
+        // SQL Query
+        else $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE thread_id = ? ";
+
+        if (!$unpub) {
+            // Only show published items
+            $query .= "AND draft = 0 ";
+            if ($this->db_driver == 'mysql') {
+                // MySql
+                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            }
+            else {
+                throw new Exception('Unsupported database driver');
+            }
+        }
+
+        if ($type) $query .= "AND {$type} = 1 "; // Type
+
+        // Execute
+        $st = $this->db->prepare($query);
+        $st->execute(array($thread_id));
+        return $st->fetchColumn();
+
+
+    }
+
+    /**
+    * Get a thread
+    *
+    * @param int $thread_id thread id
+    * @param string $type forum, blog, wiki, or slideshow
+    * @param bool $long select * or abbreviated data?
+    * @param int $limit sql limit value
+    * @param int $start sql start of limit value
+    * @param bool $unpub select un-published?
+    * @return array
+    */
+    function getThread($thread_id, $type = null, $long = false, $limit = null, $start = 0, $unpub = false) {
+
+        // Sanity check
+        if (!filter_var($thread_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid thread id');
+        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
+
+        // SQL Query
+        if ($long) $query = "SELECT * ";
+        else $query = "SELECT id, users_id, thread_id, title, LENGTH(body_plaintext) AS body_length, published_on, level ";
+        $query .= "FROM {$this->db_table} WHERE thread_id = ? ";
+
+        if (!$unpub) {
+            // Only show published items
+            $query .= "AND draft = 0 ";
+            if ($this->db_driver == 'mysql') {
+                // MySql
+                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            }
+            else {
+                throw new Exception('Unsupported database driver');
+            }
+        }
+
+        if ($type) $query .= "AND {$type} = 1 "; // Type
+        $query .= "ORDER BY thread_pos "; // Order
+        // Limit
+        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        elseif ($limit) $query .= "LIMIT {$limit} ";
+
+        // Execute
+        $st = $this->db->prepare($query);
+        $st->execute(array($thread_id));
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+
+    }
+
+
+    /**
+    * Count messages by user id
+    *
+    * @param int $users_id users id
+    * @param string $type forum, blog, wiki, or slideshow
+    * @param bool $unpub select un-published?
+    * @return array
+    */
+    function countMessagesByUser($users_id, $type = null, $unpub = false) {
+
+        // Sanity check
+        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
+
+        // SQL Query
+        $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE users_id = ? ";
+
+        if (!$unpub) {
+            // Only show published items
+            $query .= "AND draft = 0 ";
+            if ($this->db_driver == 'mysql') {
+                // MySql
+                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            }
+            else {
+                throw new Exception('Unsupported database driver');
+            }
+        }
+
+        if ($type) $query .= "AND {$type} = 1 "; // Type
+
+
+        // Execute
+        $st = $this->db->prepare($query);
+        $st->execute(array($users_id));
+        return $st->fetchColumn();
+
+    }
+
+
+    /**
+    * Group messages by user id
+    *
+    * @param string $type forum, blog, wiki, or slideshow
+    * @param bool $unpub select un-published?
+    * @return array
+    */
+    function groupMessagesByUser($type = null, $unpub = false) {
+
+        // Sanity check
+        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
+
+        // Query
+        if ($this->db_driver == 'mysql') {
+            // MySql
+            $query = "SELECT COUNT(*) AS count, users_id FROM {$this->db_table} ";
+
+            if (!$unpub) {
+                // Only show published items
+                $query .= "AND draft = 0 ";
+                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
+            }
+            if ($type) $query .= "AND {$type} = 1 "; // Type
+
+            $query .= "GROUP BY users_id
+            ORDER BY count DESC";
+
+        }
+        else {
+            throw new Exception('Unsupported database driver');
+        }
+
+        // Execute
+        $st = $this->db->query($query);
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+
+    /**
+    * Get messages by user id
+    *
+    * @param int $users_id users id
+    * @param string $type forum, blog, wiki, or slideshow
+    * @param bool $long select * or abbreviated data?
+    * @param int $limit sql limit value
+    * @param int $start sql start of limit value
+    * @param bool $unpub select un-published?
+    * @return array
+    */
+    function getMessagesByUser($users_id, $type = null, $long = false, $limit = null, $start = 0, $unpub = false) {
+
+        // Sanity check
+        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
+
+        // SQL Query
+        if ($long) $query = "SELECT *, LENGTH(body_plaintext) AS body_length ";
+        else $query = "SELECT id, users_id, thread_id, title, LENGTH(body_plaintext) AS body_length, published_on, level ";
+        $query .= "FROM {$this->db_table} WHERE users_id = ? ";
+
+        if (!$unpub) {
+            // Only show published items
+            $query .= "AND draft = 0 ";
+            if ($this->db_driver == 'mysql') {
+                // MySql
+                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            }
+            else {
+                throw new Exception('Unsupported database driver');
+            }
+        }
+
+        if ($type) $query .= "AND {$type} = 1 "; // Type
+        $query .= "ORDER BY published_on DESC "; // Order
+        // Limit
+        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        elseif ($limit) $query .= "LIMIT {$limit} ";
+
+        // Execute
+        $st = $this->db->prepare($query);
+        $st->execute(array($users_id));
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+
+    /**
+    * Count first posts
+    *
+    * @param string $type forum, blog, wiki, or slideshow
+    * @param bool $unpub select un-published?
+    * @return array
+    */
+    function countFirstPosts($type = null, $unpub = false) {
+
+        // Sanity check
+        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
+
+        // SQL Query
+        $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE thread_pos = 0 ";
+
+        if (!$unpub) {
+            // Only show published items
+            $query .= "AND draft = 0 ";
+            if ($this->db_driver == 'mysql') {
+                // MySql
+                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            }
+            else {
+                throw new Exception('Unsupported database driver');
+            }
+        }
+
+        if ($type) $query .= "AND {$type} = 1 "; // Type
+
+        // Execute
+        $st = $this->db->query($query);
+        return $st->fetchColumn();
+
+    }
+
+
+
 
     /**
     * Get first posts
     *
     * @param string $type forum, blog, wiki, or slideshow
     * @param bool $long select * or abbreviated data?
+    * @param int $limit sql limit value
+    * @param int $start sql start of limit value
     * @param bool $unpub select un-published?
     * @return array
     */
-    function getFirstPosts($type = null, $long = false, $unpub = false) {
+    function getFirstPosts($type = null, $long = false, $limit = null, $start = 0, $unpub = false) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
@@ -514,8 +684,91 @@ class suxThreadedMessages {
             }
         }
 
-        if ($type) $query .= "AND {$type} = 1 ";
-        $query .= "ORDER BY published_on DESC ";
+        if ($type) $query .= "AND {$type} = 1 "; // Type
+        $query .= "ORDER BY published_on DESC "; // Order
+        // Limit
+        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        elseif ($limit) $query .= "LIMIT {$limit} ";
+
+
+        // Execute
+        $st = $this->db->query($query);
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+
+    /**
+    * Count first posts by user id
+    *
+    * @param int $users_id users id
+    * @param string $type forum, blog, wiki, or slideshow
+    * @param bool $unpub select un-published?
+    * @return array
+    */
+    function countFirstPostsByUser($users_id, $type = null, $unpub = false) {
+
+        // Sanity check
+        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
+
+        // SQL Query
+        $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE users_id = ? AND thread_pos = 0 ";
+
+        if (!$unpub) {
+            // Only show published items
+            $query .= "AND draft = 0 ";
+            if ($this->db_driver == 'mysql') {
+                // MySql
+                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            }
+            else {
+                throw new Exception('Unsupported database driver');
+            }
+        }
+
+        if ($type) $query .= "AND {$type} = 1 "; // Type
+
+        // Execute
+        $st = $this->db->prepare($query);
+        $st->execute(array($users_id));
+        return $st->fetchColumn();
+
+    }
+
+
+    /**
+    * Group first posts by user id
+    *
+    * @param string $type forum, blog, wiki, or slideshow
+    * @param bool $unpub select un-published?
+    * @return array
+    */
+    function groupFirstPostsByUser($type = null, $unpub = false) {
+
+        // Sanity check
+        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
+
+        // Query
+        if ($this->db_driver == 'mysql') {
+            // MySql
+            $query = "SELECT COUNT(*) AS count, users_id
+            FROM {$this->db_table} WHERE thread_pos = 0 ";
+
+            if (!$unpub) {
+                // Only show published items
+                $query .= "AND draft = 0 ";
+                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
+            }
+            if ($type) $query .= "AND {$type} = 1 "; // Type
+
+            $query .= "GROUP BY users_id
+            ORDER BY count DESC";
+
+        }
+        else {
+            throw new Exception('Unsupported database driver');
+        }
 
         // Execute
         $st = $this->db->query($query);
@@ -530,10 +783,12 @@ class suxThreadedMessages {
     * @param int $users_id users id
     * @param string $type forum, blog, wiki, or slideshow
     * @param bool $long select * or abbreviated data?
+    * @param int $limit sql limit value
+    * @param int $start sql start of limit value
     * @param bool $unpub select un-published?
     * @return array
     */
-    function getFirstPostsByUser($users_id, $type = null, $long = false, $unpub = false) {
+    function getFirstPostsByUser($users_id, $type = null, $long = false, $limit = null, $start = 0, $unpub = false) {
 
         // Sanity check
         if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
@@ -556,8 +811,11 @@ class suxThreadedMessages {
             }
         }
 
-        if ($type) $query .= "AND {$type} = 1 ";
-        $query .= "ORDER BY published_on DESC ";
+        if ($type) $query .= "AND {$type} = 1 "; // Type
+        $query .= "ORDER BY published_on DESC "; // Order
+        // Limit
+        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        elseif ($limit) $query .= "LIMIT {$limit} ";
 
         // Execute
         $st = $this->db->prepare($query);
@@ -568,15 +826,103 @@ class suxThreadedMessages {
 
 
     /**
-    * Get first posts by month
+    * Count first posts by month
     *
     * @param int $date date
     * @param string $type forum, blog, wiki, or slideshow
-    * @param bool $long select * or abbreviated data?
     * @param bool $unpub select un-published?
     * @return array
     */
-    function getFirstPostsByMonth($date, $type = null, $long = false, $unpub = false) {
+    function countFirstPostsByMonth($date, $type = null, $unpub = false) {
+
+        // Sanity check
+        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
+
+        // Get year and month
+        // regex must match '2008-06-18 16:53:29' or '2008-06-18T16:53:29-04:00'
+        $matches = array();
+        $regex = '/^(\d{4})-(0[0-9]|1[0,1,2])-([0,1,2][0-9]|3[0,1]).+(\d{2}):(\d{2}):(\d{2})/';
+        if (!preg_match($regex, $date, $matches)) throw new Exception('Invalid date');
+
+        // SQL Query
+        $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE thread_pos = 0 ";
+
+        if (!$unpub) {
+            // Only show published items
+            $query .= "AND draft = 0 ";
+            if ($this->db_driver == 'mysql') {
+                // MySql
+                $date = "{$matches[1]}-{$matches[2]}-{$matches[3]} {$matches[4]}:{$matches[5]}:{$matches[6]}";
+                $query .= "AND MONTH(published_on) =  MONTH('{$date}') "; // Month
+                $query .= "AND YEAR(published_on) = YEAR('{$date}')"; // Year
+                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
+            }
+            else {
+                throw new Exception('Unsupported database driver');
+            }
+        }
+
+        if ($type) $query .= "AND {$type} = 1 ";
+
+        // Execute
+        $st = $this->db->query($query);
+        return $st->fetchColumn();
+
+    }
+
+
+    /**
+    * Group first posts by month
+    *
+    * @param string $type forum, blog, wiki, or slideshow
+    * @param bool $unpub select un-published?
+    * @return array
+    */
+    function groupFirstPostsByMonths($type = null, $unpub = false) {
+
+        // Sanity check
+        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
+
+        // Query
+        if ($this->db_driver == 'mysql') {
+            // MySql
+            $query = "SELECT COUNT(*) AS count, YEAR(published_on) AS year, MONTH(published_on) AS month
+            FROM {$this->db_table} WHERE thread_pos = 0 ";
+
+            if (!$unpub) {
+                // Only show published items
+                $query .= "AND draft = 0 ";
+                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
+            }
+            if ($type) $query .= "AND {$type} = 1 "; // Type
+
+            $query .= "GROUP BY YEAR(published_on), MONTH(published_on)
+            ORDER BY published_on DESC; ";
+
+        }
+        else {
+            throw new Exception('Unsupported database driver');
+        }
+
+        // Execute
+        $st = $this->db->query($query);
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+
+    /**
+    * Get first posts by month
+    *
+    * @param string $date date
+    * @param string $type forum, blog, wiki, or slideshow
+    * @param bool $long select * or abbreviated data?
+    * @param int $limit sql limit value
+    * @param int $start sql start of limit value
+    * @param bool $unpub select un-published?
+    * @return array
+    */
+    function getFirstPostsByMonth($date, $type = null, $long = false, $limit = null, $start = 0, $unpub = false) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
@@ -600,15 +946,18 @@ class suxThreadedMessages {
                 $date = "{$matches[1]}-{$matches[2]}-{$matches[3]} {$matches[4]}:{$matches[5]}:{$matches[6]}";
                 $query .= "AND MONTH(published_on) =  MONTH('{$date}') "; // Month
                 $query .= "AND YEAR(published_on) = YEAR('{$date}')"; // Year
-                if (!$unpub) $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
+                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
             }
             else {
                 throw new Exception('Unsupported database driver');
             }
         }
 
-        if ($type) $query .= "AND {$type} = 1 ";
+        if ($type) $query .= "AND {$type} = 1 "; // Type
         $query .= "ORDER BY published_on DESC "; // Order
+        // Limit
+        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        elseif ($limit) $query .= "LIMIT {$limit} ";
 
         // Execute
         $st = $this->db->query($query);
@@ -616,6 +965,10 @@ class suxThreadedMessages {
 
     }
 
+
+    // ----------------------------------------------------------------------------
+    // Supplemental
+    // ----------------------------------------------------------------------------
 
 
     /**

@@ -53,8 +53,10 @@ class renderer extends suxRenderer {
     */
     function getUserOwnedVectors() {
 
-        static $tmp = array();
-        if (count($tmp)) return $tmp; // Cache
+        // Cache
+        static $tmp = null;
+        if (is_array($tmp)) return $tmp;
+        $tmp = array();
 
         foreach ($this->getUserOwnedVectorsArray() as $key => $val) {
             if (!in_array($val['vector'], $tmp)) $tmp[$key] = $val['vector'];
@@ -73,8 +75,10 @@ class renderer extends suxRenderer {
     */
     function getUserSharedVectors() {
 
-        static $tmp = array();
-        if (count($tmp)) return $tmp; // Cache
+        // Cache
+        static $tmp = null;
+        if (is_array($tmp)) return $tmp;
+        $tmp = array();
 
         foreach ($this->getUserSharedVectorsArray() as $key => $val) {
             if (!in_array($val['vector'], $tmp)) $tmp[$key] = $val['vector'];
@@ -93,8 +97,10 @@ class renderer extends suxRenderer {
     */
     function getUserOwnedCategories() {
 
-        static $tmp = array();
-        if (count($tmp)) return $tmp; // Cache
+        // Cache
+        static $tmp = null;
+        if (is_array($tmp)) return $tmp;
+        $tmp = array();
 
         foreach ($this->getUserOwnedVectorsArray() as $key => $val) {
 
@@ -121,8 +127,10 @@ class renderer extends suxRenderer {
     */
     function getUserTrainableCategories() {
 
-        static $tmp = array();
-        if (count($tmp)) return $tmp; // Cache
+        // Cache
+        static $tmp = null;
+        if (is_array($tmp)) return $tmp;
+        $tmp = array();
 
         foreach ($this->getVectorsByTrainerArray() as $key => $val) {
 
@@ -149,8 +157,10 @@ class renderer extends suxRenderer {
     */
     function getUserOwnedDocuments() {
 
-        static $tmp = array();
-        if (count($tmp)) return $tmp; // Cache
+        // Cache
+        static $tmp = null;
+        if (is_array($tmp)) return $tmp;
+        $tmp = array();
 
         foreach ($this->getUserOwnedVectorsArray() as $key => $val) {
             foreach ($this->nb->getDocumentsByVector($key) as $key2 => $val2) {
