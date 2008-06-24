@@ -1,7 +1,7 @@
 <?php
 
 /*
-htmLawed 1.0.8, 27 May 2008
+htmLawed 1.0.9, 11 June 2008
 Copyright Santosh Patnaik
 GPL v3 license
 A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -107,7 +107,7 @@ if($cf['show_setting']){
 $in = preg_replace_callback('`<(?:(?:\s|$)|(?:[^>]*(?:>|$)))|>`m', 'hl_tag', $in);
 $in = ($cf['balance'] ? hl_bal($in, $cf['keep_bad'], $cf['parent']) : $in);
 $in = (($cf['cdata'] or $cf['comment']) && strpos($in, "\x01") !== false) ? str_replace(array("\x01", "\x02", "\x03", "\x04", "\x05"), array('', '', '&', '<', '>'), $in) : $in;
- // end
+// end
 unset($cf, $ec, $ac);
 if(isset($resetCf)){$GLOBALS['cf'] = $resetCf;}
 if(isset($resetSpec)){$GLOBALS['spec'] = $resetSpec;}
@@ -326,7 +326,7 @@ static $N = array('fnof'=>'402', 'Alpha'=>'913', 'Beta'=>'914', 'Gamma'=>'915', 
 if($in[0] != '#'){
  return ($cf['and_mark'] ? "\x06" : '&'). (isset($U[$in]) ? $in : (isset($N[$in]) ? (!$cf['named_entity'] ? '#'. ($cf['hexdec_entity'] > 1 ? 'x'. dechex($N[$in]) : $N[$in]) : $in) : 'amp;'. $in)). ';';
 }
-if(($n = ctype_digit($in = substr($in, 1)) ? intval($in) : hexdec(substr($in, 1))) < 9 or ($n > 13 && $n < 32) or $n == 11 or $n == 12 or ($n > 126 && $n < 160 && $n != 133) or ($n > 64975 && $n < 64992) or $n > 65535){
+if(($n = ctype_digit($in = substr($in, 1)) ? intval($in) : hexdec(substr($in, 1))) < 9 or ($n > 13 && $n < 32) or $n == 11 or $n == 12 or ($n > 126 && $n < 160 && $n != 133) or ($n > 55295 && ($n < 57344 or ($n > 64975 && $n < 64992) or $n == 65534 or $n == 65535 or $n > 1114111))){
  return ($cf['and_mark'] ? "\x06" : '&'). "amp;#{$in};";
 }
 return ($cf['and_mark'] ? "\x06" : '&'). '#'. (((ctype_digit($in) && $cf['hexdec_entity'] < 2) or !$cf['hexdec_entity']) ? $n : 'x'. dechex($n)). ';';
@@ -346,7 +346,7 @@ if(preg_match('`^([a-z\d\-+.&#; ]+?)(:|&#(58|x3a);|%3a|\\\\0{0,4}3a).`i', $p, $m
 if($cf['abs_url']){
  if($cf['abs_url'] == -1 && strpos($p, $cf['base_url']) === 0){ // Make url rel
   $p = substr($p, strlen($cf['base_url']));
- }elseif(empty($m[1])){ // Make rel URL abs; re rfc 1808; not inherit param/query/frag
+ }elseif(empty($m[1])){ // Make rel URL abs; rfc 1808; not inherit param/query/frag
   if(substr($p, 0, 2) == '//'){$p = substr($cf['base_url'], 0, strpos($cf['base_url'], ':')+1). $p;}
   elseif($p[0] == '/'){$p = preg_replace('`(^.+?://[^/]+)(.*)`', '$1', $cf['base_url']). $p;}
   elseif(strcspn($p, './')){$p = $cf['base_url']. $p;}
@@ -599,7 +599,7 @@ if($depTr){
  }
 }
 // unique IDs
-if($cf['unique_ids'] && isset($a['id'])){ // XHTML spec
+if($cf['unique_ids'] && isset($a['id'])){
  if(!preg_match('`^[A-Za-z][A-Za-z0-9_\-.:]*$`', ($id = $a['id'])) or (isset($GLOBALS['hl_Ids'][$id]) && $cf['unique_ids'] == 1)){unset($a['id']);
  }else{
   while(isset($GLOBALS['hl_Ids'][$id])){$id = $cf['unique_ids']. $id;}
@@ -650,7 +650,7 @@ return '';
 
 function hl_version(){
 // version
-return '1.0.8';
+return '1.0.9';
 // eof
 }
 

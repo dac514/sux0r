@@ -1,8 +1,8 @@
 <?php
 
 /*
-htmLawedTest.php, 28 May 2008
-htmLawed 1.0.8, 27 May 2008
+htmLawedTest.php, 11 June 2008
+htmLawed 1.0.9, 11 June 2008
 Copyright Santosh Patnaik
 GPLv3 license
 A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed
