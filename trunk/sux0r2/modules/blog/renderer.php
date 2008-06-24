@@ -31,6 +31,9 @@ require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
 class renderer extends suxRenderer {
 
+    // Arrays
+    public $fp; // First Posts
+
     // Objects
     private $user;
     private $msg;
@@ -77,12 +80,12 @@ class renderer extends suxRenderer {
     }
 
 
-    function articles() {
+    function articles($date) {
 
         static $tmp = array();
         if (count($tmp)) return $tmp; // Cache
 
-        $tmp = $this->msg->getFirstPostsByMonth(date('c'), 'blog', true);
+        $tmp = $this->msg->getFirstPostsByMonth($date, 'blog', true);
 
         foreach($tmp as &$val) {
             $val['comments'] = $this->msg->getCommentsCount($val['thread_id']);

@@ -61,19 +61,17 @@ class suxBlog  {
     /**
     * Display
     */
-    function display() {
+    function listing($date) {
+
+        // Sanity check, YYYY-MM-DD
+        $matches = array();
+        $regex = '/^(\d{4})-(0[0-9]|1[0,1,2])-([0,1,2][0-9]|3[0,1])$/';
+        if (!preg_match($regex, $date)) $date = date('Y-m-d');
+        $date .= ' ' . date('H:i:s');
 
         // Test
-        $this->tpl->assign('url', 'http://www.sux0r.org/');
-        $this->tpl->assign('title', 'sux0r - it sux0rs up all the web');
-
-        // new dBug($this->msg->getThread(3));
-        // new dBug($this->msg->getMessagesByUser(1));
-        // new dBug($this->msg->getFirstPosts());
-        // new dBug($this->msg->getFirstPostsByUser(1, 'blog'));
-        // new dBug($this->msg->getFirstPostsByMonth(date('c'), 'blog'));
-        // new dBug($this->msg->getRececentComments('blog'));
-        // new dBug($this->msg->getCommentsCount(3));
+        $this->r->fp = $this->r->articles($date);
+        $this->r->text['current_month'] = date('F Y', strtotime($date));
 
         $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('scroll.tpl');

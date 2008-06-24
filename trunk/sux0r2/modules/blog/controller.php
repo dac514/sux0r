@@ -34,21 +34,46 @@ function sux($action, $params = null) {
         // Edit
         // --------------------------------------------------------------------
 
-            $id = !empty($params[0]) ? $params[0]: null;
+        $id = !empty($params[0]) ? $params[0]: null;
 
-            // Edit profile registration
-            include_once('suxEdit.php');
-            $reg = new suxEdit($id);
+        include_once('suxEdit.php');
+        $reg = new suxEdit($id);
 
-            if ($reg->formValidate($_POST)) {
-                $reg->formProcess($_POST);
-                // $reg->formSuccess();
-            }
-            else {
-                $reg->formBuild($_POST);
-            }
+        if ($reg->formValidate($_POST)) {
+            $reg->formProcess($_POST);
+            // $reg->formSuccess();
+        }
+        else {
+            $reg->formBuild($_POST);
+        }
 
-            break;
+        break;
+
+        // --------------------------------------------------------------------
+        // View
+        // --------------------------------------------------------------------
+
+    case 'view' :
+        echo 'TODO';
+        break;
+
+
+        // --------------------------------------------------------------------
+        // Author
+        // --------------------------------------------------------------------
+
+    case 'author' :
+        echo 'TODO';
+        break;
+
+
+        // --------------------------------------------------------------------
+        // Category
+        // --------------------------------------------------------------------
+
+    case 'category' :
+        echo 'TODO';
+        break;
 
 
     default:
@@ -57,11 +82,12 @@ function sux($action, $params = null) {
         // Default
         // --------------------------------------------------------------------
 
-            // Edit profile registration
-            include_once('suxBlog.php');
-            $blog = new suxBlog();
+        $date = !empty($params[0]) ? $params[0]: date('Y-m-d');
 
-            $blog->display();
+        include_once('suxBlog.php');
+        $blog = new suxBlog();
+
+        $blog->listing($date);
 
     }
 
