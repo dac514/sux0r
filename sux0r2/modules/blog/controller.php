@@ -90,7 +90,8 @@ function sux($action, $params = null) {
 
         include_once('suxBlog.php');
         $blog = new suxBlog();
-        $blog->category($params[0]);
+        echo 'todo';
+        // $blog->category($params[0]);
         break;
 
 

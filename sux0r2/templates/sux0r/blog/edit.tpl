@@ -71,7 +71,7 @@ TODO: <a href="javascript:;" onmousedown="tinyMCE.execCommand('mceInsertContent'
 
 <p>
 <label for="draft">Save as draft:</label>
-<input type="checkbox" name="draft" value="1" {if $draft}checked="checked"{/if} />
+<input type="checkbox" name="draft" class="revert" value="1" {if $draft}checked="checked"{/if} />
 </p>
 
 <p>

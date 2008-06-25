@@ -18,12 +18,14 @@
 
 
                 {if $r->sidelist}
-                <p>{$r->text.sidelist_title}</p>
+                <div id="sidelist">
+                <p>{$r->text.sidelist}</p>
                 <ul>
                     {foreach from=$r->sidelist item=foo}
                         <li><a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">{$foo.title}</a></li>
                     {/foreach}
                 </ul>
+                </div>
                 {/if}
 
 
@@ -40,11 +42,11 @@
                 {/if}
 
 
-                {if $r->archives}
+                {if $r->archives()}
                 <div id="archives">
                 <p>{$r->text.archives}</p>
                 <ul>
-                {foreach from=$r->archives item=foo}
+                {foreach from=$r->archives() item=foo}
                     {capture name=date assign=date}{$foo.year}-{$foo.month}-01{/capture}
                     <li><a href="{$r->makeUrl('/blog/month')}/{$date|date_format:"%Y-%m-%d"}">{$date|date_format:"%B %Y"}</a> ({$foo.count})</li>
                 {/foreach}
@@ -52,11 +54,11 @@
                 </div>
                 {/if}
 
-                {if $r->users}
+                {if $r->authors()}
                 <div id="archives">
-                <p>{$r->text.users}</p>
+                <p>{$r->text.authors}</p>
                 <ul>
-                {foreach from=$r->users item=foo}
+                {foreach from=$r->authors() item=foo}
                     <li><a href="{$r->makeUrl('/blog/author')}/{$foo.nickname}">{$foo.nickname}</a> ({$foo.count})</li>
                 {/foreach}
                 </ul>
@@ -98,10 +100,8 @@
                 {capture name=blog}
 
                     <!-- Content -->
-                    <p>{$foo.published_on}, <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a>
-
-                    {$r->tags($foo.category_id, $foo.users_id)}
-
+                    <p>
+                    {$foo.published_on}, <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a>
                     </p>
 
                     <p>{$foo.body_html}</p>
@@ -123,17 +123,34 @@
                     <a href='http://del.icio.us/login/?url={$url|escape:'url, UTF-8'}&title={$foo.title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/delicious.gif' alt='Del.icio.us' width='16' height='16' /></a>
                     </p></div>
 
-                    <!-- Bayesian tags -->
-                    {capture name=tags}
+
+                    <!-- Naive Baysian Classification -->
+                    <div class="categoryContainer">
+
+                    {$r->categories($foo.id, $foo.users_id)}
+
+                    TODO:
+                    Get all the categories linking this document the user has access to
+                    Get a list of all the vectors the user has access to
+                    Split the vectors into those I can train, and those I can't
+                    Trainable are submitable (ajax?), others aren't
+                    If a category id is in the vector, select it. Vector name is green. (No percentage, or 100%)
+                    Else categorize document, sort by probabilty (top to bottom)
+
+
+                    {capture name=categories}
                         {foreach from=$r->getUserVectors() key=k item=v}
                         {$v}: <span class="htmlSelect">{html_options name='category_id[]' options=$r->getCategoriesByVector($k) selected=$foo.category_id}</span>
                         {/foreach}
                     {/capture}
 
-                    {if $smarty.capture.tags|trim}
-                    <p>{$smarty.capture.tags}</p>
+                    {if $smarty.capture.categories|trim}
+                    <p>{$smarty.capture.categories}</p>
                     {if $foo.linked}<p>Linked to: {$foo.linked}</p>{/if}
                     {/if}
+
+
+                    </div>
 
                 {/capture}
 
