@@ -22,6 +22,7 @@
 *
 */
 
+require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
 require_once(dirname(__FILE__) . '/../bayes/suxNbUser.php');
@@ -33,12 +34,12 @@ class renderer extends suxRenderer {
     // Arrays
     public $fp = array(); // Array of first posts
     public $sidelist = array(); // Array of threads in sidebar
-    public $archives = array(); // Array of archives in sidebar
 
     // Objects
     private $user;
     private $msg;
     private $nb;
+    private $link;
 
 
     /**
@@ -52,31 +53,53 @@ class renderer extends suxRenderer {
         $this->user = new suxUser();
         $this->msg = new suxThreadedMessages();
         $this->nb = new suxNbUser();
+        $this->link = new suxLink();
 
     }
 
 
     /**
+    * Return bayes categories associated to this document by author
+    *
+    * @param array $category_ids category ids
+    * @param int $id messages id
+    * @param int $users_id users id (the author)
     * @return string html
     */
-    function tags($category_ids, $users_id) {
+    function categories($id, $users_id) {
 
-        if (!$category_ids) return null;
+        $links = $this->link->getLinks('link_bayes_messages', 'messages', $id);
+        if (!$links) return null; // No linked bayes_documents
 
-        // Find all bayes categories/tags associated to this document by author
-
-        $html = '[ Tags: ';
-        foreach($category_ids as $key => $val) {
-            if ($this->nb->isCategoryOwner($val, $users_id)) {
-                $tmp = $this->nb->getCategory($val);
-                $html .= "{$tmp['category']}, ";
+        $html = '';
+        foreach($links as $val) {
+            // $val is a bayes_documents id
+            $cat = $this->nb->getCategoriesByDocument($val);
+            foreach ($cat as $key => $val2) {
+                // $cat is a category
+                // $key is the bayes_categories id,
+                // $val2 is an array of category info
+                if ($this->nb->isCategoryTrainer($key, $users_id)) {
+                    // This author is the category trainer,
+                    // They (or someone they share with) have already assigned a category
+                    $url = suxFunct::makeUrl('/blog/category/' . $key);
+                    $html .= "<a href='{$url}'>{$val2['category']}</a>, ";
+                }
             }
         }
-        $html = rtrim($html, ', ');
+        if (!$html) return null; // No categories by trainer
 
-        return $html . ' ]';
+        $html = rtrim($html, ', ');
+        $html = "<p>Author's Categories: " . $html . '</p>';
+
+        return $html;
 
     }
+
+    // ------------------------------------------------------------------------
+    // Stuff like recent(), archives(), authors() is in the renderer because
+    // there's no point in initializing if they aren't in the template
+    // ------------------------------------------------------------------------
 
 
     /**
@@ -99,9 +122,50 @@ class renderer extends suxRenderer {
             $val['title_fp'] = $tmp2['title'];
         }
 
-        // new dBug($tmp);
+        return $tmp;
+
+    }
+
+
+    /**
+    *
+    * @param int $limit sql limit value
+    * @return array
+    */
+    function archives($limit = null) {
+
+        // Cache
+        static $tmp = null;
+        if (is_array($tmp)) return $tmp;
+        $tmp = array();
+
+        $tmp = $this->msg->groupFirstPostsByMonths('blog', $limit);
 
         return $tmp;
+
+    }
+
+
+    /**
+    *
+    * @param int $limit sql limit value
+    * @return array
+    */
+    function authors($limit = null) {
+
+        // Cache
+        static $tmp = null;
+        if (is_array($tmp)) return $tmp;
+        $tmp = array();
+
+        $tmp = $this->msg->groupFirstPostsByUser('blog', $limit);
+        foreach($tmp as &$val) {
+            $u = $this->user->getUser($val['users_id']);
+            $val['nickname'] = $u['nickname'];
+        }
+
+        return $tmp;
+
 
     }
 

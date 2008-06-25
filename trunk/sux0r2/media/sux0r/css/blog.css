@@ -48,6 +48,17 @@ input, select {
     width: 350px;
 }
 
+.categoryContainer {
+    border: 1px dashed #cccccc;
+    margin: 10px;
+    padding: 10px;
+}
+
+.categoryContainer p {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
 /* Revert */
 
 .htmlSelect select {
@@ -58,4 +69,8 @@ input.imageFile {
     width: auto;
     border: 0;
     background: none;
+}
+
+input.revert {
+    width: auto;
 }

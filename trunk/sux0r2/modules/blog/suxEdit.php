@@ -291,7 +291,7 @@ class suxEdit {
 
         /*
         `link_bayes_messages` asserts that a message was trained and copied into
-        a bayes document,  it does not imply that it's the same document
+        a bayes document, it does not imply that it's the same document
 
         When a user edits their own document we can assume that we want
         the updated document to represent their selected categories
@@ -307,9 +307,18 @@ class suxEdit {
         Now what?
 
         Deleting all links to a message for which I can train the vector seems
-        the safest bet. All users get to keep what they already classified, and
-        can reclassify the modified document if they wish. They can also
+        the safest bet. Other users get to keep what they already classified,
+        and can reclassify the modified document if they wish. They can also
         manually adjust the eroneous documents in the bayes module.
+
+        Problem / TODO:
+
+        I write and classify a 5000 word blog. Someone with permission to edit
+        my blog, but who does not share my Bayesian vectors reduces the post to
+        "Eat shit." Author's categories are now meaningless as blog tags.
+
+        Now what?
+
         */
 
         // links[] is an array of $clean['id'] associated bayes_documents ids

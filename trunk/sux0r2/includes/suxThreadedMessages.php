@@ -531,10 +531,12 @@ class suxThreadedMessages {
     * Group messages by user id
     *
     * @param string $type forum, blog, wiki, or slideshow
+    * @param int $limit sql limit value
+    * @param int $start sql start of limit value
     * @param bool $unpub select un-published?
     * @return array
     */
-    function groupMessagesByUser($type = null, $unpub = false) {
+    function groupMessagesByUser($type = null, $limit = null, $start = 0, $unpub = false) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
@@ -552,12 +554,16 @@ class suxThreadedMessages {
             if ($type) $query .= "AND {$type} = 1 "; // Type
 
             $query .= "GROUP BY users_id
-            ORDER BY count DESC";
+            ORDER BY count DESC ";
 
         }
         else {
             throw new Exception('Unsupported database driver');
         }
+
+        // Limits
+        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        elseif ($limit) $query .= "LIMIT {$limit} ";
 
         // Execute
         $st = $this->db->query($query);
@@ -741,10 +747,12 @@ class suxThreadedMessages {
     * Group first posts by user id
     *
     * @param string $type forum, blog, wiki, or slideshow
+    * @param int $limit sql limit value
+    * @param int $start sql start of limit value
     * @param bool $unpub select un-published?
     * @return array
     */
-    function groupFirstPostsByUser($type = null, $unpub = false) {
+    function groupFirstPostsByUser($type = null, $limit = null, $start = 0, $unpub = false) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
@@ -763,12 +771,16 @@ class suxThreadedMessages {
             if ($type) $query .= "AND {$type} = 1 "; // Type
 
             $query .= "GROUP BY users_id
-            ORDER BY count DESC";
+            ORDER BY count DESC ";
 
         }
         else {
             throw new Exception('Unsupported database driver');
         }
+
+        // Limits
+        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        elseif ($limit) $query .= "LIMIT {$limit} ";
 
         // Execute
         $st = $this->db->query($query);
@@ -875,10 +887,12 @@ class suxThreadedMessages {
     * Group first posts by month
     *
     * @param string $type forum, blog, wiki, or slideshow
+    * @param int $limit sql limit value
+    * @param int $start sql start of limit value
     * @param bool $unpub select un-published?
     * @return array
     */
-    function groupFirstPostsByMonths($type = null, $unpub = false) {
+    function groupFirstPostsByMonths($type = null, $limit = null, $start = 0, $unpub = false) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
@@ -897,12 +911,18 @@ class suxThreadedMessages {
             if ($type) $query .= "AND {$type} = 1 "; // Type
 
             $query .= "GROUP BY YEAR(published_on), MONTH(published_on)
-            ORDER BY published_on DESC; ";
+            ORDER BY published_on DESC ";
 
         }
         else {
             throw new Exception('Unsupported database driver');
         }
+
+
+        // Limits
+        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        elseif ($limit) $query .= "LIMIT {$limit} ";
+
 
         // Execute
         $st = $this->db->query($query);
@@ -980,7 +1000,7 @@ class suxThreadedMessages {
     * @param bool $unpub select un-published?
     * @return array
     */
-    function getRececentComments($type = null, $limit = 10, $long = false, $unpub = false) {
+    function getRececentComments($type = null, $long = false, $limit = 10, $unpub = false) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
