@@ -332,7 +332,7 @@ class suxNaiveBayesian {
 
 
     /**
-    * @return array key = category, values = array(keys = 'category', 'vector_id', 'probability', 'token_count')
+    * @return array key = id, values = array(keys = 'category', 'vector_id', 'probability', 'token_count')
     */
     function getCategories() {
 
@@ -702,7 +702,7 @@ class suxNaiveBayesian {
     /**
     * @param string $document a document
     * @param int $vector_id vector id
-    * @return array keys = category names, values = scores
+    * @return array key = id, values = array(keys = 'category', 'score')
     */
     function categorize($document, $vector_id) {
 
@@ -714,6 +714,7 @@ class suxNaiveBayesian {
         $document = $converter->getText();
 
         $scores = array();
+        $categorized = array();
         $total_tokens = 0;
         $ncat = 0;
 
@@ -725,22 +726,42 @@ class suxNaiveBayesian {
             $ncat++;
         }
 
+
+
         foreach($categories as $category_id => $data) {
-            $scores[$data['category']] = $data['probability'];
+
+            $scores[$category_id] = $data['probability'];
+            // $scores[$data['category']] = $data['probability'];
+
             foreach($tokens as $token => $count) {
                 if ($this->tokenExists($token)) {
                     $token_count = $this->getTokenCount($token, $category_id);
                     $prob = 0;
                     if ($token_count && $data['token_count']) $prob = (float) $token_count/$data['token_count']; // Probability
                     else if ($data['token_count']) $prob = (float) 1/(2*$data['token_count']); // Fake probability, like a very infrequent word
-                    $scores[$data['category']] *= pow($prob, $count)*pow($total_tokens/$ncat, $count);
+                    $scores[$category_id] *= pow($prob, $count)*pow($total_tokens/$ncat, $count);
+                    // $scores[$data['category']] *= pow($prob, $count)*pow($total_tokens/$ncat, $count);
                     // pow($total_tokens/$ncat, $count) is here to avoid underflow.
                 }
             }
+
+            // Remember
+            $categorized[$category_id] = $data['category'];
+
         }
 
         $scores = $this->rescale($scores); // Rescale
         arsort($scores); // Sort
+
+        // Reorganize into multi-dimensional array
+        foreach ($scores as $key => $val) {
+            // Overwrite
+            $scores[$key] = array(
+                'category' => $categorized[$key],
+                'score' => $scores[$key]
+                );
+        }
+
         return $scores;
 
     }

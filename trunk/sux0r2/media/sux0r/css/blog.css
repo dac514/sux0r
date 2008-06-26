@@ -71,6 +71,6 @@ input.imageFile {
     background: none;
 }
 
-input.revert {
+input.revert, select.revert {
     width: auto;
 }
