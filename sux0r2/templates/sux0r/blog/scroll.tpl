@@ -84,6 +84,25 @@
             [ Go! ]
             </p>*}
 
+            {* Todo
+            <p>
+            Category Filters :
+            <select name="null" class="revert">
+            <option label="---" value="">---</option>
+            <optgroup label="Feelings">
+            <option label="Bad" value="6">Bad</option>
+            <option label="Good" value="5">Good</option>
+            </optgroup>
+            <optgroup label="Programming Languages">
+            <option label="Java" value="9">Java</option>
+            <option label="Objective-C" value="4">Objective-C</option>
+            <option label="Perl" value="3">Perl</option>
+            <option label="PHP" value="1">PHP</option>
+            </optgroup>
+            </select>
+            </p>
+            *}
+
 
             {* Blogs *}
             {if $r->fp}
@@ -100,17 +119,15 @@
                 {capture name=blog}
 
                     <!-- Content -->
-                    <p>
-                    {$foo.published_on}, <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a>
-                    </p>
-
+                    <p>{$foo.published_on}, <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a></p>
                     <p>{$foo.body_html}</p>
-
                     <div class="clearboth"></div>
+
 
                     <!-- Permanlink, Comments -->
                     <p><a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">Permanent Link</a>,
                     <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}#comments">Comments ({$foo.comments})</a></p>
+
 
                     <!-- Flair -->
                     {capture name=url assign=url}{$r->makeUrl('/blog/view', null, true)}/{$foo.thread_id}{/capture}
@@ -127,28 +144,9 @@
                     <!-- Naive Baysian Classification -->
                     <div class="categoryContainer">
 
-                    {$r->categories($foo.id, $foo.users_id)}
+                        {$r->authorCategories($foo.id, $foo.users_id)}
 
-                    TODO:
-                    Get all the categories linking this document the user has access to
-                    Get a list of all the vectors the user has access to
-                    Split the vectors into those I can train, and those I can't
-                    Trainable are submitable (ajax?), others aren't
-                    If a category id is in the vector, select it. Vector name is green. (No percentage, or 100%)
-                    Else categorize document, sort by probabilty (top to bottom)
-
-
-                    {capture name=categories}
-                        {foreach from=$r->getUserVectors() key=k item=v}
-                        {$v}: <span class="htmlSelect">{html_options name='category_id[]' options=$r->getCategoriesByVector($k) selected=$foo.category_id}</span>
-                        {/foreach}
-                    {/capture}
-
-                    {if $smarty.capture.categories|trim}
-                    <p>{$smarty.capture.categories}</p>
-                    {if $foo.linked}<p>Linked to: {$foo.linked}</p>{/if}
-                    {/if}
-
+                        {$r->userCategories($foo.id, $foo.body_plaintext)}
 
                     </div>
 

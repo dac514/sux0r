@@ -37,7 +37,7 @@ $scores = $nb->categorize($_POST['document'], $_POST['id']);
 $html = '<p><table border="1">';
 $html .= '<thead><tr><th>' . $text['categories'] . '</th><th>' . $text['scores'] . '</th></tr></thead><tbody>'. "\n";
 foreach ($scores as $k => $v) {
-    $html .= "<tr><td>{$k}</td><td>" . round($v*100, 2) . " %</td></tr>\n";
+    $html .= "<tr><td>{$v['category']}</td><td>" . round($v['score'] * 100, 2) . " %</td></tr>\n";
 }
 $html .= '</tbody></table></p>' . "\n";
 $html .= '<p><em>' . $text['categorized_on'] . ' : ' . date('D M j, G:i:s') . '</em></p>';
