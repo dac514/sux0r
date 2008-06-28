@@ -1,7 +1,7 @@
 <?php
 
 /**
-* suxEdit
+* userEdit
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -25,14 +25,9 @@
 require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
-require_once('renderer.php');
+require_once('userRenderer.php');
 
-class suxEdit {
-
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
+class userEdit {
 
     // Variables
     public $gtext = array(); // Language
@@ -40,6 +35,11 @@ class suxEdit {
     private $users_id = null;
     private $prev_url_preg = '#^user/[login|logout|register|edit]#i';
     private $module = 'user';
+
+    // Objects
+    public $tpl;
+    public $r;
+    private $user;
 
 
     /**
@@ -51,7 +51,7 @@ class suxEdit {
 
         $this->user = new suxUser(); // User
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
-        $this->r = new renderer($this->module); // Renderer
+        $this->r = new userRenderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator

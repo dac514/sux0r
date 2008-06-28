@@ -1,7 +1,7 @@
 <?php
 
 /**
-* suxHome
+* homeRenderer
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -22,46 +22,17 @@
 *
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once('renderer.php');
+require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
-class suxHome {
-
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
-
-    // Variables
-    public $gtext = array();
-    private $module = 'home';
-
+class homeRenderer extends suxRenderer {
 
     /**
     * Constructor
     *
-    * @global string $CONFIG['PARTITION']
+    * @param string $module
     */
-    function __construct(suxUser $user) {
-
-        $this->user = $user; // User
-
-        $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
-        $this->r = new renderer($this->module); // Renderer
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
-
-    }
-
-
-    /**
-    * Display home
-    */
-    function display() {
-
-        $this->tpl->assign_by_ref('r', $this->r);
-        $this->tpl->display('home.tpl');
-
+    function __construct($module) {
+        parent::__construct($module); // Call parent
     }
 
 

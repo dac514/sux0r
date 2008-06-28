@@ -35,8 +35,8 @@ function sux($action, $params = null) {
         // --------------------------------------------------------------------
 
             // Edit profile registration
-            include_once('suxCropper.php');
-            $blog = new suxCropper();
+            include_once('cropper.php');
+            $blog = new cropper();
 
             $blog->display();
 

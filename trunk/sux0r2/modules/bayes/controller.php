@@ -37,8 +37,8 @@ function sux($action, $params = null) {
             $user = !empty($params[0]) ? $params[0]: null;
 
             // Edit profile registration
-            include_once('suxEdit.php');
-            $reg = new suxEdit($user);
+            include_once('bayesEdit.php');
+            $reg = new bayesEdit($user);
 
             if ($reg->formValidate($_POST)) $reg->formProcess($_POST);
 

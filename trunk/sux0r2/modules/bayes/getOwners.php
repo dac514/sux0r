@@ -8,10 +8,10 @@ if (isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT)) {
     require_once(dirname(__FILE__) . '/../../config.php');
     require_once(dirname(__FILE__) . '/../../initialize.php');
     require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
-    require_once('suxNbUser.php');
+    require_once('bayesUser.php');
 
     $user = new suxUser();
-    $nb = new suxNbUser();
+    $nb = new bayesUser();
 
     $vectors = $nb->getVectorShares($_GET['id']);
 

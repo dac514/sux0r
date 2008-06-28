@@ -36,8 +36,8 @@ function sux($action, $params = null) {
         if (!empty($params[0]) && $params[0] == 'openid') {
 
             // Openid registration
-            include_once('suxLoginOpenID.php');
-            $auth = new suxLoginOpenID();
+            include_once('userLoginOpenID.php');
+            $auth = new userLoginOpenID();
 
             if ($auth->formValidate($_POST)) $auth->formHandoff($_POST);
             else $auth->formBuild($_POST);
@@ -46,8 +46,8 @@ function sux($action, $params = null) {
         else {
 
             // Regular login
-            include_once('suxAuthenticate.php');
-            $auth = new suxAuthenticate();
+            include_once('userAuthenticate.php');
+            $auth = new userAuthenticate();
             $auth->login();
         }
         break;
@@ -59,8 +59,8 @@ function sux($action, $params = null) {
         // Logout
         // --------------------------------------------------------------------
 
-        include_once('suxAuthenticate.php');
-        $auth = new suxAuthenticate();
+        include_once('userAuthenticate.php');
+        $auth = new userAuthenticate();
         $auth->logout();
         break;
 
@@ -74,8 +74,8 @@ function sux($action, $params = null) {
         if (!empty($params[0]) && $params[0] == 'openid') {
 
             // Openid registration
-            include_once('suxRegisterOpenID.php');
-            $reg = new suxRegisterOpenID();
+            include_once('userRegisterOpenID.php');
+            $reg = new userRegisterOpenID();
 
             if ($reg->formValidate($_POST)) $reg->formHandoff($_POST);
             else $reg->formBuild($_POST);
@@ -84,8 +84,8 @@ function sux($action, $params = null) {
         else {
 
             // Regular registration
-            include_once('suxEdit.php');
-            $reg = new suxEdit();
+            include_once('userEdit.php');
+            $reg = new userEdit();
 
             if ($reg->formValidate($_POST)) {
 
@@ -108,8 +108,8 @@ function sux($action, $params = null) {
             $user = !empty($params[0]) ? $params[0]: null;
 
             // Edit profile registration
-            include_once('suxEdit.php');
-            $reg = new suxEdit('edit', $user);
+            include_once('userEdit.php');
+            $reg = new userEdit('edit', $user);
 
             if ($reg->formValidate($_POST)) {
 
@@ -129,9 +129,9 @@ function sux($action, $params = null) {
         // Show user profile
         // --------------------------------------------------------------------
 
-        include_once('suxProfile.php');
+        include_once('userProfile.php');
         if (!empty($params[0])) {
-            $u = new suxProfile($params[0]);
+            $u = new userProfile($params[0]);
             if ($u->profile) $u->displayProfile();
             else $u->notFound();
             break;

@@ -1,7 +1,7 @@
 <?php
 
 /**
-* suxAuthenticate
+* userAuthenticate
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -26,17 +26,17 @@ require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
-class suxAuthenticate {
-
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
+class userAuthenticate {
 
     // Variables
     public $gtext = array(); // Language
     private $module = 'user'; // Module
 
+
+    // Objects
+    public $tpl;
+    public $r;
+    private $user;
 
     /**
     * Constructor

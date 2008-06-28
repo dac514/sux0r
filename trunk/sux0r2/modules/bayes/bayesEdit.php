@@ -1,7 +1,7 @@
 <?php
 
 /**
-* suxEdit
+* bayesEdit
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -22,14 +22,19 @@
 *
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
+require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
-require_once('renderer.php');
-require_once('suxNbUser.php');
+require_once('bayesRenderer.php');
+require_once('bayesUser.php');
 
-class suxEdit {
+class bayesEdit {
+
+    // Variables
+    public $gtext = array();
+    private $users_id = null;
+    private $module = 'bayes'; // Module
 
     // Objects
     public $tpl;
@@ -37,11 +42,6 @@ class suxEdit {
     public $nb;
     private $user;
     private $link;
-
-    // Variables
-    public $gtext = array();
-    private $users_id = null;
-    private $module = 'bayes'; // Module
 
 
     /**
@@ -53,13 +53,13 @@ class suxEdit {
     function __construct($user = null) {
 
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
-        $this->r = new renderer($this->module); // Renderer
+        $this->r = new bayesRenderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
         $this->user = new suxuser();
-        $this->nb = new suxNbUser();
+        $this->nb = new bayesUser();
         $this->link = new suxLink();
 
         // Redirect if not logged in

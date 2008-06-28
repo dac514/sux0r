@@ -1,7 +1,7 @@
 <?php
 
 /**
-* suxEdit
+* blogEdit
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -22,15 +22,21 @@
 *
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
-require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
-require_once(dirname(__FILE__) . '/../bayes/suxNbUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
+require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
+require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
-require_once('renderer.php');
+require_once(dirname(__FILE__) . '/../bayes/bayesUser.php');
+require_once('blogRenderer.php');
 
-class suxEdit {
+class blogEdit {
+
+    // Variables
+    public $gtext = array();
+    private $module = 'blog';
+    private $prev_url_preg = '#^blog/[edit]#i';
+    private $id;
 
     // Objects
     public $tpl;
@@ -39,12 +45,6 @@ class suxEdit {
     private $msg;
     private $nb;
     private $link;
-
-    // Variables
-    public $gtext = array();
-    private $module = 'blog';
-    private $prev_url_preg = '#^blog/[edit]#i';
-    private $id;
 
 
     /**
@@ -56,7 +56,7 @@ class suxEdit {
     function __construct($id = null) {
 
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
-        $this->r = new renderer($this->module); // Renderer
+        $this->r = new blogRenderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
@@ -64,7 +64,7 @@ class suxEdit {
         // Objects
         $this->user = new suxuser();
         $this->msg = new suxThreadedMessages();
-        $this->nb = new suxNbUser();
+        $this->nb = new bayesUser();
         $this->link = new suxLink();
 
         // Redirect if not logged in

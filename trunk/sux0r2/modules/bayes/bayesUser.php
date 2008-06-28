@@ -1,7 +1,7 @@
 <?php
 
 /**
-* suxNbUser
+* bayesUser
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -24,11 +24,11 @@
 
 require_once(dirname(__FILE__) . '/../../includes/suxNaiveBayesian.php');
 
-class suxNbUser extends suxNaiveBayesian {
+class bayesUser extends suxNaiveBayesian {
 
     /*
     Conventions:
-    An owner implies trainer, can do anything
+    An owner implies trainer, they can do anything
     A trainer is allowed to train, NOT untrain
     A user who is neither an owner nor a trainer is allowed to categorize
     */
