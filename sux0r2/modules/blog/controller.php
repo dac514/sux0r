@@ -36,8 +36,8 @@ function sux($action, $params = null) {
 
         $id = !empty($params[0]) ? $params[0]: null;
 
-        include_once('suxEdit.php');
-        $reg = new suxEdit($id);
+        include_once('blogEdit.php');
+        $reg = new blogEdit($id);
 
         if ($reg->formValidate($_POST)) {
             $reg->formProcess($_POST);
@@ -73,8 +73,8 @@ function sux($action, $params = null) {
             suxFunct::redirect(suxFunct::makeUrl('/blog'));
         }
 
-        include_once('suxBlog.php');
-        $blog = new suxBlog();
+        include_once('blog.php');
+        $blog = new blog();
         $blog->author($params[0]);
         break;
 
@@ -88,8 +88,8 @@ function sux($action, $params = null) {
             suxFunct::redirect(suxFunct::makeUrl('/blog'));
         }
 
-        include_once('suxBlog.php');
-        $blog = new suxBlog();
+        include_once('blog.php');
+        $blog = new blog();
         echo 'todo';
         // $blog->category($params[0]);
         break;
@@ -99,8 +99,8 @@ function sux($action, $params = null) {
 
         $date = !empty($params[0]) ? $params[0]: date('Y-m-d');
 
-        include_once('suxBlog.php');
-        $blog = new suxBlog();
+        include_once('blog.php');
+        $blog = new blog();
         $blog->month($date);
         break;
 
@@ -110,8 +110,8 @@ function sux($action, $params = null) {
         // Default
         // --------------------------------------------------------------------
 
-        include_once('suxBlog.php');
-        $blog = new suxBlog();
+        include_once('blog.php');
+        $blog = new blog();
         $blog->listing();
         break;
 

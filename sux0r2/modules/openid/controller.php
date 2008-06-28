@@ -26,9 +26,9 @@ function sux($action, $params = null) {
 
     unset($action, $params); // We don't use these here
 
-    require_once('suxOpenID.php');
+    require_once('openid.php');
 
-    $openID = new suxOpenID();
+    $openID = new openid();
     //$openID->profile['debug'] = true;
 
     // Pick a runmode

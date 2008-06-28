@@ -1,7 +1,7 @@
 <?php
 
 /**
-* suxLoginOpenID
+* userLoginOpenID
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -22,9 +22,9 @@
 *
 */
 
-require_once('suxRegisterOpenID.php');
+require_once('userRegisterOpenID.php');
 
-class suxLoginOpenID extends suxRegisterOpenID {
+class userLoginOpenID extends userRegisterOpenID {
 
 
     /**
@@ -33,7 +33,7 @@ class suxLoginOpenID extends suxRegisterOpenID {
     */
     function __construct() {
 
-        parent::__construct(); // Call suxRegisterOpenID
+        parent::__construct(); // Call userRegisterOpenID
 
         if ($this->user->loginCheck()) {
 

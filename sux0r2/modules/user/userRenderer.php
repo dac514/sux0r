@@ -1,7 +1,7 @@
 <?php
 
 /**
-* renderer
+* userRenderer
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -24,7 +24,7 @@
 
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
-class renderer extends suxRenderer {
+class userRenderer extends suxRenderer {
 
     // Variables
     public $profile = array(); // User profile

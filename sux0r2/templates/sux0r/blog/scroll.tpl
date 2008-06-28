@@ -146,7 +146,7 @@
 
                         {$r->authorCategories($foo.id, $foo.users_id)}
 
-                        {$r->userCategories($foo.id, $foo.body_plaintext)}
+                        {$r->userCategories($foo.id, 'messages', $foo.body_plaintext)}
 
                     </div>
 

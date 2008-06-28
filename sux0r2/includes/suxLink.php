@@ -41,6 +41,7 @@ class suxLink {
     // Database suff
     protected $db;
     protected $inTransaction = false;
+    protected $db_driver; // database type
 
 
     /**
@@ -53,7 +54,27 @@ class suxLink {
 
         if (!$key && !empty($GLOBALS['CONFIG']['DSN']['link'])) $key = 'link';
     	$this->db = suxDB::get($key);
+        $this->db_driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
         set_exception_handler(array($this, 'exceptionHandler'));
+
+    }
+
+
+    /**
+    * @param string $table name of a first table
+    * @param string $table name of a second table
+    * @return string
+    **/
+    function getLinkTableName($table1, $table2) {
+
+        // Convention
+        // Link tables should be named "link_table_table"
+        // where table_table is in alphabetical order
+
+        $tmp = array($table1, $table2);
+        natsort($tmp);
+        $link = 'link_' . implode('_', $tmp);
+        return $link;
 
     }
 
@@ -68,7 +89,7 @@ class suxLink {
 
         $return = array();
 
-        switch($this->db->getAttribute(PDO::ATTR_DRIVER_NAME))
+        switch($this->db_driver)
         {
 
         case 'mysql':

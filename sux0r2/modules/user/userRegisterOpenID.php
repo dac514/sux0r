@@ -1,7 +1,7 @@
 <?php
 
 /**
-* suxRegisterOpenID
+* userRegisterOpenID
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -27,17 +27,17 @@ require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
-class suxRegisterOpenID  {
-
-    // Objects
-    public $tpl;
-    public $r;
-    protected $user;
+class userRegisterOpenID  {
 
     // Variables
     public $gtext = array();
     protected $prev_url_preg = '#^user/[login|logout|register|edit]#i';
     private $module = 'user';
+
+    // Objects
+    public $tpl;
+    public $r;
+    protected $user;
 
     /**
     * Constructor

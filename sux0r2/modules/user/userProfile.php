@@ -1,7 +1,7 @@
 <?php
 
 /**
-* suxProfile
+* userProfile
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -26,19 +26,19 @@ require_once(dirname(__FILE__) . '/../../includes/symbionts/calendar.php');
 require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxSocialNetwork.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once('renderer.php');
+require_once('userRenderer.php');
 
-class suxProfile {
-
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
+class userProfile {
 
     // Variables
     public $gtext = array();
     public $profile; // User profile array
     private $module = 'user';
+
+    // Objects
+    public $tpl;
+    public $r;
+    private $user;
 
 
     /**
@@ -51,7 +51,7 @@ class suxProfile {
 
         $this->user = new suxUser(); // User
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
-        $this->r = new renderer($this->module); // Renderer
+        $this->r = new userRenderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
 

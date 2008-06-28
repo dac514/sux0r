@@ -1,7 +1,7 @@
 <?php
 
 /**
-* suxOpenID
+* openid
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -29,7 +29,7 @@ require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
-class suxOpenID {
+class openid {
 
     // Objects
     public $tpl;
@@ -96,7 +96,7 @@ class suxOpenID {
 
             // Debug
             'debug'		=>	false,
-            'logfile'	=>	'/tmp/suxOpenID.debug.log',
+            'logfile'	=>	'/tmp/openid.debug.log',
 
             // Determine the requested URL, DO NOT OVERRIDE
             'req_url' => $this->getReqUrl(),

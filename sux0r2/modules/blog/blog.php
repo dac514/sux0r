@@ -1,7 +1,7 @@
 <?php
 
 /**
-* suxBlog
+* blog
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -27,24 +27,24 @@ require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
 require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
-require_once(dirname(__FILE__) . '/../bayes/suxNbUser.php');
-require_once('renderer.php');
+require_once(dirname(__FILE__) . '/../bayes/bayesUser.php');
+require_once('blogRenderer.php');
 
 
-class suxBlog  {
-
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
-    private $msg;
-    private $pager;
-    private $liuk;
-    private $nb;
+class blog  {
 
     // Variables
     public $gtext = array();
     private $module = 'blog';
+
+    // Objects
+    private $liuk;
+    private $msg;
+    private $nb;
+    private $pager;
+    private $user;
+    public $r;
+    public $tpl;
 
 
     /**
@@ -55,14 +55,14 @@ class suxBlog  {
     function __construct() {
 
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
-        $this->r = new renderer($this->module); // Renderer
+        $this->r = new blogRenderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         $this->user = new suxUser();
         $this->msg = new suxThreadedMessages();
         $this->link = new suxLink();
         $this->pager = new suxPager();
-        $this->nb = new suxNbUser();
+        $this->nb = new bayesUser();
 
     }
 

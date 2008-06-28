@@ -1,7 +1,7 @@
 <?php
 
 /**
-* renderer
+* bayesRenderer
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -22,14 +22,18 @@
 *
 */
 
+require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
-require_once('suxNbUser.php');
+require_once('bayesUser.php');
 
-class renderer extends suxRenderer {
+class bayesRenderer extends suxRenderer {
+
+    // Arrays
+    public $gtext = array();
 
     // Objects
-    public $gtext = array();
     private $nb;
+    private $link;
 
 
     /**
@@ -41,9 +45,169 @@ class renderer extends suxRenderer {
 
         parent::__construct($module); // Call parent
         $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->nb = new suxNbUser();
+        $this->nb = new bayesUser();
+        $this->link = new suxLink();
 
     }
+
+    // ---
+
+    /**
+    * @param int $id messages id
+    * @param string $link link table
+    * @param string $document document to train
+    * @return string html
+    */
+    function genericBayesInterface($id, $link, $document) {
+
+        if (!isset($_SESSION['users_id'])) return null; // Anonymous user, skip
+
+        /* Get a list of all the vectors/categories the user has access to */
+
+        // Cache
+        static $vectors = null;
+        if (!is_array($vectors)) {
+            $vectors = array();
+            foreach ($this->nb->getVectorsByUser($_SESSION['users_id']) as $key => $val) {
+                $vectors[$key] = $val['vector'];
+            }
+        }
+        if (!$vectors) return null; // No user vectors, skip
+
+        // Cache
+        static $v_trainer = null;
+        static $v_user = null;
+        if (!is_array($v_trainer) || !is_array($v_user)) {
+
+            /* Split the vectors into those the user can train, and those he/she can't */
+
+            $v_trainer = array();
+            $v_user = array();
+
+            foreach ($vectors as $key => $val) {
+                if ($this->nb->isVectorTrainer($key, $_SESSION['users_id'])) {
+                    $v_trainer[$key] = array(
+                        'vector' => $val,
+                        'categories' => $this->nb->getCategoriesByVector($key),
+                        );
+                }
+                else {
+                    $v_user[$key] = array(
+                        'vector' => $val,
+                        'categories' => $this->nb->getCategoriesByVector($key),
+                        );
+                }
+            }
+            unset($vectors); // No longer used
+
+        }
+
+        /* Get all the bayes categories linked to the document id that the user has access to */
+
+        $categories = array();
+        $links = $this->link->getLinks($this->link->getLinkTableName($link, 'bayes'), $link, $id);
+        if ($links) {
+            foreach($links as $val) {
+                // $val is a bayes_documents id
+                $cat = $this->nb->getCategoriesByDocument($val);
+                foreach ($cat as $key => $val2) {
+                    // $cat is a category
+                    // $key is the bayes_categories id,
+                    // $val2 is an array of category info
+                    if ($this->nb->isCategoryUser($key, $_SESSION['users_id'])) {
+                        // Category user, someone trained the document and this
+                        // user has access to that information
+                        $categories[$key] = $val2;
+                    }
+                }
+            }
+        }
+
+
+        $html = '';
+        $i = 0; // Used to identify ajax trainable vector
+
+        foreach(array($v_trainer, $v_user) as $vectors) {
+
+            if (count($vectors)) {
+                foreach ($vectors as $key => $val) {
+
+                    // Vector name to be replaced
+                    $uniqid = time() . substr(md5(microtime()), 0, rand(5, 12));
+                    $html .= "@_{$uniqid}_@ : ";
+
+                    if ($i == 0) {
+                        // TODO: Can submit with AJAX
+                        $html .= '<select name="category_id[]" class="revert">';
+                    }
+                    else {
+                        // Looks pretty, does nothing
+                        $html .= '<select name="null" class="revert">';
+                    }
+
+                    $html .= '<option label="---" value="">---</option>';
+
+
+                    /* Check if the vector is categorized */
+
+                    $is_categorized = false;
+                    foreach ($val['categories'] as $key2 => $val2) {
+                        if (array_key_exists($key2, $categories)) {
+                            $is_categorized = $key2;
+                            break;
+                        }
+                    }
+
+                    if ($is_categorized === false) {
+
+                        /* Not categorized, get bayesian scores */
+
+                        $replace = $val['vector'];
+                        $html = str_replace("@_{$uniqid}_@", $replace, $html);
+
+                        $j = 0;
+                        $scores = $this->nb->categorize($document, $key);
+                        foreach ($scores as $key2 => $val2) {
+                            $tmp = $val2['category'] . ' (' . round($val2['score'] * 100, 2) . ' %)';
+                            $html .= '<option label="' . $tmp . '" value="' . $key2 . '" ';
+                            if ($j == 0) $html .= 'selected="selected" ';
+                            $html .= '>' . $tmp . '</option>';
+                            ++$j;
+                        }
+                    }
+                    else {
+
+                        /* Is already categorized, don't calculate */
+
+                        $replace = "<span style='color:green;font-weight:bold;'>{$val['vector']}</span>";
+                        $html = str_replace("@_{$uniqid}_@", $replace, $html);
+
+                        foreach ($val['categories'] as $key2 => $val2) {
+
+                            $html .= '<option label="' . $val2['category'] . '" value="' . $key2 . '" ';
+                            if ($is_categorized == $key2) $html .= 'selected="selected" ';
+                            $html .= '>' . $val2['category'] . '</option>';
+
+                        }
+
+                    }
+
+                    $html .= '</select><br />' . "\n";
+
+                }
+            }
+
+            ++$i; // Used to identify ajax trainable vector.
+
+        }
+
+
+        return $html;
+
+    }
+
+
+    // ---
 
 
     /**
