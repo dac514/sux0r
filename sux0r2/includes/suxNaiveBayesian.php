@@ -28,10 +28,6 @@
 
 class suxNaiveBayesian {
 
-
-    public $lang = 'en'; // Used to include language specific stopwords file
-    public $ignore_list = array(); // Stopwords list
-
     // Database suff
     protected $db;
     protected $inTransaction = false;
@@ -821,14 +817,6 @@ class suxNaiveBayesian {
 
         $rawtokens = mb_split("\W", $string);
 
-        //. Get stopwords
-        if (is_readable(dirname(__FILE__) . "/symbionts/stopwords/{$this->lang}.txt")) {
-            $this->ignore_list = file(dirname(__FILE__) . "/symbionts/stopwords/{$this->lang}.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        }
-
-        // Append generic internet cruft for good measure
-        array_push($this->ignore_list, 'http', 'https', 'mailto', 'www', 'com', 'net', 'org', 'biz', 'info');
-
         // remove unwanted tokens
         foreach ($rawtokens as $token) {
             $token = trim($token);
@@ -845,14 +833,41 @@ class suxNaiveBayesian {
     private function acceptableToken($token) {
 
         if (!(
-            (empty($token)) ||
+            empty($token) ||
             (mb_strlen($token) < $this->min_token_length) ||
             (mb_strlen($token) > $this->max_token_length) ||
-            (ctype_digit($token)) ||
-            (in_array($token, $this->ignore_list))
+            ctype_digit($token) ||
+            in_array($token, $this->stopwords())
             )) return true;
 
         return false;
+
+    }
+
+
+    /**
+    * @return array
+    */
+    private function stopwords() {
+
+        // Cache
+        static $ignore_list = null;
+        if (is_array($ignore_list)) return $ignore_list;
+        $ignore_list = array();
+
+        //. Get stopwords
+        $dir = dirname(__FILE__) . '/symbionts/stopwords';
+        foreach (new DirectoryIterator($dir) as $file) {
+            if (preg_match('/^[a-z]{2}\.txt$/', $file)) {
+                $ignore_list = array_merge($ignore_list, file("{$dir}/{$file}", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+            }
+        }
+        // Add generic internet cruft for good measure
+        $ignore_list = array_merge($ignore_list, array('http', 'https', 'mailto', 'www', 'com', 'net', 'org', 'biz', 'info'));
+        // Remove duplicates
+        $ignore_list = array_unique($ignore_list);
+
+        return $ignore_list;
 
     }
 
