@@ -715,6 +715,8 @@ class suxNaiveBayesian {
         $ncat = 0;
 
         $categories = $this->getCategoriesByVector($vector_id);
+        if (count($categories) <= 1) return array(); // Less than two categories, skip
+
         $tokens = $this->parseTokens($document);
 
         foreach ($categories as $data) {
@@ -801,6 +803,7 @@ class suxNaiveBayesian {
     * @return array keys = tokens, values = count
     */
     private function parseTokens($string) {
+
         $rawtokens = array();
         $tokens    = array();
 
@@ -832,42 +835,36 @@ class suxNaiveBayesian {
     */
     private function acceptableToken($token) {
 
+        // Cache
+        static $ignore_list = null;
+        if (!is_array($ignore_list)) {
+
+            //. Get stopwords
+            $ignore_list = array();
+            $dir = dirname(__FILE__) . '/symbionts/stopwords';
+            foreach (new DirectoryIterator($dir) as $file) {
+                if (preg_match('/^[a-z]{2}\.txt$/', $file)) {
+                    $ignore_list = array_merge($ignore_list, file("{$dir}/{$file}", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+                }
+            }
+            // Add generic internet cruft for good measure
+            $ignore_list = array_merge($ignore_list, array('http', 'https', 'mailto', 'www', 'com', 'net', 'org', 'biz', 'info'));
+
+            // Remove duplicates, increase speed by using isset() instead of in_array()
+            $ignore_list = array_flip($ignore_list);
+
+        }
+
+
         if (!(
             empty($token) ||
             (mb_strlen($token) < $this->min_token_length) ||
             (mb_strlen($token) > $this->max_token_length) ||
             ctype_digit($token) ||
-            in_array($token, $this->stopwords())
+            isset($ignore_list[$token])
             )) return true;
 
         return false;
-
-    }
-
-
-    /**
-    * @return array
-    */
-    private function stopwords() {
-
-        // Cache
-        static $ignore_list = null;
-        if (is_array($ignore_list)) return $ignore_list;
-        $ignore_list = array();
-
-        //. Get stopwords
-        $dir = dirname(__FILE__) . '/symbionts/stopwords';
-        foreach (new DirectoryIterator($dir) as $file) {
-            if (preg_match('/^[a-z]{2}\.txt$/', $file)) {
-                $ignore_list = array_merge($ignore_list, file("{$dir}/{$file}", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
-            }
-        }
-        // Add generic internet cruft for good measure
-        $ignore_list = array_merge($ignore_list, array('http', 'https', 'mailto', 'www', 'com', 'net', 'org', 'biz', 'info'));
-        // Remove duplicates
-        $ignore_list = array_unique($ignore_list);
-
-        return $ignore_list;
 
     }
 
