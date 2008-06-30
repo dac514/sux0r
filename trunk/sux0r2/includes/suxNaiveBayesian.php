@@ -465,7 +465,13 @@ class suxNaiveBayesian {
 
         $ref = $this->getDocument($document_id);
         if (count($ref)) {
-            $tokens = $this->parseTokens($ref['body']);
+
+            // Checking against stopwords is a big performance hog and
+            // they don't affect the results here, so not using them
+            // speeds things up significantly
+
+            $tokens = $this->parseTokens($ref['body'], false);
+
             foreach($tokens as $token => $count) {
                 $this->removeToken($token, $count, $ref['category_id']);
             }
@@ -717,19 +723,20 @@ class suxNaiveBayesian {
         $categories = $this->getCategoriesByVector($vector_id);
         if (count($categories) <= 1) return array(); // Less than two categories, skip
 
-        $tokens = $this->parseTokens($document);
-
         foreach ($categories as $data) {
             $total_tokens += $data['token_count'];
             $ncat++;
         }
 
+        // Checking against stopwords is a big performance hog and
+        // they don't affect the results here, so not using them
+        // speeds things up significantly
 
+        $tokens = $this->parseTokens($document, false);
 
         foreach($categories as $category_id => $data) {
 
             $scores[$category_id] = $data['probability'];
-            // $scores[$data['category']] = $data['probability'];
 
             foreach($tokens as $token => $count) {
                 if ($this->tokenExists($token)) {
@@ -738,7 +745,6 @@ class suxNaiveBayesian {
                     if ($token_count && $data['token_count']) $prob = (float) $token_count/$data['token_count']; // Probability
                     else if ($data['token_count']) $prob = (float) 1/(2*$data['token_count']); // Fake probability, like a very infrequent word
                     $scores[$category_id] *= pow($prob, $count)*pow($total_tokens/$ncat, $count);
-                    // $scores[$data['category']] *= pow($prob, $count)*pow($total_tokens/$ncat, $count);
                     // pow($total_tokens/$ncat, $count) is here to avoid underflow.
                 }
             }
@@ -800,9 +806,10 @@ class suxNaiveBayesian {
 
     /**
     * @param string $string the string to get the tokens from
+    * @param bool $stopwords use stopwords?
     * @return array keys = tokens, values = count
     */
-    private function parseTokens($string) {
+    private function parseTokens($string, $stopwords = true) {
 
         $rawtokens = array();
         $tokens    = array();
@@ -823,7 +830,7 @@ class suxNaiveBayesian {
         // remove unwanted tokens
         foreach ($rawtokens as $token) {
             $token = trim($token);
-            if ($this->acceptableToken($token)) @$tokens[$token]++;
+            if ($this->acceptableToken($token, $stopwords)) @$tokens[$token]++;
         }
         return $tokens;
     }
@@ -831,13 +838,14 @@ class suxNaiveBayesian {
 
     /**
     * @param string $string a token to inspect
+    * @param bool $stopwords use stopwords?
     * @return bool
     */
-    private function acceptableToken($token) {
+    private function acceptableToken($token, $stopwords) {
 
         // Cache
         static $ignore_list = null;
-        if (!is_array($ignore_list)) {
+        if ($stopwords && !is_array($ignore_list)) {
 
             //. Get stopwords
             $ignore_list = array();
@@ -855,13 +863,12 @@ class suxNaiveBayesian {
 
         }
 
-
         if (!(
             empty($token) ||
             (mb_strlen($token) < $this->min_token_length) ||
             (mb_strlen($token) > $this->max_token_length) ||
             ctype_digit($token) ||
-            isset($ignore_list[$token])
+            ($stopwords && isset($ignore_list[$token]))
             )) return true;
 
         return false;
@@ -946,7 +953,7 @@ class suxNaiveBayesian {
 
         $token_count = $this->getTokenCount($token, $category_id);
 
-        if ($token_count != 0 && ($token_count-$count) <= 0) {
+        if ($token_count != 0 && ($token_count - $count) <= 0) {
 
             $st = $this->db->prepare("DELETE FROM {$this->db_table_tok} WHERE token = ? AND bayes_categories_id = ? ");
             return $st->execute(array($token, $category_id));
