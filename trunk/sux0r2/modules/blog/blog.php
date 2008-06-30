@@ -132,7 +132,7 @@ class blog  {
     function listing() {
 
         // Pager
-        $this->pager->limit = 2;
+        // $this->pager->limit = 2;
         $this->pager->setStart();
         $this->pager->setPages($this->msg->countFirstPosts('blog'));
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog'));

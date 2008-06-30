@@ -72,7 +72,7 @@ class bayesRenderer extends suxRenderer {
                 $vectors[$key] = $val['vector'];
             }
         }
-        if (!$vectors) return null; // No user vectors, skip
+        if (!count($vectors)) return null; // No user vectors, skip
 
         // Cache
         static $v_trainer = null;
@@ -98,8 +98,6 @@ class bayesRenderer extends suxRenderer {
                         );
                 }
             }
-            unset($vectors); // No longer used
-
         }
 
         /* Get all the bayes categories linked to the document id that the user has access to */
@@ -127,75 +125,74 @@ class bayesRenderer extends suxRenderer {
         $html = '';
         $i = 0; // Used to identify ajax trainable vector
 
-        foreach(array($v_trainer, $v_user) as $vectors) {
+        foreach(array($v_trainer, $v_user) as $vectors2) {
 
-            if (count($vectors)) {
-                foreach ($vectors as $key => $val) {
+            foreach ($vectors2 as $key => $val) {
 
-                    // Vector name to be replaced
-                    $uniqid = time() . substr(md5(microtime()), 0, rand(5, 12));
-                    $html .= "@_{$uniqid}_@ : ";
+                // Vector name to be replaced
+                $uniqid = time() . substr(md5(microtime()), 0, rand(5, 12));
+                $html .= "@_{$uniqid}_@ : ";
 
-                    if ($i == 0) {
-                        // TODO: Can submit with AJAX
-                        $html .= '<select name="category_id[]" class="revert">';
+                if ($i == 0) {
+                    // TODO: Can submit with AJAX
+                    $html .= '<select name="category_id[]" class="revert">';
+                }
+                else {
+                    // Looks pretty, does nothing
+                    $html .= '<select name="null" class="revert">';
+                }
+
+                $html .= '<option label="---" value="">---</option>';
+
+
+                /* Check if the vector is categorized */
+
+                $is_categorized = false;
+                foreach ($val['categories'] as $key2 => $val2) {
+                    if (array_key_exists($key2, $categories)) {
+                        $is_categorized = $key2;
+                        break;
                     }
-                    else {
-                        // Looks pretty, does nothing
-                        $html .= '<select name="null" class="revert">';
+                }
+
+                if ($is_categorized === false) {
+
+                    /* Not categorized, get bayesian scores */
+
+                    $replace = $val['vector'];
+                    $html = str_replace("@_{$uniqid}_@", $replace, $html);
+
+                    $j = 0;
+                    $scores = $this->nb->categorize($document, $key);
+                    foreach ($scores as $key2 => $val2) {
+                        $tmp = $val2['category'] . ' (' . round($val2['score'] * 100, 2) . ' %)';
+                        $html .= '<option label="' . $tmp . '" value="' . $key2 . '" ';
+                        if ($j == 0) $html .= 'selected="selected" ';
+                        $html .= '>' . $tmp . '</option>';
+                        ++$j;
                     }
+                }
+                else {
 
-                    $html .= '<option label="---" value="">---</option>';
+                    /* Is already categorized, don't calculate */
 
+                    $replace = "<span style='color:green;font-weight:bold;'>{$val['vector']}</span>";
+                    $html = str_replace("@_{$uniqid}_@", $replace, $html);
 
-                    /* Check if the vector is categorized */
-
-                    $is_categorized = false;
                     foreach ($val['categories'] as $key2 => $val2) {
-                        if (array_key_exists($key2, $categories)) {
-                            $is_categorized = $key2;
-                            break;
-                        }
-                    }
 
-                    if ($is_categorized === false) {
-
-                        /* Not categorized, get bayesian scores */
-
-                        $replace = $val['vector'];
-                        $html = str_replace("@_{$uniqid}_@", $replace, $html);
-
-                        $j = 0;
-                        $scores = $this->nb->categorize($document, $key);
-                        foreach ($scores as $key2 => $val2) {
-                            $tmp = $val2['category'] . ' (' . round($val2['score'] * 100, 2) . ' %)';
-                            $html .= '<option label="' . $tmp . '" value="' . $key2 . '" ';
-                            if ($j == 0) $html .= 'selected="selected" ';
-                            $html .= '>' . $tmp . '</option>';
-                            ++$j;
-                        }
-                    }
-                    else {
-
-                        /* Is already categorized, don't calculate */
-
-                        $replace = "<span style='color:green;font-weight:bold;'>{$val['vector']}</span>";
-                        $html = str_replace("@_{$uniqid}_@", $replace, $html);
-
-                        foreach ($val['categories'] as $key2 => $val2) {
-
-                            $html .= '<option label="' . $val2['category'] . '" value="' . $key2 . '" ';
-                            if ($is_categorized == $key2) $html .= 'selected="selected" ';
-                            $html .= '>' . $val2['category'] . '</option>';
-
-                        }
+                        $html .= '<option label="' . $val2['category'] . '" value="' . $key2 . '" ';
+                        if ($is_categorized == $key2) $html .= 'selected="selected" ';
+                        $html .= '>' . $val2['category'] . '</option>';
 
                     }
-
-                    $html .= '</select><br />' . "\n";
 
                 }
+
+                $html .= '</select><br />' . "\n";
+
             }
+
 
             ++$i; // Used to identify ajax trainable vector.
 
