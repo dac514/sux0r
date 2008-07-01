@@ -34,13 +34,11 @@ class suxRolodex {
 
 
     /**
-    * @global array $CONFIG['DSN']
-    * @param string $key a key from our suxDB DSN
+    * Constructor
     */
-    function __construct($key = null) {
+    function __construct() {
 
-        if (!$key && !empty($GLOBALS['CONFIG']['DSN']['rolodex'])) $key = 'rolodex';
-    	$this->db = suxDB::get($key);
+    	$this->db = suxDB::get();
         set_exception_handler(array($this, 'exceptionHandler'));
 
     }

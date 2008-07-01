@@ -45,14 +45,10 @@ class suxNaiveBayesian {
 
     /**
     * Constructor
-    *
-    * @global array $CONFIG['DSN']
-    * @param string $key a key from our suxDB DSN
     */
-    function __construct($key = null) {
+    function __construct() {
 
-        if (!$key && !empty($GLOBALS['CONFIG']['DSN']['bayes'])) $key = 'bayes';
-    	$this->db = suxDB::get($key);
+    	$this->db = suxDB::get();
         set_exception_handler(array($this, 'exceptionHandler'));
 
     }
@@ -151,19 +147,19 @@ class suxNaiveBayesian {
 
     /**
     * @param string $vector_id vector id, must be unique
-    * @return array
+    * @return array|false
     */
     function getVector($vector_id) {
 
         $st = $this->db->prepare("SELECT * FROM {$this->db_table_vec} WHERE id = ? LIMIT 1 ");
         $st->execute(array($vector_id));
 
-        $vector = array();
         if ($row = $st->fetch(PDO::FETCH_ASSOC)) {
             $vector['id'] = $row['id'];
             $vector['vector'] = $row['vector'];
+            return $vector;
         }
-        return $vector;
+        else return false;
 
     }
 
@@ -308,22 +304,24 @@ class suxNaiveBayesian {
 
     /**
     * @param string $category_id category id, must be unique
-    * @return array
+    * @return array|false
     */
     function getCategory($category_id) {
 
         $st = $this->db->prepare("SELECT * FROM {$this->db_table_cat} WHERE id = ? LIMIT 1 ");
         $st->execute(array($category_id));
 
-        $category = array();
         if ($row = $st->fetch(PDO::FETCH_ASSOC)) {
             $category['id'] = $row['id'];
             $category['category'] = $row['category'];
             $category['vector_id'] = $row['bayes_vectors_id'];
             $category['probability'] = $row['probability'];
             $category['token_count']  = $row['token_count'];
+            return $category;
         }
-        return $category;
+        else return false;
+
+
     }
 
 
@@ -488,20 +486,20 @@ class suxNaiveBayesian {
 
     /**
     * @param string $document_id document id, must be unique
-    * @return array
+    * @return array|false
     */
     function getDocument($document_id) {
 
         $st = $this->db->prepare("SELECT * FROM {$this->db_table_doc} WHERE id = ? ");
         $st->execute(array($document_id));
 
-        $document = array();
         if ($row = $st->fetch(PDO::FETCH_ASSOC)) {
             $document['id'] = $row['id'];
             $document['category_id'] = $row['bayes_categories_id'];
             $document['body'] = $row['body_plaintext'];
+            return $document;
         }
-        return $document;
+        else return false;
     }
 
 
@@ -567,7 +565,7 @@ class suxNaiveBayesian {
 
     /**
     * @param int $category_id category id
-    * @return array key = ids, values = array(keys = 'category_id', 'category', 'body (optional)')
+    * @return array key = ids, values = array(keys = 'category_id', 'body (optional)')
     */
     function getDocumentsByCategory($category_id, $full = false) {
 

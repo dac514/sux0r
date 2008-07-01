@@ -48,14 +48,10 @@ class suxThreadedMessages {
 
     /**
     * Constructor
-    *
-    * @global array $CONFIG['DSN']
-    * @param string $key a key from our suxDB DSN
     */
-    function __construct($key = null) {
+    function __construct() {
 
-        if (!$key && !empty($GLOBALS['CONFIG']['DSN']['messages'])) $key = 'messages';
-    	$this->db = suxDB::get($key);
+    	$this->db = suxDB::get();
         $this->db_driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
         set_exception_handler(array($this, 'exceptionHandler'));
 

@@ -90,10 +90,13 @@ function sux($action, $params = null) {
 
         include_once('blog.php');
         $blog = new blog();
-        echo 'todo';
-        // $blog->category($params[0]);
+        $blog->category($params[0]);
         break;
 
+
+       // --------------------------------------------------------------------
+        // Month
+        // --------------------------------------------------------------------
 
     case 'month' :
 

@@ -82,7 +82,7 @@ class blogRenderer extends suxRenderer {
                 // $val2 is an array of category info
                 if ($this->nb->isCategoryTrainer($key, $users_id)) {
                     // This author is the category trainer,
-                    // They (or someone they share with) have already assigned a category
+                    // They (or someone they share with) have assigned a category
                     $url = suxFunct::makeUrl('/blog/category/' . $key);
                     $html .= "<a href='{$url}'>{$val2['category']}</a>, ";
                 }

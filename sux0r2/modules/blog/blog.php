@@ -81,7 +81,6 @@ class blog  {
             $this->pager->setPages($this->msg->countFirstPostsByUser($u['users_id'], 'blog'));
             $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/author/' . $author));
 
-
             // Assign
             $this->r->fp = $this->blogs($this->msg->getFirstPostsByUser($u['users_id'], 'blog', true, $this->pager->limit, $this->pager->start));
             $this->r->sidelist = $this->msg->getFirstPostsByUser($u['users_id'], 'blog'); // TODO: Too many blogs?
@@ -91,6 +90,102 @@ class blog  {
 
 
         // Template
+        $this->tpl->assign_by_ref('r', $this->r);
+        $this->tpl->display('scroll.tpl');
+
+    }
+
+
+    /**
+    * Category
+    */
+    function category($cat_id) {
+
+        $c = $this->nb->getCategory($cat_id);
+        if ($c) {
+
+            // ----------------------------------------------------------------
+            // SQL
+            // ----------------------------------------------------------------
+
+            $db = suxDB::get();
+            $db_driver = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
+
+            // Innerjoin query
+            $innerjoin = '
+            INNER JOIN link_bayes_messages ON link_bayes_messages.messages_id = messages.id
+            INNER JOIN bayes_documents ON link_bayes_messages.bayes_documents_id = bayes_documents.id
+            INNER JOIN bayes_categories ON bayes_documents.bayes_categories_id = bayes_categories.id
+            ';
+
+            // Date query, database specic
+            if ($db_driver == 'mysql') {
+                $date = 'AND NOT published_on > \'' . date('Y-m-d H:i:s') . '\' ';
+            }
+            else {
+                throw new Exception('Unsupported database driver');
+            }
+
+            // Count
+            $count_query = "
+            SELECT COUNT(*) FROM messages
+            {$innerjoin}
+            WHERE messages.thread_pos = 0 AND messages.blog = 1  AND messages.draft = 0 AND bayes_categories.id = ?
+            {$date}
+            ";
+            $st = $db->prepare($count_query);
+            $st->execute(array($cat_id));
+            $count = $st->fetchColumn();
+
+            if ($count) {
+
+                // Select, with limits
+                $limit_query = "
+                SELECT messages.*, LENGTH(messages.body_plaintext) AS body_length FROM messages
+                {$innerjoin}
+                WHERE messages.thread_pos = 0 AND messages.blog = 1  AND messages.draft = 0 AND bayes_categories.id = ?
+                {$date}
+                ORDER BY messages.published_on DESC
+                ";
+                if ($this->pager->start && $this->pager->limit) $limit_query .= "LIMIT {$this->pager->start}, {$this->pager->limit} ";
+                elseif ($this->pager->limit) $limit_query .= "LIMIT {$this->pager->limit} ";
+
+                $st = $db->prepare($limit_query);
+                $st->execute(array($cat_id));
+                $fp = $st->fetchAll(PDO::FETCH_ASSOC);
+
+                // Select, for sidebar
+                $select_query = "
+                SELECT messages.id, messages.thread_id, messages.title FROM messages
+                {$innerjoin}
+                WHERE messages.thread_pos = 0 AND messages.blog = 1  AND messages.draft = 0 AND bayes_categories.id = ?
+                {$date}
+                ORDER BY messages.published_on DESC
+                ";
+
+                $st = $db->prepare($select_query);
+                $st->execute(array($cat_id));
+                $sidelist = $st->fetchAll(PDO::FETCH_ASSOC);
+
+                // ----------------------------------------------------------------
+                // Template
+                // ----------------------------------------------------------------
+
+                // Pager
+                $this->pager->limit = 2;
+                $this->pager->setStart();
+                $this->pager->setPages($count);
+                $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/category/' . $cat_id));
+
+                // Assign
+                $this->r->fp = $this->blogs($fp);
+                $this->r->sidelist = $sidelist;
+                $this->r->text['sidelist'] = $c['category'];
+
+            }
+
+        }
+
         $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('scroll.tpl');
 

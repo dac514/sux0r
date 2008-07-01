@@ -56,13 +56,10 @@ class openid {
     * Constructor
     *
     * @global array $CONFIG['DSN']
-    * @global string $CONFIG['PARTITION']
-    * @param string $key PDO dsn key
     */
-    function __construct($key = null) {
+    function __construct() {
 
-        if (!$key && !empty($GLOBALS['CONFIG']['DSN']['openid'])) $key = 'openid';
-        $this->db = suxDB::get($key); // Db
+        $this->db = suxDB::get(); // Db
         set_exception_handler(array($this, 'exceptionHandler')); // Exception
 
         $this->user = new suxUser(); // User
