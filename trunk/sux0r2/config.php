@@ -11,27 +11,13 @@ include_once(dirname(__FILE__)  . '/includes/symbionts/dBug.php');
 
 /* Configuration variables */
 
+// Database parameters, PDO compatible
+$CONFIG['DSN'] =  array(
+    'sux0r' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
+    );
+
 // Site title
 $CONFIG['TITLE'] = 'sux0r';
-
-// An array containing PDO compatible database DSN [key => value] pairs.
-// Sux0r is (theoretically) able to span multiple databases, but ordinarily
-// there should be one ['default' => $dsn] pointing to your one database..
-
-$CONFIG['DSN'] =  array(
-    'default' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
-    /*
-    'bayes' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
-    'bookmarks' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
-    'calendar' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
-    'link' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
-    'messages' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
-    'openid' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
-    'rolodex' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
-    'socialnetwork' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
-    'users' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
-    */
-    );
 
 // The auto-detected path to your sux0r installation.
 // If you set this yourself, no trailing slash!

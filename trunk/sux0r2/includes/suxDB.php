@@ -30,14 +30,17 @@ class suxDB {
     *
     * Example:
     * suxDB::$dsn = array(
-    *   'blogs' => 'sqlite:/tmp/blogs.db',
-    *   'users' => array('mysql:host=localhost', 'user', 'password'),
-    *   'admin' => array('mysql:host=db.example.com', 'user', 'password'),
+    *   'sux0r' => array('mysql:host=localhost', 'user', 'password'),
     *   'stats' => array('oci:statistics', 'user', 'password'),
+    *   'dev' => 'sqlite:/tmp/blogs.db',
     * );
-    * $db = suxDB::get(); // Defaults to first item in DSN array, i.e. blogs
+    * $db = suxDB::get(); // Defaults to first item in DSN array, i.e. sux0r
     * $db2 = suxDB::get('stats');
     */
+
+    // Sux0r is theoretically able to span multiple databases but in practice
+    // LEFT JOIN and INNER JOIN queries accross multiple tables make this very
+    // difficult to manage. The option is here for future developement.
 
     public static $dsn = array();
     private static $db = array();

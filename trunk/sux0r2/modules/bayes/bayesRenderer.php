@@ -149,7 +149,7 @@ class bayesRenderer extends suxRenderer {
 
                 $is_categorized = false;
                 foreach ($val['categories'] as $key2 => $val2) {
-                    if (array_key_exists($key2, $categories)) {
+                    if (isset($categories[$key2])) {
                         $is_categorized = $key2;
                         break;
                     }
@@ -385,12 +385,6 @@ class bayesRenderer extends suxRenderer {
         <th>{$text['owner']}</th>
         <th>{$text['unshare']}</th>
         </tr></thead><tbody>\n";
-
-        // Yes, we could have left joined the users table
-        //
-        // But because we can split our data among multiple databases we
-        // can't guarantee that the users tables and the bayes tables are
-        // in the same place, hence this awkwardness
 
         require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
         $user = new suxUser();
