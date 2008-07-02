@@ -69,25 +69,39 @@ class blogRenderer extends suxRenderer {
     */
     function authorCategories($id, $users_id) {
 
-        $links = $this->link->getLinks('link_bayes_messages', 'messages', $id);
-        if (!$links) return null; // No linked bayes_documents
+        // ----------------------------------------------------------------
+        // SQL
+        // ----------------------------------------------------------------
 
-        $html = '';
-        foreach($links as $val) {
-            // $val is a bayes_documents id
-            $cat = $this->nb->getCategoriesByDocument($val);
-            foreach ($cat as $key => $val2) {
-                // $cat is a category
-                // $key is the bayes_categories id,
-                // $val2 is an array of category info
-                if ($this->nb->isCategoryTrainer($key, $users_id)) {
-                    // This author is the category trainer,
-                    // They (or someone they share with) have assigned a category
-                    $url = suxFunct::makeUrl('/blog/category/' . $key);
-                    $html .= "<a href='{$url}'>{$val2['category']}</a>, ";
-                }
-            }
+        // Innerjoin query
+        $innerjoin = '
+        INNER JOIN bayes_auth ON bayes_categories.bayes_vectors_id = bayes_auth.bayes_vectors_id
+        INNER JOIN bayes_documents ON bayes_categories.id = bayes_documents.bayes_categories_id
+        INNER JOIN link_bayes_messages ON link_bayes_messages.bayes_documents_id = bayes_documents.id
+        INNER JOIN messages ON link_bayes_messages.messages_id = messages.id
+        ';
+
+        // Select, equivilant to nb->isCategoryTrainer()
+        $query = "
+        SELECT bayes_categories.category, bayes_categories.id FROM bayes_categories
+        {$innerjoin}
+        WHERE messages.id = ? AND bayes_auth.users_id = ? AND (bayes_auth.owner = 1 OR bayes_auth.trainer = 1)
+        ";
+
+        $db = suxDB::get();
+        $st = $db->prepare($query);
+        $st->execute(array($id, $users_id));
+        $cat = $st->fetchAll(PDO::FETCH_ASSOC);
+
+        // ----------------------------------------------------------------
+        // Html
+        // ----------------------------------------------------------------
+
+        foreach ($cat as $val) {
+            $url = suxFunct::makeUrl('/blog/category/' . $val['id']);
+            $html .= "<a href='{$url}'>{$val['category']}</a>, ";
         }
+
         if (!$html) return null; // No categories by trainer
 
         $html = rtrim($html, ', ');

@@ -51,7 +51,7 @@ class suxPager {
 
 
     /**
-    * @return int returns the start offset based on $_GET['page'] and $this->limit
+    * @return int sets the start offset based on $_GET['page'] and $this->limit
     */
     function setStart() {
 
@@ -129,6 +129,7 @@ class suxPager {
 
 		return "<div class='pager'>{$html}</div> ";
     }
+
 }
 
 ?>
