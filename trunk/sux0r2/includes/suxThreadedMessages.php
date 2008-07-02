@@ -66,22 +66,36 @@ class suxThreadedMessages {
     * Get a message by id
     *
     * @param int $id messages_id
-    * @return array
+    * @param bool $unpub select un-published?
+    * @return array|false
     */
-    function getMessage($id) {
+    function getMessage($id, $unpub = false) {
 
         // Sanity check
         if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid message id');
 
-        $st = $this->db->prepare("SELECT * FROM {$this->db_table} WHERE id = ? LIMIT 1 ");
+        $query = "SELECT * FROM {$this->db_table} WHERE id = ? ";
+        if (!$unpub) {
+            // Only show published items
+            $query .= "AND draft = 0 ";
+            if ($this->db_driver == 'mysql') {
+                // MySql
+                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            }
+            else {
+                throw new Exception('Unsupported database driver');
+            }
+        }
+        $query .= 'LIMIT 1 ';
+
+
+        $st = $this->db->prepare($query);
         $st->execute(array($id));
 
         $message = $st->fetch(PDO::FETCH_ASSOC);
-        if (!$message) {
-            throw new Exception('Invalid message id');
-        }
+        if ($message) return $message;
+        else return false;
 
-        return $message;
 
     }
 
@@ -96,21 +110,6 @@ class suxThreadedMessages {
     * @return int insert id
     */
     function saveMessage($users_id, array $msg, $parent_id = 0, $trusted = false) {
-
-        /*
-        The first message in a thread has thread_pos = 0.
-
-        For a new message N, if there are no messages in the thread with the same
-        parent as N, N's thread_pos is one greater than its parent's thread_pos.
-
-        For a new message N, if there are messages in the thread with the same
-        parent as N, N's thread_pos is one greater than the biggest thread_pos
-        of all the messages with the same parent as N.
-
-        After new message N's thread_pos is determined, all messages in the same
-        thread with a thread_pos value greater than or equal to N's have their
-        thread_pos value incremented by 1 (to make room for N).
-        */
 
         // -------------------------------------------------------------------
         // Sanitize
@@ -175,6 +174,21 @@ class suxThreadedMessages {
         // Go!
         // -------------------------------------------------------------------
 
+        /*
+        The first message in a thread has thread_pos = 0.
+
+        For a new message N, if there are no messages in the thread with the same
+        parent as N, N's thread_pos is one greater than its parent's thread_pos.
+
+        For a new message N, if there are messages in the thread with the same
+        parent as N, N's thread_pos is one greater than the biggest thread_pos
+        of all the messages with the same parent as N, recursively.
+
+        After new message N's thread_pos is determined, all messages in the same
+        thread with a thread_pos value greater than or equal to N's have their
+        thread_pos value incremented by 1 (to make room for N).
+        */
+
         // Begin transaction
         $this->db->beginTransaction();
         $this->inTransaction = true;
@@ -189,10 +203,8 @@ class suxThreadedMessages {
             // a reply's level is one greater than its parent's
             $clean['level'] = $parent['level'] + 1;
 
-            // what is the biggest thread_pos in this thread among messages with the same parent?
-            $st = $this->db->prepare("SELECT MAX(thread_pos) FROM {$this->db_table} WHERE thread_id = ? AND parent_id = ? ");
-            $st->execute(array($parent['thread_id'], $clean['parent_id']));
-            $clean['thread_pos'] = $st->fetchColumn(0);
+            // what is the biggest thread_pos in this thread among messages with the same parent, recursively?
+            $clean['thread_pos'] = $this->biggestThreadPos($parent['thread_id'], $clean['parent_id']);
 
             if ($clean['thread_pos']) {
                 // this thread_pos goes after the biggest existing one
@@ -236,6 +248,29 @@ class suxThreadedMessages {
         $this->inTransaction = false;
 
         return $insert_id;
+
+    }
+
+
+    /**
+    * This is a recursive function which finds the biggest thread_pos
+    *
+    * @param int $thread_id thread_d
+    * @param int $parent_id parent id
+    * @return int
+    */
+    private function biggestThreadPos($thread_id, $parent_id) {
+
+        $st = $this->db->prepare("SELECT id, thread_pos FROM {$this->db_table} WHERE thread_id = ? AND parent_id = ? ORDER BY thread_pos DESC LIMIT 1 ");
+        $st->execute(array($thread_id, $parent_id));
+        $result = $st->fetch(PDO::FETCH_ASSOC);
+
+        static $max_pos = 0;
+        if ($result['thread_pos'] && $max_pos < $result['thread_pos']) {
+            $max_pos = $result['thread_pos'];
+            return $this->biggestThreadPos($thread_id, $result['id']);
+        }
+        return $max_pos;
 
     }
 
@@ -469,7 +504,7 @@ class suxThreadedMessages {
         }
 
         if ($type) $query .= "AND {$type} = 1 "; // Type
-        $query .= "ORDER BY thread_pos "; // Order
+        $query .= "ORDER BY thread_id, thread_pos "; // Order
         // Limit
         if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";

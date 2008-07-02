@@ -240,48 +240,74 @@ class blog  {
     }
 
 
+    /**
+    * View
+    */
+    function view($thread_id) {
+
+        $this->pager->limit = 100;
+
+        // Pager
+        $this->pager->setStart();
+        $this->pager->setPages($this->msg->countThread($thread_id, 'blog'));
+        $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/view/' . $thread_id));
+
+        if ($this->pager->start == 0) {
+            $thread = $this->msg->getThread($thread_id, 'blog', true, $this->pager->limit, $this->pager->start);
+            $fp[] = array_shift($thread);
+        }
+        else {
+            $thread = $this->msg->getThread($thread_id, 'blog', true, $this->pager->limit, $this->pager->start);
+            $fp[] = $this->msg->getFirstPost($thread_id, 'blog');
+        }
+
+        // Assign
+        $this->r->fp = $this->blogs($fp);
+        $this->r->comments = $this->comments($thread);
+
+        // $this->r->sidelist = $this->msg->getFirstPostsByUser($u['users_id'], 'blog'); // TODO: Too many blogs?
+        // $this->r->text['sidelist'] = ucwords($author);
+
+
+        // Template
+        $this->tpl->assign_by_ref('r', $this->r);
+        $this->tpl->display('view.tpl');
+
+    }
+
+
 
     /**
     * @param array threaded messages
     * @return array
     */
-    function blogs($msgs) {
+    private function blogs($msgs) {
 
         foreach($msgs as &$val) {
 
-            // $val is an array of threadedMessages info
-
             $val['comments'] = $this->msg->getCommentsCount($val['thread_id']);
-            $tmp = $this->user->getUser($val['users_id']);
-            $val['nickname'] = $tmp['nickname'];
-
-            if (!isset($_SESSION['users_id'])) continue; // Anonymous user, skip
-
-            $links = $this->link->getLinks('link_bayes_messages', 'messages', $val['id']);
-            if (!$links) continue;  // No linked bayes_documents, skip
-
-            $val['linked'] = '';
-            foreach($links as $val2) {
-                // $val2 is a bayes_documents id
-                $cat = $this->nb->getCategoriesByDocument($val2);
-                foreach ($cat as $key => $val3) {
-                    // $cat is a category
-                    // $key is the bayes_categories id,
-                    // $val3 is an array of category info
-                    if ($this->nb->isCategoryUser($key, $_SESSION['users_id'])) {
-                        // This user can categorize using this category
-                        // They (or someone they share with) have already assigned a category
-                        // It is redundant to categorize statistically using Naive Bayes
-                        $val['linked'] .= "$val2, ";
-                        $val['category_id'][] = $key;
-                    }
-                }
-            }
-            $val['linked'] = rtrim($val['linked'], ', '); // Remove trailing comma
+            $user = $this->user->getUser($val['users_id']);
+            $val['nickname'] = $user['nickname'];
 
         }
 
-        // new dBug($tmp);
+        return $msgs;
+
+    }
+
+
+    /**
+    * @param array threaded messages
+    * @return array
+    */
+    private function comments($msgs) {
+
+        foreach($msgs as &$val) {
+
+            $user = $this->user->getUser($val['users_id']);
+            $val['nickname'] = $user['nickname'];
+
+        }
 
         return $msgs;
 

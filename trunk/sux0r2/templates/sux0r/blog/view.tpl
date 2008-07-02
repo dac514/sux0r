@@ -53,22 +53,6 @@
                 {/if}
 
 
-                {if $r->recent()}
-                <div id="recent">
-                <p>Most recent comments:</p>
-                {foreach from=$r->recent() item=foo}
-                    <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}#comment-{$foo.id}">{$foo.title}</a>
-                    by <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a>
-                    in <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">{$foo.title_fp}</a>
-                    on {$foo.published_on}<br /><br />
-                {/foreach}
-                </div>
-                {/if}
-
-
-
-
-
 			</div>
 		</td>
 		<td style="vertical-align:top;">
@@ -84,25 +68,7 @@
             [ Go! ]
             </p>*}
 
-            {* Todo
-            <p>
-            Category Filters :
-            <select name="null" class="revert">
-            <option label="---" value="">---</option>
-            <optgroup label="Feelings">
-            <option label="Bad" value="6">Bad</option>
-            <option label="Good" value="5">Good</option>
-            </optgroup>
-            <optgroup label="Programming Languages">
-            <option label="Java" value="9">Java</option>
-            <option label="Objective-C" value="4">Objective-C</option>
-            <option label="Perl" value="3">Perl</option>
-            <option label="PHP" value="1">PHP</option>
-            </optgroup>
-            </select>
-            </p>
-            *}
-
+            {* ------------------------------------------------------------------------------------------------------ *}
 
             {* Blogs *}
             {if $r->fp}
@@ -123,11 +89,8 @@
                     <p>{$foo.body_html}</p>
                     <div class="clearboth"></div>
 
-
-                    <!-- Permanlink, Comments -->
-                    <p><a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">Permanent Link</a>,
-                    <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}#comments">Comments ({$foo.comments})</a></p>
-
+                    <!-- Reply -->
+                    <p><a href="{$r->makeUrl('/blog/reply')}/{$foo.id}">Reply</a></p>
 
                     <!-- Flair -->
                     {capture name=url assign=url}{$r->makeUrl('/blog/view', null, true)}/{$foo.thread_id}{/capture}
@@ -159,6 +122,33 @@
             {else}
                 <p>Not found.</p>
             {/if}
+
+            {* ------------------------------------------------------------------------------------------------------ *}
+
+            <a name="comments"></a>
+            {* Comments *}
+            {if $r->comments}
+            {foreach from=$r->comments item=foo}
+
+
+                    <div class="comment" style="margin-left:{$r->indenter($foo.level)};">
+                    <a name="comment-{$foo.id}"></a>
+
+                    <!-- Content -->
+                    <p>{$foo.published_on}, by <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a></p>
+                    <p>{$foo.body_html}</p>
+                    <p><a href="{$r->makeUrl('/blog/reply')}/{$foo.id}">Reply</a></p>
+
+                    </div>
+
+
+            {/foreach}
+            {else}
+                <p>No comments.</p>
+            {/if}
+
+            {* ------------------------------------------------------------------------------------------------------ *}
+
 
             {$r->text.pager}
 
