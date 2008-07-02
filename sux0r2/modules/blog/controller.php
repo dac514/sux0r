@@ -49,6 +49,29 @@ function sux($action, $params = null) {
 
         break;
 
+    case 'reply' :
+
+        // --------------------------------------------------------------------
+        // Reply
+        // --------------------------------------------------------------------
+
+        if (empty($params[0]) || !filter_var($params[0], FILTER_VALIDATE_INT)) {
+            suxFunct::redirect(suxFunct::makeUrl('/blog'));
+        }
+
+        include_once('blogReply.php');
+        $reg = new blogReply($params[0]);
+
+        if ($reg->formValidate($_POST)) {
+            $reg->formProcess($_POST);
+            // $reg->formSuccess();
+        }
+        else {
+            $reg->formBuild($_POST);
+        }
+
+        break;
+
         // --------------------------------------------------------------------
         // View
         // --------------------------------------------------------------------
@@ -59,7 +82,9 @@ function sux($action, $params = null) {
             suxFunct::redirect(suxFunct::makeUrl('/blog'));
         }
 
-        echo 'TODO';
+        include_once('blog.php');
+        $blog = new blog();
+        $blog->view($params[0]);
         break;
 
 

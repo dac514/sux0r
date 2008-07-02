@@ -200,6 +200,15 @@ class blogRenderer extends suxRenderer {
     }
 
 
+    function indenter($level) {
+
+        if ($level > 1) $level = $level * 10; // Level 1 is first comment
+        if ($level > 100) $level = 100; // Prevent excecive threading
+        return "{$level}px";
+
+    }
+
+
     // ------------------------------------------------------------------------
     // suxEdit
     // ------------------------------------------------------------------------

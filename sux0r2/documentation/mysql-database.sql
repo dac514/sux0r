@@ -219,6 +219,8 @@ CREATE TABLE `messages` (
   KEY `type` (`forum`,`blog`,`wiki`,`slideshow`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+ALTER TABLE  `messages` ADD INDEX (  `parent_id` ) ;
+
 --
 -- Dumping data for table `messages`
 --

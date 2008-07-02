@@ -59,6 +59,12 @@ input, select {
     margin-right: 0px;
 }
 
+.comment {
+    border: 1px dashed #cccccc;
+    padding: 10px;
+    margin-top: 10px;
+}
+
 /* Revert */
 
 .htmlSelect select {
