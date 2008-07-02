@@ -50,7 +50,6 @@ class bayesRenderer extends suxRenderer {
 
     }
 
-    // ---
 
     /**
     * @param int $id messages id
@@ -68,8 +67,8 @@ class bayesRenderer extends suxRenderer {
         static $vectors = null;
         if (!is_array($vectors)) {
             $vectors = array();
-            foreach ($this->nb->getVectorsByUser($_SESSION['users_id']) as $key => $val) {
-                $vectors[$key] = $val['vector'];
+            foreach ($this->nb->getSharedVectors($_SESSION['users_id']) as $key => $val) {
+                $vectors[$key] = $val;
             }
         }
         if (!count($vectors)) return null; // No user vectors, skip
@@ -85,46 +84,56 @@ class bayesRenderer extends suxRenderer {
             $v_user = array();
 
             foreach ($vectors as $key => $val) {
-                if ($this->nb->isVectorTrainer($key, $_SESSION['users_id'])) {
+
+                if ($val['owner'] || $val['trainer']) {
                     $v_trainer[$key] = array(
-                        'vector' => $val,
+                        'vector' => $val['vector'],
                         'categories' => $this->nb->getCategoriesByVector($key),
                         );
                 }
                 else {
                     $v_user[$key] = array(
-                        'vector' => $val,
+                        'vector' => $val['vector'],
                         'categories' => $this->nb->getCategoriesByVector($key),
                         );
                 }
+
             }
         }
 
         /* Get all the bayes categories linked to the document id that the user has access to */
 
+        // Innerjoin query
+        $link_table = $this->link->getLinkTableName($link, 'bayes');
+        $innerjoin = "
+        INNER JOIN bayes_auth ON bayes_categories.bayes_vectors_id = bayes_auth.bayes_vectors_id
+        INNER JOIN bayes_documents ON bayes_categories.id = bayes_documents.bayes_categories_id
+        INNER JOIN {$link_table} ON {$link_table}.bayes_documents_id = bayes_documents.id
+        INNER JOIN {$link} ON {$link_table}.{$link}_id = {$link}.id
+        ";
+
+        // Select, equivilant to nb->isCategoryUser()
+        $query = "
+        SELECT bayes_categories.id FROM bayes_categories
+        {$innerjoin}
+        WHERE {$link}.id = ? AND bayes_auth.users_id = ?
+        ";
+
+        $db = suxDB::get();
+        $st = $db->prepare($query);
+        $st->execute(array($id, $_SESSION['users_id']));
+        $tmp = $st->fetchAll(PDO::FETCH_ASSOC);
+
         $categories = array();
-        $links = $this->link->getLinks($this->link->getLinkTableName($link, 'bayes'), $link, $id);
-        if ($links) {
-            foreach($links as $val) {
-                // $val is a bayes_documents id
-                $cat = $this->nb->getCategoriesByDocument($val);
-                foreach ($cat as $key => $val2) {
-                    // $cat is a category
-                    // $key is the bayes_categories id,
-                    // $val2 is an array of category info
-                    if ($this->nb->isCategoryUser($key, $_SESSION['users_id'])) {
-                        // Category user, someone trained the document and this
-                        // user has access to that information
-                        $categories[$key] = $val2;
-                    }
-                }
-            }
+        foreach ($tmp as $key => $val) {
+            $categories[$val['id']] = true;
         }
 
 
-        $html = '';
-        $i = 0; // Used to identify ajax trainable vector
+        /* Begin rendering */
 
+        $html = '';
+        $i = 0; // Used to identify $v_trainer[]
         foreach(array($v_trainer, $v_user) as $vectors2) {
 
             foreach ($vectors2 as $key => $val) {
@@ -134,16 +143,15 @@ class bayesRenderer extends suxRenderer {
                 $html .= "@_{$uniqid}_@ : ";
 
                 if ($i == 0) {
-                    // TODO: Can submit with AJAX
+                    // this is $v_trainer[], TODO: is ajax trainable
                     $html .= '<select name="category_id[]" class="revert">';
                 }
                 else {
-                    // Looks pretty, does nothing
+                    // this is $v_user[], sit pretty, do nothing
                     $html .= '<select name="null" class="revert">';
                 }
 
                 $html .= '<option label="---" value="">---</option>';
-
 
                 /* Check if the vector is categorized */
 
@@ -193,18 +201,13 @@ class bayesRenderer extends suxRenderer {
 
             }
 
-
-            ++$i; // Used to identify ajax trainable vector.
+            ++$i; // Used to identify $v_trainer[]
 
         }
-
 
         return $html;
 
     }
-
-
-    // ---
 
 
     /**

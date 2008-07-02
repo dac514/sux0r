@@ -61,8 +61,10 @@ class blog  {
         $this->user = new suxUser();
         $this->msg = new suxThreadedMessages();
         $this->link = new suxLink();
-        $this->pager = new suxPager();
         $this->nb = new bayesUser();
+
+        $this->pager = new suxPager();
+        $this->pager->limit = 2;
 
     }
 
@@ -76,7 +78,6 @@ class blog  {
         if ($u) {
 
             // Pager
-            $this->pager->limit = 2;
             $this->pager->setStart();
             $this->pager->setPages($this->msg->countFirstPostsByUser($u['users_id'], 'blog'));
             $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/author/' . $author));
@@ -172,7 +173,6 @@ class blog  {
                 // ----------------------------------------------------------------
 
                 // Pager
-                $this->pager->limit = 2;
                 $this->pager->setStart();
                 $this->pager->setPages($count);
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/category/' . $cat_id));
@@ -204,7 +204,6 @@ class blog  {
         $datetime = $date . ' ' . date('H:i:s'); // Append current time
 
         // Pager
-        $this->pager->limit = 2;
         $this->pager->setStart();
         $this->pager->setPages($this->msg->countFirstPostsByMonth($datetime, 'blog'));
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/month/' . $date));
@@ -227,7 +226,6 @@ class blog  {
     function listing() {
 
         // Pager
-        // $this->pager->limit = 2;
         $this->pager->setStart();
         $this->pager->setPages($this->msg->countFirstPosts('blog'));
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog'));
