@@ -35,8 +35,8 @@ class blogReply {
     // Variables
     public $gtext = array();
     private $module = 'blog';
-    private $prev_url_preg = '#^blog/[edit]#i';
-    private $parent_id;
+    private $prev_url_preg = '#^blog/[edit|reply]#i';
+    private $parent;
 
     // Objects
     public $tpl;
@@ -70,15 +70,13 @@ class blogReply {
         // Redirect if not logged in
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
 
-
-        if (!$this->msg->getMessage($parent_id)) {
-
+        $parent = $this->msg->getMessage($parent_id);
+        if (!$parent) {
             echo 'Invalid message';
             exit;
-
         }
 
-        $this->parent_id = $parent_id;
+        $this->parent = $parent;
 
     }
 
@@ -137,10 +135,12 @@ class blogReply {
         }
 
         // Additional variables
-        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/reply/' . $this->parent_id);
+        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/reply/' . $this->parent['id']);
         $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
 
-        $this->tpl->assign('parent_id', $this->parent_id);
+        // Parent
+        $this->tpl->assign('parent_id', $this->parent['id']);
+        $this->tpl->assign('parent', "{$this->parent['title']} \n\n {$this->parent['body_plaintext']}");
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
