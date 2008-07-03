@@ -135,7 +135,7 @@
                     <a name="comment-{$foo.id}"></a>
 
                     <!-- Content -->
-                    <p>{$foo.published_on}, by <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a></p>
+                    <p><strong>{$foo.title}</strong> by <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a> on {$foo.published_on}</p>
                     <p>{$foo.body_html}</p>
                     <p><a href="{$r->makeUrl('/blog/reply')}/{$foo.id}">Reply</a></p>
 

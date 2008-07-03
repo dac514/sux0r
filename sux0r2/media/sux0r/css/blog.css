@@ -65,6 +65,16 @@ input, select {
     margin-top: 10px;
 }
 
+.parentContainer {
+    height: 80px;
+    overflow: auto;
+    border: 1px solid #cccccc;
+    margin: 10px;
+    margin-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 /* Revert */
 
 .htmlSelect select {

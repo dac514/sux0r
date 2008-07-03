@@ -38,11 +38,16 @@ class suxFunct {
     */
     static function killSession() {
 
+        // Keep breadcrumbs
+        $tmp = array();
+        if (isset($_SESSION['breadcrumbs'])) $tmp = $_SESSION['breadcrumbs'];
+
         $_SESSION = array();
-        if (isset($_COOKIE[session_name()])) {
-            setcookie(session_name(), '', time()-42000, '/');
-        }
         session_destroy();
+
+        @session_start();
+        $_SESSION['breadcrumbs'] = $tmp;
+
     }
 
 
@@ -233,16 +238,18 @@ class suxFunct {
     static function sanitizeHtml($html, $trusted = false) {
 
         if ($trusted) {
-            // Exclude script and iframe, let the rest pass
+            // Allow all (*) except -script and -iframe
             $config = array(
                 'elements' => '*-script-iframe',
                 );
         }
         else {
-            // Safe
+            // allow a small subset of elements to pass
+            // Transform strike and u to span for better XHTML 1-strict compliance
             $config = array(
+                'elements' => 'a,em,strike,strong,u,p,br,img,li,ol,ul',
+                'make_tag_strict' => 1,
                 'safe' => 1,
-                'deny_attribute' => 'on*,style,',
                 );
         }
 

@@ -1,6 +1,6 @@
 {capture name=header}
 
-{$r->tinyMceInit()}
+{$r->tinyMceComment()}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
@@ -13,6 +13,10 @@
 
 <fieldset>
 <legend>Reply</legend>
+
+<div class="parentContainer">
+<pre>{$parent|trim}</pre>
+</div>
 
 <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />

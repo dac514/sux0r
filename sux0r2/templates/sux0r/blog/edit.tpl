@@ -1,6 +1,6 @@
 {capture name=header}
 
-{$r->tinyMceInit()}
+{$r->tinyMceEditor()}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
@@ -64,7 +64,7 @@
 
 <p>
 <div>
-TODO: <a href="javascript:;" onmousedown="tinyMCE.execCommand('mceInsertContent',false,'<img src=\'http://www.sux0r.org/pre-alpha.png\' alt=\'sux0r\' />');">[Insert Image]</a>
+TODO: http://wiki.moxiecode.com/index.php/TinyMCE:Configuration/external_image_list_url
 </div>
 <textarea name="body" class="mceEditor">{$body}</textarea>
 </p>
