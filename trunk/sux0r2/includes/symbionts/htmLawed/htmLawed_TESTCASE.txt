@@ -1,8 +1,8 @@
 /*
-htmLawed_TESTCASE.txt
-htmLawed 1.0.9, 11 June 2008
+htmLawed_TESTCASE.txt, 29 June 2008
+htmLawed 1.1, 29 June 2008
 Copyright Santosh Patnaik
-GPLv3 license
+GPL v3 license
 A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed
 */
 
@@ -10,7 +10,7 @@ This file has UTF-8-encoded text with both correct and incorrect/malformed HTML/
 
 ************************************************
 when viewing this file in a web browser, set the
-character-set used for viewing to Unicode/utf8
+character encoding to Unicode/UTF-8
 ************************************************
 
 --------------------- start --------------------
@@ -47,6 +47,13 @@ character-set used for viewing to Unicode/utf8
 <blockquote>abc<div>def</div>ghi</blockquote><br />
 abc<div>def</div>ghi<br />
 (try with blockquote parent)
+
+<h6>CDATA sections</h6>
+
+<strong>Special characters inside:</strong> <![CDATA[ ]]> ]]>, <![CDATA[ 3 < 4 > 3.5, & 4 &gt; 4 ]]><br />
+<strong>Normal:</strong> <![CDATA[ check ]]>, <em>CDATA follows:<![CDATA[ check ]]></em><br />
+<strong>Malformed:</strong> <![cdata check ]]>, < ![CDATA check ]]>, <![CDATA check ]]>, < ![CDATA check ] ]><br />
+<strong>Invalid:</strong> <em <![CDATA[ check ]]>>CDATA in tag content</em>, <table><![CDATA[ check ]]><tr><td>text not allowed</td></tr></table>
 
 <h6>Complex-1: deprecated elements</h6>
 
@@ -103,13 +110,6 @@ Disallowed tag p
 </p>
 <ul>Bad<li>OK</li></ul>
 
-<h6>CDATA sections</h6>
-
-<strong>Special characters inside:</strong> <![CDATA[ ]]> ]]>, <![CDATA[ 3 < 4 > 3.5, & 4 &gt; 4 ]]><br />
-<strong>Normal:</strong> <![CDATA[ check ]]>, <em>CDATA follows:<![CDATA[ check ]]></em><br />
-<strong>Malformed:</strong> <![cdata check ]]>, < ![CDATA check ]]>, <![CDATA check ]]>, < ![CDATA check ] ]><br />
-<strong>Invalid:</strong> <em <![CDATA[ check ]]>>CDATA in tag content</em>, <table><![CDATA[ check ]]><tr><td>text not allowed</td></tr></table>
-
 <h6>Elements</h6>
 
 <strong>Unbalanced:</strong> <a href="h"><em>check</a></em><br />
@@ -133,6 +133,34 @@ Disallowed tag p
 <strong>Casing:</strong> &#X27;, &#x27;, &TILDE;, &tilde;
 <br />
 (also check named-to-numeric and hexdec-to-decimal, and vice versa, conversions)
+
+<h6>Format</h6>
+
+<strong>Valid but ill-formatted:</strong> text <!-- comment -->
+text <!--
+A   c  o  m  m  e  n  t -->
+<script>
+	<![CDATA[
+		code
+	]]>
+</script><!-- comment --><![CDATA[ cdata ]]> <a>text</b> text<pre id="none">p r e</pre>
+<textarea>text</textarea>	  <textarea>
+	  text	text  
+</textarea>		text  text <br /><hr />
+text <img src="none" alt="none" /> t<em class="none">e<strong>x</strong>t</em>
+text <img src="none" alt="none" /> 	<b>t<em> e <strong> x </strong> t</em></b>
+	<a href="a">	text <img src="none" alt="none" /> 	<b>t <em> e <strong> x </strong> t</em></b>
+	</a>
+<span style="background-color: yellow;">text <img src="none" alt="none" /> 	<b> <em> t e <strong> x </strong> t</em></b></span>
+<script>script</script>
+<div>
+	<pre id="none">p <a>r</a> e <!-- comment --> </pre>
+		<pre>
+				pre
+		</pre>
+</div>
+<div><div><table border="1" style="background-color: red;"><tr><td>Cell</td><td colspan="2" rowspan="2"><table border="1" style="background-color: green;"><tr><td>Cell</td><td colspan="2" rowspan="2"></td></tr><tr><td>Cell</td></tr><tr><td>Cell</td><td>Cell</td><td>Cell</td></tr></table></td></tr><tr><td>Cell</td></tr><tr><td>Cell</td><td>Cell</td><td>Cell</td></tr></table></div></div>
+(try to compact or beautify)
 
 <h6>Forms</h6>
 
