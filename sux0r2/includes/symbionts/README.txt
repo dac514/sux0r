@@ -57,7 +57,7 @@ dBug
 
 htmLawed
 * Path: ./htmLawed/
-* Version: 1.0.9
+* Version: 1.1
 * Licence: GPL 3
 * Website: http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/index.php
 
