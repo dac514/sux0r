@@ -157,18 +157,12 @@ class blogReply {
     */
     function formProcess(&$clean) {
 
-        // --------------------------------------------------------------------
-        // Sanity check
-        // --------------------------------------------------------------------
-
         $msg['blog'] = 1;
         $msg['title'] = $clean['title'];
         $msg['body'] = $clean['body'];
 
         $this->msg->saveMessage($_SESSION['users_id'], $msg, $clean['parent_id']);
-
-        $msg = $this->msg->getMessage($clean['parent_id']);
-        suxFunct::redirect(suxFunct::makeUrl('/blog/view/' . $msg['thread_id']));
+        suxFunct::redirect(suxFunct::makeUrl('/blog/view/' . $this->parent['thread_id']));
 
     }
 
