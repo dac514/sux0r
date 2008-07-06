@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 17, 2008 at 12:16 PM
+-- Generation Time: Jul 06, 2008 at 12:54 PM
 -- Server version: 5.0.41
 -- PHP Version: 5.2.5
 
@@ -119,16 +119,46 @@ CREATE TABLE `bayes_vectors` (
 
 CREATE TABLE `bookmarks` (
   `id` int(11) NOT NULL auto_increment,
+  `users_id` int(11) NOT NULL,
   `url` varchar(255) NOT NULL,
   `title` varchar(255) NOT NULL,
-  `description_html` text,
-  `description_plaintext` text,
+  `body_html` text,
+  `body_plaintext` text,
+  `draft` tinyint(1) NOT NULL,
+  `published_on` datetime NOT NULL,
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `url` (`url`)
+  UNIQUE KEY `url` (`url`),
+  KEY `users_id` (`users_id`),
+  KEY `published` (`draft`,`published_on`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `bookmarks`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bookmarks_history`
+--
+
+CREATE TABLE `bookmarks_history` (
+  `id` int(11) NOT NULL auto_increment,
+  `bookmarks_id` int(11) NOT NULL,
+  `users_id` int(11) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `body_html` text NOT NULL,
+  `body_plaintext` text NOT NULL,
+  `edited_on` datetime NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `bookmarks_id` (`bookmarks_id`),
+  KEY `users_id` (`users_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `bookmarks_history`
 --
 
 
@@ -216,10 +246,9 @@ CREATE TABLE `messages` (
   KEY `users_id` (`users_id`),
   KEY `thread` (`thread_id`,`thread_pos`),
   KEY `published` (`published_on`,`draft`),
-  KEY `type` (`forum`,`blog`,`wiki`,`slideshow`)
+  KEY `type` (`forum`,`blog`,`wiki`,`slideshow`),
+  KEY `parent_id` (`parent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-ALTER TABLE  `messages` ADD INDEX (  `parent_id` ) ;
 
 --
 -- Dumping data for table `messages`
@@ -291,38 +320,6 @@ CREATE TABLE `openid_trusted` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rolodex`
---
-
-CREATE TABLE `rolodex` (
-  `id` int(11) NOT NULL auto_increment,
-  `organization_name` varchar(255) NOT NULL,
-  `organization_unit` varchar(255) default NULL,
-  `post_office_box` varchar(255) default NULL,
-  `extended_address` varchar(255) default NULL,
-  `street_address` varchar(255) default NULL,
-  `locality` varchar(255) default NULL,
-  `region` varchar(255) default NULL,
-  `postal_code` varchar(255) default NULL,
-  `country_name` varchar(255) default NULL,
-  `tel` varchar(255) default NULL,
-  `email` varchar(255) default NULL,
-  `url` varchar(255) default NULL,
-  `photo` varchar(255) default NULL,
-  `latitude` varchar(255) default NULL,
-  `longitude` varchar(255) default NULL,
-  `note` text,
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `rolodex`
---
-
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `socialnetwork`
 --
 
@@ -333,7 +330,7 @@ CREATE TABLE `socialnetwork` (
   `relationship` varchar(255) default NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `friendship` (`users_id`,`friend_users_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `socialnetwork`
@@ -393,7 +390,7 @@ CREATE TABLE `users_info` (
 -- Dumping data for table `users_info`
 --
 
-INSERT INTO `users_info` VALUES (1, 1, 'Test', 'User', '', '', '', '', 'ca', '', '', '0000-00-00', 'm', 'en', 'America/Montreal');
+INSERT INTO `users_info` VALUES (1, 1, '', '', '', '', '', '', 'ca', '', '', '0000-00-00', 'm', 'en', 'America/Montreal');
 
 -- --------------------------------------------------------
 

@@ -37,17 +37,42 @@ function sux($action, $params = null) {
         $id = !empty($params[0]) ? $params[0]: null;
 
         include_once('blogEdit.php');
-        $reg = new blogEdit($id);
+        $edit = new blogEdit($id);
 
-        if ($reg->formValidate($_POST)) {
-            $reg->formProcess($_POST);
-            // $reg->formSuccess();
+        if ($edit->formValidate($_POST)) {
+            $edit->formProcess($_POST);
+            $edit->formSuccess();
         }
         else {
-            $reg->formBuild($_POST);
+            $edit->formBuild($_POST);
         }
 
         break;
+
+
+    case 'bookmarks' :
+
+        // --------------------------------------------------------------------
+        // Scan for bookmarks
+        // --------------------------------------------------------------------
+
+        if (empty($params[0]) || !filter_var($params[0], FILTER_VALIDATE_INT)) {
+            suxFunct::redirect(suxFunct::makeUrl('/blog'));
+        }
+
+        include_once('blogBookmarks.php');
+        $bm = new blogBookmarks($params[0]);
+
+        if ($bm->formValidate($_POST)) {
+            $bm->formProcess($_POST);
+            $bm->formSuccess();
+        }
+        else {
+            $bm->formBuild($_POST);
+        }
+
+        break;
+
 
     case 'reply' :
 
@@ -60,23 +85,24 @@ function sux($action, $params = null) {
         }
 
         include_once('blogReply.php');
-        $reg = new blogReply($params[0]);
+        $reply = new blogReply($params[0]);
 
-        if ($reg->formValidate($_POST)) {
-            $reg->formProcess($_POST);
-            // $reg->formSuccess();
+        if ($reply->formValidate($_POST)) {
+            $reply->formProcess($_POST);
+            $reply->formSuccess();
         }
         else {
-            $reg->formBuild($_POST);
+            $reply->formBuild($_POST);
         }
 
         break;
 
+
+    case 'view' :
+
         // --------------------------------------------------------------------
         // View
         // --------------------------------------------------------------------
-
-    case 'view' :
 
         if (empty($params[0]) || !filter_var($params[0], FILTER_VALIDATE_INT)) {
             suxFunct::redirect(suxFunct::makeUrl('/blog'));
@@ -88,11 +114,11 @@ function sux($action, $params = null) {
         break;
 
 
+    case 'author' :
+
         // --------------------------------------------------------------------
         // Author
         // --------------------------------------------------------------------
-
-    case 'author' :
 
         if (empty($params[0])) {
             suxFunct::redirect(suxFunct::makeUrl('/blog'));
@@ -103,11 +129,12 @@ function sux($action, $params = null) {
         $blog->author($params[0]);
         break;
 
+
+    case 'category' :
+
         // --------------------------------------------------------------------
         // Category
         // --------------------------------------------------------------------
-
-    case 'category' :
 
         if (empty($params[0])) {
             suxFunct::redirect(suxFunct::makeUrl('/blog'));
@@ -119,11 +146,11 @@ function sux($action, $params = null) {
         break;
 
 
-       // --------------------------------------------------------------------
+    case 'month' :
+
+        // --------------------------------------------------------------------
         // Month
         // --------------------------------------------------------------------
-
-    case 'month' :
 
         $date = !empty($params[0]) ? $params[0]: date('Y-m-d');
 
@@ -131,6 +158,7 @@ function sux($action, $params = null) {
         $blog = new blog();
         $blog->month($date);
         break;
+
 
     default:
 

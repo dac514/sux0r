@@ -22,6 +22,8 @@
 *
 */
 
+// Work in progress, not finished.
+// Do not include in initial sux0r 2.0 release.
 // Based on the micformats hCard specification
 // See: http://microformats.org/wiki/hcard
 
@@ -102,8 +104,6 @@ class suxRolodex {
     }
 
 
-
-
     // ----------------------------------------------------------------------------
     // Exception Handler
     // ----------------------------------------------------------------------------
@@ -125,5 +125,30 @@ class suxRolodex {
 
 
 }
+
+/*
+
+CREATE TABLE `rolodex` (
+  `id` int(11) NOT NULL auto_increment,
+  `organization_name` varchar(255) NOT NULL,
+  `organization_unit` varchar(255) default NULL,
+  `post_office_box` varchar(255) default NULL,
+  `extended_address` varchar(255) default NULL,
+  `street_address` varchar(255) default NULL,
+  `locality` varchar(255) default NULL,
+  `region` varchar(255) default NULL,
+  `postal_code` varchar(255) default NULL,
+  `country_name` varchar(255) default NULL,
+  `tel` varchar(255) default NULL,
+  `email` varchar(255) default NULL,
+  `url` varchar(255) default NULL,
+  `photo` varchar(255) default NULL,
+  `latitude` varchar(255) default NULL,
+  `longitude` varchar(255) default NULL,
+  `note` text,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+*/
 
 ?>

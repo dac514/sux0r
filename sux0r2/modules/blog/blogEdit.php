@@ -343,6 +343,18 @@ class blogEdit {
             }
         }
 
+        $this->id = $clean['id']; // Remember this id
+
+    }
+
+
+    /**
+    * The form was successfuly processed
+    */
+    function formSuccess() {
+
+        // Pass this on to bookmarks for scanning
+        suxFunct::redirect(suxFunct::makeUrl('/blog/bookmarks/' . $this->id));
 
     }
 

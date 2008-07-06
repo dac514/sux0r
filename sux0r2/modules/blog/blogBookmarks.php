@@ -1,7 +1,7 @@
 <?php
 
 /**
-* blogReply
+* blogBookmarks
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -22,6 +22,8 @@
 *
 */
 
+// Work in progress...
+
 require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
@@ -30,13 +32,13 @@ require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once(dirname(__FILE__) . '/../bayes/bayesUser.php');
 require_once('blogRenderer.php');
 
-class blogReply {
+class blogBookmarks {
 
     // Variables
     public $gtext = array();
     private $module = 'blog';
     private $prev_url_preg = '#^blog/[edit|reply]#i';
-    private $parent;
+    private $id;
 
     // Objects
     public $tpl;
@@ -53,7 +55,7 @@ class blogReply {
     * @global string $CONFIG['PARTITION']
     * @param string $key PDO dsn key
     */
-    function __construct($parent_id) {
+    function __construct($msg_id) {
 
         $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
         $this->r = new blogRenderer($this->module); // Renderer
@@ -70,13 +72,31 @@ class blogReply {
         // Redirect if not logged in
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
 
-        $parent = $this->msg->getMessage($parent_id);
-        if (!$parent) {
-            echo 'Invalid message';
-            exit;
+        // --------------------------------------------------------------------
+        // Scan post for href links
+        // --------------------------------------------------------------------
+
+        $msg = $this->msg->getMsg($msg_id, true);
+        // Check ownership...
+
+        $matches = array();
+        $pattern = '/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/ie';
+        preg_match($pattern, $msg['body_html'], $matches);
+
+        if (!count($matches)) {
+           // Nothing here, pass it on.
         }
 
-        $this->parent = $parent;
+
+        foreach ($matches as $match) {
+            if (mb_substr($match[1], 0, 7) == 'http://' || mb_substr($match[1], 0, 8) == 'https://') {
+                // TODO
+                $link = suxFunct::canonicalizeUrl($match[1]);
+                $title = $match[2];
+            }
+        }
+
+
 
     }
 
@@ -128,25 +148,22 @@ class blogReply {
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
 
-            suxValidate::register_validator('integrity', 'integrity:parent_id', 'hasIntegrity');
             suxValidate::register_validator('title', 'title', 'notEmpty', false, false, 'trim');
             suxValidate::register_validator('body', 'body', 'notEmpty', false, false, 'trim');
+
 
         }
 
         // Additional variables
-        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/reply/' . $this->parent['id']);
+        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/edit/' . $this->id);
         $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
-
-        // Parent
-        $this->tpl->assign('parent_id', $this->parent['id']);
-        $this->tpl->assign('parent', "{$this->parent['title']} \n\n {$this->parent['body_plaintext']}");
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
-        $this->tpl->display('reply.tpl');
+        $this->tpl->display('bookmarks.tpl');
 
     }
+
 
 
     /**
@@ -156,20 +173,6 @@ class blogReply {
     */
     function formProcess(&$clean) {
 
-        $msg['blog'] = 1;
-        $msg['title'] = $clean['title'];
-        $msg['body'] = $clean['body'];
-
-        $this->msg->saveMessage($_SESSION['users_id'], $msg, $clean['parent_id']);
-    }
-
-
-    /**
-    * The form was successfuly processed
-    */
-    function formSuccess() {
-
-        suxFunct::redirect(suxFunct::makeUrl('/blog/view/' . $this->parent['thread_id']));
 
     }
 
