@@ -290,7 +290,9 @@ class userEdit {
             $clean['dob'] = null;
         }
         unset ($clean['Date_Year'], $clean['Date_Month'], $clean['Date_Day']);
-        $clean['dob'] = date('Y-m-d', strtotime($clean['dob'])); // Sanitize
+        if (isset($clean['dob'])) $clean['dob'] = date('Y-m-d', strtotime($clean['dob'])); // Sanitize
+        else $clean['dob'] = null;
+
 
         // --------------------------------------------------------------------
         // Edit Mode

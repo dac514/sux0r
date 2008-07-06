@@ -386,6 +386,32 @@ class suxThreadedMessages {
 
 
     /**
+    * Delete bookmark
+    *
+    * @param int $id messages id
+    */
+    function deleteMessage($id) {
+
+        if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
+
+        // Begin transaction
+        $this->db->beginTransaction();
+        $this->inTransaction = true;
+
+        $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE id = ? LIMIT 1 ");
+        $st->execute(array($id));
+
+        $st = $this->db->prepare("DELETE FROM {$this->db_table_hist} WHERE messages_id = ? ");
+        $st->execute(array($id));
+
+        // Commit
+        $this->db->commit();
+        $this->inTransaction = false;
+
+    }
+
+
+    /**
     * Get first post
     *
     * @param int $thread_id thread_id

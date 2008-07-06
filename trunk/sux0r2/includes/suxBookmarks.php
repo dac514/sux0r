@@ -28,6 +28,7 @@ class suxBookmarks {
     protected $db;
     protected $inTransaction = false;
     protected $db_table = 'bookmarks';
+    protected $db_table_hist = 'bookmarks_history';
 
 
     /**
@@ -42,61 +43,107 @@ class suxBookmarks {
 
 
     /**
-    * Set bookmark
+    * Saves a bookmark to the database
     *
-    * @param string $url url
-    * @param string $title title
-    * @param string $desc description
-    * @return bool
+    * @param int $users_id users_id
+    * @param array $msg required keys => (title, body, [forum|blog|wiki|slideshow]) optional keys => (published_on)
+    * @param bool $trusted passed on to sanitizeHtml
+    * @return int insert id
     */
-    function setBookmark($url, $title, $desc) {
+    function saveBookmark($users_id, array $url, $trusted = false) {
 
-        // --------------------------------------------------------------------
+        // -------------------------------------------------------------------
         // Sanitize
-        // --------------------------------------------------------------------
+        // -------------------------------------------------------------------
 
-        $url = suxFunct::canonicalizeUrl($url);
+        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+        if (!isset($url['url']) || !isset($url['title']) || !isset($url['body'])) throw new Exception('Invalid $url array');
+        if (!filter_var($url['url'], FILTER_VALIDATE_URL)) throw new Exception('Invalid url');
+
+        // Users id
+        $clean['users_id'] = $users_id;
+
+        // Canonicalize Url
+        $clean['url'] = suxFunct::canonicalizeUrl($url['title']);
 
         // No HTML in title
-        $title = strip_tags($title);
+        $clean['title'] = strip_tags($url['title']);
 
-        // Sanitize HTML in desc
-        $desc = suxFunct::sanitizeHtml($desc);
+        // Sanitize HTML in body
+        $clean['body_html'] = suxFunct::sanitizeHtml($url['body'], $trusted);
 
-        // Convert and copy desc to UTF-8 plaintext
+        // Convert and copy body to UTF-8 plaintext
         require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
-        $converter = new suxHtml2UTF8($desc);
-        $desc_plaintext = $converter->getText();
+        $converter = new suxHtml2UTF8($clean['body_html']);
+        $clean['body_plaintext']  = $converter->getText();
 
+        // Publish date
+        if (isset($msg['published_on'])) {
+            // ISO 8601 date format
+            // regex must match '2008-06-18 16:53:29' or '2008-06-18T16:53:29-04:00'
+            $regex = '/^(\d{4})-(0[0-9]|1[0,1,2])-([0,1,2][0-9]|3[0,1]).+(\d{2}):(\d{2}):(\d{2})/';
+            if (!preg_match($regex, $msg['published_on'])) throw new Exception('Invalid date');
+            $clean['published_on'] = $msg['published_on'];
+        }
+        else $clean['published_on'] = date('c');
+
+        // Draft, boolean / tinyint
+        $clean['draft'] = 0;
+        if (isset($msg['draft'])) $clean['draft'] = 1;
+
+        // We now have the $clean[] array
 
         // --------------------------------------------------------------------
         // Go!
         // --------------------------------------------------------------------
 
-        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table} WHERE url = ? LIMIT 1 ");
-        $st->execute(array($url));
+        // Begin transaction
+        $this->db->beginTransaction();
+        $this->inTransaction = true;
 
-        $bookmark = array(
-            'url' => $url,
-            'title' => $title,
-            'description_html' => $desc,
-            'description_plaintext' => $desc_plaintext,
-            );
+        // Get $edit[] array in order to keep a history
+        $query = "SELECT id, url, title, body_html, body_plaintext FROM {$this->db_table} WHERE url = ? LIMIT 1 ";
+        $st = $this->db->prepare($query);
+        $st->execute(array($clean['url']));
+        $edit = $st->fetch(PDO::FETCH_ASSOC);
 
-        if ($st->fetchColumn() > 0) {
+        if ($edit) {
+
             // UPDATE
-            $query = suxDB::prepareUpdateQuery($this->db_table, $bookmark, 'url');
+
+            $id = $edit['id'];
+            $edit['users_id'] = $clean['users_id'];
+            $edit['edited_on'] = date('c');
+
+            $query = suxDB::prepareInsertQuery($this->db_table_hist, $edit);
             $st = $this->db->prepare($query);
-            return $st->execute($bookmark);
+            $st->execute($edit);
+
+            unset($clean['users_id']); // Don't override the original publisher
+
+            $query = suxDB::prepareUpdateQuery($this->db_table, $clean, 'url');
+            $st = $this->db->prepare($query);
+            $st->execute($clean);
 
         }
         else {
+
             // INSERT
-            $query = suxDB::prepareInsertQuery($this->db_table, $bookmark);
+
+            $query = suxDB::prepareInsertQuery($this->db_table, $clean);
             $st = $this->db->prepare($query);
-            return $st->execute($bookmark);
+            $st->execute($clean);
+            // MySQL InnoDB with transaction reports the last insert id as 0 after
+            // commit, the real ids are only reported before committing.
+            $id = $this->db->lastInsertId();
+
         }
 
+        // Commit
+        $this->db->commit();
+        $this->inTransaction = false;
+
+        return $id;
 
     }
 
@@ -105,14 +152,24 @@ class suxBookmarks {
     * Delete bookmark
     *
     * @param int $id bookmarks_id
-    * @return bool
     */
     function deleteBookmark($id) {
 
         if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
 
+        // Begin transaction
+        $this->db->beginTransaction();
+        $this->inTransaction = true;
+
         $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE id = ? LIMIT 1 ");
-        return $st->execute(array($id));
+        $st->execute(array($id));
+
+        $st = $this->db->prepare("DELETE FROM {$this->db_table_hist} WHERE bookmarks_id = ? ");
+        $st->execute(array($id));
+
+        // Commit
+        $this->db->commit();
+        $this->inTransaction = false;
 
     }
 
