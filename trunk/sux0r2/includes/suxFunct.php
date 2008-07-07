@@ -232,10 +232,10 @@ class suxFunct {
     * Sanitize HTML
     *
     * @param string $html the html to sanitize
-    * @param bool $style allow most attributes
+    * @param int $trusted -1, 0, or 1
     * @return string sanitized html
     */
-    static function sanitizeHtml($html, $trusted = false) {
+    static function sanitizeHtml($html, $trusted = -1) {
 
         if ($trusted) {
             // Allow all (*) except -script and -iframe
@@ -243,13 +243,20 @@ class suxFunct {
                 'elements' => '*-script-iframe',
                 );
         }
-        else {
+        elseif ($trusted < 0) {
             // allow a small subset of elements to pass
             // Transform strike and u to span for better XHTML 1-strict compliance
             $config = array(
                 'elements' => 'a,em,strike,strong,u,p,br,img,li,ol,ul',
                 'make_tag_strict' => 1,
                 'safe' => 1,
+                );
+        }
+        else {
+            // Safe enough
+            $config = array(
+                'safe' => 1,
+                'deny_attribute' => 'on*,style,',
                 );
         }
 

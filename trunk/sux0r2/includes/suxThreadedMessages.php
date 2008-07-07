@@ -106,10 +106,10 @@ class suxThreadedMessages {
     * @param int $users_id users_id
     * @param array $msg required keys => (title, body, [forum|blog|wiki|slideshow]) optional keys => (published_on)
     * @param int $parent_id messages_id of parent
-    * @param bool $trusted passed on to sanitizeHtml
+    * @param int $trusted passed on to sanitizeHtml()
     * @return int insert id
     */
-    function saveMessage($users_id, array $msg, $parent_id = 0, $trusted = false) {
+    function saveMessage($users_id, array $msg, $parent_id = 0, $trusted = -1) {
 
         // -------------------------------------------------------------------
         // Sanitize
@@ -281,9 +281,9 @@ class suxThreadedMessages {
     * @param int $messages_id messages_id
     * @param int $users_id users_id
     * @param array $msg required keys => (title, body) optional keys => (published_on)
-    * @param bool $trusted passed on to sanitizeHtml
+    * @param int $trusted passed on to sanitizeHtml()
     */
-    function editMessage($messages_id, $users_id, array $msg, $trusted = false) {
+    function editMessage($messages_id, $users_id, array $msg, $trusted = -1) {
 
         // -------------------------------------------------------------------
         // Sanitize
