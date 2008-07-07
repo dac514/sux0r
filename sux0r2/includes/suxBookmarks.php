@@ -29,6 +29,7 @@ class suxBookmarks {
     protected $inTransaction = false;
     protected $db_table = 'bookmarks';
     protected $db_table_hist = 'bookmarks_history';
+    protected $db_driver; // database type
 
 
     /**
@@ -37,9 +38,47 @@ class suxBookmarks {
     function __construct() {
 
     	$this->db = suxDB::get();
+        $this->db_driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
         set_exception_handler(array($this, 'exceptionHandler'));
 
     }
+
+
+    /**
+    * Get a bookmark by id or URL
+    *
+    * @param int|string $id bookmard id or url
+    * @param bool $unpub select un-published?
+    * @return array|false
+    */
+    function getBookmark($id, $unpub = false) {
+
+        $col = 'id';
+        if (!filter_var($id, FILTER_VALIDATE_INT)) $col = 'url';
+
+        $query = "SELECT * FROM {$this->db_table} WHERE {$col} = ? ";
+        if (!$unpub) {
+            // Only show published items
+            $query .= "AND draft = 0 ";
+            if ($this->db_driver == 'mysql') {
+                // MySql
+                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            }
+            else {
+                throw new Exception('Unsupported database driver');
+            }
+        }
+        $query .= 'LIMIT 1 ';
+
+        $st = $this->db->prepare($query);
+        $st->execute(array($id));
+
+        $bookmark = $st->fetch(PDO::FETCH_ASSOC);
+        if ($bookmark) return $bookmark;
+        else return false;
+
+    }
+
 
 
     /**
@@ -47,10 +86,10 @@ class suxBookmarks {
     *
     * @param int $users_id users_id
     * @param array $msg required keys => (title, body, [forum|blog|wiki|slideshow]) optional keys => (published_on)
-    * @param bool $trusted passed on to sanitizeHtml
+    * @param int $trusted passed on to sanitizeHtml()
     * @return int insert id
     */
-    function saveBookmark($users_id, array $url, $trusted = false) {
+    function saveBookmark($users_id, array $url, $trusted = -1) {
 
         // -------------------------------------------------------------------
         // Sanitize

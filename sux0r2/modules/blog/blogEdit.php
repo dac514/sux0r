@@ -35,7 +35,7 @@ class blogEdit {
     // Variables
     public $gtext = array();
     private $module = 'blog';
-    private $prev_url_preg = '#^blog/[edit|reply]#i';
+    private $prev_url_preg = '#^blog/[edit|reply|bookmarks]#i';
     private $id;
 
     // Objects

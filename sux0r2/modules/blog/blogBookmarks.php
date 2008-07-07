@@ -24,6 +24,7 @@
 
 // Work in progress...
 
+require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
 require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
@@ -37,8 +38,9 @@ class blogBookmarks {
     // Variables
     public $gtext = array();
     private $module = 'blog';
-    private $prev_url_preg = '#^blog/[edit|reply]#i';
-    private $id;
+    private $prev_url_preg = '#^blog/[edit|reply|bookmarks]#i';
+    private $msg_id;
+    private $found_links = array();
 
     // Objects
     public $tpl;
@@ -47,6 +49,7 @@ class blogBookmarks {
     private $msg;
     private $nb;
     private $link;
+    private $bookmarks;
 
 
     /**
@@ -68,35 +71,70 @@ class blogBookmarks {
         $this->msg = new suxThreadedMessages();
         $this->nb = new bayesUser();
         $this->link = new suxLink();
+        $this->bookmarks = new suxBookmarks();
+        $this->msg_id = $msg_id;
 
         // Redirect if not logged in
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
+
+        if (count($_POST)) return; // Don't rescan
 
         // --------------------------------------------------------------------
         // Scan post for href links
         // --------------------------------------------------------------------
 
-        $msg = $this->msg->getMsg($msg_id, true);
-        // Check ownership...
+        $msg = $this->msg->getMessage($msg_id, true);
 
-        $matches = array();
-        $pattern = '/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/ie';
-        preg_match($pattern, $msg['body_html'], $matches);
-
-        if (!count($matches)) {
-           // Nothing here, pass it on.
+        if (!$msg) {
+            // No message, skip?
         }
 
+        if ($msg['users_id'] != $_SESSION['users_id']) {
+            // Not the user's message, skip?
+        }
 
-        foreach ($matches as $match) {
-            if (mb_substr($match[1], 0, 7) == 'http://' || mb_substr($match[1], 0, 8) == 'https://') {
-                // TODO
-                $link = suxFunct::canonicalizeUrl($match[1]);
-                $title = $match[2];
+        $matches = array();
+        $pattern = '/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/i';
+        preg_match_all($pattern, $msg['body_html'], $matches);
+
+        $count = count($matches[1]);
+        if (!$count) {
+
+            // No links, skip?
+
+        }
+        else {
+            // Limit the amount of time we wait for a connection to a remote server to 5 seconds
+            ini_set('default_socket_timeout', 5);
+            for ($i = 0; $i < $count; ++$i) {
+                if (mb_substr($matches[1][$i], 0, 7) == 'http://' || mb_substr($matches[1][$i], 0, 8) == 'https://') {
+
+                    // Basic info
+                    $url = suxFunct::canonicalizeUrl($matches[1][$i]);
+                    $title = $matches[2][$i];
+                    $body = null;
+
+                    if ($tmp = $this->bookmarks->getBookmark($url)) {
+                        // Already in database, skip it
+                        continue;
+                    }
+                    elseif (filter_var($url, FILTER_VALIDATE_URL)) {
+                        // Search the webpage for info we can use
+                        $webpage = @file_get_contents($url);
+                        $found = array();
+                        // <title>
+                        if (preg_match('/<title>(.*?)<\/title>/is', $webpage, $found)) {
+                            $title = html_entity_decode(strip_tags($found[1]), ENT_QUOTES, 'UTF-8');
+                        }
+                        // TODO: Meta?
+                    }
+                    // Add to array for use in template
+                    $this->found_links[$url] = array('title' => $title, 'body' => $body);
+                }
             }
         }
 
-
+        new dBug($this->found_links);
 
     }
 
@@ -155,7 +193,7 @@ class blogBookmarks {
         }
 
         // Additional variables
-        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/edit/' . $this->id);
+        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/bookmarks/' . $this->msg_id);
         $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
 
         // Template

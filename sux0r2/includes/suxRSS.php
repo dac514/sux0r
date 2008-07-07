@@ -271,15 +271,20 @@ class suxRSS extends DOMDocument {
 	private function parse($rss_url, $timestamp = null) {
 
         // Sanity check
+        if (!filter_var($rss_url, FILTER_VALIDATE_URL)) return false;
         $timestamp = filter_var($timestamp, FILTER_VALIDATE_INT);
 
         // --------------------------------------------------------------------
         // Extablish Conditional GET
         // --------------------------------------------------------------------
 
+        // Limit the amount of time we wait for a connection to a remote server to 30 seconds
+        ini_set('default_socket_timeout', 30);
+
         if ($timestamp) $modified = gmdate('D, d M Y H:i:s', $timestamp) . ' GMT';
         else $modified = null;
 
+        // Limit the read timeout to 60 seconds
         $opts = array(
             'http'=> array(
                 'header' => "If-Modified-Since: $modified\r\n",
@@ -406,7 +411,7 @@ class suxRSS extends DOMDocument {
         // Reverse htmlentities, we want usable html
         $value = html_entity_decode(stripslashes($value), ENT_QUOTES, 'UTF-8');
         // Sanitize
-        $value = suxFunct::sanitizeHtml($value);
+        $value = suxFunct::sanitizeHtml($value, 0);
 
     }
 
