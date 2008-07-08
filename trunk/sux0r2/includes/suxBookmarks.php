@@ -88,7 +88,7 @@ class suxBookmarks {
     * Saves a bookmark to the database
     *
     * @param int $users_id users_id
-    * @param array $msg required keys => (title, body, [forum|blog|wiki|slideshow]) optional keys => (published_on)
+    * @param array $url required keys => (title, body, [forum|blog|wiki|slideshow]) optional keys => (published_on)
     * @param int $trusted passed on to sanitizeHtml()
     * @return int insert id
     */
@@ -120,18 +120,18 @@ class suxBookmarks {
         $clean['body_plaintext']  = $converter->getText();
 
         // Publish date
-        if (isset($msg['published_on'])) {
+        if (isset($url['published_on'])) {
             // ISO 8601 date format
             // regex must match '2008-06-18 16:53:29' or '2008-06-18T16:53:29-04:00'
             $regex = '/^(\d{4})-(0[0-9]|1[0,1,2])-([0,1,2][0-9]|3[0,1]).+(\d{2}):(\d{2}):(\d{2})/';
-            if (!preg_match($regex, $msg['published_on'])) throw new Exception('Invalid date');
-            $clean['published_on'] = $msg['published_on'];
+            if (!preg_match($regex, $url['published_on'])) throw new Exception('Invalid date');
+            $clean['published_on'] = $url['published_on'];
         }
         else $clean['published_on'] = date('c');
 
         // Draft, boolean / tinyint
         $clean['draft'] = 0;
-        if (isset($msg['draft'])) $clean['draft'] = 1;
+        if (isset($url['draft'])) $clean['draft'] = 1;
 
         // We now have the $clean[] array
 
