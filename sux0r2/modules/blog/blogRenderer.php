@@ -222,46 +222,59 @@ class blogRenderer extends suxRenderer {
     */
     function tinyMceComment() {
 
-        // TinyMCE Path
-        $path = $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/tinymce/jscripts/tiny_mce/tiny_mce.js';
-        $path_css = $GLOBALS['CONFIG']['URL'] . '/media/' . $GLOBALS['CONFIG']['PARTITION'] . '/css/tinymce.css';
+        $init = '
+        mode : "textareas",
+        theme : "advanced",
+        editor_selector : "mceEditor",
+        plugins : "safari,inlinepopups,autosave",
+        width: "100%",
+        height: 400,
+        theme_advanced_toolbar_location : "top",
+        theme_advanced_toolbar_align : "left",
+        theme_advanced_buttons1 : "undo,redo,|,bold,italic,underline,strikethrough,|,image,link,unlink,|,numlist,bullist,|,cleanup,code",
+        theme_advanced_buttons2 : "",
+        theme_advanced_buttons3 : "",
+        theme_advanced_statusbar_location : "bottom",
+        entity_encoding : "raw",
+        relative_urls : false,
+        inline_styles : false,
+        ';
+        return $this->tinyMce($init);
 
-        // TinyMCE Language
-        if (!empty($_SESSION['language'])) $lang = $_SESSION['language'];
-        else $lang = $GLOBALS['CONFIG']['LANGUAGE'];
-        // Sanity check
-        $test = $GLOBALS['CONFIG']['PATH'] . "/includes/symbionts/tinymce/jscripts/tiny_mce/langs/{$lang}.js";
-        if (!is_file($test)) $lang = 'en'; // Revert back to english
+    }
 
-        // Javascript
-        $js = '<script type="text/javascript" src="' . $path . '"></script>
-        <script language="javascript" type="text/javascript">
-        // <![CDATA[
 
-        tinyMCE.init({
-            mode : "textareas",
-            theme : "advanced",
-            editor_selector : "mceEditor",
-            plugins : "safari,inlinepopups,autosave",
-            width: "100%",
-            height: 400,
-            theme_advanced_toolbar_location : "top",
-            theme_advanced_toolbar_align : "left",
-            theme_advanced_buttons1 : "undo,redo,|,bold,italic,underline,strikethrough,|,image,link,unlink,|,numlist,bullist,|,cleanup,code",
-            theme_advanced_buttons2 : "",
-            theme_advanced_buttons3 : "",
-            theme_advanced_statusbar_location : "bottom",
-            entity_encoding : "raw",
-            language : "' . $lang . '",
-            relative_urls : false,
-            inline_styles : false,
-            content_css : "' . $path_css . '?" + new Date().getTime()
-        });
+    /**
+    * TinyMCE Initialization for comments
+    *
+    * @see http://tinymce.moxiecode.com/
+    * @global string $CONFIG['URL']
+    * @global string $CONFIG['PATH']
+    * @global string $CONFIG['LANGUAGE']
+    * @param int $width optional width parameter for editor window
+    * @param int $height optional height parameter for editor window
+    * @return string the javascript code
+    */
+    function tinyMceBookmark() {
 
-        // ]]>
-        </script>' . "\n";
-
-        return $js;
+        $init = '
+        mode : "textareas",
+        theme : "advanced",
+        editor_selector : "mceEditor",
+        plugins : "safari,inlinepopups,autosave",
+        width: "100%",
+        height: 100,
+        theme_advanced_toolbar_location : "top",
+        theme_advanced_toolbar_align : "left",
+        theme_advanced_buttons1 : "undo,redo,|,bold,italic,underline,strikethrough,|,cleanup,code",
+        theme_advanced_buttons2 : "",
+        theme_advanced_buttons3 : "",
+        theme_advanced_statusbar_location : "bottom",
+        entity_encoding : "raw",
+        relative_urls : false,
+        inline_styles : false,
+        ';
+        return $this->tinyMce($init);
 
     }
 
@@ -279,45 +292,23 @@ class blogRenderer extends suxRenderer {
     */
     function tinyMceEditor() {
 
-        // TinyMCE Path
-        $path = $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/tinymce/jscripts/tiny_mce/tiny_mce.js';
-        $path_css = $GLOBALS['CONFIG']['URL'] . '/media/' . $GLOBALS['CONFIG']['PARTITION'] . '/css/tinymce.css';
-
-        // TinyMCE Language
-        if (!empty($_SESSION['language'])) $lang = $_SESSION['language'];
-        else $lang = $GLOBALS['CONFIG']['LANGUAGE'];
-        // Sanity check
-        $test = $GLOBALS['CONFIG']['PATH'] . "/includes/symbionts/tinymce/jscripts/tiny_mce/langs/{$lang}.js";
-        if (!is_file($test)) $lang = 'en'; // Revert back to english
-
-        // Javascript
-        $js = '<script type="text/javascript" src="' . $path . '"></script>
-        <script language="javascript" type="text/javascript">
-        // <![CDATA[
-
-        tinyMCE.init({
-            mode : "textareas",
-            theme : "advanced",
-            editor_selector : "mceEditor",
-            plugins : "safari,paste,media,table,fullscreen,inlinepopups,autosave,preview",
-            width: "100%",
-            height: 400,
-            theme_advanced_toolbar_location : "top",
-            theme_advanced_toolbar_align : "left",
-            theme_advanced_buttons1 : "preview,|,undo,redo,pastetext,pasteword,selectall,|,bold,italic,underline,strikethrough,|,image,media,link,unlink,|,numlist,bullist,|,justifyleft,justifycenter,justifyright,justifyfull,outdent,indent,blockquote,|,table",
-            theme_advanced_buttons2 : "forecolor,backcolor,formatselect,fontselect,fontsizeselect,|,removeformat,cleanup,code,fullscreen",
-            theme_advanced_buttons3 : "",
-            theme_advanced_statusbar_location : "bottom",
-            entity_encoding : "raw",
-            language : "' . $lang . '",
-            relative_urls : false,
-            content_css : "' . $path_css . '?" + new Date().getTime()
-        });
-
-        // ]]>
-        </script>' . "\n";
-
-        return $js;
+        $init = '
+        mode : "textareas",
+        theme : "advanced",
+        editor_selector : "mceEditor",
+        plugins : "safari,paste,media,table,fullscreen,inlinepopups,autosave,preview",
+        width: "100%",
+        height: 400,
+        theme_advanced_toolbar_location : "top",
+        theme_advanced_toolbar_align : "left",
+        theme_advanced_buttons1 : "preview,|,undo,redo,pastetext,pasteword,selectall,|,bold,italic,underline,strikethrough,|,image,media,link,unlink,|,numlist,bullist,|,justifyleft,justifycenter,justifyright,justifyfull,outdent,indent,blockquote,|,table",
+        theme_advanced_buttons2 : "forecolor,backcolor,formatselect,fontselect,fontsizeselect,|,removeformat,cleanup,code,fullscreen",
+        theme_advanced_buttons3 : "",
+        theme_advanced_statusbar_location : "bottom",
+        entity_encoding : "raw",
+        relative_urls : false,
+        ';
+        return $this->tinyMce($init);
 
     }
 

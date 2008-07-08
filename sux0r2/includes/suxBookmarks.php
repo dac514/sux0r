@@ -54,7 +54,10 @@ class suxBookmarks {
     function getBookmark($id, $unpub = false) {
 
         $col = 'id';
-        if (!filter_var($id, FILTER_VALIDATE_INT)) $col = 'url';
+        if (!filter_var($id, FILTER_VALIDATE_INT)) {
+            $col = 'url';
+            $id = suxFunct::canonicalizeUrl($id);
+        }
 
         $query = "SELECT * FROM {$this->db_table} WHERE {$col} = ? ";
         if (!$unpub) {
@@ -103,7 +106,7 @@ class suxBookmarks {
         $clean['users_id'] = $users_id;
 
         // Canonicalize Url
-        $clean['url'] = suxFunct::canonicalizeUrl($url['title']);
+        $clean['url'] = suxFunct::canonicalizeUrl($url['url']);
 
         // No HTML in title
         $clean['title'] = strip_tags($url['title']);
