@@ -192,7 +192,7 @@ class SmartyValidate {
                             // apply to all keys
                             foreach ($formvars[$_field] as $_fv_key => $_fv_value) {
                                 if(($_new_val = SmartyValidate::_execute_transform($_trans_name, $formvars[$_field][$_fv_key], $_sess[$_key], $formvars, $form)) !== false)
-                                    $formvars[$_field][$_x] = $_new_val;
+                                    $formvars[$_field][$_fv_key] = $_new_val;
                             }
                         }
                     } else {
