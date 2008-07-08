@@ -52,7 +52,7 @@ class bayesRenderer extends suxRenderer {
 
 
     /**
-    * @param int $id messages id
+    * @param int $id id
     * @param string $link link table
     * @param string $document document to train
     * @return string html
@@ -101,9 +101,8 @@ class bayesRenderer extends suxRenderer {
             }
         }
 
-        /* Get all the bayes categories linked to the document id that the user has access to */
-
-        // Innerjoin query
+        /* Get all the bayes categories linked to the document id that the user has access to */        
+        
         $link_table = $this->link->getLinkTableName($link, 'bayes');
         $innerjoin = "
         INNER JOIN bayes_auth ON bayes_categories.bayes_vectors_id = bayes_auth.bayes_vectors_id
@@ -112,13 +111,12 @@ class bayesRenderer extends suxRenderer {
         INNER JOIN {$link} ON {$link_table}.{$link}_id = {$link}.id
         ";
 
-        // Select, equivilant to nb->isCategoryUser()
         $query = "
         SELECT bayes_categories.id FROM bayes_categories
         {$innerjoin}
         WHERE {$link}.id = ? AND bayes_auth.users_id = ?
-        ";
-
+        "; // Note: bayes_auth WHERE condition equivilant to nb->isCategoryUser()
+        
         $db = suxDB::get();
         $st = $db->prepare($query);
         $st->execute(array($id, $_SESSION['users_id']));
@@ -144,14 +142,17 @@ class bayesRenderer extends suxRenderer {
 
                 if ($i == 0) {
                     // this is $v_trainer[], TODO: is ajax trainable
-                    $html .= '<select name="category_id[]" class="revert">';
+                    $html .= '<select name="category_id[]" class="revert" ';
+                    // $html .= "onchange=\"#_{$uniqid}_#\" "; // Script to be changed  
+                    $html .= "onchange=\"alert( '{$link} {$id} ' + this.options[selectedIndex].value);\" ";
+                    $html .= '>';
                 }
                 else {
                     // this is $v_user[], sit pretty, do nothing
                     $html .= '<select name="null" class="revert">';
                 }
 
-                $html .= '<option label="---" value="">---</option>';
+                $html .= '<option label="---" value="">---</option>'; // Null
 
                 /* Check if the vector is categorized */
 
@@ -162,6 +163,7 @@ class bayesRenderer extends suxRenderer {
                         break;
                     }
                 }
+                
 
                 if ($is_categorized === false) {
 

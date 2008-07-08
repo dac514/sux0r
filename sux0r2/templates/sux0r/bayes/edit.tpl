@@ -20,7 +20,7 @@
             var pars = 'id=' + doc_id;
 
             var myAjax = new Ajax.Updater('placeholder1', url, {
-                    method: 'get',
+                    method: 'post',
                     parameters: pars
             });
             $('placeholder1').addClassName('active');
