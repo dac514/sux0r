@@ -134,7 +134,7 @@ class blogBookmarks {
             }
         }
 
-        new dBug($this->found_links);
+        // new dBug($this->found_links);
 
     }
 
@@ -167,10 +167,19 @@ class blogBookmarks {
     */
     function formBuild(&$dirty) {
 
-
         // --------------------------------------------------------------------
         // Form logic
         // --------------------------------------------------------------------
+
+        // new dBug($dirty);
+
+        $count = 0;
+        if (isset($dirty['url']) && is_array($dirty['url'])) {
+            $count = count($dirty['url']);
+            for ($i = 0; $i < $count; ++$i) {
+                $this->found_links[@$dirty['url'][$i]] = array('title' => @$dirty['title'][$i], 'body' => @$dirty['body'][$i]);
+            }
+        }
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
         else suxValidate::disconnect();
@@ -180,12 +189,16 @@ class blogBookmarks {
             suxValidate::connect($this->tpl, true); // Reset connection
 
             // Register our additional criterias
-            //suxValidate::register_criteria('invalidShare', 'this->invalidShare', 'sharevec');
-            //suxValidate::register_criteria('userExists', 'this->userExists', 'sharevec');
+            // register_criteria($name, $func_name, $form = 'default')
+
+            suxValidate::register_criteria('urlExists', 'this->urlExists');
 
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
 
+            suxValidate::register_validator('url', 'url', 'notEmpty', false, false, 'trim');
+            suxValidate::register_validator('url2', 'url', 'isURL');
+            suxValidate::register_validator('url3', 'url', 'urlExists');
             suxValidate::register_validator('title', 'title', 'notEmpty', false, false, 'trim');
             suxValidate::register_validator('body', 'body', 'notEmpty', false, false, 'trim');
 
@@ -197,6 +210,7 @@ class blogBookmarks {
         $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
 
         // Template
+        $this->r->found_links = $this->found_links;
         $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('bookmarks.tpl');
 
@@ -211,6 +225,41 @@ class blogBookmarks {
     */
     function formProcess(&$clean) {
 
+
+        if (isset($clean['url']) && is_array($clean['url'])) {
+            $count = count($clean['url']);
+            for ($i = 0; $i < $count; ++$i) {
+                $bookmark = array();
+                if (!$this->bookmarks->getBookmark($clean['url'][$i])) {
+                    $bookmark['url'] = $clean['url'][$i];
+                    $bookmark['title'] = $clean['title'][$i];
+                    $bookmark['body'] = $clean['body'][$i];
+                    $this->bookmarks->saveBookmark($_SESSION['users_id'], $bookmark);
+                }
+            }
+        }
+
+        // TODO, handoff
+        exit;
+
+    }
+
+
+    /**
+    * for suxValidate, check if a url already exists
+    *
+    * @return bool
+    */
+    function urlExists($value, $empty, &$params, &$formvars) {
+
+        if (!isset($formvars[$params['field']]) || !is_array($formvars[$params['field']])) return false;
+
+        $urls = $formvars[$params['field']];
+        foreach ($urls as $url) {
+            if ($this->bookmarks->getBookmark($url)) return false;
+        }
+
+        return true;
 
     }
 

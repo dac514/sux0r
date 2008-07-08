@@ -285,6 +285,51 @@ class suxRenderer {
 
     }
 
+    /**
+    * TinyMCE Initialization
+    *
+    * @see http://tinymce.moxiecode.com/
+    * @global string $CONFIG['URL']
+    * @global string $CONFIG['PATH']
+    * @global string $CONFIG['LANGUAGE']
+    * @param string $init tinyMCE.init values
+    * @return string the javascript code
+    */
+    function tinyMce($init) {
+
+        // Remove trailing comma, if any
+        $init = trim($init);
+        $init = rtrim($init, ',');
+
+        // TinyMCE Path
+        $path = $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/tinymce/jscripts/tiny_mce/tiny_mce.js';
+        $path_css = $GLOBALS['CONFIG']['URL'] . '/media/' . $GLOBALS['CONFIG']['PARTITION'] . '/css/tinymce.css';
+
+        // TinyMCE Language
+        if (!empty($_SESSION['language'])) $lang = $_SESSION['language'];
+        else $lang = $GLOBALS['CONFIG']['LANGUAGE'];
+        // Sanity check
+        $test = $GLOBALS['CONFIG']['PATH'] . "/includes/symbionts/tinymce/jscripts/tiny_mce/langs/{$lang}.js";
+        if (!is_file($test)) $lang = 'en'; // Revert back to english
+
+        // Javascript
+        $js = '<script type="text/javascript" src="' . $path . '"></script>
+        <script language="javascript" type="text/javascript">
+        // <![CDATA[
+
+        tinyMCE.init({
+            ' . $init . ',
+            language : "' . $lang . '",
+            content_css : "' . $path_css . '?" + new Date().getTime()
+        });
+
+        // ]]>
+        </script>' . "\n";
+
+        return $js;
+
+    }
+
 
 }
 
