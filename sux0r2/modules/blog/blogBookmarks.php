@@ -77,8 +77,6 @@ class blogBookmarks {
         // Redirect if not logged in
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
 
-        if (count($_POST)) return; // Don't rescan
-
         // --------------------------------------------------------------------
         // Scan post for href links
         // --------------------------------------------------------------------
@@ -99,38 +97,35 @@ class blogBookmarks {
 
         $count = count($matches[1]);
         if (!$count) {
-
             // No links, skip?
-
         }
-        else {
-            // Limit the amount of time we wait for a connection to a remote server to 5 seconds
-            ini_set('default_socket_timeout', 5);
-            for ($i = 0; $i < $count; ++$i) {
-                if (mb_substr($matches[1][$i], 0, 7) == 'http://' || mb_substr($matches[1][$i], 0, 8) == 'https://') {
 
-                    // Basic info
-                    $url = suxFunct::canonicalizeUrl($matches[1][$i]);
-                    $title = $matches[2][$i];
-                    $body = null;
+        // Limit the amount of time we wait for a connection to a remote server to 5 seconds
+        ini_set('default_socket_timeout', 5);
+        for ($i = 0; $i < $count; ++$i) {
+            if (mb_substr($matches[1][$i], 0, 7) == 'http://' || mb_substr($matches[1][$i], 0, 8) == 'https://') {
 
-                    if ($tmp = $this->bookmarks->getBookmark($url)) {
-                        // Already in database, skip it
-                        continue;
-                    }
-                    elseif (filter_var($url, FILTER_VALIDATE_URL)) {
-                        // Search the webpage for info we can use
-                        $webpage = @file_get_contents($url);
-                        $found = array();
-                        // <title>
-                        if (preg_match('/<title>(.*?)<\/title>/is', $webpage, $found)) {
-                            $title = html_entity_decode(strip_tags($found[1]), ENT_QUOTES, 'UTF-8');
-                        }
-                        // TODO: Meta?
-                    }
-                    // Add to array for use in template
-                    $this->found_links[$url] = array('title' => $title, 'body' => $body);
+                // Basic info
+                $url = suxFunct::canonicalizeUrl($matches[1][$i]);
+                $title = strip_tags($matches[2][$i]);
+                $body = null;
+
+                if ($tmp = $this->bookmarks->getBookmark($url, true)) {
+                    // Already in database, skip it
+                    continue;
                 }
+                elseif (filter_var($url, FILTER_VALIDATE_URL) && !count($_POST)) {
+                    // if !$_POST, search the webpage for info we can use
+                    $webpage = @file_get_contents($url);
+                    // <title>
+                    $found = array();
+                    if (preg_match('/<title>(.*?)<\/title>/is', $webpage, $found)) {
+                        $title = html_entity_decode(strip_tags($found[1]), ENT_QUOTES, 'UTF-8');
+                    }
+                    // TODO: Meta?
+                }
+                // Add to array for use in template
+                $this->found_links[$url] = array('title' => $title, 'body' => $body);
             }
         }
 
@@ -168,18 +163,28 @@ class blogBookmarks {
     function formBuild(&$dirty) {
 
         // --------------------------------------------------------------------
-        // Form logic
+        // Replace what we have with what the user submitted.
         // --------------------------------------------------------------------
-
-        // new dBug($dirty);
 
         $count = 0;
         if (isset($dirty['url']) && is_array($dirty['url'])) {
-            $count = count($dirty['url']);
+            $count = count($this->found_links); // Original count
+            $this->found_links = array(); // Clear array
             for ($i = 0; $i < $count; ++$i) {
-                $this->found_links[@$dirty['url'][$i]] = array('title' => @$dirty['title'][$i], 'body' => @$dirty['body'][$i]);
+                if (!empty($dirty['url'][$i]) && !isset($this->found_links[$dirty['url'][$i]])) {
+                    $this->found_links[$dirty['url'][$i]] = array('title' => $dirty['title'][$i], 'body' => $dirty['body'][$i]);
+                }
+                else {
+                    $title = isset($dirty['title'][$i]) ? $dirty['title'][$i] : null;
+                    $body = isset($dirty['body'][$i]) ? $dirty['body'][$i] : null;
+                    $this->found_links[] = array('title' => $title, 'body' => $body);
+                }
             }
         }
+
+        // --------------------------------------------------------------------
+        // Form logic
+        // --------------------------------------------------------------------
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
         else suxValidate::disconnect();
@@ -191,17 +196,16 @@ class blogBookmarks {
             // Register our additional criterias
             // register_criteria($name, $func_name, $form = 'default')
 
-            suxValidate::register_criteria('urlExists', 'this->urlExists');
-
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
 
-            suxValidate::register_validator('url', 'url', 'notEmpty', false, false, 'trim');
-            suxValidate::register_validator('url2', 'url', 'isURL');
-            suxValidate::register_validator('url3', 'url', 'urlExists');
-            suxValidate::register_validator('title', 'title', 'notEmpty', false, false, 'trim');
-            suxValidate::register_validator('body', 'body', 'notEmpty', false, false, 'trim');
-
+            $count = count($this->found_links);
+            for ($i = 0; $i < $count; ++$i) {
+                suxValidate::register_validator("url[$i]", "url[$i]", 'notEmpty', false, false, 'trim');
+                suxValidate::register_validator("url2[$i]", "url[$i]", 'isURL');
+                suxValidate::register_validator("title[$i]", "title[$i]", 'notEmpty', false, false, 'trim');
+                suxValidate::register_validator("body[$i]", "body[$i]", 'notEmpty', false, false, 'trim');
+            }
 
         }
 
@@ -230,10 +234,11 @@ class blogBookmarks {
             $count = count($clean['url']);
             for ($i = 0; $i < $count; ++$i) {
                 $bookmark = array();
-                if (!$this->bookmarks->getBookmark($clean['url'][$i])) {
+                if (!$this->bookmarks->getBookmark($clean['url'][$i],  true)) {
                     $bookmark['url'] = $clean['url'][$i];
                     $bookmark['title'] = $clean['title'][$i];
                     $bookmark['body'] = $clean['body'][$i];
+                    $bookmark['draft'] = 1; // Admin approves bookmarks, like dmoz.org
                     $this->bookmarks->saveBookmark($_SESSION['users_id'], $bookmark);
                 }
             }
@@ -241,25 +246,6 @@ class blogBookmarks {
 
         // TODO, handoff
         exit;
-
-    }
-
-
-    /**
-    * for suxValidate, check if a url already exists
-    *
-    * @return bool
-    */
-    function urlExists($value, $empty, &$params, &$formvars) {
-
-        if (!isset($formvars[$params['field']]) || !is_array($formvars[$params['field']])) return false;
-
-        $urls = $formvars[$params['field']];
-        foreach ($urls as $url) {
-            if ($this->bookmarks->getBookmark($url)) return false;
-        }
-
-        return true;
 
     }
 
