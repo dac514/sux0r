@@ -228,7 +228,7 @@ class blogRenderer extends suxRenderer {
         editor_selector : "mceEditor",
         plugins : "safari,inlinepopups,autosave",
         width: "100%",
-        height: 400,
+        height: 200,
         theme_advanced_toolbar_location : "top",
         theme_advanced_toolbar_align : "left",
         theme_advanced_buttons1 : "undo,redo,|,bold,italic,underline,strikethrough,|,image,link,unlink,|,numlist,bullist,|,cleanup,code",

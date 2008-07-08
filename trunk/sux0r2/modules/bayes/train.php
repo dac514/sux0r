@@ -1,0 +1,86 @@
+<?php
+
+// Ajax
+// Train a document using genericBayesInterface()
+
+// ---------------------------------------------------------------------------
+// Error checking
+// ---------------------------------------------------------------------------
+
+$valid_links = array('messages');
+
+if (!isset($_SESSION['users_id'])) exit;
+if (!isset($_POST['link']) || !in_array($_POST['link'], $valid_links)) exit;
+if (!isset($_POST['id']) || !filter_var($_POST['id'], FILTER_VALIDATE_INT)) exit;
+if (!isset($_POST['cat_id']) || !filter_var($_POST['cat_id'], FILTER_VALIDATE_INT)) $_POST['cat_id'] = null;
+
+$link = $_POST['link'];
+$id = $_POST['id']; 
+$cat_id = $_POST['cat_id'];
+
+// ---------------------------------------------------------------------------
+// Secondary error checking
+// ---------------------------------------------------------------------------
+
+require_once(dirname(__FILE__) . '/../../config.php');
+require_once(dirname(__FILE__) . '/../../initialize.php');
+require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
+require_once('bayesUser.php');
+
+$link = new suxLink();
+$nb = new bayesUser();
+
+if ($cat_id && !$this->nb->isCategoryTrainer($cat_id, $_SESSION['users_id'])) exit; // Something is wrong, abort
+
+$body = false;
+if ($link == 'messages') {
+    require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
+    $msg = new suxThreadedMessages();
+    $body = $msg->getMessage($id);
+}
+if ($body === false) exit; // Something is wrong, abort...
+
+// ---------------------------------------------------------------------------
+// Go!
+// ---------------------------------------------------------------------------
+
+// Get all the bayes_documents linked to this message where user is trainer 
+// untrain it, delete links
+
+$link_table = $this->link->getLinkTableName($link, 'bayes');
+$innerjoin = "
+INNER JOIN {$link_table} ON {$link_table}.bayes_documents_id = bayes_documents.id
+INNER JOIN {$link} ON {$link_table}.{$link}_id = {$link}.id        
+INNER JOIN bayes_categories ON bayes_categories.id = bayes_documents.bayes_categories_id        
+INNER JOIN bayes_auth ON bayes_categories.bayes_vectors_id = bayes_auth.bayes_vectors_id
+";
+
+$query = "
+SELECT bayes_documents.id FROM bayes_documents
+{$innerjoin}
+WHERE {$link}.id = ? 
+AND bayes_auth.users_id = ? AND (bayes_auth.owner = 1 OR bayes_auth.trainer = 1)
+"; // Note: bayes_auth WHERE condition equivilant to nb->isCategoryTrainer()        
+
+$db = suxDB::get();
+$st = $db->prepare($query);
+$st->execute(array($id, $_SESSION['users_id']));
+$tmp = $st->fetchAll(PDO::FETCH_ASSOC);  
+
+foreach ($tmp as $val) {
+    $nb->untrainDocument($val['id']); 
+    $link->deleteLink($link_table, 'bayes_documents', $val['id']);
+}
+
+
+// Regcategorize
+// category ids submitted by the form
+
+if ($cat_id) {
+    $doc_id = $this->nb->trainDocument($body, $cat_id);
+    $this->link->setLink($link_table, 'bayes_documents', $doc_id, $link, $id);  
+}
+
+// TODO, update web interface with Ajax
+
+?>

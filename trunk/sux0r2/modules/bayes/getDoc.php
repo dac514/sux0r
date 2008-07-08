@@ -3,7 +3,7 @@
 // Ajax
 // Echo the content of a bayesian document
 
-if (isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT)) {
+if (isset($_POST['id']) && filter_var($_POST['id'], FILTER_VALIDATE_INT)) {
 
     require_once(dirname(__FILE__) . '/../../config.php');
     require_once(dirname(__FILE__) . '/../../initialize.php');
@@ -11,7 +11,7 @@ if (isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT)) {
     require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 
     $nb = new suxNaiveBayesian();
-    $doc = $nb->getDocument($_GET['id']);
+    $doc = $nb->getDocument($_POST['id']);
     if ($doc) {
 
         $text = suxFunct::gtext('bayes');
@@ -19,7 +19,7 @@ if (isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT)) {
         $tmp = null;
         $link = new suxLink();
         foreach ($link->getLinkTables('bayes') as $table) {
-            $links = $link->getLinks($table, 'bayes_documents', $_GET['id']);
+            $links = $link->getLinks($table, 'bayes_documents', $_POST['id']);
             if($links && count($links)) {
 
                 $table = str_replace('link_', '', $table);
@@ -33,7 +33,7 @@ if (isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT)) {
             }
         }
 
-        echo '<em>bayes_document_id: ' . $_GET['id'] . '</em><br />';
+        echo '<em>bayes_document_id: ' . $_POST['id'] . '</em><br />';
 
         if ($tmp) {
             echo "<em><strong>{$text['is_linked']}</strong></em> ";
