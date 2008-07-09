@@ -54,6 +54,53 @@ class bayesRenderer extends suxRenderer {
 
 
     /**
+    * @global string $CONFIG['URL']
+    * @param bool $init include .js files?
+    * @return string the javascript code
+    */
+    function genericBayesInterfaceInit($init = true) {
+
+        $js = '';
+
+        if ($init) {
+            $path_prototype = $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/scriptaculous/lib/prototype.js';
+            $path_scriptaculous = $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/scriptaculous/src/scriptaculous.js';
+            $js .= '<script type="text/javascript" src="' . $path_prototype . '"></script>' . "\n";
+            $js .= '<script type="text/javascript" src="' . $path_scriptaculous . '"></script>' . "\n";
+        }
+
+        $js .="
+        <script type='text/javascript'>
+        // <![CDATA[
+
+        function suxTrain(placeholder, link, id, cat_id) {
+
+            var url = '{$GLOBALS['CONFIG']['URL']}/modules/bayes/train.php';
+            var pars = 'link=' + link + '&id=' + id + '&cat_id=' + cat_id;
+
+            new Effect.Highlight($(placeholder));
+
+            new Ajax.Request(url, {
+                method: 'post',
+                parameters: pars,
+                onSuccess: function() {
+                    $(placeholder).addClassName('nbVecTrained');
+                    Effect.Pulsate($(placeholder));
+                }
+            });
+
+        }
+
+        // ]]>
+        </script>
+        ";
+
+        return $js;
+
+    }
+
+
+    /**
     * @param int $id id
     * @param string $link link table
     * @param string $document document to train
@@ -140,12 +187,12 @@ class bayesRenderer extends suxRenderer {
 
                 // Vector name to be replaced
                 $uniqid = time() . substr(md5(microtime()), 0, rand(5, 12));
-                $html .= "<span id='{$uniqid}'>@_{$uniqid}_@</span>";
+                $html .= "<span id='nb{$uniqid}'>@_{$uniqid}_@</span>";
 
                 if ($i == 0) {
                     // this is $v_trainer[], TODO: is ajax trainable
                     $html .= '<select name="category_id[]" class="nbCatDropdown" ';
-                    $html .= "onchange=\"suxTrain('{$uniqid}', '{$link}', {$id}, this.options[selectedIndex].value);\" ";
+                    $html .= "onchange=\"suxTrain('nb{$uniqid}', '{$link}', {$id}, this.options[selectedIndex].value);\" ";
                     $html .= '>';
 
                 }
