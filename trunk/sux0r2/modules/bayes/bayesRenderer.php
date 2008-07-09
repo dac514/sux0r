@@ -24,6 +24,7 @@
 
 require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
+require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once('bayesUser.php');
 
 class bayesRenderer extends suxRenderer {
@@ -47,6 +48,7 @@ class bayesRenderer extends suxRenderer {
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->nb = new bayesUser();
         $this->link = new suxLink();
+        $this->user = new suxUser();
 
     }
 
@@ -59,7 +61,7 @@ class bayesRenderer extends suxRenderer {
     */
     function genericBayesInterface($id, $link, $document) {
 
-        if (!isset($_SESSION['users_id'])) return null; // Anonymous user, skip
+        if (!$this->user->loginCheck()) return null; // Anonymous user, skip
 
         /* Get a list of all the vectors/categories the user has access to */
 
@@ -101,8 +103,8 @@ class bayesRenderer extends suxRenderer {
             }
         }
 
-        /* Get all the bayes categories linked to the document id that the user has access to */        
-        
+        /* Get all the bayes categories linked to the document id that the user has access to */
+
         $link_table = $this->link->getLinkTableName($link, 'bayes');
         $innerjoin = "
         INNER JOIN bayes_auth ON bayes_categories.bayes_vectors_id = bayes_auth.bayes_vectors_id
@@ -116,7 +118,7 @@ class bayesRenderer extends suxRenderer {
         {$innerjoin}
         WHERE {$link}.id = ? AND bayes_auth.users_id = ?
         "; // Note: bayes_auth WHERE condition equivilant to nb->isCategoryUser()
-        
+
         $db = suxDB::get();
         $st = $db->prepare($query);
         $st->execute(array($id, $_SESSION['users_id']));
@@ -138,14 +140,14 @@ class bayesRenderer extends suxRenderer {
 
                 // Vector name to be replaced
                 $uniqid = time() . substr(md5(microtime()), 0, rand(5, 12));
-                $html .= "@_{$uniqid}_@ : ";
+                $html .= "<span id='{$uniqid}'>@_{$uniqid}_@ : </span>";
 
                 if ($i == 0) {
                     // this is $v_trainer[], TODO: is ajax trainable
                     $html .= '<select name="category_id[]" class="revert" ';
-                    // $html .= "onchange=\"#_{$uniqid}_#\" "; // Script to be changed  
-                    $html .= "onchange=\"alert( '{$link} {$id} ' + this.options[selectedIndex].value);\" ";
+                    $html .= "onchange=\"suxTrain('{$uniqid}', '{$link}', {$id}, this.options[selectedIndex].value);\" ";
                     $html .= '>';
+
                 }
                 else {
                     // this is $v_user[], sit pretty, do nothing
@@ -163,7 +165,7 @@ class bayesRenderer extends suxRenderer {
                         break;
                     }
                 }
-                
+
 
                 if ($is_categorized === false) {
 

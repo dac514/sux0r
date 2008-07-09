@@ -1,4 +1,33 @@
-{include file=$r->xhtml_header}
+{capture name=header}
+
+    <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
+    {literal}
+    <script type='text/javascript'>
+    // <![CDATA[
+
+    function suxTrain(placeholder, link, id, cat_id) {
+
+            {/literal}
+            var url = '{$r->url}/modules/bayes/train.php';
+            var pars = 'link=' + link + '&id=' + id + '&cat_id=' + cat_id;
+            {literal}
+
+            var myAjax = new Ajax.Updater(placeholder, url, {
+                    method: 'post',
+                    parameters: pars
+            });
+            // $(placeholder).addClassName('active');
+            // $(placeholder).show();
+
+    }
+
+    // ]]>
+    </script>
+    {/literal}
+
+{/capture}{strip}
+{$r->assign('header', $smarty.capture.header)}
+{include file=$r->xhtml_header}{/strip}
 
 <table id="proselytizer" >
 	<tr>

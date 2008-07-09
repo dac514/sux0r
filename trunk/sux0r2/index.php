@@ -80,6 +80,7 @@ array_unshift($_SESSION['breadcrumbs'], filter_var(trim(trim(isset($_GET['c']) ?
 $_SESSION['breadcrumbs'] = array_unique($_SESSION['breadcrumbs']);
 $_SESSION['breadcrumbs'] = array_slice($_SESSION['breadcrumbs'], 0, 10); // maximum 10
 
+// new dBug($_SESSION);
 // new dBug($_SESSION['breadcrumbs']);
 
 ?>
