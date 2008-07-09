@@ -132,7 +132,7 @@ class bayesRenderer extends suxRenderer {
 
         /* Begin rendering */
 
-        $html = '';
+        $html = "<div class='nbInterface'>\n";
         $i = 0; // Used to identify $v_trainer[]
         foreach(array($v_trainer, $v_user) as $vectors2) {
 
@@ -140,21 +140,19 @@ class bayesRenderer extends suxRenderer {
 
                 // Vector name to be replaced
                 $uniqid = time() . substr(md5(microtime()), 0, rand(5, 12));
-                $html .= "<span id='{$uniqid}'>@_{$uniqid}_@ : </span>";
+                $html .= "<span id='{$uniqid}'>@_{$uniqid}_@</span>";
 
                 if ($i == 0) {
                     // this is $v_trainer[], TODO: is ajax trainable
-                    $html .= '<select name="category_id[]" class="revert" ';
+                    $html .= '<select name="category_id[]" class="nbCatDropdown" ';
                     $html .= "onchange=\"suxTrain('{$uniqid}', '{$link}', {$id}, this.options[selectedIndex].value);\" ";
                     $html .= '>';
 
                 }
                 else {
                     // this is $v_user[], sit pretty, do nothing
-                    $html .= '<select name="null" class="revert">';
+                    $html .= '<select name="null" class="nbCatDropdown">';
                 }
-
-                $html .= '<option label="---" value="">---</option>'; // Null
 
                 /* Check if the vector is categorized */
 
@@ -171,7 +169,7 @@ class bayesRenderer extends suxRenderer {
 
                     /* Not categorized, get bayesian scores */
 
-                    $replace = $val['vector'];
+                    $replace = $val['vector'] . ' : ';
                     $html = str_replace("@_{$uniqid}_@", $replace, $html);
 
                     $j = 0;
@@ -188,7 +186,7 @@ class bayesRenderer extends suxRenderer {
 
                     /* Is already categorized, don't calculate */
 
-                    $replace = "<span style='color:green;font-weight:bold;'>{$val['vector']}</span>";
+                    $replace = "<span class='nbVecTrained'>{$val['vector']} : </span>";
                     $html = str_replace("@_{$uniqid}_@", $replace, $html);
 
                     foreach ($val['categories'] as $key2 => $val2) {
@@ -201,13 +199,15 @@ class bayesRenderer extends suxRenderer {
 
                 }
 
-                $html .= '</select><br />' . "\n";
+                $html .= '</select>' . "\n";
 
             }
 
             ++$i; // Used to identify $v_trainer[]
 
         }
+
+        $html .= "</div>\n";
 
         return $html;
 

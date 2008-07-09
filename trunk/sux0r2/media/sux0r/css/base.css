@@ -133,6 +133,28 @@ input, select {
 
 /* }}} */
 
+/* {{{ genericBayesInterface */
+
+.nbInterface {
+
+}
+
+.nbInterface .nbCatDropdown {
+    margin-right: 10px;
+
+}
+
+.nbVecTrained {
+    color: green;
+    font-weight:bold;
+}
+
+.nbCatDropdown {
+    width: auto;
+}
+
+/* }}} */
+
 
 /* {{{ Horizontal Navigation Container */
 

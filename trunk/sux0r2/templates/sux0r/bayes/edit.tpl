@@ -1,6 +1,8 @@
 {capture name=header}
 
     <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
+    <script src="{$r->url}/includes/symbionts/scriptaculous/src/scriptaculous.js" type="text/javascript"></script>
+
     {literal}
     <script type='text/javascript'>
     // <![CDATA[
@@ -20,12 +22,16 @@
             var pars = 'id=' + doc_id;
             {literal}
 
-            var myAjax = new Ajax.Updater('placeholder1', url, {
+            new Ajax.Updater('placeholder1', url, {
                     method: 'post',
-                    parameters: pars
+                    parameters: pars,
+                    onSuccess: function() {
+                        $('placeholder1').addClassName('active');
+                        $('placeholder1').show();
+                        new Effect.Highlight($('placeholder1'));
+                    }
             });
-            $('placeholder1').addClassName('active');
-            $('placeholder1').show();
+
         }
     }
 
@@ -36,12 +42,15 @@
         var pars = 'document=' + document + '&id=' + vec_id ;
         {literal}
 
-        var myAjax = new Ajax.Updater('placeholder2', url, {
+        new Ajax.Updater('placeholder2', url, {
                 method: 'post',
-                parameters: pars
+                parameters: pars,
+                onSuccess: function() {
+                    $('placeholder2').addClassName('active');
+                    $('placeholder2').show();
+                    new Effect.Highlight($('placeholder2'));
+                }
         });
-        $('placeholder2').addClassName('active');
-        $('placeholder2').show();
 
     }
 
@@ -221,7 +230,8 @@
         {/strip}
 
         <label for="document_id" {if $smarty.capture.error}class="error"{/if} >{$r->text.remove_doc} :</label>
-        <select name="document_id" onmouseup="getDoc(this.value);">
+        <select name="document_id" onchange="getDoc(this.value);">
+        <option value="">---</option>
         {html_options options=$r->getUserOwnedDocuments() selected=$document_id}
         </select>
         <input type="button" class="button" value="{$r->text.delete}" onclick="rm('remdoc', '{$r->text.alert_doc}');"/>
