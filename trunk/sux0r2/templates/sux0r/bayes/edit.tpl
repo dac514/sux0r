@@ -33,6 +33,10 @@
             });
 
         }
+        else {
+            new Effect.Highlight($('placeholder1'));
+            Effect.BlindUp($('placeholder1'), {duration:1});
+        }
     }
 
     function getCat(document, vec_id) {
