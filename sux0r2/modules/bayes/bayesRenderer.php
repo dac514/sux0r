@@ -185,12 +185,14 @@ class bayesRenderer extends suxRenderer {
 
             foreach ($vectors2 as $key => $val) {
 
+                if (count($val['categories']) < 2) continue; // Not enough categories, skip
+
                 // Vector name to be replaced
                 $uniqid = time() . substr(md5(microtime()), 0, rand(5, 12));
                 $html .= "<span id='nb{$uniqid}'>@_{$uniqid}_@</span>";
 
                 if ($i == 0) {
-                    // this is $v_trainer[], TODO: is ajax trainable
+                    // this is $v_trainer[], Ajax trainable
                     $html .= '<select name="category_id[]" class="nbCatDropdown" ';
                     $html .= "onchange=\"suxTrain('nb{$uniqid}', '{$link}', {$id}, this.options[selectedIndex].value);\" ";
                     $html .= '>';
