@@ -112,6 +112,15 @@ class blogRenderer extends suxRenderer {
     }
 
 
+    /**
+    * @return string javascript
+    */
+    function userCategoriesInit() {
+
+        return $this->bayesRenderer->genericBayesInterfaceInit();
+
+    }
+
 
     /**
     * @param int $id messages id
