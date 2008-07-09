@@ -113,7 +113,7 @@ TODO: http://wiki.moxiecode.com/index.php/TinyMCE:Configuration/external_image_l
 
 {if $smarty.capture.tags|trim}
 <p>{$smarty.capture.tags}</p>
-{if $linked}<p>Linked to: {$linked}</p>{/if}
+{if $linked}<p><em>{$r->text.linked_to}: {$linked}</em></p>{/if}
 {/if}
 
 
