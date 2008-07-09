@@ -14,6 +14,8 @@
         var pars = 'link=' + link + '&id=' + id + '&cat_id=' + cat_id;
         {literal}
 
+        new Effect.Highlight($(placeholder));
+
         new Ajax.Request(url, {
                 method: 'post',
                 parameters: pars,
