@@ -323,7 +323,7 @@ class blogRenderer extends suxRenderer {
         if (is_array($vectors)) return $vectors;
         $vectors = array();
 
-        if (!isset($_SESSION['users_id'])) return $vectors ; // Anonymous user, skip
+        if (!$this->user->loginCheck()) return $vectors ; // Anonymous user, skip
 
         foreach ($this->nb->getVectorsByUser($_SESSION['users_id']) as $key => $val) {
             $vectors[$key] = $val['vector'];
@@ -346,7 +346,7 @@ class blogRenderer extends suxRenderer {
         if (is_array($vectors)) return $vectors;
         $vectors = array();
 
-        if (!isset($_SESSION['users_id'])) return $vectors ; // Anonymous user, skip
+        if (!$this->user->loginCheck()) return $vectors ; // Anonymous user, skip
 
         foreach ($this->nb->getVectorsByTrainer($_SESSION['users_id']) as $key => $val) {
             $vectors[$key] = $val['vector'];

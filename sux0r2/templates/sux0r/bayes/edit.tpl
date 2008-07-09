@@ -14,10 +14,11 @@
 
     function getDoc(doc_id) {
         if (doc_id) {
+
             {/literal}
             var url = '{$r->url}/modules/bayes/getDoc.php';
-            {literal}
             var pars = 'id=' + doc_id;
+            {literal}
 
             var myAjax = new Ajax.Updater('placeholder1', url, {
                     method: 'post',
@@ -32,8 +33,8 @@
 
         {/literal}
         var url = '{$r->url}/modules/bayes/getCat.php';
+        var pars = 'document=' + document + '&id=' + vec_id ;
         {literal}
-        var pars = { document: document, id: vec_id }
 
         var myAjax = new Ajax.Updater('placeholder2', url, {
                 method: 'post',
