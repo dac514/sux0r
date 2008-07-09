@@ -1,23 +1,27 @@
 {capture name=header}
 
     <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
+    <script src="{$r->url}/includes/symbionts/scriptaculous/src/scriptaculous.js" type="text/javascript"></script>
+
     {literal}
     <script type='text/javascript'>
     // <![CDATA[
 
     function suxTrain(placeholder, link, id, cat_id) {
 
-            {/literal}
-            var url = '{$r->url}/modules/bayes/train.php';
-            var pars = 'link=' + link + '&id=' + id + '&cat_id=' + cat_id;
-            {literal}
+        {/literal}
+        var url = '{$r->url}/modules/bayes/train.php';
+        var pars = 'link=' + link + '&id=' + id + '&cat_id=' + cat_id;
+        {literal}
 
-            var myAjax = new Ajax.Updater(placeholder, url, {
-                    method: 'post',
-                    parameters: pars
-            });
-            // $(placeholder).addClassName('active');
-            // $(placeholder).show();
+        new Ajax.Request(url, {
+                method: 'post',
+                parameters: pars,
+                onSuccess: function() {
+                    $(placeholder).addClassName('nbVecTrained');
+                    Effect.Pulsate($(placeholder));
+                }
+        });
 
     }
 

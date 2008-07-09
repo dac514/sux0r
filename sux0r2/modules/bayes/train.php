@@ -15,7 +15,7 @@ $valid_links = array('messages');
 if (!isset($_SESSION['users_id'])) exit;
 if (!isset($_POST['link']) || !in_array($_POST['link'], $valid_links)) exit;
 if (!isset($_POST['id']) || !filter_var($_POST['id'], FILTER_VALIDATE_INT)) exit;
-if (!isset($_POST['cat_id']) || !filter_var($_POST['cat_id'], FILTER_VALIDATE_INT)) $_POST['cat_id'] = null;
+if (!isset($_POST['cat_id']) || !filter_var($_POST['cat_id'], FILTER_VALIDATE_INT)) exit;
 
 $link = $_POST['link'];
 $id = $_POST['id'];
@@ -35,7 +35,7 @@ $user = new suxUser();
 
 if (!$user->loginCheck()) exit; // Something is wrong, abort
 
-if ($cat_id && !$nb->isCategoryTrainer($cat_id, $_SESSION['users_id'])) exit; // Something is wrong, abort
+if (!$nb->isCategoryTrainer($cat_id, $_SESSION['users_id'])) exit; // Something is wrong, abort
 
 $body = false;
 if ($link == 'messages') {
@@ -51,7 +51,7 @@ if ($body === false) exit; // Something is wrong, abort...
 // ---------------------------------------------------------------------------
 
 // Get all the bayes_documents linked to this message where user is trainer
-// untrain it, delete links
+// Also get associated vectors
 
 $link_table = $suxLink->getLinkTableName($link, 'bayes');
 $innerjoin = "
@@ -62,7 +62,7 @@ INNER JOIN bayes_auth ON bayes_categories.bayes_vectors_id = bayes_auth.bayes_ve
 ";
 
 $query = "
-SELECT bayes_documents.id FROM bayes_documents
+SELECT bayes_documents.id, bayes_auth.bayes_vectors_id FROM bayes_documents
 {$innerjoin}
 WHERE {$link}.id = ?
 AND bayes_auth.users_id = ? AND (bayes_auth.owner = 1 OR bayes_auth.trainer = 1)
@@ -73,22 +73,21 @@ $st = $db->prepare($query);
 $st->execute(array($id, $_SESSION['users_id']));
 $tmp = $st->fetchAll(PDO::FETCH_ASSOC);
 
+// Since we are only training one category/vector at a time, we need to make
+// sure we don't untrain other unrlated vectors here.
+
+$vec_id = $nb->getVectorsByCategory($cat_id);
 foreach ($tmp as $val) {
-    $nb->untrainDocument($val['id']);
-    $suxLink->deleteLink($link_table, 'bayes_documents', $val['id']);
+    if (isset($vec_id[$val['bayes_vectors_id']])) {
+        $nb->untrainDocument($val['id']);
+        $suxLink->deleteLink($link_table, 'bayes_documents', $val['id']);
+    }
 }
 
+// Recategorize
 
-// Regcategorize
-// category ids submitted by the form
+$doc_id = $nb->trainDocument($body, $cat_id);
+$suxLink->setLink($link_table, 'bayes_documents', $doc_id, $link, $id);
 
-if ($cat_id) {
-    $doc_id = $nb->trainDocument($body, $cat_id);
-    $suxLink->setLink($link_table, 'bayes_documents', $doc_id, $link, $id);
-}
-
-// TODO, update web interface with Ajax
-
-echo 'w00t! ';
 
 ?>
