@@ -115,7 +115,7 @@ class blogRenderer extends suxRenderer {
     /**
     * @return string javascript
     */
-    function userCategoriesInit() {
+    function genericBayesInterfaceInit() {
 
         return $this->bayesRenderer->genericBayesInterfaceInit();
 
@@ -128,9 +128,21 @@ class blogRenderer extends suxRenderer {
     * @param string $document document to train
     * @return string html
     */
-    function userCategories($id, $link, $document) {
+    function genericBayesInterface($id, $link, $document) {
 
         return $this->bayesRenderer->genericBayesInterface($id, $link, $document);
+
+    }
+
+
+    /**
+    * Get {html_options} formated categories array
+    *
+    * @return array
+    */
+    function getUserCategories() {
+
+        return $this->bayesRenderer->getUserCategories();
 
     }
 

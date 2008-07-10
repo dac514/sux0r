@@ -74,12 +74,9 @@ class bayesRenderer extends suxRenderer {
         // <![CDATA[
 
         function suxTrain(placeholder, link, id, cat_id) {
-
             var url = '{$GLOBALS['CONFIG']['URL']}/modules/bayes/train.php';
             var pars = 'link=' + link + '&id=' + id + '&cat_id=' + cat_id;
-
             new Effect.Highlight($(placeholder));
-
             new Ajax.Request(url, {
                 method: 'post',
                 parameters: pars,
@@ -88,7 +85,10 @@ class bayesRenderer extends suxRenderer {
                     Effect.Pulsate($(placeholder));
                 }
             });
+        }
 
+        function suxNotTrainer(placeholder) {
+            Effect.Shake($(placeholder));
         }
 
         // ]]>
@@ -108,15 +108,13 @@ class bayesRenderer extends suxRenderer {
     */
     function genericBayesInterface($id, $link, $document) {
 
-        if (!$this->user->loginCheck()) return null; // Anonymous user, skip
-
         /* Get a list of all the vectors/categories the user has access to */
 
         // Cache
         static $vectors = null;
         if (!is_array($vectors)) {
             $vectors = array();
-            foreach ($this->nb->getSharedVectors($_SESSION['users_id']) as $key => $val) {
+            if ($this->user->loginCheck()) foreach ($this->nb->getSharedVectors($_SESSION['users_id']) as $key => $val) {
                 $vectors[$key] = $val;
             }
         }
@@ -200,7 +198,10 @@ class bayesRenderer extends suxRenderer {
                 }
                 else {
                     // this is $v_user[], sit pretty, do nothing
-                    $html .= '<select name="null" class="nbCatDropdown">';
+                    $html .= '<select name="null" class="nbCatDropdown" ';
+                    $html .= "onchange=\"suxNotTrainer('nb{$uniqid}');\" ";
+                    $html .= '>';
+
                 }
 
                 /* Check if the vector is categorized */
@@ -275,7 +276,7 @@ class bayesRenderer extends suxRenderer {
         if (is_array($tmp)) return $tmp;
         $tmp = array();
 
-        foreach ($this->getUserOwnedVectorsArray() as $key => $val) {
+        foreach ($this->getVectorsByOwnerArray() as $key => $val) {
             if (!in_array($val['vector'], $tmp)) $tmp[$key] = $val['vector'];
             else $tmp[$key] = "{$val['vector']} (id:$key)";
         }
@@ -297,7 +298,7 @@ class bayesRenderer extends suxRenderer {
         if (is_array($tmp)) return $tmp;
         $tmp = array();
 
-        foreach ($this->getUserSharedVectorsArray() as $key => $val) {
+        foreach ($this->getSharedVectorsArray() as $key => $val) {
             if (!in_array($val['vector'], $tmp)) $tmp[$key] = $val['vector'];
             else $tmp[$key] = "{$val['vector']} (id:$key)";
         }
@@ -319,7 +320,7 @@ class bayesRenderer extends suxRenderer {
         if (is_array($tmp)) return $tmp;
         $tmp = array();
 
-        foreach ($this->getUserOwnedVectorsArray() as $key => $val) {
+        foreach ($this->getVectorsByOwnerArray() as $key => $val) {
 
             // Create a dropdown with <optgroup> array
             $x = "{$val['vector']}";
@@ -368,6 +369,38 @@ class bayesRenderer extends suxRenderer {
 
 
     /**
+    * Get {html_options} formated categories array
+    *
+    * @return array
+    */
+    function getUserCategories() {
+
+        // Cache
+        static $tmp = null;
+        if (is_array($tmp)) return $tmp;
+        $tmp = array();
+
+        if (!$this->user->loginCheck()) return null; // Anonymous user, skip
+
+        foreach ($this->getVectorsByUserArray() as $key => $val) {
+
+            // Create a dropdown with <optgroup> array
+            $x = "{$val['vector']}";
+            if (isset($tmp[$x])) $x = "{$val['vector']} (id:$key)";
+            $y = array();
+            foreach ($this->nb->getCategoriesByVector($key) as $key2 => $val2) {
+                $y[$key2] = "{$val2['category']}";
+            }
+
+            $tmp[$x] = $y;
+        }
+
+        return $tmp;
+
+    }
+
+
+    /**
     * Get documents
     *
     * @return array
@@ -379,7 +412,7 @@ class bayesRenderer extends suxRenderer {
         if (is_array($tmp)) return $tmp;
         $tmp = array();
 
-        foreach ($this->getUserOwnedVectorsArray() as $key => $val) {
+        foreach ($this->getVectorsByOwnerArray() as $key => $val) {
             foreach ($this->nb->getDocumentsByVector($key) as $key2 => $val2) {
                 $category = $this->nb->getCategory($val2['category_id']);
                 $tmp[$key2] = "{$key2} - {$val['vector']}, {$category['category']}";
@@ -404,7 +437,7 @@ class bayesRenderer extends suxRenderer {
         $text =& $this->gtext;
         $cat = 0;
         $html = "<div id='bStats'><ul>\n";
-        foreach ($this->getUserSharedVectorsArray() as $key => $val) {
+        foreach ($this->getSharedVectorsArray() as $key => $val) {
             $html .= "<li class='bStatsVec'>{$val['vector']}";
             if (!$this->nb->isVectorOwner($key, $_SESSION['users_id'])) $html .= ' <em>(' . $text['shared'] . ')/em>';
             $html .= ":</li>\n<ul>\n";
@@ -446,7 +479,7 @@ class bayesRenderer extends suxRenderer {
         $user = new suxUser();
 
         // Owned, and the users shared with
-        $vectors = $this->getUserOwnedVectorsArray();
+        $vectors = $this->getVectorsByOwnerArray();
         foreach ($vectors as $key => $val) {
 
 
@@ -488,7 +521,7 @@ class bayesRenderer extends suxRenderer {
         }
 
         // Shared, but not owned
-        $vectors = $this->getUserSharedVectorsArray();
+        $vectors = $this->getSharedVectorsArray();
         foreach ($vectors as $key => $val) {
 
             if ($val['owner']) continue;
@@ -514,13 +547,12 @@ class bayesRenderer extends suxRenderer {
 
     }
 
-
     /**
     * Get vectors, statically cached array
     *
     * @return array
     */
-    private function getUserOwnedVectorsArray() {
+    private function getVectorsByOwnerArray() {
 
         static $vectors = array();
         if (count($vectors)) return $vectors; // Cache
@@ -548,7 +580,21 @@ class bayesRenderer extends suxRenderer {
     *
     * @return array
     */
-    private function getUserSharedVectorsArray() {
+    private function getVectorsByUserArray() {
+
+        static $vectors = array();
+        if (count($vectors)) return $vectors; // Cache
+        else return $this->nb->getVectorsByUser($_SESSION['users_id']);
+
+    }
+
+
+    /**
+    * Get vectors, statically cached array
+    *
+    * @return array
+    */
+    private function getSharedVectorsArray() {
 
         static $vectors = array();
         if (count($vectors)) return $vectors; // Cache

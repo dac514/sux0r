@@ -39,7 +39,7 @@
     {/capture}
 {/strip}
 <label for="title" {if $smarty.capture.error}class="error"{/if} >Title :</label>
-<input type="text" name="title" value="{$title}" />
+<input type="text" name="title" value="{$title}" class="widerInput" />
 {$smarty.capture.error}
 </p>
 
