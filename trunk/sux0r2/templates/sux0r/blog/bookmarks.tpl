@@ -35,7 +35,7 @@
 
     <p>
     <label {if $error}class="error"{/if} for="url[{$smarty.foreach.foo.index}]">URL :</label>
-    <input type="text" name="url[{$smarty.foreach.foo.index}]" value="{if !is_numeric($k)}{$k}{/if}" />
+    <input type="text" name="url[{$smarty.foreach.foo.index}]" value="{if !is_numeric($k)}{$k}{/if}" class="widerInput" />
     {if $error}{foreach from=$error item=v2}{$v2}{/foreach}{/if}
     </p>
 
@@ -46,7 +46,7 @@
 
     <p>
     <label {if $error}class="error"{/if} for="title[{$smarty.foreach.foo.index}]">Title :</label>
-    <input type="text" name="title[{$smarty.foreach.foo.index}]" value="{$v.title}" />
+    <input type="text" name="title[{$smarty.foreach.foo.index}]" value="{$v.title}" class="widerInput" />
     {if $error}{foreach from=$error item=v2}{$v2}{/foreach}{/if}
     </p>
 

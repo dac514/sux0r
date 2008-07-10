@@ -1,6 +1,6 @@
 {capture name=header}
 
-{$r->userCategoriesInit()}
+{$r->genericBayesInterfaceInit()}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
@@ -64,16 +64,6 @@
 		<td style="vertical-align:top;">
 			<div id="rightside">
 
-            {*<p>
-            Author:
-            [ Dropdown ]
-            Tags:
-            [ Dropdown ]
-            Month/Year:
-            [ Dropdown ]
-            [ Go! ]
-            </p>*}
-
             {* ------------------------------------------------------------------------------------------------------ *}
 
             {* Blogs *}
@@ -115,7 +105,7 @@
 
                         {$r->authorCategories($foo.id, $foo.users_id)}
 
-                        {$r->userCategories($foo.id, 'messages', $foo.body_plaintext)}
+                        {$r->genericBayesInterface($foo.id, 'messages', $foo.body_plaintext)}
 
                     </div>
 

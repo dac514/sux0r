@@ -36,7 +36,7 @@
     {/capture}
 {/strip}
 <label for="title" {if $smarty.capture.error}class="error"{/if} >{$r->text.dob} Title :</label>
-<input type="text" name="title" value="{$title}" />
+<input type="text" name="title" value="{$title}" class="widerInput" />
 {$smarty.capture.error}
 </p>
 
@@ -71,7 +71,7 @@ TODO: http://wiki.moxiecode.com/index.php/TinyMCE:Configuration/external_image_l
 
 <p>
 <label for="draft">Save as draft:</label>
-<input type="checkbox" name="draft" class="revert" value="1" {if $draft}checked="checked"{/if} />
+<input type="checkbox" name="draft" value="1" {if $draft}checked="checked"{/if} />
 </p>
 
 <p>
