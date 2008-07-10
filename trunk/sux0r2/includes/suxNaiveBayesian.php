@@ -185,7 +185,7 @@ class suxNaiveBayesian {
     * @param int $category_id category id
     * @return array key = id, values = array(keys = 'vector')
     */
-    function getVectorsByCategory($category_id) {
+    function getVectorByCategory($category_id) {
 
         if (!filter_var($category_id, FILTER_VALIDATE_INT)) return false;
 
@@ -197,11 +197,11 @@ class suxNaiveBayesian {
         $st->execute(array($category_id));
 
         $vectors = array();
-        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
-            $vectors[$row['id']] = array(
-                'vector' => $row['vector'],
-                );
-        }
+        $row = $st->fetch(PDO::FETCH_ASSOC); // There should only be one vector
+        $vectors[$row['id']] = array(
+            'vector' => $row['vector'],
+            );
+
         return $vectors;
     }
 

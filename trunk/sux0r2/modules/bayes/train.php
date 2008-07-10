@@ -76,7 +76,7 @@ $tmp = $st->fetchAll(PDO::FETCH_ASSOC);
 // Since we are only training one category/vector at a time, we need to make
 // sure we don't untrain other unrlated vectors here.
 
-$vec_id = $nb->getVectorsByCategory($cat_id);
+$vec_id = $nb->getVectorByCategory($cat_id);
 foreach ($tmp as $val) {
     if (isset($vec_id[$val['bayes_vectors_id']])) {
         $nb->untrainDocument($val['id']);

@@ -160,6 +160,25 @@ function sux($action, $params = null) {
         break;
 
 
+    case 'filter' :
+
+        // --------------------------------------------------------------------
+        // Filter
+        // --------------------------------------------------------------------
+
+        if (empty($_REQUEST['category_id']) || !isset($_REQUEST['threshold'])) {
+            suxFunct::redirect(suxFunct::makeUrl('/blog'));
+        }
+
+        $cat_id = $_REQUEST['category_id'];
+        $threshold = $_REQUEST['threshold'];
+
+        include_once('blog.php');
+        $blog = new blog();
+        $blog->filter($cat_id, $threshold);
+        break;
+
+
     default:
 
         // --------------------------------------------------------------------
