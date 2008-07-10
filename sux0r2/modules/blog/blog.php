@@ -186,6 +186,7 @@ class blog  {
 
         }
 
+        $this->tpl->assign('category_id', $cat_id);
         $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('scroll.tpl');
 
@@ -212,6 +213,43 @@ class blog  {
         $this->r->fp = $this->blogs($this->msg->getFirstPostsByMonth($datetime, 'blog', true, $this->pager->limit, $this->pager->start));
         $this->r->sidelist = $this->msg->getFirstPostsByMonth($datetime, 'blog');
         $this->r->text['sidelist'] = date('F Y', strtotime($date));
+
+        // Template
+        $this->tpl->assign_by_ref('r', $this->r);
+        $this->tpl->display('scroll.tpl');
+
+    }
+
+
+    /**
+    * Filter
+    */
+    function filter($cat_id, $threshold) {
+
+        $threshold = filter_var($threshold, FILTER_VALIDATE_FLOAT);
+        if ($threshold >= 1 ) suxFunct::redirect(suxFunct::makeUrl('/blog/category/' . $cat_id));
+
+        $this->user->loginCheck(suxFunct::makeUrl('/blog')); // Skip anonymous users
+        $vec_id = key($this->nb->getVectorByCategory($cat_id));
+        if (!$vec_id) suxFunct::redirect(suxFunct::makeUrl('/blog'));
+        if (!$this->nb->isVectorOwner($vec_id, $_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/blog'));
+
+        // TODO, some sort of pager mechanism is needed
+
+        $fp = $this->blogs($this->msg->getFirstPosts('blog', true));
+        if ($threshold > 0 && $threshold < 1) {
+            foreach ($fp as $key => $val) {
+                $score = $this->nb->categorize($val['body_plaintext'], $vec_id);
+                if ($score[$cat_id]['score'] < $threshold) {
+                    unset($fp[$key]);
+                    continue;
+                }
+            }
+        }
+
+        $this->r->fp = $fp;
+        $this->tpl->assign('category_id', $cat_id);
+        $this->tpl->assign('threshold', $threshold);
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);

@@ -72,9 +72,6 @@
                 {/if}
 
 
-
-
-
 			</div>
 		</td>
 		<td style="vertical-align:top;">
@@ -84,7 +81,8 @@
 
             {if $r->getUserCategories()}
             <div style="margin-top: 5px;">
-            <form id="slider-form" onsubmit="alert(Form.serialize($('slider-form'))); return false;">
+            <form action="{$r->makeUrl('/blog/filter')}" method="post" accept-charset="utf-8" >
+            {* <form id="slider-form" onsubmit="alert(Form.serialize($('slider-form'))); return false;"> *}
 
                 <input type="hidden" id="threshold" name="threshold" value="0" />
 
@@ -102,7 +100,7 @@
 
                 </div>
 
-                <div style="float:left; margin-left: 5px;"><input type="submit" name="submit" value="Filter" /></div>
+                <div style="float:left; margin-left: 5px;"><input type="submit" value="Filter" /></div>
 
                 <div class='clearboth'></div>
 
@@ -116,7 +114,7 @@
             // Script has to come after slider xhtml otherwise it doesn't work
 
             // initial slider value
-            sv = {/literal}{if $threshold}{$threshold}{else}0.8{/if}{literal};
+            sv = {/literal}{if isset($threshold)}{$threshold}{else}1{/if}{literal};
             $('threshold').value = sv;
             $('nbPercentage').innerHTML = (sv * 100).toFixed(2) + '%';
 
