@@ -113,7 +113,7 @@
             // Script has to come after slider xhtml otherwise it doesn't work
 
             // initial slider value
-            sv = {/literal}{if isset($threshold)}{$threshold}{else}1{/if}{literal};
+            sv = {/literal}{if isset($threshold)}{$threshold}{else}0{/if}{literal};
             $('threshold').value = sv;
             $('nbPercentage').innerHTML = (sv * 100).toFixed(2) + '%';
 
