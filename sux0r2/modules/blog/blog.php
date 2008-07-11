@@ -226,26 +226,55 @@ class blog  {
     */
     function filter($cat_id, $threshold) {
 
+        // -------------------------------------------------------------------
+        // Sanitize
+        // -------------------------------------------------------------------
+
         $threshold = filter_var($threshold, FILTER_VALIDATE_FLOAT);
         if ($threshold >= 1 ) suxFunct::redirect(suxFunct::makeUrl('/blog/category/' . $cat_id));
 
         $this->user->loginCheck(suxFunct::makeUrl('/blog')); // Skip anonymous users
         $vec_id = key($this->nb->getVectorByCategory($cat_id));
         if (!$vec_id) suxFunct::redirect(suxFunct::makeUrl('/blog'));
-        if (!$this->nb->isVectorOwner($vec_id, $_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/blog'));
+        if (!$this->nb->isVectorUser($vec_id, $_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/blog'));
 
-        // TODO, some sort of pager mechanism is needed
+        // -------------------------------------------------------------------
+        // Get items based on score, variable paging
+        // -------------------------------------------------------------------
 
-        $fp = $this->blogs($this->msg->getFirstPosts('blog', true));
-        if ($threshold > 0 && $threshold < 1) {
-            foreach ($fp as $key => $val) {
-                $score = $this->nb->categorize($val['body_plaintext'], $vec_id);
-                if ($score[$cat_id]['score'] < $threshold) {
-                    unset($fp[$key]);
-                    continue;
+        $limit = $this->pager->limit;
+        $start = 0;
+        $max = $this->msg->countFirstPosts('blog');
+        $i = 0;
+        $fp = array();
+        while ($i < $limit) {
+
+            $fp = array_merge($fp, $this->blogs($this->msg->getFirstPosts('blog', true, $limit, $start)));
+
+            if ($threshold > 0 && $threshold < 1) {
+                foreach ($fp as $key => $val) {
+                    $score = $this->nb->categorize($val['body_plaintext'], $vec_id);
+                    if ($score[$cat_id]['score'] < $threshold) {
+                        unset($fp[$key]);
+                        continue;
+                    }
                 }
             }
+
+            $i = count($fp);
+            if ($i < $limit && $start < ($max - $limit)) {
+                ++$start;
+            }
+            else break;
+
         }
+
+        // new dBug($start);
+        // TODO, some sort of pager mechanism is needed using $start
+
+        // -------------------------------------------------------------------
+        // Template
+        // -------------------------------------------------------------------
 
         $this->r->fp = $fp;
         $this->tpl->assign('category_id', $cat_id);
