@@ -64,7 +64,7 @@ class blog  {
         $this->nb = new bayesUser();
 
         $this->pager = new suxPager();
-        $this->pager->limit = 2;
+        $this->pager->limit = 2; // TODO, remove this value, it's for testing
 
     }
 
@@ -77,18 +77,40 @@ class blog  {
         $u = $this->user->getUserByNickname($author);
         if ($u) {
 
-            // Pager
-            $this->pager->setStart();
-            $this->pager->setPages($this->msg->countFirstPostsByUser($u['users_id'], 'blog'));
-            $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/author/' . $author));
+            if (list($vec_id, $cat_id, $threshold, $start) = $this->isValidFilter()) {
 
-            // Assign
-            $this->r->fp = $this->blogs($this->msg->getFirstPostsByUser($u['users_id'], 'blog', true, $this->pager->limit, $this->pager->start));
+                // Filtered results
+                $max = $this->msg->countFirstPostsByUser($u['users_id'], 'blog');
+                $eval = '$this->msg->getFirstPostsByUser(' .$u['users_id'] . ', \'blog\', true, $this->pager->limit, $start)';
+                $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval)); // Important: start must be reference
+
+                if (count($this->r->fp) && $start < $max) {
+                    $url = suxFunct::makeUrl('/blog/author/'. $author, array('threshold' => $threshold, 'category_id' => $cat_id));
+                    $this->r->text['pager'] = $this->pager->continueLink($start, $url);
+                }
+
+                $this->tpl->assign('category_id', $cat_id);
+                $this->tpl->assign('threshold', $threshold);
+
+            }
+            else {
+
+                // Paged results
+                $this->pager->setStart();
+                $this->pager->setPages($this->msg->countFirstPostsByUser($u['users_id'], 'blog'));
+                $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/author/' . $author));
+                $this->r->fp = $this->blogs($this->msg->getFirstPostsByUser($u['users_id'], 'blog', true, $this->pager->limit, $this->pager->start));
+
+            }
+
+            // Sidelist
             $this->r->sidelist = $this->msg->getFirstPostsByUser($u['users_id'], 'blog'); // TODO: Too many blogs?
             $this->r->text['sidelist'] = ucwords($author);
 
         }
 
+        // Forum Url
+        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/author/' . $author);
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
@@ -106,7 +128,7 @@ class blog  {
         if ($c) {
 
             // ----------------------------------------------------------------
-            // SQL
+            // Reusable SQL
             // ----------------------------------------------------------------
 
             $db = suxDB::get();
@@ -126,6 +148,10 @@ class blog  {
             else {
                 throw new Exception('Unsupported database driver');
             }
+
+            // ----------------------------------------------------------------
+            // SQL
+            // ----------------------------------------------------------------
 
             // Count
             $count_query = "
@@ -148,14 +174,43 @@ class blog  {
                 {$date}
                 ORDER BY messages.published_on DESC
                 ";
-                if ($this->pager->start && $this->pager->limit) $limit_query .= "LIMIT {$this->pager->start}, {$this->pager->limit} ";
-                elseif ($this->pager->limit) $limit_query .= "LIMIT {$this->pager->limit} ";
 
-                $st = $db->prepare($limit_query);
-                $st->execute(array($cat_id));
-                $fp = $st->fetchAll(PDO::FETCH_ASSOC);
+                if (list($vec_id, $cat_id2, $threshold, $start) = $this->isValidFilter()) {
 
-                // Select, for sidebar
+                    // Filtered results
+                    $eval = '$this->foobar("' . $limit_query . '", ' . $cat_id . ', $start)';
+                    $this->r->fp  = $this->blogs($this->filter($count, $vec_id, $cat_id2, $threshold, &$start, $eval)); // Important: start must be reference
+
+                    if (count($this->r->fp) && $start < $count) {
+                        $url = suxFunct::makeUrl('/blog/category/'. $cat_id, array('threshold' => $threshold, 'category_id' => $cat_id));
+                        $this->r->text['pager'] = $this->pager->continueLink($start, $url);
+                    }
+
+                    $this->tpl->assign('category_id', $cat_id2);
+                    $this->tpl->assign('threshold', $threshold);
+
+                }
+                else{
+
+                    // Paged results
+                    $this->pager->setStart();
+                    $this->pager->setPages($count);
+                    $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/category/' . $cat_id));
+
+                    if ($this->pager->start && $this->pager->limit) $limit_query .= "LIMIT {$this->pager->start}, {$this->pager->limit} ";
+                    elseif ($this->pager->limit) $limit_query .= "LIMIT {$this->pager->limit} ";
+
+                    $st = $db->prepare($limit_query);
+                    $st->execute(array($cat_id));
+                    $fp = $st->fetchAll(PDO::FETCH_ASSOC);
+                    $this->r->fp = $this->blogs($fp);
+
+                }
+
+                // ----------------------------------------------------------------
+                // Sidelist
+                // ----------------------------------------------------------------
+
                 $select_query = "
                 SELECT messages.id, messages.thread_id, messages.title FROM messages
                 {$innerjoin}
@@ -167,26 +222,17 @@ class blog  {
                 $st = $db->prepare($select_query);
                 $st->execute(array($cat_id));
                 $sidelist = $st->fetchAll(PDO::FETCH_ASSOC);
-
-                // ----------------------------------------------------------------
-                // Template
-                // ----------------------------------------------------------------
-
-                // Pager
-                $this->pager->setStart();
-                $this->pager->setPages($count);
-                $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/category/' . $cat_id));
-
-                // Assign
-                $this->r->fp = $this->blogs($fp);
                 $this->r->sidelist = $sidelist;
                 $this->r->text['sidelist'] = $c['category'];
+
 
             }
 
         }
 
-        $this->tpl->assign('category_id', $cat_id);
+        // Forum Url
+        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/category/' . $cat_id);
+
         $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('scroll.tpl');
 
@@ -204,81 +250,38 @@ class blog  {
         if (!preg_match($regex, $date)) $date = date('Y-m-d');
         $datetime = $date . ' ' . date('H:i:s'); // Append current time
 
-        // Pager
-        $this->pager->setStart();
-        $this->pager->setPages($this->msg->countFirstPostsByMonth($datetime, 'blog'));
-        $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/month/' . $date));
+        if (list($vec_id, $cat_id, $threshold, $start) = $this->isValidFilter()) {
 
-        // Assign
-        $this->r->fp = $this->blogs($this->msg->getFirstPostsByMonth($datetime, 'blog', true, $this->pager->limit, $this->pager->start));
-        $this->r->sidelist = $this->msg->getFirstPostsByMonth($datetime, 'blog');
-        $this->r->text['sidelist'] = date('F Y', strtotime($date));
+            // Filtered results
+            $max = $this->msg->countFirstPostsByMonth($datetime, 'blog');
+            $eval = '$this->msg->getFirstPostsByMonth(\'' . $datetime . '\', \'blog\', true, $this->pager->limit, $start)';
+            $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval)); // Important: start must be reference
 
-        // Template
-        $this->tpl->assign_by_ref('r', $this->r);
-        $this->tpl->display('scroll.tpl');
-
-    }
-
-
-    /**
-    * Filter
-    */
-    function filter($cat_id, $threshold) {
-
-        // -------------------------------------------------------------------
-        // Sanitize
-        // -------------------------------------------------------------------
-
-        $threshold = filter_var($threshold, FILTER_VALIDATE_FLOAT);
-        if ($threshold >= 1 ) suxFunct::redirect(suxFunct::makeUrl('/blog/category/' . $cat_id));
-
-        $this->user->loginCheck(suxFunct::makeUrl('/blog')); // Skip anonymous users
-        $vec_id = key($this->nb->getVectorByCategory($cat_id));
-        if (!$vec_id) suxFunct::redirect(suxFunct::makeUrl('/blog'));
-        if (!$this->nb->isVectorUser($vec_id, $_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/blog'));
-
-        // -------------------------------------------------------------------
-        // Get items based on score, variable paging
-        // -------------------------------------------------------------------
-
-        $limit = $this->pager->limit;
-        $start = 0;
-        $max = $this->msg->countFirstPosts('blog');
-        $i = 0;
-        $fp = array();
-        while ($i < $limit) {
-
-            $fp = array_merge($fp, $this->blogs($this->msg->getFirstPosts('blog', true, $limit, $start)));
-
-            if ($threshold > 0 && $threshold < 1) {
-                foreach ($fp as $key => $val) {
-                    $score = $this->nb->categorize($val['body_plaintext'], $vec_id);
-                    if ($score[$cat_id]['score'] < $threshold) {
-                        unset($fp[$key]);
-                        continue;
-                    }
-                }
+            if (count($this->r->fp) && $start < $max) {
+                $url = suxFunct::makeUrl('/blog/month/'. $date, array('threshold' => $threshold, 'category_id' => $cat_id));
+                $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
 
-            $i = count($fp);
-            if ($i < $limit && $start < ($max - $limit)) {
-                ++$start;
-            }
-            else break;
+            $this->tpl->assign('category_id', $cat_id);
+            $this->tpl->assign('threshold', $threshold);
+
+        }
+        else {
+
+            // Paged results
+            $this->pager->setStart();
+            $this->pager->setPages($this->msg->countFirstPostsByMonth($datetime, 'blog'));
+            $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/month/' . $date));
+            $this->r->fp = $this->blogs($this->msg->getFirstPostsByMonth($datetime, 'blog', true, $this->pager->limit, $this->pager->start));
 
         }
 
-        // new dBug($start);
-        // TODO, some sort of pager mechanism is needed using $start
+        // Sidelist
+        $this->r->sidelist = $this->msg->getFirstPostsByMonth($datetime, 'blog');
+        $this->r->text['sidelist'] = date('F Y', strtotime($date));
 
-        // -------------------------------------------------------------------
-        // Template
-        // -------------------------------------------------------------------
-
-        $this->r->fp = $fp;
-        $this->tpl->assign('category_id', $cat_id);
-        $this->tpl->assign('threshold', $threshold);
+        // Forum Url
+        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/month/' . $date);
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
@@ -292,13 +295,35 @@ class blog  {
     */
     function listing() {
 
-        // Pager
-        $this->pager->setStart();
-        $this->pager->setPages($this->msg->countFirstPosts('blog'));
-        $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog'));
+        if (list($vec_id, $cat_id, $threshold, $start) = $this->isValidFilter()) {
 
-        // Assign
-        $this->r->fp = $this->blogs($this->msg->getFirstPosts('blog', true, $this->pager->limit, $this->pager->start));
+            // Filtered results
+            $max = $this->msg->countFirstPosts('blog');
+            $eval = '$this->msg->getFirstPosts(\'blog\', true, $this->pager->limit, $start)';
+            $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval)); // Important: start must be reference
+
+            if (count($this->r->fp) && $start < $max) {
+                $url = suxFunct::makeUrl('/blog/', array('threshold' => $threshold, 'category_id' => $cat_id));
+                $this->r->text['pager'] = $this->pager->continueLink($start, $url);
+            }
+
+            $this->tpl->assign('category_id', $cat_id);
+            $this->tpl->assign('threshold', $threshold);
+
+        }
+        else {
+
+            // Paged results
+            $this->pager->setStart();
+            $this->pager->setPages($this->msg->countFirstPosts('blog'));
+            $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog'));
+            $this->r->fp = $this->blogs($this->msg->getFirstPosts('blog', true, $this->pager->limit, $this->pager->start));
+
+
+        }
+
+        // Forum Url
+        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/');
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
@@ -331,10 +356,6 @@ class blog  {
         // Assign
         $this->r->fp = $this->blogs($fp);
         $this->r->comments = $this->comments($thread);
-
-        // $this->r->sidelist = $this->msg->getFirstPostsByUser($u['users_id'], 'blog'); // TODO: Too many blogs?
-        // $this->r->text['sidelist'] = ucwords($author);
-
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
@@ -380,6 +401,93 @@ class blog  {
 
     }
 
+
+    /**
+    * @return false|array($vec_id, $cat_id, $threshold, $start)
+    */
+    private function isValidFilter() {
+
+        if (!isset($_GET['threshold'])) return false;
+        if ($_GET['threshold'] != '0') {
+            if (!filter_var($_GET['threshold'], FILTER_VALIDATE_FLOAT)) return false;
+        }
+        if ($_GET['threshold'] < 0 || $_GET['threshold'] > 1) return false;
+
+
+        if (!isset($_GET['category_id'])) return false;
+        if (!filter_var($_GET['category_id'], FILTER_VALIDATE_INT)) return false;
+        if ($_GET['category_id'] < 0) return false;
+        if (!$this->user->loginCheck()) return false;
+
+        $vec_id = $this->nb->getVectorByCategory($_GET['category_id']);
+        if (!$vec_id) return false;
+        $vec_id = key($vec_id);
+        if (!$this->nb->isVectorUser($vec_id, $_SESSION['users_id'])) return false;
+
+        if (!isset($_GET['start'])) $_GET['start'] = 0;
+        else if (!(filter_var($_GET['start'], FILTER_VALIDATE_INT) && $_GET['start'] > 0)) $_GET['start'] = 0;
+
+        return array($vec_id, $_GET['category_id'], $_GET['threshold'], $_GET['start']);
+
+    }
+
+
+    /**
+    * Filter
+    */
+    private function filter($max, $vec_id, $cat_id, $threshold, $start, $eval) {
+
+        // -------------------------------------------------------------------
+        // Get items based on score, variable paging
+        // -------------------------------------------------------------------
+
+        $fp = array();
+
+        $init = $start;
+        $i = 0;
+        while ($i < $this->pager->limit) {
+
+            $tmp = array();
+            eval('$tmp = ' . $eval . ';');
+            $fp = array_merge($fp, $tmp);
+
+            if ($threshold > 0 && $threshold <= 1) {
+                foreach ($fp as $key => $val) {
+                    $score = $this->nb->categorize($val['body_plaintext'], $vec_id);
+                    if ($score[$cat_id]['score'] < $threshold) {
+                        unset($fp[$key]);
+                        continue;
+                    }
+                }
+            }
+
+            $i = count($fp);
+            if ($start == $init) $start = $start + ($this->pager->limit - 1);
+            if ($i < $this->pager->limit && $start < ($max - $this->pager->limit)) {
+                ++$start;
+            }
+            else break;
+
+        }
+        ++$start;
+
+        return $fp;
+
+    }
+
+
+    /**
+    * Workaround function for catgetory()
+    */
+    private function foobar($q, $cat_id, $start) {
+
+        $q .= "LIMIT {$start}, {$this->pager->limit} ";
+        $db = suxDB::get();
+        $st = $db->prepare($q);
+        $st->execute(array($cat_id));
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }
 
 }
 

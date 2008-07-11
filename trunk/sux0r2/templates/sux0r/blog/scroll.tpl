@@ -81,8 +81,7 @@
 
             {if $r->getUserCategories()}
             <div style="margin-top: 5px;">
-            <form action="{$r->makeUrl('/blog/filter')}" method="post" accept-charset="utf-8" >
-            {* <form id="slider-form" onsubmit="alert(Form.serialize($('slider-form'))); return false;"> *}
+            <form action="{$r->text.form_url}" method="get" accept-charset="utf-8" >
 
                 <input type="hidden" id="threshold" name="threshold" value="0" />
 

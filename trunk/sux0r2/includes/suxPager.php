@@ -23,26 +23,9 @@
 
 class suxPager {
 
-    /*
-    Example usage:
-
-    $p = new Pager;
-    $p->limit = 10; // Optional
-    $p->setStart();
-    // ...
-    $count = suxDB::prepareCountQuery(...);
-    $p->setPages($count);
-    // ...
-    $query = "SELECT * from feeds WHERE `approved` = 1 ORDER BY title LIMIT {$p->start}, {$p->limit} ";
-    // ...
-    $pagelist = $p->pageList('http://some.url/');
-    echo $pagelist;
-    */
-
     public $limit = 50;
     public $start = 0;
     public $pages = 0;
-
 
     /**
     * Constructor
@@ -50,20 +33,61 @@ class suxPager {
     function __construct() { }
 
 
+    // -----------------------------------------------------------------------
+    // Simple continue link with $_GET['start']
+    // -----------------------------------------------------------------------
+
+    /**
+    * @param string $url
+    * @return string returns a contine link
+    */
+	function continueLink($start, $url) {
+
+        if (!(filter_var($start, FILTER_VALIDATE_INT) && $start > 0)) $start = 0;
+		if (trim($url) == '') return null;
+
+        $text = suxFunct::gtext();
+        $q = mb_strpos($url, '?') ? '&' : '?';
+        $html = "<a href='{$url}{$q}start={$start}' class='nextPage'>{$text['continue']} &raquo;</a> ";
+		return "<div class='pager'>{$html}</div> ";
+
+    }
+
+
+    // -----------------------------------------------------------------------
+    // Pager links with $_GET['page']
+    // -----------------------------------------------------------------------
+
+    /*
+
+    // Pseudo example:
+
+    $p = new suxPager();
+    $p->limit = 10; // Optional
+    $p->setStart();
+    $count = SELECT COUNT(*)
+    $p->setPages($count);
+    $query = "SELECT * FROM table WHERE condition = 1 ORDER BY title LIMIT {$p->start}, {$p->limit} ";
+    $pagelist = $p->pageList('http://some.url/');
+    echo $pagelist;
+
+    */
+
     /**
     * @return int sets the start offset based on $_GET['page'] and $this->limit
     */
     function setStart() {
 
-		if (!isset($_GET['page']) || !filter_var($_GET['page'], FILTER_VALIDATE_INT) || $_GET['page'] == '1') {
-			$start = 0;
+        if (isset($_GET['page'])) {
+            if (filter_var($_GET['page'], FILTER_VALIDATE_INT) && $_GET['page'] > 0) {
+                $this->start = ($_GET['page'] - 1) * $this->limit;
+            }
+        }
+        else {
+			$this->start = 0;
 			$_GET['page'] = 1;
-		}
-		else {
-			$start = ($_GET['page'] - 1) * $this->limit;
-		}
+        }
 
-		$this->start = $start;
     }
 
 
@@ -129,6 +153,7 @@ class suxPager {
 
 		return "<div class='pager'>{$html}</div> ";
     }
+
 
 }
 
