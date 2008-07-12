@@ -60,6 +60,8 @@ class bayesRenderer extends suxRenderer {
     */
     function genericBayesInterfaceInit($init = true) {
 
+        if (!$this->user->loginCheck()) return null; // Skip anonymous users
+
         $js = '';
 
         if ($init) {

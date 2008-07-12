@@ -16,7 +16,7 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
-* @author     Dac Chartrand <dac.chartrand@gmail.com>
+* @author     Dac Chartrand <dac.chartrand@gmail.com>c
 * @copyright  2008 sux0r development group
 * @license    http://www.gnu.org/licenses/agpl.html
 *
@@ -85,12 +85,14 @@ class blog  {
                 $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval)); // Important: start must be reference
 
                 if (count($this->r->fp) && $start < $max) {
-                    $url = suxFunct::makeUrl('/blog/author/'. $author, array('threshold' => $threshold, 'category_id' => $cat_id));
+                    if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
+                    else $params = array('filter' => $cat_id);
+                    $url = suxFunct::makeUrl('/blog/author/'. $author, $params);
                     $this->r->text['pager'] = $this->pager->continueLink($start, $url);
                 }
 
-                $this->tpl->assign('category_id', $cat_id);
-                $this->tpl->assign('threshold', $threshold);
+                $this->tpl->assign('filter', $cat_id);
+                if ($threshold !== false) $this->tpl->assign('threshold', $threshold);
 
             }
             else {
@@ -182,12 +184,14 @@ class blog  {
                     $this->r->fp  = $this->blogs($this->filter($count, $vec_id, $cat_id2, $threshold, &$start, $eval)); // Important: start must be reference
 
                     if (count($this->r->fp) && $start < $count) {
-                        $url = suxFunct::makeUrl('/blog/category/'. $cat_id, array('threshold' => $threshold, 'category_id' => $cat_id));
+                        if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
+                        else $params = array('filter' => $cat_id);
+                        $url = suxFunct::makeUrl('/blog/category/'. $cat_id, $params);
                         $this->r->text['pager'] = $this->pager->continueLink($start, $url);
                     }
 
-                    $this->tpl->assign('category_id', $cat_id2);
-                    $this->tpl->assign('threshold', $threshold);
+                    $this->tpl->assign('filter', $cat_id2);
+                    if ($threshold !== false) $this->tpl->assign('threshold', $threshold);
 
                 }
                 else{
@@ -258,12 +262,14 @@ class blog  {
             $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval)); // Important: start must be reference
 
             if (count($this->r->fp) && $start < $max) {
-                $url = suxFunct::makeUrl('/blog/month/'. $date, array('threshold' => $threshold, 'category_id' => $cat_id));
+                if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
+                else $params = array('filter' => $cat_id);
+                $url = suxFunct::makeUrl('/blog/month/'. $date, $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
 
-            $this->tpl->assign('category_id', $cat_id);
-            $this->tpl->assign('threshold', $threshold);
+            $this->tpl->assign('filter', $cat_id);
+            if ($threshold !== false) $this->tpl->assign('threshold', $threshold);
 
         }
         else {
@@ -303,12 +309,14 @@ class blog  {
             $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval)); // Important: start must be reference
 
             if (count($this->r->fp) && $start < $max) {
-                $url = suxFunct::makeUrl('/blog/', array('threshold' => $threshold, 'category_id' => $cat_id));
+                if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
+                else $params = array('filter' => $cat_id);
+                $url = suxFunct::makeUrl('/blog/', $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
 
-            $this->tpl->assign('category_id', $cat_id);
-            $this->tpl->assign('threshold', $threshold);
+            $this->tpl->assign('filter', $cat_id);
+            if ($threshold !== false) $this->tpl->assign('threshold', $threshold);
 
         }
         else {
@@ -407,27 +415,29 @@ class blog  {
     */
     private function isValidFilter() {
 
-        if (!isset($_GET['threshold'])) return false;
-        if ($_GET['threshold'] != '0') {
-            if (!filter_var($_GET['threshold'], FILTER_VALIDATE_FLOAT)) return false;
-        }
-        if ($_GET['threshold'] < 0 || $_GET['threshold'] > 1) return false;
-
-
-        if (!isset($_GET['category_id'])) return false;
-        if (!filter_var($_GET['category_id'], FILTER_VALIDATE_INT)) return false;
-        if ($_GET['category_id'] < 0) return false;
+        if (!isset($_GET['filter'])) return false;
+        if (!filter_var($_GET['filter'], FILTER_VALIDATE_INT)) return false;
+        if ($_GET['filter'] < 0) return false;
         if (!$this->user->loginCheck()) return false;
 
-        $vec_id = $this->nb->getVectorByCategory($_GET['category_id']);
+        if (!isset($_GET['threshold'])) $_GET['threshold'] = false;
+        else {
+            if ($_GET['threshold'] != '0') {
+                if (!filter_var($_GET['threshold'], FILTER_VALIDATE_FLOAT)) return false;
+            }
+            if ($_GET['threshold'] < 0 || $_GET['threshold'] > 1) return false;
+        }
+
+        $vec_id = $this->nb->getVectorByCategory($_GET['filter']);
         if (!$vec_id) return false;
+        reset($vec_id);
         $vec_id = key($vec_id);
         if (!$this->nb->isVectorUser($vec_id, $_SESSION['users_id'])) return false;
 
         if (!isset($_GET['start'])) $_GET['start'] = 0;
         else if (!(filter_var($_GET['start'], FILTER_VALIDATE_INT) && $_GET['start'] > 0)) $_GET['start'] = 0;
 
-        return array($vec_id, $_GET['category_id'], $_GET['threshold'], $_GET['start']);
+        return array($vec_id, $_GET['filter'], $_GET['threshold'], $_GET['start']);
 
     }
 
@@ -451,7 +461,19 @@ class blog  {
             eval('$tmp = ' . $eval . ';');
             $fp = array_merge($fp, $tmp);
 
-            if ($threshold > 0 && $threshold <= 1) {
+            if ($threshold === false) {
+                // Top
+                foreach ($fp as $key => $val) {
+                    $score = $this->nb->categorize($val['body_plaintext'], $vec_id);
+                    reset($score);
+                    if ($cat_id != key($score)){
+                        unset($fp[$key]);
+                        continue;
+                    }
+                }
+            }
+            elseif ($threshold > 0 && $threshold <= 1) {
+                // Threshold
                 foreach ($fp as $key => $val) {
                     $score = $this->nb->categorize($val['body_plaintext'], $vec_id);
                     if ($score[$cat_id]['score'] < $threshold) {
