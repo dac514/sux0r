@@ -24,23 +24,23 @@
 
 function sux($action, $params = null) {
 
-    switch($action)
-    {
+
+    include_once('cropper.php');
+    $cropper = new cropper();
 
 
-    default:
-
-        // --------------------------------------------------------------------
-        // Default
-        // --------------------------------------------------------------------
-
-            // Edit profile registration
-            include_once('cropper.php');
-            $blog = new cropper();
-
-            $blog->display();
-
+    if ($cropper->formValidate($_POST)) {
+        $cropper->formProcess($_POST);
+        $cropper->formSuccess();
     }
+    else {
+        $cropper->formBuild($action, $params[0], $_POST);
+    }
+
+
+
+
+
 
 }
 

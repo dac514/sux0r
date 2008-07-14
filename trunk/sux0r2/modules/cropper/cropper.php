@@ -23,14 +23,17 @@
 */
 
 require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
+require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once('cropperRenderer.php');
+
 
 class cropper {
 
     //Variables
     public $gtext = array();
     private $module = 'cropper';
+    private $prev_url_preg = '#^cropper/#i';
 
     // Objects
     public $tpl;
@@ -51,35 +54,108 @@ class cropper {
         $this->r = new cropperRenderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
+        suxValidate::register_object('this', $this); // Register self to validator
 
     }
 
 
     /**
-    * Display
+    * Validate the form
+    *
+    * @param array $dirty reference to unverified $_POST
+    * @return bool
     */
-    function display() {
+    function formValidate(&$dirty) {
 
-        // TODO:
+        if(!empty($dirty) && suxValidate::is_registered_form()) {
+            // Validate
+            suxValidate::connect($this->tpl);
+            if(suxValidate::is_valid($dirty)) {
+                suxValidate::disconnect();
+                return true;
+            }
+        }
+        return false;
 
-        $image = 'http://www.trotch.com/images/hammer.gif';
+    }
+
+
+    /**
+    * Build the form and show the template
+    *
+    * @global string $CONFIG['URL']
+    * @param string $type
+    * @param int $id
+    * @param array $dirty reference to unverified $_POST
+    */
+    function formBuild($type, $id, &$dirty) {
+
+        // Initialize width & height
         $width = 0;
         $height = 0;
 
-        $image = suxFunct::canonicalizeUrl($image);
+        // Check $id
+        if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception ('Invalid $id');
+
+        // Check $type, assign $table
+        $table = $this->getTable($type);
+        if (!$table) throw new Exception('Unsuported $type');
+
+        // --------------------------------------------------------------------
+        // Form logic
+        // --------------------------------------------------------------------
+
+        if (!empty($dirty)) $this->tpl->assign($dirty);
+        else suxValidate::disconnect();
+
+        if (!suxValidate::is_registered_form()) {
+            suxValidate::connect($this->tpl, true); // Reset connection
+            suxValidate::register_validator('integrity', 'integrity:type:id', 'hasIntegrity');
+        }
+
+        // --------------------------------------------------------------------
+        // Get image from database
+        // --------------------------------------------------------------------
+
+        $query = "SELECT users_id, image FROM {$table} WHERE id = ? LIMIT 1 ";
+        $db = suxDB::get();
+        $st = $db->prepare($query);
+        $st->execute(array($id));
+        $image = $st->fetch(PDO::FETCH_ASSOC);
+
+        if (!$image['image']) throw new Exception('$image not found');
+
+        if ($image['users_id'] != $_SESSION['users_id']) {
+            // TODO, verify we are allowed to edit this
+        }
+
+        // Assign a url to the fullsize version of the image
+        $image = $image['image'];
+        $image = suxFunct::t2fImage($image);
+        $image = "{$GLOBALS['CONFIG']['URL']}/data/{$type}/{$image}";
+        $image = suxFunct::myHttpServer() . $image;
+
+        // Double check
         if (!filter_var($image, FILTER_VALIDATE_URL)) $image = null;
         if (!preg_match('/\.(jpe?g|gif|png)$/i', $image)) $image = null;
         if ($image) list($width, $height) = @getimagesize($image);
 
+        // --------------------------------------------------------------------
+        // Template
+        // --------------------------------------------------------------------
 
         if ($image && $width && $height) {
 
-            // Test
+            $this->tpl->assign('type', $type);
+            $this->tpl->assign('id', $id);
             $this->tpl->assign('x2', 80); // Pavatar
             $this->tpl->assign('y2', 80);
-            $this->tpl->assign('url_to_source', $image); // 135 x 290
+            $this->tpl->assign('url_to_source', $image);
             $this->tpl->assign('width', $width);
             $this->tpl->assign('height', $height);
+
+            $this->tpl->assign('form_url', suxFunct::makeUrl("/cropper/{$type}/{$id}"));
+            $this->tpl->assign('prev_url', suxFunct::getPreviousURL($this->prev_url_preg));
 
             $this->tpl->assign_by_ref('r', $this->r);
             $this->tpl->display('cropper.tpl');
@@ -97,10 +173,28 @@ class cropper {
     */
     function formProcess(&$clean) {
 
-        // TODO
+        // Check $type, assign $table
+        $table = $this->getTable($clean['type']);
+        if (!$table) throw new Exception('Unsuported $type');
 
-        $path_to_source = '/location/to/source.png';
-        $path_to_dest = '/tmp/dest.png'; // variable
+        // --------------------------------------------------------------------
+        // Get image from database
+        // --------------------------------------------------------------------
+
+        $query = "SELECT users_id, image FROM {$table} WHERE id = ? LIMIT 1 ";
+        $db = suxDB::get();
+        $st = $db->prepare($query);
+        $st->execute(array($clean['id']));
+        $image = $st->fetch(PDO::FETCH_ASSOC);
+
+        if (!$image['image']) throw new Exception('$image not found');
+
+        if ($image['users_id'] != $_SESSION['users_id']) {
+            // TODO, verify we are allowed to edit this
+        }
+
+        $path_to_dest = "{$GLOBALS['CONFIG']['PATH']}/data/{$clean['type']}/{$image['image']}";
+        $path_to_source = suxFunct::t2fImage($path_to_dest);
 
         if (!is_writable($path_to_dest)) die('Destination is not writable? ' . $path_to_dest);
 
@@ -109,7 +203,8 @@ class cropper {
         // ----------------------------------------------------------------------------
 
         // $image
-        $format = mb_strtolower(end(explode('.', $path_to_source)));
+        $format = explode('.', $path_to_source);
+        $format = mb_strtolower(end($format));
         if ($format == 'jpg') $format = 'jpeg'; // fix stupid mistake
         if (!($format == 'jpeg' || $format == 'gif' || $format == 'png')) die('Invalid image format');
         $func = 'imagecreatefrom' . $format;
@@ -118,14 +213,42 @@ class cropper {
 
         // $thumb
         $thumb = imagecreatetruecolor($clean['x2'] , $clean['y2']);
-        $bgcolor = imagecolorallocate($thumb, 255, 255, 255);
-        ImageFilledRectangle($thumb, 0, 0, $clean['x2'], $clean['y2'], $bgcolor);
+
+        $white = imagecolorallocate($thumb, 255, 255, 255);
+        ImageFilledRectangle($thumb, 0, 0, $clean['x2'], $clean['y2'], $white);
         imagealphablending($thumb, true);
 
         // Output
         imagecopyresampled($thumb, $image, 0, 0, $clean['x1'], $clean['y1'], $clean['x2'], $clean['y2'], $clean['width'], $clean['height']);
         $func = 'image' . $format;
         $func($thumb, $path_to_dest);
+
+        // Free memory
+        imagedestroy($image);
+        imagedestroy($thumb);
+
+    }
+
+    function formSuccess() {
+
+        suxFunct::redirect(suxFunct::getPreviousURL($this->prev_url_preg));
+
+    }
+
+
+    /**
+    * Check type, return table
+    *
+    * @param string $type
+    * @return string
+    */
+    private function getTable($type) {
+
+
+        if ($type == 'blog') $table = 'messages';
+        else $table = false;
+
+        return $table;
 
     }
 

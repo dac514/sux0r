@@ -19,8 +19,8 @@
 
             {/literal}
             var url = '{$r->url}/modules/bayes/getDoc.php';
-            var pars = 'id=' + doc_id;
             {literal}
+            var pars = { id: doc_id };
 
             new Ajax.Updater('placeholder1', url, {
                     method: 'post',
@@ -43,8 +43,8 @@
 
         {/literal}
         var url = '{$r->url}/modules/bayes/getCat.php';
-        var pars = 'document=' + document + '&id=' + vec_id ;
         {literal}
+        var pars = { document: document, id: vec_id };
 
         new Ajax.Updater('placeholder2', url, {
                 method: 'post',

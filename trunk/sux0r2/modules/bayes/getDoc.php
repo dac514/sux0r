@@ -44,7 +44,7 @@ if (isset($_POST['id']) && filter_var($_POST['id'], FILTER_VALIDATE_INT)) {
         }
         echo "\n<div style='border-bottom: 1px solid #ccc; margin-top:4px;'></div>\n";
         echo "<pre>";
-        echo trim($doc['body']);
+        echo $doc['body'];
         echo "</pre>\n";
     }
 
