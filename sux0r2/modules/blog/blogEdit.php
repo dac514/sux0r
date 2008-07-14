@@ -35,7 +35,7 @@ class blogEdit {
     // Variables
     public $gtext = array();
     private $module = 'blog';
-    private $prev_url_preg = '#^blog/[edit|reply|bookmarks]#i';
+    private $prev_url_preg = '#^blog/[edit|reply|bookmarks]|^cropper/#i';
     private $id;
 
     // Objects
@@ -240,6 +240,9 @@ class blogEdit {
         $clean['published_on'] = "{$clean['Date']} {$clean['Time_Hour']}:{$clean['Time_Minute']}:{$clean['Time_Second']}";
         $clean['published_on'] = date('Y-m-d H:i:s', strtotime($clean['published_on'])); // Sanitize
 
+        // Unset image?
+        if (!empty($clean['unset_image'])) $clean['image'] = ''; // Set to empty string
+
         // Image?
         if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
 
@@ -267,11 +270,11 @@ class blogEdit {
                 'draft' => @$clean['draft'],
                 'blog' => 1,
             );
-                        
+
         // --------------------------------------------------------------------
         // Put $msg in database
         // --------------------------------------------------------------------
-        
+
 
         if (isset($clean['id'])) {
 
@@ -310,7 +313,7 @@ class blogEdit {
 
         Deleting all links to a message for which I can train the vector seems
         the safest bet. Other users get to keep what they already classified,
-        and can reclassify the modified document at a later date if they wish. 
+        and can reclassify the modified document at a later date if they wish.
         They can also manually adjust the eroneous documents in the bayes module.
 
         Problem / TODO:
@@ -321,38 +324,38 @@ class blogEdit {
 
         Now what?
 
-        */        
-        
-        // Get all the bayes_documents linked to this message where user is trainer 
+        */
+
+        // Get all the bayes_documents linked to this message where user is trainer
         // untrain it, delete links
-          
+
         $innerjoin = "
         INNER JOIN link_bayes_messages ON link_bayes_messages.bayes_documents_id = bayes_documents.id
-        INNER JOIN messages ON link_bayes_messages.messages_id = messages.id        
-        INNER JOIN bayes_categories ON bayes_categories.id = bayes_documents.bayes_categories_id        
+        INNER JOIN messages ON link_bayes_messages.messages_id = messages.id
+        INNER JOIN bayes_categories ON bayes_categories.id = bayes_documents.bayes_categories_id
         INNER JOIN bayes_auth ON bayes_categories.bayes_vectors_id = bayes_auth.bayes_vectors_id
         ";
-          
+
         $query = "
         SELECT bayes_documents.id FROM bayes_documents
         {$innerjoin}
-        WHERE messages.id = ? 
+        WHERE messages.id = ?
         AND bayes_auth.users_id = ? AND (bayes_auth.owner = 1 OR bayes_auth.trainer = 1)
-        "; // Note: bayes_auth WHERE condition equivilant to nb->isCategoryTrainer()        
-                
+        "; // Note: bayes_auth WHERE condition equivilant to nb->isCategoryTrainer()
+
         $db = suxDB::get();
         $st = $db->prepare($query);
         $st->execute(array($clean['id'], $_SESSION['users_id']));
-        $tmp = $st->fetchAll(PDO::FETCH_ASSOC);  
-        
+        $tmp = $st->fetchAll(PDO::FETCH_ASSOC);
+
         foreach ($tmp as $val) {
-            $this->nb->untrainDocument($val['id']); 
+            $this->nb->untrainDocument($val['id']);
             $this->link->deleteLink('link_bayes_messages', 'bayes_documents', $val['id']);
         }
-        
+
         // Regcategorize
         // category ids submitted by the form
-        
+
         if (isset($clean['category_id'])) foreach($clean['category_id'] as $val) {
             if (!empty($val) && $this->nb->isCategoryTrainer($val, $_SESSION['users_id'])) {
                 $doc_id = $this->nb->trainDocument($clean['body'], $val);

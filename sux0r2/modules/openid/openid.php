@@ -1227,18 +1227,9 @@ class openid {
     */
     private function getReqUrl() {
 
-        $s = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] ? 's' : '';
-        $host = $_SERVER['HTTP_HOST'];
-        $port = $_SERVER['SERVER_PORT'];
         $path = $_SERVER['REQUEST_URI'];
+        return suxFunct::myHttpServer() . $path;
 
-        if (($s && $port == "443") || (!$s && $port == "80") || preg_match("/:$port\$/", $host)) {
-            $p = '';
-        } else {
-            $p = ':' . $port;
-        }
-
-        return "http$s://$host$p$path";
     }
 
 

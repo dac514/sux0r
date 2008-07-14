@@ -40,6 +40,18 @@
 {$smarty.capture.error}
 </p>
 
+{if $image}
+<!-- Current image -->
+<p>
+<a href="{$r->makeUrl('/cropper/blog')}/{$id}"><img src="{$r->url}/data/blog/{$image}" alt="" border="0" /></a>
+</p>
+
+<p>
+<label for="unset_image">Unset current image:</label>
+<input type="checkbox" name="unset_image" value="1" {if $unset_image}checked="checked"{/if} /><br />
+</p>
+{/if}
+
 <p>
 {strip}
     {capture name=error}
@@ -50,8 +62,6 @@
 <input type="file" name="image" class="imageFile" />
 {$smarty.capture.error}
 </p>
-
-
 
 <p>
 {strip}

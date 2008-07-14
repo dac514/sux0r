@@ -126,6 +126,23 @@ class suxFunct {
 
 
     /**
+    * Convert thumbail filename to fullsize filename
+    * i.e. filename_12345.jpg to filename_12345_fullsize.jpg
+    *
+    * @param string $name the name of an image file
+    * @return string
+    */
+    static function t2fImage($filename) {
+
+        $pattern = '/(\.jpe?g|\.gif|\.png)$/i';
+        $replacement = '_fullsize' . "$1";
+        $fullsize = preg_replace($pattern, $replacement, $filename);
+        return $fullsize;
+
+    }
+
+
+    /**
     * Proprtionally crop and resize an image file
     *
     * @param string $format expect jpg, jpeg, gif, or png
@@ -352,6 +369,29 @@ class suxFunct {
 
 
     /**
+    * Get the server url
+    *
+    * @return string http server url
+    */
+    static function myHttpServer() {
+
+        // Autodetect ourself
+        $s = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] ? 's' : '';
+        $host = $_SERVER['SERVER_NAME'];
+        $port = $_SERVER['SERVER_PORT'];
+        if (($s && $port == "443") || (!$s && $port == "80") || preg_match("/:$port\$/", $host)) {
+            $p = '';
+        }
+        else {
+            $p = ':' . $port;
+        }
+
+        return "http$s://$host$p";
+
+    }
+
+
+    /**
     * Make url based on $CONFIG['CLEAN'] setting
     *
     * @global string $CONFIG['URL']
@@ -369,19 +409,7 @@ class suxFunct {
         $path = rtrim($path, '/');
 
         $tmp = '';
-        if ($full) {
-            // Autodetect ourself
-            $s = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] ? 's' : '';
-            $host = $_SERVER['SERVER_NAME'];
-            $port = $_SERVER['SERVER_PORT'];
-            if (($s && $port == "443") || (!$s && $port == "80") || preg_match("/:$port\$/", $host)) {
-                $p = '';
-            }
-            else {
-                $p = ':' . $port;
-            }
-            $tmp .= "http$s://$host$p";
-        }
+        if ($full)  $tmp .= self::myHttpServer();
         $tmp .= $GLOBALS['CONFIG']['URL'];
         $tmp .= ($GLOBALS['CONFIG']['CLEAN_URL'] ? '/' : '/index.php?c=');
         $tmp .= $path;

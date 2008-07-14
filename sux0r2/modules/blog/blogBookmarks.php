@@ -38,7 +38,7 @@ class blogBookmarks {
     // Variables
     public $gtext = array();
     private $module = 'blog';
-    private $prev_url_preg = '#^blog/[edit|reply|bookmarks]#i';
+    private $prev_url_preg = '#^blog/[edit|reply|bookmarks]|^cropper/#i';
     private $msg_id;
     private $found_links = array();
 

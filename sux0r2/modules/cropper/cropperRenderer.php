@@ -63,10 +63,10 @@ class cropperRenderer extends suxRenderer {
         // <![CDATA[
 
                 function onEndCrop( coords, dimensions ) {
-                    $( "x1" ).value = coords.x1;
-                    $( "y1" ).value = coords.y1;
-                    $( "width" ).value = dimensions.width;
-                    $( "height" ).value = dimensions.height;
+                    $("x1").value = coords.x1;
+                    $("y1").value = coords.y1;
+                    $("width").value = dimensions.width;
+                    $("height").value = dimensions.height;
                 }
 
                 Event.observe( window, "load", function() {
