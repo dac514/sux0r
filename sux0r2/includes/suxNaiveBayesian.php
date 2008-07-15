@@ -466,7 +466,7 @@ class suxNaiveBayesian {
 
             // Checking against stopwords is a big performance hog and
             // they don't affect the results here, so not using them
-            // speeds things up significantly
+            // speeds things up significantly, hence false
 
             $tokens = $this->parseTokens($ref['body'], false);
 
@@ -712,6 +712,7 @@ class suxNaiveBayesian {
         require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
         $converter = new suxHtml2UTF8($document);
         $document = $converter->getText();
+        unset($converter); // Remove from memory
 
         $scores = array();
         $categorized = array();
@@ -728,7 +729,7 @@ class suxNaiveBayesian {
 
         // Checking against stopwords is a big performance hog and
         // they don't affect the results here, so not using them
-        // speeds things up significantly
+        // speeds things up significantly, hence false
 
         $tokens = $this->parseTokens($document, false);
 
@@ -742,12 +743,11 @@ class suxNaiveBayesian {
                     $prob = 0;
                     if ($token_count && $data['token_count']) $prob = (float) $token_count/$data['token_count']; // Probability
                     else if ($data['token_count']) $prob = (float) 1/(2*$data['token_count']); // Fake probability, like a very infrequent word
-                    $scores[$category_id] *= pow($prob, $count)*pow($total_tokens/$ncat, $count);
-                    // pow($total_tokens/$ncat, $count) is here to avoid underflow.
+                    $scores[$category_id] *= pow($prob, $count)*pow($total_tokens/$ncat, $count); // pow($total_tokens/$ncat, $count) is here to avoid underflow.
                 }
             }
 
-            // Remember
+            // Remember and use in reorganization of array
             $categorized[$category_id] = $data['category'];
 
         }
@@ -884,7 +884,7 @@ class suxNaiveBayesian {
             // Add generic internet cruft for good measure
             $ignore_list = array_merge($ignore_list, array('http', 'https', 'mailto', 'www', 'com', 'net', 'org', 'biz', 'info'));
 
-            // Remove duplicates, increase speed by using isset() instead of in_array()
+            // array_clip removes duplicates and increase speed by using isset() instead of in_array()
             $ignore_list = array_flip($ignore_list);
 
         }
