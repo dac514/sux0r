@@ -217,38 +217,20 @@ class bayesRenderer extends suxRenderer {
                 }
 
 
-                if ($is_categorized === false) {
+                /* Get bayesian scores */
 
-                    /* Not categorized, get bayesian scores */
+                if ($is_categorized) $replace = "<span class='nbVecTrained'>{$val['vector']} : </span>";
+                else $replace = $val['vector'] . ' : ';
+                $html = str_replace("@_{$uniqid}_@", $replace, $html);
 
-                    $replace = $val['vector'] . ' : ';
-                    $html = str_replace("@_{$uniqid}_@", $replace, $html);
-
-                    $j = 0;
-                    $scores = $this->nb->categorize($document, $key);
-                    foreach ($scores as $key2 => $val2) {
-                        $tmp = $val2['category'] . ' (' . round($val2['score'] * 100, 2) . ' %)';
-                        $html .= '<option label="' . $tmp . '" value="' . $key2 . '" ';
-                        if ($j == 0) $html .= 'selected="selected" ';
-                        $html .= '>' . $tmp . '</option>';
-                        ++$j;
-                    }
-                }
-                else {
-
-                    /* Is already categorized, don't calculate */
-
-                    $replace = "<span class='nbVecTrained'>{$val['vector']} : </span>";
-                    $html = str_replace("@_{$uniqid}_@", $replace, $html);
-
-                    foreach ($val['categories'] as $key2 => $val2) {
-
-                        $html .= '<option label="' . $val2['category'] . '" value="' . $key2 . '" ';
-                        if ($is_categorized == $key2) $html .= 'selected="selected" ';
-                        $html .= '>' . $val2['category'] . '</option>';
-
-                    }
-
+                $j = 0;
+                $scores = $this->nb->categorize($document, $key);
+                foreach ($scores as $key2 => $val2) {
+                    $tmp = $val2['category'] . ' (' . round($val2['score'] * 100, 2) . ' %)';
+                    $html .= '<option label="' . $tmp . '" value="' . $key2 . '" ';
+                    if ($is_categorized == $key2 || $j == 0) $html .= 'selected="selected" ';
+                    $html .= '>' . $tmp . '</option>';
+                    ++$j;
                 }
 
                 $html .= '</select>' . "\n";
