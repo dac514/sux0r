@@ -27,8 +27,8 @@ class suxLink {
     /*
     Link tables are special tables that join two other tables using a 1 to 1
     relationship with primary keys. The table name is "link_" followed by two
-    other representative names. The order of the two other tables shoulbd be
-    alphabetical. An example of a link table for "messages" and "bayes" :
+    other representative names. The order of the two other tables should be in
+    alphabetical order. An example of a link table for "messages" and "bayes" :
 
     CREATE TABLE `link_bayes_messages` (
     `messages_id` int(11) NOT NULL,

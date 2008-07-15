@@ -77,7 +77,7 @@ class blog  {
         $u = $this->user->getUserByNickname($author);
         if ($u) {
 
-            if (list($vec_id, $cat_id, $threshold, $start) = $this->isValidFilter()) {
+            if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
 
                 // Filtered results
                 $max = $this->msg->countFirstPostsByUser($u['users_id'], 'blog');
@@ -177,7 +177,7 @@ class blog  {
                 ORDER BY messages.published_on DESC
                 ";
 
-                if (list($vec_id, $cat_id2, $threshold, $start) = $this->isValidFilter()) {
+                if (list($vec_id, $cat_id2, $threshold, $start) = $this->nb->isValidFilter()) {
 
                     // Filtered results
                     $eval = '$this->foobar("' . $limit_query . '", ' . $cat_id . ', $start)';
@@ -254,7 +254,7 @@ class blog  {
         if (!preg_match($regex, $date)) $date = date('Y-m-d');
         $datetime = $date . ' ' . date('H:i:s'); // Append current time
 
-        if (list($vec_id, $cat_id, $threshold, $start) = $this->isValidFilter()) {
+        if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
 
             // Filtered results
             $max = $this->msg->countFirstPostsByMonth($datetime, 'blog');
@@ -301,7 +301,7 @@ class blog  {
     */
     function listing() {
 
-        if (list($vec_id, $cat_id, $threshold, $start) = $this->isValidFilter()) {
+        if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
 
             // Filtered results
             $max = $this->msg->countFirstPosts('blog');
@@ -411,38 +411,6 @@ class blog  {
 
 
     /**
-    * @return false|array($vec_id, $cat_id, $threshold, $start)
-    */
-    private function isValidFilter() {
-
-        if (!isset($_GET['filter'])) return false;
-        if (!filter_var($_GET['filter'], FILTER_VALIDATE_INT)) return false;
-        if ($_GET['filter'] < 0) return false;
-        if (!$this->user->loginCheck()) return false;
-
-        if (!isset($_GET['threshold'])) $_GET['threshold'] = false;
-        else {
-            if ($_GET['threshold'] != '0') {
-                if (!filter_var($_GET['threshold'], FILTER_VALIDATE_FLOAT)) return false;
-            }
-            if ($_GET['threshold'] < 0 || $_GET['threshold'] > 1) return false;
-        }
-
-        $vec_id = $this->nb->getVectorByCategory($_GET['filter']);
-        if (!$vec_id) return false;
-        reset($vec_id);
-        $vec_id = key($vec_id);
-        if (!$this->nb->isVectorUser($vec_id, $_SESSION['users_id'])) return false;
-
-        if (!isset($_GET['start'])) $_GET['start'] = 0;
-        else if (!(filter_var($_GET['start'], FILTER_VALIDATE_INT) && $_GET['start'] > 0)) $_GET['start'] = 0;
-
-        return array($vec_id, $_GET['filter'], $_GET['threshold'], $_GET['start']);
-
-    }
-
-
-    /**
     * Filter
     */
     private function filter($max, $vec_id, $cat_id, $threshold, $start, $eval) {
@@ -451,41 +419,27 @@ class blog  {
         // Get items based on score, variable paging
         // -------------------------------------------------------------------
 
-        $fp = array();
+        $fp = array(); // First posts array
 
         $init = $start;
         $i = 0;
         while ($i < $this->pager->limit) {
 
             $tmp = array();
-            eval('$tmp = ' . $eval . ';');
+            eval('$tmp = ' . $eval . ';'); // $fp is transformed here, by $eval
             $fp = array_merge($fp, $tmp);
 
-            if ($threshold === false) {
-                // Top
-                foreach ($fp as $key => $val) {
-                    $score = $this->nb->categorize($val['body_plaintext'], $vec_id);
-                    reset($score);
-                    if ($cat_id != key($score)){
-                        unset($fp[$key]);
-                        continue;
-                    }
-                }
-            }
-            elseif ($threshold > 0 && $threshold <= 1) {
-                // Threshold
-                foreach ($fp as $key => $val) {
-                    $score = $this->nb->categorize($val['body_plaintext'], $vec_id);
-                    if ($score[$cat_id]['score'] < $threshold) {
-                        unset($fp[$key]);
-                        continue;
-                    }
+            foreach ($fp as $key => $val) {
+                if (!$this->nb->passesThreshold($threshold, $vec_id, $cat_id, $val['body_plaintext'])) {
+                    unset($fp[$key]);
+                    continue;
                 }
             }
 
             $i = count($fp);
             if ($start == $init) $start = $start + ($this->pager->limit - 1);
             if ($i < $this->pager->limit && $start < ($max - $this->pager->limit)) {
+                // Not enough first posts, keep looping
                 ++$start;
             }
             else break;
@@ -499,7 +453,7 @@ class blog  {
 
 
     /**
-    * Workaround function for catgetory()
+    * Workaround function for $this->category()
     */
     private function foobar($q, $cat_id, $start) {
 

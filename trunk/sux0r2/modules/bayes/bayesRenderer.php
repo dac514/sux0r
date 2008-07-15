@@ -609,4 +609,37 @@ class bayesRenderer extends suxRenderer {
 }
 
 
+// -------------------------------------------------------------------------
+// Smarty {insert} functions
+// -------------------------------------------------------------------------
+
+/**
+* Render bayesFilters
+*
+* @global string $CONFIG['PARTITION']
+* @param array $params smarty {insert} parameters
+* @return string html
+*/
+function insert_bayesFilters($params) {
+
+    // TODO
+    // $text = suxFunct::gtext();
+
+    if (!empty($_SESSION['partition'])) $partition = $_SESSION['partition'];
+    else $partition = $GLOBALS['CONFIG']['PARTITION'];
+
+    $tpl = new suxTemplate('bayes', $partition);
+    $r = new bayesRenderer('bayes'); // Renderer
+    $tpl->assign_by_ref('r', $r);
+
+    if (isset($_GET['filter'])) $tpl->assign('filter', $_GET['filter']);
+    if (isset($_GET['threshold']) && $_GET['threshold'] !== false) $tpl->assign('threshold', $_GET['threshold']);
+    if (isset($params['form_url'])) $tpl->assign('form_url', $params['form_url']);
+
+    return $tpl->fetch('filters.tpl');
+
+}
+
+
+
 ?>

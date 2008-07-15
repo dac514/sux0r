@@ -6,7 +6,7 @@ $gtext['navcontainer'] = array(
 
     'Home' => suxFunct::makeUrl('/home'),
     'Blog' => suxFunct::makeUrl('/blog'),
-    'Item Three' => '#',
+    'RSS Feeds' => suxFunct::makeUrl('/feeds'),
     'Item Four' => '#',
     'Item Five' => '#',
     'Trotch' => 'http://www.trotch.com/',
