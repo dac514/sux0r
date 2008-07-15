@@ -354,7 +354,9 @@ class suxNaiveBayesian {
         if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
 
         $categories = array();
-        $st = $this->db->prepare("SELECT * FROM {$this->db_table_cat} WHERE bayes_vectors_id = ? ORDER BY category ASC ");
+
+        static $st = null; // Cache
+        if (!$st) $st = $this->db->prepare("SELECT * FROM {$this->db_table_cat} WHERE bayes_vectors_id = ? ORDER BY category ASC ");
         $st->execute(array($vector_id));
 
         foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
@@ -913,7 +915,8 @@ class suxNaiveBayesian {
     */
     private function tokenExists($token) {
 
-        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_tok} WHERE token = ? LIMIT 1 ");
+        static $st = null; // Cache
+        if (!$st) $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_tok} WHERE token = ? LIMIT 1 ");
         $st->execute(array($token));
         return ($st->fetchColumn() > 0 ? true : false);
 
@@ -929,7 +932,8 @@ class suxNaiveBayesian {
 
         $count = 0;
 
-        $st = $this->db->prepare("SELECT * FROM {$this->db_table_tok} WHERE token = ? AND bayes_categories_id = ? ");
+        static $st = null; // Cache
+        if (!$st) $st = $this->db->prepare("SELECT * FROM {$this->db_table_tok} WHERE token = ? AND bayes_categories_id = ? ");
         $st->execute(array($token, $category_id));
 
         if ($row = $st->fetch(PDO::FETCH_ASSOC)) {
