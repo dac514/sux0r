@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 06, 2008 at 12:54 PM
+-- Generation Time: Jul 15, 2008 at 04:08 PM
 -- Server version: 5.0.41
 -- PHP Version: 5.2.5
 
@@ -222,6 +222,40 @@ CREATE TABLE `link_bayes_messages` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `link_bayes_rss`
+--
+
+CREATE TABLE `link_bayes_rss` (
+  `rss_items_id` int(11) NOT NULL,
+  `bayes_documents_id` int(11) NOT NULL,
+  UNIQUE KEY `idx` (`rss_items_id`,`bayes_documents_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `link_bayes_rss`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `link_rss_users`
+--
+
+CREATE TABLE `link_rss_users` (
+  `rss_feeds_id` int(11) NOT NULL,
+  `users_id` int(11) NOT NULL,
+  UNIQUE KEY `idx` (`rss_feeds_id`,`users_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `link_rss_users`
+--
+
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `messages`
 --
 
@@ -314,6 +348,58 @@ CREATE TABLE `openid_trusted` (
 
 --
 -- Dumping data for table `openid_trusted`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rss_feeds`
+--
+
+CREATE TABLE `rss_feeds` (
+  `id` int(11) NOT NULL auto_increment,
+  `users_id` int(11) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `body_html` text,
+  `body_plaintext` text,
+  `draft` tinyint(1) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `url` (`url`),
+  KEY `users_id` (`users_id`),
+  KEY `approved` (`draft`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `rss_feeds`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rss_items`
+--
+
+CREATE TABLE `rss_items` (
+  `id` int(11) NOT NULL auto_increment,
+  `rss_feeds_id` int(11) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `body_html` text,
+  `body_plaintext` text,
+  `md5` char(32) NOT NULL,
+  `published_on` datetime NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `url` (`url`),
+  KEY `rss_feeds_id` (`rss_feeds_id`),
+  KEY `md5` (`md5`),
+  KEY `published` (`published_on`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `rss_items`
 --
 
 

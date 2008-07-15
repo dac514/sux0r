@@ -770,6 +770,34 @@ class suxNaiveBayesian {
 
 
     /**
+    * Verify if a text is higher than a given threshold
+    *
+    * @param float|false $threshold value between 0 and 1, or false
+    * @param int $vec_id  vector id
+    * @param int $cat_id  category id, related to the vector id
+    * @param string $text a document to analyze
+    * @return bool
+    */
+    function passesThreshold($threshold, $vec_id, $cat_id, $text) {
+
+        if ($threshold === false) {
+            // Top
+            $score = $this->categorize($text, $vec_id);
+            reset($score);
+            if ($cat_id != key($score)) return false;
+        }
+        elseif ($threshold > 0 && $threshold <= 1) {
+            // Threshold
+            $score = $this->categorize($text, $vec_id);
+            if ($score[$cat_id]['score'] < $threshold) return false;
+        }
+
+        return true;
+
+    }
+
+
+    /**
     * @param array $scores scores (keys => category, values => scores)
     * @return array normalized scores (keys => category, values => scores)
     */
