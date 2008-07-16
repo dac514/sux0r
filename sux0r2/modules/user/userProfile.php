@@ -23,7 +23,6 @@
 */
 
 require_once(dirname(__FILE__) . '/../../includes/symbionts/calendar.php');
-require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxSocialNetwork.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once('userRenderer.php');
@@ -44,13 +43,12 @@ class userProfile {
     /**
     * Constructor
     *
-    * @global string $CONFIG['PARTITION']
     * @param string $nickname nickname
     */
     function __construct($nickname) {
 
         $this->user = new suxUser(); // User
-        $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
+        $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new userRenderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;

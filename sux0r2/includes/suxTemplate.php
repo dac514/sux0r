@@ -34,10 +34,11 @@ class suxTemplate extends Smarty {
     * Constructor
     *
     * @global string $CONFIG['PATH']
+    * @global string $CONFIG['PARTITION']
     * @param string $module
     * @param string $partition
     */
-    function __construct($module, $partition = 'sux0r') {
+    function __construct($module) {
 
         // Call parent
         parent::__construct();
@@ -54,6 +55,9 @@ class suxTemplate extends Smarty {
         // --------------------------------------------------------------------
         // Setup
         // --------------------------------------------------------------------
+
+        if (!empty($_SESSION['partition'])) $partition = $_SESSION['partition'];
+        else $partition = $GLOBALS['CONFIG']['PARTITION'];
 
         $this->setModule($module, $partition);
 

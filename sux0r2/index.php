@@ -24,6 +24,17 @@
 
 require_once(dirname(__FILE__) . '/config.php'); // Configuration
 require_once(dirname(__FILE__) . '/initialize.php'); // Initialization
+require_once(dirname(__FILE__) . '/includes/suxUser.php');
+
+// --------------------------------------------------------------------------
+// $_SESSION security check
+// --------------------------------------------------------------------------
+
+if (isset($_SESSION['users_id']) || isset($_SESSION['nickname'])) {
+    $u = new suxUser();
+    $u->loginCheck(suxFunct::makeUrl('/home'));
+}
+unset($u);
 
 // ---------------------------------------------------------------------------
 // Prepare

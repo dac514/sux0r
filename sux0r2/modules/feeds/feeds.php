@@ -26,7 +26,6 @@ require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
-require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../bayes/bayesUser.php');
 require_once('feedsRenderer.php');
 
@@ -50,11 +49,10 @@ class feeds  {
     /**
     * Constructor
     *
-    * @global string $CONFIG['PARTITION']
     */
     function __construct() {
 
-        $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
+        $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new feedsRenderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
@@ -75,9 +73,17 @@ class feeds  {
     */
     function listing() {
 
+        $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/'); // Forum Url
+        $this->tpl->assign_by_ref('r', $this->r);
+
+        $cache_id = false;
+
         if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
 
+            // ---------------------------------------------------------------
             // Filtered results
+            // ---------------------------------------------------------------
+
             $max = $this->msg->countFirstPosts('blog');
             $eval = '$this->msg->getFirstPosts(\'blog\', true, $this->pager->limit, $start)';
             $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval); // Important: start must be reference
@@ -95,21 +101,33 @@ class feeds  {
         }
         else {
 
-            // Paged results
-            $this->pager->setStart();
-            $this->pager->setPages($this->msg->countFirstPosts('blog'));
-            $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/feeds'));
-            $this->r->fp = $this->msg->getFirstPosts('blog', true, $this->pager->limit, $this->pager->start);
+            // ---------------------------------------------------------------
+            // Paged results, cached
+            // ---------------------------------------------------------------
 
+            // Start pager
+            $this->pager->setStart();
+
+            // Get nickname
+            if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
+            else $nn = 'nobody';
+
+            // "Cache Groups" using a vertical bar |
+            $cache_id = $nn . '|listing|' . $this->pager->start;
+            $this->tpl->caching = 1;
+
+            if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
+
+                $this->pager->setPages($this->msg->countFirstPosts('blog'));
+                $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/feeds'));
+                $this->r->fp = $this->msg->getFirstPosts('blog', true, $this->pager->limit, $this->pager->start);
+            }
 
         }
 
-        // Forum Url
-        $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/');
+        if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
+        else $this->tpl->display('scroll.tpl');
 
-        // Template
-        $this->tpl->assign_by_ref('r', $this->r);
-        $this->tpl->display('scroll.tpl');
 
     }
 

@@ -24,7 +24,6 @@
 
 require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('bayesRenderer.php');
 require_once('bayesUser.php');
@@ -47,12 +46,11 @@ class bayesEdit {
     /**
     * Constructor
     *
-    * @global string $CONFIG['PARTITION']
     * @param string $key PDO dsn key
     */
     function __construct($user = null) {
 
-        $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
+        $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new bayesRenderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;

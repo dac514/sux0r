@@ -7,17 +7,24 @@ require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/../../initialize.php');
 
 // ---------------------------------------------------------------------------
-// Error checking
+// Variables
 // ---------------------------------------------------------------------------
 
 $valid_links = array('messages');
+$valid_modules = array('blog', 'feeds');
+
+// ---------------------------------------------------------------------------
+// Error checking
+// ---------------------------------------------------------------------------
 
 if (!isset($_SESSION['users_id'])) exit;
 if (!isset($_POST['link']) || !in_array($_POST['link'], $valid_links)) exit;
+if (!isset($_POST['module']) || !in_array($_POST['module'], $valid_modules)) exit;
 if (!isset($_POST['id']) || !filter_var($_POST['id'], FILTER_VALIDATE_INT)) exit;
 if (!isset($_POST['cat_id']) || !filter_var($_POST['cat_id'], FILTER_VALIDATE_INT)) exit;
 
 $link = $_POST['link'];
+$module = $_POST['module'];
 $id = $_POST['id'];
 $cat_id = $_POST['cat_id'];
 
@@ -85,9 +92,12 @@ foreach ($tmp as $val) {
 }
 
 // Recategorize
-
 $doc_id = $nb->trainDocument($body, $cat_id);
 $suxLink->setLink($link_table, 'bayes_documents', $doc_id, $link, $id);
 
+// Clear cache
+require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
+$tpl = new suxTemplate($module);
+$tpl->clear_cache(null, "{$_SESSION['nickname']}"); // clear all caches with "nickname" as the first cache_id group
 
 ?>

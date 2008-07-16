@@ -105,7 +105,7 @@
 
                         {$r->authorCategories($foo.id, $foo.users_id)}
 
-                        {$r->genericBayesInterface($foo.id, 'messages', $foo.body_plaintext)}
+                        {$r->genericBayesInterface($foo.id, 'messages', 'blog', $foo.body_plaintext)}
 
                     </div>
 

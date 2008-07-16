@@ -25,7 +25,6 @@
 *
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
@@ -64,7 +63,7 @@ class openid {
 
         $this->user = new suxUser(); // User
         $this->r = new suxRenderer($this->module); // Renderer
-        $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
+        $this->tpl = new suxTemplate($this->module); // Template
         $this->gtext = suxFunct::gtext($this->module); // Language
 
 
