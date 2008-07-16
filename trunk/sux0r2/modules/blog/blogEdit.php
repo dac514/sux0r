@@ -371,8 +371,8 @@ class blogEdit {
     */
     function formSuccess() {
 
-        // Pass this on to bookmarks for scanning
-        suxFunct::redirect(suxFunct::makeUrl('/blog/bookmarks/' . $this->id));
+        $this->tpl->clear_cache(null, $_SESSION['nickname']); // Clear cache
+        suxFunct::redirect(suxFunct::makeUrl('/blog/bookmarks/' . $this->id)); // Pass this on to bookmarks for scanning
 
     }
 

@@ -121,6 +121,9 @@ class feeds  {
                 $this->pager->setPages($this->msg->countFirstPosts('blog'));
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/feeds'));
                 $this->r->fp = $this->msg->getFirstPosts('blog', true, $this->pager->limit, $this->pager->start);
+
+                if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+
             }
 
         }

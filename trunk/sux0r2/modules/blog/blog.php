@@ -131,6 +131,9 @@ class blog  {
                     $this->pager->setPages($this->msg->countFirstPostsByUser($u['users_id'], 'blog'));
                     $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/author/' . $author));
                     $this->r->fp = $this->blogs($this->msg->getFirstPostsByUser($u['users_id'], 'blog', true, $this->pager->limit, $this->pager->start));
+
+                    if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+
                 }
 
             }
@@ -271,6 +274,8 @@ class blog  {
                         $fp = $st->fetchAll(PDO::FETCH_ASSOC);
                         $this->r->fp = $this->blogs($fp);
 
+                        if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+
                         // Sidelist
 
                         $select_query = "
@@ -368,13 +373,15 @@ class blog  {
                 $this->pager->setPages($this->msg->countFirstPostsByMonth($datetime, 'blog'));
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/month/' . $date));
                 $this->r->fp = $this->blogs($this->msg->getFirstPostsByMonth($datetime, 'blog', true, $this->pager->limit, $this->pager->start));
+
+                if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+
             }
 
         }
 
         if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
         else $this->tpl->display('scroll.tpl');
-
 
     }
 
@@ -433,6 +440,9 @@ class blog  {
                 $this->pager->setPages($this->msg->countFirstPosts('blog'));
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog'));
                 $this->r->fp = $this->blogs($this->msg->getFirstPosts('blog', true, $this->pager->limit, $this->pager->start));
+
+                if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+
             }
 
         }
@@ -449,29 +459,47 @@ class blog  {
     */
     function view($thread_id) {
 
-        $this->pager->limit = 100;
-
-        // Pager
-        $this->pager->setStart();
-        $this->pager->setPages($this->msg->countThread($thread_id, 'blog'));
-        $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/view/' . $thread_id));
-
-        if ($this->pager->start == 0) {
-            $thread = $this->msg->getThread($thread_id, 'blog', true, $this->pager->limit, $this->pager->start);
-            $fp[] = array_shift($thread);
-        }
-        else {
-            $thread = $this->msg->getThread($thread_id, 'blog', true, $this->pager->limit, $this->pager->start);
-            $fp[] = $this->msg->getFirstPost($thread_id, 'blog');
-        }
-
-        // Assign
-        $this->r->fp = $this->blogs($fp);
-        $this->r->comments = $this->comments($thread);
-
-        // Template
         $this->tpl->assign_by_ref('r', $this->r);
-        $this->tpl->display('view.tpl');
+
+        $this->pager->limit = 100;
+        $this->pager->setStart();
+
+        // Get nickname
+        if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
+        else $nn = 'nobody';
+
+        // "Cache Groups" using a vertical bar |
+        $cache_id = $nn . "|{$thread_id}|" . $this->pager->start;
+        $this->tpl->caching = 1;
+
+        if (!$this->tpl->is_cached('view.tpl', $cache_id)) {
+
+            $fp[] = $this->msg->getFirstPost($thread_id, 'blog');
+
+            if ($fp[0] === false) {
+                // This is not a blog post, redirect
+                suxFunct::redirect(suxFunct::makeUrl('/blog'));
+            }
+
+            $this->pager->setPages($this->msg->countThread($thread_id, 'blog'));
+            $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/view/' . $thread_id));
+
+            if ($this->pager->start == 0) {
+                $thread = $this->msg->getThread($thread_id, 'blog', true, $this->pager->limit, $this->pager->start);
+                unset($fp);
+                $fp[] = array_shift($thread);
+            }
+            else {
+                $thread = $this->msg->getThread($thread_id, 'blog', true, $this->pager->limit, $this->pager->start);
+            }
+
+            // Assign
+            $this->r->fp = $this->blogs($fp);
+            $this->r->comments = $this->comments($thread);
+
+        }
+
+        $this->tpl->display('view.tpl', $cache_id);
 
     }
 
