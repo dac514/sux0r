@@ -159,6 +159,7 @@ class blogReply {
         $msg['body'] = $clean['body'];
 
         $this->msg->saveMessage($_SESSION['users_id'], $msg, $clean['parent_id']);
+
     }
 
 
@@ -167,7 +168,8 @@ class blogReply {
     */
     function formSuccess() {
 
-        suxFunct::redirect(suxFunct::makeUrl('/blog/view/' . $this->parent['thread_id']));
+        $this->tpl->clear_cache(null, $_SESSION['nickname']); // Clear cache
+        suxFunct::redirect(suxFunct::makeUrl('/blog/view/' . $this->parent['thread_id'])); // Redirect
 
     }
 
