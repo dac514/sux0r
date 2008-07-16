@@ -202,6 +202,7 @@ class suxUser {
         $user = array();
 
         // Nickname
+        if (mb_strtolower($info['nickname']) == 'nobody') throw new Exception('"nobody" is a reservered word');
         if (!empty($info['nickname'])) $user['nickname'] = strip_tags($info['nickname']);
         unset($info['nickname']);
 

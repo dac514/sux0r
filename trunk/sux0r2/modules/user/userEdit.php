@@ -22,7 +22,6 @@
 *
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('userRenderer.php');
@@ -45,12 +44,11 @@ class userEdit {
     /**
     * Constructor
     *
-    * @global string $CONFIG['PARTITION']
     */
     function __construct($mode = 'register', $user = null) {
 
         $this->user = new suxUser(); // User
-        $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
+        $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new userRenderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
@@ -192,6 +190,7 @@ class userEdit {
             // Register our additional criterias
             suxValidate::register_criteria('invalidCharacters', 'this->invalidCharacters');
             suxValidate::register_criteria('isDuplicateNickname', 'this->isDuplicateNickname');
+            suxValidate::register_criteria('isReservedNickname', 'this->isReservedNickname');
             suxValidate::register_criteria('isDuplicateEmail', 'this->isDuplicateEmail');
             suxValidate::register_criteria('isValidCaptcha', 'this->isValidCaptcha');
 
@@ -200,6 +199,7 @@ class userEdit {
             suxValidate::register_validator('nickname', 'nickname', 'notEmpty', false, false, 'trim');
             suxValidate::register_validator('nickname2', 'nickname', 'invalidCharacters');
             suxValidate::register_validator('nickname3', 'nickname', 'isDuplicateNickname');
+            suxValidate::register_validator('nickname4', 'nickname', 'isReservedNickname');
             suxValidate::register_validator('email', 'email', 'isEmail', false, false, 'trim');
             suxValidate::register_validator('email2', 'email', 'isDuplicateEmail');
             if ($this->mode == 'edit') suxValidate::register_validator('integrity', 'integrity:nickname', 'hasIntegrity');
@@ -403,6 +403,20 @@ class userEdit {
         }
 
         return false; // Fail
+
+    }
+
+    /**
+    * for suxValidate, check if nickname is 'nobody'
+    *
+    * @return bool
+    */
+    function isReservedNickname($value, $empty, &$params, &$formvars) {
+
+        if (empty($formvars['nickname'])) return false;
+
+        if (mb_strtolower($formvars['nickname']) == 'nobody') return false; // Fail
+        else return true;
 
     }
 

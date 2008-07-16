@@ -24,7 +24,6 @@
 
 require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
-require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once('bayesUser.php');
 
 class bayesRenderer extends suxRenderer {
@@ -48,7 +47,6 @@ class bayesRenderer extends suxRenderer {
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->nb = new bayesUser();
         $this->link = new suxLink();
-        $this->user = new suxUser();
 
     }
 
@@ -60,7 +58,7 @@ class bayesRenderer extends suxRenderer {
     */
     function genericBayesInterfaceInit($init = true) {
 
-        if (!$this->user->loginCheck()) return null; // Skip anonymous users
+        if (!isset($_SESSION['users_id'])) return null; // Skip anonymous users
 
         $js = '';
 
@@ -75,9 +73,9 @@ class bayesRenderer extends suxRenderer {
         <script type='text/javascript'>
         // <![CDATA[
 
-        function suxTrain(placeholder, link, id, cat_id) {
+        function suxTrain(placeholder, link, module, id, cat_id) {
             var url = '{$GLOBALS['CONFIG']['URL']}/modules/bayes/train.php';
-            var pars = { link: link, id: id, cat_id: cat_id };
+            var pars = { link: link, module: module, id: id, cat_id: cat_id };
             new Effect.Highlight($(placeholder));
             new Ajax.Request(url, {
                 method: 'post',
@@ -105,10 +103,11 @@ class bayesRenderer extends suxRenderer {
     /**
     * @param int $id id
     * @param string $link link table
+    * @param string $module sux0r module, used to clear cache
     * @param string $document document to train
     * @return string html
     */
-    function genericBayesInterface($id, $link, $document) {
+    function genericBayesInterface($id, $link, $module, $document) {
 
         /* Get a list of all the vectors/categories the user has access to */
 
@@ -116,7 +115,7 @@ class bayesRenderer extends suxRenderer {
         static $vectors = null;
         if (!is_array($vectors)) {
             $vectors = array();
-            if ($this->user->loginCheck()) foreach ($this->nb->getSharedVectors($_SESSION['users_id']) as $key => $val) {
+            if (isset($_SESSION['users_id'])) foreach ($this->nb->getSharedVectors($_SESSION['users_id']) as $key => $val) {
                 $vectors[$key] = $val;
             }
         }
@@ -194,7 +193,7 @@ class bayesRenderer extends suxRenderer {
                 if ($i == 0) {
                     // this is $v_trainer[], Ajax trainable
                     $html .= '<select name="category_id[]" class="nbCatDropdown" ';
-                    $html .= "onchange=\"suxTrain('nb{$uniqid}', '{$link}', {$id}, this.options[selectedIndex].value);\" ";
+                    $html .= "onchange=\"suxTrain('nb{$uniqid}', '{$link}', '{$module}', {$id}, this.options[selectedIndex].value);\" ";
                     $html .= '>';
 
                 }
@@ -364,7 +363,7 @@ class bayesRenderer extends suxRenderer {
         if (is_array($tmp)) return $tmp;
         $tmp = array();
 
-        if (!$this->user->loginCheck()) return null; // Anonymous user, skip
+        if (!isset($_SESSION['users_id'])) return null; // Anonymous user, skip
 
         foreach ($this->getVectorsByUserArray() as $key => $val) {
 
@@ -459,7 +458,6 @@ class bayesRenderer extends suxRenderer {
         <th>{$text['unshare']}</th>
         </tr></thead><tbody>\n";
 
-        require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
         $user = new suxUser();
 
         // Owned, and the users shared with
@@ -598,7 +596,6 @@ class bayesRenderer extends suxRenderer {
 /**
 * Render bayesFilters
 *
-* @global string $CONFIG['PARTITION']
 * @param array $params smarty {insert} parameters
 * @return string html
 */
@@ -607,10 +604,7 @@ function insert_bayesFilters($params) {
     // TODO
     // $text = suxFunct::gtext();
 
-    if (!empty($_SESSION['partition'])) $partition = $_SESSION['partition'];
-    else $partition = $GLOBALS['CONFIG']['PARTITION'];
-
-    $tpl = new suxTemplate('bayes', $partition);
+    $tpl = new suxTemplate('bayes'); // Template
     $r = new bayesRenderer('bayes'); // Renderer
     $tpl->assign_by_ref('r', $r);
 

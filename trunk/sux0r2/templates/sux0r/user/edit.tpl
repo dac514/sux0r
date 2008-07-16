@@ -29,6 +29,7 @@
     {validate id="nickname" message=$r->text.form_error_1}
     {validate id="nickname2" message=$r->text.form_error_2}
     {validate id="nickname3" message=$r->text.form_error_3}
+    {validate id="nickname4" message=$r->text.form_error_13}
     {/capture}
 {/strip}
 

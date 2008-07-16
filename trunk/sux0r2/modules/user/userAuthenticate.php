@@ -22,7 +22,6 @@
 *
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
@@ -41,12 +40,11 @@ class userAuthenticate {
     /**
     * Constructor
     *
-    * @global string $CONFIG['PARTITION']
     */
     function __construct() {
 
         $this->user = new suxUser(); // User
-        $this->tpl = new suxTemplate($this->module, $GLOBALS['CONFIG']['PARTITION']); // Template
+        $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new suxRenderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;

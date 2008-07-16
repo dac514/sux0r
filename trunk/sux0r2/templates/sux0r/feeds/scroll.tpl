@@ -49,7 +49,7 @@
 
                     <!-- Naive Baysian Classification -->
                     <div class="categoryContainer">
-                        {$r->genericBayesInterface($foo.id, 'messages', $foo.body_plaintext)}
+                        {$r->genericBayesInterface($foo.id, 'messages', 'feeds', $foo.body_plaintext)}
                     </div>
 
                 {/capture}

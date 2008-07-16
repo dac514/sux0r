@@ -23,7 +23,6 @@
 */
 
 require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
-require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 require_once(dirname(__FILE__) . '/../bayes/bayesUser.php');
@@ -73,12 +72,13 @@ class feedsRenderer extends suxRenderer {
     /**
     * @param int $id messages id
     * @param string $link link table
+    * @param string $module sux0r module, used to clear cache
     * @param string $document document to train
     * @return string html
     */
-    function genericBayesInterface($id, $link, $document) {
+    function genericBayesInterface($id, $link, $module, $document) {
 
-        return $this->bayesRenderer->genericBayesInterface($id, $link, $document);
+        return $this->bayesRenderer->genericBayesInterface($id, $link, $module, $document);
 
     }
 
