@@ -121,7 +121,8 @@
                     <!-- Naive Baysian Classification -->
                     <div class="categoryContainer">
                         {$r->authorCategories($foo.id, $foo.users_id)}
-                        {$r->genericBayesInterface($foo.id, 'messages', 'blog', $foo.body_plaintext)}
+                        {capture name=document}{$foo.title} {$foo.body_plaintext}{/capture}
+                        {$r->genericBayesInterface($foo.id, 'messages', 'blog', $smarty.capture.document)}
                     </div>
 
                 {/capture}
