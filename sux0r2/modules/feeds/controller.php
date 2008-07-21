@@ -26,6 +26,26 @@ function sux($action, $params = null) {
 
     switch($action)
     {
+        
+        
+    case 'suggest' :
+
+        // --------------------------------------------------------------------
+        // Suggest
+        // --------------------------------------------------------------------
+
+        include_once('feedsSuggest.php');
+        $feeds = new feedsSuggest();
+
+        if ($feeds->formValidate($_POST)) {
+            $feeds->formProcess($_POST);
+            $feeds->formSuccess();
+        }
+        else {
+            $feeds->formBuild($_POST);
+        }
+
+        break;        
 
 
     default:

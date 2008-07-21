@@ -389,12 +389,10 @@ CREATE TABLE `rss_items` (
   `title` varchar(255) NOT NULL,
   `body_html` text,
   `body_plaintext` text,
-  `md5` char(32) NOT NULL,
   `published_on` datetime NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `url` (`url`),
   KEY `rss_feeds_id` (`rss_feeds_id`),
-  KEY `md5` (`md5`),
   KEY `published` (`published_on`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

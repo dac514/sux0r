@@ -22,10 +22,7 @@
 *
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
-require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
-require_once(dirname(__FILE__) . '/../bayes/bayesUser.php');
 require_once(dirname(__FILE__) . '/../bayes/bayesRenderer.php');
 
 class feedsRenderer extends suxRenderer {
@@ -35,10 +32,6 @@ class feedsRenderer extends suxRenderer {
     public $sidelist = array(); // Array of threads in sidebar
 
     // Objects
-    private $user;
-    private $msg;
-    private $nb;
-    private $link;
     private $bayesRenderer;
 
 
@@ -50,10 +43,6 @@ class feedsRenderer extends suxRenderer {
     function __construct($module) {
 
         parent::__construct($module); // Call parent
-        $this->user = new suxUser();
-        $this->msg = new suxThreadedMessages();
-        $this->nb = new bayesUser();
-        $this->link = new suxLink();
         $this->bayesRenderer = new bayesRenderer('bayes');
 
     }

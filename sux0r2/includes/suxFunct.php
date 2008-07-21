@@ -23,62 +23,36 @@
 */
 
 class suxFunct {
-
+    
+    
     // Static class, no cloning or instantiating allowed
     final private function __construct() { }
     final private function __clone() { }
-
+    
+    
     // ------------------------------------------------------------------------
-    // Static Functions
+    // Miscelaneous 
     // ------------------------------------------------------------------------
-
-
+    
+    
     /**
     * Kill $_SESSION
     */
     static function killSession() {
-
+        
         // Keep breadcrumbs
         $tmp = array();
         if (isset($_SESSION['breadcrumbs'])) $tmp = $_SESSION['breadcrumbs'];
-
+        
         $_SESSION = array();
         session_destroy();
-
+        
         @session_start();
         $_SESSION['breadcrumbs'] = $tmp;
-
+        
     }
-
-
-
-    /**
-    * Redirection
-    *
-    * @param string $href a uniform resource locator (url)
-    */
-    static function redirect($href) {
-
-        $href = filter_var($href, FILTER_SANITIZE_URL);
-
-        if (!headers_sent()) {
-            header("Location: $href");
-        }
-        else {
-            // Javascript hack
-            echo "
-            <script type='text/javascript'>
-            <!--
-            window.location = '{$href}';
-            //-->
-            </script>
-            ";
-        }
-
-        exit; // Quit script
-    }
-
-
+    
+    
     /**
     * Use output buffering to include a file into a string
     *
@@ -96,12 +70,235 @@ class suxFunct {
         return false;
     }
 
-
-    // isValidEmail()
-    // use filter_var($href, FILTER_VALIDATE_EMAIL) ? true : false;
-    // See: http://ca3.php.net/manual/en/book.filter.php
-
-
+    
+    /**
+    * Sanitize HTML
+    *
+    * @param string $html the html to sanitize
+    * @param int $trusted -1, 0, or 1
+    * @return string sanitized html
+    */
+    static function sanitizeHtml($html, $trusted = -1) {
+        
+        if ($trusted) {
+            // Allow all (*) except -script and -iframe
+            $config = array(
+                'elements' => '*-script-iframe',
+                );
+        }
+        elseif ($trusted < 0) {
+            // Overkill, i.e. allow a small subset of elements to pass
+            // Transform strike and u to span for better XHTML 1-strict compliance
+            $config = array(
+                'elements' => 'a,em,strike,strong,u,p,br,img,li,ol,ul',
+                'make_tag_strict' => 1,
+                'safe' => 1,
+                );
+        }
+        else {
+            // Safe
+            $config = array(
+                'safe' => 1,
+                'deny_attribute' => 'on*,style,',
+                );
+        }
+        
+        require_once(dirname(__FILE__) . '/symbionts/htmLawed/htmLawed.php');
+        return htmLawed($html, $config);
+        
+    }
+        
+    
+    /**
+    * Return data directory
+    *
+    * @global string $CONFIG['PATH']
+    * @param string $module 
+    * @return string 
+    */    
+    static function dataDir($module) {
+        
+        $data_dir = $GLOBALS['CONFIG']['PATH'] . "/data/$module";
+        if(!is_dir($data_dir) && !mkdir($data_dir, 0777, true)) {
+            throw new Exception('Missing data dir ' . $data_dir);
+        } 
+        
+        return $data_dir;
+        
+    }
+    
+    
+    // ------------------------------------------------------------------------
+    // Dates and times
+    // ------------------------------------------------------------------------     
+    
+    
+    /**
+    * Get the last day of a month
+    *
+    * @return string YYYY-MM-DD
+    */
+    static function lastDay($month = '', $year = '') {
+        
+        if (empty($month)) $month = date('m');
+        if (empty($year)) $year = date('Y');
+        $result = strtotime("{$year}-{$month}-01");
+        $result = strtotime('-1 second', strtotime('+1 month', $result));
+        return date('Y-m-d', $result);
+        
+    }   
+    
+    
+    // ------------------------------------------------------------------------
+    // URLs
+    // ------------------------------------------------------------------------    
+    
+    
+    /**
+    * Redirection
+    *
+    * @param string $href a uniform resource locator (URL)
+    */
+    static function redirect($href) {
+        
+        $href = filter_var($href, FILTER_SANITIZE_URL);
+        
+        if (!headers_sent()) {
+            header("Location: $href");
+        }
+        else {
+            // Javascript hack
+            echo "
+            <script type='text/javascript'>
+            // <![CDATA[
+            window.location = '{$href}';
+            // ]]>
+            </script>
+            ";
+        }
+        
+        exit; // Quit script
+    }    
+    
+    
+    /**
+    * Get the server url
+    *
+    * @return string http server url
+    */
+    static function myHttpServer() {
+        
+        // Autodetect ourself
+        $s = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] ? 's' : '';
+        $host = $_SERVER['SERVER_NAME'];
+        $port = $_SERVER['SERVER_PORT'];
+        if (($s && $port == "443") || (!$s && $port == "80") || preg_match("/:$port\$/", $host)) {
+            $p = '';
+        }
+        else {
+            $p = ':' . $port;
+        }
+        
+        return "http$s://$host$p";
+        
+    }
+    
+    
+    /**
+    * Make URL based on $CONFIG['CLEAN'] setting
+    *
+    * @global string $CONFIG['URL']
+    * @global string $CONFIG['CLEAN_URL']
+    * @param string $path controller value in /this/style
+    * @param array $query http_build_query compatible array
+    * @param bool $full return full url?
+    * @return string url
+    */
+    static function makeUrl($path, $query = null, $full = false) {
+        
+        // Fix stupidties
+        $path = trim($path);
+        $path = ltrim($path, '/');
+        $path = rtrim($path, '/');
+        
+        $tmp = '';
+        if ($full)  $tmp .= self::myHttpServer();
+        $tmp .= $GLOBALS['CONFIG']['URL'];
+        $tmp .= ($GLOBALS['CONFIG']['CLEAN_URL'] ? '/' : '/index.php?c=');
+        $tmp .= $path;
+        $tmp = rtrim($tmp, '/'); // In case path is null
+        
+        if (is_array($query) && count($query)) {
+            $q = mb_strpos($tmp, '?') ? '&' : '?';
+            $tmp .= $q . http_build_query($query);
+        }
+        
+        return $tmp;
+        
+    }
+    
+    
+    /**
+    * Get this user's previous URL
+    *
+    * @param string $preg regular expression
+    * @return bool
+    */
+    static function getPreviousURL($preg) {
+        
+        $url = suxFunct::makeUrl('/home'); // Some default
+        
+        if (isset($_SESSION['breadcrumbs'])) foreach($_SESSION['breadcrumbs'] as $val) {
+            if (!preg_match($preg, $val)) {
+                $url = suxFunct::makeUrl($val); // Overwrite
+                break;
+            }
+        }
+        
+        return $url;
+        
+    }    
+    
+    
+    /**
+    * Canonicalize URL
+    *
+    * @param  string $url
+    */
+    static function canonicalizeUrl($url) {
+        
+        // remove trailing slash
+        $url = rtrim(trim($url), '/');
+        
+        // Add http:// if it's missing
+        if (!preg_match('#^https?://#i', $url)) {
+            // Remove ftp://, gopher://, fake://, etc
+            if (mb_strpos($url, '://')) list($garbage, $url) = mb_split('://', $url);
+            // Prepend http
+            $url = 'http://' . $url;
+            if (preg_match('#^http:///#', $url)) {
+                return null; // This is wrong...
+            }
+        }
+        
+        // protocol and domain to lowercase (but NOT the rest of the URL),
+        $scheme = @parse_url($url, PHP_URL_SCHEME);
+        $url = preg_replace("/$scheme/", mb_strtolower($scheme), $url, 1);
+        $host = @parse_url($url, PHP_URL_HOST);
+        $url = preg_replace("/$host/", mb_strtolower($host), $url, 1);
+        
+        // Sanitize for good measure
+        $url = filter_var($url, FILTER_SANITIZE_URL);
+        
+        return $url;
+        
+    }   
+    
+    
+    // ------------------------------------------------------------------------
+    // Images
+    // ------------------------------------------------------------------------     
+    
     /**
     * Assign a unique id to an image file name. Returns an array of filename
     * conventions
@@ -110,21 +307,21 @@ class suxFunct {
     * @return array
     */
     static function renameImage($filename) {
-
+        
         $pattern = '/(\.jpe?g|\.gif|\.png)$/i';
         $uniqid = time() . substr(md5(microtime()), 0, rand(5, 12));
-
+        
         $replacement = "_{$uniqid}" . "$1";
         $resize = preg_replace($pattern, $replacement, $filename);
-
+        
         $replacement = "_{$uniqid}_fullsize" . "$1";
         $fullsize = preg_replace($pattern, $replacement, $filename);
-
+        
         return array($resize, $fullsize);
-
+        
     }
-
-
+    
+    
     /**
     * Convert thumbail filename to fullsize filename
     * i.e. filename_12345.jpg to filename_12345_fullsize.jpg
@@ -133,15 +330,15 @@ class suxFunct {
     * @return string
     */
     static function t2fImage($filename) {
-
+        
         $pattern = '/(\.jpe?g|\.gif|\.png)$/i';
         $replacement = '_fullsize' . "$1";
         $fullsize = preg_replace($pattern, $replacement, $filename);
         return $fullsize;
-
+        
     }
-
-
+    
+    
     /**
     * Proprtionally crop and resize an image file
     *
@@ -155,19 +352,17 @@ class suxFunct {
     * @param int $blue RGB blue for imagecolorallocate()
     */
     static function resizeImage($format, $filein, $fileout, $imagethumbsize_w, $imagethumbsize_h, $red = 255, $green = 255, $blue = 255) {
-
+        
         $format = strtolower($format);
         if ($format == 'jpg') $format = 'jpeg'; // fix stupid mistake
         if (!($format == 'jpeg' || $format == 'gif' || $format == 'png'))  {
             throw new Exception('Invalid image format');
         }
-
-        // --------------------------------------------------------------------
-        // Try to avoid problems with memory limit
-        // --------------------------------------------------------------------
-
+        
+        /* Try to avoid problems with memory limit */
+        
         $size = getimagesize($filein);
-
+        
         if ($format == 'jpeg') {
             // Jpeg
             $fudge = 1.65; // This is a guestimate, your mileage may very
@@ -179,52 +374,50 @@ class suxFunct {
             if (isset($size['bits'])) $memoryNeeded = $memoryNeeded * $size['bits'];
             $memoryNeeded = round($memoryNeeded);
         }
-
+        
         if (memory_get_usage() + $memoryNeeded > (int) ini_get('memory_limit') * pow(1024, 2)) {
             trigger_error('Image is too big, attempting to compensate...', E_USER_WARNING);
             ini_set('memory_limit', (int) ini_get('memory_limit') + ceil(((memory_get_usage() + $memoryNeeded) - (int) ini_get('memory_limit') * pow(1024, 2)) / pow(1024, 2)) . 'M');
         }
-
-        // --------------------------------------------------------------------
-        // Proceed with resizing
-        // --------------------------------------------------------------------
-
+        
+        /* Proceed with resizing */
+        
         $func = 'imagecreatefrom' . $format;
         $image = $func($filein);
         if (!$image) throw new Exception('Invalid image format');
-
+        
         $width = $imagethumbsize_w;
         $height = $imagethumbsize_h;
         list($width_orig, $height_orig) = getimagesize($filein);
-
+        
         if ($width_orig < $height_orig) {
             $height = ($imagethumbsize_w / $width_orig) * $height_orig;
         }
         else {
             $width = ($imagethumbsize_h / $height_orig) * $width_orig;
         }
-
+        
         //if the width is smaller than supplied thumbnail size
         if ($width < $imagethumbsize_w) {
             $width = $imagethumbsize_w;
             $height = ($imagethumbsize_w/ $width_orig) * $height_orig;
         }
-
+        
         //if the height is smaller than supplied thumbnail size
         if ($height < $imagethumbsize_h) {
             $height = $imagethumbsize_h;
             $width = ($imagethumbsize_h / $height_orig) * $width_orig;
         }
-
+        
         // Original, proportionally modified
         $thumb = imagecreatetruecolor($width, $height);
         $bgcolor = imagecolorallocate($thumb, $red, $green, $blue);
         ImageFilledRectangle($thumb, 0, 0, $width, $height, $bgcolor);
         imagealphablending($thumb, true);
         imagecopyresampled($thumb, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
-
+        
         imagedestroy($image); // Free memory
-
+        
         // Thumbnail
         $thumb2 = imagecreatetruecolor($imagethumbsize_w, $imagethumbsize_h);
         $white = imagecolorallocate($thumb2, 255, 255, 255);
@@ -233,220 +426,57 @@ class suxFunct {
         $w1 = ($width/2) - ($imagethumbsize_w/2);
         $h1 = ($height/2) - ($imagethumbsize_h/2);
         imagecopyresampled($thumb2, $thumb, 0, 0, $w1, $h1, $imagethumbsize_w , $imagethumbsize_h ,$imagethumbsize_w, $imagethumbsize_h);
-
+        
         imagedestroy($thumb); // Free memory
-
+        
         $func = 'image' . $format;
         $func($thumb2, $fileout);
-
+        
         imagedestroy($thumb2); // Free memory
-
+        
     }
-
-
-
-    /**
-    * Sanitize HTML
-    *
-    * @param string $html the html to sanitize
-    * @param int $trusted -1, 0, or 1
-    * @return string sanitized html
-    */
-    static function sanitizeHtml($html, $trusted = -1) {
-
-        if ($trusted) {
-            // Allow all (*) except -script and -iframe
-            $config = array(
-                'elements' => '*-script-iframe',
-                );
-        }
-        elseif ($trusted < 0) {
-            // allow a small subset of elements to pass
-            // Transform strike and u to span for better XHTML 1-strict compliance
-            $config = array(
-                'elements' => 'a,em,strike,strong,u,p,br,img,li,ol,ul',
-                'make_tag_strict' => 1,
-                'safe' => 1,
-                );
-        }
-        else {
-            // Safe enough
-            $config = array(
-                'safe' => 1,
-                'deny_attribute' => 'on*,style,',
-                );
-        }
-
-        require_once(dirname(__FILE__) . '/symbionts/htmLawed/htmLawed.php');
-        return htmLawed($html, $config);
-
-    }
-
-
-    /**
-    * Get the last day of a month
-    * @return string YYYY-MM-DD
-    */
-    static function lastDay($month = '', $year = '') {
-
-        if (empty($month)) $month = date('m');
-        if (empty($year)) $year = date('Y');
-        $result = strtotime("{$year}-{$month}-01");
-        $result = strtotime('-1 second', strtotime('+1 month', $result));
-        return date('Y-m-d', $result);
-
-    }
-
-
+    
+    
+    // ------------------------------------------------------------------------
+    // Languages and locales
+    // ------------------------------------------------------------------------    
+    
+    
     /**
     * Get available locales on a *nix system
     * @return array list of locales
     */
     static function getLocales(){
-
+        
         $output = array();
         exec('locale -a', $output);
         return $output;
-
-    }
-
-
+        
+    }    
+    
+    
     /**
     * Set locale in a platform-independent way
     *
     * @param  string $locale  the locale name ('en_US', 'uk_UA', 'fr_FR' etc)
     */
     static function setLocale($locale) {
-
+        
         @list($lang, $cty) = explode('_', $locale);
         $locales = array("$locale.UTF-8", "$locale.utf8", $lang);
         $result = setlocale(LC_ALL, $locales);
-
+        
         if(!$result)
             throw new Exception("Unknown Locale name $locale");
-
+        
         // See if we have successfully set it to UTF-8
         $result = mb_strtolower($result);
         if(!mb_strpos($result, 'utf-8') && !mb_strpos($result, 'utf8'))
             throw new Exception("$locale is not UTF-8: $result");
-
+        
     }
-
-
-    /**
-    * Canonicalize url
-    *
-    * @param  string $url
-    */
-    static function canonicalizeUrl($url) {
-
-        // remove trailing slash
-        $url = rtrim(trim($url), '/');
-
-        // Add http:// if it's missing
-        if (!preg_match('#^https?://#i', $url)) {
-            // Remove ftp://, gopher://, fake://, etc
-            if (mb_strpos($url, '://')) list($garbage, $url) = mb_split('://', $url);
-            // Prepend http
-            $url = 'http://' . $url;
-            if (preg_match('#^http:///#', $url)) {
-                return null; // This is wrong...
-            }
-        }
-
-        // protocol and domain to lowercase (but NOT the rest of the URL),
-        $scheme = @parse_url($url, PHP_URL_SCHEME);
-        $url = preg_replace("/$scheme/", mb_strtolower($scheme), $url, 1);
-        $host = @parse_url($url, PHP_URL_HOST);
-        $url = preg_replace("/$host/", mb_strtolower($host), $url, 1);
-
-        // Sanitize for good measure
-        $url = filter_var($url, FILTER_SANITIZE_URL);
-
-        return $url;
-
-    }
-
-
-    /**
-    * Get the server url
-    *
-    * @return string http server url
-    */
-    static function myHttpServer() {
-
-        // Autodetect ourself
-        $s = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] ? 's' : '';
-        $host = $_SERVER['SERVER_NAME'];
-        $port = $_SERVER['SERVER_PORT'];
-        if (($s && $port == "443") || (!$s && $port == "80") || preg_match("/:$port\$/", $host)) {
-            $p = '';
-        }
-        else {
-            $p = ':' . $port;
-        }
-
-        return "http$s://$host$p";
-
-    }
-
-
-    /**
-    * Make url based on $CONFIG['CLEAN'] setting
-    *
-    * @global string $CONFIG['URL']
-    * @global string $CONFIG['CLEAN_URL']
-    * @param string $path controller value in /this/style
-    * @param array $query http_build_query compatible array
-    * @param bool $full return full url?
-    * @return string url
-    */
-    static function makeUrl($path, $query = null, $full = false) {
-
-        // Fix stupidties
-        $path = trim($path);
-        $path = ltrim($path, '/');
-        $path = rtrim($path, '/');
-
-        $tmp = '';
-        if ($full)  $tmp .= self::myHttpServer();
-        $tmp .= $GLOBALS['CONFIG']['URL'];
-        $tmp .= ($GLOBALS['CONFIG']['CLEAN_URL'] ? '/' : '/index.php?c=');
-        $tmp .= $path;
-        $tmp = rtrim($tmp, '/'); // In case path is null
-
-        if (is_array($query) && count($query)) {
-            $q = mb_strpos($tmp, '?') ? '&' : '?';
-            $tmp .= $q . http_build_query($query);
-        }
-
-        return $tmp;
-
-    }
-
-
-    /**
-    * Get this user's previous URL
-    *
-    * @param string $preg regular expression
-    * @return bool
-    */
-    static function getPreviousURL($preg) {
-
-        $url = suxFunct::makeUrl('/home'); // Some default
-
-        if (isset($_SESSION['breadcrumbs'])) foreach($_SESSION['breadcrumbs'] as $val) {
-            if (!preg_match($preg, $val)) {
-                $url = suxFunct::makeUrl($val); // Overwrite
-                break;
-            }
-        }
-
-        return $url;
-
-    }
-
-
+    
+    
     /**
     * Get the user's language
     *
@@ -455,37 +485,32 @@ class suxFunct {
     * @return array $gtext
     */
     static function gtext($module = null) {
-
+        
         $gtext = array();
-
+        
         if (!empty($_SESSION['language'])) $lang = $_SESSION['language'];
         else $lang = $GLOBALS['CONFIG']['LANGUAGE'];
-
-        if ($module) {
-
+        
+        if ($module) {     
             $default = $GLOBALS['CONFIG']['PATH'] . "/modules/{$module}/languages/en.php";
-            $requested = $GLOBALS['CONFIG']['PATH'] . "/modules/{$module}/languages/$lang.php";
-
+            $requested = $GLOBALS['CONFIG']['PATH'] . "/modules/{$module}/languages/$lang.php";     
         }
         else {
-
             $default = dirname(__FILE__) . "/languages/en.php";
             $requested = dirname(__FILE__) . "/languages/$lang.php";
-
         }
-
+        
         if (!is_readable($default)) return false; // no default, something is wrong
         else include($default);
-
+        
         if ($lang != 'en' && is_readable($requested)) include($requested);
-
+        
         if (!is_array($gtext) || !count($gtext)) return false; // something is wrong
         else return $gtext;
-
+        
     }
-
-
-
+    
+    
     /**
     * Get a key => value array of ISO 639 two letter language codes
     *
@@ -493,7 +518,7 @@ class suxFunct {
     * @return array languages
     */
     static function getLanguages() {
-
+        
         return array(
             'aa' => 'Afar',
             'ab' => 'Abkhazian',
@@ -632,11 +657,11 @@ class suxFunct {
             'zh' => 'Chinese',
             'zu' => 'Zulu',
             );
-
+        
     }
-
-
-
+    
+    
+    
     /**
     * Get a key => value array of ISO 3166-1 two letter country codes
     *
@@ -644,7 +669,7 @@ class suxFunct {
     * @return array languages
     */
     static function getCountries() {
-
+        
         return array(
             'af' => 'Afghanistan',
             'ax' => 'Ãland Islands',
@@ -893,11 +918,9 @@ class suxFunct {
             'zm' => 'Zambia',
             'zw' => 'Zimbabwe',
             );
-
+        
     }
-
-
-
+        
 }
 
 

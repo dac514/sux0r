@@ -31,10 +31,10 @@ require_once('bayesUser.php');
 class bayesEdit {
 
     // Variables
+    public $caches = array('blog', 'feeds'); // Modules that cache bayes interfaces 
     public $gtext = array();
-    private $users_id = null;
     private $module = 'bayes'; // Module
-
+    
     // Objects
     public $tpl;
     public $r;
@@ -46,9 +46,8 @@ class bayesEdit {
     /**
     * Constructor
     *
-    * @param string $key PDO dsn key
     */
-    function __construct($user = null) {
+    function __construct() {
 
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new bayesRenderer($this->module); // Renderer
@@ -62,17 +61,6 @@ class bayesEdit {
 
         // Redirect if not logged in
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
-
-        if ($user != $_SESSION['nickname']) {
-
-            // TODO:
-            // Security check
-            // Only an administrator can modify other users
-
-            $u = $this->user->getUserByNickname($user);
-            if ($u) $this->users_id = $u['users_id'];
-
-        }
 
 
     }
@@ -175,12 +163,10 @@ class bayesEdit {
             // Unshare vector
             suxValidate::register_validator('unsharevec1', 'unshare', 'dummyValid', false, false, null, 'unsharevec');
 
-
-
         }
 
         // Additional variables
-        $this->r->text['form_url'] = suxFunct::makeUrl('/bayes/edit');
+        $this->r->text['form_url'] = suxFunct::makeUrl('/bayes');
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
@@ -197,7 +183,20 @@ class bayesEdit {
     * @param array $clean reference to validated $_POST
     */
     function formProcess(&$clean) {
-
+        
+        // --------------------------------------------------------------------
+        // Clear user caches
+        // --------------------------------------------------------------------
+        
+        foreach ($this->caches as $module) {
+            // clear all caches with "nickname" as the first cache_id group   
+            $tpl = new suxTemplate($module);
+            $tpl->clear_cache(null, "{$_SESSION['nickname']}");     
+        }
+        
+        // --------------------------------------------------------------------
+        // Action
+        // --------------------------------------------------------------------        
 
         switch ($clean['action'])
         {
@@ -281,6 +280,7 @@ class bayesEdit {
                 if (!isset($clean['trainer'])) $clean['trainer'] = 0;
                 if (!isset($clean['owner'])) $clean['owner'] = 0;
                 $this->nb->shareVector($clean['users_id'], $clean['vector_id'], $clean['trainer'], $clean['owner']);
+                // TODO, clear caches for $clean['users_id'] (we need to get their partition, too)
             }
             break;
 
@@ -289,6 +289,7 @@ class bayesEdit {
             foreach ($clean['unshare'] as $val) {
                 foreach ($val as $vectors_id => $users_id) {
                     $this->nb->unshareVector($users_id, $vectors_id);
+                    // TODO, clear caches for $users_id (we need to get their partition, too)
                 }
             }
             break;

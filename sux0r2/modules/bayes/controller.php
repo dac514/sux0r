@@ -23,41 +23,19 @@
 */
 
 function sux($action, $params = null) {
-
+    
     switch($action)
     {
-
-
-    case 'edit' :
-
-        // --------------------------------------------------------------------
-        // Edit
-        // --------------------------------------------------------------------
-
-            $user = !empty($params[0]) ? $params[0]: null;
-
-            // Edit profile registration
-            include_once('bayesEdit.php');
-            $reg = new bayesEdit($user);
-
-            if ($reg->formValidate($_POST)) $reg->formProcess($_POST);
-
-            $reg->formBuild($_POST);
-
-            break;
-
-
+        
     default:
-
-        // --------------------------------------------------------------------
-        // Default
-        // --------------------------------------------------------------------
-
-        echo 'bayes module';
-        break;
-
+        
+        include_once('bayesEdit.php');
+        $reg = new bayesEdit();    
+        if ($reg->formValidate($_POST)) $reg->formProcess($_POST);
+        $reg->formBuild($_POST);
+        
     }
-
+    
 }
 
 ?>

@@ -82,20 +82,20 @@ class blogBookmarks {
         $msg = $this->msg->getMessage($msg_id, true);
 
         if (!$msg) {
-            // No message, skip?
+            // TODO: No message, skip?
         }
 
         if ($msg['users_id'] != $_SESSION['users_id']) {
-            // Not the user's message, skip?
+            // TODO: Not the user's message, skip?
         }
 
         $matches = array();
-        $pattern = '/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/i';
+        $pattern = '/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/i'; // href pattern
         preg_match_all($pattern, $msg['body_html'], $matches);
 
         $count = count($matches[1]);
         if (!$count) {
-            // No links, skip?
+            // TODO: No links, skip?
         }
 
         // Limit the amount of time we wait for a connection to a remote server to 5 seconds
@@ -105,15 +105,15 @@ class blogBookmarks {
 
                 // Basic info
                 $url = suxFunct::canonicalizeUrl($matches[1][$i]);
+                
+                if (!filter_var($url, FILTER_VALIDATE_URL) || $this->bookmarks->getBookmark($url, true)) 
+                    continue; // skip it 
+                             
                 $title = strip_tags($matches[2][$i]);
-                $body = null;
-
-                if ($tmp = $this->bookmarks->getBookmark($url, true)) {
-                    // Already in database, skip it
-                    continue;
-                }
-                elseif (filter_var($url, FILTER_VALIDATE_URL) && !count($_POST)) {
-                    // if !$_POST, search the webpage for info we can use
+                $body = null;         
+                
+                if (!$this->r->detectPOST()) {
+                    // Search the webpage for info we can use
                     $webpage = @file_get_contents($url);
                     // <title>
                     $found = array();
@@ -122,12 +122,12 @@ class blogBookmarks {
                     }
                     // TODO: Meta?
                 }
+                
                 // Add to array for use in template
                 $this->found_links[$url] = array('title' => $title, 'body' => $body);
+                
             }
         }
-
-        // new dBug($this->found_links);
 
     }
 
@@ -190,13 +190,8 @@ class blogBookmarks {
         if (!suxValidate::is_registered_form()) {
 
             suxValidate::connect($this->tpl, true); // Reset connection
-
-            // Register our additional criterias
-            // register_criteria($name, $func_name, $form = 'default')
-
-            // Register our validators
-            // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
-
+            
+            // Register our validators 
             $count = count($this->found_links);
             for ($i = 0; $i < $count; ++$i) {
                 suxValidate::register_validator("url[$i]", "url[$i]", 'notEmpty', false, false, 'trim');
@@ -246,7 +241,6 @@ class blogBookmarks {
         exit;
 
     }
-
 
 }
 

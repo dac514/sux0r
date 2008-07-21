@@ -462,7 +462,7 @@ class suxThreadedMessages {
     * @param int $thread_id thread id
     * @param string $type forum, blog, wiki, or slideshow
     * @param bool $unpub select un-published?
-    * @return array
+    * @return int
     */
     function countThread($thread_id, $type = null, $unpub = false) {
 
@@ -550,7 +550,7 @@ class suxThreadedMessages {
     * @param int $users_id users id
     * @param string $type forum, blog, wiki, or slideshow
     * @param bool $unpub select un-published?
-    * @return array
+    * @return int
     */
     function countMessagesByUser($users_id, $type = null, $unpub = false) {
 
@@ -682,7 +682,7 @@ class suxThreadedMessages {
     *
     * @param string $type forum, blog, wiki, or slideshow
     * @param bool $unpub select un-published?
-    * @return array
+    * @return int
     */
     function countFirstPosts($type = null, $unpub = false) {
 
@@ -767,7 +767,7 @@ class suxThreadedMessages {
     * @param int $users_id users id
     * @param string $type forum, blog, wiki, or slideshow
     * @param bool $unpub select un-published?
-    * @return array
+    * @return int
     */
     function countFirstPostsByUser($users_id, $type = null, $unpub = false) {
 
@@ -900,7 +900,7 @@ class suxThreadedMessages {
     * @param int $date date
     * @param string $type forum, blog, wiki, or slideshow
     * @param bool $unpub select un-published?
-    * @return array
+    * @return int
     */
     function countFirstPostsByMonth($date, $type = null, $unpub = false) {
 
@@ -1096,7 +1096,7 @@ class suxThreadedMessages {
     *
     * @param int $thread_id thread_id
     * @param bool $unpub select un-published?
-    * @return array
+    * @return int
     */
     function getCommentsCount($thread_id, $unpub = false) {
 

@@ -1,6 +1,7 @@
 <?php
 
 $gtext['authors'] = 'Authors';
+$gtext['author_categories'] = 'Author\'s Categories';
 $gtext['archives'] = 'Archives';
 $gtext['cancel'] = 'Cancel';
 $gtext['form_error'] = 'The form was not submitted, see errors below';

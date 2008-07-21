@@ -30,7 +30,6 @@ require_once('suxTemplate.php');
 class suxRenderer {
 
     public $module; // Module
-    public $lang; // Language
     public $xhtml_header; // Full path to xhtml_header.tpl
     public $xhtml_footer; // Full path to xhtml_footer.tpl
 
@@ -60,21 +59,21 @@ class suxRenderer {
     */
     function __construct($module) {
 
-        $this->module = $module; // Module
-
-        // Language
-        if (!empty($_SESSION['language'])) $this->lang = $_SESSION['language'];
-        else $this->lang = $GLOBALS['CONFIG']['LANGUAGE'];
+        // Module
+        $this->module = $module;
+        
+        // Partition
+        if (!empty($_SESSION['partition'])) $this->partition = $_SESSION['partition'];
+        else $this->partition  = $GLOBALS['CONFIG']['PARTITION'];       
 
         // Path to XTHML header & footer templates
-        $this->xhtml_header = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $GLOBALS['CONFIG']['PARTITION'] . '/xhtml_header.tpl';
+        $this->xhtml_header = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $this->partition  . '/xhtml_header.tpl';
         if (!file_exists($this->xhtml_header)) $this->xhtml_header = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r/xhtml_header.tpl';
-        $this->xhtml_footer = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $GLOBALS['CONFIG']['PARTITION'] . '/xhtml_footer.tpl';
+        $this->xhtml_footer = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $this->partition  . '/xhtml_footer.tpl';
         if (!file_exists($this->xhtml_footer)) $this->xhtml_footer = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r/xhtml_footer.tpl';
 
         // Defaults
         $this->url = $GLOBALS['CONFIG']['URL'];
-        $this->partition = $GLOBALS['CONFIG']['PARTITION'];
         $this->title = $GLOBALS['CONFIG']['TITLE'];
         $this->bool['analytics'] = true;
 
@@ -88,25 +87,25 @@ class suxRenderer {
 
 
     /**
-    * Assign
+    * Assign, used to access this object's variables from inside a template
     *
     * @param string $variable the public variable to work with
     * @param string $value content
-    * @param string $key key or append
+    * @param string|bool $k either key, or append
     */
-    function assign($variable, $value, $key = false) {
+    function assign($variable, $value, $k = false) {
 
         // Array
         if (is_array($this->$variable)) {
-            if (!$key) return;
+            if (!$k) return;
             else {
-                $this->$variable[$key] = $value;
+                $this->$variable[$k] = $value;
                 return;
             }
         }
 
         // Text
-        if ($key) $this->$variable .= $value; // Append
+        if ($k) $this->$variable .= $value; // Append
         else $this->$variable = $value;
 
     }
@@ -149,7 +148,6 @@ class suxRenderer {
     * Constructs a widget
     *
     * @global string $CONFIG['PATH']
-    * @global string $CONFIG['PARTITION']
     * @param string $title a title
     * @param string $content html content
     * @param string $url URL for the title
@@ -211,7 +209,7 @@ class suxRenderer {
         $tpl->assign('width', $width);
         $tpl->assign('content', $content);
 
-        $path = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $GLOBALS['CONFIG']['PARTITION'];
+        $path = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $this->partition ;
         if (!file_exists("$path/widget.tpl")) $path = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r';
         return $tpl->fetch("file:$path/widget.tpl");
 
@@ -303,7 +301,7 @@ class suxRenderer {
 
         // TinyMCE Path
         $path = $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/tinymce/jscripts/tiny_mce/tiny_mce.js';
-        $path_css = $GLOBALS['CONFIG']['URL'] . '/media/' . $GLOBALS['CONFIG']['PARTITION'] . '/css/tinymce.css';
+        $path_css = $GLOBALS['CONFIG']['URL'] . '/media/' . $this->partition . '/css/tinymce.css';
 
         // TinyMCE Language
         if (!empty($_SESSION['language'])) $lang = $_SESSION['language'];
@@ -354,6 +352,7 @@ function insert_userInfo($params) {
 
     $url = $GLOBALS['CONFIG']['URL'];
     $url_logout = suxFunct::makeUrl('/user/logout');
+    
     if (!empty($_SESSION['partition'])) $partition = $_SESSION['partition'];
     else $partition = $GLOBALS['CONFIG']['PARTITION'];
 

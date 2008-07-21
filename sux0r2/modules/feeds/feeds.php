@@ -25,7 +25,7 @@
 require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
+require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
 require_once(dirname(__FILE__) . '/../bayes/bayesUser.php');
 require_once('feedsRenderer.php');
 
@@ -38,7 +38,7 @@ class feeds  {
 
     // Objects
     private $liuk;
-    private $msg;
+    private $rss;
     private $nb;
     private $pager;
     private $user;
@@ -57,7 +57,7 @@ class feeds  {
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         $this->user = new suxUser();
-        $this->msg = new suxThreadedMessages();
+        $this->rss = new suxRSS();
         $this->link = new suxLink();
         $this->nb = new bayesUser();
 
@@ -73,9 +73,11 @@ class feeds  {
     */
     function listing() {
 
+        
         $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/'); // Forum Url
         $this->tpl->assign_by_ref('r', $this->r);
 
+        $feeds_id = null; // TODO
         $cache_id = false;
 
         if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
@@ -84,8 +86,8 @@ class feeds  {
             // Filtered results
             // ---------------------------------------------------------------
 
-            $max = $this->msg->countFirstPosts('blog');
-            $eval = '$this->msg->getFirstPosts(\'blog\', true, $this->pager->limit, $start)';
+            $max = $this->rss->countItems($feeds_id);
+            $eval = '$this->rss->getItems(' . ($feeds_id ? $feeds_id : 'null') . ', $this->pager->limit, $start)';
             $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval); // Important: start must be reference
 
             if (count($this->r->fp) && $start < $max) {
@@ -118,9 +120,9 @@ class feeds  {
 
             if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
 
-                $this->pager->setPages($this->msg->countFirstPosts('blog'));
+                $this->pager->setPages($this->rss->countItems($feeds_id));
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/feeds'));
-                $this->r->fp = $this->msg->getFirstPosts('blog', true, $this->pager->limit, $this->pager->start);
+                $this->r->fp = $this->rss->getItems($feeds_id, $this->pager->limit, $this->pager->start);
 
                 if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
@@ -130,7 +132,6 @@ class feeds  {
 
         if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
         else $this->tpl->display('scroll.tpl');
-
 
     }
 

@@ -77,4 +77,14 @@ if (get_magic_quotes_gpc() && (!ini_get('magic_quotes_sybase'))) {
     unset($in);
 }
 
+// Include suxUser
+require_once($GLOBALS['CONFIG']['PATH'] . '/includes/suxUser.php');
+
+// Validate user $_SESSION
+if (isset($_SESSION['users_id']) || isset($_SESSION['nickname'])) {
+    $u = new suxUser();
+    $u->loginCheck(suxFunct::makeUrl('/home'));
+}
+unset($u);
+
 ?>
