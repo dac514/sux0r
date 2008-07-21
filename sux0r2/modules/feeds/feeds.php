@@ -62,8 +62,8 @@ class feeds  {
         $this->nb = new bayesUser();
 
         $this->pager = new suxPager();
-        $this->pager->limit = 2; // TODO, remove this value, it's for testing
-
+        $this->pager->limit = 10; 
+        
     }
 
 
@@ -90,7 +90,7 @@ class feeds  {
             $eval = '$this->rss->getItems(' . ($feeds_id ? $feeds_id : 'null') . ', $this->pager->limit, $start)';
             $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval); // Important: start must be reference
 
-            if (count($this->r->fp) && $start < $max) {
+            if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
                 else $params = array('filter' => $cat_id);
                 $url = suxFunct::makeUrl('/feeds/', $params);
@@ -147,9 +147,15 @@ class feeds  {
         // -------------------------------------------------------------------
 
         $fp = array(); // First posts array
+        
+        // Force timeout if this operation takes too long
+        $timer = microtime(true); 
+        $timeout_max = ini_get('max_execution_time') * 0.333333;
+        if ($timeout_max > 30) $timeout_max = 30;
 
+        // Start filtering
         $init = $start;
-        $i = 0;
+        $i = 0;        
         while ($i < $this->pager->limit) {
 
             $tmp = array();
@@ -165,14 +171,14 @@ class feeds  {
 
             $i = count($fp);
             if ($start == $init) $start = $start + ($this->pager->limit - 1);
-            if ($i < $this->pager->limit && $start < ($max - $this->pager->limit)) {
+            if (($timer + $timeout_max) > microtime(true) && $i < $this->pager->limit && $start < ($max - $this->pager->limit)) {
                 // Not enough first posts, keep looping
                 ++$start;
             }
             else break;
 
         }
-        ++$start;
+        ++$start;     
 
         return $fp;
 

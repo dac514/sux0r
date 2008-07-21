@@ -104,7 +104,8 @@ class feedsSuggest  {
             suxValidate::register_validator('url', 'url', 'notEmpty', false, false, 'trim');
             suxValidate::register_validator('url2', 'url', 'isURL');
             suxValidate::register_validator('url3', 'url', 'isDuplicateFeed');
-
+            suxValidate::register_validator('url4', 'url', 'isValidFeed');
+            
         }
 
         // Urls
@@ -125,7 +126,14 @@ class feedsSuggest  {
     */
     function formProcess(&$clean) {
 
-        // TODO
+        $feed = $this->rss->fetchRss($clean['url']);
+                
+        $rss['url'] = $clean['url'];
+        $rss['title'] = isset($feed['title']) ? $feed['title'] : '';
+        $rss['body'] = isset($feed['body']) ? $feed['body'] : '';        
+        $rss['draft'] = 1;
+        
+        $this->rss->saveFeed($_SESSION['users_id'], $rss);
 
     }
 
@@ -135,7 +143,10 @@ class feedsSuggest  {
     */
     function formSuccess() {
 
-        // TODO 
+        // Template
+        $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
+        $this->tpl->assign_by_ref('r', $this->r);
+        $this->tpl->display('success.tpl');
         
     }
 
@@ -149,9 +160,7 @@ class feedsSuggest  {
     function isDuplicateFeed($value, $empty, &$params, &$formvars) {
 
         if (empty($formvars['url'])) return false;
-
-        // TODO
-        
+        if ($this->rss->getFeed($formvars['url'])) return false;
         return true;
 
     }
@@ -164,10 +173,9 @@ class feedsSuggest  {
     */
     function isValidFeed($value, $empty, &$params, &$formvars) {
 
-        if (empty($formvars['url'])) return false;
-
-        // TODO
-        
+        if (empty($formvars['url'])) return false;        
+        $feed = $this->rss->fetchRSS($formvars['url']);        
+        if (!isset($feed['items_count']) || $feed['items_count'] <= 0) return false;                
         return true;
 
     }    
