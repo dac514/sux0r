@@ -94,7 +94,7 @@ class blog  {
                 $eval = '$this->msg->getFirstPostsByUser(' .$u['users_id'] . ', \'blog\', true, $this->pager->limit, $start)';
                 $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval)); // Important: start must be reference
 
-                if (count($this->r->fp) && $start < $max) {
+                if ($start < $max) {
                     if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
                     else $params = array('filter' => $cat_id);
                     $url = suxFunct::makeUrl('/blog/author/'. $author, $params);
@@ -217,7 +217,7 @@ class blog  {
                     $eval = '$this->foobar("' . $limit_query . '", ' . $cat_id . ', $start)';
                     $this->r->fp  = $this->blogs($this->filter($count, $vec_id, $cat_id2, $threshold, &$start, $eval)); // Important: start must be reference
 
-                    if (count($this->r->fp) && $start < $count) {
+                    if ($start < $count) {
                         if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
                         else $params = array('filter' => $cat_id);
                         $url = suxFunct::makeUrl('/blog/category/'. $cat_id, $params);
@@ -331,7 +331,7 @@ class blog  {
             $eval = '$this->msg->getFirstPostsByMonth(\'' . $datetime . '\', \'blog\', true, $this->pager->limit, $start)';
             $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval)); // Important: start must be reference
 
-            if (count($this->r->fp) && $start < $max) {
+            if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
                 else $params = array('filter' => $cat_id);
                 $url = suxFunct::makeUrl('/blog/month/'. $date, $params);
@@ -401,7 +401,7 @@ class blog  {
             $eval = '$this->msg->getFirstPosts(\'blog\', true, $this->pager->limit, $start)';
             $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval)); // Important: start must be reference
 
-            if (count($this->r->fp) && $start < $max) {
+            if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
                 else $params = array('filter' => $cat_id);
                 $url = suxFunct::makeUrl('/blog/', $params);
@@ -541,7 +541,13 @@ class blog  {
         // -------------------------------------------------------------------
 
         $fp = array(); // First posts array
+        
+        // Force timeout if this operation takes too long
+        $timer = microtime(true); 
+        $timeout_max = ini_get('max_execution_time') * 0.333333;
+        if ($timeout_max > 30) $timeout_max = 30;        
 
+        // Start filtering
         $init = $start;
         $i = 0;
         while ($i < $this->pager->limit) {
@@ -559,7 +565,7 @@ class blog  {
 
             $i = count($fp);
             if ($start == $init) $start = $start + ($this->pager->limit - 1);
-            if ($i < $this->pager->limit && $start < ($max - $this->pager->limit)) {
+            if (($timer + $timeout_max) > microtime(true) && $i < $this->pager->limit && $start < ($max - $this->pager->limit)) {
                 // Not enough first posts, keep looping
                 ++$start;
             }

@@ -22,7 +22,7 @@
         <td style="vertical-align:top;">
 			<div id="leftside">
 
-                <p>Todo</p>
+                <p><a href="{$r->makeUrl('/feeds/suggest')}">{$r->text.suggest}</a></p>
 
 			</div>
 		</td>

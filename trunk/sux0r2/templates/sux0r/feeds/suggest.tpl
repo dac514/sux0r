@@ -28,7 +28,8 @@
     {capture name=error1}
     {validate id="url" message=$r->text.form_error_1}
     {validate id="url2" message=$r->text.form_error_2}
-    {validate id="url3" message=$r->text.form_error_3}    
+    {validate id="url3" message=$r->text.form_error_3}  
+    {validate id="url4" message=$r->text.form_error_4}     
     {/capture}
 {/strip}
 

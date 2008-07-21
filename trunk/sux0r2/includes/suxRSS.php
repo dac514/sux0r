@@ -142,9 +142,37 @@ class suxRSS extends DOMDocument {
         }   
     }
     
+
+    /**
+    * Get a feed by id or url
+    *
+    * @param int|string $id feed id or url
+    * @param bool $unpub select un-published?
+    * @return array|false
+    */
+    function getFeed($id) {
+
+        // Pick a query
+        if (filter_var($id, FILTER_VALIDATE_INT) && $id > 0) {                       
+            $query = "SELECT * FROM {$this->db_feeds} WHERE id = ? LIMIT 1 ";
+        }
+        else { 
+            $id = suxFunct::canonicalizeUrl($id);
+            $query = "SELECT * FROM {$this->db_feeds} WHERE url = ? LIMIT 1 ";
+        }
+        
+        $st = $this->db->prepare($query);
+        $st->execute(array($id));
+
+        $feed = $st->fetch(PDO::FETCH_ASSOC);
+        if ($feed) return $feed;
+        else return false;
+
+    }      
+    
     
     /**
-    * Get a message by id
+    * Get a item by id
     *
     * @param int $id messages_id
     * @param bool $unpub select un-published?
@@ -159,11 +187,85 @@ class suxRSS extends DOMDocument {
         $st = $this->db->prepare($query);
         $st->execute(array($id));
 
-        $message = $st->fetch(PDO::FETCH_ASSOC);
-        if ($message) return $message;
+        $item = $st->fetch(PDO::FETCH_ASSOC);
+        if ($item) return $item;
         else return false;
 
-    }    
+    }
+
+   /**
+    * Saves a bookmark to the database
+    *
+    * @param int $users_id users_id
+    * @param array $url required keys => (url, title, body) optional keys => (draft)
+    * @param int $trusted passed on to sanitizeHtml()
+    * @return int insert id
+    */
+    function saveFeed($users_id, array $url, $trusted = -1) {
+
+        // -------------------------------------------------------------------
+        // Sanitize
+        // -------------------------------------------------------------------
+
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) throw new Exception('Invalid user id');
+        if (!isset($url['url']) || !isset($url['title']) || !isset($url['body'])) throw new Exception('Invalid $url array');
+        if (!filter_var($url['url'], FILTER_VALIDATE_URL)) throw new Exception('Invalid url');
+
+        // Users id
+        $clean['users_id'] = $users_id;
+
+        // Canonicalize Url
+        $clean['url'] = suxFunct::canonicalizeUrl($url['url']);
+
+        // No HTML in title
+        $clean['title'] = strip_tags($url['title']);
+
+        // Sanitize HTML in body
+        $clean['body_html'] = suxFunct::sanitizeHtml($url['body'], $trusted);
+
+        // Convert and copy body to UTF-8 plaintext
+        require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
+        $converter = new suxHtml2UTF8($clean['body_html']);
+        $clean['body_plaintext']  = $converter->getText();
+
+        // Draft, boolean / tinyint
+        $clean['draft'] = 0;
+        if (isset($url['draft'])) $clean['draft'] = 1;
+
+        // We now have the $clean[] array
+
+        // --------------------------------------------------------------------
+        // Go!
+        // --------------------------------------------------------------------
+
+        // Check if this is an insert or an update
+        $query = "SELECT id FROM {$this->db_feeds} WHERE url = ? LIMIT 1 ";
+        $st = $this->db->prepare($query);
+        $st->execute(array($clean['url']));
+        $edit = $st->fetch(PDO::FETCH_ASSOC);
+
+        if ($edit) {
+
+            // UPDATE
+            $query = suxDB::prepareUpdateQuery($this->db_feeds, $clean, 'url');
+            $st = $this->db->prepare($query);
+            $st->execute($clean);
+            $id = $edit['id'];
+
+        }
+        else {
+
+            // INSERT
+            $query = suxDB::prepareInsertQuery($this->db_feeds, $clean);
+            $st = $this->db->prepare($query);
+            $st->execute($clean);
+            $id = $this->db->lastInsertId();
+
+        }
+
+        return $id;
+
+    }     
   
     
     /**

@@ -88,7 +88,7 @@ class suxBookmarks {
     * Saves a bookmark to the database
     *
     * @param int $users_id users_id
-    * @param array $url required keys => (title, body, [forum|blog|wiki|slideshow]) optional keys => (published_on)
+    * @param array $url required keys => (url, title, body) optional keys => (published_on, draft)
     * @param int $trusted passed on to sanitizeHtml()
     * @return int insert id
     */
@@ -98,7 +98,7 @@ class suxBookmarks {
         // Sanitize
         // -------------------------------------------------------------------
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) throw new Exception('Invalid user id');
         if (!isset($url['url']) || !isset($url['title']) || !isset($url['body'])) throw new Exception('Invalid $url array');
         if (!filter_var($url['url'], FILTER_VALIDATE_URL)) throw new Exception('Invalid url');
 
