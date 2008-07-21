@@ -86,7 +86,8 @@ CREATE TABLE `bayes_tokens` (
   `bayes_categories_id` int(11) NOT NULL,
   `count` bigint(20) NOT NULL default '0',
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `grouping` (`token`,`bayes_categories_id`)
+  UNIQUE KEY `grouping` (`bayes_categories_id`,`token`),
+  KEY `token` (`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
