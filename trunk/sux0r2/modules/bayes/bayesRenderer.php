@@ -42,9 +42,9 @@ class bayesRenderer extends suxRenderer {
     * @param string $module
     */
     function __construct($module) {
-
+        
         parent::__construct($module); // Call parent
-        $this->gtext = suxFunct::gtext($this->module); // Language
+        $this->gtext = suxFunct::gtext('bayes'); // Language
         $this->nb = new bayesUser();
         $this->link = new suxLink();
 
@@ -601,17 +601,15 @@ class bayesRenderer extends suxRenderer {
 */
 function insert_bayesFilters($params) {
 
-    // TODO
-    // $text = suxFunct::gtext();
-
     $tpl = new suxTemplate('bayes'); // Template
     $r = new bayesRenderer('bayes'); // Renderer
-    $tpl->assign_by_ref('r', $r);
+    $r->text = suxFunct::gtext('bayes'); // Language
 
     if (isset($_GET['filter'])) $tpl->assign('filter', $_GET['filter']);
     if (isset($_GET['threshold']) && $_GET['threshold'] !== false) $tpl->assign('threshold', $_GET['threshold']);
-    if (isset($params['form_url'])) $tpl->assign('form_url', $params['form_url']);
+    if (isset($params['form_url'])) $r->text['form_url'] = $params['form_url'];        
 
+    $tpl->assign_by_ref('r', $r);    
     return $tpl->fetch('filters.tpl');
 
 }

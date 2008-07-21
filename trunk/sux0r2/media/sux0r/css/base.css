@@ -58,7 +58,7 @@ table#proselytizer {
     float: right;
     margin-top: 3px;
     margin-right: 5px;
-
+    
 }
 
 #header img.openidLogin {
@@ -135,13 +135,15 @@ input, select {
 
 /* {{{ genericBayesInterface */
 
-.nbInterface {
+/* Ajax trainers */
 
+.nbInterface {
+    
 }
 
 .nbInterface .nbCatDropdown {
     margin-right: 10px;
-
+    
 }
 
 .nbVecTrained {
@@ -151,6 +153,53 @@ input, select {
 
 .nbCatDropdown {
     width: auto;
+}
+
+/*  Filters */
+
+#nbf {
+    margin-top: 5px;  
+}
+
+#nbfCategories {
+    float: left;
+}
+
+#nbfSlider {
+    float:left; 
+    margin-left: 1em; 
+    padding-top: 0.5em;      
+}
+
+#nbfTrack {    
+    width: 100px; 
+    background-color: #ccc; 
+    height: 10px; 
+    float: left;    
+}
+
+#nbfHandle {
+    width: 10px; 
+    height: 15px; 
+    background-color: #f00; 
+    cursor: crosshair;    
+}
+
+#nbfPercentage {
+    float: left; 
+    margin-left: 0.5em;
+}
+
+#nbfTopButton, #nbfThresholdButton {
+    float:left; 
+    margin-left: 0.5em;
+}
+
+.nbfFilteredBy {
+    float: left; 
+    margin-left: 0.5em; 
+    padding-top: 0.5em; 
+    color: red;     
 }
 
 /* }}} */
@@ -205,7 +254,7 @@ input, select {
 /* {{{ Vertical Menu Container */
 
 .menucontainer {
-
+    
 }
 
 .menucontainer ul {
@@ -257,7 +306,7 @@ input, select {
     margin: 0 0 20px 0;
     padding: 5px 0 5px 5px;
     border-bottom: 1px solid black;
-
+    
 }
 
 .widget h2 a:link, .widget h2 a:visited, .widget h2 a:active {
@@ -310,6 +359,7 @@ b.bb b {
 }
 
 /* }}} */
+
 
 pre {
     /* Linewrap */

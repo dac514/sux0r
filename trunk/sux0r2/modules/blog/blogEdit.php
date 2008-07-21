@@ -49,7 +49,7 @@ class blogEdit {
     /**
     * Constructor
     *
-    * @param string $key PDO dsn key
+    * @param int $id message id
     */
     function __construct($id = null) {
 
@@ -172,13 +172,7 @@ class blogEdit {
 
             suxValidate::connect($this->tpl, true); // Reset connection
 
-            // Register our additional criterias
-            //suxValidate::register_criteria('invalidShare', 'this->invalidShare', 'sharevec');
-            //suxValidate::register_criteria('userExists', 'this->userExists', 'sharevec');
-
             // Register our validators
-            // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
-
             if ($this->id) suxValidate::register_validator('integrity', 'integrity:id', 'hasIntegrity');
             suxValidate::register_validator('title', 'title', 'notEmpty', false, false, 'trim');
             suxValidate::register_validator('image', 'image:jpg,jpeg,gif,png', 'isFileType', true);
@@ -249,8 +243,8 @@ class blogEdit {
             $format = explode('.', $_FILES['image']['name']);
             $format = strtolower(end($format));
             $filein = $_FILES['image']['tmp_name'];
-            $resize = "{$GLOBALS['CONFIG']['PATH']}/data/{$this->module}/{$resize}";
-            $fullsize = "{$GLOBALS['CONFIG']['PATH']}/data/{$this->module}/{$fullsize}";
+            $resize = suxFunct::dataDir($this->module) . "/{$resize}";
+            $fullsize = suxFunct::dataDir($this->module) . "/{$fullsize}";
             suxFunct::resizeImage($format, $filein, $resize, 80, 80);
             move_uploaded_file($_FILES['image']['tmp_name'], $fullsize);
 

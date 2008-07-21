@@ -1,7 +1,7 @@
 <?php
 
 /**
-* blogReply
+* feedsSuggest
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -22,60 +22,40 @@
 *
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
+require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
-require_once(dirname(__FILE__) . '/../bayes/bayesUser.php');
-require_once('blogRenderer.php');
+require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
-class blogReply {
+class feedsSuggest  {
 
     // Variables
     public $gtext = array();
-    private $module = 'blog';
-    private $prev_url_preg = '#^blog/[edit|reply|bookmarks]|^cropper/#i';
-    private $parent;
+    protected $prev_url_preg = '#^feeds/[suggest|admin]#i';
+    private $module = 'feeds';
 
     // Objects
     public $tpl;
     public $r;
-    private $user;
-    private $msg;
-    private $nb;
-    private $link;
-
+    protected $user;
+    protected $rss;
 
     /**
     * Constructor
     *
-    * @param int $parent_id
     */
-    function __construct($parent_id) {
+    function __construct() {
 
+        $this->rss = new suxRSS();
+        $this->user = new suxUser(); // User
         $this->tpl = new suxTemplate($this->module); // Template
-        $this->r = new blogRenderer($this->module); // Renderer
+        $this->r = new suxRenderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
-
-        // Objects
-        $this->user = new suxuser();
-        $this->msg = new suxThreadedMessages();
-        $this->nb = new bayesUser();
-        $this->link = new suxLink();
-
+        
         // Redirect if not logged in
-        $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
-
-        $parent = $this->msg->getMessage($parent_id);
-        if (!$parent) {
-            // TODO: Beautify
-            echo 'Invalid message';
-            exit;
-        }
-
-        $this->parent = $parent;
+        $this->user->loginCheck(suxfunct::makeUrl('/user/register'));        
 
     }
 
@@ -108,10 +88,6 @@ class blogReply {
     */
     function formBuild(&$dirty) {
 
-        // --------------------------------------------------------------------
-        // Form logic
-        // --------------------------------------------------------------------
-
         if (!empty($dirty)) $this->tpl->assign($dirty);
         else suxValidate::disconnect();
 
@@ -119,28 +95,29 @@ class blogReply {
 
             suxValidate::connect($this->tpl, true); // Reset connection
 
+            // Register our additional criterias
+            suxValidate::register_criteria('isDuplicateFeed', 'this->isDuplicateFeed');
+            suxValidate::register_criteria('isValidFeed', 'this->isValidFeed');
+            
             // Register our validators
-            suxValidate::register_validator('integrity', 'integrity:parent_id', 'hasIntegrity');
-            suxValidate::register_validator('title', 'title', 'notEmpty', false, false, 'trim');
-            suxValidate::register_validator('body', 'body', 'notEmpty', false, false, 'trim');
+            // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
+            suxValidate::register_validator('url', 'url', 'notEmpty', false, false, 'trim');
+            suxValidate::register_validator('url2', 'url', 'isURL');
+            suxValidate::register_validator('url3', 'url', 'isDuplicateFeed');
 
         }
 
-        // Additional variables
-        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/reply/' . $this->parent['id']);
+        // Urls
+        $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/suggest');
         $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
-
-        // Parent
-        $this->tpl->assign('parent_id', $this->parent['id']);
-        $this->tpl->assign('parent', "{$this->parent['title']} \n\n {$this->parent['body_plaintext']}");
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
-        $this->tpl->display('reply.tpl');
+        $this->tpl->display('suggest.tpl');
 
     }
-
-
+    
+    
     /**
     * Process the form
     *
@@ -148,11 +125,7 @@ class blogReply {
     */
     function formProcess(&$clean) {
 
-        $msg['blog'] = 1;
-        $msg['title'] = $clean['title'];
-        $msg['body'] = $clean['body'];
-
-        $this->msg->saveMessage($_SESSION['users_id'], $msg, $clean['parent_id']);
+        // TODO
 
     }
 
@@ -162,10 +135,42 @@ class blogReply {
     */
     function formSuccess() {
 
-        $this->tpl->clear_cache(null, $_SESSION['nickname']); // Clear cache
-        suxFunct::redirect(suxFunct::makeUrl('/blog/view/' . $this->parent['thread_id'])); // Redirect
+        // TODO 
+        
+    }
+
+
+
+    /**
+    * for suxValidate, check if a duplicate url exists
+    *
+    * @return bool
+    */
+    function isDuplicateFeed($value, $empty, &$params, &$formvars) {
+
+        if (empty($formvars['url'])) return false;
+
+        // TODO
+        
+        return true;
 
     }
+    
+    
+    /**
+    * for suxValidate, check if a RSS feed is valid
+    *
+    * @return bool
+    */
+    function isValidFeed($value, $empty, &$params, &$formvars) {
+
+        if (empty($formvars['url'])) return false;
+
+        // TODO
+        
+        return true;
+
+    }    
 
 
 }

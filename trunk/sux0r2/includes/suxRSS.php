@@ -32,7 +32,7 @@ class suxRSS extends DOMDocument {
     // --------------------------------------------------------------------
 
     // Cache interval in seconds
-	public $cache_time = 3600;
+	public $cache_time = 900;
 
     // Folder in which cached data should be stored, set in constructor
     public $cache_dir = null;
@@ -47,9 +47,9 @@ class suxRSS extends DOMDocument {
 
     // All pubDate and lastBuildDate data will be converted to specified
     // date/time format. The format is fully compatible with PHP function date()
-	public $date_format = '';
+	public $date_format = 'Y-m-d H:i:s';
 
-    // getRSS Tags
+    // fetchRSS Tags
     protected $channeltags = array('title', 'link', 'description', 'language', 'copyright', 'managingEditor', 'webMaster', 'lastBuildDate', 'rating', 'docs');
 	protected $itemtags = array('title', 'link', 'description', 'author', 'category', 'comments', 'enclosure', 'guid', 'pubDate', 'source');
 	protected $imagetags = array('title', 'url', 'link', 'width', 'height');
@@ -60,15 +60,20 @@ class suxRSS extends DOMDocument {
 
     // Channel
     private $channel;
-
+    
     // --------------------------------------------------------------------
-    // Functions
-    // --------------------------------------------------------------------
+    // Database stuff
+    // --------------------------------------------------------------------    
 
+    protected $db;
+    protected $inTransaction = false;
+    protected $db_feeds = 'rss_feeds';
+    protected $db_items = 'rss_items';
+    protected $db_driver; // database type    
+    
 
     /**
     * Constructor
-    *
     */
     function __construct() {
 
@@ -77,29 +82,145 @@ class suxRSS extends DOMDocument {
 
         // Cache
         $this->cache_dir = dirname(__FILE__)  . '/../temporary/rss_cache';
+        
+        // Db
+    	$this->db = suxDB::get();
+        $this->db_driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
+        set_exception_handler(array($this, 'exceptionHandler'));        
 
     }
+    
+    
+    // --------------------------------------------------------------------
+    // Database accesors
+    // --------------------------------------------------------------------
+
+    /**
+    * Cron, fetch RSS items and insert them into the database    
+    */
+    function cron() {
+        
+        require_once('suxHtml2UTF8.php');
+        
+        $q = "SELECT id, url FROM {$this->db_feeds} WHERE draft = 0 ";
+        $st = $this->db->query($q);
+        
+        // Resused prepared statement
+        $q2 = "SELECT COUNT(*) FROM {$this->db_items} WHERE url = ? ";
+        $st2 = $this->db->prepare($q2);
+        
+        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {    
+            $results = $this->fetchRSS($row['url']); 
+            if ($results['cached'] != 1) {
+                foreach ($results['items'] as $item) {   
+                    if (isset($item['title']) && isset($item['link']) && isset($item['description'])) {
+                        
+                        $clean = array(); // Reset
+                        
+                        // Check if this already exists
+                        $clean['url'] = suxFunct::canonicalizeUrl($item['link']);                
+                        $st2->execute(array($clean['url']));
+                        if ($st2->fetchColumn() <= 0) continue; // Skip
+                        
+                        // Set the rest of our array
+                        $clean['rss_feeds_id'] = $row['id'];                
+                        $clean['title'] = strip_tags($item['title']);
+                        $clean['body_html'] = $item['description']; // suxRSS() sanitzes HTML           
+                        $converter = new suxHtml2UTF8($clean['body_html']);
+                        $clean['body_plaintext']  = $converter->getText();  
+                        if (!empty($item['pubDate'])) $clean['published_on'] = $item['pubDate'];
+                        else $clean['published_on'] = date('c'); 
+                        
+                        // Insert
+                        $q3 = suxDB::prepareInsertQuery($this->db_items, $clean);  
+                        $st3 = $this->db->prepare($q3);
+                        $st3->execute($clean);                                
+                        
+                    }
+                }
+            }    
+        }   
+    }
+  
+    
+    /**
+    * Count RSS items
+    *
+    * @param int $feed_id feed id    
+    * @param string $type forum, blog, wiki, or slideshow
+    * @param bool $unpub select un-published?
+    * @return int
+    */
+    function countItems($feed_id = null) {
+
+        $query = "SELECT COUNT(*) FROM {$this->db_items} ";        
+        if ($feed_id) {
+            if (filter_var($feed_id, FILTER_VALIDATE_INT) && $feed_id > 0) {
+                $query .= "WHERE rss_feeds_id = $feed_id ";
+            }
+            else throw new Exception('Invalid feed id');
+        }
+
+        // Execute
+        $st = $this->db->query($query);
+        return $st->fetchColumn();
+
+    }    
+    
+    /**
+    * Get RSS items
+    *
+    * @param int $feed_id feed id
+    * @param int $limit sql limit value
+    * @param int $start sql start of limit value
+    * @return array
+    */
+    function getItems($feed_id = null, $limit = null, $start = 0) {
+
+        $query = "SELECT * FROM {$this->db_items} ";
+        if ($feed_id) {
+            if (filter_var($feed_id, FILTER_VALIDATE_INT) && $feed_id > 0) {
+                $query .= "WHERE rss_feeds_id = $feed_id ";
+            }
+            else throw new Exception('Invalid feed id');
+        }
+        $query .= "ORDER BY published_on DESC "; // Order
+      
+        // Limit
+        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        elseif ($limit) $query .= "LIMIT {$limit} ";
+
+        // Execute
+        $st = $this->db->query($query);
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }    
+    
+    
+    // --------------------------------------------------------------------
+    // RSS Output
+    // --------------------------------------------------------------------    
 
 
     /**
-    * set RSS feed, example usage:
+    * Set RSS feed, example usage:
     *
     * $rss = new suxRSS();
-    * $rss->setRSS('Channel Title', 'http://www.example.org', 'Channel Description');
-    * $rss->addItem('Item 1', 'http://www.example.org/item1', 'Item 1 Description');
-    * $rss->addItem('Item 2', 'http://www.example.org/item2', 'Item 2 Description');
+    * $rss->outputRSS('Channel Title', 'http://www.example.org', 'Channel Description');
+    * $rss->addOutputItem('Item 1', 'http://www.example.org/item1', 'Item 1 Description');
+    * $rss->addOutputItem('Item 2', 'http://www.example.org/item2', 'Item 2 Description');
     * echo $rss->saveXML();
     *
     * @param string $title the channel title
     * @param string $link the URL to the source of the RSS feed, i.e. the website home page
     * @param string $description the channel description
     */
-    function setRSS($title, $link, $description) {
+    function outputRSS($title, $link, $description) {
 
         $root = $this->appendChild($this->createElement('rss'));
         $root->setAttribute('version', '2.0');
 
-        $channel= $root->appendChild($this->createElement('channel'));
+        $channel = $root->appendChild($this->createElement('channel'));
 
         $channel->appendChild($this->createElement('title', htmlspecialchars($title, ENT_QUOTES, 'UTF-8', false)));
         $channel->appendChild($this->createElement('link', htmlspecialchars($link, ENT_QUOTES, 'UTF-8', false)));
@@ -117,7 +238,7 @@ class suxRSS extends DOMDocument {
     * @param string $link the URL to the source of the RSS item, i.e. the unique content
     * @param string $description the item description
     */
-    public function addItem($title, $link, $description) {
+    public function addOutputItem($title, $link, $description) {
 
         $item = $this->createElement('item');
         $item->appendChild($this->createElement('title', htmlspecialchars($title, ENT_QUOTES, 'UTF-8', false)));
@@ -126,15 +247,20 @@ class suxRSS extends DOMDocument {
 
         $this->channel->appendChild($item);
     }
+    
+    
+    // --------------------------------------------------------------------
+    // RSS Retrieval
+    // --------------------------------------------------------------------     
 
 
 	/**
-	* Get an RSS feed
+	* Fetch RSS feed
     *
     * @param string $rss_url a URL to an RSS Feed
     * @return array
 	*/
-	function getRSS($rss_url) {
+	function fetchRSS($rss_url) {
 
         // Sanity Check
         if (!$this->cache_dir || !is_dir($this->cache_dir) && !mkdir($this->cache_dir, 0777, true)) {
@@ -284,7 +410,7 @@ class suxRSS extends DOMDocument {
         if ($timestamp) $modified = gmdate('D, d M Y H:i:s', $timestamp) . ' GMT';
         else $modified = null;
 
-        // Limit the read timeout to 60 seconds
+        // Headers
         $opts = array(
             'http'=> array(
                 'header' => "If-Modified-Since: $modified\r\n",
@@ -375,10 +501,13 @@ class suxRSS extends DOMDocument {
 					}
 
                     // If date_format is specified and pubDate is valid
-					if ($this->date_format != '' && ($timestamp = strtotime($result['items'][$i]['pubDate'])) !==-1) {
+					if ($this->date_format != '' && ($timestamp = strtotime($result['items'][$i]['pubDate'])) !== -1) {
 						// convert pubDate to specified date format
 						$result['items'][$i]['pubDate'] = date($this->date_format, $timestamp);
 					}
+                    else {
+                        unset($result['items'][$i]['pubDate']);
+                    }
 
 					// Item counter
 					$i++;
@@ -414,6 +543,26 @@ class suxRSS extends DOMDocument {
         $value = suxFunct::sanitizeHtml($value, 0);
 
     }
+    
+    
+    // --------------------------------------------------------------------
+    // Exception Handler
+    // --------------------------------------------------------------------
+
+
+    /**
+    * @param Exception $e an Exception class
+    */
+    function exceptionHandler(Exception $e) {
+
+        if ($this->db && $this->inTransaction) {
+            $this->db->rollback();
+            $this->inTransaction = false;
+        }
+
+        throw($e); // Hot potato!
+
+    }    
 
 }
 

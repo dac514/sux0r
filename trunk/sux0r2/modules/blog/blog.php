@@ -16,7 +16,7 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
-* @author     Dac Chartrand <dac.chartrand@gmail.com>c
+* @author     Dac Chartrand <dac.chartrand@gmail.com>
 * @copyright  2008 sux0r development group
 * @license    http://www.gnu.org/licenses/agpl.html
 *
@@ -72,12 +72,12 @@ class blog  {
     */
     function author($author) {
 
-        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/author/' . $author); // Forum Url
+        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/author/' . $author); // Form Url
         $this->tpl->assign_by_ref('r', $this->r);
 
         $cache_id = false;
-
         $u = $this->user->getUserByNickname($author);
+        
         if ($u) {
 
             if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
@@ -152,12 +152,12 @@ class blog  {
     */
     function category($cat_id) {
 
-        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/category/' . $cat_id); // Forum Url
+        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/category/' . $cat_id); // Form Url
         $this->tpl->assign_by_ref('r', $this->r);
 
         $cache_id = false;
-
         $c = $this->nb->getCategory($cat_id);
+        
         if ($c) {
 
             // ----------------------------------------------------------------
@@ -228,7 +228,6 @@ class blog  {
                     if ($threshold !== false) $this->tpl->assign('threshold', $threshold);
 
                     // Sidelist
-
                     $select_query = "
                     SELECT messages.id, messages.thread_id, messages.title FROM messages
                     {$innerjoin}
@@ -277,7 +276,6 @@ class blog  {
                         if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
                         // Sidelist
-
                         $select_query = "
                         SELECT messages.id, messages.thread_id, messages.title FROM messages
                         {$innerjoin}
@@ -293,11 +291,8 @@ class blog  {
                         $this->r->text['sidelist'] = $c['category'];
 
                     }
-
                 }
-
             }
-
         }
 
         if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
@@ -317,7 +312,7 @@ class blog  {
         if (!preg_match($regex, $date)) $date = date('Y-m-d');
         $datetime = $date . ' ' . date('H:i:s'); // Append current time
 
-        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/month/' . $date); // Forum Url
+        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/month/' . $date); // Form Url
         $this->tpl->assign_by_ref('r', $this->r);
 
         $cache_id = false;
@@ -391,7 +386,7 @@ class blog  {
     */
     function listing() {
 
-        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/'); // Forum Url
+        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/'); // Form Url
         $this->tpl->assign_by_ref('r', $this->r);
 
         $cache_id = false;
@@ -512,13 +507,10 @@ class blog  {
     private function blogs($msgs) {
 
         foreach($msgs as &$val) {
-
             $val['comments'] = $this->msg->getCommentsCount($val['thread_id']);
             $user = $this->user->getUser($val['users_id']);
             $val['nickname'] = $user['nickname'];
-
         }
-
         return $msgs;
 
     }
@@ -531,12 +523,9 @@ class blog  {
     private function comments($msgs) {
 
         foreach($msgs as &$val) {
-
             $user = $this->user->getUser($val['users_id']);
             $val['nickname'] = $user['nickname'];
-
         }
-
         return $msgs;
 
     }

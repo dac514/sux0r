@@ -473,6 +473,44 @@ class bayesUser extends suxNaiveBayesian {
         return $st->execute(array($users_id, $vector_id));
 
     }
+    
+    
+    /**
+    * Verify that $_GET values for filter are valid
+    *
+    * @return false|array($vec_id, $cat_id, $threshold, $start)
+    */
+    function isValidFilter() {
+
+        function failure() {
+            unset($_GET['filter'], $_GET['threshold']);
+            return false;
+        }
+
+        if (!isset($_GET['filter'])) return failure();
+        if (!filter_var($_GET['filter'], FILTER_VALIDATE_INT)) return failure();
+        if ($_GET['filter'] < 0) return failure();
+
+        if (!isset($_GET['threshold'])) $_GET['threshold'] = false;
+        else {
+            if ($_GET['threshold'] != '0') {
+                if (!filter_var($_GET['threshold'], FILTER_VALIDATE_FLOAT)) return failure();
+            }
+            if ($_GET['threshold'] < 0 || $_GET['threshold'] > 1) return failure();
+        }
+
+        $vec_id = $this->getVectorByCategory($_GET['filter']);
+        if (!$vec_id) return failure();
+        reset($vec_id);
+        $vec_id = key($vec_id);
+        if (@!$this->isVectorUser($vec_id, $_SESSION['users_id'])) return failure();
+
+        if (!isset($_GET['start'])) $_GET['start'] = 0;
+        else if (!(filter_var($_GET['start'], FILTER_VALIDATE_INT) && $_GET['start'] > 0)) $_GET['start'] = 0;
+
+        return array($vec_id, $_GET['filter'], $_GET['threshold'], $_GET['start']);
+
+    }    
 
 
     // --------------------------------------------------------------------
@@ -535,45 +573,6 @@ class bayesUser extends suxNaiveBayesian {
         $st->execute(array($vector_id));
 
     }
-
-
-    /**
-    * Verify that $_GET values for filter are valid
-    *
-    * @return false|array($vec_id, $cat_id, $threshold, $start)
-    */
-    function isValidFilter() {
-
-        function failure() {
-            unset($_GET['filter'], $_GET['threshold']);
-            return false;
-        }
-
-        if (!isset($_GET['filter'])) return failure();
-        if (!filter_var($_GET['filter'], FILTER_VALIDATE_INT)) return failure();
-        if ($_GET['filter'] < 0) return failure();
-
-        if (!isset($_GET['threshold'])) $_GET['threshold'] = false;
-        else {
-            if ($_GET['threshold'] != '0') {
-                if (!filter_var($_GET['threshold'], FILTER_VALIDATE_FLOAT)) return failure();
-            }
-            if ($_GET['threshold'] < 0 || $_GET['threshold'] > 1) return failure();
-        }
-
-        $vec_id = $this->getVectorByCategory($_GET['filter']);
-        if (!$vec_id) return failure();
-        reset($vec_id);
-        $vec_id = key($vec_id);
-        if (@!$this->isVectorUser($vec_id, $_SESSION['users_id'])) return failure();
-
-        if (!isset($_GET['start'])) $_GET['start'] = 0;
-        else if (!(filter_var($_GET['start'], FILTER_VALIDATE_INT) && $_GET['start'] > 0)) $_GET['start'] = 0;
-
-        return array($vec_id, $_GET['filter'], $_GET['threshold'], $_GET['start']);
-
-    }
-
 
 
 }

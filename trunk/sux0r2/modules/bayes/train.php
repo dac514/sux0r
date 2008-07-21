@@ -40,18 +40,24 @@ $suxLink = new suxLink();
 $nb = new bayesUser();
 $user = new suxUser();
 
-if (!$user->loginCheck()) exit; // Something is wrong, abort
+if (!$user->loginCheck()) exit; // Something is wrong, abort (TODO: Return fail to prototype)
 
-if (!$nb->isCategoryTrainer($cat_id, $_SESSION['users_id'])) exit; // Something is wrong, abort
+if (!$nb->isCategoryTrainer($cat_id, $_SESSION['users_id'])) exit; // Something is wrong, abort (TODO: Return fail to prototype)
+
+// ---------------------------------------------------------------------------
+// Create $body based on $link type
+// ---------------------------------------------------------------------------
 
 $body = false;
+
 if ($link == 'messages') {
     require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
     $msg = new suxThreadedMessages();
     $body = $msg->getMessage($id);
-    $body = $body['body_html'];
+    $body = "{$body['title']} \n\n {$body['body_plaintext']}";
 }
-if ($body === false) exit; // Something is wrong, abort...
+
+if ($body === false) exit; // Something is wrong, abort. (TODO: Return fail to prototype).
 
 // ---------------------------------------------------------------------------
 // Go!
@@ -81,7 +87,7 @@ $st->execute(array($id, $_SESSION['users_id']));
 $tmp = $st->fetchAll(PDO::FETCH_ASSOC);
 
 // Since we are only training one category/vector at a time, we need to make
-// sure we don't untrain other unrlated vectors here.
+// sure we don't untrain other unrelated vectors here.
 
 $vec_id = $nb->getVectorByCategory($cat_id);
 foreach ($tmp as $val) {

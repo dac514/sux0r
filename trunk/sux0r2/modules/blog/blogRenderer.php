@@ -33,6 +33,7 @@ class blogRenderer extends suxRenderer {
     // Arrays
     public $fp = array(); // Array of first posts
     public $sidelist = array(); // Array of threads in sidebar
+    public $gtext = array();    
 
     // Objects
     private $user;
@@ -48,8 +49,9 @@ class blogRenderer extends suxRenderer {
     * @param string $module
     */
     function __construct($module) {
-
+        
         parent::__construct($module); // Call parent
+        $this->gtext = suxFunct::gtext('blog'); // Language       
         $this->user = new suxUser();
         $this->msg = new suxThreadedMessages();
         $this->nb = new bayesUser();
@@ -104,7 +106,7 @@ class blogRenderer extends suxRenderer {
         if (!$html) return null; // No categories by trainer
 
         $html = rtrim($html, ', ');
-        $html = "<p>Author's Categories: " . $html . '</p>';
+        $html = "<p>{$this->gtext['author_categories']}: " . $html . '</p>';
 
         return $html;
 
