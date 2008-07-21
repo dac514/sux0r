@@ -120,7 +120,7 @@ class suxRSS extends DOMDocument {
                         // Check if this already exists
                         $clean['url'] = suxFunct::canonicalizeUrl($item['link']);                
                         $st2->execute(array($clean['url']));
-                        if ($st2->fetchColumn() <= 0) continue; // Skip
+                        if ($st2->fetchColumn() > 0) continue; // Already in DB, skip
                         
                         // Set the rest of our array
                         $clean['rss_feeds_id'] = $row['id'];                
@@ -141,6 +141,29 @@ class suxRSS extends DOMDocument {
             }    
         }   
     }
+    
+    
+    /**
+    * Get a message by id
+    *
+    * @param int $id messages_id
+    * @param bool $unpub select un-published?
+    * @return array|false
+    */
+    function getItem($id) {
+
+        // Sanity check
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0) throw new Exception('Invalid message id');
+
+        $query = "SELECT * FROM {$this->db_items} WHERE id = ? LIMIT 1 ";
+        $st = $this->db->prepare($query);
+        $st->execute(array($id));
+
+        $message = $st->fetch(PDO::FETCH_ASSOC);
+        if ($message) return $message;
+        else return false;
+
+    }    
   
     
     /**
@@ -448,7 +471,7 @@ class suxRSS extends DOMDocument {
 			}
 
 			// If date_format is specified and lastBuildDate is valid
-			if ($this->date_format != '' && ($timestamp = strtotime($result['lastBuildDate'])) !== -1) {
+			if ($this->date_format != '' && isset($result['lastBuildDate']) && ($timestamp = strtotime($result['lastBuildDate'])) !== -1) {
                 // convert lastBuildDate to specified date format
                 $result['lastBuildDate'] = date($this->date_format, $timestamp);
 			}
@@ -501,7 +524,7 @@ class suxRSS extends DOMDocument {
 					}
 
                     // If date_format is specified and pubDate is valid
-					if ($this->date_format != '' && ($timestamp = strtotime($result['items'][$i]['pubDate'])) !== -1) {
+					if ($this->date_format != '' && isset($result['items'][$i]['pubDate']) && ($timestamp = strtotime($result['items'][$i]['pubDate'])) !== -1) {
 						// convert pubDate to specified date format
 						$result['items'][$i]['pubDate'] = date($this->date_format, $timestamp);
 					}

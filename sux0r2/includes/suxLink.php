@@ -73,6 +73,30 @@ class suxLink {
         return $link;
 
     }
+    
+ 
+    /**
+    * Some link columns break naming conventions. Use this function to get the 
+    * correct linked table name.
+    *
+    * @param string $table name of a link table
+    * @param string $table name of column in the link table
+    * @return string    
+    **/
+    function getLinkColumnName($table, $link) {
+        
+        if ($link == 'bayes') 
+            return 'bayes_documents';
+        
+        elseif ($table == 'link_bayes_rss' && $link == 'rss') 
+            return 'rss_items';
+        
+        elseif ($table == 'link_rss_users' && $link == 'rss')
+            return 'rss_feeds';
+        
+        return $link;
+        
+    }    
 
 
     /**
