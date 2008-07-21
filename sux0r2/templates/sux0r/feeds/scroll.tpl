@@ -49,7 +49,8 @@
 
                     <!-- Naive Baysian Classification -->
                     <div class="categoryContainer">
-                        {$r->genericBayesInterface($foo.id, 'rss', 'feeds', $foo.body_plaintext)}
+                        {capture name=document}{$foo.title} {$foo.body_plaintext}{/capture}
+                        {$r->genericBayesInterface($foo.id, 'rss', 'feeds', $smarty.capture.document)}
                     </div>
 
                 {/capture}
