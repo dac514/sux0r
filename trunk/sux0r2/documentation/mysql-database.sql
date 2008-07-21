@@ -47,7 +47,8 @@ CREATE TABLE `bayes_categories` (
   `probability` double NOT NULL default '0',
   `token_count` bigint(20) NOT NULL default '0',
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `grouping` (`category`,`bayes_vectors_id`)
+  UNIQUE KEY `grouping` (`category`,`bayes_vectors_id`),
+  KEY `bayes_vectors_id` (`bayes_vectors_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
