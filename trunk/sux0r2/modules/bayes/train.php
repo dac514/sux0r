@@ -10,8 +10,43 @@ require_once(dirname(__FILE__) . '/../../initialize.php');
 // Variables
 // ---------------------------------------------------------------------------
 
-$valid_links = array('messages');
+$valid_links = array('messages', 'rss');
 $valid_modules = array('blog', 'feeds');
+
+// ---------------------------------------------------------------------------
+// Maleable function
+// ---------------------------------------------------------------------------
+
+function getBody($link, $id) {
+    
+    $body = false; 
+    
+    if ($link == 'messages') {
+        require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
+        $msg = new suxThreadedMessages();
+        $body = $msg->getMessage($id);
+        $body = "{$body['title']} \n\n {$body['body_plaintext']}";
+    }
+    elseif ($link == 'rss') {
+        require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
+        $rss = new suxRSS();
+        $body = $rss->getItem($id);
+        $body = "{$body['title']} \n\n {$body['body_plaintext']}";
+    }
+
+    return $body;
+    
+}
+
+// ---------------------------------------------------------------------------
+// Ajax Failure
+// ---------------------------------------------------------------------------
+
+function failure($msg = null) {   
+    if (!headers_sent()) header("HTTP/1.0 500 Internal Server Error");
+    if ($msg) echo "Something went wrong: \n\n $msg";
+    die();
+}
 
 // ---------------------------------------------------------------------------
 // Error checking
@@ -40,24 +75,16 @@ $suxLink = new suxLink();
 $nb = new bayesUser();
 $user = new suxUser();
 
-if (!$user->loginCheck()) exit; // Something is wrong, abort (TODO: Return fail to prototype)
+if (!$user->loginCheck()) failure('User is not logged in.'); // Something is wrong, abort
 
-if (!$nb->isCategoryTrainer($cat_id, $_SESSION['users_id'])) exit; // Something is wrong, abort (TODO: Return fail to prototype)
+if (!$nb->isCategoryTrainer($cat_id, $_SESSION['users_id'])) failure('User is not authorized to train category.'); // Something is wrong, abort
 
 // ---------------------------------------------------------------------------
 // Create $body based on $link type
 // ---------------------------------------------------------------------------
 
-$body = false;
-
-if ($link == 'messages') {
-    require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
-    $msg = new suxThreadedMessages();
-    $body = $msg->getMessage($id);
-    $body = "{$body['title']} \n\n {$body['body_plaintext']}";
-}
-
-if ($body === false) exit; // Something is wrong, abort. (TODO: Return fail to prototype).
+$body = getBody($link, $id);
+if ($body === false) failure('No $body, nothing to train.'); // Something is wrong, abort.
 
 // ---------------------------------------------------------------------------
 // Go!
@@ -67,9 +94,10 @@ if ($body === false) exit; // Something is wrong, abort. (TODO: Return fail to p
 // Also get associated vectors
 
 $link_table = $suxLink->getLinkTableName($link, 'bayes');
+$link_table2 = $suxLink->getLinkColumnName($link_table, $link);
 $innerjoin = "
 INNER JOIN {$link_table} ON {$link_table}.bayes_documents_id = bayes_documents.id
-INNER JOIN {$link} ON {$link_table}.{$link}_id = {$link}.id
+INNER JOIN {$link_table2} ON {$link_table}.{$link_table2}_id = {$link_table2}.id
 INNER JOIN bayes_categories ON bayes_categories.id = bayes_documents.bayes_categories_id
 INNER JOIN bayes_auth ON bayes_categories.bayes_vectors_id = bayes_auth.bayes_vectors_id
 ";
@@ -77,7 +105,7 @@ INNER JOIN bayes_auth ON bayes_categories.bayes_vectors_id = bayes_auth.bayes_ve
 $query = "
 SELECT bayes_documents.id, bayes_auth.bayes_vectors_id FROM bayes_documents
 {$innerjoin}
-WHERE {$link}.id = ?
+WHERE {$link_table2}.id = ?
 AND bayes_auth.users_id = ? AND (bayes_auth.owner = 1 OR bayes_auth.trainer = 1)
 "; // Note: bayes_auth WHERE condition equivilant to nb->isCategoryTrainer()
 
@@ -99,7 +127,7 @@ foreach ($tmp as $val) {
 
 // Recategorize
 $doc_id = $nb->trainDocument($body, $cat_id);
-$suxLink->setLink($link_table, 'bayes_documents', $doc_id, $link, $id);
+$suxLink->setLink($link_table, 'bayes_documents', $doc_id, $link_table2, $id);
 
 // Clear cache
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');

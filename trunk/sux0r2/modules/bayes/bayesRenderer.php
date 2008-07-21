@@ -83,6 +83,10 @@ class bayesRenderer extends suxRenderer {
                 onSuccess: function() {
                     $(placeholder).addClassName('nbVecTrained');
                     Effect.Pulsate($(placeholder));
+                },
+                onFailure: function(transport){ 
+                    var response = transport.responseText || '';
+                    if (response) alert(response);
                 }
             });
         }
@@ -152,17 +156,18 @@ class bayesRenderer extends suxRenderer {
         /* Get all the bayes categories linked to the document id that the user has access to */
 
         $link_table = $this->link->getLinkTableName($link, 'bayes');
+        $link_table2 = $this->link->getLinkColumnName($link_table, $link);
         $innerjoin = "
         INNER JOIN bayes_auth ON bayes_categories.bayes_vectors_id = bayes_auth.bayes_vectors_id
         INNER JOIN bayes_documents ON bayes_categories.id = bayes_documents.bayes_categories_id
         INNER JOIN {$link_table} ON {$link_table}.bayes_documents_id = bayes_documents.id
-        INNER JOIN {$link} ON {$link_table}.{$link}_id = {$link}.id
+        INNER JOIN {$link_table2} ON {$link_table}.{$link_table2}_id = {$link_table2}.id
         ";
 
         $query = "
         SELECT bayes_categories.id FROM bayes_categories
         {$innerjoin}
-        WHERE {$link}.id = ? AND bayes_auth.users_id = ?
+        WHERE {$link_table2}.id = ? AND bayes_auth.users_id = ?
         "; // Note: bayes_auth WHERE condition equivilant to nb->isCategoryUser()
 
         $db = suxDB::get();
