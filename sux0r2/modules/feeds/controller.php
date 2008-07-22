@@ -26,8 +26,8 @@ function sux($action, $params = null) {
 
     switch($action)
     {
-        
-        
+
+
     case 'suggest' :
 
         // --------------------------------------------------------------------
@@ -45,7 +45,7 @@ function sux($action, $params = null) {
             $feeds->formBuild($_POST);
         }
 
-        break;        
+        break;
 
 
     default:
@@ -56,7 +56,10 @@ function sux($action, $params = null) {
 
         include_once('feeds.php');
         $feeds = new feeds();
-        $feeds->listing();
+
+        if (filter_var($action, FILTER_VALIDATE_INT) && $action > 0) $feeds->listing($action);
+        else $feeds->listing();
+
         break;
 
     }

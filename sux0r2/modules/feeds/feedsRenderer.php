@@ -22,6 +22,7 @@
 *
 */
 
+require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 require_once(dirname(__FILE__) . '/../bayes/bayesRenderer.php');
 
@@ -33,6 +34,7 @@ class feedsRenderer extends suxRenderer {
 
     // Objects
     private $bayesRenderer;
+    private $rss;
 
 
     /**
@@ -44,6 +46,7 @@ class feedsRenderer extends suxRenderer {
 
         parent::__construct($module); // Call parent
         $this->bayesRenderer = new bayesRenderer('bayes');
+        $this->rss = new suxRSS();
 
     }
 
@@ -68,6 +71,30 @@ class feedsRenderer extends suxRenderer {
     function genericBayesInterface($id, $link, $module, $document) {
 
         return $this->bayesRenderer->genericBayesInterface($id, $link, $module, $document);
+
+    }
+
+
+    // ------------------------------------------------------------------------
+    // Stuff like recent(), archives(), authors() is in the renderer because
+    // there's no point in initializing if they aren't in the template
+    // ------------------------------------------------------------------------
+
+
+    /**
+    *
+    * @return array
+    */
+    function feeds() {
+
+        // Cache
+        static $tmp = null;
+        if (is_array($tmp)) return $tmp;
+        $tmp = array();
+
+        $tmp = $this->rss->getFeeds();
+
+        return $tmp;
 
     }
 
