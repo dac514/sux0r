@@ -36,6 +36,27 @@ CREATE TABLE `bayes_auth` (
 
 -- --------------------------------------------------------
 
+-- 
+-- Table structure for table `bayes_cache`
+-- 
+
+CREATE TABLE `bayes_cache` (
+  `id` int(11) NOT NULL auto_increment,
+  `md5` char(32) NOT NULL,
+  `expiration` int(11) NOT NULL,
+  `scores` text NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `md5` (`md5`),
+  KEY `expiration` (`expiration`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `bayes_categories`
+--
+
+
+-- --------------------------------------------------------
+
 --
 -- Table structure for table `bayes_categories`
 --
