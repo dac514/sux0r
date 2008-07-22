@@ -37,7 +37,8 @@ class suxNaiveBayesian {
     protected $db_table_cat = 'bayes_categories';
     protected $db_table_doc = 'bayes_documents';
     protected $db_table_tok = 'bayes_tokens';
-
+    protected $db_table_cache = 'bayes_cache'; 
+    
     // If you change these, then you need to adjust your database columns
     private $min_token_length = 3;
     private $max_token_length = 64;
@@ -53,6 +54,16 @@ class suxNaiveBayesian {
     	$this->db = suxDB::get();
         set_exception_handler(array($this, 'exceptionHandler'));
 
+
+    }
+    
+    /**
+    * Destructor
+    */
+    function __destruct() {
+        
+        $this->cleanCache(); 
+        
     }
 
 
@@ -357,7 +368,7 @@ class suxNaiveBayesian {
 
         $categories = array();
 
-        static $st = null; // Cache, to make categorize() faster
+        static $st = null; // Static as cache, to make categorize() faster
         if (!$st) $st = $this->db->prepare("SELECT * FROM {$this->db_table_cat} WHERE bayes_vectors_id = ? ORDER BY category ASC ");
         $st->execute(array($vector_id));
 
@@ -701,7 +712,7 @@ class suxNaiveBayesian {
         return true;
 
     }
-
+    
 
     /**
     * @param string $document a document
@@ -715,7 +726,11 @@ class suxNaiveBayesian {
         // Sanity check, convert to UTF-8 plaintext
         $converter = new suxHtml2UTF8($document);
         $document = $converter->getText();
-
+                
+        // Check cache
+        $md5 = md5($vector_id . $document);
+        if ($scores = $this->checkCache($md5)) return $scores; 
+       
         $scores = array();
         $categorized = array();
         $total_tokens = 0;
@@ -763,6 +778,9 @@ class suxNaiveBayesian {
                 'score' => $scores[$key]
                 );
         }
+                
+        // Cache results        
+        $this->setCache($md5, $scores); 
 
         return $scores;
 
@@ -914,7 +932,7 @@ class suxNaiveBayesian {
     */
     private function tokenExists($token, $vector_id) {
 
-        static $st = null; // Cache, to make categorize() faster
+        static $st = null; // Static as cache, to make categorize() faster
         if (!$st) {
             $q = "
             SELECT COUNT(*) FROM {$this->db_table_tok}
@@ -939,7 +957,7 @@ class suxNaiveBayesian {
 
         $count = 0;
 
-        static $st = null; // Cache, to make categorize() faster
+        static $st = null; // Static as cache, to make categorize() faster
         if (!$st) $st = $this->db->prepare("SELECT count FROM {$this->db_table_tok} WHERE token = ? AND bayes_categories_id = ? ");
 
         $st->execute(array($token, $category_id));
@@ -1031,7 +1049,71 @@ class suxNaiveBayesian {
         return $st->execute(array($document_id));
 
     }
+    
+    
+    // ----------------------------------------------------------------------------
+    // Caching for categorization scores
+    // ----------------------------------------------------------------------------    
+    
+    
+    private function cleanCache() {
+        
+        $st = $this->db->prepare("DELETE FROM {$this->db_table_cache} WHERE expiration < ? ");
+        $st->execute(array(time()));        
+        
+    }
+    
 
+    /**
+    * @param  string $md5 a has of a vector id concatenated with a document
+    * @return array|false
+    */    
+    private function checkCache($md5) {
+        
+        static $st = null; // Static as cache, to make categorize() faster
+        if (!$st) {
+            $q = "SELECT scores FROM {$this->db_table_cache} WHERE md5 = ? ";
+            $st = $this->db->prepare($q);
+        }       
+        
+        $st->execute(array($md5));
+        if ($row = $st->fetch(PDO::FETCH_ASSOC)) {
+            return unserialize($row['scores']);
+        }
+        else return false;
+        
+    }
+    
+
+    /**
+    * @param  string $md5 a has of a vector id concatenated with a document
+    * @param  array $scores
+    */        
+    private function setCache($md5, $scores) {
+        
+        $clean = array(
+            'md5' => $md5,
+            'expiration' => time() + 60, // 60 second cache
+            'scores' => serialize($scores),
+            );        
+        
+        static $st = null; // Static as cache, to make categorize() faster
+        if (!$st) {
+            $q = suxDB::prepareInsertQuery($this->db_table_cache, $clean);
+            $st = $this->db->prepare($q);
+        }          
+        
+        try {
+            $st->execute($clean); 
+        }
+        catch (Exception $e) {
+             // SQLSTATE 23000: Is a constraint violations, we don't care, carry on
+            if ($st->errorCode() == 23000) return;
+            else throw ($e); // Hot potato
+        }        
+        
+    }    
+    
 
     // ----------------------------------------------------------------------------
     // Exception Handler
