@@ -732,13 +732,12 @@ class suxNaiveBayesian {
         // Checking against stopwords is a big performance hog and
         // they don't affect the results here, so not using them
         // speeds things up significantly, hence false
-        
         $tokens = $this->parseTokens($document, false);
 
+        // Needs optimizing, help?
+        // $debug1 = microtime(true);
         foreach($categories as $category_id => $data) {
-
             $scores[$category_id] = $data['probability'];
-
             foreach($tokens as $token => $count) {
                 if ($this->tokenExists($token, $vector_id)) {
                     $prob = 0;
@@ -748,11 +747,10 @@ class suxNaiveBayesian {
                     $scores[$category_id] *= pow($prob, $count)*pow($total_tokens/$ncat, $count); // pow($total_tokens/$ncat, $count) is here to avoid underflow.
                 }
             }
-
             // Remember and use in reorganization of array
             $categorized[$category_id] = $data['category'];
-
         }
+        // new dBug('Elapsed time in seconds: ' . (microtime(true) - $debug1));;
 
         $scores = $this->rescale($scores); // Rescale
         arsort($scores); // Sort
@@ -908,28 +906,28 @@ class suxNaiveBayesian {
     // Data storage, Private
     // ----------------------------------------------------------------------------
 
-    
+
     /**
     * @param string $token token
     * @param int $vector_id vector id
     * @return bool
     */
     private function tokenExists($token, $vector_id) {
-        
+
         static $st = null; // Cache, to make categorize() faster
-        if (!$st) {            
+        if (!$st) {
             $q = "
-            SELECT COUNT(*) FROM {$this->db_table_tok} 
+            SELECT COUNT(*) FROM {$this->db_table_tok}
             INNER JOIN {$this->db_table_cat} ON {$this->db_table_tok}.bayes_categories_id = {$this->db_table_cat}.id
-            WHERE {$this->db_table_tok}.token = ? AND {$this->db_table_cat}.bayes_vectors_id = ? LIMIT 1 
+            WHERE {$this->db_table_tok}.token = ? AND {$this->db_table_cat}.bayes_vectors_id = ? LIMIT 1
             ";
             $st = $this->db->prepare($q);
         }
-        
+
         $st->execute(array($token, $vector_id));
         return ($st->fetchColumn() > 0 ? true : false);
-        
-    }    
+
+    }
 
 
     /** get the count of a token in a category.
@@ -942,8 +940,8 @@ class suxNaiveBayesian {
         $count = 0;
 
         static $st = null; // Cache, to make categorize() faster
-        if (!$st) $st = $this->db->prepare("SELECT * FROM {$this->db_table_tok} WHERE token = ? AND bayes_categories_id = ? ");
-        
+        if (!$st) $st = $this->db->prepare("SELECT count FROM {$this->db_table_tok} WHERE token = ? AND bayes_categories_id = ? ");
+
         $st->execute(array($token, $category_id));
         if ($row = $st->fetch(PDO::FETCH_ASSOC)) {
             $count = $row['count'];

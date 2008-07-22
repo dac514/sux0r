@@ -62,8 +62,8 @@ class feeds  {
         $this->nb = new bayesUser();
 
         $this->pager = new suxPager();
-        $this->pager->limit = 10; 
-        
+        $this->pager->limit = 10;
+
     }
 
 
@@ -73,7 +73,7 @@ class feeds  {
     */
     function listing() {
 
-        
+
         $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/'); // Forum Url
         $this->tpl->assign_by_ref('r', $this->r);
 
@@ -147,16 +147,16 @@ class feeds  {
         // -------------------------------------------------------------------
 
         $fp = array(); // First posts array
-        
+
         // Force timeout if this operation takes too long
-        $timer = microtime(true); 
+        $timer = microtime(true);
         $timeout_max = ini_get('max_execution_time') * 0.333333;
         if ($timeout_max > 30) $timeout_max = 30;
 
         // Start filtering
-        $init = $start;
-        $i = 0;        
-        while ($i < $this->pager->limit) {
+        $i = 0;
+        $limit = $this->pager->limit;
+        while ($i < $limit) {
 
             $tmp = array();
             eval('$tmp = ' . $eval . ';'); // $fp is transformed here, by $eval
@@ -170,15 +170,22 @@ class feeds  {
             }
 
             $i = count($fp);
-            if ($start == $init) $start = $start + ($this->pager->limit - 1);
-            if (($timer + $timeout_max) > microtime(true) && $i < $this->pager->limit && $start < ($max - $this->pager->limit)) {
+            $start = $start + $this->pager->limit;
+
+            // new dBug("i: $i");
+            // new dBug("next start: $start");
+            // new dBug("limit: $limit");
+            // new dBug("max: $max");
+            // new dBug('---');
+
+            if ($i < $limit && $start < ($max) && ($timer + $timeout_max) > microtime(true)) {
                 // Not enough first posts, keep looping
-                ++$start;
+                $this->pager->limit = 1;
             }
             else break;
 
         }
-        ++$start;     
+        $this->pager->limit = $limit; // Restore limit
 
         return $fp;
 

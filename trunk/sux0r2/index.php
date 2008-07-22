@@ -76,10 +76,10 @@ catch (Exception $e) {
 // ---------------------------------------------------------------------------
 
 $crumb = filter_var(trim(trim(isset($_GET['c']) ? $_GET['c'] : 'home'), '/'), FILTER_SANITIZE_URL);
-if (isset($_GET['page']) && filter_var($_GET['page'], FILTER_VALIDATE_INT) && $_GET['page'] > 0) 
+if (isset($_GET['page']) && filter_var($_GET['page'], FILTER_VALIDATE_INT) && $_GET['page'] > 0)
     $crumb .= "?page={$_GET['page']}";
 
-if (!isset($_SESSION['breadcrumbs'])) $_SESSION['breadcrumbs'] = array();    
+if (!isset($_SESSION['breadcrumbs'])) $_SESSION['breadcrumbs'] = array();
 array_unshift($_SESSION['breadcrumbs'], $crumb);
 $_SESSION['breadcrumbs'] = array_unique($_SESSION['breadcrumbs']);
 $_SESSION['breadcrumbs'] = array_slice($_SESSION['breadcrumbs'], 0, 10); // maximum 10
