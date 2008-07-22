@@ -256,6 +256,13 @@ class bayesEdit {
             if ($this->nb->isCategoryTrainer($clean['category_id'], $_SESSION['users_id'])) {
                 $this->nb->trainDocument($clean['document'], $clean['category_id']);
             }
+
+            // Scores have changed, clear bayes_cache            
+            $vec_id = $this->nb->getVectorByCategory($clean['category_id']);
+            $vec_id = array_keys($vec_id); // Get the key
+            $vec_id = array_shift($vec_id);
+            $this->nb->unsetCache($vec_id);
+            
             unset($clean['document']);
             break;
 
@@ -267,6 +274,13 @@ class bayesEdit {
                 foreach ($this->link->getLinkTables('bayes') as $tmp) {
                     $this->link->deleteLink($tmp, 'bayes_documents', $clean['document_id']);
                 }
+                
+                // Scores have changed, clear bayes_cache            
+                $vectors= $this->nb->getVectorsByDocument($clean['document_id']);
+                foreach($vectors as $key => $val) {
+                    $this->nb->unsetCache($key);   
+                }
+                
                 // Remove document
                 $this->nb->untrainDocument($clean['document_id']);
             }
