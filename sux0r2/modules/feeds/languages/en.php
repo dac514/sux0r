@@ -12,7 +12,7 @@ $gtext['form_error_3'] = 'Duplicate RSS Feed ';
 $gtext['form_error_4'] = 'RSS Feed doesn\'t seem to be valid';
 
 $gtext['success'] = 'Success!';
-$gtext['success2'] = 'An adminitrator will review your suggestion in the next few days.';
+$gtext['success2'] = 'An adminitrator will review your suggestion within the next few days.';
 $gtext['back'] = 'Back';
 
 ?>
