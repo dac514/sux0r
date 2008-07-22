@@ -780,7 +780,7 @@ class suxNaiveBayesian {
         }
                 
         // Cache results        
-        $this->setCache($md5, $scores); 
+        $this->setCache($vector_id, $md5, $scores); 
 
         return $scores;
 
@@ -1056,13 +1056,26 @@ class suxNaiveBayesian {
     // ----------------------------------------------------------------------------    
     
     
+    /**
+    * @param int $vector_id vector id
+    */    
+    function unsetCache($vector_id) {
+        
+        if (!filter_var($vector_id, FILTER_VALIDATE_INT) || $vector_id < 0) return false;
+        
+        $st = $this->db->prepare("DELETE FROM {$this->db_table_cache} WHERE bayes_vectors_id = ? ");
+        $st->execute(array($vector_id));        
+        
+    }
+    
+    
     private function cleanCache() {
         
         $st = $this->db->prepare("DELETE FROM {$this->db_table_cache} WHERE expiration < ? ");
         $st->execute(array(time()));        
         
     }
-    
+        
 
     /**
     * @param  string $md5 a has of a vector id concatenated with a document
@@ -1086,12 +1099,14 @@ class suxNaiveBayesian {
     
 
     /**
-    * @param  string $md5 a has of a vector id concatenated with a document
-    * @param  array $scores
+    * @param int $vector_id vector id
+    * @param string $md5 a has of a vector id concatenated with a document
+    * @param array $scores
     */        
-    private function setCache($md5, $scores) {
+    private function setCache($vector_id, $md5, $scores) {
         
         $clean = array(
+            'bayes_vectors_id' => $vector_id,
             'md5' => $md5,
             'expiration' => time() + 60, // 60 second cache
             'scores' => serialize($scores),

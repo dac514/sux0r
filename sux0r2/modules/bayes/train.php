@@ -129,9 +129,17 @@ foreach ($tmp as $val) {
 $doc_id = $nb->trainDocument($body, $cat_id);
 $suxLink->setLink($link_table, 'bayes_documents', $doc_id, $link_table2, $id);
 
-// Clear cache
+// ---------------------------------------------------------------------------
+// Clear caches
+// ---------------------------------------------------------------------------
+
+$vec_id = array_keys($vec_id); // Get the key
+$vec_id = array_shift($vec_id);
+$nb->unsetCache($vec_id);
+
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 $tpl = new suxTemplate($module);
 $tpl->clear_cache(null, "{$_SESSION['nickname']}"); // clear all caches with "nickname" as the first cache_id group
+
 
 ?>

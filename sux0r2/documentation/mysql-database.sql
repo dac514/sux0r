@@ -41,14 +41,14 @@ CREATE TABLE `bayes_auth` (
 -- 
 
 CREATE TABLE `bayes_cache` (
-  `id` int(11) NOT NULL auto_increment,
-  `md5` char(32) NOT NULL,
+  `md5` char(32) character set latin1 collate latin1_general_ci NOT NULL,
+  `bayes_vectors_id` int(11) NOT NULL,
   `expiration` int(11) NOT NULL,
   `scores` text NOT NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `md5` (`md5`),
-  KEY `expiration` (`expiration`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  PRIMARY KEY  (`md5`),
+  KEY `expiration` (`expiration`),
+  KEY `bayes_vectors_id` (`bayes_vectors_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 
 --
 -- Dumping data for table `bayes_categories`
