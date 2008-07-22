@@ -60,17 +60,17 @@ class suxRSS extends DOMDocument {
 
     // Channel
     private $channel;
-    
+
     // --------------------------------------------------------------------
     // Database stuff
-    // --------------------------------------------------------------------    
+    // --------------------------------------------------------------------
 
     protected $db;
     protected $inTransaction = false;
     protected $db_feeds = 'rss_feeds';
     protected $db_items = 'rss_items';
-    protected $db_driver; // database type    
-    
+    protected $db_driver; // database type
+
 
     /**
     * Constructor
@@ -82,66 +82,80 @@ class suxRSS extends DOMDocument {
 
         // Cache
         $this->cache_dir = dirname(__FILE__)  . '/../temporary/rss_cache';
-        
+
         // Db
     	$this->db = suxDB::get();
         $this->db_driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
-        set_exception_handler(array($this, 'exceptionHandler'));        
+        set_exception_handler(array($this, 'exceptionHandler'));
 
     }
-    
-    
+
+
     // --------------------------------------------------------------------
     // Database accesors
     // --------------------------------------------------------------------
 
     /**
-    * Cron, fetch RSS items and insert them into the database    
+    * Cron, fetch RSS items and insert them into the database
     */
     function cron() {
-        
+
         require_once('suxHtml2UTF8.php');
-        
+
         $q = "SELECT id, url FROM {$this->db_feeds} WHERE draft = 0 ";
         $st = $this->db->query($q);
-        
+
         // Resused prepared statement
         $q2 = "SELECT COUNT(*) FROM {$this->db_items} WHERE url = ? ";
         $st2 = $this->db->prepare($q2);
-        
-        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {    
-            $results = $this->fetchRSS($row['url']); 
+
+        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $results = $this->fetchRSS($row['url']);
             if ($results['cached'] != 1) {
-                foreach ($results['items'] as $item) {   
+                foreach ($results['items'] as $item) {
                     if (isset($item['title']) && isset($item['link']) && isset($item['description'])) {
-                        
+
                         $clean = array(); // Reset
-                        
+
                         // Check if this already exists
-                        $clean['url'] = suxFunct::canonicalizeUrl($item['link']);                
+                        $clean['url'] = suxFunct::canonicalizeUrl($item['link']);
                         $st2->execute(array($clean['url']));
                         if ($st2->fetchColumn() > 0) continue; // Already in DB, skip
-                        
+
                         // Set the rest of our array
-                        $clean['rss_feeds_id'] = $row['id'];                
+                        $clean['rss_feeds_id'] = $row['id'];
                         $clean['title'] = strip_tags($item['title']);
-                        $clean['body_html'] = $item['description']; // suxRSS() sanitzes HTML           
+                        $clean['body_html'] = $item['description']; // suxRSS() sanitzes HTML
                         $converter = new suxHtml2UTF8($clean['body_html']);
-                        $clean['body_plaintext']  = $converter->getText();  
+                        $clean['body_plaintext']  = $converter->getText();
                         if (!empty($item['pubDate'])) $clean['published_on'] = $item['pubDate'];
-                        else $clean['published_on'] = date('c'); 
-                        
+                        else $clean['published_on'] = date('c');
+
                         // Insert
-                        $q3 = suxDB::prepareInsertQuery($this->db_items, $clean);  
+                        $q3 = suxDB::prepareInsertQuery($this->db_items, $clean);
                         $st3 = $this->db->prepare($q3);
-                        $st3->execute($clean);                                
-                        
+                        $st3->execute($clean);
+
                     }
                 }
-            }    
-        }   
+            }
+        }
     }
-    
+
+
+    /**
+    * Get all published feeds
+    *
+    * @return array|false
+    */
+    function getFeeds() {
+
+        $q = "SELECT * FROM {$this->db_feeds} WHERE draft = 0 ORDER BY title ASC ";
+        $st = $this->db->query($q);
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
 
     /**
     * Get a feed by id or url
@@ -153,14 +167,14 @@ class suxRSS extends DOMDocument {
     function getFeed($id) {
 
         // Pick a query
-        if (filter_var($id, FILTER_VALIDATE_INT) && $id > 0) {                       
+        if (filter_var($id, FILTER_VALIDATE_INT) && $id > 0) {
             $query = "SELECT * FROM {$this->db_feeds} WHERE id = ? LIMIT 1 ";
         }
-        else { 
+        else {
             $id = suxFunct::canonicalizeUrl($id);
             $query = "SELECT * FROM {$this->db_feeds} WHERE url = ? LIMIT 1 ";
         }
-        
+
         $st = $this->db->prepare($query);
         $st->execute(array($id));
 
@@ -168,9 +182,9 @@ class suxRSS extends DOMDocument {
         if ($feed) return $feed;
         else return false;
 
-    }      
-    
-    
+    }
+
+
     /**
     * Get a item by id
     *
@@ -265,20 +279,20 @@ class suxRSS extends DOMDocument {
 
         return $id;
 
-    }     
-  
-    
+    }
+
+
     /**
     * Count RSS items
     *
-    * @param int $feed_id feed id    
+    * @param int $feed_id feed id
     * @param string $type forum, blog, wiki, or slideshow
     * @param bool $unpub select un-published?
     * @return int
     */
     function countItems($feed_id = null) {
 
-        $query = "SELECT COUNT(*) FROM {$this->db_items} ";        
+        $query = "SELECT COUNT(*) FROM {$this->db_items} ";
         if ($feed_id) {
             if (filter_var($feed_id, FILTER_VALIDATE_INT) && $feed_id > 0) {
                 $query .= "WHERE rss_feeds_id = $feed_id ";
@@ -290,8 +304,8 @@ class suxRSS extends DOMDocument {
         $st = $this->db->query($query);
         return $st->fetchColumn();
 
-    }    
-    
+    }
+
     /**
     * Get RSS items
     *
@@ -310,7 +324,7 @@ class suxRSS extends DOMDocument {
             else throw new Exception('Invalid feed id');
         }
         $query .= "ORDER BY published_on DESC "; // Order
-      
+
         // Limit
         if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
@@ -319,12 +333,12 @@ class suxRSS extends DOMDocument {
         $st = $this->db->query($query);
         return $st->fetchAll(PDO::FETCH_ASSOC);
 
-    }    
-    
-    
+    }
+
+
     // --------------------------------------------------------------------
     // RSS Output
-    // --------------------------------------------------------------------    
+    // --------------------------------------------------------------------
 
 
     /**
@@ -372,11 +386,11 @@ class suxRSS extends DOMDocument {
 
         $this->channel->appendChild($item);
     }
-    
-    
+
+
     // --------------------------------------------------------------------
     // RSS Retrieval
-    // --------------------------------------------------------------------     
+    // --------------------------------------------------------------------
 
 
 	/**
@@ -668,8 +682,8 @@ class suxRSS extends DOMDocument {
         $value = suxFunct::sanitizeHtml($value, 0);
 
     }
-    
-    
+
+
     // --------------------------------------------------------------------
     // Exception Handler
     // --------------------------------------------------------------------
@@ -687,7 +701,7 @@ class suxRSS extends DOMDocument {
 
         throw($e); // Hot potato!
 
-    }    
+    }
 
 }
 

@@ -66,18 +66,22 @@ class feeds  {
 
     }
 
+    function author($author) {
+
+    }
+
 
 
     /**
     * Listing
+    *
+    * @param int $feeds_id a feed id
     */
-    function listing() {
+    function listing($feeds_id = null) {
 
-
-        $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/'); // Forum Url
+        $this->r->text['form_url'] = suxFunct::makeUrl("/feeds/$feeds_id"); // Forum Url
         $this->tpl->assign_by_ref('r', $this->r);
 
-        $feeds_id = null; // TODO
         $cache_id = false;
 
         if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
@@ -93,7 +97,7 @@ class feeds  {
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
                 else $params = array('filter' => $cat_id);
-                $url = suxFunct::makeUrl('/feeds/', $params);
+                $url = suxFunct::makeUrl("/feeds/$feeds_id", $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
 
@@ -115,13 +119,13 @@ class feeds  {
             else $nn = 'nobody';
 
             // "Cache Groups" using a vertical bar |
-            $cache_id = $nn . '|listing|' . $this->pager->start;
+            $cache_id = "$nn|listing|$feeds_id|{$this->pager->start}";
             $this->tpl->caching = 1;
 
             if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
 
                 $this->pager->setPages($this->rss->countItems($feeds_id));
-                $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/feeds'));
+                $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/feeds/$feeds_id"));
                 $this->r->fp = $this->rss->getItems($feeds_id, $this->pager->limit, $this->pager->start);
 
                 if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
