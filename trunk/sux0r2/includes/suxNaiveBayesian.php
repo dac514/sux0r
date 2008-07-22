@@ -128,6 +128,9 @@ class suxNaiveBayesian {
         $this->inTransaction = true;
 
         $count = 0;
+        
+        // As we are updating probabilities, we must clear the cache
+        $this->unsetCache($vector_id);       
 
         $st = $this->db->prepare("DELETE FROM {$this->db_table_vec} WHERE id = ? LIMIT 1 ");
         $st->execute(array($vector_id));
@@ -150,7 +153,7 @@ class suxNaiveBayesian {
         }
 
         $this->updateProbabilities();
-
+ 
         $this->db->commit();
         $this->inTransaction = false;
 
@@ -291,6 +294,12 @@ class suxNaiveBayesian {
 
         $this->db->beginTransaction();
         $this->inTransaction = true;
+        
+        // As we are updating probabilities, we must clear the cache        
+        $vector_id = $this->getVectorByCategory($category_id);
+        $vector_id = array_keys($vector_id); // Get the key
+        $vector_id = array_shift($vector_id);
+        $this->unsetCache($vector_id);      
 
         $count = 0;
 
@@ -444,6 +453,12 @@ class suxNaiveBayesian {
 
         $this->db->beginTransaction();
         $this->inTransaction = true;
+        
+        // As we are updating probabilities, we must clear the cache        
+        $vector_id = $this->getVectorByCategory($category_id);
+        $vector_id = array_keys($vector_id); // Get the key
+        $vector_id = array_shift($vector_id);
+        $this->unsetCache($vector_id);         
 
     	$tokens = $this->parseTokens($content);
         foreach($tokens as $token => $count) {
@@ -475,6 +490,12 @@ class suxNaiveBayesian {
 
         $this->db->beginTransaction();
         $this->inTransaction = true;
+                   
+        // As we are updating probabilities, we must clear the cache        
+        $vectors = $this->getVectorsByDocument($document_id);
+        foreach($vectors as $key => $val) {
+            $this->unsetCache($key);   
+        }       
 
         $ref = $this->getDocument($document_id);
         if (count($ref)) {
@@ -1059,9 +1080,7 @@ class suxNaiveBayesian {
     /**
     * @param int $vector_id vector id
     */    
-    function unsetCache($vector_id) {
-        
-        if (!filter_var($vector_id, FILTER_VALIDATE_INT) || $vector_id < 0) return false;
+    private function unsetCache($vector_id) {
         
         $st = $this->db->prepare("DELETE FROM {$this->db_table_cache} WHERE bayes_vectors_id = ? ");
         $st->execute(array($vector_id));        
@@ -1108,7 +1127,7 @@ class suxNaiveBayesian {
         $clean = array(
             'bayes_vectors_id' => $vector_id,
             'md5' => $md5,
-            'expiration' => time() + 60, // 60 second cache
+            'expiration' => time() + 3600, // Keep the scores for an hour
             'scores' => serialize($scores),
             );        
         

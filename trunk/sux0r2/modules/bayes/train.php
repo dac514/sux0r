@@ -130,12 +130,8 @@ $doc_id = $nb->trainDocument($body, $cat_id);
 $suxLink->setLink($link_table, 'bayes_documents', $doc_id, $link_table2, $id);
 
 // ---------------------------------------------------------------------------
-// Clear caches
+// Clear template caches
 // ---------------------------------------------------------------------------
-
-$vec_id = array_keys($vec_id); // Get the key
-$vec_id = array_shift($vec_id);
-$nb->unsetCache($vec_id);
 
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 $tpl = new suxTemplate($module);
