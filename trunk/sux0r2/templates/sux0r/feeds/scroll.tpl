@@ -47,7 +47,7 @@
             {if $r->fp}
             {foreach from=$r->fp item=foo}
 
-                {capture name=blog}
+                {capture name=feed}
 
                     <!-- Content -->
                     <p>{$foo.published_on}, <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a></p>
@@ -55,8 +55,7 @@
                     <div class="clearboth"></div>
 
                     <!-- Read more -->
-                    <p><a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">Read more...</a></p>
-
+                    <p><a href="{$foo.url}">Read more &raquo;</a></p>
 
                     <!-- Naive Baysian Classification -->
                     <div class="categoryContainer">
@@ -66,7 +65,7 @@
 
                 {/capture}
 
-                {$r->widget($foo.title, $smarty.capture.blog, $smarty.capture.blog_url, $smarty.capture.blog_img)}
+                {$r->widget($foo.title, $smarty.capture.feed, $foo.url)}
 
 
             {/foreach}
