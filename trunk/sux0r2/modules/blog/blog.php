@@ -62,7 +62,7 @@ class blog  {
         $this->nb = new bayesUser();
 
         $this->pager = new suxPager();
-        $this->pager->limit = 2; // TODO, remove this value, it's for testing
+        $this->pager->limit = 10;
 
     }
 
