@@ -37,8 +37,8 @@ class suxNaiveBayesian {
     protected $db_table_cat = 'bayes_categories';
     protected $db_table_doc = 'bayes_documents';
     protected $db_table_tok = 'bayes_tokens';
-    protected $db_table_cache = 'bayes_cache'; 
-    
+    protected $db_table_cache = 'bayes_cache';
+
     // If you change these, then you need to adjust your database columns
     private $min_token_length = 3;
     private $max_token_length = 64;
@@ -56,14 +56,14 @@ class suxNaiveBayesian {
 
 
     }
-    
+
     /**
     * Destructor
     */
     function __destruct() {
-        
-        $this->cleanCache(); 
-        
+
+        $this->cleanCache();
+
     }
 
 
@@ -128,9 +128,9 @@ class suxNaiveBayesian {
         $this->inTransaction = true;
 
         $count = 0;
-        
+
         // As we are updating probabilities, we must clear the cache
-        $this->unsetCache($vector_id);       
+        $this->unsetCache($vector_id);
 
         $st = $this->db->prepare("DELETE FROM {$this->db_table_vec} WHERE id = ? LIMIT 1 ");
         $st->execute(array($vector_id));
@@ -153,7 +153,7 @@ class suxNaiveBayesian {
         }
 
         $this->updateProbabilities();
- 
+
         $this->db->commit();
         $this->inTransaction = false;
 
@@ -277,7 +277,7 @@ class suxNaiveBayesian {
             return $st->execute(array($category, $vector_id));
         }
         catch (Exception $e) {
-            if ($st->errorCode() == 23000) return false; // SQLSTATE 23000: Constraint violations
+            if ($st->errorCode() == 23000) return false; // SQLSTATE 23000: Constraint violation
             else throw ($e); // Hot potato
         }
 
@@ -294,12 +294,12 @@ class suxNaiveBayesian {
 
         $this->db->beginTransaction();
         $this->inTransaction = true;
-        
-        // As we are updating probabilities, we must clear the cache        
+
+        // As we are updating probabilities, we must clear the cache
         $vector_id = $this->getVectorByCategory($category_id);
         $vector_id = array_keys($vector_id); // Get the key
         $vector_id = array_shift($vector_id);
-        $this->unsetCache($vector_id);      
+        $this->unsetCache($vector_id);
 
         $count = 0;
 
@@ -453,12 +453,12 @@ class suxNaiveBayesian {
 
         $this->db->beginTransaction();
         $this->inTransaction = true;
-        
-        // As we are updating probabilities, we must clear the cache        
+
+        // As we are updating probabilities, we must clear the cache
         $vector_id = $this->getVectorByCategory($category_id);
         $vector_id = array_keys($vector_id); // Get the key
         $vector_id = array_shift($vector_id);
-        $this->unsetCache($vector_id);         
+        $this->unsetCache($vector_id);
 
     	$tokens = $this->parseTokens($content);
         foreach($tokens as $token => $count) {
@@ -490,12 +490,12 @@ class suxNaiveBayesian {
 
         $this->db->beginTransaction();
         $this->inTransaction = true;
-                   
-        // As we are updating probabilities, we must clear the cache        
+
+        // As we are updating probabilities, we must clear the cache
         $vectors = $this->getVectorsByDocument($document_id);
         foreach($vectors as $key => $val) {
-            $this->unsetCache($key);   
-        }       
+            $this->unsetCache($key);
+        }
 
         $ref = $this->getDocument($document_id);
         if (count($ref)) {
@@ -733,7 +733,7 @@ class suxNaiveBayesian {
         return true;
 
     }
-    
+
 
     /**
     * @param string $document a document
@@ -747,11 +747,11 @@ class suxNaiveBayesian {
         // Sanity check, convert to UTF-8 plaintext
         $converter = new suxHtml2UTF8($document);
         $document = $converter->getText();
-                
+
         // Check cache
         $md5 = md5($vector_id . $document);
-        if ($scores = $this->checkCache($md5)) return $scores; 
-       
+        if ($scores = $this->checkCache($md5)) return $scores;
+
         $scores = array();
         $categorized = array();
         $total_tokens = 0;
@@ -799,9 +799,9 @@ class suxNaiveBayesian {
                 'score' => $scores[$key]
                 );
         }
-                
-        // Cache results        
-        $this->setCache($vector_id, $md5, $scores); 
+
+        // Cache results
+        $this->setCache($vector_id, $md5, $scores);
 
         return $scores;
 
@@ -1070,84 +1070,84 @@ class suxNaiveBayesian {
         return $st->execute(array($document_id));
 
     }
-    
-    
+
+
     // ----------------------------------------------------------------------------
     // Caching for categorization scores
-    // ----------------------------------------------------------------------------    
-    
-    
+    // ----------------------------------------------------------------------------
+
+
     /**
     * @param int $vector_id vector id
-    */    
+    */
     private function unsetCache($vector_id) {
-        
+
         $st = $this->db->prepare("DELETE FROM {$this->db_table_cache} WHERE bayes_vectors_id = ? ");
-        $st->execute(array($vector_id));        
-        
+        $st->execute(array($vector_id));
+
     }
-    
-    
+
+
     private function cleanCache() {
-        
+
         $st = $this->db->prepare("DELETE FROM {$this->db_table_cache} WHERE expiration < ? ");
-        $st->execute(array(time()));        
-        
+        $st->execute(array(time()));
+
     }
-        
+
 
     /**
     * @param  string $md5 a has of a vector id concatenated with a document
     * @return array|false
-    */    
+    */
     private function checkCache($md5) {
-        
+
         static $st = null; // Static as cache, to make categorize() faster
         if (!$st) {
             $q = "SELECT scores FROM {$this->db_table_cache} WHERE md5 = ? ";
             $st = $this->db->prepare($q);
-        }       
-        
+        }
+
         $st->execute(array($md5));
         if ($row = $st->fetch(PDO::FETCH_ASSOC)) {
             return unserialize($row['scores']);
         }
         else return false;
-        
+
     }
-    
+
 
     /**
     * @param int $vector_id vector id
     * @param string $md5 a has of a vector id concatenated with a document
     * @param array $scores
-    */        
+    */
     private function setCache($vector_id, $md5, $scores) {
-        
+
         $clean = array(
             'bayes_vectors_id' => $vector_id,
             'md5' => $md5,
-            'expiration' => time() + 3600, // Keep the scores for an hour
+            'expiration' => time() + (3600 * 12), // Keep the scores for 12 hours
             'scores' => serialize($scores),
-            );        
-        
+            );
+
         static $st = null; // Static as cache, to make categorize() faster
         if (!$st) {
             $q = suxDB::prepareInsertQuery($this->db_table_cache, $clean);
             $st = $this->db->prepare($q);
-        }          
-        
+        }
+
         try {
-            $st->execute($clean); 
+            $st->execute($clean);
         }
         catch (Exception $e) {
-             // SQLSTATE 23000: Is a constraint violations, we don't care, carry on
-            if ($st->errorCode() == 23000) return;
+             // SQLSTATE 23000: Constraint violation, we don't care, carry on
+            if ($st->errorCode() == 23000) return true;
             else throw ($e); // Hot potato
-        }        
-        
-    }    
-    
+        }
+
+    }
+
 
     // ----------------------------------------------------------------------------
     // Exception Handler

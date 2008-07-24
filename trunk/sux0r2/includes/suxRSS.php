@@ -111,7 +111,7 @@ class suxRSS extends DOMDocument {
 
         foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
             $results = $this->fetchRSS($row['url']);
-            if ($results['cached'] != 1) {
+            if (is_array($results) && count($results) && $results['cached'] != 1) {
                 foreach ($results['items'] as $item) {
                     if (isset($item['title']) && isset($item['link']) && isset($item['description'])) {
 
@@ -184,28 +184,6 @@ class suxRSS extends DOMDocument {
 
     }
 
-
-    /**
-    * Get a item by id
-    *
-    * @param int $id messages_id
-    * @param bool $unpub select un-published?
-    * @return array|false
-    */
-    function getItem($id) {
-
-        // Sanity check
-        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0) throw new Exception('Invalid message id');
-
-        $query = "SELECT * FROM {$this->db_items} WHERE id = ? LIMIT 1 ";
-        $st = $this->db->prepare($query);
-        $st->execute(array($id));
-
-        $item = $st->fetch(PDO::FETCH_ASSOC);
-        if ($item) return $item;
-        else return false;
-
-    }
 
    /**
     * Saves a bookmark to the database
@@ -306,6 +284,30 @@ class suxRSS extends DOMDocument {
 
     }
 
+
+    /**
+    * Get a item by id
+    *
+    * @param int $id messages_id
+    * @param bool $unpub select un-published?
+    * @return array|false
+    */
+    function getItem($id) {
+
+        // Sanity check
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0) throw new Exception('Invalid message id');
+
+        $query = "SELECT * FROM {$this->db_items} WHERE id = ? LIMIT 1 ";
+        $st = $this->db->prepare($query);
+        $st->execute(array($id));
+
+        $item = $st->fetch(PDO::FETCH_ASSOC);
+        if ($item) return $item;
+        else return false;
+
+    }
+
+
     /**
     * Get RSS items
     *
@@ -323,7 +325,7 @@ class suxRSS extends DOMDocument {
             }
             else throw new Exception('Invalid feed id');
         }
-        $query .= "ORDER BY published_on DESC "; // Order
+        $query .= "ORDER BY published_on DESC, id DESC "; // Order
 
         // Limit
         if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
@@ -442,7 +444,7 @@ class suxRSS extends DOMDocument {
             // Still no result, probably recieved a  304 (not modified)
             // response from the server, use the cache
 
-            touch($cache_file); // Reset time for caching
+            // touch($cache_file); // Reset time for caching?
             $result = unserialize(file_get_contents($cache_file));
             $result['cached'] = 1;
 
@@ -529,6 +531,7 @@ class suxRSS extends DOMDocument {
 	/**
 	* Load and parse RSS file
     *
+    * @global string $CONFIG['TIMEZONE']
     * @param string $rss_url
     * @param int $timestamp unix timestamp
     * @return array|false
@@ -543,19 +546,25 @@ class suxRSS extends DOMDocument {
         // Extablish Conditional GET
         // --------------------------------------------------------------------
 
-        // Limit the amount of time we wait for a connection to a remote server to 30 seconds
+        $modified = null;
+        $opts = array();
+
+        if ($timestamp) {
+            date_default_timezone_set('GMT');
+            $modified = date('D, d M Y H:i:s', $timestamp) . ' GMT';
+            date_default_timezone_set($GLOBALS['CONFIG']['TIMEZONE']);
+        }
+
+        if ($modified) {
+            // Headers for Conditional GET
+            $opts = array(
+                'http'=> array(
+                    'header' => "If-Modified-Since: $modified\r\n",
+                    )
+                );
+        }
+
         ini_set('default_socket_timeout', 30);
-
-        if ($timestamp) $modified = gmdate('D, d M Y H:i:s', $timestamp) . ' GMT';
-        else $modified = null;
-
-        // Headers
-        $opts = array(
-            'http'=> array(
-                'header' => "If-Modified-Since: $modified\r\n",
-                )
-            );
-
         $ctx = stream_context_create($opts);
 
         // --------------------------------------------------------------------
