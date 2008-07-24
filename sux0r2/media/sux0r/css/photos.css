@@ -1,0 +1,52 @@
+#leftside {
+    margin: 10px;
+    width: 160px;
+}
+
+#leftside ul {
+    margin-left: 15px;
+    padding: 0;
+}
+
+#leftside li {
+    margin-bottom: 4px;
+}
+
+
+#rightside {
+    width: 738px;
+}
+
+.photo {
+    border: 1px solid #999999;
+    margin: 0 15px 15px 0;
+    padding: 5px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.prevNext {
+    text-align: right;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+a.previous  {
+    text-decoration: none;
+    margin-right: 1em;
+}
+
+a.next {
+    text-decoration: none;
+}
+
+
+.description {
+    border: 1px dashed #cccccc;
+    padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}

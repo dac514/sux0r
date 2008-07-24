@@ -36,9 +36,9 @@ CREATE TABLE `bayes_auth` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `bayes_cache`
--- 
+--
 
 CREATE TABLE `bayes_cache` (
   `md5` char(32) character set latin1 collate latin1_general_ci NOT NULL,
@@ -375,6 +375,43 @@ CREATE TABLE `openid_trusted` (
 
 
 -- --------------------------------------------------------
+
+--
+-- Table structure for table `photoalbums`
+--
+
+CREATE TABLE `photoalbums` (
+  `id` int(11) NOT NULL,
+  `users_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `body_html` text NOT NULL,
+  `body_plaintext` text NOT NULL,
+  `draft` tinyint(1) NOT NULL,
+  `published_on` date NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `users_id` (`users_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `photos`
+--
+
+CREATE TABLE `photos` (
+  `id` int(11) NOT NULL,
+  `users_id` int(11) NOT NULL,
+  `photoalbums_id` int(11) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `body_html` text NOT NULL,
+  `body_plaintext` text NOT NULL,
+  `md5` char(32) character set latin1 collate latin1_general_ci NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `dupechecker` (`md5`,`users_id`,`photoalbums_id`),
+  KEY `users_id` (`users_id`),
+  KEY `photoalbums_id` (`photoalbums_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 --
 -- Table structure for table `rss_feeds`

@@ -5,7 +5,7 @@
 
 <div class="widget">
 <h2>{$title}</h2>
-{if $image}<div class="floatright">
+{if $image}<div class="{$floater}">
 {$image}
 {if $caption && $width}<div style="width:{$width}px;">{$caption}</div>{/if}
 </div>{/if}
