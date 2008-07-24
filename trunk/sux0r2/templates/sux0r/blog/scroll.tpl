@@ -96,7 +96,7 @@
                 {capture name=blog}
 
                     <!-- Content -->
-                    <p>{$foo.published_on}, <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a></p>
+                    <p>By <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a> <em>on {$foo.published_on}</em></p>
                     <p>{$foo.body_html}</p>
                     <div class="clearboth"></div>
 

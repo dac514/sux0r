@@ -50,7 +50,7 @@
                 {capture name=feed}
 
                     <!-- Content -->
-                    <p>{$foo.published_on}, <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a></p>
+                    <p><em>{$foo.published_on}</em></p>
                     <p>{$foo.body_html}</p>
                     <div class="clearboth"></div>
 
