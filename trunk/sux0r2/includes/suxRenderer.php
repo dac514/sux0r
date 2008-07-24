@@ -61,10 +61,10 @@ class suxRenderer {
 
         // Module
         $this->module = $module;
-        
+
         // Partition
         if (!empty($_SESSION['partition'])) $this->partition = $_SESSION['partition'];
-        else $this->partition  = $GLOBALS['CONFIG']['PARTITION'];       
+        else $this->partition  = $GLOBALS['CONFIG']['PARTITION'];
 
         // Path to XTHML header & footer templates
         $this->xhtml_header = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $this->partition  . '/xhtml_header.tpl';
@@ -154,9 +154,10 @@ class suxRenderer {
     * @param string $image path to image (http://)
     * @param string $caption caption for image
     * @param string $url2 another url, for image
+    * @param string $floater class for image encapsulation
     * @return string the html code
     */
-    function widget($title, $content, $url = null, $image = null, $caption = null, $url2 = null) {
+    function widget($title, $content, $url = null, $image = null, $caption = null, $url2 = null, $floater = 'floatright') {
 
         // Sanitize / Filter
         if ($url) {
@@ -208,6 +209,7 @@ class suxRenderer {
         $tpl->assign('caption', $caption);
         $tpl->assign('width', $width);
         $tpl->assign('content', $content);
+        $tpl->assign('floater', $floater);
 
         $path = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $this->partition ;
         if (!file_exists("$path/widget.tpl")) $path = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r';
@@ -352,7 +354,7 @@ function insert_userInfo($params) {
 
     $url = $GLOBALS['CONFIG']['URL'];
     $url_logout = suxFunct::makeUrl('/user/logout');
-    
+
     if (!empty($_SESSION['partition'])) $partition = $_SESSION['partition'];
     else $partition = $GLOBALS['CONFIG']['PARTITION'];
 

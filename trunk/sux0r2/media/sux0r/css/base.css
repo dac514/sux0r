@@ -58,7 +58,7 @@ table#proselytizer {
     float: right;
     margin-top: 3px;
     margin-right: 5px;
-    
+
 }
 
 #header img.openidLogin {
@@ -138,12 +138,12 @@ input, select {
 /* Ajax trainers */
 
 .nbInterface {
-    
+
 }
 
 .nbInterface .nbCatDropdown {
     margin-right: 10px;
-    
+
 }
 
 .nbVecTrained {
@@ -158,7 +158,7 @@ input, select {
 /*  Filters */
 
 #nbf {
-    margin-top: 5px;  
+    margin-top: 5px;
 }
 
 #nbfCategories {
@@ -166,40 +166,40 @@ input, select {
 }
 
 #nbfSlider {
-    float:left; 
-    margin-left: 1em; 
-    padding-top: 0.5em;      
+    float:left;
+    margin-left: 1em;
+    padding-top: 0.5em;
 }
 
-#nbfTrack {    
-    width: 100px; 
-    background-color: #ccc; 
-    height: 10px; 
-    float: left;    
+#nbfTrack {
+    width: 100px;
+    background-color: #ccc;
+    height: 10px;
+    float: left;
 }
 
 #nbfHandle {
-    width: 10px; 
-    height: 15px; 
-    background-color: #f00; 
-    cursor: crosshair;    
+    width: 10px;
+    height: 15px;
+    background-color: #f00;
+    cursor: crosshair;
 }
 
 #nbfPercentage {
-    float: left; 
+    float: left;
     margin-left: 0.5em;
 }
 
 #nbfTopButton, #nbfThresholdButton {
-    float:left; 
+    float:left;
     margin-left: 0.5em;
 }
 
 .nbfFilteredBy {
-    float: left; 
-    margin-left: 0.5em; 
-    padding-top: 0.5em; 
-    color: red;     
+    float: left;
+    margin-left: 0.5em;
+    padding-top: 0.5em;
+    color: red;
 }
 
 /* }}} */
@@ -254,7 +254,7 @@ input, select {
 /* {{{ Vertical Menu Container */
 
 .menucontainer {
-    
+
 }
 
 .menucontainer ul {
@@ -306,7 +306,7 @@ input, select {
     margin: 0 0 20px 0;
     padding: 5px 0 5px 5px;
     border-bottom: 1px solid black;
-    
+
 }
 
 .widget h2 a:link, .widget h2 a:visited, .widget h2 a:active {
@@ -331,6 +331,26 @@ input, select {
 }
 
 .widget div.floatright img {
+    border-top: 2px solid #555555;
+    border-right: 1px solid #999999;
+    border-bottom: 1px solid #999999;
+    border-left: 2px solid #555555;
+}
+
+
+.widget .floatleft {
+    float: left;
+    margin: 0 0 10px 10px;
+    background-color: #ffffff;
+    padding: 10px;
+    border-top: 1px solid #999999;
+    border-right: 2px solid #555555;
+    border-bottom: 2px solid #555555;
+    border-left: 1px solid #999999;
+    margin-right: 10px;
+}
+
+.widget div.floatleft img {
     border-top: 2px solid #555555;
     border-right: 1px solid #999999;
     border-bottom: 1px solid #999999;
