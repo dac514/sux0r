@@ -687,6 +687,10 @@ class suxRSS extends DOMDocument {
 
         // Reverse htmlentities, we want usable html
         $value = html_entity_decode(stripslashes($value), ENT_QUOTES, 'UTF-8');
+        // Get rid of font tags before handing off to htmLawed,
+        // see: http://www.bioinformatics.org/phplabware/forum/viewtopic.php?id=64
+        $value = preg_replace('/<font([^>]+)>/i', '', $value);
+        $value = str_ireplace('</font>', '', $value);
         // Sanitize
         $value = suxFunct::sanitizeHtml($value, 0);
 
