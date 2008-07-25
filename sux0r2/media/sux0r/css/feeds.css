@@ -17,25 +17,6 @@
     width: 738px;
 }
 
-#recent {
-    border: 1px dashed black;
-    padding-left: 4px;
-    padding-right: 4px;
-}
-
-#archives {
-
-}
-
-.flair img {
-    border: 0;
-    margin-right: 4px;
-}
-
-.flair a {
-    background: none;
-}
-
 label {
     float: left;
     width: auto;
@@ -50,43 +31,16 @@ label {
 
 .categoryContainer {
     border: 1px dashed #cccccc;
-    margin: 10px;
     padding: 10px;
 }
 
-.categoryContainer p {
-    margin-left: 0px;
-    margin-right: 0px;
+.rssItem a:link, .rssItem a:visited, .rssItem a:active {
+    color: #000000;
+    text-decoration: none;
+    font-style: italic;
 }
 
-.comment {
-    border: 1px dashed #cccccc;
-    padding: 10px;
-    margin-top: 10px;
-}
-
-.parentContainer {
-    height: 80px;
-    overflow: auto;
-    border: 1px solid #cccccc;
-    margin: 10px;
-    margin-bottom: 20px;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-/* Revert */
-
-.htmlSelect select {
-    width: auto;
-}
-
-input.imageFile {
-    width: auto;
-    border: 0;
+.rssItem a:hover {
+    color: red;
     background: none;
-}
-
-input.revert, select.revert {
-    width: auto;
 }

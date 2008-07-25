@@ -50,13 +50,7 @@ label {
 
 .categoryContainer {
     border: 1px dashed #cccccc;
-    margin: 10px;
     padding: 10px;
-}
-
-.categoryContainer p {
-    margin-left: 0px;
-    margin-right: 0px;
 }
 
 .comment {

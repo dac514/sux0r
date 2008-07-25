@@ -51,7 +51,7 @@
 
                     <!-- Content -->
                     <p><em>{$foo.published_on}</em></p>
-                    <p>{$foo.body_html}</p>
+                    <div class="rssItem">{$foo.body_html}</div>
                     <div class="clearboth"></div>
 
                     <!-- Read more -->
