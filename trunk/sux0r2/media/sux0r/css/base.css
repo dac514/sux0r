@@ -313,9 +313,17 @@ input, select {
     text-decoration: none;
 }
 
-.widget p {
+.widget .widgetContent {
     margin-left: 10px;
     margin-right: 10px;
+}
+
+.widget .widgetContent h2 {
+    background-color: #ffffff;
+    color: #000000;
+    margin: 0px;
+    padding: 0px;
+    border: none;
 }
 
 .widget .floatright {
@@ -336,7 +344,6 @@ input, select {
     border-bottom: 1px solid #999999;
     border-left: 2px solid #555555;
 }
-
 
 .widget .floatleft {
     float: left;
