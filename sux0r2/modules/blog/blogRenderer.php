@@ -33,7 +33,7 @@ class blogRenderer extends suxRenderer {
     // Arrays
     public $fp = array(); // Array of first posts
     public $sidelist = array(); // Array of threads in sidebar
-    public $gtext = array();    
+    public $gtext = array();
 
     // Objects
     private $user;
@@ -49,9 +49,9 @@ class blogRenderer extends suxRenderer {
     * @param string $module
     */
     function __construct($module) {
-        
+
         parent::__construct($module); // Call parent
-        $this->gtext = suxFunct::gtext('blog'); // Language       
+        $this->gtext = suxFunct::gtext('blog'); // Language
         $this->user = new suxUser();
         $this->msg = new suxThreadedMessages();
         $this->nb = new bayesUser();
@@ -268,7 +268,7 @@ class blogRenderer extends suxRenderer {
 
 
     /**
-    * TinyMCE Initialization for comments
+    * TinyMCE Initialization for bookmarks
     *
     * @see http://tinymce.moxiecode.com/
     * @global string $CONFIG['URL']

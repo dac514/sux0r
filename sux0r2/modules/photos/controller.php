@@ -34,7 +34,36 @@ function sux($action, $params = null) {
         $photos->view($params[0]);
         break;
 
+
     case 'album':
+
+        // --------------------------------------------------------------------
+        // Edit
+        // --------------------------------------------------------------------
+
+        if ($params[0] == 'edit') {
+
+            $id = !empty($params[1]) ? $params[1]: null;
+
+            include_once('photoalbumsEdit.php');
+            $edit = new photoalbumsEdit($id);
+
+            if ($edit->formValidate($_POST)) {
+                $edit->formProcess($_POST);
+                $edit->formSuccess();
+            }
+            else {
+                $edit->formBuild($_POST);
+            }
+
+            break;
+        }
+
+
+        // --------------------------------------------------------------------
+        // View
+        // --------------------------------------------------------------------
+
 
         include_once('photos.php');
         $photos = new photos();
