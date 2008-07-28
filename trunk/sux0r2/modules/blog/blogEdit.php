@@ -23,6 +23,7 @@
 */
 
 require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
+require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
@@ -238,14 +239,14 @@ class blogEdit {
         // Image?
         if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
 
-            list($resize, $fullsize) = suxFunct::renameImage($_FILES['image']['name']);
+            list($resize, $fullsize) = suxPhoto::renameImage($_FILES['image']['name']);
             $clean['image'] = $resize; // Add image to clean array
             $format = explode('.', $_FILES['image']['name']);
             $format = strtolower(end($format));
             $filein = $_FILES['image']['tmp_name'];
             $resize = suxFunct::dataDir($this->module) . "/{$resize}";
             $fullsize = suxFunct::dataDir($this->module) . "/{$fullsize}";
-            suxFunct::resizeImage($format, $filein, $resize, 80, 80);
+            suxPhoto::resizeImage($format, $filein, $resize, 80, 80);
             move_uploaded_file($_FILES['image']['tmp_name'], $fullsize);
 
         }
@@ -350,7 +351,7 @@ class blogEdit {
 
         if (isset($clean['category_id'])) foreach($clean['category_id'] as $val) {
             if (!empty($val) && $this->nb->isCategoryTrainer($val, $_SESSION['users_id'])) {
-                $doc_id = $this->nb->trainDocument($clean['body'], $val);
+                $doc_id = $this->nb->trainDocument("{$clean['title']} \n\n {$clean['body']}", $val);
                 $this->link->setLink('link_bayes_messages', 'bayes_documents', $doc_id, 'messages', $clean['id']);
             }
         }

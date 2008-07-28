@@ -381,7 +381,7 @@ CREATE TABLE `openid_trusted` (
 --
 
 CREATE TABLE `photoalbums` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL auto_increment,
   `users_id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
   `body_html` text NOT NULL,
@@ -390,7 +390,7 @@ CREATE TABLE `photoalbums` (
   `published_on` date NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `users_id` (`users_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -399,7 +399,7 @@ CREATE TABLE `photoalbums` (
 --
 
 CREATE TABLE `photos` (
-  `id` int(11) NOT NULL,
+  `id` int(11) unsigned NOT NULL auto_increment,
   `users_id` int(11) NOT NULL,
   `photoalbums_id` int(11) NOT NULL,
   `image` varchar(255) NOT NULL,
@@ -410,7 +410,7 @@ CREATE TABLE `photos` (
   UNIQUE KEY `dupechecker` (`md5`,`users_id`,`photoalbums_id`),
   KEY `users_id` (`users_id`),
   KEY `photoalbums_id` (`photoalbums_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
 --
