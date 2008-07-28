@@ -113,7 +113,7 @@ class blogEdit {
 
             // Editing a blog post
 
-            $tmp = $this->msg->getMessage($this->id);
+            $tmp = $this->msg->getMessage($this->id, true);
 
             $blog['id'] = $tmp['id'];
             $blog['title'] = $tmp['title'];
