@@ -22,6 +22,7 @@
 *
 */
 
+require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once('cropperRenderer.php');
@@ -129,7 +130,7 @@ class cropper {
 
         // Assign a url to the fullsize version of the image
         $image = $image['image'];
-        $image = suxFunct::t2fImage($image);
+        $image = suxPhoto::t2fImage($image);
         $image = "{$GLOBALS['CONFIG']['URL']}/data/{$type}/{$image}";
         $image = suxFunct::myHttpServer() . $image;
 
@@ -192,7 +193,7 @@ class cropper {
         }
 
         $path_to_dest = "{$GLOBALS['CONFIG']['PATH']}/data/{$clean['type']}/{$image['image']}";
-        $path_to_source = suxFunct::t2fImage($path_to_dest);
+        $path_to_source = suxPhoto::t2fImage($path_to_dest);
 
         if (!is_writable($path_to_dest)) die('Destination is not writable? ' . $path_to_dest);
 

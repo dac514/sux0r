@@ -185,8 +185,8 @@ class suxRSS extends DOMDocument {
     }
 
 
-   /**
-    * Saves a bookmark to the database
+    /**
+    * Saves a feed to the database
     *
     * @param int $users_id users_id
     * @param array $url required keys => (url, title, body) optional keys => (draft)

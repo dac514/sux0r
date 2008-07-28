@@ -50,3 +50,8 @@ a.next {
     margin-left: auto;
     margin-right: auto;
 }
+
+
+.widerInput {
+    width: 350px;
+}

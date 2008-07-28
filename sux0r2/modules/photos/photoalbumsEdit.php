@@ -22,6 +22,7 @@
 *
 */
 
+require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('photosRenderer.php');
@@ -38,15 +39,17 @@ class photoalbumsEdit {
     public $tpl;
     public $r;
     private $user;
-
+    private $photo;
+    
 
     /**
     * Constructor
     *
-    * @param int $id message id
+    * @param int $id album id
     */
     function __construct($id = null) {
 
+        $this->photo = new suxPhoto($this->module); // Photos
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new photosRenderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
@@ -102,9 +105,7 @@ class photoalbumsEdit {
         if ($this->id) {
 
             // Editing a photoalbum
-
-            // TODO
-            // $tmp = $this->msg->getMessage($this->id);
+            $tmp = $this->photo->getAlbum($this->id, true);
 
             $photoalbum['id'] = $tmp['id'];
             $photoalbum['title'] = $tmp['title'];
@@ -202,38 +203,24 @@ class photoalbumsEdit {
         $clean['published_on'] = "{$clean['Date']} {$clean['Time_Hour']}:{$clean['Time_Minute']}:{$clean['Time_Second']}";
         $clean['published_on'] = date('Y-m-d H:i:s', strtotime($clean['published_on'])); // Sanitize
 
-        // Unset image?
-        if (!empty($clean['unset_image'])) $clean['image'] = ''; // Set to empty string
-
         // --------------------------------------------------------------------
-        // Create $msg array
+        // Create $album array
         // --------------------------------------------------------------------
-
-        $msg = array(
+        
+        $album = array(
                 'title' => $clean['title'],
                 'body' => $clean['body'],
                 'published_on' => $clean['published_on'],
                 'draft' => @$clean['draft'],
             );
+        
+        if (isset($clean['id'])) $album['id'] = $clean['id'];
 
         // --------------------------------------------------------------------
-        // Put $msg in database
+        // Put $album in database
         // --------------------------------------------------------------------
 
-
-        if (isset($clean['id'])) {
-
-            // Edit, TODO
-            // $this->msg->editMessage($clean['id'], $_SESSION['users_id'], $msg, true);
-
-        }
-        else {
-
-            // New, TODO
-            // $clean['id'] = $this->msg->saveMessage($_SESSION['users_id'], $msg, null, true);
-
-        }
-
+        $this->photo->saveAlbum($_SESSION['users_id'], $album);
 
     }
 
@@ -243,7 +230,7 @@ class photoalbumsEdit {
     */
     function formSuccess() {
 
-        // TODO
+        // TODO?
         // $this->tpl->clear_cache(null, $_SESSION['nickname']); // Clear cache
 
         // Template
