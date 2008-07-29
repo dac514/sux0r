@@ -55,3 +55,10 @@ a.next {
 .widerInput {
     width: 350px;
 }
+
+
+input.imageFile {
+    width: auto;
+    border: 0;
+    background: none;
+}
