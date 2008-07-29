@@ -239,14 +239,15 @@ class blogEdit {
         // Image?
         if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
 
+            $format = explode('.', $_FILES['image']['name']);
+            $format = strtolower(end($format)); // Extension
+
             list($resize, $fullsize) = suxPhoto::renameImage($_FILES['image']['name']);
             $clean['image'] = $resize; // Add image to clean array
-            $format = explode('.', $_FILES['image']['name']);
-            $format = strtolower(end($format));
-            $filein = $_FILES['image']['tmp_name'];
             $resize = suxFunct::dataDir($this->module) . "/{$resize}";
             $fullsize = suxFunct::dataDir($this->module) . "/{$fullsize}";
-            suxPhoto::resizeImage($format, $filein, $resize, 80, 80);
+
+            suxPhoto::resizeImage($format, $_FILES['image']['tmp_name'], $resize, 80, 80); // TODO, variable sized thumbnail
             move_uploaded_file($_FILES['image']['tmp_name'], $fullsize);
 
         }

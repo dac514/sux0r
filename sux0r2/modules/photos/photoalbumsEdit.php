@@ -40,7 +40,7 @@ class photoalbumsEdit {
     public $r;
     private $user;
     private $photo;
-    
+
 
     /**
     * Constructor
@@ -49,6 +49,7 @@ class photoalbumsEdit {
     */
     function __construct($id = null) {
 
+        $this->user = new suxUser(); // User
         $this->photo = new suxPhoto($this->module); // Photos
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new photosRenderer($this->module); // Renderer
@@ -56,8 +57,6 @@ class photoalbumsEdit {
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
-        // Objects
-        $this->user = new suxUser();
 
         // Redirect if not logged in
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
@@ -206,14 +205,14 @@ class photoalbumsEdit {
         // --------------------------------------------------------------------
         // Create $album array
         // --------------------------------------------------------------------
-        
+
         $album = array(
                 'title' => $clean['title'],
                 'body' => $clean['body'],
                 'published_on' => $clean['published_on'],
                 'draft' => @$clean['draft'],
             );
-        
+
         if (isset($clean['id'])) $album['id'] = $clean['id'];
 
         // --------------------------------------------------------------------

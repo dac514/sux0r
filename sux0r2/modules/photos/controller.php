@@ -35,6 +35,27 @@ function sux($action, $params = null) {
         break;
 
 
+    case 'upload':
+
+        // --------------------------------------------------------------------
+        // Upload
+        // --------------------------------------------------------------------
+
+        include_once('photoUpload.php');
+        $edit = new photoUpload();
+
+        if ($edit->formValidate($_POST)) {
+            $edit->formProcess($_POST);
+            $edit->formSuccess();
+        }
+        else {
+            $edit->formBuild($_POST);
+        }
+
+        break;
+
+
+
     case 'album':
 
         // --------------------------------------------------------------------

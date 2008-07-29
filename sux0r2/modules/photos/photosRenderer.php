@@ -72,6 +72,24 @@ class photosRenderer extends suxRenderer {
     }
 
 
+    /**
+    * Get a users albums
+    *
+    * @return array
+    */
+    function getAlbums() {
+
+        // TODO
+
+        $c[''] = '---';
+        $c['1'] = 'Album 1';
+        $c['2'] = 'Album 2';
+
+        return $c;
+
+    }
+
+
 
 }
 

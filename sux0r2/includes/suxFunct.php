@@ -128,6 +128,96 @@ class suxFunct {
     }
 
 
+    /**
+    * Unzip
+    *
+    * @param string $file
+    * @param string $dir
+    * @return bool
+    */
+    static function unzip($file, $dir) {
+
+        if (class_exists('ZipArchive')) {
+
+            $zip = new ZipArchive();
+            if ($zip->open($file) === true) {
+                $_ret = $zip->extractTo($dir);
+                $zip->close();
+                return $_ret;
+            }
+            else return false;
+
+        }
+        else {
+
+            // Escape
+            $file = escapeshellarg($file);
+            $dir = escapeshellarg($dir);
+
+            $cmd = "unzip {$file} -d {$dir}"; // Info-zip assumed to be in path
+
+            $res = -1; // any nonzero value
+            $unused = array();
+            $unused2 = exec($cmd, $unused, $res);
+            if ($res != 0) trigger_error("Warning: unzip return value is $res ");
+
+            return ($res == 0 || $res == 1); // http://www.info-zip.org/FAQ.html#error-codes
+
+        }
+
+    }
+
+
+
+    /**
+    * Remove directory
+    *
+    * @param string $dirname
+    * @param bool $empty
+    * @return bool
+    */
+    static function obliterateDir($dirname, $only_empty = false) {
+
+        if (!is_dir($dirname)) return false;
+
+        if (isset($_ENV['OS']) && strripos($_ENV['OS'], "windows", 0) !== FALSE) {
+
+            // Windows patch for buggy perimssions on some machines
+            $command = 'cmd /C "rmdir /S /Q "'.str_replace('//', '\\', $dirname).'\\""';
+            $wsh = new COM("WScript.Shell");
+            $wsh->Run($command, 7, false);
+            $wsh = null;
+            return true;
+
+        }
+        else {
+
+            $dscan = array(realpath($dirname));
+            $darr = array();
+            while (!empty($dscan)) {
+                $dcur = array_pop($dscan);
+                $darr[] = $dcur;
+                if ($d = opendir($dcur)) {
+                    while ($f=readdir($d)) {
+                        if ($f == '.' || $f == '..') continue;
+                        $f = $dcur . '/' . $f;
+                        if (is_dir($f)) $dscan[] = $f;
+                        else unlink($f);
+                    }
+                    closedir($d);
+                }
+            }
+            $i_until = ($only_empty)? 1 : 0;
+            for ($i=count($darr)-1; $i>=$i_until; $i--) {
+                if (!rmdir($darr[$i])) trigger_error("Warning: There was a problem deleting a temporary file in $dirname ");
+            }
+            return (($only_empty) ? (count(scandir($dirname)) <= 2) : (!is_dir($dirname)));
+
+        }
+
+    }
+
+
     // ------------------------------------------------------------------------
     // Dates and times
     // ------------------------------------------------------------------------
