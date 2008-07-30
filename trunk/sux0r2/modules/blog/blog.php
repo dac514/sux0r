@@ -91,7 +91,7 @@ class blog  {
                 $this->r->text['sidelist'] = ucwords($author);
 
                 $max = $this->msg->countFirstPostsByUser($u['users_id'], 'blog');
-                $eval = '$this->msg->getFirstPostsByUser(' .$u['users_id'] . ', \'blog\', true, $this->pager->limit, $start)';
+                $eval = '$this->msg->getFirstPostsByUser(' .$u['users_id'] . ', \'blog\', $this->pager->limit, $start)';
                 $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval)); // Important: start must be reference
 
                 if ($start < $max) {
@@ -130,7 +130,7 @@ class blog  {
 
                     $this->pager->setPages($this->msg->countFirstPostsByUser($u['users_id'], 'blog'));
                     $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/author/' . $author));
-                    $this->r->fp = $this->blogs($this->msg->getFirstPostsByUser($u['users_id'], 'blog', true, $this->pager->limit, $this->pager->start));
+                    $this->r->fp = $this->blogs($this->msg->getFirstPostsByUser($u['users_id'], 'blog', $this->pager->limit, $this->pager->start));
 
                     if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
@@ -328,7 +328,7 @@ class blog  {
             $this->r->text['sidelist'] = date('F Y', strtotime($date));
 
             $max = $this->msg->countFirstPostsByMonth($datetime, 'blog');
-            $eval = '$this->msg->getFirstPostsByMonth(\'' . $datetime . '\', \'blog\', true, $this->pager->limit, $start)';
+            $eval = '$this->msg->getFirstPostsByMonth(\'' . $datetime . '\', \'blog\', $this->pager->limit, $start)';
             $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval)); // Important: start must be reference
 
             if ($start < $max) {
@@ -367,7 +367,7 @@ class blog  {
 
                 $this->pager->setPages($this->msg->countFirstPostsByMonth($datetime, 'blog'));
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/month/' . $date));
-                $this->r->fp = $this->blogs($this->msg->getFirstPostsByMonth($datetime, 'blog', true, $this->pager->limit, $this->pager->start));
+                $this->r->fp = $this->blogs($this->msg->getFirstPostsByMonth($datetime, 'blog', $this->pager->limit, $this->pager->start));
 
                 if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
@@ -398,7 +398,7 @@ class blog  {
             // ---------------------------------------------------------------
 
             $max = $this->msg->countFirstPosts('blog');
-            $eval = '$this->msg->getFirstPosts(\'blog\', true, $this->pager->limit, $start)';
+            $eval = '$this->msg->getFirstPosts(\'blog\', $this->pager->limit, $start)';
             $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval)); // Important: start must be reference
 
             if ($start < $max) {
@@ -434,7 +434,7 @@ class blog  {
 
                 $this->pager->setPages($this->msg->countFirstPosts('blog'));
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog'));
-                $this->r->fp = $this->blogs($this->msg->getFirstPosts('blog', true, $this->pager->limit, $this->pager->start));
+                $this->r->fp = $this->blogs($this->msg->getFirstPosts('blog', $this->pager->limit, $this->pager->start));
 
                 if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
@@ -469,7 +469,7 @@ class blog  {
 
         if (!$this->tpl->is_cached('view.tpl', $cache_id)) {
 
-            $fp[] = $this->msg->getFirstPost($thread_id, 'blog');
+            $fp[] = $this->msg->getFirstPost($thread_id);
 
             if ($fp[0] === false) {
                 // This is not a blog post, redirect
@@ -480,12 +480,12 @@ class blog  {
             $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/view/' . $thread_id));
 
             if ($this->pager->start == 0) {
-                $thread = $this->msg->getThread($thread_id, 'blog', true, $this->pager->limit, $this->pager->start);
+                $thread = $this->msg->getThread($thread_id, 'blog', $this->pager->limit, $this->pager->start);
                 unset($fp);
                 $fp[] = array_shift($thread);
             }
             else {
-                $thread = $this->msg->getThread($thread_id, 'blog', true, $this->pager->limit, $this->pager->start);
+                $thread = $this->msg->getThread($thread_id, 'blog', $this->pager->limit, $this->pager->start);
             }
 
             // Assign

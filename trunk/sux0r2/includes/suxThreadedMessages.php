@@ -412,19 +412,16 @@ class suxThreadedMessages {
     * Get first post
     *
     * @param int $thread_id thread_id
-    * @param bool $long select * or abbreviated data?
     * @param bool $unpub select un-published?
     * @return array
     */
-    function getFirstPost($thread_id, $long = false, $unpub = false) {
+    function getFirstPost($thread_id, $unpub = false) {
 
         // Sanity check
         if (!filter_var($thread_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid thread id');
 
         // SQL Query
-        if ($long) $query = "SELECT *, LENGTH(body_plaintext) AS body_length ";
-        else $query = "SELECT id, users_id, thread_id, title, LENGTH(body_plaintext) AS body_length, published_on, level ";
-        $query .= "FROM {$this->db_table} WHERE thread_id = ? AND thread_pos = 0 ";
+        $query = "SELECT * FROM {$this->db_table} WHERE thread_id = ? AND thread_pos = 0 ";
 
         if (!$unpub) {
             // Only show published items
@@ -497,22 +494,19 @@ class suxThreadedMessages {
     *
     * @param int $thread_id thread id
     * @param string $type forum, blog, wiki, or slideshow
-    * @param bool $long select * or abbreviated data?
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
     * @param bool $unpub select un-published?
     * @return array
     */
-    function getThread($thread_id, $type = null, $long = false, $limit = null, $start = 0, $unpub = false) {
+    function getThread($thread_id, $type = null, $limit = null, $start = 0, $unpub = false) {
 
         // Sanity check
         if (!filter_var($thread_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid thread id');
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
 
         // SQL Query
-        if ($long) $query = "SELECT * ";
-        else $query = "SELECT id, users_id, thread_id, title, LENGTH(body_plaintext) AS body_length, published_on, level ";
-        $query .= "FROM {$this->db_table} WHERE thread_id = ? ";
+        $query = "SELECT * FROM {$this->db_table} WHERE thread_id = ? ";
 
         if (!$unpub) {
             // Only show published items
@@ -631,22 +625,19 @@ class suxThreadedMessages {
     *
     * @param int $users_id users id
     * @param string $type forum, blog, wiki, or slideshow
-    * @param bool $long select * or abbreviated data?
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
     * @param bool $unpub select un-published?
     * @return array
     */
-    function getMessagesByUser($users_id, $type = null, $long = false, $limit = null, $start = 0, $unpub = false) {
+    function getMessagesByUser($users_id, $type = null, $limit = null, $start = 0, $unpub = false) {
 
         // Sanity check
         if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
 
         // SQL Query
-        if ($long) $query = "SELECT *, LENGTH(body_plaintext) AS body_length ";
-        else $query = "SELECT id, users_id, thread_id, title, LENGTH(body_plaintext) AS body_length, published_on, level ";
-        $query .= "FROM {$this->db_table} WHERE users_id = ? ";
+        $query = "SELECT * FROM {$this->db_table} WHERE users_id = ? ";
 
         if (!$unpub) {
             // Only show published items
@@ -716,21 +707,18 @@ class suxThreadedMessages {
     * Get first posts
     *
     * @param string $type forum, blog, wiki, or slideshow
-    * @param bool $long select * or abbreviated data?
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
     * @param bool $unpub select un-published?
     * @return array
     */
-    function getFirstPosts($type = null, $long = false, $limit = null, $start = 0, $unpub = false) {
+    function getFirstPosts($type = null, $limit = null, $start = 0, $unpub = false) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
 
         // SQL Query
-        if ($long) $query = "SELECT *, LENGTH(body_plaintext) AS body_length ";
-        else $query = "SELECT id, users_id, thread_id, title, LENGTH(body_plaintext) AS body_length, published_on, level ";
-        $query .= "FROM {$this->db_table} WHERE thread_pos = 0 ";
+        $query = "SELECT * FROM {$this->db_table} WHERE thread_pos = 0 ";
 
         if (!$unpub) {
             // Only show published items
@@ -848,22 +836,19 @@ class suxThreadedMessages {
     *
     * @param int $users_id users id
     * @param string $type forum, blog, wiki, or slideshow
-    * @param bool $long select * or abbreviated data?
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
     * @param bool $unpub select un-published?
     * @return array
     */
-    function getFirstPostsByUser($users_id, $type = null, $long = false, $limit = null, $start = 0, $unpub = false) {
+    function getFirstPostsByUser($users_id, $type = null, $limit = null, $start = 0, $unpub = false) {
 
         // Sanity check
         if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
 
         // SQL Query
-        if ($long) $query = "SELECT *, LENGTH(body_plaintext) AS body_length ";
-        else $query = "SELECT id, users_id, thread_id, title, LENGTH(body_plaintext) AS body_length, published_on, level ";
-        $query .= "FROM {$this->db_table} WHERE users_id = ? AND thread_pos = 0 ";
+        $query = "SELECT * FROM {$this->db_table} WHERE users_id = ? AND thread_pos = 0 ";
 
         if (!$unpub) {
             // Only show published items
@@ -990,13 +975,12 @@ class suxThreadedMessages {
     *
     * @param string $date date
     * @param string $type forum, blog, wiki, or slideshow
-    * @param bool $long select * or abbreviated data?
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
     * @param bool $unpub select un-published?
     * @return array
     */
-    function getFirstPostsByMonth($date, $type = null, $long = false, $limit = null, $start = 0, $unpub = false) {
+    function getFirstPostsByMonth($date, $type = null, $limit = null, $start = 0, $unpub = false) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
@@ -1008,9 +992,7 @@ class suxThreadedMessages {
         if (!preg_match($regex, $date, $matches)) throw new Exception('Invalid date');
 
         // SQL Query
-        if ($long) $query = "SELECT *, LENGTH(body_plaintext) AS body_length ";
-        else $query = "SELECT id, users_id, thread_id, title, LENGTH(body_plaintext) AS body_length, published_on, level ";
-        $query .= "FROM {$this->db_table} WHERE thread_pos = 0 ";
+        $query = "SELECT * FROM {$this->db_table} WHERE thread_pos = 0 ";
 
         if (!$unpub) {
             // Only show published items
@@ -1049,20 +1031,17 @@ class suxThreadedMessages {
     * Get latest replies, i.e. thread_pos != 0
     *
     * @param string $type forum, blog, wiki, or slideshow
-    * @param bool $long select * or abbreviated data?
     * @param int $limit maximum latest replies
     * @param bool $unpub select un-published?
     * @return array
     */
-    function getRececentComments($type = null, $long = false, $limit = 10, $unpub = false) {
+    function getRececentComments($type = null, $limit = 10, $unpub = false) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
 
         // SQL Query
-        if ($long) $query = "SELECT *, LENGTH(body_plaintext) AS body_length ";
-        else $query = "SELECT id, users_id, thread_id, title, LENGTH(body_plaintext) AS body_length, published_on, level ";
-        $query .= "FROM {$this->db_table} WHERE thread_pos != 0 ";
+        $query = "SELECT * FROM {$this->db_table} WHERE thread_pos != 0 ";
 
         if (!$unpub) {
             // Only show published items
