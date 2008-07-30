@@ -16,9 +16,6 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
-* Inspired by:
-* PHP Cookbook Second Edition, Recipe 10.16
-*
 * @author     Dac Chartrand <dac.chartrand@gmail.com>
 * @copyright  2008 sux0r development group
 * @license    http://www.gnu.org/licenses/agpl.html

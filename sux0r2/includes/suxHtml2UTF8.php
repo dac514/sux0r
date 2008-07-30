@@ -16,7 +16,7 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
-* Inspired by:
+* Forked from / Inspired by:
 * Jon Abernathy <jon@chuggnutt.com>: http://www.chuggnutt.com/html2text.php
 *
 * @author     Dac Chartrand <dac.chartrand@gmail.com>

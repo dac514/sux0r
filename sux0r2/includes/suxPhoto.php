@@ -16,9 +16,6 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
-* Inspired by:
-* PHP Cookbook Second Edition, Recipe 10.16
-*
 * @author     Dac Chartrand <dac.chartrand@gmail.com>
 * @copyright  2008 sux0r development group
 * @license    http://www.gnu.org/licenses/agpl.html
@@ -85,6 +82,47 @@ class suxPhoto {
 
 
     }
+
+
+    /**
+    * Get an album by id
+    *
+    * @param int $id photoalbums id
+    * @param bool $unpub select un-published?
+    * @return array|false
+    */
+    function getAlbums($users_id = null, $unpub = false) {
+
+        // Sanity check
+        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid album id');
+
+        $query = "SELECT * FROM {$this->db_albums} ";
+        if ($users_id) $query .= 'WHERE users_id = ? ';
+
+        if (!$unpub) {
+            // Only show published items
+            $query .= $users_id ? 'AND ' : 'WHERE ';
+            $query .= 'draft = 0 ';
+            if ($this->db_driver == 'mysql') {
+                // MySql
+                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            }
+            else {
+                throw new Exception('Unsupported database driver');
+            }
+        }
+        $query .= 'ORDER BY published_on DESC ';
+
+        $st = $this->db->prepare($query);
+        $st->execute($users_id ? array($users_id) : array());
+
+        $album = $st->fetchAll(PDO::FETCH_ASSOC);
+        if ($album) return $album;
+        else return false;
+
+
+    }
+
 
     /**
     * Saves an album to the database
@@ -172,6 +210,75 @@ class suxPhoto {
     // ------------------------------------------------------------------------
     // Photo functions
     // ------------------------------------------------------------------------
+
+    /**
+    * Get a photo by id
+    *
+    * @param int $id photoalbums id
+    * @return array|false
+    */
+    function getPhoto($id) {
+
+        // Sanity check
+        if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid photo id');
+
+        $query = "SELECT * FROM {$this->db_photos} WHERE id = ? LIMIT 1 ";
+        $st = $this->db->prepare($query);
+        $st->execute(array($id));
+
+        $album = $st->fetch(PDO::FETCH_ASSOC);
+        if ($album) return $album;
+        else return false;
+
+    }
+
+
+    /**
+    * Get photos by photoalbums_id
+    *
+    * @param int $photoalbums_id photoalbums id
+    * @return array|false
+    */
+    function getPhotos($photoalbums_id) {
+
+        // Sanity check
+        if (!filter_var($photoalbums_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid photoalbums id');
+
+        $query = "SELECT * FROM {$this->db_photos} WHERE photoalbums_id = ? ORDER BY image ";
+
+        $st = $this->db->prepare($query);
+        $st->execute(array($photoalbums_id));
+
+        $album = $st->fetchAll(PDO::FETCH_ASSOC);
+        if ($album) return $album;
+        else return false;
+
+
+    }
+
+
+    /**
+    * Get photos by users_id
+    *
+    * @param int $users_id photoalbums id
+    * @return array|false
+    */
+    function getPhotosByUser($users_id) {
+
+        // Sanity check
+        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid users id');
+
+        $query = "SELECT * FROM {$this->db_photos} WHERE users_id = ? ORDER BY photoalbums_id, image ";
+
+        $st = $this->db->prepare($query);
+        $st->execute(array($users_id));
+
+        $album = $st->fetchAll(PDO::FETCH_ASSOC);
+        if ($album) return $album;
+        else return false;
+
+
+    }
 
 
     /**

@@ -176,7 +176,7 @@ class suxFunct {
     * @param bool $empty
     * @return bool
     */
-    static function obliterateDir($dirname, $only_empty = false) {
+    static function obliterateDir($dirname) {
 
         if (!is_dir($dirname)) return false;
 
@@ -207,11 +207,13 @@ class suxFunct {
                     closedir($d);
                 }
             }
-            $i_until = ($only_empty)? 1 : 0;
-            for ($i=count($darr)-1; $i>=$i_until; $i--) {
-                if (!rmdir($darr[$i])) trigger_error("Warning: There was a problem deleting a temporary file in $dirname ");
+
+            for ($i=count($darr)-1; $i >= 0 ; $i--) {
+                if (!rmdir($darr[$i]))
+                    trigger_error("Warning: There was a problem deleting a temporary file in $dirname ");
             }
-            return (($only_empty) ? (count(scandir($dirname)) <= 2) : (!is_dir($dirname)));
+
+            return (!is_dir($dirname));
 
         }
 

@@ -399,7 +399,7 @@ CREATE TABLE `photoalbums` (
 --
 
 CREATE TABLE `photos` (
-  `id` int(11) unsigned NOT NULL auto_increment,
+  `id` int(11) NOT NULL auto_increment,
   `users_id` int(11) NOT NULL,
   `photoalbums_id` int(11) NOT NULL,
   `image` varchar(255) NOT NULL,
@@ -409,7 +409,8 @@ CREATE TABLE `photos` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `dupechecker` (`md5`,`users_id`,`photoalbums_id`),
   KEY `users_id` (`users_id`),
-  KEY `photoalbums_id` (`photoalbums_id`)
+  KEY `photoalbums_id` (`photoalbums_id`),
+  KEY `image` (`image`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 

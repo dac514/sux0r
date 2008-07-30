@@ -22,9 +22,12 @@
 *
 */
 
+require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
 class photosRenderer extends suxRenderer {
+
+    private $photo;
 
     /**
     * Constructor
@@ -33,6 +36,7 @@ class photosRenderer extends suxRenderer {
     */
     function __construct($module) {
         parent::__construct($module); // Call parent
+        $this->photo = new suxPhoto($module);
     }
 
 
@@ -73,19 +77,25 @@ class photosRenderer extends suxRenderer {
 
 
     /**
-    * Get a users albums
+    * Get users' albums
     *
     * @return array
     */
     function getAlbums() {
 
-        // TODO
+        // Cache
+        static $tmp = null;
+        if (is_array($tmp)) return $tmp;
+        $tmp = array();
 
-        $c[''] = '---';
-        $c['1'] = 'Album 1';
-        $c['2'] = 'Album 2';
+        $albums = $this->photo->getAlbums($_SESSION['users_id'], true);
 
-        return $c;
+        $tmp[''] = '---';
+        foreach ($albums as $album) {
+            $tmp[$album['id']] = $album['title'];
+        }
+
+        return $tmp;
 
     }
 
