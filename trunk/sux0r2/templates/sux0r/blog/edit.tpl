@@ -73,9 +73,6 @@
 </p>
 
 <p>
-<div>
-TODO: http://wiki.moxiecode.com/index.php/TinyMCE:Configuration/external_image_list_url
-</div>
 <textarea name="body" class="mceEditor">{$body}</textarea>
 </p>
 

@@ -437,7 +437,7 @@ class suxUser {
     /**
     * Perform a login using Digest Access Authentication
     *
-    * Inspired by:
+    * Forked From / Inspired by:
     * CJ Niemira: http://siege.org/projects/phpMyID/
     *
     * @global string $CONFIG['REALM']

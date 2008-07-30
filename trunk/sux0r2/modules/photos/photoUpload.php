@@ -134,6 +134,7 @@ class photoUpload  {
             throw new Exception('No file uploaded?');
 
         // Begin collecting $photo array
+        // TODO: Avoid spoofing, check if this album belongs to this user,
         $photo['photoalbums_id'] = $clean['album'];
 
         // Get extension

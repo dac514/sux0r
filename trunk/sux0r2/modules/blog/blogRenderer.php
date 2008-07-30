@@ -236,11 +236,6 @@ class blogRenderer extends suxRenderer {
     * TinyMCE Initialization for comments
     *
     * @see http://tinymce.moxiecode.com/
-    * @global string $CONFIG['URL']
-    * @global string $CONFIG['PATH']
-    * @global string $CONFIG['LANGUAGE']
-    * @param int $width optional width parameter for editor window
-    * @param int $height optional height parameter for editor window
     * @return string the javascript code
     */
     function tinyMceComment() {
@@ -271,11 +266,6 @@ class blogRenderer extends suxRenderer {
     * TinyMCE Initialization for bookmarks
     *
     * @see http://tinymce.moxiecode.com/
-    * @global string $CONFIG['URL']
-    * @global string $CONFIG['PATH']
-    * @global string $CONFIG['LANGUAGE']
-    * @param int $width optional width parameter for editor window
-    * @param int $height optional height parameter for editor window
     * @return string the javascript code
     */
     function tinyMceBookmark() {
@@ -307,10 +297,6 @@ class blogRenderer extends suxRenderer {
     *
     * @see http://tinymce.moxiecode.com/
     * @global string $CONFIG['URL']
-    * @global string $CONFIG['PATH']
-    * @global string $CONFIG['LANGUAGE']
-    * @param int $width optional width parameter for editor window
-    * @param int $height optional height parameter for editor window
     * @return string the javascript code
     */
     function tinyMceEditor() {
@@ -330,6 +316,7 @@ class blogRenderer extends suxRenderer {
         theme_advanced_statusbar_location : "bottom",
         entity_encoding : "raw",
         relative_urls : false,
+        external_image_list_url : "' . $GLOBALS['CONFIG']['URL'] . '/modules/photos/getImagesByUser.php",
         ';
         return $this->tinyMce($init);
 

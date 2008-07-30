@@ -16,7 +16,7 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
-* Inspired by:
+* Forked from / Inspired by:
 * Loic d'Anterroches: http://www.xhtml.net/scripts/PHPNaiveBayesianFilter
 * Ken Williams: http://mathforum.org/~ken/bayes/bayes.html
 *
