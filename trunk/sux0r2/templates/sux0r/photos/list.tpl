@@ -26,37 +26,75 @@
 		<td style="vertical-align:top;">
 			<div id="leftside">
 
-            {$r->widget('Title', '<p>Lorem ipsum dolor sit amet, consectetuer...</p>', 'www.trotch.com', 'http://localhost:8888/sux0r2/media/sux0r/pavatars/bunker.jpg', 'Caption my big ass caption', null, 'floatleft')}
+            {if $r->pho}
+            {foreach from=$r->pho item=foo name=bar}
+            {if $smarty.foreach.bar.iteration % 2 != 0}
 
 
-                <div class="widget">
-                    <h2>Title</h2>
-                    <div class="floatleft">
-                    <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="80" height="80"><br>
-                    </div>
+
+                {capture name=album}
                     <p>
-                    Title<br />
-                    Description<br />
-                    2007-01-01 12:12:12<br />
-                    ## Photos
+                    {$foo.published_on}<br />
+                    {$foo.title}<br />
+                    {$r->countPhotos($foo.id)} Photos
                     </p>
-                    <div class="clearboth"></div>
-                    <b class="bb"><b></b></b>
-                </div>
+                    {$foo.body_html}
+                {/capture}
 
+                {capture name=album_url}
+                    {$r->makeUrl('/photos/album', null, true)}/{$foo.id}
+                {/capture}
+
+                {capture name=thumbnail}
+                    http://localhost:8888/sux0r2/media/sux0r/pavatars/bunker.jpg
+                {/capture}
+
+                {$r->widget($foo.title, $smarty.capture.album, $smarty.capture.album_url, $smarty.capture.thumbnail, null, null, 'floatleft')}
+
+            {/if}
+            {/foreach}
+            {/if}
 
 			</div>
 		</td>
 		<td style="vertical-align:top;">
 			<div id="rightside">
 
-            {$r->widget('Title', '<p>Lorem ipsum dolor sit amet, consectetuer...</p>', 'www.trotch.com', 'http://localhost:8888/sux0r2/media/sux0r/pavatars/bunker.jpg', 'Caption my big ass caption', null, 'floatleft')}
-            {$r->widget('Title', '<p>Lorem ipsum dolor sit amet, consectetuer...</p>', 'www.trotch.com', 'http://localhost:8888/sux0r2/media/sux0r/pavatars/bunker.jpg', 'Caption my big ass caption', null, 'floatleft')}
+            {if $r->pho}
+            {foreach from=$r->pho item=foo name=bar}
+            {if $smarty.foreach.bar.iteration % 2 == 0}
 
+                {capture name=album}
+                    <p>
+                    {$foo.published_on}<br />
+                    {$foo.title}<br />
+                    {$r->countPhotos($foo.id)} Photos
+                    </p>
+                    {$foo.body_html}
+                {/capture}
+
+                {capture name=album_url}
+                    {$r->makeUrl('/photos/album', null, true)}/{$foo.id}
+                {/capture}
+
+                {capture name=thumbnail}
+                    http://localhost:8888/sux0r2/media/sux0r/pavatars/bunker.jpg
+                {/capture}
+
+                {$r->widget($foo.title, $smarty.capture.album, $smarty.capture.album_url, $smarty.capture.thumbnail, null, null, 'floatleft')}
+
+            {/if}
+            {/foreach}
+            {/if}
 
 			</div>
 		</td>
 	</tr>
+    <tr>
+        <td colspan="2" style="text-align:center;">
+            {$r->text.pager}
+        </td>
+    </tr>
 	<tr>
 		<td colspan="2" style="vertical-align:bottom;">
 			<div id="footer">

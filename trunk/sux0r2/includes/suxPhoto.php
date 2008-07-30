@@ -88,13 +88,15 @@ class suxPhoto {
     * Get an album by id
     *
     * @param int $id photoalbums id
+    * @param int $limit sql limit value
+    * @param int $start sql start of limit value
     * @param bool $unpub select un-published?
     * @return array|false
     */
-    function getAlbums($users_id = null, $unpub = false) {
+    function getAlbums($users_id = null, $limit = null, $start = 0, $unpub = false) {
 
         // Sanity check
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid album id');
+        if ($users_id && !filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid users id');
 
         $query = "SELECT * FROM {$this->db_albums} ";
         if ($users_id) $query .= 'WHERE users_id = ? ';
@@ -113,6 +115,10 @@ class suxPhoto {
         }
         $query .= 'ORDER BY published_on DESC ';
 
+        // Limit
+        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        elseif ($limit) $query .= "LIMIT {$limit} ";
+
         $st = $this->db->prepare($query);
         $st->execute($users_id ? array($users_id) : array());
 
@@ -120,6 +126,41 @@ class suxPhoto {
         if ($album) return $album;
         else return false;
 
+
+    }
+
+
+    /**
+    * Count albums
+    *
+    * @param int $id photoalbums id
+    * @param bool $unpub select un-published?
+    * @return array|false
+    */
+    function countAlbums($users_id = null, $unpub = false) {
+
+        // Sanity check
+        if ($users_id && !filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid users id');
+
+        $query = "SELECT COUNT(*) FROM {$this->db_albums} ";
+        if ($users_id) $query .= 'WHERE users_id = ? ';
+
+        if (!$unpub) {
+            // Only show published items
+            $query .= $users_id ? 'AND ' : 'WHERE ';
+            $query .= 'draft = 0 ';
+            if ($this->db_driver == 'mysql') {
+                // MySql
+                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            }
+            else {
+                throw new Exception('Unsupported database driver');
+            }
+        }
+
+        $st = $this->db->prepare($query);
+        $st->execute($users_id ? array($users_id) : array());
+        return $st->fetchColumn();
 
     }
 
@@ -276,6 +317,27 @@ class suxPhoto {
         $album = $st->fetchAll(PDO::FETCH_ASSOC);
         if ($album) return $album;
         else return false;
+
+
+    }
+
+
+    /**
+    * Count photos by photoalbums_id
+    *
+    * @param int $photoalbums_id photoalbums id
+    * @return array|false
+    */
+    function countPhotos($photoalbums_id) {
+
+        // Sanity check
+        if (!filter_var($photoalbums_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid photoalbums id');
+
+        $query = "SELECT COUNT(*) FROM {$this->db_photos} WHERE photoalbums_id = ? ";
+
+        $st = $this->db->prepare($query);
+        $st->execute(array($photoalbums_id));
+        return $st->fetchColumn();
 
 
     }

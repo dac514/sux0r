@@ -22,6 +22,8 @@
 *
 */
 
+require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
+require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once('photosRenderer.php');
 
@@ -35,6 +37,8 @@ class photos {
     public $tpl;
     public $r;
     private $user;
+    private $photo;
+    private $pager;
 
 
     /**
@@ -46,8 +50,45 @@ class photos {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new photosRenderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->user = new suxUser();
         $this->r->text =& $this->gtext;
+        $this->user = new suxUser();
+        $this->photo = new suxPhoto();
+
+        $this->pager = new suxPager();
+        $this->pager->limit = 10;
+
+    }
+
+
+    /**
+    * List albums
+    */
+    function listing() {
+
+        // Start pager
+        $this->pager->setStart();
+
+        // Get nickname
+        if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
+        else $nn = 'nobody';
+
+        // "Cache Groups" using a vertical bar |
+        $cache_id = $nn . '|listing|' . $this->pager->start;
+        $this->tpl->caching = 0;
+
+        if (!$this->tpl->is_cached('list.tpl', $cache_id)) {
+
+            $this->pager->setPages($this->photo->countAlbums());
+            $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/photos'));
+            $this->r->pho = $this->photo->getAlbums(null, $this->pager->limit, $this->pager->start);
+
+            if (!count($this->r->pho)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+
+        }
+
+
+        $this->tpl->assign_by_ref('r', $this->r);
+        $this->tpl->display('list.tpl', $cache_id);
 
     }
 
@@ -64,7 +105,7 @@ class photos {
 
 
     /**
-    * List photos
+    * List photos in an album
     */
     function album($id) {
 
@@ -73,16 +114,6 @@ class photos {
 
     }
 
-
-    /**
-    * List photos
-    */
-    function listing() {
-
-        $this->tpl->assign_by_ref('r', $this->r);
-        $this->tpl->display('list.tpl');
-
-    }
 
 
 }

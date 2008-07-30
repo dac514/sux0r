@@ -27,6 +27,9 @@ require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
 class photosRenderer extends suxRenderer {
 
+    public $pho = array(); // Array of photos
+
+    // Objects
     private $photo;
 
     /**
@@ -88,7 +91,7 @@ class photosRenderer extends suxRenderer {
         if (is_array($tmp)) return $tmp;
         $tmp = array();
 
-        $albums = $this->photo->getAlbums($_SESSION['users_id'], true);
+        $albums = $this->photo->getAlbums($_SESSION['users_id'], null, 0, true);
 
         $tmp[''] = '---';
         foreach ($albums as $album) {
@@ -96,6 +99,19 @@ class photosRenderer extends suxRenderer {
         }
 
         return $tmp;
+
+    }
+
+
+    /**
+    * Count photos
+    *
+    * @param int $photoalbums_id
+    * @return int
+    */
+    function countPhotos($photoalbums_id) {
+
+        return $this->photo->countPhotos($photoalbums_id);
 
     }
 
