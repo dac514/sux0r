@@ -6,10 +6,11 @@ $gtext['navcontainer'] = array(
 
     'Home' => suxFunct::makeUrl('/home'),
     'Blog' => suxFunct::makeUrl('/blog'),
-    'RSS Feeds' => suxFunct::makeUrl('/feeds'),
+    'Feeds' => suxFunct::makeUrl('/feeds'),
     'Photos' => suxFunct::makeUrl('/photos'),
-    'Item Five' => '#',
-    'Trotch' => 'http://www.trotch.com/',
+    'Bookmarks' => '#',
+    'Calendar' => '#',
+    'Donate!' => 'http://sourceforge.net/project/project_donations.php?group_id=131752',
 
     );
 
