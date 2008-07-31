@@ -248,6 +248,42 @@ class suxPhoto {
     }
 
 
+    /**
+    * Get photos by photoalbums_id
+    *
+    * @param int $photoalbums_id photoalbums id
+    * @return array|false
+    */
+    function getThumbnail($photoalbums_id) {
+
+        // Sanity check
+        if (!filter_var($photoalbums_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid photoalbums id');
+
+        $query = "SELECT thumbnail FROM {$this->db_albums} WHERE id = ? LIMIT 1 ";
+
+        $st = $this->db->prepare($query);
+        $st->execute(array($photoalbums_id));
+        $thumbnail = $st->fetchColumn();
+
+        if ($thumbnail) {
+
+            $query = "SELECT * FROM {$this->db_photos} WHERE id = ? LIMIT 1 ";
+            $st = $this->db->prepare($query);
+            $st->execute(array($thumbnail));
+            $photo = $st->fetch(PDO::FETCH_ASSOC);
+
+            if ($photo) return $photo;
+
+        }
+
+        $query = "SELECT * FROM {$this->db_photos} WHERE photoalbums_id = ? ORDER BY image LIMIT 1 ";
+        $st = $this->db->prepare($query);
+        $st->execute(array($photoalbums_id));
+        return $st->fetch(PDO::FETCH_ASSOC);
+
+    }
+
+
     // ------------------------------------------------------------------------
     // Photo functions
     // ------------------------------------------------------------------------
@@ -278,14 +314,20 @@ class suxPhoto {
     * Get photos by photoalbums_id
     *
     * @param int $photoalbums_id photoalbums id
+    * @param int $limit sql limit value
+    * @param int $start sql start of limit value
     * @return array|false
     */
-    function getPhotos($photoalbums_id) {
+    function getPhotos($photoalbums_id, $limit = null, $start = 0) {
 
         // Sanity check
         if (!filter_var($photoalbums_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid photoalbums id');
 
         $query = "SELECT * FROM {$this->db_photos} WHERE photoalbums_id = ? ORDER BY image ";
+
+        // Limit
+        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        elseif ($limit) $query .= "LIMIT {$limit} ";
 
         $st = $this->db->prepare($query);
         $st->execute(array($photoalbums_id));
@@ -302,14 +344,20 @@ class suxPhoto {
     * Get photos by users_id
     *
     * @param int $users_id photoalbums id
+    * @param int $limit sql limit value
+    * @param int $start sql start of limit value
     * @return array|false
     */
-    function getPhotosByUser($users_id) {
+    function getPhotosByUser($users_id, $limit = null, $start = 0) {
 
         // Sanity check
         if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid users id');
 
         $query = "SELECT * FROM {$this->db_photos} WHERE users_id = ? ORDER BY photoalbums_id, image ";
+
+        // Limit
+        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        elseif ($limit) $query .= "LIMIT {$limit} ";
 
         $st = $this->db->prepare($query);
         $st->execute(array($users_id));

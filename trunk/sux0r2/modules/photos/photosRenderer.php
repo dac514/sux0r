@@ -116,6 +116,23 @@ class photosRenderer extends suxRenderer {
     }
 
 
+    /**
+    * Get thumbnail
+    *
+    * @param int $photoalbums_id
+    * @return int
+    */
+    function getThumbnail($photoalbums_id) {
+
+        $image = null;
+        $tmp = $this->photo->getThumbnail($photoalbums_id);
+        if ($tmp) $image = suxFunct::makeUrl('/data/photos/' . $tmp['image'], null, true);
+
+        return $image;
+
+    }
+
+
 
 }
 
