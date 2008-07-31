@@ -98,6 +98,20 @@ class suxTemplate extends Smarty {
         $this->caching = 0; // Caching off by default, enable in module if needed
 
         // --------------------------------------------------------------------
+        // Config dir
+        // --------------------------------------------------------------------
+
+        $config_dir = $GLOBALS['CONFIG']['PATH'] . "/templates/$partition/";
+        $config_dir_fallback = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r/';
+
+        if($partition != 'sux0r' && !is_file($config_dir . 'my.conf')) {
+            // We didn't find anything, but the partition wasn't default, let's try with default
+            $config_dir = $config_dir_fallback;
+        }
+
+        $this->config_dir = $config_dir;
+
+        // --------------------------------------------------------------------
         // Template directory
         // --------------------------------------------------------------------
 

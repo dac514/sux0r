@@ -22,7 +22,7 @@
 
                 <div class="widget">
                     <h2>Lorem ipsum</h2>
-                    <div class="floatright">
+                    <div class="floatleft">
                     <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="80" height="80"><br>
                     Caption
                     </div>
@@ -42,38 +42,6 @@
 
                 <div class="widget">
                     <h2>Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, consectetuer</h2>
-
-                    <p>Thumbnails?</p>
-
-                    <div style="margin-left: 10px;">
-
-                    <div class="thumbnail">
-                    <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="60" height="60">
-                    </div>
-
-                    <div class="thumbnail">
-                    <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="60" height="60">
-                    </div>
-
-                    <div class="thumbnail">
-                    <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="60" height="60">
-                    </div>
-
-                    {* <br class="clearboth" /> *}
-
-                    <div class="thumbnail">
-                    <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="60" height="60"><br>
-                    </div>
-                    <div class="thumbnail">
-                    <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="60" height="60"><br>
-                    </div>
-                    <div class="thumbnail">
-                    <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="60" height="60"><br>
-                    </div>
-
-                    <br class="clearboth" />
-
-                    </div>
 
                     <!-- menu -->
                     <div class='menucontainer'>

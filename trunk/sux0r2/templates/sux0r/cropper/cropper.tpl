@@ -22,9 +22,9 @@
     <form action="{$form_url}" name="default" method="post" accept-charset="utf-8" >
 
     <input type="hidden" name="token" value="{$token}" />
-    <input type="hidden" name="integrity" value="{$r->integrityHash($type, $id)}" />
+    <input type="hidden" name="integrity" value="{$r->integrityHash($module, $id)}" />
 
-    <input type="hidden" name="type" value="{$type}" />
+    <input type="hidden" name="module" value="{$module}" />
     <input type="hidden" name="id" value="{$id}" />
     <input type="hidden" name="x2" value="{$x2}" />
     <input type="hidden" name="y2" value="{$y2}" />

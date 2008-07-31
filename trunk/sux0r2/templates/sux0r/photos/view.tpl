@@ -1,5 +1,28 @@
 {include file=$r->xhtml_header}
 
+{literal}
+<script type="text/javascript">
+// <![CDATA[
+function maximumWidth(myId, maxW) {
+    var pix=document.getElementById(myId).getElementsByTagName('img');
+    for (i=0; i<pix.length; i++) {
+        w=pix[i].width;
+        h=pix[i].height;
+        if (w > maxW) {
+            f=1-((w - maxW) / w);
+            pix[i].width=w * f;
+            pix[i].height=h * f;
+        }
+    }
+}
+
+window.onload = function() {
+    maximumWidth('suxPhoto', {/literal}{#maxPhotoWidth#}{literal});
+}
+// ]]>
+</script>
+{/literal}
+
 <table id="proselytizer">
 	<tr>
 		<td colspan="2" style="vertical-align:top;">
@@ -17,7 +40,7 @@
 		<td style="vertical-align:top;">
 			<div id="leftside">
 
-            xxx
+            TODO
 
 			</div>
 		</td>
@@ -26,24 +49,23 @@
 
 
                 <div class="widget">
-                    <h2>Album</h2>
+                    <h2><a href="{$r->text.back_url}">{$r->text.album}</a></h2>
 
 
-                    <div class="prevNext" style="width:672px;">
-                        <a href="" class="previous">&laquo; Previous</a>
-                        <a href="" class="next">Next &raquo;</a>
+                    <div class="prevNext" style="width:{#maxPhotoWidth#}px;">
+                        {if $r->text.prev_id}<a href="{$r->makeUrl('photos/view')}/{$r->text.prev_id}" class="previous">&laquo; Previous</a>{/if}
+                        {if $r->text.next_id}<a href="{$r->makeUrl('photos/view')}/{$r->text.next_id}" class="next">Next &raquo;</a>{/if}
                     </div>
 
-                    <p>
+                    <p id="suxPhoto">
                     <img class="photo" src="{$r->url}/data/photos/{$r->pho.image}" alt="" >
                     </p>
 
-
-                    <div class="description" style="width:672px;">
-                    Album
+                    {if $r->pho.body_html}
+                    <div class="description" style="width:{#maxPhotoWidth#}px;">
                     {$r->pho.body_html}
                     </div>
-
+                    {/if}
 
                     <div class="clearboth"></div>
                     <b class="bb"><b></b></b>

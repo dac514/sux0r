@@ -83,11 +83,11 @@ class cropper {
     * Build the form and show the template
     *
     * @global string $CONFIG['URL']
-    * @param string $type
+    * @param string $module
     * @param int $id
     * @param array $dirty reference to unverified $_POST
     */
-    function formBuild($type, $id, &$dirty) {
+    function formBuild($module, $id, &$dirty) {
 
         // Initialize width & height
         $width = 0;
@@ -96,9 +96,9 @@ class cropper {
         // Check $id
         if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception ('Invalid $id');
 
-        // Check $type, assign $table
-        $table = $this->getTable($type);
-        if (!$table) throw new Exception('Unsuported $type');
+        // Check $module, assign $table
+        $table = $this->getTable($module);
+        if (!$table) throw new Exception('Unsuported $module');
 
         // --------------------------------------------------------------------
         // Form logic
@@ -109,7 +109,7 @@ class cropper {
 
         if (!suxValidate::is_registered_form()) {
             suxValidate::connect($this->tpl, true); // Reset connection
-            suxValidate::register_validator('integrity', 'integrity:type:id', 'hasIntegrity');
+            suxValidate::register_validator('integrity', 'integrity:module:id', 'hasIntegrity');
         }
 
         // --------------------------------------------------------------------
@@ -131,7 +131,7 @@ class cropper {
         // Assign a url to the fullsize version of the image
         $image = $image['image'];
         $image = suxPhoto::t2fImage($image);
-        $image = "{$GLOBALS['CONFIG']['URL']}/data/{$type}/{$image}";
+        $image = "{$GLOBALS['CONFIG']['URL']}/data/{$module}/{$image}";
         $image = suxFunct::myHttpServer() . $image;
 
         // Double check
@@ -145,15 +145,18 @@ class cropper {
 
         if ($image && $width && $height) {
 
-            $this->tpl->assign('type', $type);
+            // Get config variables
+            $this->tpl->config_load('my.conf', $module);
+
+            $this->tpl->assign('module', $module);
             $this->tpl->assign('id', $id);
-            $this->tpl->assign('x2', 80); // Pavatar
-            $this->tpl->assign('y2', 80);
+            $this->tpl->assign('x2', $this->tpl->get_config_vars('thumbnailWidth')); // Pavatar
+            $this->tpl->assign('y2', $this->tpl->get_config_vars('thumbnailHeight'));
             $this->tpl->assign('url_to_source', $image);
             $this->tpl->assign('width', $width);
             $this->tpl->assign('height', $height);
 
-            $this->tpl->assign('form_url', suxFunct::makeUrl("/cropper/{$type}/{$id}"));
+            $this->tpl->assign('form_url', suxFunct::makeUrl("/cropper/{$module}/{$id}"));
             $this->tpl->assign('prev_url', suxFunct::getPreviousURL($this->prev_url_preg));
 
             $this->tpl->assign_by_ref('r', $this->r);
@@ -172,9 +175,9 @@ class cropper {
     */
     function formProcess(&$clean) {
 
-        // Check $type, assign $table
-        $table = $this->getTable($clean['type']);
-        if (!$table) throw new Exception('Unsuported $type');
+        // Check $module, assign $table
+        $table = $this->getTable($clean['module']);
+        if (!$table) throw new Exception('Unsuported $module');
 
         // --------------------------------------------------------------------
         // Get image from database
@@ -192,7 +195,7 @@ class cropper {
             // TODO, verify we are allowed to edit this
         }
 
-        $path_to_dest = "{$GLOBALS['CONFIG']['PATH']}/data/{$clean['type']}/{$image['image']}";
+        $path_to_dest = "{$GLOBALS['CONFIG']['PATH']}/data/{$clean['module']}/{$image['image']}";
         $path_to_source = suxPhoto::t2fImage($path_to_dest);
 
         if (!is_writable($path_to_dest)) die('Destination is not writable? ' . $path_to_dest);
@@ -236,15 +239,14 @@ class cropper {
 
 
     /**
-    * Check type, return table
+    * Check module, return table
     *
-    * @param string $type
+    * @param string $module
     * @return string
     */
-    private function getTable($type) {
+    private function getTable($module) {
 
-
-        if ($type == 'blog') $table = 'messages';
+        if ($module == 'blog') $table = 'messages';
         else $table = false;
 
         return $table;
