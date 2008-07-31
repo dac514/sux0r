@@ -66,6 +66,9 @@ class blogEdit {
         $this->nb = new bayesUser();
         $this->link = new suxLink();
 
+        // This module has config variables, load them
+        $this->tpl->config_load('my.conf', $this->module);
+
         // Redirect if not logged in
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
 
@@ -247,7 +250,10 @@ class blogEdit {
             $resize = suxFunct::dataDir($this->module) . "/{$resize}";
             $fullsize = suxFunct::dataDir($this->module) . "/{$fullsize}";
 
-            suxPhoto::resizeImage($format, $_FILES['image']['tmp_name'], $resize, 80, 80); // TODO, variable sized thumbnail
+            suxPhoto::resizeImage($format, $_FILES['image']['tmp_name'], $resize,
+                $this->tpl->get_config_vars('thumbnailWidth'),
+                $this->tpl->get_config_vars('thumbnailHeight')
+                );
             move_uploaded_file($_FILES['image']['tmp_name'], $fullsize);
 
         }

@@ -30,8 +30,10 @@ require_once('photosRenderer.php');
 class photos {
 
     // Variables
+    public $per_page; // Photos per page
     public $gtext = array();
     private $module = 'photos';
+
 
     // Objects
     public $tpl;
@@ -54,8 +56,13 @@ class photos {
         $this->user = new suxUser();
         $this->photo = new suxPhoto();
 
+        // Pager defaults
         $this->pager = new suxPager();
         $this->pager->limit = 10;
+
+        // This module has config variables, load them
+        $this->tpl->config_load('my.conf', $this->module);
+        $this->per_page = $this->tpl->get_config_vars('perPage');
 
     }
 
@@ -65,15 +72,13 @@ class photos {
     */
     function listing() {
 
+        $this->tpl->assign_by_ref('r', $this->r);
+
         // Start pager
         $this->pager->setStart();
 
-        // Get nickname
-        if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
-        else $nn = 'nobody';
-
         // "Cache Groups" using a vertical bar |
-        $cache_id = $nn . '|listing|' . $this->pager->start;
+        $cache_id = 'listing|' . $this->pager->start;
         $this->tpl->caching = 0; // TODO, turn cache on
 
         if (!$this->tpl->is_cached('list.tpl', $cache_id)) {
@@ -86,8 +91,6 @@ class photos {
 
         }
 
-
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('list.tpl', $cache_id);
 
     }
@@ -98,17 +101,14 @@ class photos {
     */
     function album($id) {
 
-        $this->pager->limit = 50;
+        $this->tpl->assign_by_ref('r', $this->r);
+        $this->pager->limit = $this->per_page;
 
         // Start pager
         $this->pager->setStart();
 
-        // Get nickname
-        if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
-        else $nn = 'nobody';
-
         // "Cache Groups" using a vertical bar |
-        $cache_id = $nn . "|album|{$id}|" . $this->pager->start;
+        $cache_id = "album|{$id}|" . $this->pager->start;
         $this->tpl->caching = 0; // TODO, turn cache on
 
         if (!$this->tpl->is_cached('album.tpl', $cache_id)) {
@@ -118,10 +118,14 @@ class photos {
             $this->r->pho = $this->photo->getPhotos($id, $this->pager->limit, $this->pager->start);
 
             if (!count($this->r->pho)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+            else {
+                $album = $this->photo->getAlbum($id);
+                $this->r->text['album'] = $album['title'];
+                $this->r->text['album_url'] = suxFunct::makeUrl('/photos/album/' . $id);
+            }
 
         }
 
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('album.tpl', $cache_id);
 
     }
@@ -132,12 +136,10 @@ class photos {
     */
     function view($id) {
 
-        // Get nickname
-        if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
-        else $nn = 'nobody';
+        $this->tpl->assign_by_ref('r', $this->r);
 
         // "Cache Groups" using a vertical bar |
-        $cache_id = $nn . "|view|{$id}|" . $this->pager->start;
+        $cache_id = "view|{$id}|" . $this->pager->start;
         $this->tpl->caching = 0; // TODO, turn cache on
 
         if (!$this->tpl->is_cached('view.tpl', $cache_id)) {
@@ -146,16 +148,43 @@ class photos {
             if (!count($this->r->pho)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
             else {
 
-                $this->r->pho['image'] = suxPhoto::t2fImage($this->r->pho['image']);
-                // SQL query for prev and next images
+                $this->r->pho['image'] = suxPhoto::t2fImage($this->r->pho['image']); // Fullsize
 
+                // Album info
+                $album = $this->photo->getAlbum($this->r->pho['photoalbums_id']);
+                $this->r->text['album'] = $album['title'];
+
+                // Previous, next, and page number
+                $prev_id = null;
+                $next_id = null;
+                $page = 1;
+                $query = 'SELECT id FROM photos WHERE photoalbums_id = ? ORDER BY image '; // Same order as suxPhoto->getPhotos()
+
+                $db = suxDB::get();
+                $st = $db->prepare($query);
+                $st->execute(array($this->r->pho['photoalbums_id']));
+
+                $i = 0;
+                while ($prev_next = $st->fetch(PDO::FETCH_ASSOC)) {
+                    ++$i;
+                    if ($prev_next['id'] == $id) break;
+                    if ($i >= $this->per_page) {
+                        $i = 0;
+                        ++$page;
+                    }
+                    $prev_id = $prev_next['id'];
+                }
+                $prev_next = $st->fetch(PDO::FETCH_ASSOC);
+                $next_id = $prev_next['id'];
+
+                $this->r->text['prev_id'] = $prev_id;
+                $this->r->text['next_id'] = $next_id;
+                $this->r->text['back_url'] = suxFunct::makeUrl('photos/album/' . $this->r->pho['photoalbums_id'], array('page' => $page));
 
             }
 
         }
 
-
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('view.tpl', $cache_id);
 
     }

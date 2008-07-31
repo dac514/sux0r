@@ -56,6 +56,9 @@ class photoUpload  {
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
+        // This module has config variables, load them
+        $this->tpl->config_load('my.conf', $this->module);
+
         // Redirect if not logged in
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
 
@@ -158,7 +161,10 @@ class photoUpload  {
 
             if (!$this->photo->isDupe($md5, $_SESSION['users_id'], $photo['photoalbums_id'])) {
 
-                suxPhoto::resizeImage($format, $_FILES['image']['tmp_name'], $resize, 80, 80); // TODO, variable sized thumbnail
+                suxPhoto::resizeImage($format, $_FILES['image']['tmp_name'], $resize,
+                    $this->tpl->get_config_vars('thumbnailWidth'),
+                    $this->tpl->get_config_vars('thumbnailHeight')
+                    );
                 move_uploaded_file($_FILES['image']['tmp_name'], $fullsize);
 
                 // Insert $photo into database
@@ -195,7 +201,10 @@ class photoUpload  {
 
                     if (!$this->photo->isDupe($md5, $_SESSION['users_id'], $photo['photoalbums_id'])) {
 
-                        suxPhoto::resizeImage($format, "{$tmp_dir}/{$file}", $resize, 80, 80); // TODO, variable sized thumbnail
+                        suxPhoto::resizeImage($format, "{$tmp_dir}/{$file}", $resize,
+                            $this->tpl->get_config_vars('thumbnailWidth'),
+                            $this->tpl->get_config_vars('thumbnailHeight')
+                            );
                         copy("{$tmp_dir}/{$file}", $fullsize);
 
                         // Insert $photo into database

@@ -62,3 +62,11 @@ input.imageFile {
     border: 0;
     background: none;
 }
+
+
+.thumbnail {
+    float: left;
+    border: 1px solid #999999;
+    margin: 0 25px 25px 0;
+    padding: 5px;
+}
