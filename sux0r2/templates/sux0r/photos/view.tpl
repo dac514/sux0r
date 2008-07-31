@@ -35,13 +35,13 @@
                     </div>
 
                     <p>
-                    <img class="photo" src="http://www.trotch.com/images/press/pfd_web_98.jpg" alt="" />
+                    <img class="photo" src="{$r->url}/data/photos/{$r->pho.image}" alt="" >
                     </p>
 
 
                     <div class="description" style="width:672px;">
-                    Album<br />
-                    Description
+                    Album
+                    {$r->pho.body_html}
                     </div>
 
 

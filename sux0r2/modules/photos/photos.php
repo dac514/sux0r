@@ -74,7 +74,7 @@ class photos {
 
         // "Cache Groups" using a vertical bar |
         $cache_id = $nn . '|listing|' . $this->pager->start;
-        $this->tpl->caching = 0;
+        $this->tpl->caching = 0; // TODO, turn cache on
 
         if (!$this->tpl->is_cached('list.tpl', $cache_id)) {
 
@@ -94,23 +94,69 @@ class photos {
 
 
     /**
-    * View photo
+    * List photos in an album
     */
-    function view($id) {
+    function album($id) {
+
+        $this->pager->limit = 50;
+
+        // Start pager
+        $this->pager->setStart();
+
+        // Get nickname
+        if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
+        else $nn = 'nobody';
+
+        // "Cache Groups" using a vertical bar |
+        $cache_id = $nn . "|album|{$id}|" . $this->pager->start;
+        $this->tpl->caching = 0; // TODO, turn cache on
+
+        if (!$this->tpl->is_cached('album.tpl', $cache_id)) {
+
+            $this->pager->setPages($this->photo->countPhotos($id));
+            $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/photos/album/{$id}"));
+            $this->r->pho = $this->photo->getPhotos($id, $this->pager->limit, $this->pager->start);
+
+            if (!count($this->r->pho)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+
+        }
 
         $this->tpl->assign_by_ref('r', $this->r);
-        $this->tpl->display('view.tpl');
+        $this->tpl->display('album.tpl', $cache_id);
 
     }
 
 
     /**
-    * List photos in an album
+    * View photo
     */
-    function album($id) {
+    function view($id) {
+
+        // Get nickname
+        if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
+        else $nn = 'nobody';
+
+        // "Cache Groups" using a vertical bar |
+        $cache_id = $nn . "|view|{$id}|" . $this->pager->start;
+        $this->tpl->caching = 0; // TODO, turn cache on
+
+        if (!$this->tpl->is_cached('view.tpl', $cache_id)) {
+
+            $this->r->pho = $this->photo->getPhoto($id);
+            if (!count($this->r->pho)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+            else {
+
+                $this->r->pho['image'] = suxPhoto::t2fImage($this->r->pho['image']);
+                // SQL query for prev and next images
+
+
+            }
+
+        }
+
 
         $this->tpl->assign_by_ref('r', $this->r);
-        $this->tpl->display('album.tpl');
+        $this->tpl->display('view.tpl', $cache_id);
 
     }
 

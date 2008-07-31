@@ -28,21 +28,20 @@
                 <div class="widget">
                     <h2>Title</h2>
 
-                    <p>Thumbnails?</p>
-
                     <div style="margin-left: 10px;">
 
-                        <img class="thumbnail" src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="60" height="60">
-                        <img class="thumbnail" src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="60" height="60">
-                        <img class="thumbnail" src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="60" height="60">
+                    {if $r->pho}
+                    {foreach from=$r->pho item=foo name=bar}
 
-                        {* <br class="clearboth" /> *}
+                       <a href="{$r->makeUrl('/photos/view')}/{$foo.id}"><img class="thumbnail" src="{$r->url}/data/photos/{$foo.image}" alt="" ></a>
 
-                        <img class="thumbnail" src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="60" height="60">
-                        <img class="thumbnail" src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="60" height="60">
-                        <img class="thumbnail" src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="60" height="60">
+                    {/foreach}
+                    {/if}
 
                     </div>
+
+                    <div class="clearboth"></div>
+                    <p>{$r->text.pager}</p>
 
 
                     <div class="clearboth"></div>

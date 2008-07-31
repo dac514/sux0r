@@ -46,7 +46,7 @@
                 {/capture}
 
                 {capture name=thumbnail}
-                    http://localhost:8888/sux0r2/media/sux0r/pavatars/bunker.jpg
+                    {$r->getThumbnail($foo.id)}
                 {/capture}
 
                 {$r->widget($foo.title, $smarty.capture.album, $smarty.capture.album_url, $smarty.capture.thumbnail, null, null, 'floatleft')}
@@ -78,7 +78,7 @@
                 {/capture}
 
                 {capture name=thumbnail}
-                    http://localhost:8888/sux0r2/media/sux0r/pavatars/bunker.jpg
+                    {$r->getThumbnail($foo.id)}
                 {/capture}
 
                 {$r->widget($foo.title, $smarty.capture.album, $smarty.capture.album_url, $smarty.capture.thumbnail, null, null, 'floatleft')}

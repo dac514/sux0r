@@ -302,7 +302,7 @@ CREATE TABLE `messages` (
   PRIMARY KEY  (`id`),
   KEY `users_id` (`users_id`),
   KEY `thread` (`thread_id`,`thread_pos`),
-  KEY `published` (`published_on`,`draft`),
+  KEY `published` (`draft`,`published_on`),
   KEY `type` (`forum`,`blog`,`wiki`,`slideshow`),
   KEY `parent_id` (`parent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -386,10 +386,12 @@ CREATE TABLE `photoalbums` (
   `title` varchar(255) NOT NULL,
   `body_html` text NOT NULL,
   `body_plaintext` text NOT NULL,
+  `thumbnail` int(11) default NULL,
   `draft` tinyint(1) NOT NULL,
-  `published_on` date NOT NULL,
+  `published_on` datetime NOT NULL,
   PRIMARY KEY  (`id`),
-  KEY `users_id` (`users_id`)
+  KEY `users_id` (`users_id`),
+  KEY `published` (`draft`,`published_on`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
