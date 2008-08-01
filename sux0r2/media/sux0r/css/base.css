@@ -125,6 +125,10 @@ input, select {
     margin-right: 5px;
 }
 
+.pager .currentPage {
+    font-weight: bold;
+}
+
 /* }}} */
 
 /* {{{ genericBayesInterface */
