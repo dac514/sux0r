@@ -23,9 +23,11 @@
 
 class suxPager {
 
-    public $limit = 50;
+    public $range = 10; // pageList() variable
+    public $limit = 10; // SQL Limit
     public $start = 0;
     public $pages = 0;
+
 
     /**
     * Constructor
@@ -115,9 +117,10 @@ class suxPager {
 
         // Sanitize
 		if (trim($url) == '') return null;
-        if (!isset($_GET['page']) || !filter_var($_GET['page'], FILTER_VALIDATE_INT)) {
+        if (!isset($_GET['page']) || !filter_var($_GET['page'], FILTER_VALIDATE_INT) || $_GET['page'] < 1) {
             $_GET['page'] = 1;
         }
+        if ($_GET['page'] > $this->pages) $_GET['page'] = $this->pages;
 
         $html = '';
         $q = mb_strpos($url, '?') ? '&' : '?';
@@ -131,17 +134,39 @@ class suxPager {
 		}
 
 		// Print the numeric page list; make the current page unlinked and bold
-		for ($i = 1; $i <= $this->pages; $i++) {
 
-            if ($i == $_GET['page']) {
-				$html .= "<span class='currentPage'><strong>{$i}</strong></span> ";
-			}
-			else if ($i >= ($_GET['page'] - 11) && $i <= ($_GET['page'] + 11)) {
-                // TODO: why 11? Is this a range?
-                $html .= "<a href='{$url}{$q}page={$i}' class='page'>{$i}</a> ";
-			}
+        $rc = $this->range - $_GET['page']; // right count
+        $lc = $this->pages - $_GET['page']; // left count
 
-		}
+        if ($rc >= ($this->range / 2)) {
+            $lc = $this->range - $rc;
+        }
+        elseif ($lc <= ($this->range / 2)) {
+            $lc = min($this->range - $lc, $this->range);
+            $rc = $this->range - $lc;
+        }
+        else {
+            $rc = round($this->range / 2);
+            $lc = $rc;
+        }
+
+        // Html mess
+        $tmp = "<span class='currentPage'>{$_GET['page']}</span> ";
+        $tmp2 = '';
+        while($lc) {
+            $p = $_GET['page'] - $lc;
+            if ($p >= 1) $tmp2 .= "<a href='{$url}{$q}page={$p}' class='page'>{$p}</a> ";
+            --$lc;
+        }
+        $tmp = $tmp2 . $tmp;
+        $tmp2 = '';
+        while($rc) {
+            $p = $_GET['page'] + $rc;
+            if ($p <= $this->pages) $tmp2 = "<a href='{$url}{$q}page={$p}' class='page'>{$p}</a> " . $tmp2;
+            --$rc;
+        }
+        $tmp .= $tmp2;
+        $html .= $tmp;
 
 		// Print the Next and Last page links if necessary
 		if (($_GET['page'] + 1) <= $this->pages) {
