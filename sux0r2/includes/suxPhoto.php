@@ -46,6 +46,26 @@ class suxPhoto {
     // Photoalbum functions
     // ------------------------------------------------------------------------
 
+
+    /**
+    * @param int $id album id
+    * @param int $users_id users id
+    * @return bool
+    */
+    function isAlbumOwner($id, $users_id) {
+
+        if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+
+        $query = "SELECT COUNT(*) FROM {$this->db_albums} WHERE id = ? AND users_id = ? LIMIT 1 ";
+
+        $st = $this->db->prepare($query);
+        $st->execute(array($id, $users_id));
+        return ($st->fetchColumn() > 0 ? true : false);
+
+    }
+
+
     /**
     * Get an album by id
     *
@@ -288,6 +308,26 @@ class suxPhoto {
     // Photo functions
     // ------------------------------------------------------------------------
 
+
+    /**
+    * @param int $id photo id
+    * @param int $users_id users id
+    * @return bool
+    */
+    function isPhotoOwner($id, $users_id) {
+
+        if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+
+        $query = "SELECT COUNT(*) FROM {$this->db_photos} WHERE id = ? AND users_id = ? LIMIT 1 ";
+
+        $st = $this->db->prepare($query);
+        $st->execute(array($id, $users_id));
+        return ($st->fetchColumn() > 0 ? true : false);
+
+    }
+
+
     /**
     * Get a photo by id
     *
@@ -414,41 +454,41 @@ class suxPhoto {
     * Saves a photo to the database
     *
     * @param int $users_id users_id
-    * @param array $album required keys => (photoalbums_id, image, md5) optional keys => (body)
-    * @param int $trusted passed on to sanitizeHtml()
+    * @param array $album required keys => (image), conditional keys => (photoalbums_id, md5), optional keys => (description)
     * @return int insert id
     */
-    function savePhoto($users_id, array $photo, $trusted = -1) {
+    function savePhoto($users_id, array $photo) {
 
         // -------------------------------------------------------------------
         // Sanitize
         // -------------------------------------------------------------------
 
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) throw new Exception('Invalid user id');
-        if (!isset($photo['photoalbums_id']) || !isset($photo['image']) || !isset($photo['md5'])) throw new Exception('Invalid $photo array');
 
         // photo id
         if (isset($photo['id'])) {
             if (!filter_var($photo['id'], FILTER_VALIDATE_INT) || $photo['id'] <= 0) throw new Exception('Invalid photo id');
             else $clean['id'] = $photo['id'];
         }
+        else {
+            if (!isset($photo['image']) || !isset($photo['photoalbums_id']) || !isset($photo['md5']))
+                throw new Exception('Invalid $photo array');
+        }
 
         // Begin collecting $clean array
         $clean['users_id'] = $users_id;
-        $clean['image'] = $photo['image'];
-        $clean['photoalbums_id'] = $photo['photoalbums_id'];
-        $clean['md5'] = $photo['md5'];
+        if (isset($photo['image'])) $clean['image'] = $photo['image'];
+        if (isset($photo['photoalbums_id'])) $clean['photoalbums_id'] = $photo['photoalbums_id'];
+        if (isset($photo['md5'])) $clean['md5'] = $photo['md5'];
 
         // Set an empty string if empty
-        if (!isset($album['body'])) $album['body'] = '';
-
-        // Sanitize HTML in body
-        $clean['body_html'] = suxFunct::sanitizeHtml($album['body'], $trusted);
-
-        // Convert and copy body to UTF-8 plaintext
-        require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
-        $converter = new suxHtml2UTF8($clean['body_html']);
-        $clean['body_plaintext']  = $converter->getText();
+        if (!isset($photo['description'])) $photo['description'] = '';
+        else {
+            // Sanitize description
+            require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
+            $converter = new suxHtml2UTF8($photo['description']);
+            $clean['description']  = $converter->getText();
+        }
 
 
         // We now have the $clean[] array
@@ -548,25 +588,7 @@ class suxPhoto {
         }
 
         /* Try to avoid problems with memory limit */
-
-        $size = getimagesize($filein);
-
-        if ($format == 'jpeg') {
-            // Jpeg
-            $fudge = 1.65; // This is a guestimate, your mileage may very
-            $memoryNeeded = round(($size[0] * $size[1] * $size['bits'] * $size['channels'] / 8 + Pow(2, 16)) * $fudge);
-        }
-        else {
-            // Not Sure
-            $memoryNeeded = $size[0] * $size[1];
-            if (isset($size['bits'])) $memoryNeeded = $memoryNeeded * $size['bits'];
-            $memoryNeeded = round($memoryNeeded);
-        }
-
-        if (memory_get_usage() + $memoryNeeded > (int) ini_get('memory_limit') * pow(1024, 2)) {
-            trigger_error('Image is too big, attempting to compensate...', E_USER_WARNING);
-            ini_set('memory_limit', (int) ini_get('memory_limit') + ceil(((memory_get_usage() + $memoryNeeded) - (int) ini_get('memory_limit') * pow(1024, 2)) / pow(1024, 2)) . 'M');
-        }
+        self::fudgeFactor($format, $filein);
 
         /* Proceed with resizing */
 
@@ -621,6 +643,36 @@ class suxPhoto {
         $func($thumb2, $fileout);
 
         imagedestroy($thumb2); // Free memory
+
+    }
+
+
+    /**
+    * Adjust memory for large images
+    *
+    * @param string $format expect jpg, jpeg, gif, or png
+    * @param string $filein path to read image file
+    */
+    static function fudgeFactor($format, $filein) {
+
+        $size = getimagesize($filein);
+
+        if ($format == 'jpeg') {
+            // Jpeg
+            $fudge = 1.65; // This is a guestimate, your mileage may very
+            $memoryNeeded = round(($size[0] * $size[1] * $size['bits'] * $size['channels'] / 8 + pow(2, 16)) * $fudge);
+        }
+        else {
+            // Not Sure
+            $memoryNeeded = $size[0] * $size[1];
+            if (isset($size['bits'])) $memoryNeeded = $memoryNeeded * $size['bits'];
+            $memoryNeeded = round($memoryNeeded);
+        }
+
+        if (memory_get_usage() + $memoryNeeded > (int) ini_get('memory_limit') * pow(1024, 2)) {
+            trigger_error('Image is too big, attempting to compensate...', E_USER_WARNING);
+            ini_set('memory_limit', (int) ini_get('memory_limit') + ceil(((memory_get_usage() + $memoryNeeded) - (int) ini_get('memory_limit') * pow(1024, 2)) / pow(1024, 2)) . 'M');
+        }
 
     }
 

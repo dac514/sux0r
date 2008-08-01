@@ -56,11 +56,11 @@ class photoUpload  {
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
-        // This module has config variables, load them
-        $this->tpl->config_load('my.conf', $this->module);
-
         // Redirect if not logged in
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
+
+        // This module has config variables, load them
+        $this->tpl->config_load('my.conf', $this->module);
 
     }
 

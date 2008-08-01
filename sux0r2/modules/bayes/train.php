@@ -18,9 +18,9 @@ $valid_modules = array('blog', 'feeds');
 // ---------------------------------------------------------------------------
 
 function getBody($link, $id) {
-    
-    $body = false; 
-    
+
+    $body = false;
+
     if ($link == 'messages') {
         require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
         $msg = new suxThreadedMessages();
@@ -35,14 +35,14 @@ function getBody($link, $id) {
     }
 
     return $body;
-    
+
 }
 
 // ---------------------------------------------------------------------------
 // Ajax Failure
 // ---------------------------------------------------------------------------
 
-function failure($msg = null) {   
+function failure($msg = null) {
     if (!headers_sent()) header("HTTP/1.0 500 Internal Server Error");
     if ($msg) echo "Something went wrong: \n\n $msg";
     die();
@@ -74,8 +74,6 @@ require_once('bayesUser.php');
 $suxLink = new suxLink();
 $nb = new bayesUser();
 $user = new suxUser();
-
-if (!$user->loginCheck()) failure('User is not logged in.'); // Something is wrong, abort
 
 if (!$nb->isCategoryTrainer($cat_id, $_SESSION['users_id'])) failure('User is not authorized to train category.'); // Something is wrong, abort
 

@@ -60,9 +60,7 @@ class feeds  {
         $this->rss = new suxRSS();
         $this->link = new suxLink();
         $this->nb = new bayesUser();
-
         $this->pager = new suxPager();
-        $this->pager->limit = 10;
 
     }
 

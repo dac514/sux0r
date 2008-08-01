@@ -55,10 +55,7 @@ class photos {
         $this->r->text =& $this->gtext;
         $this->user = new suxUser();
         $this->photo = new suxPhoto();
-
-        // Pager defaults
         $this->pager = new suxPager();
-        $this->pager->limit = 10;
 
         // This module has config variables, load them
         $this->tpl->config_load('my.conf', $this->module);

@@ -61,9 +61,9 @@ window.onload = function() {
                     <img class="photo" src="{$r->url}/data/photos/{$r->pho.image}" alt="" >
                     </p>
 
-                    {if $r->pho.body_html}
+                    {if $r->pho.description}
                     <div class="description" style="width:{#maxPhotoWidth#}px;">
-                    {$r->pho.body_html}
+                    {$r->pho.description}
                     </div>
                     {/if}
 
