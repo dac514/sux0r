@@ -130,7 +130,7 @@ class cropper {
 
         // Assign a url to the fullsize version of the image
         $image = $image['image'];
-        $image = suxPhoto::t2fImage($image);
+        $image = rawurlencode(suxPhoto::t2fImage($image));
         $image = "{$GLOBALS['CONFIG']['URL']}/data/{$module}/{$image}";
         $image = suxFunct::myHttpServer() . $image;
 
@@ -209,6 +209,10 @@ class cropper {
         $format = mb_strtolower(end($format));
         if ($format == 'jpg') $format = 'jpeg'; // fix stupid mistake
         if (!($format == 'jpeg' || $format == 'gif' || $format == 'png')) die('Invalid image format');
+
+        // Try to adjust memory for big files
+        suxPhoto::fudgeFactor($format, $path_to_source);
+
         $func = 'imagecreatefrom' . $format;
         $image = $func($path_to_source);
         if (!$image) die('Invalid image format');
@@ -247,6 +251,7 @@ class cropper {
     private function getTable($module) {
 
         if ($module == 'blog') $table = 'messages';
+        elseif ($module == 'photos') $table = 'photos';
         else $table = false;
 
         return $table;

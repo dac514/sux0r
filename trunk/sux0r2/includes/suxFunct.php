@@ -159,7 +159,7 @@ class suxFunct {
             $res = -1; // any nonzero value
             $unused = array();
             $unused2 = exec($cmd, $unused, $res);
-            if ($res != 0) trigger_error("Warning: unzip return value is $res ");
+            if ($res != 0) trigger_error("Warning: unzip return value is $res ", E_USER_WARNING);
 
             return ($res == 0 || $res == 1); // http://www.info-zip.org/FAQ.html#error-codes
 
@@ -210,7 +210,7 @@ class suxFunct {
 
             for ($i=count($darr)-1; $i >= 0 ; $i--) {
                 if (!rmdir($darr[$i]))
-                    trigger_error("Warning: There was a problem deleting a temporary file in $dirname ");
+                    trigger_error("Warning: There was a problem deleting a temporary file in $dirname ", E_USER_WARNING);
             }
 
             return (!is_dir($dirname));
