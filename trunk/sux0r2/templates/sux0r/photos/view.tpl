@@ -58,7 +58,7 @@ window.onload = function() {
                     </div>
 
                     <p id="suxPhoto">
-                    <img class="photo" src="{$r->url}/data/photos/{$r->pho.image}" alt="" >
+                    {if $r->pho.image}<img class="photo" src="{$r->url}/data/photos/{$r->pho.image}" alt="" >{/if}
                     </p>
 
                     {if $r->pho.description}
