@@ -60,7 +60,8 @@ class suxUser {
         }
 
         // Any user
-        if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0)
+            throw new Exception('Invalid user id');
 
         $st = $this->db->prepare("SELECT * FROM {$this->db_table} WHERE id = ? ");
         $st->execute(array($id));
@@ -187,7 +188,8 @@ class suxUser {
         // Sanitize
         // --------------------------------------------------------------------
 
-        if ($id != null && !filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+        if ($id != null && (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0))
+            throw new Exception('Invalid user id');
 
         unset($info['id'], $info['users_id']); // Don't allow spoofing of the id in the array
         unset($info['accesslevel']); // Don't allow accesslevel changes with this function
@@ -322,7 +324,8 @@ class suxUser {
         }
 
         // Any user
-        if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0)
+            throw new Exception('Invalid user id');
 
         // Get the Ids
         $st = $this->db->prepare("SELECT id, openid_url FROM {$this->db_table_openid} WHERE users_id = ? ");
@@ -349,7 +352,8 @@ class suxUser {
         }
 
         // Any user
-        if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0)
+            throw new Exception('Invalid user id');
 
         // Canonicalize url
         $openid_url = suxFunct::canonicalizeUrl($openid_url);
@@ -390,7 +394,8 @@ class suxUser {
         }
 
         // Any user
-        if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0)
+            throw new Exception('Invalid user id');
 
         // Canonicalize url
         $openid_url = suxFunct::canonicalizeUrl($openid_url);
@@ -612,7 +617,7 @@ class suxUser {
     */
     private function tokenCheck($id, $token) {
 
-        if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0) return false;
 
         $st = $this->db->prepare("SELECT password FROM {$this->db_table} WHERE id = ? ");
         $st->execute(array($id));

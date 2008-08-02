@@ -199,9 +199,14 @@ class suxRSS extends DOMDocument {
         // Sanitize
         // -------------------------------------------------------------------
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) throw new Exception('Invalid user id');
-        if (!isset($url['url']) || !isset($url['title']) || !isset($url['body'])) throw new Exception('Invalid $url array');
-        if (!filter_var($url['url'], FILTER_VALIDATE_URL)) throw new Exception('Invalid url');
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0)
+            throw new Exception('Invalid user id');
+
+        if (!isset($url['url']) || !isset($url['title']) || !isset($url['body']))
+            throw new Exception('Invalid $url array');
+
+        if (!filter_var($url['url'], FILTER_VALIDATE_URL))
+            throw new Exception('Invalid url');
 
         // Users id
         $clean['users_id'] = $users_id;
@@ -295,7 +300,8 @@ class suxRSS extends DOMDocument {
     function getItem($id) {
 
         // Sanity check
-        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0) throw new Exception('Invalid message id');
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0)
+            throw new Exception('Invalid message id');
 
         $query = "SELECT * FROM {$this->db_items} WHERE id = ? LIMIT 1 ";
         $st = $this->db->prepare($query);

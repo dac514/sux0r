@@ -59,7 +59,7 @@ class suxRolodex {
         // Sanitize
         // --------------------------------------------------------------------
 
-        if ($id != null && !filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid rolodex id');
+        if ($id != null && (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0)) throw new Exception('Invalid rolodex id');
 
         unset($info['id']); // Don't allow spoofing of the id in the array
 

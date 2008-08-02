@@ -197,7 +197,7 @@ class suxBookmarks {
     */
     function deleteBookmark($id) {
 
-        if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0) return false;
 
         // Begin transaction
         $this->db->beginTransaction();

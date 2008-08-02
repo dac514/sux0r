@@ -45,7 +45,7 @@ class suxPager {
     */
 	function continueLink($start, $url) {
 
-        if (!(filter_var($start, FILTER_VALIDATE_INT) && $start > 0)) $start = 0;
+        if (!(filter_var($start, FILTER_VALIDATE_INT))) $start = 0;
 		if (trim($url) == '') return null;
 
         $text = suxFunct::gtext();

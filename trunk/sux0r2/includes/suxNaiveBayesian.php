@@ -114,7 +114,7 @@ class suxNaiveBayesian {
     */
     function removeVector($vector_id) {
 
-        if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($vector_id, FILTER_VALIDATE_INT) || $vector_id <= 0) return false;
 
         // Get the category ids for this vector
         $categories = array();
@@ -203,7 +203,7 @@ class suxNaiveBayesian {
     */
     function getVectorByCategory($category_id) {
 
-        if (!filter_var($category_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($category_id, FILTER_VALIDATE_INT) || $category_id <= 0) return false;
 
         $query = "SELECT {$this->db_table_vec}.* FROM {$this->db_table_vec}
         INNER JOIN {$this->db_table_cat} ON {$this->db_table_vec}.id = {$this->db_table_cat}.bayes_vectors_id
@@ -228,7 +228,7 @@ class suxNaiveBayesian {
     */
     function getVectorsByDocument($document_id) {
 
-        if (!filter_var($document_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($document_id, FILTER_VALIDATE_INT) || $document_id <= 0) return false;
 
         $query = "SELECT {$this->db_table_vec}.* FROM {$this->db_table_vec}
         INNER JOIN {$this->db_table_cat} ON {$this->db_table_vec}.id = {$this->db_table_cat}.bayes_vectors_id
@@ -262,7 +262,7 @@ class suxNaiveBayesian {
     function addCategory($category, $vector_id) {
 
         if (mb_strlen($category) > $this->max_category_length) return false;
-        if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($vector_id, FILTER_VALIDATE_INT) || $vector_id <= 0) return false;
 
         // Make sure vector exists
         $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_vec} WHERE id = ? LIMIT 1 ");
@@ -290,7 +290,7 @@ class suxNaiveBayesian {
     */
     function removeCategory($category_id) {
 
-        if (!filter_var($category_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($category_id, FILTER_VALIDATE_INT) || $category_id <= 0) return false;
 
         $this->db->beginTransaction();
         $this->inTransaction = true;
@@ -373,7 +373,7 @@ class suxNaiveBayesian {
     */
     function getCategoriesByVector($vector_id) {
 
-        if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($vector_id, FILTER_VALIDATE_INT) || $vector_id <= 0) return false;
 
         $categories = array();
 
@@ -400,7 +400,7 @@ class suxNaiveBayesian {
     */
     function getCategoriesByDocument($document_id) {
 
-        if (!filter_var($document_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($document_id, FILTER_VALIDATE_INT) || $document_id <= 0) return false;
 
         $query = "SELECT
         {$this->db_table_cat}.* FROM {$this->db_table_cat}
@@ -439,7 +439,7 @@ class suxNaiveBayesian {
     */
     function trainDocument($content, $category_id) {
 
-        if (!filter_var($category_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($category_id, FILTER_VALIDATE_INT) || $category_id <= 0) return false;
 
         // Make sure category exists
         $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_cat} WHERE id = ? LIMIT 1 ");
@@ -486,7 +486,7 @@ class suxNaiveBayesian {
     */
     function untrainDocument($document_id) {
 
-        if (!filter_var($document_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($document_id, FILTER_VALIDATE_INT) || $document_id <= 0) return false;
 
         $this->db->beginTransaction();
         $this->inTransaction = true;
@@ -563,7 +563,7 @@ class suxNaiveBayesian {
     */
     function getDocumentsByVector($vector_id, $full = false) {
 
-        if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($vector_id, FILTER_VALIDATE_INT) || $vector_id <= 0) return false;
 
         if ($full) $query = "SELECT {$this->db_table_doc}.* ";
         else {
@@ -605,7 +605,7 @@ class suxNaiveBayesian {
     */
     function getDocumentsByCategory($category_id, $full = false) {
 
-        if (!filter_var($category_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($category_id, FILTER_VALIDATE_INT) || $category_id <= 0) return false;
 
         if ($full) $query = "SELECT {$this->db_table_doc}.* ";
         else {
@@ -645,7 +645,7 @@ class suxNaiveBayesian {
     */
     function getDocumentCountByCategory($category_id) {
 
-        if (!filter_var($category_id, FILTER_VALIDATE_INT)) return 0;
+        if (!filter_var($category_id, FILTER_VALIDATE_INT) || $category_id <= 0) return 0;
 
         $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_doc} WHERE bayes_categories_id = ? ");
         $st->execute(array($category_id));
@@ -742,7 +742,7 @@ class suxNaiveBayesian {
     */
     function categorize($document, $vector_id) {
 
-        if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($vector_id, FILTER_VALIDATE_INT) || $vector_id <= 0) return false;
 
         // Sanity check, convert to UTF-8 plaintext
         $converter = new suxHtml2UTF8($document);
