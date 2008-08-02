@@ -29,6 +29,14 @@ function sux($action, $params = null) {
 
     case 'view':
 
+        // --------------------------------------------------------------------
+        // View
+        // --------------------------------------------------------------------
+
+        if (empty($params[0]) || !filter_var($params[0], FILTER_VALIDATE_INT) || $params[0] < 1) {
+            suxFunct::redirect(suxFunct::makeUrl('/photos'));
+        }
+
         include_once('photos.php');
         $photos = new photos();
         $photos->view($params[0]);
@@ -80,17 +88,19 @@ function sux($action, $params = null) {
             break;
         }
 
-
         // --------------------------------------------------------------------
         // annotate
         // --------------------------------------------------------------------
 
-        if ($params[0] == 'annotate') {
 
-            $id = !empty($params[1]) ? $params[1]: null;
+        elseif ($params[0] == 'annotate') {
+
+            if (empty($params[1]) || !filter_var($params[1], FILTER_VALIDATE_INT) || $params[1] < 1) {
+                suxFunct::redirect(suxFunct::makeUrl('/photos'));
+            }
 
             include_once('photosEdit.php');
-            $edit = new photosEdit($id);
+            $edit = new photosEdit($params[1]);
             $edit->annotator();
 
             break;
@@ -101,11 +111,18 @@ function sux($action, $params = null) {
         // View
         // --------------------------------------------------------------------
 
+        else {
 
-        include_once('photos.php');
-        $photos = new photos();
-        $photos->album($params[0]);
-        break;
+            if (empty($params[0]) || !filter_var($params[0], FILTER_VALIDATE_INT) || $params[0] < 1) {
+                suxFunct::redirect(suxFunct::makeUrl('/photos'));
+            }
+
+            include_once('photos.php');
+            $photos = new photos();
+            $photos->album($params[0]);
+            break;
+
+        }
 
 
     default:

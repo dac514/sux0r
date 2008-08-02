@@ -84,7 +84,8 @@ class photos {
             $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/photos'));
             $this->r->pho = $this->photo->getAlbums(null, $this->pager->limit, $this->pager->start);
 
-            if (!count($this->r->pho)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+            if ($this->r->pho == false || !count($this->r->pho))
+                $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
         }
 
@@ -114,7 +115,8 @@ class photos {
             $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/photos/album/{$id}"));
             $this->r->pho = $this->photo->getPhotos($id, $this->pager->limit, $this->pager->start);
 
-            if (!count($this->r->pho)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+            if ($this->r->pho == false || !count($this->r->pho))
+                $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
             else {
                 $album = $this->photo->getAlbum($id);
                 $this->r->text['album'] = $album['title'];
@@ -142,7 +144,8 @@ class photos {
         if (!$this->tpl->is_cached('view.tpl', $cache_id)) {
 
             $this->r->pho = $this->photo->getPhoto($id);
-            if (!count($this->r->pho)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+            if ($this->r->pho == false || !count($this->r->pho))
+                $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
             else {
 
                 $this->r->pho['image'] = suxPhoto::t2fImage($this->r->pho['image']); // Fullsize

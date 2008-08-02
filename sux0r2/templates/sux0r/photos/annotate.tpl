@@ -57,7 +57,10 @@ new Ajax.InPlaceEditor(
 {/foreach}
 {/if}
 
-<div style="margin: 10px;"><p>{$r->text.pager}</p></div>
+<div style="margin: 10px;">
+    <p>{$r->text.pager}</p>
+    <p><input type="button" class="button" value="Back to album" onclick="document.location='{$r->text.back_url}';" /></p>
+</div>
 
 </div>
 

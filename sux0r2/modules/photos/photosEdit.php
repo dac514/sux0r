@@ -87,6 +87,8 @@ class photosEdit {
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/photos/album/annotate/{$this->id}"));
         $this->r->pho = $this->photo->getPhotos($this->id, $this->pager->limit, $this->pager->start);
 
+        $this->r->text['back_url'] = suxFunct::makeUrl('/photos/album/' . $this->id);
+
         $this->tpl->display('annotate.tpl');
 
 
