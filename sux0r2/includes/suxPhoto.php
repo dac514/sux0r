@@ -54,8 +54,8 @@ class suxPhoto {
     */
     function isAlbumOwner($id, $users_id) {
 
-        if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) return false;
 
         $query = "SELECT COUNT(*) FROM {$this->db_albums} WHERE id = ? AND users_id = ? LIMIT 1 ";
 
@@ -76,7 +76,8 @@ class suxPhoto {
     function getAlbum($id, $unpub = false) {
 
         // Sanity check
-        if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid album id');
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0)
+            throw new Exception('Invalid album id');
 
         $query = "SELECT * FROM {$this->db_albums} WHERE id = ? ";
         if (!$unpub) {
@@ -116,7 +117,8 @@ class suxPhoto {
     function getAlbums($users_id = null, $limit = null, $start = 0, $unpub = false) {
 
         // Sanity check
-        if ($users_id && !filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid users id');
+        if ($users_id && (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0))
+            throw new Exception('Invalid users id');
 
         $query = "SELECT * FROM {$this->db_albums} ";
         if ($users_id) $query .= 'WHERE users_id = ? ';
@@ -160,7 +162,8 @@ class suxPhoto {
     function countAlbums($users_id = null, $unpub = false) {
 
         // Sanity check
-        if ($users_id && !filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid users id');
+        if ($users_id && (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0))
+            throw new Exception('Invalid users id');
 
         $query = "SELECT COUNT(*) FROM {$this->db_albums} ";
         if ($users_id) $query .= 'WHERE users_id = ? ';
@@ -199,8 +202,11 @@ class suxPhoto {
         // Sanitize
         // -------------------------------------------------------------------
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) throw new Exception('Invalid user id');
-        if (!isset($album['title']) || !isset($album['body'])) throw new Exception('Invalid $album array');
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0)
+            throw new Exception('Invalid user id');
+
+        if (!isset($album['title']) || !isset($album['body']))
+            throw new Exception('Invalid $album array');
 
         // Album id
         if (isset($album['id'])) {
@@ -277,7 +283,8 @@ class suxPhoto {
     function getThumbnail($photoalbums_id) {
 
         // Sanity check
-        if (!filter_var($photoalbums_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid photoalbums id');
+        if (!filter_var($photoalbums_id, FILTER_VALIDATE_INT) || $photoalbums_id <= 0)
+            throw new Exception('Invalid photoalbums id');
 
         $query = "SELECT thumbnail FROM {$this->db_albums} WHERE id = ? LIMIT 1 ";
 
@@ -316,8 +323,8 @@ class suxPhoto {
     */
     function isPhotoOwner($id, $users_id) {
 
-        if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) return false;
 
         $query = "SELECT COUNT(*) FROM {$this->db_photos} WHERE id = ? AND users_id = ? LIMIT 1 ";
 
@@ -337,7 +344,8 @@ class suxPhoto {
     function getPhoto($id) {
 
         // Sanity check
-        if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid photo id');
+        if (!filter_var($id, FILTER_VALIDATE_INT)  || $id <= 0)
+            throw new Exception('Invalid photo id');
 
         $query = "SELECT * FROM {$this->db_photos} WHERE id = ? LIMIT 1 ";
         $st = $this->db->prepare($query);
@@ -361,7 +369,8 @@ class suxPhoto {
     function getPhotos($photoalbums_id, $limit = null, $start = 0) {
 
         // Sanity check
-        if (!filter_var($photoalbums_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid photoalbums id');
+        if (!filter_var($photoalbums_id, FILTER_VALIDATE_INT) || $photoalbums_id <= 0)
+            throw new Exception('Invalid photoalbums id');
 
         $query = "SELECT * FROM {$this->db_photos} WHERE photoalbums_id = ? ORDER BY image ";
 
@@ -391,7 +400,8 @@ class suxPhoto {
     function getPhotosByUser($users_id, $limit = null, $start = 0) {
 
         // Sanity check
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid users id');
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0)
+            throw new Exception('Invalid users id');
 
         $query = "SELECT * FROM {$this->db_photos} WHERE users_id = ? ORDER BY photoalbums_id, image ";
 
@@ -419,7 +429,8 @@ class suxPhoto {
     function countPhotos($photoalbums_id) {
 
         // Sanity check
-        if (!filter_var($photoalbums_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid photoalbums id');
+        if (!filter_var($photoalbums_id, FILTER_VALIDATE_INT) || $photoalbums_id <= 0)
+            throw new Exception('Invalid photoalbums id');
 
         $query = "SELECT COUNT(*) FROM {$this->db_photos} WHERE photoalbums_id = ? ";
 
@@ -463,11 +474,13 @@ class suxPhoto {
         // Sanitize
         // -------------------------------------------------------------------
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) throw new Exception('Invalid user id');
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0)
+            throw new Exception('Invalid user id');
 
         // photo id
         if (isset($photo['id'])) {
-            if (!filter_var($photo['id'], FILTER_VALIDATE_INT) || $photo['id'] <= 0) throw new Exception('Invalid photo id');
+            if (!filter_var($photo['id'], FILTER_VALIDATE_INT) || $photo['id'] <= 0)
+                throw new Exception('Invalid photo id');
             else $clean['id'] = $photo['id'];
         }
         else {

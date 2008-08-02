@@ -69,7 +69,8 @@ class suxThreadedMessages {
     function getMessage($id, $unpub = false) {
 
         // Sanity check
-        if (!filter_var($id, FILTER_VALIDATE_INT)) throw new Exception('Invalid message id');
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0)
+            throw new Exception('Invalid message id');
 
         $query = "SELECT * FROM {$this->db_table} WHERE id = ? ";
         if (!$unpub) {
@@ -112,8 +113,11 @@ class suxThreadedMessages {
         // Sanitize
         // -------------------------------------------------------------------
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
-        if (!isset($msg['title']) || !isset($msg['body'])) throw new Exception('Invalid $msg array');
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0)
+            throw new Exception('Invalid user id');
+
+        if (!isset($msg['title']) || !isset($msg['body']))
+            throw new Exception('Invalid $msg array');
 
         // Users id
         $clean['users_id'] = $users_id;
@@ -286,9 +290,14 @@ class suxThreadedMessages {
         // Sanitize
         // -------------------------------------------------------------------
 
-        if (!filter_var($messages_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid message id');
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
-        if (!isset($msg['title']) || !isset($msg['body'])) throw new Exception('Invalid $msg array');
+        if (!filter_var($messages_id, FILTER_VALIDATE_INT) || $messages_id <= 0)
+            throw new Exception('Invalid message id');
+
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0)
+            throw new Exception('Invalid user id');
+
+        if (!isset($msg['title']) || !isset($msg['body']))
+            throw new Exception('Invalid $msg array');
 
         // Users id
         $clean['id'] = $messages_id;
@@ -389,7 +398,7 @@ class suxThreadedMessages {
     */
     function deleteMessage($id) {
 
-        if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0) return false;
 
         // Begin transaction
         $this->db->beginTransaction();
@@ -418,7 +427,8 @@ class suxThreadedMessages {
     function getFirstPost($thread_id, $unpub = false) {
 
         // Sanity check
-        if (!filter_var($thread_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid thread id');
+        if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id <= 0)
+            throw new Exception('Invalid thread id');
 
         // SQL Query
         $query = "SELECT * FROM {$this->db_table} WHERE thread_id = ? AND thread_pos = 0 ";
@@ -461,8 +471,11 @@ class suxThreadedMessages {
     function countThread($thread_id, $type = null, $unpub = false) {
 
         // Sanity check
-        if (!filter_var($thread_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid thread id');
-        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
+        if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id <= 0)
+            throw new Exception('Invalid thread id');
+
+        if ($type && !in_array($type, $this->types))
+            throw new Exception('Invalid type');
 
         // SQL Query
         else $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE thread_id = ? ";
@@ -502,8 +515,11 @@ class suxThreadedMessages {
     function getThread($thread_id, $type = null, $limit = null, $start = 0, $unpub = false) {
 
         // Sanity check
-        if (!filter_var($thread_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid thread id');
-        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
+        if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id <= 0)
+            throw new Exception('Invalid thread id');
+
+        if ($type && !in_array($type, $this->types))
+            throw new Exception('Invalid type');
 
         // SQL Query
         $query = "SELECT * FROM {$this->db_table} WHERE thread_id = ? ";
@@ -546,8 +562,11 @@ class suxThreadedMessages {
     function countMessagesByUser($users_id, $type = null, $unpub = false) {
 
         // Sanity check
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
-        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0)
+            throw new Exception('Invalid user id');
+
+        if ($type && !in_array($type, $this->types))
+            throw new Exception('Invalid type');
 
         // SQL Query
         $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE users_id = ? ";
@@ -633,8 +652,11 @@ class suxThreadedMessages {
     function getMessagesByUser($users_id, $type = null, $limit = null, $start = 0, $unpub = false) {
 
         // Sanity check
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
-        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0)
+            throw new Exception('Invalid user id');
+
+        if ($type && !in_array($type, $this->types))
+            throw new Exception('Invalid type');
 
         // SQL Query
         $query = "SELECT * FROM {$this->db_table} WHERE users_id = ? ";
@@ -757,8 +779,11 @@ class suxThreadedMessages {
     function countFirstPostsByUser($users_id, $type = null, $unpub = false) {
 
         // Sanity check
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
-        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0)
+            throw new Exception('Invalid user id');
+
+        if ($type && !in_array($type, $this->types))
+            throw new Exception('Invalid type');
 
         // SQL Query
         $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE users_id = ? AND thread_pos = 0 ";
@@ -844,8 +869,11 @@ class suxThreadedMessages {
     function getFirstPostsByUser($users_id, $type = null, $limit = null, $start = 0, $unpub = false) {
 
         // Sanity check
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
-        if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0)
+            throw new Exception('Invalid user id');
+
+        if ($type && !in_array($type, $this->types))
+            throw new Exception('Invalid type');
 
         // SQL Query
         $query = "SELECT * FROM {$this->db_table} WHERE users_id = ? AND thread_pos = 0 ";
@@ -1077,7 +1105,8 @@ class suxThreadedMessages {
     function getCommentsCount($thread_id, $unpub = false) {
 
         // Sanity check
-        if (!filter_var($thread_id, FILTER_VALIDATE_INT)) throw new Exception('Invalid thread id');
+        if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id <= 0)
+            throw new Exception('Invalid thread id');
 
         // SQL Query
         $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE thread_id = ? AND thread_pos != 0 ";

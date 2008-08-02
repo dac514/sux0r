@@ -68,8 +68,11 @@ class suxSocialNetwork {
         // Sanitize
         // --------------------------------------------------------------------
 
-        if (!filter_var($uid, FILTER_VALIDATE_INT)) throw new Exception('Invalid user id');
-        if (!filter_var($fid, FILTER_VALIDATE_INT)) throw new Exception('Invalid friend id');
+        if (!filter_var($uid, FILTER_VALIDATE_INT) || $uid <= 0)
+            throw new Exception('Invalid user id');
+
+        if (!filter_var($fid, FILTER_VALIDATE_INT) || $fid <= 0)
+            throw new Exception('Invalid friend id');
 
         $rel = strip_tags($rel); // Strip tags
         $rel = mb_strtolower($rel);
@@ -150,7 +153,7 @@ class suxSocialNetwork {
     */
     function deleteRelationship($id) {
 
-        if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0) return false;
 
         $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE id = ? LIMIT 1 ");
         return $st->execute(array($id));

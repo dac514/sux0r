@@ -57,7 +57,7 @@ class bayesUser extends suxNaiveBayesian {
     */
     function getVectorAuthorization($vector_id) {
 
-        if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($vector_id, FILTER_VALIDATE_INT) || $vector_id <= 0) return false;
 
         $query = "SELECT users_id, bayes_vectors_id, trainer, owner FROM {$this->db_table_auth} WHERE bayes_vectors_id = ? ";
         $st = $this->db->prepare($query);
@@ -76,7 +76,7 @@ class bayesUser extends suxNaiveBayesian {
     */
     function getSharedVectors($users_id) {
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) return false;
 
         $query = "SELECT {$this->db_table_vec}.*, {$this->db_table_auth}.trainer, {$this->db_table_auth}.owner FROM {$this->db_table_vec}
         INNER JOIN {$this->db_table_auth} ON {$this->db_table_vec}.id = {$this->db_table_auth}.bayes_vectors_id
@@ -105,7 +105,7 @@ class bayesUser extends suxNaiveBayesian {
     */
     function getVectorsByOwner($users_id) {
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) return false;
 
         $query = "SELECT {$this->db_table_vec}.* FROM {$this->db_table_vec}
         INNER JOIN {$this->db_table_auth} ON {$this->db_table_vec}.id = {$this->db_table_auth}.bayes_vectors_id
@@ -132,7 +132,7 @@ class bayesUser extends suxNaiveBayesian {
     */
     function getVectorsByTrainer($users_id) {
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) return false;
 
         // Note: Owner of a vector implies trainer
         $query = "SELECT {$this->db_table_vec}.* FROM {$this->db_table_vec}
@@ -160,7 +160,7 @@ class bayesUser extends suxNaiveBayesian {
     */
     function getVectorsByUser($users_id) {
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) return false;
 
         // Note: Owner of a vector implies trainer
         $query = "SELECT {$this->db_table_vec}.* FROM {$this->db_table_vec}
@@ -194,8 +194,8 @@ class bayesUser extends suxNaiveBayesian {
     */
     function isVectorOwner($vector_id, $users_id) {
 
-        if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($vector_id, FILTER_VALIDATE_INT) || $vector_id <= 0) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT)  || $users_id <= 0) return false;
 
         $query = "SELECT COUNT(*) FROM {$this->db_table_auth}
         WHERE bayes_vectors_id = ? AND users_id = ? AND owner = 1 LIMIT 1 ";
@@ -214,8 +214,8 @@ class bayesUser extends suxNaiveBayesian {
     */
     function isVectorTrainer($vector_id, $users_id) {
 
-        if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($vector_id, FILTER_VALIDATE_INT) || $vector_id <= 0) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) return false;
 
         // Note: Owner of a vector implies trainer
         $query = "SELECT COUNT(*) FROM {$this->db_table_auth}
@@ -237,8 +237,8 @@ class bayesUser extends suxNaiveBayesian {
     */
     function isVectorUser($vector_id, $users_id) {
 
-        if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($vector_id, FILTER_VALIDATE_INT) || $vector_id <= 0) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) return false;
 
         // Note: Owner of a vector implies trainer
         $query = "SELECT COUNT(*) FROM {$this->db_table_auth}
@@ -260,8 +260,8 @@ class bayesUser extends suxNaiveBayesian {
     */
     function isCategoryOwner($category_id, $users_id) {
 
-        if (!filter_var($category_id, FILTER_VALIDATE_INT)) return false;
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($category_id, FILTER_VALIDATE_INT) || $category_id <= 0) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) return false;
 
         $query = "SELECT COUNT(*) FROM {$this->db_table_auth}
         INNER JOIN {$this->db_table_cat} ON {$this->db_table_auth}.bayes_vectors_id = {$this->db_table_cat}.bayes_vectors_id
@@ -281,8 +281,8 @@ class bayesUser extends suxNaiveBayesian {
     */
     function isCategoryTrainer($category_id, $users_id) {
 
-        if (!filter_var($category_id, FILTER_VALIDATE_INT)) return false;
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($category_id, FILTER_VALIDATE_INT) || $category_id <= 0) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) return false;
 
         // Note: Owner of a vector implies trainer
         $query = "SELECT COUNT(*) FROM {$this->db_table_auth}
@@ -304,8 +304,8 @@ class bayesUser extends suxNaiveBayesian {
     */
     function isCategoryUser($category_id, $users_id) {
 
-        if (!filter_var($category_id, FILTER_VALIDATE_INT)) return false;
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($category_id, FILTER_VALIDATE_INT) || $category_id <= 0) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) return false;
 
         // Note: Owner of a vector implies trainer
         $query = "SELECT COUNT(*) FROM {$this->db_table_auth}
@@ -327,8 +327,8 @@ class bayesUser extends suxNaiveBayesian {
     */
     function isDocumentOwner($document_id, $users_id) {
 
-        if (!filter_var($document_id, FILTER_VALIDATE_INT)) return false;
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($document_id, FILTER_VALIDATE_INT) || $document_id <= 0) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) return false;
 
         $query = "SELECT COUNT(*) FROM {$this->db_table_auth}
         INNER JOIN {$this->db_table_cat} ON {$this->db_table_auth}.bayes_vectors_id = {$this->db_table_cat}.bayes_vectors_id
@@ -349,8 +349,8 @@ class bayesUser extends suxNaiveBayesian {
     */
     function isDocumentTrainer($document_id, $users_id) {
 
-        if (!filter_var($document_id, FILTER_VALIDATE_INT)) return false;
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($document_id, FILTER_VALIDATE_INT) || $document_id <= 0) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) return false;
 
         // Note: Owner of a vector implies trainer
         $query = "SELECT COUNT(*) FROM {$this->db_table_auth}
@@ -373,8 +373,8 @@ class bayesUser extends suxNaiveBayesian {
     */
     function isDocumentUser($document_id, $users_id) {
 
-        if (!filter_var($document_id, FILTER_VALIDATE_INT)) return false;
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($document_id, FILTER_VALIDATE_INT) || $document_id <= 0) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) return false;
 
         // Note: Owner of a vector implies trainer
         $query = "SELECT COUNT(*) FROM {$this->db_table_auth}
@@ -405,8 +405,8 @@ class bayesUser extends suxNaiveBayesian {
     */
     function shareVector($users_id, $vector_id, $trainer, $owner) {
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
-        if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) return false;
+        if (!filter_var($vector_id, FILTER_VALIDATE_INT) || $vector_id <= 0) return false;
         if ($users_id == $_SESSION['users_id']) return false; // Cannot share a vector with one's self
         if ($trainer != 1) $trainer = 0;
         if ($owner != 1) $owner = 0;
@@ -460,8 +460,8 @@ class bayesUser extends suxNaiveBayesian {
     */
     function unshareVector($users_id, $vector_id) {
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
-        if (!filter_var($vector_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) return false;
+        if (!filter_var($vector_id, FILTER_VALIDATE_INT) || $vector_id <= 0) return false;
 
         // Don't allow unsharing if there is only one owner, probably due to a race condition
         $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_auth} WHERE bayes_vectors_id = ? ");
@@ -473,8 +473,8 @@ class bayesUser extends suxNaiveBayesian {
         return $st->execute(array($users_id, $vector_id));
 
     }
-    
-    
+
+
     /**
     * Verify that $_GET values for filter are valid
     *
@@ -488,7 +488,7 @@ class bayesUser extends suxNaiveBayesian {
         }
 
         if (!isset($_GET['filter'])) return failure();
-        if (!filter_var($_GET['filter'], FILTER_VALIDATE_INT)) return failure();
+        if (!filter_var($_GET['filter'], FILTER_VALIDATE_INT) || $_GET['filter'] <= 0) return failure();
         if ($_GET['filter'] < 0) return failure();
 
         if (!isset($_GET['threshold'])) $_GET['threshold'] = false;
@@ -506,11 +506,11 @@ class bayesUser extends suxNaiveBayesian {
         if (@!$this->isVectorUser($vec_id, $_SESSION['users_id'])) return failure();
 
         if (!isset($_GET['start'])) $_GET['start'] = 0;
-        else if (!(filter_var($_GET['start'], FILTER_VALIDATE_INT) && $_GET['start'] > 0)) $_GET['start'] = 0;
+        else if (!filter_var($_GET['start'], FILTER_VALIDATE_INT) || $_GET['start'] <= 0) $_GET['start'] = 0;
 
         return array($vec_id, $_GET['filter'], $_GET['threshold'], $_GET['start']);
 
-    }    
+    }
 
 
     // --------------------------------------------------------------------
@@ -535,7 +535,7 @@ class bayesUser extends suxNaiveBayesian {
         */
 
         if (mb_strlen($vector) > $this->getMaxVectorLength()) return false;
-        if (!filter_var($users_id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) return false;
 
         $vector = strip_tags($vector); // Sanitize
 

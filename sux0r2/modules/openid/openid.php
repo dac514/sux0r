@@ -983,7 +983,7 @@ class openid {
     */
     private function checkTrusted($id, $url) {
 
-        if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0) return false;
 
         $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_trust} WHERE users_id = ? AND auth_url = ? LIMIT 1 ");
         $st->execute(array($id, $url));
@@ -1002,7 +1002,7 @@ class openid {
     */
     private function trustUrl($id, $url) {
 
-        if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0) return false;
         $url = filter_var($url, FILTER_SANITIZE_URL);
 
         $trusted = array(
@@ -1029,7 +1029,7 @@ class openid {
     */
     private function destroyAssocHandle($id) {
 
-        if (!filter_var($id, FILTER_VALIDATE_INT)) return false;
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0) return false;
 
         $this->debug("Destroying session: $id");
 
