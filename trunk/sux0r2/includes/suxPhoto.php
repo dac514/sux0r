@@ -275,7 +275,7 @@ class suxPhoto {
 
 
     /**
-    * Get photos by photoalbums_id
+    * Get thumbnail
     *
     * @param int $photoalbums_id photoalbums id
     * @return array|false
@@ -309,6 +309,29 @@ class suxPhoto {
         return $st->fetch(PDO::FETCH_ASSOC);
 
     }
+
+
+    /**
+    * Set thumbnail
+    *
+    * @param int $photoalbums_id photoalbums id
+    * @param int $photos_id photos id
+    */
+    function setThumbnail($photoalbums_id, $photos_id) {
+
+        // Sanity check
+        if (!filter_var($photoalbums_id, FILTER_VALIDATE_INT) || $photoalbums_id <= 0)
+            throw new Exception('Invalid photoalbums id');
+
+        if (!filter_var($photos_id, FILTER_VALIDATE_INT) || $photos_id <= 0)
+            throw new Exception('Invalid photos id');
+
+        $query = "UPDATE {$this->db_albums} SET thumbnail = ? WHERE id = ? ";
+        $st = $this->db->prepare($query);
+        $st->execute(array($photos_id, $photoalbums_id));
+
+    }
+
 
 
     // ------------------------------------------------------------------------
@@ -531,6 +554,21 @@ class suxPhoto {
         }
 
         return $id;
+
+    }
+
+
+    /**
+    * Delete photo
+    *
+    * @param int $id messages id
+    */
+    function deletePhoto($id) {
+
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0) return false;
+
+        $st = $this->db->prepare("DELETE FROM {$this->db_photos} WHERE id = ? LIMIT 1 ");
+        $st->execute(array($id));
 
     }
 

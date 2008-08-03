@@ -89,7 +89,7 @@ function sux($action, $params = null) {
         }
 
         // --------------------------------------------------------------------
-        // annotate
+        // Annotate
         // --------------------------------------------------------------------
 
 
@@ -101,7 +101,15 @@ function sux($action, $params = null) {
 
             include_once('photosEdit.php');
             $edit = new photosEdit($params[1]);
-            $edit->annotator();
+
+            if ($edit->formValidate($_POST)) {
+                $edit->formProcess($_POST);
+                $edit->formSuccess();
+            }
+            else {
+                $edit->formBuild($_POST);
+            }
+
 
             break;
         }
