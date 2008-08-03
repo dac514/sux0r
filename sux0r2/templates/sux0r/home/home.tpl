@@ -17,13 +17,13 @@
 		<td style="vertical-align:top;">
 			<div id="leftside">
 
-            {$r->widget('Title', '<p>Lorem ipsum dolor sit amet, consectetuer...</p>', 'www.trotch.com', 'http://localhost:8888/sux0r2/media/sux0r/pavatars/bunker.jpg', 'Caption my big ass caption')}
+            {$r->widget('Title', '<p>Lorem ipsum dolor sit amet, consectetuer...</p>', 'www.trotch.com', 'http://localhost:8888/sux0r2/media/sux0r/assets/nullwhore.png', 'Caption my big ass caption')}
 
 
                 <div class="widget">
                     <h2>Lorem ipsum</h2>
                     <div class="floatleft">
-                    <img src="{$r->url}/media/{$r->partition}/pavatars/bunker.jpg" alt="" width="80" height="80"><br>
+                    <img src="{$r->url}/media/{$r->partition}/assets/nullwhore.png" alt="" width="80" height="80"><br>
                     Caption
                     </div>
                     <p>Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer
