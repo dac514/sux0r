@@ -42,7 +42,7 @@ class bayesRenderer extends suxRenderer {
     * @param string $module
     */
     function __construct($module) {
-        
+
         parent::__construct($module); // Call parent
         $this->gtext = suxFunct::gtext('bayes'); // Language
         $this->nb = new bayesUser();
@@ -84,7 +84,7 @@ class bayesRenderer extends suxRenderer {
                     $(placeholder).addClassName('nbVecTrained');
                     Effect.Pulsate($(placeholder));
                 },
-                onFailure: function(transport){ 
+                onFailure: function(transport){
                     var response = transport.responseText || '';
                     if (response) alert(response);
                 }
@@ -612,9 +612,9 @@ function insert_bayesFilters($params) {
 
     if (isset($_GET['filter'])) $tpl->assign('filter', $_GET['filter']);
     if (isset($_GET['threshold']) && $_GET['threshold'] !== false) $tpl->assign('threshold', $_GET['threshold']);
-    if (isset($params['form_url'])) $r->text['form_url'] = $params['form_url'];        
+    if (isset($params['form_url'])) $r->text['form_url'] = $params['form_url'];
 
-    $tpl->assign_by_ref('r', $r);    
+    $tpl->assign_by_ref('r', $r);
     return $tpl->fetch('filters.tpl');
 
 }

@@ -20,10 +20,13 @@
 
 			</div>
             <div class="clearboth"></div>
+
+            <div>{insert name="editLinks"}</div>
 		</td>
 	</tr>
 	<tr>
 		<td style="vertical-align:top;">
+
 			<div id="leftside">
 
             {if $r->pho}
@@ -39,6 +42,7 @@
                     {$r->countPhotos($foo.id)} Photos
                     </p>
                     {$foo.body_html}
+                    <p>{insert name="editLinks2" album_id=$foo.id}</p>
                 {/capture}
 
                 {capture name=album_url}
@@ -71,6 +75,7 @@
                     {$r->countPhotos($foo.id)} Photos
                     </p>
                     {$foo.body_html}
+                    <p>{insert name="editLinks2" album_id=$foo.id}</p>
                 {/capture}
 
                 {capture name=album_url}
@@ -92,7 +97,7 @@
 	</tr>
     <tr>
         <td colspan="2" style="text-align:center;">
-            {$r->text.pager}
+           <p>{$r->text.pager}</p>
         </td>
     </tr>
 	<tr>

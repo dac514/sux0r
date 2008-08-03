@@ -118,9 +118,7 @@ class photos {
             if ($this->r->pho == false || !count($this->r->pho))
                 $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
             else {
-                $album = $this->photo->getAlbum($id);
-                $this->r->text['album'] = $album['title'];
-                $this->r->text['album_url'] = suxFunct::makeUrl('/photos/album/' . $id);
+                $this->r->album = $this->photo->getAlbum($id);
             }
 
         }
@@ -151,8 +149,7 @@ class photos {
                 $this->r->pho['image'] = suxPhoto::t2fImage($this->r->pho['image']); // Fullsize
 
                 // Album info
-                $album = $this->photo->getAlbum($this->r->pho['photoalbums_id']);
-                $this->r->text['album'] = $album['title'];
+                $this->r->album = $this->photo->getAlbum($this->r->pho['photoalbums_id']);
 
                 // Previous, next, and page number
                 $prev_id = null;

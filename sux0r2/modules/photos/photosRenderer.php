@@ -27,7 +27,9 @@ require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
 class photosRenderer extends suxRenderer {
 
-    public $pho = array(); // Array of photos
+    // Variables
+    public $pho = array(); // Array of photo(s)
+    public $album = array(); // Array of album(s)
 
     // Objects
     private $photo;
@@ -133,6 +135,63 @@ class photosRenderer extends suxRenderer {
     }
 
 
+
+}
+
+
+// -------------------------------------------------------------------------
+// Smarty {insert} functions
+// -------------------------------------------------------------------------
+
+
+/**
+* Render edit links
+*
+* @param array $params smarty {insert} parameters
+* @return string html
+*/
+function insert_editLinks($params) {
+
+    if (!isset($_SESSION['users_id'])) return null;
+
+    $photo = new suxPhoto();
+    // TODO, check if the user is allowed
+
+    $new = suxFunct::makeUrl('/photos/album/edit/');
+
+    $html = '';
+    $html .= "<a href='{$new}'>New album &raquo;</a><br />";
+
+    return $html;
+
+}
+
+
+/**
+* Render edit links
+*
+* @param array $params smarty {insert} parameters
+* @return string html
+*/
+function insert_editLinks2($params) {
+
+    if (!isset($_SESSION['users_id'])) return null;
+    if (empty($params['album_id'])) return null;
+    if (!filter_var($params['album_id'], FILTER_VALIDATE_INT) || $params['album_id'] <= 0) return null;
+
+    $photo = new suxPhoto();
+    if (!$photo->isAlbumOwner($params['album_id'], $_SESSION['users_id'])) return null;
+
+    $edit = suxFunct::makeUrl('/photos/album/edit/' . $params['album_id']);
+    $annotate = suxFunct::makeUrl('/photos/album/annotate/' . $params['album_id']);
+    $upload = suxFunct::makeUrl('/photos/upload/' . $params['album_id']);
+
+    $html = '';
+    $html .= "<a href='{$edit}'>Edit properties &raquo;</a><br />";
+    $html .= "<a href='{$upload}'>Upload photos &raquo;</a><br />";
+    $html .= "<a href='{$annotate}'>Annotate photos &raquo;</a>";
+
+    return $html;
 
 }
 

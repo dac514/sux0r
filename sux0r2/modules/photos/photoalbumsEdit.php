@@ -32,7 +32,7 @@ class photoalbumsEdit {
     // Variables
     public $gtext = array();
     private $module = 'photos';
-    private $prev_url_preg = '#^photos/[album/edit]|^cropper/#i';
+    private $prev_url_preg = '#^photos/album/[edit|annotate]|^cropper/#i';
     private $id;
 
     // Objects

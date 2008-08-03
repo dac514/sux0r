@@ -17,16 +17,18 @@
 		<td style="vertical-align:top;">
 			<div id="leftside">
 
-            TODO
+            <p>
+            {insert name="editLinks"}
+            {insert name="editLinks2" album_id=$r->album.id}
+            </p>
 
 			</div>
 		</td>
 		<td style="vertical-align:top;">
 			<div id="rightside">
 
-
                 <div class="widget">
-                    <h2><a href="{$r->text.album_url}">{$r->text.album}</a></h2>
+                    <h2><a href="{$r->makeUrl('/photos/album')}/{$r->album.id}">{$r->album.title}</a></h2>
 
                     <div style="padding-left: 30px;">
 
