@@ -46,7 +46,7 @@ class photoUpload  {
     * Constructor
     *
     */
-    function __construct() {
+    function __construct($id = null) {
 
         $this->user = new suxUser(); // User
         $this->photo = new suxPhoto($this->module); // Photos
@@ -61,6 +61,8 @@ class photoUpload  {
 
         // This module has config variables, load them
         $this->tpl->config_load('my.conf', $this->module);
+
+        if (filter_var($id, FILTER_VALIDATE_INT) && $id > 0) $this->tpl->assign('album', $id);
 
     }
 

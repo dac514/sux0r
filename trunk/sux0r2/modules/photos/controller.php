@@ -50,7 +50,7 @@ function sux($action, $params = null) {
         // --------------------------------------------------------------------
 
         include_once('photoUpload.php');
-        $edit = new photoUpload();
+        $edit = new photoUpload(@$params[0]);
 
         if ($edit->formValidate($_POST)) {
             $edit->formProcess($_POST);

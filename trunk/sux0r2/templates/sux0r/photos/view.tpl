@@ -4,14 +4,14 @@
 <script type="text/javascript">
 // <![CDATA[
 function maximumWidth(myId, maxW) {
-    var pix=document.getElementById(myId).getElementsByTagName('img');
-    for (i=0; i<pix.length; i++) {
-        w=pix[i].width;
-        h=pix[i].height;
+    var pix = document.getElementById(myId).getElementsByTagName('img');
+    for (i = 0; i < pix.length; i++) {
+        w = pix[i].width;
+        h = pix[i].height;
         if (w > maxW) {
-            f=1-((w - maxW) / w);
-            pix[i].width=w * f;
-            pix[i].height=h * f;
+            f = 1 - ((w - maxW) / w);
+            pix[i].width = w * f;
+            pix[i].height = h * f;
         }
     }
 }
@@ -40,7 +40,10 @@ window.onload = function() {
 		<td style="vertical-align:top;">
 			<div id="leftside">
 
-            TODO
+            <p>
+            {insert name="editLinks"}
+            {insert name="editLinks2" album_id=$r->album.id}
+            </p>
 
 			</div>
 		</td>
@@ -49,7 +52,7 @@ window.onload = function() {
 
 
                 <div class="widget">
-                    <h2><a href="{$r->text.back_url}">{$r->text.album}</a></h2>
+                    <h2><a href="{$r->text.back_url}">{$r->album.title}</a></h2>
 
 
                     <div class="prevNext" style="width:{#maxPhotoWidth#}px;">
