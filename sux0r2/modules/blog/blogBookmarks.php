@@ -105,16 +105,16 @@ class blogBookmarks {
 
                 // Basic info
                 $url = suxFunct::canonicalizeUrl($matches[1][$i]);
-                
-                if (!filter_var($url, FILTER_VALIDATE_URL) || $this->bookmarks->getBookmark($url, true)) 
-                    continue; // skip it 
-                             
+
+                if (!filter_var($url, FILTER_VALIDATE_URL) || $this->bookmarks->getBookmark($url, true))
+                    continue; // skip it
+
                 $title = strip_tags($matches[2][$i]);
-                $body = null;         
-                
+                $body = null;
+
                 if (!$this->r->detectPOST()) {
                     // Search the webpage for info we can use
-                    $webpage = @file_get_contents($url);
+                    $webpage = @file_get_contents($url, null, null, 0, 16384); // Quit after 16 kilobytes
                     // <title>
                     $found = array();
                     if (preg_match('/<title>(.*?)<\/title>/is', $webpage, $found)) {
@@ -122,10 +122,10 @@ class blogBookmarks {
                     }
                     // TODO: Meta?
                 }
-                
+
                 // Add to array for use in template
                 $this->found_links[$url] = array('title' => $title, 'body' => $body);
-                
+
             }
         }
 
@@ -190,8 +190,8 @@ class blogBookmarks {
         if (!suxValidate::is_registered_form()) {
 
             suxValidate::connect($this->tpl, true); // Reset connection
-            
-            // Register our validators 
+
+            // Register our validators
             $count = count($this->found_links);
             for ($i = 0; $i < $count; ++$i) {
                 suxValidate::register_validator("url[$i]", "url[$i]", 'notEmpty', false, false, 'trim');

@@ -936,9 +936,10 @@ class openid {
     private function discover($openid_url) {
 
         // TODO: Improve this
+
         // Check for server/delegate,
         $url = $openid_url;
-        $tmp = @file_get_contents($openid_url);
+        $tmp = @file_get_contents($openid_url, null, null, 0, 16384); // Quit after 16 kilobytes;
         $found = array();
         // Try
         preg_match('/<link[^>]*rel=(["\'])openid.server\\1[^>]*href=(["\'])([^"\']+)\\2[^>]*\/?>/i', $tmp, $found);
