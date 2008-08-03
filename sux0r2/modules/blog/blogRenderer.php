@@ -227,7 +227,7 @@ class blogRenderer extends suxRenderer {
 
         if ($level > 1) $level = $level * 10; // Level 1 is first comment
         if ($level > 100) $level = 100; // Prevent excessive threading
-        return "{$level}px";
+        return $level;
 
     }
 
