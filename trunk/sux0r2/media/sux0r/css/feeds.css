@@ -44,3 +44,7 @@ label {
     color: red;
     background: none;
 }
+
+.rssItem img {
+    border: none;
+}

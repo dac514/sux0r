@@ -3,6 +3,7 @@
 {literal}
 <script type="text/javascript">
 // <![CDATA[
+// Set the maximum width of an image
 function maximumWidth(myId, maxW) {
     var pix = document.getElementById(myId).getElementsByTagName('img');
     for (i = 0; i < pix.length; i++) {
@@ -15,7 +16,6 @@ function maximumWidth(myId, maxW) {
         }
     }
 }
-
 window.onload = function() {
     maximumWidth('suxPhoto', {/literal}{#maxPhotoWidth#}{literal});
 }

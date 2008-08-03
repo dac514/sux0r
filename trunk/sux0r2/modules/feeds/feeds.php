@@ -62,6 +62,9 @@ class feeds  {
         $this->nb = new bayesUser();
         $this->pager = new suxPager();
 
+        // This module has config variables, load them
+        $this->tpl->config_load('my.conf', $this->module);
+
     }
 
     function author($author) {
