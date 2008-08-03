@@ -104,7 +104,7 @@
                 </p>
             {/capture}
 
-            {$r->widget('Profile', $smarty.capture.profile, null, 'http://localhost:8888/sux0r2/media/sux0r/pavatars/bunker.jpg')}
+            {$r->widget('Profile', $smarty.capture.profile, null, 'http://localhost:8888/sux0r2/media/sux0r/assets/nullwhore.png')}
             {$r->widget('Friends', 'Todo')}
 
             </div>
