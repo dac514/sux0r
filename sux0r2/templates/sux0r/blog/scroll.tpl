@@ -6,6 +6,29 @@
 {$r->assign('header', $smarty.capture.header)}
 {include file=$r->xhtml_header}{/strip}
 
+{literal}
+<script type="text/javascript">
+// <![CDATA[
+// Set the maximum width of an image
+function maximumWidth(myId, maxW) {
+    var pix = document.getElementById(myId).getElementsByTagName('img');
+    for (i = 0; i < pix.length; i++) {
+        w = pix[i].width;
+        h = pix[i].height;
+        if (w > maxW) {
+            f = 1 - ((w - maxW) / w);
+            pix[i].width = w * f;
+            pix[i].height = h * f;
+        }
+    }
+}
+window.onload = function() {
+    maximumWidth('rightside', {/literal}{#maxPhotoWidth#}{literal});
+}
+// ]]>
+</script>
+{/literal}
+
 <table id="proselytizer" >
 	<tr>
 		<td colspan="2" style="vertical-align:top;">
