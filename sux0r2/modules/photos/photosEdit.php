@@ -25,6 +25,7 @@
 require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
 require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
+require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('photosRenderer.php');
 
 class photosEdit {
@@ -57,6 +58,7 @@ class photosEdit {
         $this->r = new photosRenderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
+        suxValidate::register_object('this', $this); // Register self to validator
         $this->pager = new suxPager();
 
         // Redirect if not logged in
@@ -75,9 +77,69 @@ class photosEdit {
     }
 
 
-    function annotator() {
+    /**
+    * Validate the form
+    *
+    * @param array $dirty reference to unverified $_POST
+    * @return bool
+    */
+    function formValidate(&$dirty) {
 
-        $this->tpl->assign_by_ref('r', $this->r);
+        if(!empty($dirty) && suxValidate::is_registered_form()) {
+            // Validate
+            suxValidate::connect($this->tpl);
+            if(suxValidate::is_valid($dirty)) {
+                suxValidate::disconnect();
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+
+    /**
+    * Build the form and show the template
+    *
+    * @param array $dirty reference to unverified $_POST
+    */
+    function formBuild(&$dirty) {
+
+        $photoalbum = array();
+
+        if ($this->id) {
+
+            // Editing a photoalbum
+            $tmp = $this->photo->getAlbum($this->id, true);
+
+            $photoalbum['id'] = $tmp['id'];
+            $photoalbum['cover'] = $tmp['thumbnail'];
+
+            // Don't allow spoofing
+            unset($dirty['id']);
+        }
+
+        $this->tpl->assign($photoalbum);
+
+        // --------------------------------------------------------------------
+        // Form logic
+        // --------------------------------------------------------------------
+
+        if (!empty($dirty)) $this->tpl->assign($dirty);
+        else suxValidate::disconnect();
+
+        if (!suxValidate::is_registered_form()) {
+
+            suxValidate::connect($this->tpl, true); // Reset connection
+
+            // Register our validators
+            suxValidate::register_validator('integrity', 'integrity:id', 'hasIntegrity');
+
+        }
+
+        // --------------------------------------------------------------------
+        // Templating
+        // --------------------------------------------------------------------
 
         // Start pager
         $this->pager->setStart();
@@ -87,10 +149,48 @@ class photosEdit {
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/photos/album/annotate/{$this->id}"));
         $this->r->pho = $this->photo->getPhotos($this->id, $this->pager->limit, $this->pager->start);
 
+        $this->r->text['form_url'] = suxFunct::makeUrl('/photos/album/annotate/' . $this->id, array('page' => $_GET['page']));
         $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
 
+        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('annotate.tpl');
 
+    }
+
+
+    /**
+    * Todo
+    *
+    * @param array $clean reference to validated $_POST
+    */
+    function formProcess(&$clean) {
+
+        // Set cover
+        if (isset($clean['cover'])) $this->photo->setThumbnail($clean['id'], $clean['cover']);
+
+        // Remove photos from database
+        // Notice: This does not remove photos from disk!
+        if (isset($clean['delete'])) foreach ($clean['delete'] as $val) {
+            if ($this->photo->isPhotoOwner($val, $_SESSION['users_id'])) {
+                $this->photo->deletePhoto($val);
+            }
+        }
+
+    }
+
+
+    /**
+    * The form was successfuly processed
+    */
+    function formSuccess() {
+
+        // TODO?
+        // $this->tpl->clear_cache(null, "album|{$this->id}"); // Clear cache
+
+        // Template
+        $this->r->text['back_url'] = suxFunct::makeUrl('/photos/album/annotate/' . $this->id);
+        $this->tpl->assign_by_ref('r', $this->r);
+        $this->tpl->display('success.tpl');
 
     }
 

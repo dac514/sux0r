@@ -35,7 +35,8 @@ $clean = array(
 try {
     $photo->savePhoto($_SESSION['users_id'], $clean);
     $tmp = $photo->getPhoto($clean['id']);
-    echo $tmp['description'];
+    if ($tmp['description']) echo $tmp['description'];
+    else echo 'Click me to edit this nice long text.'; // TODO: Translate
 }
 catch (Exception $e) {
     echo $e->getMessage();
