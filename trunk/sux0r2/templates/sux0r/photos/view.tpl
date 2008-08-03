@@ -1,4 +1,4 @@
-{include file=$r->xhtml_header}
+{capture name=header}
 
 {literal}
 <script type="text/javascript">
@@ -17,11 +17,15 @@ function maximumWidth(myId, maxW) {
     }
 }
 window.onload = function() {
-    maximumWidth('suxPhoto', {/literal}{#maxPhotoWidth#}{literal});
+    maximumWidth({/literal}'suxPhoto', {#maxPhotoWidth#}{literal});
 }
 // ]]>
 </script>
 {/literal}
+
+{/capture}{strip}
+{$r->assign('header', $smarty.capture.header)}
+{include file=$r->xhtml_header}{/strip}
 
 <table id="proselytizer">
 	<tr>

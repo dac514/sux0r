@@ -2,10 +2,6 @@
 
 {$r->genericBayesInterfaceInit()}
 
-{/capture}{strip}
-{$r->assign('header', $smarty.capture.header)}
-{include file=$r->xhtml_header}{/strip}
-
 {literal}
 <script type="text/javascript">
 // <![CDATA[
@@ -22,12 +18,18 @@ function maximumWidth(myId, maxW) {
         }
     }
 }
-window.onload = function() {
-    maximumWidth('rightside', {/literal}{#maxPhotoWidth#}{literal});
-}
+Event.observe(window, 'load', function() {
+    maximumWidth('suxBlog', {/literal}{#maxPhotoWidth#}{literal});
+});
 // ]]>
 </script>
 {/literal}
+
+{/capture}{strip}
+{$r->assign('header', $smarty.capture.header)}
+{include file=$r->xhtml_header}{/strip}
+
+
 
 <table id="proselytizer" >
 	<tr>
@@ -134,7 +136,9 @@ window.onload = function() {
 
                 {/capture}
 
+                <div id="suxBlog">
                 {$r->widget($foo.title, $smarty.capture.blog, $smarty.capture.blog_url, $smarty.capture.blog_img)}
+                </div>
 
 
             {/foreach}
@@ -150,7 +154,7 @@ window.onload = function() {
             {foreach from=$r->comments item=foo}
 
 
-                    <div class="comment" style="margin-left:{$r->indenter($foo.level)};">
+                    <div class="comment" id="suxComment{$foo.id}" style="margin-left:{$r->indenter($foo.level)}px;">
                     <a name="comment-{$foo.id}"></a>
 
                     <!-- Content -->
@@ -159,6 +163,17 @@ window.onload = function() {
                     <p><a href="{$r->makeUrl('/blog/reply')}/{$foo.id}">Reply</a></p>
 
                     </div>
+
+                    {literal}
+                    <script type="text/javascript">
+                    // <![CDATA[
+                    // Set the maximum width of an image
+                    Event.observe(window, 'load', function() {
+                            maximumWidth({/literal}'suxComment{$foo.id}', {math equation="x - y" x=#maxPhotoWidth# y=$r->indenter($foo.level)}{literal});
+                    });
+                    // ]]>
+                    </script>
+                    {/literal}
 
 
             {/foreach}
