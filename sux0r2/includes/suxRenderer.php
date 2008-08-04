@@ -143,6 +143,16 @@ class suxRenderer {
     }
 
 
+    /**
+    * Check if a user is logged in
+    */
+    function isLoggedIn() {
+
+        return isset($_SESSION['users_id']) ? true : false;
+
+    }
+
+
 
     /**
     * Constructs a widget

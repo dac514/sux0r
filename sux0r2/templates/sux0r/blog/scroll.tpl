@@ -1,6 +1,10 @@
 {capture name=header}
 
-{$r->genericBayesInterfaceInit()}
+{if $r->isLoggedIn()}
+    {$r->genericBayesInterfaceInit()}
+{else}
+    <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
+{/if}
 
 {literal}
 <script type="text/javascript">
@@ -19,7 +23,7 @@ function maximumWidth(myId, maxW) {
     }
 }
 Event.observe(window, 'load', function() {
-    maximumWidth({/literal}'rightside', {#maxPhotoWidth#}{literal});
+    maximumWidth('rightside', {/literal}{#maxPhotoWidth#}{literal});
 });
 // ]]>
 </script>
