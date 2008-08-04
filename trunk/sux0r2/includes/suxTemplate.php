@@ -29,7 +29,6 @@ class suxTemplate extends Smarty {
     public $partition;
     public $template_dir_fallback;
 
-
     /**
     * Constructor
     *
@@ -145,6 +144,31 @@ class suxTemplate extends Smarty {
         $this->partition = $partition;
         $this->template_dir = $template_dir;
         $this->template_dir_fallback = $template_dir_fallback;
+
+    }
+
+
+    /**
+    * htmLawed Tidy
+    *
+    * @see http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s3.3.5
+    * @param string $html
+    * @param int|string $tidy
+    * @return string
+    */
+    function tidy($html, $tidy) {
+
+        /*
+        htmLawed is meant for input that goes into the body of HTML documents.
+        HTML's head-level elements are not supported, nor are the frameset
+        elements frameset, frame and noframes.
+        */
+
+        require_once(dirname(__FILE__) . '/symbionts/htmLawed/htmLawed.php');
+        $config = array(
+            'tidy' => $tidy,
+            );
+        return htmLawed($html, $config);
 
     }
 
