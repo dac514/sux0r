@@ -175,7 +175,7 @@ class feedsSuggest  {
 
         if (empty($formvars['url'])) return false;
         $feed = $this->rss->fetchRSS($formvars['url']);
-        if (!isset($feed['items_count']) || $feed['items_count'] <= 0) return false;
+        if (!isset($feed['items_count']) || $feed['items_count'] < 1) return false;
         return true;
 
     }

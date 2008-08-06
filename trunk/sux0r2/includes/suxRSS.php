@@ -67,9 +67,11 @@ class suxRSS extends DOMDocument {
 
     protected $db;
     protected $inTransaction = false;
+    protected $db_driver;
+    // InnoDB
     protected $db_feeds = 'rss_feeds';
     protected $db_items = 'rss_items';
-    protected $db_driver; // database type
+
 
 
     /**
@@ -199,7 +201,7 @@ class suxRSS extends DOMDocument {
         // Sanitize
         // -------------------------------------------------------------------
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0)
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
             throw new Exception('Invalid user id');
 
         if (!isset($url['url']) || !isset($url['title']) || !isset($url['body']))
@@ -300,7 +302,7 @@ class suxRSS extends DOMDocument {
     function getItem($id) {
 
         // Sanity check
-        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0)
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
             throw new Exception('Invalid message id');
 
         $query = "SELECT * FROM {$this->db_items} WHERE id = ? LIMIT 1 ";

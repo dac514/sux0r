@@ -62,6 +62,55 @@ class blogRenderer extends suxRenderer {
 
 
     /**
+    * Return tags associated to this document by author
+    *
+    * @param int $id messages id
+    * @return string html
+    */
+    function tags($id) {
+
+        // ----------------------------------------------------------------
+        // SQL
+        // ----------------------------------------------------------------
+
+        // Innerjoin query
+        $innerjoin = '
+        INNER JOIN link_messages_tags ON link_messages_tags.tags_id = tags.id
+        ';
+
+        // Select
+        $query = "
+        SELECT tags.id, tags.tag FROM tags
+        {$innerjoin}
+        WHERE link_messages_tags.messages_id = ?
+        ";
+
+        $db = suxDB::get();
+        $st = $db->prepare($query);
+        $st->execute(array($id));
+        $cat = $st->fetchAll(PDO::FETCH_ASSOC);
+
+        // ----------------------------------------------------------------
+        // Html
+        // ----------------------------------------------------------------
+
+        foreach ($cat as $val) {
+            $url = suxFunct::makeUrl('/blog/tag/' . $val['id']);
+            $html .= "<a href='{$url}'>{$val['tag']}</a>, ";
+        }
+
+        if (!$html) return null; // No categories by trainer
+
+        $html = rtrim($html, ', ');
+        $html = "{$this->gtext['tags']}: " . $html . '';
+
+        return $html;
+
+    }
+
+
+
+    /**
     * Return bayes categories associated to this document by author
     *
     * @param int $id messages id
@@ -106,7 +155,7 @@ class blogRenderer extends suxRenderer {
         if (!$html) return null; // No categories by trainer
 
         $html = rtrim($html, ', ');
-        $html = "<p>{$this->gtext['author_categories']}: " . $html . '</p>';
+        $html = "<p>{$this->gtext['bayes_categories']}: " . $html . '</p>';
 
         return $html;
 

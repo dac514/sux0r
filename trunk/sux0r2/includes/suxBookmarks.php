@@ -27,9 +27,11 @@ class suxBookmarks {
     // Database suff
     protected $db;
     protected $inTransaction = false;
+    protected $db_driver;
+    // InnoDB
     protected $db_table = 'bookmarks';
     protected $db_table_hist = 'bookmarks_history';
-    protected $db_driver; // database type
+
 
 
     /**
@@ -54,7 +56,7 @@ class suxBookmarks {
     function getBookmark($id, $unpub = false) {
 
         $col = 'id';
-        if (!filter_var($id, FILTER_VALIDATE_INT)) {
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) {
             $col = 'url';
             $id = suxFunct::canonicalizeUrl($id);
         }
@@ -98,7 +100,7 @@ class suxBookmarks {
         // Sanitize
         // -------------------------------------------------------------------
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0) throw new Exception('Invalid user id');
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
         if (!isset($url['url']) || !isset($url['title']) || !isset($url['body'])) throw new Exception('Invalid $url array');
         if (!filter_var($url['url'], FILTER_VALIDATE_URL)) throw new Exception('Invalid url');
 
@@ -197,7 +199,7 @@ class suxBookmarks {
     */
     function deleteBookmark($id) {
 
-        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0) return false;
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
 
         // Begin transaction
         $this->db->beginTransaction();
