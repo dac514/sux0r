@@ -94,7 +94,7 @@ class cropper {
         $height = 0;
 
         // Check $id
-        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0) throw new Exception ('Invalid $id');
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) throw new Exception ('Invalid $id');
 
         // Check $module, assign $table
         $table = $this->getTable($module);

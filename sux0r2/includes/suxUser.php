@@ -24,12 +24,16 @@
 
 class suxUser {
 
-    // Variables
+    // Database stuff
     protected $db;
     protected $inTransaction = false;
+    protected $db_driver;
+    // InnoDB
     protected $db_table = 'users';
     protected $db_table_info = 'users_info';
     protected $db_table_openid = 'users_openid';
+
+    // Variables
     private $max_failures = 4; // Maximum authetication failures allowed
 
 
@@ -60,7 +64,7 @@ class suxUser {
         }
 
         // Any user
-        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0)
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
             throw new Exception('Invalid user id');
 
         $st = $this->db->prepare("SELECT * FROM {$this->db_table} WHERE id = ? ");
@@ -188,7 +192,7 @@ class suxUser {
         // Sanitize
         // --------------------------------------------------------------------
 
-        if ($id != null && (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0))
+        if ($id != null && (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1))
             throw new Exception('Invalid user id');
 
         unset($info['id'], $info['users_id']); // Don't allow spoofing of the id in the array
@@ -324,7 +328,7 @@ class suxUser {
         }
 
         // Any user
-        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0)
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
             throw new Exception('Invalid user id');
 
         // Get the Ids
@@ -352,7 +356,7 @@ class suxUser {
         }
 
         // Any user
-        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0)
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
             throw new Exception('Invalid user id');
 
         // Canonicalize url
@@ -394,7 +398,7 @@ class suxUser {
         }
 
         // Any user
-        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0)
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
             throw new Exception('Invalid user id');
 
         // Canonicalize url
@@ -617,7 +621,7 @@ class suxUser {
     */
     private function tokenCheck($id, $token) {
 
-        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0) return false;
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
 
         $st = $this->db->prepare("SELECT password FROM {$this->db_table} WHERE id = ? ");
         $st->execute(array($id));

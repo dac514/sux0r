@@ -27,6 +27,8 @@ class suxCalendar {
     // Database suff
     protected $db;
     protected $inTransaction = false;
+    protected $db_driver;
+    // InnoDB
     protected $db_table = 'calendar';
     protected $db_table_dates = 'calendar_dates';
 
@@ -37,6 +39,7 @@ class suxCalendar {
     function __construct() {
 
     	$this->db = suxDB::get();
+        $this->db_driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
         set_exception_handler(array($this, 'exceptionHandler'));
 
     }

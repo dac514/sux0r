@@ -130,6 +130,22 @@ function sux($action, $params = null) {
         break;
 
 
+    case 'tag' :
+
+        // --------------------------------------------------------------------
+        // Tag
+        // --------------------------------------------------------------------
+
+        if (empty($params[0])) {
+            suxFunct::redirect(suxFunct::makeUrl('/blog'));
+        }
+
+        include_once('blog.php');
+        $blog = new blog();
+        $blog->tag($params[0]);
+        break;
+
+
     case 'category' :
 
         // --------------------------------------------------------------------

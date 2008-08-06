@@ -32,6 +32,8 @@ class suxRolodex {
     // Database suff
     protected $db;
     protected $inTransaction = false;
+    protected $db_driver;
+    // InnoDB
     protected $db_table = 'rolodex';
 
 
@@ -41,6 +43,7 @@ class suxRolodex {
     function __construct() {
 
     	$this->db = suxDB::get();
+        $this->db_driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
         set_exception_handler(array($this, 'exceptionHandler'));
 
     }
@@ -59,7 +62,7 @@ class suxRolodex {
         // Sanitize
         // --------------------------------------------------------------------
 
-        if ($id != null && (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0)) throw new Exception('Invalid rolodex id');
+        if ($id != null && (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)) throw new Exception('Invalid rolodex id');
 
         unset($info['id']); // Don't allow spoofing of the id in the array
 

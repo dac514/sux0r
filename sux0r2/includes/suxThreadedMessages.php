@@ -26,9 +26,11 @@ class suxThreadedMessages {
     // Database stuff
     protected $db;
     protected $inTransaction = false;
+    protected $db_driver;
+    // InnoDB
     protected $db_table = 'messages';
     protected $db_table_hist = 'messages_history';
-    protected $db_driver; // database type
+
 
     /*
     Currently:
@@ -69,7 +71,7 @@ class suxThreadedMessages {
     function getMessage($id, $unpub = false) {
 
         // Sanity check
-        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0)
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
             throw new Exception('Invalid message id');
 
         $query = "SELECT * FROM {$this->db_table} WHERE id = ? ";
@@ -113,7 +115,7 @@ class suxThreadedMessages {
         // Sanitize
         // -------------------------------------------------------------------
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0)
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
             throw new Exception('Invalid user id');
 
         if (!isset($msg['title']) || !isset($msg['body']))
@@ -290,10 +292,10 @@ class suxThreadedMessages {
         // Sanitize
         // -------------------------------------------------------------------
 
-        if (!filter_var($messages_id, FILTER_VALIDATE_INT) || $messages_id <= 0)
+        if (!filter_var($messages_id, FILTER_VALIDATE_INT) || $messages_id < 1)
             throw new Exception('Invalid message id');
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0)
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
             throw new Exception('Invalid user id');
 
         if (!isset($msg['title']) || !isset($msg['body']))
@@ -392,13 +394,13 @@ class suxThreadedMessages {
 
 
     /**
-    * Delete bookmark
+    * Delete message
     *
     * @param int $id messages id
     */
     function deleteMessage($id) {
 
-        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0) return false;
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
 
         // Begin transaction
         $this->db->beginTransaction();
@@ -427,7 +429,7 @@ class suxThreadedMessages {
     function getFirstPost($thread_id, $unpub = false) {
 
         // Sanity check
-        if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id <= 0)
+        if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id < 1)
             throw new Exception('Invalid thread id');
 
         // SQL Query
@@ -471,7 +473,7 @@ class suxThreadedMessages {
     function countThread($thread_id, $type = null, $unpub = false) {
 
         // Sanity check
-        if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id <= 0)
+        if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id < 1)
             throw new Exception('Invalid thread id');
 
         if ($type && !in_array($type, $this->types))
@@ -515,7 +517,7 @@ class suxThreadedMessages {
     function getThread($thread_id, $type = null, $limit = null, $start = 0, $unpub = false) {
 
         // Sanity check
-        if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id <= 0)
+        if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id < 1)
             throw new Exception('Invalid thread id');
 
         if ($type && !in_array($type, $this->types))
@@ -562,7 +564,7 @@ class suxThreadedMessages {
     function countMessagesByUser($users_id, $type = null, $unpub = false) {
 
         // Sanity check
-        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0)
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
             throw new Exception('Invalid user id');
 
         if ($type && !in_array($type, $this->types))
@@ -652,7 +654,7 @@ class suxThreadedMessages {
     function getMessagesByUser($users_id, $type = null, $limit = null, $start = 0, $unpub = false) {
 
         // Sanity check
-        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0)
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
             throw new Exception('Invalid user id');
 
         if ($type && !in_array($type, $this->types))
@@ -779,7 +781,7 @@ class suxThreadedMessages {
     function countFirstPostsByUser($users_id, $type = null, $unpub = false) {
 
         // Sanity check
-        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0)
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
             throw new Exception('Invalid user id');
 
         if ($type && !in_array($type, $this->types))
@@ -869,7 +871,7 @@ class suxThreadedMessages {
     function getFirstPostsByUser($users_id, $type = null, $limit = null, $start = 0, $unpub = false) {
 
         // Sanity check
-        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id <= 0)
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
             throw new Exception('Invalid user id');
 
         if ($type && !in_array($type, $this->types))
@@ -1105,7 +1107,7 @@ class suxThreadedMessages {
     function getCommentsCount($thread_id, $unpub = false) {
 
         // Sanity check
-        if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id <= 0)
+        if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id < 1)
             throw new Exception('Invalid thread id');
 
         // SQL Query

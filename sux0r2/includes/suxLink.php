@@ -34,14 +34,16 @@ class suxLink {
     `messages_id` int(11) NOT NULL,
     `bayes_documents_id` int(11) NOT NULL,
     UNIQUE KEY `idx` (`messages_id`,`bayes_documents_id`)
-    );
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+    NB: Because we need rollback, link tables are InnoDB
     */
 
 
     // Database suff
     protected $db;
     protected $inTransaction = false;
-    protected $db_driver; // database type
+    protected $db_driver;
 
 
     /**
@@ -73,30 +75,30 @@ class suxLink {
         return $link;
 
     }
-    
- 
+
+
     /**
-    * Some link columns break naming conventions. Use this function to get the 
+    * Some link columns break naming conventions. Use this function to get the
     * correct linked table name.
     *
     * @param string $table name of a link table
     * @param string $table name of column in the link table
-    * @return string    
+    * @return string
     **/
     function getLinkColumnName($table, $link) {
-        
-        if ($link == 'bayes') 
+
+        if ($link == 'bayes')
             return 'bayes_documents';
-        
-        elseif ($table == 'link_bayes_rss' && $link == 'rss') 
+
+        elseif ($table == 'link_bayes_rss' && $link == 'rss')
             return 'rss_items';
-        
+
         elseif ($table == 'link_rss_users' && $link == 'rss')
             return 'rss_feeds';
-        
+
         return $link;
-        
-    }    
+
+    }
 
 
     /**

@@ -35,7 +35,7 @@
     {validate id="title" message="title cannot be empty"}
     {/capture}
 {/strip}
-<label for="title" {if $smarty.capture.error}class="error"{/if} >{$r->text.dob} Title :</label>
+<label for="title" {if $smarty.capture.error}class="error"{/if} >Title :</label>
 <input type="text" name="title" value="{$title}" class="widerInput" />
 {$smarty.capture.error}
 </p>
@@ -110,7 +110,13 @@
 {$smarty.capture.error}
 </p>
 
-<!-- Bayesian tags -->
+<!-- Regular tags -->
+<p>
+<label for="tags" >Tags, comma delimited :</label>
+<input type="text" name="tags" value="{$tags}" class="widerInput" />
+</p>
+
+<!-- Bayesian categories -->
 
 {capture name=tags}
     {foreach from=$r->getTrainerVectors() key=k item=v}

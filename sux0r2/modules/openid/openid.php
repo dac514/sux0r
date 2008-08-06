@@ -30,6 +30,14 @@ require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
 class openid {
 
+    // Database suff
+    protected $db;
+    protected $inTransaction = false;
+    protected $db_driver;
+    // MyISAM (faster, no rollback)
+    protected $db_table_sec = 'openid_secrets';
+    protected $db_table_trust = 'openid_trusted';
+
     // Objects
     public $tpl;
     public $r;
@@ -39,10 +47,6 @@ class openid {
     public $gtext = array();
     public $profile = array();
     public $sreg = array();
-    protected $db;
-    protected $inTransaction = false;
-    protected $db_table_sec = 'openid_secrets';
-    protected $db_table_trust = 'openid_trusted';
     protected $assoc_types = array();
     protected $session_types = array();
     protected $bcmath_types = array();
@@ -59,6 +63,7 @@ class openid {
     function __construct() {
 
         $this->db = suxDB::get(); // Db
+        $this->db_driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
         set_exception_handler(array($this, 'exceptionHandler')); // Exception
 
         $this->user = new suxUser(); // User
@@ -984,7 +989,7 @@ class openid {
     */
     private function checkTrusted($id, $url) {
 
-        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0) return false;
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
 
         $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_trust} WHERE users_id = ? AND auth_url = ? LIMIT 1 ");
         $st->execute(array($id, $url));
@@ -1003,7 +1008,7 @@ class openid {
     */
     private function trustUrl($id, $url) {
 
-        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0) return false;
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
         $url = filter_var($url, FILTER_SANITIZE_URL);
 
         $trusted = array(
@@ -1030,7 +1035,7 @@ class openid {
     */
     private function destroyAssocHandle($id) {
 
-        if (!filter_var($id, FILTER_VALIDATE_INT) || $id <= 0) return false;
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
 
         $this->debug("Destroying session: $id");
 

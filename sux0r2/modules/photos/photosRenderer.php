@@ -177,7 +177,7 @@ function insert_editLinks2($params) {
 
     if (!isset($_SESSION['users_id'])) return null;
     if (empty($params['album_id'])) return null;
-    if (!filter_var($params['album_id'], FILTER_VALIDATE_INT) || $params['album_id'] <= 0) return null;
+    if (!filter_var($params['album_id'], FILTER_VALIDATE_INT) || $params['album_id'] < 1) return null;
 
     $photo = new suxPhoto();
     if (!$photo->isAlbumOwner($params['album_id'], $_SESSION['users_id'])) return null;

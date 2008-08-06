@@ -131,8 +131,11 @@ Event.observe(window, 'load', function() {
 
 
                     <!-- Permanlink, Comments -->
-                    <p><a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">Permanent Link</a>,
-                    <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}#comments">Comments ({$foo.comments})</a></p>
+                    <p>
+                    <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">Permanent Link</a>,
+                    <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}#comments">Comments ({$foo.comments})</a>
+                    {$r->tags($foo.id)}
+                    </p>
 
 
                     <!-- Flair -->
@@ -145,6 +148,9 @@ Event.observe(window, 'load', function() {
                     <a href='http://www.stumbleupon.com/submit?url={$url|escape:'url, UTF-8'}&title={$foo.title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/stumbleupon.gif' alt='StumbleUpon' width='16' height='16' /></a>
                     <a href='http://del.icio.us/login/?url={$url|escape:'url, UTF-8'}&title={$foo.title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/delicious.gif' alt='Del.icio.us' width='16' height='16' /></a>
                     </p></div>
+
+
+                    <!-- Tags -->
 
 
                     <!-- Naive Baysian Classification -->

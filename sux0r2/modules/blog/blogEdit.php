@@ -23,6 +23,7 @@
 */
 
 require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
+require_once(dirname(__FILE__) . '/../../includes/suxTags.php');
 require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
@@ -45,6 +46,7 @@ class blogEdit {
     private $msg;
     private $nb;
     private $link;
+    private $tags;
 
 
     /**
@@ -65,6 +67,7 @@ class blogEdit {
         $this->msg = new suxThreadedMessages();
         $this->nb = new bayesUser();
         $this->link = new suxLink();
+        $this->tags = new suxTags();
 
         // This module has config variables, load them
         $this->tpl->config_load('my.conf', $this->module);
@@ -136,7 +139,18 @@ class blogEdit {
             $blog['Time_Minute']  = @$matches[5]; // minutes
             $blog['Time_Second'] = @$matches[6]; //seconds
 
-            /*
+            /* Tags */
+
+            $links = $this->link->getLinks('link_messages_tags', 'messages', $blog['id']);
+            $blog['tags'] = '';
+            foreach($links as $val) {
+                $tmp = $this->tags->getTag($val);
+                $blog['tags'] .=  $tmp['tag'] . ', ';
+            }
+            $blog['tags'] = rtrim($blog['tags'], ', ');
+
+
+            /* Naive Bayesian:
             1) Get the `link_bayes_messages` matching this messages_id
             2) Foreach linking bayes_document_id
             3) get the categories I can train (nb::isCategoryTrainer($cat_id, $users_id)
@@ -258,6 +272,7 @@ class blogEdit {
 
         }
 
+
         // --------------------------------------------------------------------
         // Create $msg array
         // --------------------------------------------------------------------
@@ -291,7 +306,29 @@ class blogEdit {
 
 
         // --------------------------------------------------------------------
-        // Naive Bayesian stuff
+        // Tags procedure
+        // --------------------------------------------------------------------
+
+        // Parse tags
+        $tags = suxTags::parse($clean['tags']);
+
+        // Save tags into database
+        $tag_ids = array();
+        foreach($tags as $tag) {
+            $tag_ids[] = $this->tags->saveTag($_SESSION['users_id'], $tag);
+        }
+
+        //Delete current links
+        $this->link->deleteLink('link_messages_tags', 'messages', $clean['id']);
+
+        // Reconnect links
+        foreach ($tag_ids as $id) {
+            $this->link->setLink('link_messages_tags', 'messages', $clean['id'], 'tags', $id);
+        }
+
+
+        // --------------------------------------------------------------------
+        // Naive Bayesian procedure
         // --------------------------------------------------------------------
 
         /*
