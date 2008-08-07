@@ -21,12 +21,6 @@
 * @license    http://www.gnu.org/licenses/agpl.html
 */
 
-
-// Enforce minimum version of PHP 5.2.3
-if (preg_replace('/[a-z-]/i', '', phpversion()) < '5.2.3') {
-    die('sux0r requires PHP 5.2.3, or higher.');
-}
-
 // Enforce config
 if (!isset($GLOBALS['CONFIG'])) {
     die("Something is wrong, can't initialize without configuration.");
