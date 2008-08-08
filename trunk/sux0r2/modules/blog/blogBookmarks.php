@@ -113,14 +113,11 @@ class blogBookmarks {
                 $body = null;
 
                 if (!$this->r->detectPOST()) {
-                    // Search the webpage for info we can use
-                    $webpage = @file_get_contents($url, null, null, 0, 16384); // Quit after 16 kilobytes
-                    // <title>
-                    $found = array();
-                    if (preg_match('/<title>(.*?)<\/title>/is', $webpage, $found)) {
-                        $title = html_entity_decode(strip_tags($found[1]), ENT_QUOTES, 'UTF-8');
+                    $tmp = $this->bookmarks->fetchBookmark($url);
+                    if ($tmp) {
+                        $title = $tmp['title'];
+                        $body = $tmp['description'];
                     }
-                    // TODO: Meta?
                 }
 
                 // Add to array for use in template

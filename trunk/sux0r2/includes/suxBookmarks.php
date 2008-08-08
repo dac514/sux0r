@@ -28,10 +28,8 @@ class suxBookmarks {
     protected $db;
     protected $inTransaction = false;
     protected $db_driver;
-    // InnoDB
+    // MyISAM (faster, no rollback)
     protected $db_table = 'bookmarks';
-    protected $db_table_hist = 'bookmarks_history';
-
 
 
     /**
@@ -141,11 +139,6 @@ class suxBookmarks {
         // Go!
         // --------------------------------------------------------------------
 
-        // Begin transaction
-        $this->db->beginTransaction();
-        $this->inTransaction = true;
-
-        // Get $edit[] array in order to keep a history
         $query = "SELECT id, url, title, body_html, body_plaintext FROM {$this->db_table} WHERE url = ? LIMIT 1 ";
         $st = $this->db->prepare($query);
         $st->execute(array($clean['url']));
@@ -154,17 +147,8 @@ class suxBookmarks {
         if ($edit) {
 
             // UPDATE
-
             $id = $edit['id'];
-            $edit['users_id'] = $clean['users_id'];
-            $edit['edited_on'] = date('c');
-
-            $query = suxDB::prepareInsertQuery($this->db_table_hist, $edit);
-            $st = $this->db->prepare($query);
-            $st->execute($edit);
-
-            unset($clean['users_id']); // Don't override the original publisher
-
+            unset($clean['users_id']); // Don't override the original suggestor
             $query = suxDB::prepareUpdateQuery($this->db_table, $clean, 'url');
             $st = $this->db->prepare($query);
             $st->execute($clean);
@@ -173,19 +157,13 @@ class suxBookmarks {
         else {
 
             // INSERT
-
             $query = suxDB::prepareInsertQuery($this->db_table, $clean);
             $st = $this->db->prepare($query);
             $st->execute($clean);
-            // MySQL InnoDB with transaction reports the last insert id as 0 after
-            // commit, the real ids are only reported before committing.
             $id = $this->db->lastInsertId();
 
         }
 
-        // Commit
-        $this->db->commit();
-        $this->inTransaction = false;
 
         return $id;
 
@@ -201,19 +179,37 @@ class suxBookmarks {
 
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
 
-        // Begin transaction
-        $this->db->beginTransaction();
-        $this->inTransaction = true;
-
         $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE id = ? LIMIT 1 ");
         $st->execute(array($id));
 
-        $st = $this->db->prepare("DELETE FROM {$this->db_table_hist} WHERE bookmarks_id = ? ");
-        $st->execute(array($id));
+    }
 
-        // Commit
-        $this->db->commit();
-        $this->inTransaction = false;
+
+	/**
+	* Fetch a bookmark
+    *
+    * @param string $url a URL to an RSS Feed
+    * @return array|false
+	*/
+	function fetchBookmark($url) {
+
+        // Search the webpage for info we can use
+        $webpage = @file_get_contents($url, null, null, 0, 16384); // Quit after 16 kilobytes
+
+        $title = null;
+        $description = null;
+
+        // <title>
+        $found = array();
+        if (preg_match('/<title>(.*?)<\/title>/is', $webpage, $found)) {
+            $title = html_entity_decode(strip_tags($found[1]), ENT_QUOTES, 'UTF-8');
+        }
+        // TODO: Meta for description?
+
+        return array(
+            'title' => $title,
+            'description' => $description,
+            );
 
     }
 
