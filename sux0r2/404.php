@@ -2,8 +2,7 @@
 
 require_once(dirname(__FILE__) . '/config.php'); // Configuration
 require_once(dirname(__FILE__) . '/initialize.php'); // Initialization
-
-$text = suxFunct::gtext();
+$text = suxFunct::gtext(); // Language
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

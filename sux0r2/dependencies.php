@@ -1,22 +1,54 @@
 <?php
 
+require_once(dirname(__FILE__) . '/config.php'); // Configuration
+
+// ---------------------------------------------------------------------------
+// Check for problems
+// ---------------------------------------------------------------------------
+
 // No problems to start
-$problems = null;
+$prob = null;
+$continue = false;
 
 // Enforce minimum version of PHP 5.2.3
 if (preg_replace('/[a-z-]/i', '', phpversion()) < '5.2.3') {
-    $problems .= "Error: sux0r requires PHP 5.2.3, or higher. \n";
+    $prob .= "Error: sux0r requires PHP 5.2.3, or higher. see: http://www.gophp5.org/ \n";
 }
 
 // Check for mbstring
 if (!extension_loaded('mbstring')) {
-    $problems .= "Error: sux0r requires the mbstring extension, see: http://php.net/mbstring \n";
+    $prob .= "Error: sux0r requires the mbstring extension, see: http://php.net/mbstring \n";
 }
 
-// Echo problems?
-echo '<pre>';
-if ($problems) echo $problems;
-else echo 'Everything seems fine!';
-echo '</pre>';
+// Problems?
+if (!$prob) {
+    $prob = 'Ok!';
+    $continue = true;
+}
+
+// ---------------------------------------------------------------------------
+// Inline, horrible inline
+// ---------------------------------------------------------------------------
 
 ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <title><?php echo $GLOBALS['CONFIG']['TITLE']; ?> - Dependencies</title>
+    <style>
+    body  { font-family: Arial, Helvetica, sans-serif; background-color: #ffffff; }
+    a:link, a:visited, a:active { font-weight: bold; color: #000000; text-decoration: underline; }
+    a:hover { color: #ffffff; background: #000000; }
+    </style>
+</head>
+<body>
+
+    <p><pre><?php echo $prob; ?></pre></p>
+
+    <?php if ($continue) { ?>
+    <p><a href="<?php echo $GLOBALS['CONFIG']['URL']; ?>"><?php echo $GLOBALS['CONFIG']['TITLE']; ?> &raquo;</a></p>
+    <? } ?>
+
+</body>
+</html>

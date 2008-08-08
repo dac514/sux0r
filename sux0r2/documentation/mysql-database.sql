@@ -147,35 +147,10 @@ CREATE TABLE `bookmarks` (
   UNIQUE KEY `url` (`url`),
   KEY `users_id` (`users_id`),
   KEY `published` (`draft`,`published_on`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `bookmarks`
---
-
-
--- --------------------------------------------------------
-
---
--- Table structure for table `bookmarks_history`
---
-
-CREATE TABLE `bookmarks_history` (
-  `id` int(11) NOT NULL auto_increment,
-  `bookmarks_id` int(11) NOT NULL,
-  `users_id` int(11) NOT NULL,
-  `url` varchar(255) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `body_html` text NOT NULL,
-  `body_plaintext` text NOT NULL,
-  `edited_on` datetime NOT NULL,
-  PRIMARY KEY  (`id`),
-  KEY `bookmarks_id` (`bookmarks_id`),
-  KEY `users_id` (`users_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `bookmarks_history`
 --
 
 

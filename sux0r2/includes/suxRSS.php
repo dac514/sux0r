@@ -246,10 +246,11 @@ class suxRSS extends DOMDocument {
         if ($edit) {
 
             // UPDATE
+            $id = $edit['id'];
+            unset($clean['users_id']); // Don't override the original suggestor
             $query = suxDB::prepareUpdateQuery($this->db_feeds, $clean, 'url');
             $st = $this->db->prepare($query);
             $st->execute($clean);
-            $id = $edit['id'];
 
         }
         else {
