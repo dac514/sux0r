@@ -16,4 +16,8 @@ $gtext['success'] = 'Success!';
 $gtext['success2'] = 'An adminitrator will review your suggestion within the next few days.';
 $gtext['back'] = 'Back';
 
+$gtext['tags'] = 'Tags';
+$gtext['none'] = 'None';
+
+
 ?>

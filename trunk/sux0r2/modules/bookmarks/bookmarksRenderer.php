@@ -43,8 +43,56 @@ class bookmarksRenderer extends suxRenderer {
     function __construct($module) {
 
         parent::__construct($module); // Call parent
-        $this->gtext = suxFunct::gtext('blog'); // Language
+        $this->gtext = suxFunct::gtext('bookmarks'); // Language
         $this->user = new suxUser();
+
+    }
+
+
+   /**
+    * Return tags associated to this bookmark
+    *
+    * @param int $id bookmark id
+    * @return string html
+    */
+    function tags($id) {
+
+        // ----------------------------------------------------------------
+        // SQL
+        // ----------------------------------------------------------------
+
+        // Innerjoin query
+        $innerjoin = '
+        INNER JOIN link_bookmarks_tags ON link_bookmarks_tags.tags_id = tags.id
+        ';
+
+        // Select
+        $query = "
+        SELECT tags.id, tags.tag FROM tags
+        {$innerjoin}
+        WHERE link_bookmarks_tags.bookmarks_id = ?
+        ";
+
+        $db = suxDB::get();
+        $st = $db->prepare($query);
+        $st->execute(array($id));
+        $cat = $st->fetchAll(PDO::FETCH_ASSOC);
+
+        // ----------------------------------------------------------------
+        // Html
+        // ----------------------------------------------------------------
+
+        foreach ($cat as $val) {
+            $url = suxFunct::makeUrl('/bookmarks/tag/' . $val['id']);
+            $html .= "<a href='{$url}'>{$val['tag']}</a>, ";
+        }
+
+        if (!$html) $html = $this->gtext['none'];
+        else $html = rtrim($html, ', ');
+
+        $html = "{$this->gtext['tags']}: " . $html . '';
+
+        return $html;
 
     }
 
@@ -77,6 +125,7 @@ class bookmarksRenderer extends suxRenderer {
         return $this->tinyMce($init);
 
     }
+
 
 
 }

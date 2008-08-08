@@ -148,6 +148,7 @@ class suxTags {
 
         foreach ($tags as $key => &$val) {
             $val = strip_tags($val);
+            $val = mb_convert_case($val, MB_CASE_TITLE, 'UTF-8');
             $val = mb_split('\W', $val); // Split on negated \w
             $val = implode(' ', $val); // Put back together with spaces
             $val = trim($val);

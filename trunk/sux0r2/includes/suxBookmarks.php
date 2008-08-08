@@ -45,6 +45,81 @@ class suxBookmarks {
 
 
     /**
+    * Count bookmarks
+    *
+    * @param bool $unpub select un-published?
+    * @return int
+    */
+    function countBookmarks($unpub = false) {
+
+        // SQL Query
+        $query = "SELECT COUNT(*) FROM {$this->db_table} ";
+
+        if (!$unpub) {
+            // Only show published items
+            $query .= "WHERE draft = 0 ";
+            if ($this->db_driver == 'mysql') {
+                // MySql
+                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            }
+            else {
+                throw new Exception('Unsupported database driver');
+            }
+        }
+
+        // Execute
+        $st = $this->db->prepare($query);
+        $st->execute();
+        return $st->fetchColumn();
+
+
+    }
+
+
+
+    /**
+    * Get bookmarks
+    *
+    * @param int $limit sql limit value
+    * @param int $start sql start of limit value
+    * @param bool $alphasort sort alphabetically?
+    * @param bool $unpub select un-published?
+    * @return array
+    */
+    function getBookmarks($limit = null, $start = 0, $alphasort = false, $unpub = false) {
+
+        // SQL Query
+        $query = "SELECT * FROM {$this->db_table} ";
+
+        if (!$unpub) {
+            // Only show published items
+            $query .= "WHERE draft = 0 ";
+            if ($this->db_driver == 'mysql') {
+                // MySql
+                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            }
+            else {
+                throw new Exception('Unsupported database driver');
+            }
+        }
+
+        // Order
+        if ($alphasort) $query .= 'ORDER BY title ';
+        else $query .= 'ORDER BY published_on DESC ';
+
+        // Limit
+        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        elseif ($limit) $query .= "LIMIT {$limit} ";
+
+        // Execute
+        $st = $this->db->prepare($query);
+        $st->execute();
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+
+    /**
     * Get a bookmark by id or URL
     *
     * @param int|string $id bookmard id or url

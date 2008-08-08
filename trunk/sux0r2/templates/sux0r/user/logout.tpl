@@ -1,4 +1,8 @@
-{include file=$r->xhtml_header}
+{capture name=header}
+
+{/capture}{strip}
+{$r->assign('header', $smarty.capture.header)}
+{include file=$r->xhtml_header}{/strip}
 
 <div id="proselytizer"><div id="middle">
 
