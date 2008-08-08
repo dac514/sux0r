@@ -277,6 +277,7 @@ class bookmarksEdit {
     */
     function formSuccess() {
 
+        // TODO: Clear caches
         echo 'TODO';
 
 

@@ -77,6 +77,48 @@ function sux($action, $params = null) {
 
         break;
 
+
+    case 'user' :
+
+        // --------------------------------------------------------------------
+        // User
+        // --------------------------------------------------------------------
+
+        break; // TODO
+
+
+    case 'tag' :
+
+        // --------------------------------------------------------------------
+        // Tag
+        // --------------------------------------------------------------------
+
+        if (empty($params[0])) {
+            suxFunct::redirect(suxFunct::makeUrl('/bookmarks'));
+        }
+
+        include_once('bookmarks.php');
+        $bm = new bookmarks();
+        $bm->tag($params[0]);
+        break;
+
+
+    default:
+
+        // --------------------------------------------------------------------
+        // Default
+        // --------------------------------------------------------------------
+
+        include_once('bookmarks.php');
+        $bm = new bookmarks();
+
+        $alphasort = false;
+        if (isset($_GET['sort']) && $_GET['sort'] == 'alpha') $alphasort = true;
+
+        $bm->listing($alphasort);
+
+        break;
+
     }
 
 }

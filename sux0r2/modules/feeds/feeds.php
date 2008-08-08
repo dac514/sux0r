@@ -67,7 +67,10 @@ class feeds  {
 
     }
 
-    function author($author) {
+
+    function user($nickname) {
+
+        // TODO
 
     }
 

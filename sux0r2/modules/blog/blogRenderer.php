@@ -62,7 +62,7 @@ class blogRenderer extends suxRenderer {
 
 
     /**
-    * Return tags associated to this document by author
+    * Return tags associated to this document
     *
     * @param int $id messages id
     * @return string html
