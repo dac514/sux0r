@@ -58,7 +58,7 @@ $CONFIG['CLEAN_URL'] = true;
 //
 // *** WARNING ***
 // If you change this value after the fact, all stored passwords will
-// become invalid and need to be reset.
+// become invalid and need to be reset. GET THIS RIGHT THE FIRST TIME!
 //
 // For more infom see:
 // http://en.wikipedia.org/wiki/Digest_access_authentication
