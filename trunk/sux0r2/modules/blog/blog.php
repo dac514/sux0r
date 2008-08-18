@@ -306,6 +306,52 @@ class blog  {
 
 
     /**
+    * Tag cloud
+    */
+    function tagcloud() {
+
+        $this->tpl->assign_by_ref('r', $this->r);
+
+        // ---------------------------------------------------------------
+        // Tagcloud, cached
+        // ---------------------------------------------------------------
+
+        $cache_id = 'tagcloud';
+        $this->tpl->caching = 1;
+
+        if (!$this->tpl->is_cached('cloud.tpl', $cache_id)) {
+
+            $db = suxDB::get();
+            $db_driver = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
+
+            // Date query, database specic
+            if ($db_driver == 'mysql') {
+                $date = 'AND NOT published_on > \'' . date('Y-m-d H:i:s') . '\' ';
+            }
+            else {
+                throw new Exception('Unsupported database driver');
+            }
+
+
+            $link = $this->link->getLinkTableName('messages', 'tags');
+            $query = "
+            SELECT tags.tag AS tag, tags.id AS id, COUNT(tags.id) AS quantity FROM tags
+            INNER JOIN {$link} ON {$link}.tags_id = tags.id
+            INNER JOIN messages ON {$link}.messages_id = messages.id
+            WHERE messages.blog = 1 AND messages.draft = 0 {$date}
+            GROUP BY tag ORDER BY tag ASC
+            ";
+
+            $this->r->tc = $this->link->tagcloud($query);
+
+        }
+
+        $this->tpl->display('cloud.tpl', $cache_id);
+
+    }
+
+
+    /**
     * Category
     */
     function category($cat_id) {
