@@ -179,6 +179,81 @@ class bookmarks  {
 
 
     /**
+    * Tag cloud
+    *
+    * @see: http://prism-perfect.net/archive/php-tag-cloud-tutorial/
+    */
+    function tagcloud() {
+
+
+        $this->tpl->assign_by_ref('r', $this->r);
+        $cache_id = false;
+
+        // ---------------------------------------------------------------
+        // Tagcloud, cached
+        // ---------------------------------------------------------------
+
+        // "Cache Groups" using a vertical bar |
+        $cache_id = 'tagcloud';
+        $this->tpl->caching = 1;
+
+        if (!$this->tpl->is_cached('cloud.tpl', $cache_id)) {
+
+            // Query the tags
+            $query = '
+            SELECT tags.tag AS tag, tags.id AS id, COUNT(tags.id) AS quantity FROM tags
+            INNER JOIN link_bookmarks_tags ON link_bookmarks_tags.tags_id = tags.id
+            GROUP BY tag ORDER BY tag ASC
+            ';
+
+            $db = suxDB::get();
+            $st = $db->query($query);
+
+            // Put results into arrays
+            $tags = array();
+            $category_id = array();
+            while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
+                $tags[$row['tag']] = $row['quantity'];
+                $category_id[$row['tag']] = $row['id'];
+            }
+
+            $max_size = 250; // max font size in %
+            $min_size = 100; // min font size in %
+
+            // get the largest and smallest array values
+            $max_qty = max(array_values($tags));
+            $min_qty = min(array_values($tags));
+
+            // find the range of values
+            $spread = $max_qty - $min_qty;
+            if (0 == $spread) { // we don't want to divide by zero
+                $spread = 1;
+            }
+
+            // determine the font-size increment
+            // this is the increase per tag quantity (times used)
+            $step = ($max_size - $min_size)/($spread);
+
+            // Adjust data structure
+            $tmp = array();
+            foreach ($tags as $key => $val) {
+                $tmp[$key] = array(
+                    'quantity' => $val,
+                    'id' => $category_id[$key],
+                    'size' => $min_size + (($val - $min_qty) * $step),
+                    );
+
+            }
+            $this->r->tc = $tmp;
+
+        }
+
+        $this->tpl->display('cloud.tpl', $cache_id);
+
+    }
+
+
+    /**
     * Listing
     *
     * @param int $feeds_id a feed id
