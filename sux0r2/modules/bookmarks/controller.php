@@ -101,7 +101,11 @@ function sux($action, $params = null) {
         $bm = new bookmarks();
 
         if ($params[0] == 'cloud') $bm->tagcloud();
-        else $bm->tag($params[0]);
+        else {
+            $alphasort = false;
+            if (isset($_GET['sort']) && $_GET['sort'] == 'alpha') $alphasort = true;
+            $bm->tag($params[0], $alphasort);
+        }
 
         break;
 

@@ -104,7 +104,7 @@ class suxBookmarks {
         }
 
         // Order
-        if ($alphasort) $query .= 'ORDER BY title ';
+        if ($alphasort) $query .= 'ORDER BY title DESC ';
         else $query .= 'ORDER BY published_on DESC ';
 
         // Limit

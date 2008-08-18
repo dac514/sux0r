@@ -129,7 +129,7 @@ class bookmarks  {
                 ";
 
                 // Order
-                if ($alphasort) $limit_query .= 'ORDER BY title ';
+                if ($alphasort) $limit_query .= 'ORDER BY title DESC ';
                 else $limit_query .= 'ORDER BY published_on DESC ';
 
                 // ---------------------------------------------------------------
