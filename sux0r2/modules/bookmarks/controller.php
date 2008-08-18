@@ -90,7 +90,7 @@ function sux($action, $params = null) {
     case 'tag' :
 
         // --------------------------------------------------------------------
-        // Tag
+        // Tags
         // --------------------------------------------------------------------
 
         if (empty($params[0])) {
@@ -99,7 +99,10 @@ function sux($action, $params = null) {
 
         include_once('bookmarks.php');
         $bm = new bookmarks();
-        $bm->tag($params[0]);
+
+        if ($params[0] == 'cloud') $bm->tagcloud();
+        else $bm->tag($params[0]);
+
         break;
 
 

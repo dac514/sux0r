@@ -49,6 +49,7 @@
 
             {if $r->fp}
             <ul>
+            <li><a href="{$r->makeUrl('/bookmarks/tag/cloud')}">Tag cloud</a></li>
                 <li><a href="{$datesort_url}">Sort by date</a></li>
                 <li><a href="{$alphasort_url}">Sort alphabetically</a></li>
                 <li><em><a href="{$r->makeUrl('/bookmarks/suggest')}">Suggest a bookmark &raquo;</a></em></li>

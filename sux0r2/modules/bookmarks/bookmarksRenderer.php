@@ -30,6 +30,7 @@ class bookmarksRenderer extends suxRenderer {
     public $fp = array(); // Array of first posts
     public $sidelist = array(); // Array of threads in sidebar
     public $gtext = array();
+    public $tc = array(); // Tagcloud
 
     // Objects
     private $user;
@@ -49,7 +50,7 @@ class bookmarksRenderer extends suxRenderer {
     }
 
 
-   /**
+    /**
     * Return tags associated to this bookmark
     *
     * @param int $id bookmark id
@@ -92,6 +93,24 @@ class bookmarksRenderer extends suxRenderer {
 
         $html = "{$this->gtext['tags']}: " . $html . '';
 
+        return $html;
+
+    }
+
+
+    /**
+    * Return tag cloud
+    *
+    * @param array $tags key = tag, val = (quantity, id, size)
+    * @return string html
+    */
+    function tagcloud($tags) {
+
+        $html = '';
+        foreach ($tags as $key => $val) {
+            $url = suxFunct::makeURL('/bookmarks/tag/' . $val['id']);
+            $html .= "<a href='{$url}' style='font-size: {$val['size']}%;' style='tag' s>{$key}</a> <span class='quantity' >({$val['quantity']})<span> ";
+        }
         return $html;
 
     }
