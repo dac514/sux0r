@@ -100,6 +100,11 @@ Event.observe(window, 'load', function() {
                 </div>
                 {/if}
 
+                <ul>
+                <li><a href="{$r->makeUrl('/blog/tag/cloud')}">Tag cloud</a></li>
+                </ul>
+
+
 
 			</div>
 		</td>

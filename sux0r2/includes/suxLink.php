@@ -250,6 +250,58 @@ class suxLink {
     }
 
 
+    /**
+    * Tag cloud data structure
+    *
+    * @see: http://prism-perfect.net/archive/php-tag-cloud-tutorial/
+    * @param string $query
+    * @return array
+    */
+    function tagcloud($query) {
+
+        $st = $this->db->query($query);
+
+        // Put results into arrays
+        $tags = array();
+        $category_id = array();
+        while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
+            $tags[$row['tag']] = $row['quantity'];
+            $category_id[$row['tag']] = $row['id'];
+        }
+
+        $max_size = 250; // max font size in %
+        $min_size = 100; // min font size in %
+
+        // get the largest and smallest array values
+        $max_qty = max(array_values($tags));
+        $min_qty = min(array_values($tags));
+
+        // find the range of values
+        $spread = $max_qty - $min_qty;
+        if (0 == $spread) { // we don't want to divide by zero
+            $spread = 1;
+        }
+
+        // determine the font-size increment
+        // this is the increase per tag quantity (times used)
+        $step = ($max_size - $min_size)/($spread);
+
+        // Adjust data structure
+        $data = array();
+        foreach ($tags as $key => $val) {
+            $data[$key] = array(
+                'quantity' => $val,
+                'id' => $category_id[$key],
+                'size' => $min_size + (($val - $min_qty) * $step),
+                );
+
+        }
+
+        return $data;
+
+    }
+
+
     // ----------------------------------------------------------------------------
     // Exception Handler
     // ----------------------------------------------------------------------------

@@ -142,7 +142,10 @@ function sux($action, $params = null) {
 
         include_once('blog.php');
         $blog = new blog();
-        $blog->tag($params[0]);
+
+        if ($params[0] == 'cloud') $blog->tagcloud();
+        else $blog->tag($params[0]);
+
         break;
 
 

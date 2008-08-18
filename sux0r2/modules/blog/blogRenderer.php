@@ -109,6 +109,23 @@ class blogRenderer extends suxRenderer {
     }
 
 
+    /**
+    * Return tag cloud
+    *
+    * @param array $tags key = tag, val = (quantity, id, size)
+    * @return string html
+    */
+    function tagcloud($tags) {
+
+        $html = '';
+        foreach ($tags as $key => $val) {
+            $url = suxFunct::makeURL('/blog/tag/' . $val['id']);
+            $html .= "<a href='{$url}' style='font-size: {$val['size']}%;' style='tag' s>{$key}</a> <span class='quantity' >({$val['quantity']})<span> ";
+        }
+        return $html;
+
+    }
+
 
     /**
     * Return bayes categories associated to this document by author
