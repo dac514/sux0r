@@ -258,6 +258,19 @@ class suxBookmarks {
         $st->execute(array($id));
 
     }
+    
+    
+    /**
+    * @param int $id bookmark id
+    */
+    function approveBookmark($id) {
+        
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
+        
+        $st = $this->db->prepare("UPDATE {$this->db_table} SET draft = 0 WHERE id = ? ");
+        $st->execute(array($id));           
+        
+    }      
 
 
 	/**

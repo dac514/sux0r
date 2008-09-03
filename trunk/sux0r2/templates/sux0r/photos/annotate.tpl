@@ -13,7 +13,7 @@
 <div id="middle">
 
 <fieldset>
-<legend>Annotate</legend>
+<legend>{$r->text.annotate}</legend>
 
 <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />
@@ -34,12 +34,12 @@
     </div>
 
     <div style="float:left; margin-left: 10px; width: 600px;">
-        <div id="editme{$foo.id}">{if $foo.description}{$foo.description}{else}Click me to edit this nice long text.{/if}</div>
+        <div id="editme{$foo.id}">{if $foo.description}{$foo.description}{else}{$r->text.clickme}{/if}</div>
     </div>
 
     <div style="float:right;text-align: right; width: 180px">
-        <input type="radio" name="cover" id="cover{$foo.id}" value="{$foo.id}" {if $cover == $foo.id}checked="checked"{/if} /><label for="cover{$foo.id}">Album Cover</label> |
-        <input type="checkbox" name="delete[]" id="delete{$foo.id}" value="{$foo.id}" /><label for="delete{$foo.id}">Delete</label>
+        <input type="radio" name="cover" id="cover{$foo.id}" value="{$foo.id}" {if $cover == $foo.id}checked="checked"{/if} /><label for="cover{$foo.id}">{$r->text.cover}</label> |
+        <input type="checkbox" name="delete[]" id="delete{$foo.id}" value="{$foo.id}" /><label for="delete{$foo.id}">{$r->text.delete}</label>
     </div>
 
 
@@ -51,12 +51,12 @@
         '/sux0r2/modules/photos/describe.php', {
             rows: 5,
             cols: 80,
-            clickToEditText: 'Click to edit',
-            savingText: 'Saving',
+            clickToEditText: '{/literal}{$r->text.clickme}{literal}',
+            savingText: '{/literal}{$r->text.saving}{literal}...',
             okControl: 'button',
-            okText: 'Ok',
+            okText: '{/literal}{$r->text.ok}{literal}',
             cancelControl: 'button',
-            cancelText: 'Cancel',
+            cancelText: '{/literal}{$r->text.cancel}{literal}',
             callback: function(form, value) {
                 return 'id={/literal}{$foo.id}{literal}&description='+escape(value)
             }

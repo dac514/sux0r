@@ -272,8 +272,6 @@ class suxRSS extends DOMDocument {
     * Count RSS items
     *
     * @param int $feed_id feed id
-    * @param string $type forum, blog, wiki, or slideshow
-    * @param bool $unpub select un-published?
     * @return int
     */
     function countItems($feed_id = null) {
@@ -291,13 +289,48 @@ class suxRSS extends DOMDocument {
         return $st->fetchColumn();
 
     }
+    
+    
+
+    /**
+    * @param int $id feed id
+    */
+    function deleteFeed($id) {
+        
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
+        
+        $this->db->beginTransaction();
+        $this->inTransaction = true;
+        
+        $st = $this->db->prepare("DELETE FROM {$this->db_items} WHERE rss_feeds_id = ? ");
+        $st->execute(array($id));
+        
+        $st = $this->db->prepare("DELETE FROM {$this->db_feeds} WHERE id = ? LIMIT 1 ");
+        $st->execute(array($id));       
+        
+        $this->db->commit();
+        $this->inTransaction = false;  
+        
+    }
+    
+    
+    /**
+    * @param int $id feed id
+    */
+    function approveFeed($id) {
+        
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
+        
+        $st = $this->db->prepare("UPDATE {$this->db_feeds} SET draft = 0 WHERE id = ? ");
+        $st->execute(array($id));           
+        
+    }    
 
 
     /**
     * Get a item by id
     *
     * @param int $id messages_id
-    * @param bool $unpub select un-published?
     * @return array|false
     */
     function getItem($id) {

@@ -9,6 +9,23 @@
 {literal}
 <script type="text/javascript">
 // <![CDATA[
+
+function toggleSubscription(feed_id) {
+    
+    // TODO: Work in progress...
+    var myClass = 'img.subscription' + feed_id;
+    var res = $$(myClass);    
+    for (i = 0; i < res.length; i++) {
+        if (res[i].src.endsWith('sticky.gif')) {
+            res[i].src = '/sux0r2/media/sux0r/assets/subscribed.gif';
+        }
+        else {
+            res[i].src = '/sux0r2/media/sux0r/assets/sticky.gif';
+        }
+    }
+    
+}
+
 // Set the maximum width of an image
 function maximumWidth(myId, maxW) {
     var pix = document.getElementById(myId).getElementsByTagName('img');
@@ -76,8 +93,16 @@ Event.observe(window, 'load', function() {
 
                 {capture name=feed}
 
-                    <!-- Content -->
-                    <p><em>{$foo.published_on}</em></p>
+                    <!-- Content -->                                    
+                    <div style="float:left;margin-right:5px;">
+                    {$r->isSubscribed($foo.rss_feeds_id)}
+                    </div>
+                    <div style="float:left;margin-bottom: 1em;">
+                    Feed: {$r->feedLink($foo.rss_feeds_id)}<br />                    
+                    <em>Published on: {$foo.published_on}</em
+                    </div>
+                    <div class="clearboth"></div>
+                    
                     <div class="rssItem">{$foo.body_html}</div>
                     <div class="clearboth"></div>
 

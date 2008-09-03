@@ -137,7 +137,7 @@ class feeds  {
             }
 
         }
-
+        
         if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
         else $this->tpl->display('scroll.tpl');
 
