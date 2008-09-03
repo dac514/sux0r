@@ -9,6 +9,7 @@ if (!isset($GLOBALS['CONFIG'])) {
 // Default Exception Handler
 // ----------------------------------------------------------------------------
 
+// $e defined in index.php
 $message = 'Error: ';
 $message .= $e->getMessage() . "\n";
 $message .= "File: " . $e->getFile() . "\n";
