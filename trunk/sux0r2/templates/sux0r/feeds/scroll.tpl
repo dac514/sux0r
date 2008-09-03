@@ -16,11 +16,11 @@ function toggleSubscription(feed_id) {
     var myClass = 'img.subscription' + feed_id;
     var res = $$(myClass);    
     for (i = 0; i < res.length; i++) {
-        if (res[i].src.endsWith('sticky.gif')) {
-            res[i].src = '/sux0r2/media/sux0r/assets/subscribed.gif';
+        if (res[i].src.endsWith('{/literal}{#imgSubscribed#}{literal}')) {
+            res[i].src = '{/literal}{$r->url}/media/{$r->partition}/assets/{#imgUnsubscribed#}{literal}';
         }
         else {
-            res[i].src = '/sux0r2/media/sux0r/assets/sticky.gif';
+            res[i].src = '{/literal}{$r->url}/media/{$r->partition}/assets/{#imgSubscribed#}{literal}';
         }
     }
     
