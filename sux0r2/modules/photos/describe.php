@@ -24,6 +24,8 @@ require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
 $user = new suxUser();
 $photo = new suxPhoto();
 
+$text = suxFunct::gtext('photos');
+
 // Verify if user is allowed to edit this photo.
 if (!$photo->isPhotoOwner($_POST['id'], $_SESSION['users_id'])) exit;
 
@@ -36,7 +38,7 @@ try {
     $photo->savePhoto($_SESSION['users_id'], $clean);
     $tmp = $photo->getPhoto($clean['id']);
     if ($tmp['description']) echo $tmp['description'];
-    else echo 'Click me to edit this nice long text.'; // TODO: Translate
+    else echo $text['clickme'];
 }
 catch (Exception $e) {
     echo $e->getMessage();

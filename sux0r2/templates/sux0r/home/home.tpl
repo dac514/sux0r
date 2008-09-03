@@ -27,7 +27,7 @@
                 <div class="widget">
                     <h2>Lorem ipsum</h2>
                     <div class="floatleft">
-                    <img src="{$r->url}/media/{$r->partition}/assets/nullwhore.png" alt="" width="80" height="80"><br>
+                    <img src="{$r->url}/media/{$r->partition}/assets/nullwhore.png" alt="" width="80" height="80" /><br>
                     Caption
                     </div>
                     <p>Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer

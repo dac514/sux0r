@@ -14,5 +14,11 @@ $gtext['submit'] = 'Submit';
 $gtext['success'] = 'Success!';
 $gtext['success2'] = 'You will be redirected in 5 seconds.';
 $gtext['upload'] = 'Upload image(s)';
+$gtext['clickme'] = 'Click here to edit this text';
+$gtext['delete'] = 'Delete';
+$gtext['cover'] = 'Album Cover';
+$gtext['ok'] = 'Ok';
+$gtext['saving'] = 'Saving';
+$gtext['annotate'] = 'Annotate';
 
 ?>

@@ -259,6 +259,9 @@ class suxLink {
     */
     function tagcloud($query) {
 
+        // Expects something like:
+        // SELECT tags.tag AS tag, tags.id AS id, COUNT(tags.id) AS quantity FROM tags
+        // INNER JOIN [...]
         $st = $this->db->query($query);
 
         // Put results into arrays

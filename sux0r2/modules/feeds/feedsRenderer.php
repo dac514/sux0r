@@ -79,6 +79,39 @@ class feedsRenderer extends suxRenderer {
     // Stuff like recent(), archives(), authors() is in the renderer because
     // there's no point in initializing if they aren't in the template
     // ------------------------------------------------------------------------
+    
+    function isSubscribed($feed_id) {
+        
+        if (!$this->isLoggedIn())
+            return  "<img src='{$this->url}/media/{$this->partition}/assets/sticky.gif' border='0' width='12' height='12' />";
+        
+        
+        $image = 'sticky.gif';
+        // IF SUBSCRIBED($_SESSION['users_id'], $feed_id) $image = 'subscribed.gif';
+        
+        $html = "<img src='{$this->url}/media/{$this->partition}/assets/{$image}' border='0' width='12' height='12'
+        onclick=\"toggleSubscription('{$feed_id}');\" 
+        style='cursor: pointer;'
+        class='subscription{$feed_id}'
+        />";
+        
+        return $html;
+        
+    }
+    
+    
+    function feedLink($id) {
+        
+        $tmp = $this->rss->getFeed($id);
+        if(!$tmp) return null;
+        
+        $url = suxFunct::makeUrl("/feeds/{$id}");
+        $html = "<a href='{$url}'>{$tmp['title']}</a>";
+        return $html;
+        
+    }
+    
+    
 
 
     /**
