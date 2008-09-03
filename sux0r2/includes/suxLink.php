@@ -255,7 +255,7 @@ class suxLink {
     *
     * @see: http://prism-perfect.net/archive/php-tag-cloud-tutorial/
     * @param string $query
-    * @return array
+    * @return array|false
     */
     function tagcloud($query) {
 
@@ -268,6 +268,8 @@ class suxLink {
             $tags[$row['tag']] = $row['quantity'];
             $category_id[$row['tag']] = $row['id'];
         }
+        
+        if (!count($tags)) return false; // Nothing to do?
 
         $max_size = 250; // max font size in %
         $min_size = 100; // min font size in %

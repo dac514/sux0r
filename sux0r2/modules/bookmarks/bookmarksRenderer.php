@@ -107,7 +107,7 @@ class bookmarksRenderer extends suxRenderer {
     function tagcloud($tags) {
 
         $html = '';
-        foreach ($tags as $key => $val) {
+        if ($tags) foreach ($tags as $key => $val) {
             $url = suxFunct::makeURL('/bookmarks/tag/' . $val['id']);
             $html .= "<a href='{$url}' style='font-size: {$val['size']}%;' style='tag' s>{$key}</a> <span class='quantity' >({$val['quantity']})<span> ";
         }
