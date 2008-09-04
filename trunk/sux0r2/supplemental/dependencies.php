@@ -1,6 +1,6 @@
 <?php
 
-require_once('../config.php'); // Configuration
+require_once(dirname(__FILE__)  . '/../config.php'); // Configuration
 
 // ---------------------------------------------------------------------------
 // Check for problems
