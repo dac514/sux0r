@@ -17,9 +17,7 @@
     function getDoc(doc_id) {
         if (doc_id) {
 
-            {/literal}
-            var url = '{$r->url}/modules/bayes/getDoc.php';
-            {literal}
+            var url = '{/literal}{$r->url}/modules/bayes/getDoc.php{literal}';
             var pars = { id: doc_id };
 
             new Ajax.Updater('placeholder1', url, {

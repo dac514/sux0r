@@ -10,21 +10,33 @@
 <script type="text/javascript">
 // <![CDATA[
 
+{/literal}{if $r->isLoggedIn()}{literal}
+// Toggle subscription to a feed
 function toggleSubscription(feed_id) {
     
-    // TODO: Work in progress...
-    var myClass = 'img.subscription' + feed_id;
-    var res = $$(myClass);    
-    for (i = 0; i < res.length; i++) {
-        if (res[i].src.endsWith('{/literal}{#imgSubscribed#}{literal}')) {
-            res[i].src = '{/literal}{$r->url}/media/{$r->partition}/assets/{#imgUnsubscribed#}{literal}';
-        }
-        else {
-            res[i].src = '{/literal}{$r->url}/media/{$r->partition}/assets/{#imgSubscribed#}{literal}';
-        }
-    }
+    var url = '{/literal}{$r->url}/modules/feeds/toggle.php{literal}';
+    var pars = { id: feed_id };
+    
+    new Ajax.Request(url, {
+            method: 'post',
+            parameters: pars,
+            onSuccess: function(transport) {
+                // Toggle images
+                var myImage = transport.responseText.strip();
+                var myClass = 'img.subscription' + feed_id;
+                var res = $$(myClass);    
+                for (i = 0; i < res.length; i++) {
+                    res[i].src = '{/literal}{$r->url}/media/{$r->partition}/assets/{literal}' + myImage;
+                }
+            },
+            onFailure: function(transport){
+                if (transport.responseText.strip()) 
+                    alert(transport.responseText);
+            }   
+    });    
     
 }
+{/literal}{/if}{literal}
 
 // Set the maximum width of an image
 function maximumWidth(myId, maxW) {

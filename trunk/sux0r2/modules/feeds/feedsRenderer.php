@@ -22,6 +22,7 @@
 *
 */
 
+require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 require_once(dirname(__FILE__) . '/../bayes/bayesRenderer.php');
@@ -35,6 +36,7 @@ class feedsRenderer extends suxRenderer {
     // Objects
     private $bayesRenderer;
     private $rss;
+    private $link;
 
 
     /**
@@ -47,6 +49,7 @@ class feedsRenderer extends suxRenderer {
         parent::__construct($module); // Call parent
         $this->bayesRenderer = new bayesRenderer('bayes');
         $this->rss = new suxRSS();
+        $this->link = new suxLink();
 
     }
 
@@ -80,15 +83,32 @@ class feedsRenderer extends suxRenderer {
     // there's no point in initializing if they aren't in the template
     // ------------------------------------------------------------------------
     
+    
     function isSubscribed($feed_id) {
         
         if (!$this->isLoggedIn())
             return  "<img src='{$this->url}/media/{$this->partition}/assets/sticky.gif' border='0' width='12' height='12' />";
+              
+        // Get config variables for template
+        $tpl = new suxTemplate($this->module);
+        $tpl->config_load('my.conf', $this->module);
+        $image = $tpl->get_config_vars('imgUnsubscribed');
         
-        
-        $image = 'sticky.gif';
-        // IF SUBSCRIBED($_SESSION['users_id'], $feed_id) $image = 'subscribed.gif';
-        
+        // Don't query the database unnecessarily.
+        static $img_cache = array();
+        if (isset($img_cache[$feed_id])) {
+            $image = $img_cache[$feed_id];
+        }
+        else {   
+            // If subscribed, change image
+            $query = 'SELECT COUNT(*) FROM link_rss_users WHERE rss_feeds_id = ? AND users_id = ? ';
+            $db = suxDB::get();
+            $st = $db->prepare($query);
+            $st->execute(array($feed_id, $_SESSION['users_id']));
+            if ($st->fetchColumn() > 0) $image = $tpl->get_config_vars('imgSubscribed');
+            $img_cache[$feed_id] = $image;
+        }
+              
         $html = "<img src='{$this->url}/media/{$this->partition}/assets/{$image}' border='0' width='12' height='12'
         onclick=\"toggleSubscription('{$feed_id}');\" 
         style='cursor: pointer;'
@@ -124,8 +144,29 @@ class feedsRenderer extends suxRenderer {
         static $tmp = null;
         if (is_array($tmp)) return $tmp;
         $tmp = array();
+        
+        // Check if the user has any subscriptions
+        $subscriptions = array();
+        if (isset($_SESSION['users_id'])) {
+            $subscriptions = $this->link->getLinks('link_rss_users', 'users', $_SESSION['users_id']);          
+        }        
 
-        $tmp = $this->rss->getFeeds();
+        if (!count($subscriptions)) {
+            // Regular query
+            $tmp = $this->rss->getFeeds();
+        }
+        else {
+            // Special INNER JOIN query
+            $db = suxDB::get();
+            $q = "
+            SELECT * FROM rss_feeds              
+            INNER JOIN link_rss_users ON link_rss_users.rss_feeds_id = rss_feeds.id
+            WHERE link_rss_users.users_id = ? AND draft = 0       
+            ORDER BY title ASC ";
+            $st = $db->prepare($q);
+            $st->execute(array($_SESSION['users_id']));
+            $tmp = $st->fetchAll(PDO::FETCH_ASSOC);  
+        }
 
         return $tmp;
 

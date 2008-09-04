@@ -85,8 +85,8 @@ class bayesRenderer extends suxRenderer {
                     Effect.Pulsate($(placeholder));
                 },
                 onFailure: function(transport){
-                    var response = transport.responseText || '';
-                    if (response) alert(response);
+                    if (transport.responseText.strip()) 
+                        alert(transport.responseText);
                 }
             });
         }
