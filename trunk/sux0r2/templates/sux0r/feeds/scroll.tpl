@@ -78,18 +78,28 @@ Event.observe(window, 'load', function() {
         <td style="vertical-align:top;">
 			<div id="leftside">
 
-                <div id="feeds">
+                {if $r->feeds(true)}            
+                <p>My {$r->text.feeds}</p>
+                <ul>
+                    {foreach from=$r->feeds(true) item=foo}
+                    <li><a href="{$r->makeUrl('/feeds')}/{$foo.id}">{$foo.title}</a></li>
+                    {/foreach}
+                </ul>
+                {/if} 
+               
+                {if $r->feeds()}
                 <p>{$r->text.feeds}</p>
                 <ul>
-                    {if $r->feeds()}
                     {foreach from=$r->feeds() item=foo}
-                        <li><a href="{$r->makeUrl('/feeds')}/{$foo.id}">{$foo.title}</a></li>
+                    <li><a href="{$r->makeUrl('/feeds')}/{$foo.id}">{$foo.title}</a></li>
                     {/foreach}
-                    {/if}
+                </ul>         
+                {/if}
+                
+                <p>Actions</p>
+                <ul>
                     <li><em><a href="{$r->makeUrl('/feeds/suggest')}">{$r->text.suggest} &raquo;</a></em></li>
                 </ul>
-                </div>
-
 
 			</div>
 		</td>

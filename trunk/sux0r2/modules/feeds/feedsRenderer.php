@@ -84,6 +84,9 @@ class feedsRenderer extends suxRenderer {
     // ------------------------------------------------------------------------
     
     
+    /**
+    * @return string html
+    */    
     function isSubscribed($feed_id) {
         
         if (!$this->isLoggedIn())
@@ -120,6 +123,9 @@ class feedsRenderer extends suxRenderer {
     }
     
     
+    /**
+    * @return string html
+    */
     function feedLink($id) {
         
         $tmp = $this->rss->getFeed($id);
@@ -138,38 +144,29 @@ class feedsRenderer extends suxRenderer {
     *
     * @return array
     */
-    function feeds() {
-
-        // Cache
-        static $tmp = null;
-        if (is_array($tmp)) return $tmp;
-        $tmp = array();
+    function feeds($subscribed = false) {
         
-        // Check if the user has any subscriptions
-        $subscriptions = array();
-        if (isset($_SESSION['users_id'])) {
+        // Caches
+        static $feeds = null;      
+        static $subscriptions = array();
+        
+        if (!is_array($feeds)) $feeds = $this->rss->getFeeds();
+        if (isset($_SESSION['users_id']) && !count($subscriptions)) {
             $subscriptions = $this->link->getLinks('link_rss_users', 'users', $_SESSION['users_id']);          
         }        
-
-        if (!count($subscriptions)) {
-            // Regular query
-            $tmp = $this->rss->getFeeds();
+        
+        $tmp = array();
+        foreach($feeds as $feed) {
+            if ($subscribed && in_array($feed['id'], $subscriptions)) {
+                $tmp[] = $feed;
+            }
+            elseif (!$subscribed && !in_array($feed['id'], $subscriptions)) {
+                $tmp[] =$feed;
+            }
         }
-        else {
-            // Special INNER JOIN query
-            $db = suxDB::get();
-            $q = "
-            SELECT * FROM rss_feeds              
-            INNER JOIN link_rss_users ON link_rss_users.rss_feeds_id = rss_feeds.id
-            WHERE link_rss_users.users_id = ? AND draft = 0       
-            ORDER BY title ASC ";
-            $st = $db->prepare($q);
-            $st->execute(array($_SESSION['users_id']));
-            $tmp = $st->fetchAll(PDO::FETCH_ASSOC);  
-        }
-
+        
         return $tmp;
-
+        
     }
 
 
