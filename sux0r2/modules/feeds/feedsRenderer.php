@@ -148,13 +148,15 @@ class feedsRenderer extends suxRenderer {
         
         // Caches
         static $feeds = null;      
-        static $subscriptions = array();
+        static $subscriptions = null;
         
         if (!is_array($feeds)) $feeds = $this->rss->getFeeds();
-        if (isset($_SESSION['users_id']) && !count($subscriptions)) {
-            $subscriptions = $this->link->getLinks('link_rss_users', 'users', $_SESSION['users_id']);          
-        }        
-        
+        if (!is_array($subscriptions)) {
+            $subscriptions = array();
+            if (isset($_SESSION['users_id']))
+                $subscriptions = $this->link->getLinks('link_rss_users', 'users', $_SESSION['users_id']);          
+        }
+                      
         $tmp = array();
         foreach($feeds as $feed) {
             if ($subscribed && in_array($feed['id'], $subscriptions)) {
