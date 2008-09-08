@@ -6,10 +6,9 @@ $gtext['navcontainer'] = array(
 
     'Home' => suxFunct::makeUrl('/home'),
     'Blog' => suxFunct::makeUrl('/blog'),
-    'Feeds' => suxFunct::makeUrl('/feeds'),
+    'Bookmarks' => suxFunct::makeUrl('/bookmarks'),          
     'Photos' => suxFunct::makeUrl('/photos'),
-    'Bookmarks' => suxFunct::makeUrl('/bookmarks'),
-    'Calendar' => '#',
+    'Feeds' => suxFunct::makeUrl('/feeds'),      
     'Donate!' => 'http://sourceforge.net/project/project_donations.php?group_id=131752',
 
     );

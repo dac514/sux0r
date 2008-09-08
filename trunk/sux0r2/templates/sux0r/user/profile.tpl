@@ -112,9 +112,6 @@
 		<td style="vertical-align:top;">
 			<div id="rightside">
 
-            <h2>Calendar</h2>
-            <p>{$r->text.calendar}</p>
-
 
             <h2><a href="#todo" class="noBg"><img class="rssIcon" src="{$r->url}/media/{$r->partition}/assets/rss_icon.png" alt="RSS Feed" /></a> Minifeed</h2>
             <p>Todo</p>
