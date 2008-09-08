@@ -31,10 +31,10 @@ require_once('bayesUser.php');
 class bayesEdit {
 
     // Variables
-    public $caches = array('blog', 'feeds'); // Modules that cache bayes interfaces 
+    public $caches = array('blog', 'feeds'); // Modules that cache bayes interfaces
     public $gtext = array();
     private $module = 'bayes'; // Module
-    
+
     // Objects
     public $tpl;
     public $r;
@@ -74,21 +74,10 @@ class bayesEdit {
     */
     function formValidate(&$dirty) {
 
-        if(!empty($dirty['action'])) {
+        if (empty($dirty['action'])) return false;
 
-            $action = filter_var($dirty['action'], FILTER_SANITIZE_STRING);
-
-            // Add Vector
-            if (suxValidate::is_registered_form($action)) {
-                suxValidate::connect($this->tpl);
-                if (suxValidate::is_valid($dirty, $action)) {
-                    suxValidate::disconnect();
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        $action = filter_var($dirty['action'], FILTER_SANITIZE_STRING);
+        return suxValidate::formValidate($dirty, $this->tpl, $action);
 
     }
 
@@ -183,20 +172,20 @@ class bayesEdit {
     * @param array $clean reference to validated $_POST
     */
     function formProcess(&$clean) {
-        
+
         // --------------------------------------------------------------------
         // Clear user caches
         // --------------------------------------------------------------------
-        
+
         foreach ($this->caches as $module) {
-            // clear all caches with "nickname" as the first cache_id group   
+            // clear all caches with "nickname" as the first cache_id group
             $tpl = new suxTemplate($module);
-            $tpl->clear_cache(null, "{$_SESSION['nickname']}");     
+            $tpl->clear_cache(null, "{$_SESSION['nickname']}");
         }
-        
+
         // --------------------------------------------------------------------
         // Action
-        // --------------------------------------------------------------------        
+        // --------------------------------------------------------------------
 
         switch ($clean['action'])
         {

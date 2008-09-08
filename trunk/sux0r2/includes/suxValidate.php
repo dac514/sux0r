@@ -175,6 +175,29 @@ class suxValidate extends SmartyValidate {
     }
 
 
+    /**
+    * Validate the form
+    *
+    * @param array $dirty reference to unverified $_POST
+    * @param object smarty template
+    * @param string $form the name of the form being validated
+    * @return bool
+    */
+    static function formValidate(&$dirty, $tpl, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
+
+        if(!empty($dirty) && SmartyValidate::is_registered_form($form)) {
+            // Validate
+            self::connect($tpl);
+            if(self::is_valid($dirty, $form)) {
+                SmartyValidate::disconnect();
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+
 }
 
 
