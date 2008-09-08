@@ -15,5 +15,6 @@ $gtext['success'] = 'Success!';
 $gtext['success2'] = 'An adminitrator will review your suggestion within the next few days.';
 $gtext['back'] = 'Back';
 $gtext['feeds'] = 'RSS Feeds';
+$gtext['manage'] = 'Manage feeds';
 
 ?>

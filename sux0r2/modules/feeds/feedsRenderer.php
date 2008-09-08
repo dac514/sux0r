@@ -144,7 +144,7 @@ class feedsRenderer extends suxRenderer {
     *
     * @return array
     */
-    function feeds($subscribed = false) {
+    function feeds($subscribed = false, $users_id = null) {
         
         // Caches
         static $feeds = null;      
@@ -153,8 +153,8 @@ class feedsRenderer extends suxRenderer {
         if (!is_array($feeds)) $feeds = $this->rss->getFeeds();
         if (!is_array($subscriptions)) {
             $subscriptions = array();
-            if (isset($_SESSION['users_id']))
-                $subscriptions = $this->link->getLinks('link_rss_users', 'users', $_SESSION['users_id']);          
+            if (isset($users_id))
+                $subscriptions = $this->link->getLinks('link_rss_users', 'users', $users_id);          
         }
                       
         $tmp = array();
