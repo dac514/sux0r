@@ -22,7 +22,6 @@
 *
 */
 
-require_once(dirname(__FILE__) . '/../../includes/symbionts/calendar.php');
 require_once(dirname(__FILE__) . '/../../includes/suxSocialNetwork.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once('userRenderer.php');
@@ -78,9 +77,6 @@ class userProfile {
 
             // Title
             $this->r->title .= " | {$fullprofile['nickname']}";
-
-            // TODO: Calendar
-            $this->r->text['calendar'] = generate_calendar(2008, 5);
 
             $this->tpl->assign_by_ref('r', $this->r);
 
