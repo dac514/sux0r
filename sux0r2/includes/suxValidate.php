@@ -226,7 +226,7 @@ function smarty_validate_criteria_hasIntegrity($value, $empty, &$params, &$formv
         }
         elseif (preg_match('/^field[2-7]$/', $key)) {
             // Up to 6 variables can be hashed
-            // see suxValidate->integrityHash()
+            // see suxRenderer::integrityHash()
             $compare .= $formvars[$val];
         }
     }
