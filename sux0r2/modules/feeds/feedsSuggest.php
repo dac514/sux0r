@@ -67,18 +67,9 @@ class feedsSuggest  {
     * @return bool
     */
     function formValidate(&$dirty) {
-
-        if(!empty($dirty) && suxValidate::is_registered_form()) {
-            // Validate
-            suxValidate::connect($this->tpl);
-            if(suxValidate::is_valid($dirty)) {
-                suxValidate::disconnect();
-                return true;
-            }
-        }
-        return false;
-
+        return suxValidate::formValidate($dirty, $this->tpl);
     }
+
 
 
     /**
