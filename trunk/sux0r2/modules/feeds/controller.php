@@ -65,22 +65,40 @@ function sux($action, $params = null) {
         break; // TODO
 
 
-    case 'user' :
-
-        // --------------------------------------------------------------------
-        // User
-        // --------------------------------------------------------------------
-
-        break; // TODO
-
-
     case 'manage' :
 
         // --------------------------------------------------------------------
         // Manage
         // --------------------------------------------------------------------
 
-        break; // TODO
+        include_once('feedsManage.php');
+        $feeds = new feedsManage();
+
+        if ($feeds->formValidate($_POST)) {
+            $feeds->formProcess($_POST);
+            $feeds->formSuccess();
+        }
+        else {
+            $feeds->formBuild($_POST);
+        }
+
+        break;
+        
+    case 'user' :
+
+        // --------------------------------------------------------------------
+        // User
+        // --------------------------------------------------------------------
+        
+        if (empty($params[0])) {
+            suxFunct::redirect(suxFunct::makeUrl('/feeds'));
+        }        
+                
+        include_once('feeds.php');
+        $feeds = new feeds();        
+        $feeds->user($params[0]);
+
+        break;      
 
 
     default:

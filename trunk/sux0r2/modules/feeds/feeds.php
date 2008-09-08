@@ -33,6 +33,7 @@ require_once('feedsRenderer.php');
 class feeds  {
 
     // Variables
+    public $users_id; // For filter
     public $gtext = array();
     private $module = 'feeds';
 
@@ -70,7 +71,73 @@ class feeds  {
 
     function user($nickname) {
 
-        // TODO
+        // Get users_id based on nickname        
+        $user = $this->user->getUserByNickname($nickname);            
+        if (!$user) suxFunct::redirect(suxFunct::makeUrl('/feeds'));        
+        $this->users_id = $user['users_id']; // Needs to be in externally accessible variable for filter()
+        unset($user);
+        
+        // Assign stuff
+        $this->r->text['form_url'] = suxFunct::makeUrl("/feeds/user/$nickname"); // Forum Url
+        $this->tpl->assign_by_ref('r', $this->r);
+        $cache_id = false;
+
+        if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
+
+            // ---------------------------------------------------------------
+            // Filtered results
+            // ---------------------------------------------------------------
+
+            // User has subscriptions, we need special JOIN queries
+            $max = $this->countUserItems($this->users_id);
+            $eval = '$this->getUserItems($this->users_id, $this->pager->limit, $start)';
+            $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval); // Important: start must be reference
+
+            if ($start < $max) {
+                if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
+                else $params = array('filter' => $cat_id);
+                $url = suxFunct::makeUrl("/feeds/user/$nickname", $params);
+                $this->r->text['pager'] = $this->pager->continueLink($start, $url);
+            }
+
+            $this->tpl->assign('filter', $cat_id);
+            if ($threshold !== false) $this->tpl->assign('threshold', $threshold);
+
+        }
+        else {
+
+            // ---------------------------------------------------------------
+            // Paged results, cached
+            // ---------------------------------------------------------------
+
+            // Start pager
+            $this->pager->setStart();
+
+            // Get nickname
+            if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
+            else $nn = 'nobody';
+
+            // "Cache Groups" using a vertical bar |
+            $cache_id = "$nn|user|$nickname|{$this->pager->start}";
+            $this->tpl->caching = 1;
+
+            if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
+                                
+                // User has subscriptions, we need special JOIN queries
+                $this->pager->setPages($this->countUserItems($this->users_id));
+                $this->r->fp = $this->getUserItems($this->users_id, $this->pager->limit, $this->pager->start);                
+                
+                $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/feeds/user/$nickname"));
+                if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+                
+            }
+
+        }
+        
+        $this->tpl->assign('users_id', $this->users_id);
+        if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
+        else $this->tpl->display('scroll.tpl');
+
 
     }
 
@@ -82,11 +149,12 @@ class feeds  {
     * @param int $feeds_id a feed id
     */
     function listing($feeds_id = null) {
-        
+
         // Check if the user has any subscriptions
         $subscriptions = array();
         if (isset($_SESSION['users_id'])) {
-            $subscriptions = $this->link->getLinks('link_rss_users', 'users', $_SESSION['users_id']);          
+            $subscriptions = $this->link->getLinks('link_rss_users', 'users', $_SESSION['users_id']);
+            $this->tpl->assign('users_id', $_SESSION['users_id']);
         }
 
         // Assign stuff
@@ -100,32 +168,28 @@ class feeds  {
             // Filtered results
             // ---------------------------------------------------------------
 
-            if ($feeds_id || !count($subscriptions)) {            
-                
+            if ($feeds_id || !count($subscriptions)) {
                 // Regular queries
                 $max = $this->rss->countItems($feeds_id);
                 $eval = '$this->rss->getItems(' . ($feeds_id ? $feeds_id : 'null') . ', $this->pager->limit, $start)';
-                $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval); // Important: start must be reference
-            
             }
             else {
-                
-                // User has subscriptions, we need special JOIN queries 
-                $max = $this->countUserItems();
-                $eval = '$this->getUserItems($this->pager->limit, $start)';
-                $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval); // Important: start must be reference
-                
+                // User has subscriptions, we need special JOIN queries
+                $max = $this->countUserItems($_SESSION['users_id']);
+                $eval = '$this->getUserItems($_SESSION[\'users_id\'], $this->pager->limit, $start)';
             }
-            
+            // Important: start must be reference
+            $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval);
+
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
                 else $params = array('filter' => $cat_id);
                 $url = suxFunct::makeUrl("/feeds/$feeds_id", $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
-                           
+
             $this->tpl->assign('filter', $cat_id);
-            if ($threshold !== false) $this->tpl->assign('threshold', $threshold);                        
+            if ($threshold !== false) $this->tpl->assign('threshold', $threshold);
 
         }
         else {
@@ -146,29 +210,25 @@ class feeds  {
             $this->tpl->caching = 1;
 
             if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
-                
+
                 if ($feeds_id || !count($subscriptions)) {
-                 
-                    // Regular queries    
+                    // Regular queries
                     $this->pager->setPages($this->rss->countItems($feeds_id));
                     $this->r->fp = $this->rss->getItems($feeds_id, $this->pager->limit, $this->pager->start);
-                    
                 }
                 else {
-                    
-                    // User has subscriptions, we need special JOIN queries                   
-                    $this->pager->setPages($this->countUserItems());  
-                    $this->r->fp = $this->getUserItems($this->pager->limit, $this->pager->start);
-                    
+                    // User has subscriptions, we need special JOIN queries
+                    $this->pager->setPages($this->countUserItems($_SESSION['users_id']));
+                    $this->r->fp = $this->getUserItems($_SESSION['users_id'], $this->pager->limit, $this->pager->start);
                 }
-                
-                $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/feeds/$feeds_id"));                
+
+                $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/feeds/$feeds_id"));
                 if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
             }
 
         }
-        
+
         if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
         else $this->tpl->display('scroll.tpl');
 
@@ -229,48 +289,48 @@ class feeds  {
         return $fp;
 
     }
-    
-    
-    private function countUserItems() {
-        
+
+
+    private function countUserItems($users_id) {
+
         $db = suxDB::get();
-        
+
         // Count
         $query = "
         SELECT COUNT(*) FROM rss_items
         INNER JOIN rss_feeds on rss_feeds.id = rss_items.rss_feeds_id
         INNER JOIN link_rss_users ON link_rss_users.rss_feeds_id = rss_feeds.id
         WHERE link_rss_users.users_id = ?
-        "; 
-        $st = $db->prepare($query);                    
-        $st->execute(array($_SESSION['users_id']));
+        ";
+        $st = $db->prepare($query);
+        $st->execute(array($users_id));
         return $st->fetchColumn();
-        
+
     }
-    
-    
-    private function getUserItems($limit, $start) {
-        
+
+
+    private function getUserItems($users_id, $limit, $start) {
+
         $db = suxDB::get();
-        
+
         // Get Items
         $query = "
-        SELECT rss_items.* FROM rss_items 
+        SELECT rss_items.* FROM rss_items
         INNER JOIN rss_feeds on rss_feeds.id = rss_items.rss_feeds_id
         INNER JOIN link_rss_users ON link_rss_users.rss_feeds_id = rss_feeds.id
         WHERE link_rss_users.users_id = ?
-        ORDER BY rss_items.published_on DESC, rss_items.id DESC 
+        ORDER BY rss_items.published_on DESC, rss_items.id DESC
         ";
         // Limit
-        if ($start && $this->pager->limit) 
+        if ($start && $this->pager->limit)
             $query .= "LIMIT {$start}, {$limit} ";
-        elseif ($limit) 
-            $query .= "LIMIT {$limit} ";      
-        
-        $st = $db->prepare($query);                    
-        $st->execute(array($_SESSION['users_id']));  
-        return $st->fetchAll(PDO::FETCH_ASSOC);    
-        
+        elseif ($limit)
+            $query .= "LIMIT {$limit} ";
+
+        $st = $db->prepare($query);
+        $st->execute(array($users_id));
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
     }
 
 

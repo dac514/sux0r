@@ -13,10 +13,10 @@
 {/literal}{if $r->isLoggedIn()}{literal}
 // Toggle subscription to a feed
 function toggleSubscription(feed_id) {
-    
+
     var url = '{/literal}{$r->url}/modules/feeds/toggle.php{literal}';
     var pars = { id: feed_id };
-    
+
     new Ajax.Request(url, {
             method: 'post',
             parameters: pars,
@@ -24,17 +24,17 @@ function toggleSubscription(feed_id) {
                 // Toggle images
                 var myImage = transport.responseText.strip();
                 var myClass = 'img.subscription' + feed_id;
-                var res = $$(myClass);    
+                var res = $$(myClass);
                 for (i = 0; i < res.length; i++) {
                     res[i].src = '{/literal}{$r->url}/media/{$r->partition}/assets/{literal}' + myImage;
                 }
             },
             onFailure: function(transport){
-                if (transport.responseText.strip()) 
+                if (transport.responseText.strip())
                     alert(transport.responseText);
-            }   
-    });    
-    
+            }
+    });
+
 }
 {/literal}{/if}{literal}
 
@@ -78,28 +78,31 @@ Event.observe(window, 'load', function() {
         <td style="vertical-align:top;">
 			<div id="leftside">
 
-                {if $r->feeds(true)}            
-                <p>My {$r->text.feeds}</p>
+                <p>{$r->text.feeds}</p>            
+            
+                {if $r->feeds(true, $users_id)}
                 <ul>
-                    {foreach from=$r->feeds(true) item=foo}
+                    {foreach from=$r->feeds(true, $users_id) item=foo}
                     <li><a href="{$r->makeUrl('/feeds')}/{$foo.id}">{$foo.title}</a></li>
                     {/foreach}
                 </ul>
-                {/if} 
-               
-                {if $r->feeds()}
-                <p>{$r->text.feeds}</p>
+
+                {else}
+                                
                 <ul>
-                    {foreach from=$r->feeds() item=foo}
+                    {foreach from=$r->feeds(false, $users_id) item=foo}
                     <li><a href="{$r->makeUrl('/feeds')}/{$foo.id}">{$foo.title}</a></li>
                     {/foreach}
-                </ul>         
+                </ul>
                 {/if}
-                
+
+                {if $r->isLoggedIn()}
                 <p>Actions</p>
                 <ul>
+                    <li><em><a href="{$r->makeUrl('/feeds/manage')}">{$r->text.manage} &raquo;</a></em></li>
                     <li><em><a href="{$r->makeUrl('/feeds/suggest')}">{$r->text.suggest} &raquo;</a></em></li>
                 </ul>
+                {/if}
 
 			</div>
 		</td>
@@ -115,16 +118,16 @@ Event.observe(window, 'load', function() {
 
                 {capture name=feed}
 
-                    <!-- Content -->                                    
+                    <!-- Content -->
                     <div style="float:left;margin-right:5px;">
                     {$r->isSubscribed($foo.rss_feeds_id)}
                     </div>
                     <div style="float:left;margin-bottom: 1em;">
-                    Feed: {$r->feedLink($foo.rss_feeds_id)}<br />                    
+                    Feed: {$r->feedLink($foo.rss_feeds_id)}<br />
                     <em>Published on: {$foo.published_on}</em
                     </div>
                     <div class="clearboth"></div>
-                    
+
                     <div class="rssItem">{$foo.body_html}</div>
                     <div class="clearboth"></div>
 

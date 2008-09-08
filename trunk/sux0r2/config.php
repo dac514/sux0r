@@ -5,7 +5,6 @@
 // Development
 error_reporting(E_ALL | E_STRICT);
 include_once(dirname(__FILE__)  . '/includes/symbionts/dBug.php');
-set_time_limit(90);
 
 // Hosting
 // error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
