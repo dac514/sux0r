@@ -115,7 +115,10 @@ Event.observe(window, 'load', function() {
                     <div class="clearboth"></div>
 
                     <!-- Reply -->
-                    <p><a href="{$r->makeUrl('/blog/reply')}/{$foo.id}">Reply</a></p>
+                    <p>
+                    <a href="{$r->makeUrl('/blog/reply')}/{$foo.id}">Reply</a>
+                    {$r->tags($foo.id)}
+                    </p>
 
                     <!-- Flair -->
                     {capture name=url assign=url}{$r->makeUrl('/blog/view', null, true)}/{$foo.thread_id}{/capture}

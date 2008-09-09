@@ -19,5 +19,7 @@ $gtext['back'] = 'Back';
 $gtext['tags'] = 'Tags';
 $gtext['none'] = 'None';
 
+$gtext['bayes_categories'] = 'Bayes Categories';
+
 
 ?>

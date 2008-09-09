@@ -148,7 +148,7 @@ class photosEdit {
 
 
     /**
-    * Todo
+    * Process form
     *
     * @param array $clean reference to validated $_POST
     */

@@ -578,4 +578,103 @@ class bayesUser extends suxNaiveBayesian {
 }
 
 
+// ---------------------------------------------------------------------------
+// Shared methods for child classes
+// ---------------------------------------------------------------------------
+
+abstract class bayesShared {
+            
+    protected $pager; // suxPager() object to be declared in child
+    protected $nb; // suxNaiveBayesian() object to be declared in child
+    
+    abstract function __construct();    
+    
+    /**
+    * Filter    
+    *
+    * @param int $max
+    * @param int $vec_id
+    * @param int $cat_id
+    * @param float $threshold
+    * @param int $start
+    * @param string $eval    
+    */       
+    protected function filter($max, $vec_id, $cat_id, $threshold, $start, $eval) {
+
+        // -------------------------------------------------------------------
+        // Get items based on score, variable paging
+        // -------------------------------------------------------------------
+
+        $results = array();
+
+        // Force timeout if this operation takes too long
+        $timer = microtime(true);
+        $timeout_max = ini_get('max_execution_time') * 0.333333;
+        if ($timeout_max > 30) $timeout_max = 30;
+
+        // Start filtering
+        $i = 0;
+        $limit = $this->pager->limit;
+        while ($i < $limit) {
+
+            $tmp = array();
+            eval('$tmp = ' . $eval . ';'); // results is transformed here, by $eval
+            $results = array_merge($results, $tmp);
+
+            foreach ($results as $key => $val) {
+                if (!$this->nb->passesThreshold($threshold, $vec_id, $cat_id, "{$val['title']} \n\n {$val['body_plaintext']}")) {
+                    unset($results[$key]);
+                    continue;
+                }
+            }
+
+            $i = count($results);
+            $start = $start + $this->pager->limit;
+
+            // new dBug("i: $i");
+            // new dBug("next start: $start");
+            // new dBug("limit: $limit");
+            // new dBug("max: $max");
+            // new dBug('---');
+
+            if ($i < $limit && $start < ($max) && ($timer + $timeout_max) > microtime(true)) {
+                // Not enough first posts, keep looping
+                $this->pager->limit = 1;
+            }
+            else break;
+
+        }
+        $this->pager->limit = $limit; // Restore limit
+
+        return $results;
+
+    }  
+
+
+    /**
+    * Reusable SQL for date constraint
+    */
+    protected function _dateSql() {
+        
+        static $date = null; // Cache
+        if ($date != null) return $date;
+        
+        $db = suxDb::get();
+        $db_driver = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
+        
+        // Date query, database specic
+        if ($db_driver == 'mysql') {
+            $date = 'AND NOT published_on > \'' . date('Y-m-d H:i:s') . '\' ';
+        }
+        else {
+            throw new Exception('Unsupported database driver');
+        }     
+        
+        return $date;
+        
+    }      
+    
+}
+
+
 ?>
