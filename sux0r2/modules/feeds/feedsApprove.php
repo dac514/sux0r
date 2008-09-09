@@ -30,8 +30,7 @@ require_once('feedsRenderer.php');
 class feedsApprove  {
 
     // Variables
-    public $gtext = array();
-    protected $prev_url_preg = '#^feeds/[approve|admin]#i';
+    public $gtext = array();    
     private $module = 'feeds';
 
     // Objects
@@ -66,7 +65,7 @@ class feedsApprove  {
     * @param array $dirty reference to unverified $_POST
     * @return bool
     */
-    function formValidate(&$dirty) {
+    function formValidate(&$dirty) {        
         return suxValidate::formValidate($dirty, $this->tpl);
     }
 
@@ -87,15 +86,15 @@ class feedsApprove  {
             suxValidate::connect($this->tpl, true); // Reset connection
 
             // Register our validators
-            // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
-
-            suxValidate::register_validator('feeds', 'feeds', 'isInt', true);
+            // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')    
+            
+            suxValidate::register_validator('feeds', 'feeds', 'isInt', true);            
 
         }
 
         // Urls
         $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/approve');
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
 
         // Feeds
         $this->r->fp = $this->rss->getUnpublishedFeeds();        
@@ -112,12 +111,14 @@ class feedsApprove  {
     * @param array $clean reference to validated $_POST
     */
     function formProcess(&$clean) {
-
-        $this->link->deleteLink('link_rss_users', 'users', $_SESSION['users_id']);
-
-        if (isset($clean['subscriptions']) && count($clean['subscriptions']))
-            $this->link->saveLink('link_rss_users', 'users', $_SESSION['users_id'], 'rss_feeds', $clean['subscriptions']);
-
+        
+        if (isset($clean['feeds'])) foreach ($clean['feeds'] as $key => $val) {
+            
+            if ($val == 1) $this->rss->approveFeed($key);
+            else $this->rss->deleteFeed($key);
+            
+        }
+        
     }
 
 
@@ -126,11 +127,8 @@ class feedsApprove  {
     */
     function formSuccess() {
 
-        // clear all caches with "nickname" as the first cache_id group
-        $this->tpl->clear_cache(null, "{$_SESSION['nickname']}");
-
         // Redirect
-        suxFunct::redirect(suxFunct::getPreviousURL($this->prev_url_preg));
+        suxFunct::redirect(suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']));
 
     }
 

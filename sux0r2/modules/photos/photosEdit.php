@@ -32,10 +32,9 @@ class photosEdit {
 
     // Variables
     public $per_page; // Photos per page
-    public $gtext = array();
-    private $module = 'photos';
-    private $prev_url_preg = '#^photos/album/[edit|annotate]|^cropper/#i';
+    public $gtext = array();        
     private $id;
+    private $module = 'photos';    
 
     // Objects
     public $tpl;
@@ -140,7 +139,7 @@ class photosEdit {
         $this->r->pho = $this->photo->getPhotos($this->id, $this->pager->limit, $this->pager->start);
 
         $this->r->text['form_url'] = suxFunct::makeUrl('/photos/album/annotate/' . $this->id, array('page' => $_GET['page']));
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
 
         $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('annotate.tpl');

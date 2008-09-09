@@ -32,10 +32,9 @@ require_once('bookmarksRenderer.php');
 class bookmarksEdit {
 
     // Variables
-    public $gtext = array();
-    private $module = 'bookmarks';
-    private $prev_url_preg = '#^bookmarks/[edit]/#i';
+    public $gtext = array();        
     private $id;
+    private $module = 'bookmarks';    
 
     // Objects
     public $tpl;
@@ -154,13 +153,18 @@ class bookmarksEdit {
         if (!suxValidate::is_registered_form()) {
 
             suxValidate::connect($this->tpl, true); // Reset connection
+            
+            // Register our additional criterias
+            suxValidate::register_criteria('isDuplicateBookmark', 'this->isDuplicateBookmark');  
+            suxValidate::register_criteria('isValidBookmark', 'this->isValidBookmark');            
 
             // Register our validators
             if ($this->id) suxValidate::register_validator('integrity', 'integrity:id', 'hasIntegrity');
 
             suxValidate::register_validator('url', 'url', 'notEmpty', false, false, 'trim');
             suxValidate::register_validator('url2', 'url', 'isURL');
-
+            suxValidate::register_validator('url3', 'url', 'isDuplicateBookmark');            
+            suxValidate::register_validator('url4', 'url', 'isValidBookmark');
             suxValidate::register_validator('title', 'title', 'notEmpty', false, false, 'trim');
             suxValidate::register_validator('body', 'body', 'notEmpty', false, false, 'trim');
             suxValidate::register_validator('date', 'Date:Date_Year:Date_Month:Date_Day', 'isDate', false, false, 'makeDate');
@@ -173,7 +177,7 @@ class bookmarksEdit {
 
         // Additional variables
         $this->r->text['form_url'] = suxFunct::makeUrl('/bookmarks/edit/' . $this->id);
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
 
         if (!$this->tpl->get_template_vars('Date_Year')) {
             // Today's Date
@@ -208,12 +212,6 @@ class bookmarksEdit {
         // Sanity check
         // --------------------------------------------------------------------
 
-        // Message id, edit mode
-        if (isset($clean['id']) && filter_var($clean['id'], FILTER_VALIDATE_INT)) {
-            // TODO: Check to see if this user is allowed to modify this bookmark
-            // $clean['id'] = false // on fail
-        }
-
         // Date
         $clean['published_on'] = "{$clean['Date']} {$clean['Time_Hour']}:{$clean['Time_Minute']}:{$clean['Time_Second']}";
         $clean['published_on'] = date('Y-m-d H:i:s', strtotime($clean['published_on'])); // Sanitize
@@ -223,19 +221,25 @@ class bookmarksEdit {
         // --------------------------------------------------------------------
 
         $bookmark = array(
-                'url' => @$clean['url'],
+                'url' => $clean['url'],
                 'title' => $clean['title'],
                 'body' => $clean['body'],
                 'published_on' => $clean['published_on'],
                 'draft' => @$clean['draft'],
             );
+        
+        // --------------------------------------------------------------------
+        // Id
+        // --------------------------------------------------------------------        
+                        
+        if (isset($clean['id']) && filter_var($clean['id'], FILTER_VALIDATE_INT) && $clean['id'] > 0) {            
+            // TODO: Check to see if this user is allowed to modify this bookmark            
+            $bookmark['id'] = $clean['id'];
+        }        
 
         // --------------------------------------------------------------------
         // Put $bookmark in database
         // --------------------------------------------------------------------      
-        
-        /* saveBookmark() uses the url as the key and ignores the id, it will 
-        also automatically unset the users_id if it's an update */
         
         $clean['id'] = $this->bm->saveBookmark($_SESSION['users_id'], $bookmark);
 
@@ -274,6 +278,44 @@ class bookmarksEdit {
 
 
     }
+    
+    
+    /**
+    * for suxValidate, check if a duplicate url exists
+    *
+    * @return bool
+    */
+    function isDuplicateBookmark($value, $empty, &$params, &$formvars) {
+        
+        if (empty($formvars['url'])) return false;
+        
+        $tmp = $this->bm->getBookmark($formvars['url']);
+        if ($tmp === false ) return true; // No duplicate found    
+        
+        if ($this->id) {
+            // This is an Bookmark editing itself, this is OK
+            if ($tmp['id'] == $this->id) return true; 
+        }
+        
+        return false;
+        
+    }
+    
+    
+    /**
+    * for suxValidate, check if a bookmark is valid
+    *
+    * @return bool
+    */
+    function isValidBookmark($value, $empty, &$params, &$formvars) {
+
+        if (empty($formvars['url'])) return false;
+        $bm = $this->bm->fetchBookmark($formvars['url']);
+        if (!$bm) return false;
+        return true;
+
+    }    
+    
 
 
 }

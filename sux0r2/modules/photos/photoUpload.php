@@ -30,10 +30,9 @@ require_once('photosRenderer.php');
 class photoUpload  {
 
     // Variables
-    public $gtext = array();
-    private $module = 'photos';
-    private $prev_url_preg = '#^photos/[album/edit]|^cropper/#i';
+    public $gtext = array();        
     private $extensions = 'jpg,jpeg,gif,png,zip'; // Supported extensions
+    private $module = 'photos';    
 
 
     // Objects
@@ -109,7 +108,7 @@ class photoUpload  {
 
         // Urls
         $this->r->text['form_url'] = suxFunct::makeUrl('/photos/upload');
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
@@ -222,7 +221,7 @@ class photoUpload  {
     function formSuccess() {
 
         // Template
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
         $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('success.tpl');
 

@@ -25,11 +25,10 @@
     {elseif $r->detectPOST()}
     <p class="errorWarning">{$r->text.form_problem} :</p>
     {/if}
-
-    {if $r->fp}
-        {foreach from=$r->fp item=foo}
-        
-        
+       
+    {validate id="feeds" message=$r->text.form_problem}    
+    {if $r->fp}                
+        {foreach from=$r->fp item=foo}                
             <div style="border: 1px dashed #ccc; padding: 10px; margin: 10px;">
                 
             <div>
@@ -38,9 +37,9 @@
             </div>
         
             <div style="margin-top: 20px;">
-                <a href="{$r->makeUrl('/feeds/edit')}/{$foo.id}">Edit</a> | <a href="{$foo.url}" target="_blank">Link</a> |
-                <input type="radio" name="approve[{$foo.id}]" value="keep" /><label for="cover{$foo.id}">Approve</label> | 
-                <input type="radio" name="approve[{$foo.id}]" value="delete" /><label for="delete{$foo.id}">Delete</label>
+                <a href="{$r->makeUrl('/feeds/edit')}/{$foo.id}">Edit</a> | <a href="{$foo.url}" target="_blank">URL</a> |
+                <input type="radio" name="feeds[{$foo.id}]" id="f_k_{$foo.id}" value="1" /><label for="f_k_{$foo.id}" >Approve</label> | 
+                <input type="radio" name="feeds[{$foo.id}]" id="f_d_{$foo.id}" value="0" /><label for="f_d_{$foo.id}" >Delete</label>
                                 
             </div>   
             

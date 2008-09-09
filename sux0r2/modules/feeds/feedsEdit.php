@@ -32,8 +32,7 @@ class feedsEdit {
 
     // Variables
     public $gtext = array();
-    private $module = 'feeds';
-    private $prev_url_preg = '#^feeds/[edit]/#i';
+    private $module = 'feeds';    
     private $id;
 
     // Objects
@@ -122,12 +121,18 @@ class feedsEdit {
         if (!suxValidate::is_registered_form()) {
 
             suxValidate::connect($this->tpl, true); // Reset connection
+            
+            // Register our additional criterias
+            suxValidate::register_criteria('isDuplicateFeed', 'this->isDuplicateFeed');
+            suxValidate::register_criteria('isValidFeed', 'this->isValidFeed');            
 
             // Register our validators
             if ($this->id) suxValidate::register_validator('integrity', 'integrity:id', 'hasIntegrity');
 
             suxValidate::register_validator('url', 'url', 'notEmpty', false, false, 'trim');
             suxValidate::register_validator('url2', 'url', 'isURL');
+            suxValidate::register_validator('url3', 'url', 'isDuplicateFeed');
+            suxValidate::register_validator('url4', 'url', 'isValidFeed');            
 
             suxValidate::register_validator('title', 'title', 'notEmpty', false, false, 'trim');
             suxValidate::register_validator('body', 'body', 'notEmpty', false, false, 'trim');
@@ -137,7 +142,7 @@ class feedsEdit {
 
         // Additional variables
         $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/edit/' . $this->id);
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
@@ -153,35 +158,31 @@ class feedsEdit {
     * @param array $clean reference to validated $_POST
     */
     function formProcess(&$clean) {
-
-        // --------------------------------------------------------------------
-        // Sanity check
-        // --------------------------------------------------------------------
-
-        // Message id, edit mode
-        if (isset($clean['id']) && filter_var($clean['id'], FILTER_VALIDATE_INT)) {
-            // TODO: Check to see if this user is allowed to modify this feed
-            // $clean['id'] = false // on fail
-        }
-
+        
         // --------------------------------------------------------------------
         // Create $feed array
         // --------------------------------------------------------------------
 
         $feed = array(
-                'url' => @$clean['url'],
+                'url' => $clean['url'],
                 'title' => $clean['title'],
                 'body' => $clean['body'],
                 'draft' => @$clean['draft'],
             );
+        
+        // --------------------------------------------------------------------
+        // Id
+        // --------------------------------------------------------------------        
+                        
+        if (isset($clean['id']) && filter_var($clean['id'], FILTER_VALIDATE_INT) && $clean['id'] > 0) {            
+            // TODO: Check to see if this user is allowed to modify this bookmark            
+            $feed['id'] = $clean['id'];
+        }           
 
         // --------------------------------------------------------------------
         // Put $feed in database
         // --------------------------------------------------------------------
         
-        /* saveFeed() uses the url as the key and ignores the id, it will also 
-        automatically unset the users_id if it's an update */        
-
         $this->rss->saveFeed($_SESSION['users_id'], $feed);
 
 
@@ -194,9 +195,49 @@ class feedsEdit {
     function formSuccess() {
 
         // TODO: Clear caches
-        echo 'TODO';
+
+        // Redirect
+        suxFunct::redirect(suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']));                
 
     }
+    
+    
+    /**
+    * for suxValidate, check if a duplicate url exists
+    *
+    * @return bool
+    */
+    function isDuplicateFeed($value, $empty, &$params, &$formvars) {
+
+        if (empty($formvars['url'])) return false;
+        
+        $tmp = $this->rss->getFeed($formvars['url']);
+        if ($tmp === false ) return true; // No duplicate found    
+        
+        if ($this->id) {
+            // This is an RSS editing itself, this is OK
+            if ($tmp['id'] == $this->id) return true; 
+        }
+        
+        return false;
+
+    }
+
+
+    /**
+    * for suxValidate, check if a RSS feed is valid
+    *
+    * @return bool
+    */
+    function isValidFeed($value, $empty, &$params, &$formvars) {
+
+        if (empty($formvars['url'])) return false;
+        $feed = $this->rss->fetchRSS($formvars['url']);
+        if (!isset($feed['items_count']) || $feed['items_count'] < 1) return false;
+        return true;
+
+    }
+    
 
 
 }

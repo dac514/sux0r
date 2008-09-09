@@ -30,8 +30,7 @@ require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 class feedsSuggest  {
 
     // Variables
-    public $gtext = array();
-    protected $prev_url_preg = '#^feeds/[suggest|admin]#i';
+    public $gtext = array();    
     private $module = 'feeds';
 
     // Objects
@@ -101,7 +100,7 @@ class feedsSuggest  {
 
         // Urls
         $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/suggest');
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
@@ -135,7 +134,7 @@ class feedsSuggest  {
     function formSuccess() {
 
         // Template
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
         $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('success.tpl');
 

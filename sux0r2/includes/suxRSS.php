@@ -209,7 +209,7 @@ class suxRSS extends DOMDocument {
     * Saves a feed to the database
     *
     * @param int $users_id users_id
-    * @param array $url required keys => (url, title, body) optional keys => (draft)
+    * @param array $url required keys => (url, title, body) optional keys => (id, draft)
     * @param int $trusted passed on to sanitizeHtml()
     * @return int insert id
     */
@@ -244,6 +244,19 @@ class suxRSS extends DOMDocument {
         require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
         $converter = new suxHtml2UTF8($clean['body_html']);
         $clean['body_plaintext']  = $converter->getText();
+                
+        // Id
+        if (isset($url['id'])) {                
+            if (!filter_var($url['id'], FILTER_VALIDATE_INT) || $url['id'] < 1) throw new Exception('Invalid id');
+            else $clean['id'] = $url['id'];
+        }
+        else {            
+            $query = "SELECT id FROM {$this->db_feeds} WHERE url = ? LIMIT 1 ";
+            $st = $this->db->prepare($query);
+            $st->execute(array($clean['url']));
+            $edit = $st->fetch(PDO::FETCH_ASSOC); 
+            if ($edit) $clean['id'] = $edit['id'];                            
+        }        
 
         // Draft, boolean / tinyint
         $clean['draft'] = 0;
@@ -255,18 +268,11 @@ class suxRSS extends DOMDocument {
         // Go!
         // --------------------------------------------------------------------
 
-        // Check if this is an insert or an update
-        $query = "SELECT id FROM {$this->db_feeds} WHERE url = ? LIMIT 1 ";
-        $st = $this->db->prepare($query);
-        $st->execute(array($clean['url']));
-        $edit = $st->fetch(PDO::FETCH_ASSOC);
+        if (isset($clean['id'])) {
 
-        if ($edit) {
-
-            // UPDATE
-            $id = $edit['id'];
+            // UPDATE            
             unset($clean['users_id']); // Don't override the original suggestor
-            $query = suxDB::prepareUpdateQuery($this->db_feeds, $clean, 'url');
+            $query = suxDB::prepareUpdateQuery($this->db_feeds, $clean);
             $st = $this->db->prepare($query);
             $st->execute($clean);
 
@@ -277,11 +283,11 @@ class suxRSS extends DOMDocument {
             $query = suxDB::prepareInsertQuery($this->db_feeds, $clean);
             $st = $this->db->prepare($query);
             $st->execute($clean);
-            $id = $this->db->lastInsertId();
+            $clean['id'] = $this->db->lastInsertId();
 
         }
 
-        return $id;
+        return $clean['id'];
 
     }
 

@@ -32,9 +32,8 @@ class userEdit {
     public $gtext = array(); // Language
     private $mode = 'register';
     private $users_id = null;
-    private $prev_url_preg = '#^user/[login|logout|register|edit]#i';
-    private $module = 'user';
-
+    private $module = 'user';        
+    
     // Objects
     public $tpl;
     public $r;
@@ -246,7 +245,7 @@ class userEdit {
             $this->r->bool['edit'] = true;
         }
 
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
@@ -347,7 +346,7 @@ class userEdit {
         if ($this->mode == 'edit') {
 
             $this->r->bool['edit'] = true;
-            $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
+            $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
 
         }
 

@@ -43,7 +43,8 @@ function sux($action, $params = null) {
         else {
             $feeds->formBuild($_POST);
         }
-
+        
+        break;
 
         
     case 'edit' :
