@@ -153,6 +153,19 @@ CREATE TABLE `bookmarks` (
 -- Dumping data for table `bookmarks`
 --
 
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `link_bayes_bookmarks`
+-- 
+
+CREATE TABLE `link_bayes_bookmarks` (
+  `bookmarks_id` int(11) NOT NULL,
+  `bayes_documents_id` int(11) NOT NULL,
+  UNIQUE KEY `idx` (`bookmarks_id`,`bayes_documents_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 
 -- --------------------------------------------------------
 
