@@ -1,7 +1,7 @@
 <?php
 
 /**
-* feedsManage
+* feedsApprove
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -23,24 +23,22 @@
 */
 
 require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
-require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('feedsRenderer.php');
 
-class feedsManage  {
+class feedsApprove  {
 
     // Variables
     public $gtext = array();
-    protected $prev_url_preg = '#^feeds/[manage|admin]#i';
+    protected $prev_url_preg = '#^feeds/[approve|admin]#i';
     private $module = 'feeds';
 
     // Objects
     public $tpl;
     public $r;
     protected $user;
-    protected $rss;
-    protected $link;
+    protected $rss;    
 
     /**
     * Constructor
@@ -49,8 +47,7 @@ class feedsManage  {
     function __construct() {
 
         $this->rss = new suxRSS();
-        $this->user = new suxUser(); // User
-        $this->link = new suxLink();
+        $this->user = new suxUser(); // User        
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new feedsRenderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
@@ -92,28 +89,19 @@ class feedsManage  {
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
 
-            suxValidate::register_validator('subscriptions', 'subscriptions', 'isInt', true);
+            suxValidate::register_validator('feeds', 'feeds', 'isInt', true);
 
         }
 
         // Urls
-        $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/manage');
+        $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/approve');
         $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
 
         // Feeds
-        $feeds = array();
-        foreach ($this->rss->getFeeds() as $feed) {
-            $feeds[$feed['id']] = $feed['title'];
-        }
-        $this->r->fp = $feeds;
-
-        // Subscriptions
-        if (!isset($_POST['subscriptions'])) {
-            $this->r->subscriptions = $this->link->getLinks('link_rss_users', 'users', $_SESSION['users_id']);            
-        }
-
+        $this->r->fp = $this->rss->getUnpublishedFeeds();        
+        
         $this->tpl->assign_by_ref('r', $this->r);
-        $this->tpl->display('manage.tpl');
+        $this->tpl->display('approve.tpl');
 
     }
 

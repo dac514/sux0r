@@ -25,7 +25,7 @@
 {/if}
 
 {if $r->pho}
-{foreach from=$r->pho item=foo name=bar}
+{foreach from=$r->pho item=foo}
 
     <div style="border: 1px dashed #ccc; padding: 10px; margin: 10px;">
 
@@ -66,8 +66,7 @@
     {/literal}
 
     <div class="clearboth"></div>
-
-
+    
     </div>
 
 {/foreach}

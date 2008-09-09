@@ -342,7 +342,7 @@ class blog  {
             GROUP BY tag ORDER BY tag ASC
             ";
 
-            $this->r->tc = $this->link->tagcloud($query);
+            $this->r->tc = $this->tags->tagcloud($query);
 
         }
 

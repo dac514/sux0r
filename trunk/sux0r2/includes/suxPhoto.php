@@ -193,7 +193,7 @@ class suxPhoto {
     * Saves an album to the database
     *
     * @param int $users_id users_id
-    * @param array $album required keys => (url, title, body) optional keys => (draft)
+    * @param array $album required keys => (url, title, body) optional keys => (id, published_on, draft)
     * @param int $trusted passed on to sanitizeHtml()
     * @return int insert id
     */
@@ -253,10 +253,11 @@ class suxPhoto {
         if (isset($clean['id'])) {
 
             // UPDATE
+            $id = $clean['id'];            
+            unset($clean['users_id']); // Don't override the original submitter            
             $query = suxDB::prepareUpdateQuery($this->db_albums, $clean);
             $st = $this->db->prepare($query);
             $st->execute($clean);
-            $id = $clean['id'];
 
         }
         else {
@@ -312,12 +313,12 @@ class suxPhoto {
 
 
     /**
-    * Set thumbnail
+    * Save thumbnail
     *
     * @param int $photoalbums_id photoalbums id
     * @param int $photos_id photos id
     */
-    function setThumbnail($photoalbums_id, $photos_id) {
+    function saveThumbnail($photoalbums_id, $photos_id) {
 
         // Sanity check
         if (!filter_var($photoalbums_id, FILTER_VALIDATE_INT) || $photoalbums_id < 1)
@@ -537,10 +538,11 @@ class suxPhoto {
         if (isset($clean['id'])) {
 
             // UPDATE
+            $id = $clean['id'];            
+            unset($clean['users_id']); // Don't override the original submitter                        
             $query = suxDB::prepareUpdateQuery($this->db_photos, $clean);
             $st = $this->db->prepare($query);
             $st->execute($clean);
-            $id = $clean['id'];
 
         }
         else {

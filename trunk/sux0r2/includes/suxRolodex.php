@@ -56,7 +56,7 @@ class suxRolodex {
     * @param int $id rolodex_id
     * @return bool
     */
-    function setRolodex(array $info, $id = null) {
+    function saveRolodex(array $info, $id = null) {
 
         // --------------------------------------------------------------------
         // Sanitize
@@ -77,20 +77,20 @@ class suxRolodex {
         // --------------------------------------------------------------------
 
         try {
-            if (!$id) {
-
-                // Insert user
-                $query = suxDB::prepareInsertQuery($this->db_table, $info);
+            if ($id) {
+                
+                // UPDATE
+                $query = suxDB::prepareUpdateQuery($this->db_table, $info);
                 $st = $this->db->prepare($query);
-                return $st->execute($info);
+                return $st->execute($info);                
 
             }
             else {
-
-                // Update user
-                $query = suxDB::prepareUpdateQuery($this->db_table, $info);
+                
+                // INSERT
+                $query = suxDB::prepareInsertQuery($this->db_table, $info);
                 $st = $this->db->prepare($query);
-                return $st->execute($info);
+                return $st->execute($info);                
 
             }
 

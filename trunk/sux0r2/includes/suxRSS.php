@@ -150,13 +150,31 @@ class suxRSS extends DOMDocument {
     *
     * @return array|false
     */
-    function getFeeds() {
+    function getFeeds($unpub = false) {
 
-        $q = "SELECT * FROM {$this->db_feeds} WHERE draft = 0 ORDER BY title ASC ";
+        $q = "SELECT * FROM {$this->db_feeds} ";
+        if (!$unpub) $q .= 'WHERE draft = 0 ';
+        $q .= 'ORDER BY title ASC ';
+
         $st = $this->db->query($q);
         return $st->fetchAll(PDO::FETCH_ASSOC);
 
     }
+    
+    
+    /**
+    * Get all published feeds
+    *
+    * @return array|false
+    */
+    function getUnpublishedFeeds() {
+
+        $q = "SELECT * FROM {$this->db_feeds} WHERE draft = 1 ORDER BY title ASC ";
+        $st = $this->db->query($q);
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+    
 
 
     /**

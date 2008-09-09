@@ -318,8 +318,8 @@ class userEdit {
         // SQL
         // --------------------------------------------------------------------
 
-        if (isset($id) && filter_var($id, FILTER_VALIDATE_INT)) $this->user->setUser($clean, $id);
-        else $this->user->setUser($clean);
+        if (isset($id) && filter_var($id, FILTER_VALIDATE_INT)) $this->user->saveUser($clean, $id);
+        else $this->user->saveUser($clean);
 
         // --------------------------------------------------------------------
         // Cleanup

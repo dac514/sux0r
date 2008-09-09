@@ -24,7 +24,6 @@
 
 require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTags.php');
-require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
@@ -100,12 +99,12 @@ class bookmarksEdit {
     */
     function formBuild(&$dirty) {
 
+        unset($dirty['id']); // Don't allow spoofing       
         $bookmark = array();
 
         if ($this->id) {
-
+            
             // Editing a bookmark post
-
             $tmp = $this->bm->getBookmark($this->id, true);
 
             $bookmark['id'] = $tmp['id'];
@@ -136,8 +135,8 @@ class bookmarksEdit {
             }
             $bookmark['tags'] = rtrim($bookmark['tags'], ', ');
 
-            // Don't allow spoofing
-            unset($dirty['id']);
+            
+            
 
         }
 
@@ -233,8 +232,11 @@ class bookmarksEdit {
 
         // --------------------------------------------------------------------
         // Put $bookmark in database
-        // --------------------------------------------------------------------
-
+        // --------------------------------------------------------------------      
+        
+        /* saveBookmark() uses the url as the key and ignores the id, it will 
+        also automatically unset the users_id if it's an update */
+        
         $clean['id'] = $this->bm->saveBookmark($_SESSION['users_id'], $bookmark);
 
         // --------------------------------------------------------------------
@@ -255,7 +257,7 @@ class bookmarksEdit {
 
         // Reconnect links
         foreach ($tag_ids as $id) {
-            $this->link->setLink('link_bookmarks_tags', 'bookmarks', $clean['id'], 'tags', $id);
+            $this->link->saveLink('link_bookmarks_tags', 'bookmarks', $clean['id'], 'tags', $id);
         }
 
 

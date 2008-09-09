@@ -125,7 +125,7 @@ foreach ($tmp as $val) {
 
 // Recategorize
 $doc_id = $nb->trainDocument($body, $cat_id);
-$suxLink->setLink($link_table, 'bayes_documents', $doc_id, $link_table2, $id);
+$suxLink->saveLink($link_table, 'bayes_documents', $doc_id, $link_table2, $id);
 
 // ---------------------------------------------------------------------------
 // Clear template caches

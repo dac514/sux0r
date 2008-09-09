@@ -185,8 +185,7 @@ class suxUser {
     * @param int $id users_id
     * @return int users_id
     */
-    function setUser(array $info, $id = null) {
-
+    function saveUser(array $info, $id = null) {
 
         // --------------------------------------------------------------------
         // Sanitize
@@ -194,6 +193,10 @@ class suxUser {
 
         if ($id != null && (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1))
             throw new Exception('Invalid user id');
+        if (!empty($info['nickname']) && $this->getUserByNickname($info['nickname']))
+            throw new Exception('Duplicate nickname');
+        if (!empty($info['email']) && $this->getUserByEmail($info['email']))
+            throw new Exception('Duplicate email');            
 
         unset($info['id'], $info['users_id']); // Don't allow spoofing of the id in the array
         unset($info['accesslevel']); // Don't allow accesslevel changes with this function
@@ -242,37 +245,37 @@ class suxUser {
         $this->db->beginTransaction();
         $this->inTransaction = true;
 
-        if (!$id) {
-
-            // Insert user
-
-            $query = suxDB::prepareInsertQuery($this->db_table, $user);
-            $st = $this->db->prepare($query);
-            $st->execute($user);
-
-            $id = $this->db->lastInsertId();
-            $info['users_id'] = $id;
-
-            $query = suxDB::prepareInsertQuery($this->db_table_info, $info);
-            $st = $this->db->prepare($query);
-            $st->execute($info);
-
-        }
-        else {
-
-            // Update user
-
+        if ($id) {
+            
+            // UPDATE
+            
             $user['id'] = $id;
             $query = suxDB::prepareUpdateQuery($this->db_table, $user);
             $st = $this->db->prepare($query);
             $st->execute($user);
-
+            
             $info['users_id'] = $id;
-
+            
             $query = suxDB::prepareUpdateQuery($this->db_table_info, $info, 'users_id');
             $st = $this->db->prepare($query);
-            $res = $st->execute($info);
-
+            $res = $st->execute($info);            
+            
+        }
+        else {
+            
+            // INSERT
+            
+            $query = suxDB::prepareInsertQuery($this->db_table, $user);
+            $st = $this->db->prepare($query);
+            $st->execute($user);
+            
+            $id = $this->db->lastInsertId();
+            $info['users_id'] = $id;
+            
+            $query = suxDB::prepareInsertQuery($this->db_table_info, $info);
+            $st = $this->db->prepare($query);
+            $st->execute($info);            
+            
         }
 
         if ($openid_url) $this->attachOpenID($openid_url, $id);
