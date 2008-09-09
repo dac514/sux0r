@@ -3,6 +3,12 @@
 // Ajax
 // Train a document using genericBayesInterface()
 
+/*
+Steps to add a new module to this trainer:
+1) Adjust $valid_links and $valid_modules variables, accordingly
+2) Create a new procedure/condition in getBody() function
+*/
+
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/../../initialize.php');
 
@@ -10,8 +16,8 @@ require_once(dirname(__FILE__) . '/../../initialize.php');
 // Variables
 // ---------------------------------------------------------------------------
 
-$valid_links = array('messages', 'rss');
-$valid_modules = array('blog', 'feeds');
+$valid_links = array('messages', 'rss', 'bookmarks');
+$valid_modules = array('blog', 'feeds', 'bookmarks');
 
 // ---------------------------------------------------------------------------
 // Maleable function
@@ -33,6 +39,12 @@ function getBody($link, $id) {
         $body = $rss->getItem($id);
         $body = "{$body['title']} \n\n {$body['body_plaintext']}";
     }
+    elseif ($link == 'bookmarks') {
+        require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');                                
+        $bm = new suxBookmarks();        
+        $body = $bm->getBookmark($id);
+        $body = "{$body['title']} \n\n {$body['body_plaintext']}";           
+    }
 
     return $body;
 
@@ -52,11 +64,11 @@ function failure($msg = null) {
 // Error checking
 // ---------------------------------------------------------------------------
 
-if (!isset($_SESSION['users_id'])) exit;
-if (!isset($_POST['link']) || !in_array($_POST['link'], $valid_links)) exit;
-if (!isset($_POST['module']) || !in_array($_POST['module'], $valid_modules)) exit;
-if (!isset($_POST['id']) || !filter_var($_POST['id'], FILTER_VALIDATE_INT)) exit;
-if (!isset($_POST['cat_id']) || !filter_var($_POST['cat_id'], FILTER_VALIDATE_INT)) exit;
+if (!isset($_SESSION['users_id'])) failure('Invalid users_id');
+if (!isset($_POST['link']) || !in_array($_POST['link'], $valid_links)) failure('Invalid link');
+if (!isset($_POST['module']) || !in_array($_POST['module'], $valid_modules)) failure('Invalid module');
+if (!isset($_POST['id']) || !filter_var($_POST['id'], FILTER_VALIDATE_INT) || $_POST['id'] < 1) failure('Invalid id');
+if (!isset($_POST['cat_id']) || !filter_var($_POST['cat_id'], FILTER_VALIDATE_INT) || $_POST['cat_id'] < 1) failure('Invalid cat_id');
 
 $link = $_POST['link'];
 $module = $_POST['module'];
@@ -134,6 +146,5 @@ $suxLink->saveLink($link_table, 'bayes_documents', $doc_id, $link_table2, $id);
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 $tpl = new suxTemplate($module);
 $tpl->clear_cache(null, "{$_SESSION['nickname']}"); // clear all caches with "nickname" as the first cache_id group
-
 
 ?>

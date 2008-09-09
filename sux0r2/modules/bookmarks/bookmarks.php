@@ -27,23 +27,28 @@ require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTags.php');
+require_once(dirname(__FILE__) . '/../bayes/bayesUser.php'); // includes bayesShared
 require_once('bookmarksRenderer.php');
 
-
-class bookmarks  {
+class bookmarks extends bayesShared {
 
     // Variables
+    public $alphasort; // For filter
+    public $users_id; // For filter
     public $gtext = array();
     private $module = 'bookmarks';
 
     // Objects
-    private $bm;
-    private $liuk;
-    private $tags;
-    private $pager;
-    private $user;
     public $r;
-    public $tpl;
+    public $tpl;    
+    
+    protected $pager;
+    protected $nb;    
+    protected $bm;
+    
+    private $liuk;        
+    private $tags;    
+    private $user;
 
 
     /**
@@ -58,6 +63,7 @@ class bookmarks  {
         $this->r->text =& $this->gtext;
         $this->user = new suxUser();
         $this->link = new suxLink();
+        $this->nb = new bayesUser();        
         $this->tags = new suxTags();
         $this->bm = new suxBookmarks();
         $this->pager = new suxPager();
@@ -66,6 +72,17 @@ class bookmarks  {
 
 
     function user($nickname) {
+
+        // Get users_id based on nickname        
+        $user = $this->user->getUserByNickname($nickname);            
+        if (!$user) suxFunct::redirect(suxFunct::makeUrl('/bookmarks'));        
+        $this->users_id = $user['users_id']; // Needs to be in externally accessible variable for filter()
+        unset($user);
+        
+        // Assign stuff
+        $this->r->text['form_url'] = suxFunct::makeUrl("/bookmarks/user/$nickname"); // Forum Url
+        $this->tpl->assign_by_ref('r', $this->r);
+        $cache_id = false;
 
         // TODO
 
@@ -84,7 +101,6 @@ class bookmarks  {
         if ($tag) {
 
             $db = suxDB::get();
-            $db_driver = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
 
             // ----------------------------------------------------------------
             // Reusable SQL
@@ -95,14 +111,6 @@ class bookmarks  {
             INNER JOIN link_bookmarks_tags ON link_bookmarks_tags.bookmarks_id = bookmarks.id
             ';
 
-            // Date query, database specic
-            if ($db_driver == 'mysql') {
-                $date = 'AND NOT published_on > \'' . date('Y-m-d H:i:s') . '\' ';
-            }
-            else {
-                throw new Exception('Unsupported database driver');
-            }
-
             // ----------------------------------------------------------------
             // SQL
             // ----------------------------------------------------------------
@@ -112,7 +120,7 @@ class bookmarks  {
             SELECT COUNT(*) FROM bookmarks
             {$innerjoin}
             WHERE bookmarks.draft = 0 AND link_bookmarks_tags.tags_id = ?
-            {$date}
+            {$this->_dateSql()}
             ";
             $st = $db->prepare($count_query);
             $st->execute(array($tag_id));
@@ -125,7 +133,7 @@ class bookmarks  {
                 SELECT bookmarks.* FROM bookmarks
                 {$innerjoin}
                 WHERE bookmarks.draft = 0 AND link_bookmarks_tags.tags_id = ?
-                {$date}
+                {$this->_dateSql()}
                 ";
 
                 // Order
@@ -195,23 +203,13 @@ class bookmarks  {
         if (!$this->tpl->is_cached('cloud.tpl', $cache_id)) {
 
             $db = suxDB::get();
-            $db_driver = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
-
-            // Date query, database specic
-            if ($db_driver == 'mysql') {
-                $date = 'AND NOT published_on > \'' . date('Y-m-d H:i:s') . '\' ';
-            }
-            else {
-                throw new Exception('Unsupported database driver');
-            }
-
 
             $link = $this->link->getLinkTableName('bookmarks', 'tags');
             $query = "
             SELECT tags.tag AS tag, tags.id AS id, COUNT(tags.id) AS quantity FROM tags
             INNER JOIN {$link} ON {$link}.tags_id = tags.id
             INNER JOIN bookmarks ON {$link}.bookmarks_id = bookmarks.id
-            WHERE bookmarks.draft = 0 {$date}
+            WHERE bookmarks.draft = 0 {$this->_dateSql()}
             GROUP BY tag ORDER BY tag ASC
             ";
 
@@ -230,42 +228,74 @@ class bookmarks  {
     * @param int $feeds_id a feed id
     */
     function listing($alphasort = false) {
-
+        
+        $this->r->text['form_url'] = suxFunct::makeUrl('/bookmarks'); // Form Url
         $this->tpl->assign_by_ref('r', $this->r);
+        $this->alphasort = $alphasort; // Needs to be in externally accessible variable for filter()     
+        
+        // Sort links
+        $this->tpl->assign('datesort_url', suxFunct::makeUrl('/bookmarks'));
+        $this->tpl->assign('alphasort_url', suxFunct::makeUrl('/bookmarks', array('sort' => 'alpha')));          
+        
         $cache_id = false;
-
-        // ---------------------------------------------------------------
-        // Paged results, cached
-        // ---------------------------------------------------------------
-
-        // "Cache Groups" using a vertical bar |
-        if ($alphasort) $cache_id = "listing|alphasort|{$this->pager->start}";
-        else $cache_id = "listing|datesort|{$this->pager->start}";
-        $this->tpl->caching = 0; // TODO: Turn on caching
-
-        if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
-
-            // Start pager
-            $this->pager->setStart();
-
-            // Some defaults
-            $this->tpl->assign('datesort_url', suxFunct::makeUrl('/bookmarks'));
-            $this->tpl->assign('alphasort_url', suxFunct::makeUrl('/bookmarks', array('sort' => 'alpha')));
-
-            $sort = array();
-            if ($alphasort) $sort['sort'] = 'alpha';
-
-            $this->pager->setPages($this->bm->countBookmarks());
-            $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/bookmarks/", $sort));
-            $this->r->fp = $this->bm->getBookmarks($this->pager->limit, $this->pager->start, $alphasort);
-
-            if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
-
+        
+        if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
+            
+            // ---------------------------------------------------------------
+            // Filtered results
+            // ---------------------------------------------------------------
+            
+            $max = $this->bm->countBookmarks();
+            $eval = '$this->bm->getBookmarks($this->pager->limit, $start, $this->alphasort)';
+            $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval); // Important: start must be reference
+            
+            if ($start < $max) {
+                if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
+                else $params = array('filter' => $cat_id);
+                if ($alphasort) $params['sort'] = 'alpha'; // Sort                
+                
+                $url = suxFunct::makeUrl('/bookmarks/', $params);
+                $this->r->text['pager'] = $this->pager->continueLink($start, $url);
+            }
+            
+            $this->tpl->assign('filter', $cat_id);
+            if ($threshold !== false) $this->tpl->assign('threshold', $threshold);            
+            
         }
-
-        $this->tpl->display('scroll.tpl', $cache_id);
-
+        else {
+            
+            // ---------------------------------------------------------------
+            // Paged results, cached
+            // ---------------------------------------------------------------
+            
+            // "Cache Groups" using a vertical bar |
+            if ($alphasort) $cache_id = "listing|alphasort|{$this->pager->start}";
+            else $cache_id = "listing|datesort|{$this->pager->start}";
+            $this->tpl->caching = 0; // TODO: Turn on caching
+            
+            if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
+                
+                // Sort                              
+                $sort = array();
+                if ($alphasort) $sort['sort'] = 'alpha';
+                
+                // Start pager
+                $this->pager->setStart();                                
+                $this->pager->setPages($this->bm->countBookmarks());
+                $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/bookmarks/", $sort));
+                $this->r->fp = $this->bm->getBookmarks($this->pager->limit, $this->pager->start, $alphasort);
+                
+                if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+                
+            }            
+            
+        }
+        
+        if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
+        else $this->tpl->display('scroll.tpl');        
+        
     }
+  
 
 
 }

@@ -23,6 +23,8 @@
 */
 
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
+require_once(dirname(__FILE__) . '/../bayes/bayesRenderer.php');
+
 
 class bookmarksRenderer extends suxRenderer {
 
@@ -31,6 +33,7 @@ class bookmarksRenderer extends suxRenderer {
     public $sidelist = array(); // Array of threads in sidebar
     public $gtext = array();
     public $tc = array(); // Tagcloud
+    private $bayesRenderer;    
 
     // Objects
     private $user;
@@ -46,6 +49,7 @@ class bookmarksRenderer extends suxRenderer {
         parent::__construct($module); // Call parent
         $this->gtext = suxFunct::gtext('bookmarks'); // Language
         $this->user = new suxUser();
+        $this->bayesRenderer = new bayesRenderer('bayes');        
 
     }
 
@@ -144,7 +148,31 @@ class bookmarksRenderer extends suxRenderer {
         return $this->tinyMce($init);
 
     }
+    
+        
+    /**
+    * @return string javascript
+    */
+    function genericBayesInterfaceInit() {
 
+        return $this->bayesRenderer->genericBayesInterfaceInit();
+
+    }
+
+
+    /**
+    * @param int $id messages id
+    * @param string $link link table
+    * @param string $module sux0r module, used to clear cache
+    * @param string $document document to train
+    * @return string html
+    */
+    function genericBayesInterface($id, $link, $module, $document) {
+
+        return $this->bayesRenderer->genericBayesInterface($id, $link, $module, $document);
+
+    }    
+    
 
 
 }

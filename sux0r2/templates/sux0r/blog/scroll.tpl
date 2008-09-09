@@ -155,9 +155,6 @@ Event.observe(window, 'load', function() {
                     </p></div>
 
 
-                    <!-- Tags -->
-
-
                     <!-- Naive Baysian Classification -->
                     <div class="categoryContainer">
                         {$r->authorCategories($foo.id, $foo.users_id)}

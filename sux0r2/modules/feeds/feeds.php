@@ -26,11 +26,11 @@ require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
-require_once(dirname(__FILE__) . '/../bayes/bayesUser.php');
+require_once(dirname(__FILE__) . '/../bayes/bayesUser.php'); // includes bayesShared
 require_once('feedsRenderer.php');
 
 
-class feeds  {
+class feeds extends bayesShared {
 
     // Variables
     public $users_id; // For filter
@@ -38,13 +38,16 @@ class feeds  {
     private $module = 'feeds';
 
     // Objects
-    private $liuk;
-    private $rss;
-    private $nb;
-    private $pager;
-    private $user;
     public $r;
-    public $tpl;
+    public $tpl;    
+
+    protected $rss;
+    protected $nb;
+    protected $pager;
+    
+    private $liuk;
+    private $user;
+
 
 
     /**
@@ -235,63 +238,7 @@ class feeds  {
     }
 
 
-
-    /**
-    * Filter
-    */
-    private function filter($max, $vec_id, $cat_id, $threshold, $start, $eval) {
-
-        // -------------------------------------------------------------------
-        // Get items based on score, variable paging
-        // -------------------------------------------------------------------
-
-        $fp = array(); // First posts array
-
-        // Force timeout if this operation takes too long
-        $timer = microtime(true);
-        $timeout_max = ini_get('max_execution_time') * 0.333333;
-        if ($timeout_max > 30) $timeout_max = 30;
-
-        // Start filtering
-        $i = 0;
-        $limit = $this->pager->limit;
-        while ($i < $limit) {
-
-            $tmp = array();
-            eval('$tmp = ' . $eval . ';'); // $fp is transformed here, by $eval
-            $fp = array_merge($fp, $tmp);
-
-            foreach ($fp as $key => $val) {
-                if (!$this->nb->passesThreshold($threshold, $vec_id, $cat_id, $val['body_plaintext'])) {
-                    unset($fp[$key]);
-                    continue;
-                }
-            }
-
-            $i = count($fp);
-            $start = $start + $this->pager->limit;
-
-            // new dBug("i: $i");
-            // new dBug("next start: $start");
-            // new dBug("limit: $limit");
-            // new dBug("max: $max");
-            // new dBug('---');
-
-            if ($i < $limit && $start < ($max) && ($timer + $timeout_max) > microtime(true)) {
-                // Not enough first posts, keep looping
-                $this->pager->limit = 1;
-            }
-            else break;
-
-        }
-        $this->pager->limit = $limit; // Restore limit
-
-        return $fp;
-
-    }
-
-
-    private function countUserItems($users_id) {
+    protected function countUserItems($users_id) {
 
         $db = suxDB::get();
 
@@ -309,7 +256,7 @@ class feeds  {
     }
 
 
-    private function getUserItems($users_id, $limit, $start) {
+    protected function getUserItems($users_id, $limit, $start) {
 
         $db = suxDB::get();
 
@@ -320,12 +267,8 @@ class feeds  {
         INNER JOIN link_rss_users ON link_rss_users.rss_feeds_id = rss_feeds.id
         WHERE link_rss_users.users_id = ?
         ORDER BY rss_items.published_on DESC, rss_items.id DESC
+        LIMIT {$start}, {$limit}         
         ";
-        // Limit
-        if ($start && $this->pager->limit)
-            $query .= "LIMIT {$start}, {$limit} ";
-        elseif ($limit)
-            $query .= "LIMIT {$limit} ";
 
         $st = $db->prepare($query);
         $st->execute(array($users_id));

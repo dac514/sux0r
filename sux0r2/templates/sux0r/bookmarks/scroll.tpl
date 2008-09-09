@@ -1,5 +1,11 @@
 {capture name=header}
 
+{if $r->isLoggedIn()}
+    {$r->genericBayesInterfaceInit()}
+{else}
+    <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
+{/if}
+
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
 {include file=$r->xhtml_header}{/strip}
@@ -19,6 +25,9 @@
 	<tr>
         <td style="vertical-align:top;">
 			<div id="leftside">
+            
+            <!-- Category filters -->
+            {insert name="bayesFilters" form_url=$r->text.form_url}            
 
             {* Bookmarks *}
             {if $r->fp}
@@ -29,6 +38,13 @@
                     <div>{$foo.body_html}</div>
                     <em>Published on: {$foo.published_on}</em><br />
                     {$r->tags($foo.id)}
+                    
+                    <!-- Naive Baysian Classification -->
+                    <div class="categoryContainer">                        
+                        {capture name=document}{$foo.title} {$foo.body_plaintext}{/capture}
+                        {$r->genericBayesInterface($foo.id, 'bookmarks', 'bookmarks', $smarty.capture.document)}
+                    </div>                    
+                    
                 </div>
 
 
