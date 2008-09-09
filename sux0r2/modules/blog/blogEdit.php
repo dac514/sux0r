@@ -313,7 +313,7 @@ class blogEdit {
 
         // Reconnect links
         foreach ($tag_ids as $id) {
-            $this->link->setLink('link_messages_tags', 'messages', $clean['id'], 'tags', $id);
+            $this->link->saveLink('link_messages_tags', 'messages', $clean['id'], 'tags', $id);
         }
 
 
@@ -386,7 +386,7 @@ class blogEdit {
         if (isset($clean['category_id'])) foreach($clean['category_id'] as $val) {
             if (!empty($val) && $this->nb->isCategoryTrainer($val, $_SESSION['users_id'])) {
                 $doc_id = $this->nb->trainDocument("{$clean['title']} \n\n {$clean['body']}", $val);
-                $this->link->setLink('link_bayes_messages', 'bayes_documents', $doc_id, 'messages', $clean['id']);
+                $this->link->saveLink('link_bayes_messages', 'bayes_documents', $doc_id, 'messages', $clean['id']);
             }
         }
 

@@ -33,7 +33,17 @@ function sux($action, $params = null) {
         // Approve
         // --------------------------------------------------------------------
 
-        break; // TODO
+        include_once('feedsApprove.php');
+        $feeds = new feedsApprove();
+
+        if ($feeds->formValidate($_POST)) {
+            $feeds->formProcess($_POST);
+            $feeds->formSuccess();
+        }
+        else {
+            $feeds->formBuild($_POST);
+        }
+
 
         
     case 'edit' :
@@ -42,8 +52,20 @@ function sux($action, $params = null) {
         // Edit
         // --------------------------------------------------------------------
 
-        break; // TODO
+        $id = !empty($params[0]) ? $params[0]: null;
+
+        include_once('feedsEdit.php');
+        $edit = new feedsEdit($id);
+
+        if ($edit->formValidate($_POST)) {
+            $edit->formProcess($_POST);
+            $edit->formSuccess();
+        }
+        else {
+            $edit->formBuild($_POST);
+        }
         
+        break;
 
 
     case 'suggest' :

@@ -134,7 +134,7 @@ class suxNaiveBayesian {
         $count = 0;
 
         // As we are updating probabilities, we must clear the cache
-        $this->unsetCache($vector_id);
+        $this->deleteCache($vector_id);
 
         $st = $this->db->prepare("DELETE FROM {$this->db_table_vec} WHERE id = ? LIMIT 1 ");
         $st->execute(array($vector_id));
@@ -303,7 +303,7 @@ class suxNaiveBayesian {
         $vector_id = $this->getVectorByCategory($category_id);
         $vector_id = array_keys($vector_id); // Get the key
         $vector_id = array_shift($vector_id);
-        $this->unsetCache($vector_id);
+        $this->deleteCache($vector_id);
 
         $count = 0;
 
@@ -462,13 +462,13 @@ class suxNaiveBayesian {
         $vector_id = $this->getVectorByCategory($category_id);
         $vector_id = array_keys($vector_id); // Get the key
         $vector_id = array_shift($vector_id);
-        $this->unsetCache($vector_id);
+        $this->deleteCache($vector_id);
 
     	$tokens = $this->parseTokens($content);
         foreach($tokens as $token => $count) {
             $this->updateToken($token, $count, $category_id);
         }
-        $this->saveDocument($category_id, $content);
+        $this->addDocument($category_id, $content);
 
         // MySQL InnoDB with transaction reports the last insert id as 0 after
         // commit, the real ids are only reported before committing.
@@ -498,7 +498,7 @@ class suxNaiveBayesian {
         // As we are updating probabilities, we must clear the cache
         $vectors = $this->getVectorsByDocument($document_id);
         foreach($vectors as $key => $val) {
-            $this->unsetCache($key);
+            $this->deleteCache($key);
         }
 
         $ref = $this->getDocument($document_id);
@@ -805,7 +805,7 @@ class suxNaiveBayesian {
         }
 
         // Cache results
-        $this->setCache($vector_id, $md5, $scores);
+        $this->addCache($vector_id, $md5, $scores);
 
         return $scores;
 
@@ -1056,7 +1056,7 @@ class suxNaiveBayesian {
     @param string $content content of the document
     @return bool
     */
-    private function saveDocument($category_id, $content) {
+    private function addDocument($category_id, $content) {
 
         $st = $this->db->prepare("INSERT INTO {$this->db_table_doc} (bayes_categories_id, body_plaintext) VALUES (?, ?) ");
         return $st->execute(array($category_id, $content));
@@ -1084,7 +1084,7 @@ class suxNaiveBayesian {
     /**
     * @param int $vector_id vector id
     */
-    private function unsetCache($vector_id) {
+    private function deleteCache($vector_id) {
 
         $st = $this->db->prepare("DELETE FROM {$this->db_table_cache} WHERE bayes_vectors_id = ? ");
         $st->execute(array($vector_id));
@@ -1126,7 +1126,7 @@ class suxNaiveBayesian {
     * @param string $md5 a has of a vector id concatenated with a document
     * @param array $scores
     */
-    private function setCache($vector_id, $md5, $scores) {
+    private function addCache($vector_id, $md5, $scores) {
 
         $clean = array(
             'bayes_vectors_id' => $vector_id,

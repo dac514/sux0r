@@ -30,7 +30,8 @@ require_once(dirname(__FILE__) . '/../bayes/bayesRenderer.php');
 class feedsRenderer extends suxRenderer {
 
     // Arrays
-    public $fp = array(); // Array of first posts
+    public $fp = array(); // Array of feeds
+    public $subscriptions = array(); // Array of subscription    
     public $sidelist = array(); // Array of threads in sidebar
 
     // Objects
@@ -49,8 +50,7 @@ class feedsRenderer extends suxRenderer {
         parent::__construct($module); // Call parent
         $this->bayesRenderer = new bayesRenderer('bayes');
         $this->rss = new suxRSS();
-        $this->link = new suxLink();
-
+        $this->link = new suxLink();                
     }
 
 
@@ -170,8 +170,37 @@ class feedsRenderer extends suxRenderer {
         return $tmp;
         
     }
+    
+    
+    /**
+    * TinyMCE Initialization for bookmarks
+    *
+    * @see http://tinymce.moxiecode.com/
+    * @return string the javascript code
+    */
+    function tinyMceEditor() {
 
+        $init = '
+        mode : "textareas",
+        theme : "advanced",
+        editor_selector : "mceEditor",
+        plugins : "safari,inlinepopups,autosave",
+        width: "100%",
+        height: 100,
+        theme_advanced_toolbar_location : "top",
+        theme_advanced_toolbar_align : "left",
+        theme_advanced_buttons1 : "undo,redo,|,bold,italic,underline,strikethrough,|,cleanup,code",
+        theme_advanced_buttons2 : "",
+        theme_advanced_buttons3 : "",
+        theme_advanced_statusbar_location : "bottom",
+        entity_encoding : "raw",
+        relative_urls : false,
+        inline_styles : false,
+        ';
+        return $this->tinyMce($init);
 
+    }    
+    
 
 }
 

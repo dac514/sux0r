@@ -17,6 +17,7 @@
     width: 738px;
 }
 
+/*
 label {
     float: left;
     width: auto;
@@ -24,6 +25,7 @@ label {
     padding-top: 0.2em;
     text-align: right;
 }
+*/
 
 .widerInput {
     width: 350px;

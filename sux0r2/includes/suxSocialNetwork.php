@@ -62,7 +62,7 @@ class suxSocialNetwork {
     * @param string $rel relationship based on XFN
     * @return bool
     */
-    function setRelationship($uid, $fid, $rel) {
+    function saveRelationship($uid, $fid, $rel) {
 
         // --------------------------------------------------------------------
         // Sanitize

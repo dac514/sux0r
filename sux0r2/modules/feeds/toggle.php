@@ -63,7 +63,7 @@ else {
     // Insert
     require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
     $suxLink = new suxLink();
-    $suxLink->setLink($link, 'users', $_SESSION['users_id'], 'rss_feeds', $id);
+    $suxLink->saveLink($link, 'users', $_SESSION['users_id'], 'rss_feeds', $id);
     $image = $tpl->get_config_vars('imgSubscribed');
 }
 

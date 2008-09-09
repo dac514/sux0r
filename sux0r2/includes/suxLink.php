@@ -175,7 +175,7 @@ class suxLink {
     * @param int|array $id2 either a primary key, or an array of primary keys
     * @param bool if true, use the key of $id2 as the data
     */
-    function setLink($link, $table1, $id1, $table2, $id2, $onkey = false) {
+    function saveLink($link, $table1, $id1, $table2, $id2, $onkey = false) {
 
         // One to many mapping
         // $id1 = One
@@ -249,62 +249,6 @@ class suxLink {
 
     }
 
-
-    /**
-    * Tag cloud data structure
-    *
-    * @see: http://prism-perfect.net/archive/php-tag-cloud-tutorial/
-    * @param string $query
-    * @return array|false
-    */
-    function tagcloud($query) {
-
-        // Expects something like:
-        // SELECT tags.tag AS tag, tags.id AS id, COUNT(tags.id) AS quantity FROM tags
-        // INNER JOIN [...]
-        $st = $this->db->query($query);
-
-        // Put results into arrays
-        $tags = array();
-        $category_id = array();
-        while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
-            $tags[$row['tag']] = $row['quantity'];
-            $category_id[$row['tag']] = $row['id'];
-        }
-        
-        if (!count($tags)) return false; // Nothing to do?
-
-        $max_size = 250; // max font size in %
-        $min_size = 100; // min font size in %
-
-        // get the largest and smallest array values
-        $max_qty = max(array_values($tags));
-        $min_qty = min(array_values($tags));
-
-        // find the range of values
-        $spread = $max_qty - $min_qty;
-        if (0 == $spread) { // we don't want to divide by zero
-            $spread = 1;
-        }
-
-        // determine the font-size increment
-        // this is the increase per tag quantity (times used)
-        $step = ($max_size - $min_size)/($spread);
-
-        // Adjust data structure
-        $data = array();
-        foreach ($tags as $key => $val) {
-            $data[$key] = array(
-                'quantity' => $val,
-                'id' => $category_id[$key],
-                'size' => $min_size + (($val - $min_qty) * $step),
-                );
-
-        }
-
-        return $data;
-
-    }
 
 
     // ----------------------------------------------------------------------------

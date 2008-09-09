@@ -27,7 +27,7 @@
     {/if}
 
     {validate id="subscriptions" message=$r->text.form_problem}
-    {html_checkboxes name='subscriptions' options=$feeds selected=$subscriptions assign=tmp}
+    {html_checkboxes name='subscriptions' options=$r->fp selected=$r->subscriptions assign=tmp}
     {html_table loop=$tmp inner=rows table_attr='border="0" class="feedTable"'}
 
     <p>

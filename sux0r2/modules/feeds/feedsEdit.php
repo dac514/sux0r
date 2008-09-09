@@ -1,7 +1,7 @@
 <?php
 
 /**
-* photosEdit
+* feedsEdit
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -22,44 +22,43 @@
 *
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
-require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
+require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
+require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
-require_once('photosRenderer.php');
+require_once('feedsRenderer.php');
 
-class photosEdit {
+class feedsEdit {
 
     // Variables
-    public $per_page; // Photos per page
     public $gtext = array();
-    private $module = 'photos';
-    private $prev_url_preg = '#^photos/album/[edit|annotate]|^cropper/#i';
+    private $module = 'feeds';
+    private $prev_url_preg = '#^feeds/[edit]/#i';
     private $id;
 
     // Objects
     public $tpl;
     public $r;
     private $user;
-    private $photo;
-    private $pager;
+    private $rss;        
 
 
     /**
     * Constructor
     *
-    * @param int $id album id
+    * @param int $id message id
     */
     function __construct($id = null) {
 
-        $this->user = new suxUser(); // User
-        $this->photo = new suxPhoto($this->module); // Photos
         $this->tpl = new suxTemplate($this->module); // Template
-        $this->r = new photosRenderer($this->module); // Renderer
+        $this->r = new feedsRenderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
-        $this->pager = new suxPager();
+
+        // Objects
+        $this->user = new suxUser();
+        $this->rss = new suxRSS();
 
         // Redirect if not logged in
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
@@ -70,9 +69,6 @@ class photosEdit {
             $this->id = $id;
         }
 
-        // This module has config variables, load them
-        $this->tpl->config_load('my.conf', $this->module);
-        $this->per_page = $this->tpl->get_config_vars('perPage');
 
     }
 
@@ -95,21 +91,26 @@ class photosEdit {
     */
     function formBuild(&$dirty) {
 
-        $photoalbum = array();
+        unset($dirty['id']); // Don't allow spoofing        
+        $feed = array();
 
         if ($this->id) {
 
-            // Editing a photoalbum
-            $tmp = $this->photo->getAlbum($this->id, true);
+            // Editing a feed
 
-            $photoalbum['id'] = $tmp['id'];
-            $photoalbum['cover'] = $tmp['thumbnail'];
+            $tmp = $this->rss->getFeed($this->id, true);
 
-            // Don't allow spoofing
-            unset($dirty['id']);
+            $feed['id'] = $tmp['id'];
+            $feed['title'] = $tmp['title'];
+            $feed['url'] = $tmp['url'];
+            $feed['body'] = $tmp['body_html'];
+            $feed['draft'] = $tmp['draft'];
+
         }
 
-        $this->tpl->assign($photoalbum);
+        // Assign feed
+        // new dBug($feed);
+        $this->tpl->assign($feed);
 
         // --------------------------------------------------------------------
         // Form logic
@@ -123,48 +124,66 @@ class photosEdit {
             suxValidate::connect($this->tpl, true); // Reset connection
 
             // Register our validators
-            suxValidate::register_validator('integrity', 'integrity:id', 'hasIntegrity');
+            if ($this->id) suxValidate::register_validator('integrity', 'integrity:id', 'hasIntegrity');
+
+            suxValidate::register_validator('url', 'url', 'notEmpty', false, false, 'trim');
+            suxValidate::register_validator('url2', 'url', 'isURL');
+
+            suxValidate::register_validator('title', 'title', 'notEmpty', false, false, 'trim');
+            suxValidate::register_validator('body', 'body', 'notEmpty', false, false, 'trim');
+
 
         }
 
-        // --------------------------------------------------------------------
-        // Templating
-        // --------------------------------------------------------------------
-
-        // Start pager
-        $this->pager->setStart();
-        // $this->pager->limit = $this->per_page;
-
-        $this->pager->setPages($this->photo->countPhotos($this->id));
-        $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/photos/album/annotate/{$this->id}"));
-        $this->r->pho = $this->photo->getPhotos($this->id, $this->pager->limit, $this->pager->start);
-
-        $this->r->text['form_url'] = suxFunct::makeUrl('/photos/album/annotate/' . $this->id, array('page' => $_GET['page']));
+        // Additional variables
+        $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/edit/' . $this->id);
         $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
 
+        // Template
         $this->tpl->assign_by_ref('r', $this->r);
-        $this->tpl->display('annotate.tpl');
+        $this->tpl->display('edit.tpl');
 
     }
 
 
+
     /**
-    * Todo
+    * Process the form
     *
     * @param array $clean reference to validated $_POST
     */
     function formProcess(&$clean) {
 
-        // Set cover
-        if (isset($clean['cover'])) $this->photo->saveThumbnail($clean['id'], $clean['cover']);
+        // --------------------------------------------------------------------
+        // Sanity check
+        // --------------------------------------------------------------------
 
-        // Remove photos from database
-        // Notice: This does not remove photos from disk!
-        if (isset($clean['delete'])) foreach ($clean['delete'] as $val) {
-            if ($this->photo->isPhotoOwner($val, $_SESSION['users_id'])) {
-                $this->photo->deletePhoto($val);
-            }
+        // Message id, edit mode
+        if (isset($clean['id']) && filter_var($clean['id'], FILTER_VALIDATE_INT)) {
+            // TODO: Check to see if this user is allowed to modify this feed
+            // $clean['id'] = false // on fail
         }
+
+        // --------------------------------------------------------------------
+        // Create $feed array
+        // --------------------------------------------------------------------
+
+        $feed = array(
+                'url' => @$clean['url'],
+                'title' => $clean['title'],
+                'body' => $clean['body'],
+                'draft' => @$clean['draft'],
+            );
+
+        // --------------------------------------------------------------------
+        // Put $feed in database
+        // --------------------------------------------------------------------
+        
+        /* saveFeed() uses the url as the key and ignores the id, it will also 
+        automatically unset the users_id if it's an update */        
+
+        $this->rss->saveFeed($_SESSION['users_id'], $feed);
+
 
     }
 
@@ -174,16 +193,10 @@ class photosEdit {
     */
     function formSuccess() {
 
-        // TODO?
-        // $this->tpl->clear_cache(null, "album|{$this->id}"); // Clear cache
-
-        // Template
-        $this->r->text['back_url'] = suxFunct::makeUrl('/photos/album/annotate/' . $this->id);
-        $this->tpl->assign_by_ref('r', $this->r);
-        $this->tpl->display('success.tpl');
+        // TODO: Clear caches
+        echo 'TODO';
 
     }
-
 
 
 }

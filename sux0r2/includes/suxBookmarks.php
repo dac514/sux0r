@@ -222,11 +222,11 @@ class suxBookmarks {
         if ($edit) {
 
             // UPDATE
-            $id = $edit['id'];
-            unset($clean['users_id']); // Don't override the original suggestor
+            $id = $edit['id'];               
+            unset($clean['users_id']); // Don't override the original submitter
             $query = suxDB::prepareUpdateQuery($this->db_table, $clean, 'url');
             $st = $this->db->prepare($query);
-            $st->execute($clean);
+            $st->execute($clean);         
 
         }
         else {
@@ -292,7 +292,7 @@ class suxBookmarks {
         if (preg_match('/<title>(.*?)<\/title>/is', $webpage, $found)) {
             $title = html_entity_decode(strip_tags($found[1]), ENT_QUOTES, 'UTF-8');
         }
-        // TODO: Meta for description?
+        // TODO: Meta preg for description?
 
         return array(
             'title' => $title,
