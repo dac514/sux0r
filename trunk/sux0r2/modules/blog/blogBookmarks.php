@@ -36,11 +36,10 @@ class blogBookmarks {
 
     // Variables
     public $gtext = array();
-    private $module = 'blog';
-    private $prev_url_preg = '#^blog/[edit|reply|bookmarks]|^cropper/#i';
     private $msg_id;
     private $found_links = array();
-
+    private $module = 'blog';
+           
     // Objects
     public $tpl;
     public $r;
@@ -191,7 +190,7 @@ class blogBookmarks {
 
         // Additional variables
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog/bookmarks/' . $this->msg_id);
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
 
         // Template
         $this->r->found_links = $this->found_links;

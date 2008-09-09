@@ -32,8 +32,7 @@ class cropper {
 
     //Variables
     public $gtext = array();
-    private $module = 'cropper';
-    private $prev_url_preg = '#^cropper/#i';
+    private $module = 'cropper';    
 
     // Objects
     public $tpl;
@@ -147,7 +146,7 @@ class cropper {
             $this->tpl->assign('height', $height);
 
             $this->tpl->assign('form_url', suxFunct::makeUrl("/cropper/{$module}/{$id}"));
-            $this->tpl->assign('prev_url', suxFunct::getPreviousURL($this->prev_url_preg));
+            $this->tpl->assign('prev_url', suxFunct::getPreviousURL('cropper'));
 
             $this->tpl->assign_by_ref('r', $this->r);
             $this->tpl->display('cropper.tpl');
@@ -227,7 +226,7 @@ class cropper {
 
     function formSuccess() {
 
-        suxFunct::redirect(suxFunct::getPreviousURL($this->prev_url_preg));
+        suxFunct::redirect(suxFunct::getPreviousURL('cropper'));
 
     }
 

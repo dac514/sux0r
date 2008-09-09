@@ -32,8 +32,10 @@
 <p>
 {strip}
     {capture name=error}
-    {validate id="url" message="URL cannot be empty"}
-    {validate id="url2" message="URL is invalid"}
+    {validate id="url" message=$r->text.form_error_1}
+    {validate id="url2" message=$r->text.form_error_2}
+    {validate id="url3" message=$r->text.form_error_3}
+    {validate id="url4" message=$r->text.form_error_4}    
     {/capture}
 {/strip}
 <label for="url" {if $smarty.capture.error}class="error"{/if} >URL :</label>

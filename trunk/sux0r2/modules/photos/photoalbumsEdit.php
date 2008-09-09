@@ -30,10 +30,9 @@ require_once('photosRenderer.php');
 class photoalbumsEdit {
 
     // Variables
-    public $gtext = array();
-    private $module = 'photos';
-    private $prev_url_preg = '#^photos/album/[edit|annotate]|^cropper/#i';
+    public $gtext = array();        
     private $id;
+    private $module = 'photos';    
 
     // Objects
     public $tpl;
@@ -147,7 +146,7 @@ class photoalbumsEdit {
 
         // Additional variables
         $this->r->text['form_url'] = suxFunct::makeUrl('/photos/album/edit/' . $this->id);
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
 
         if (!$this->tpl->get_template_vars('Date_Year')) {
             // Today's Date
@@ -223,7 +222,7 @@ class photoalbumsEdit {
         // $this->tpl->clear_cache(null, $_SESSION['nickname']); // Clear cache
 
         // Template
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
         $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('success.tpl');
 

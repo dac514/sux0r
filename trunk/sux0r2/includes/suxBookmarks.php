@@ -163,7 +163,7 @@ class suxBookmarks {
     * Saves a bookmark to the database
     *
     * @param int $users_id users_id
-    * @param array $url required keys => (url, title, body) optional keys => (published_on, draft)
+    * @param array $url required keys => (url, title, body) optional keys => (id, published_on, draft)
     * @param int $trusted passed on to sanitizeHtml()
     * @return int insert id
     */
@@ -193,6 +193,19 @@ class suxBookmarks {
         require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
         $converter = new suxHtml2UTF8($clean['body_html']);
         $clean['body_plaintext']  = $converter->getText();
+        
+        // Id
+        if (isset($url['id'])) {                
+            if (!filter_var($url['id'], FILTER_VALIDATE_INT) || $url['id'] < 1) throw new Exception('Invalid id');
+            else $clean['id'] = $url['id'];
+        }
+        else {            
+            $query = "SELECT id FROM {$this->db_table} WHERE url = ? LIMIT 1 ";
+            $st = $this->db->prepare($query);
+            $st->execute(array($clean['url']));
+            $edit = $st->fetch(PDO::FETCH_ASSOC); 
+            if ($edit) $clean['id'] = $edit['id'];                            
+        }
 
         // Publish date
         if (isset($url['published_on'])) {
@@ -214,17 +227,11 @@ class suxBookmarks {
         // Go!
         // --------------------------------------------------------------------
 
-        $query = "SELECT id, url, title, body_html, body_plaintext FROM {$this->db_table} WHERE url = ? LIMIT 1 ";
-        $st = $this->db->prepare($query);
-        $st->execute(array($clean['url']));
-        $edit = $st->fetch(PDO::FETCH_ASSOC);
+        if (isset($clean['id'])) {
 
-        if ($edit) {
-
-            // UPDATE
-            $id = $edit['id'];               
+            // UPDATE              
             unset($clean['users_id']); // Don't override the original submitter
-            $query = suxDB::prepareUpdateQuery($this->db_table, $clean, 'url');
+            $query = suxDB::prepareUpdateQuery($this->db_table, $clean);
             $st = $this->db->prepare($query);
             $st->execute($clean);         
 
@@ -235,12 +242,11 @@ class suxBookmarks {
             $query = suxDB::prepareInsertQuery($this->db_table, $clean);
             $st = $this->db->prepare($query);
             $st->execute($clean);
-            $id = $this->db->lastInsertId();
+            $clean['id'] = $this->db->lastInsertId();
 
         }
 
-
-        return $id;
+        return $clean['id'];
 
     }
 

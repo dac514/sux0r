@@ -31,8 +31,7 @@ require_once('feedsRenderer.php');
 class feedsManage  {
 
     // Variables
-    public $gtext = array();
-    protected $prev_url_preg = '#^feeds/[manage|admin]#i';
+    public $gtext = array();    
     private $module = 'feeds';
 
     // Objects
@@ -98,7 +97,7 @@ class feedsManage  {
 
         // Urls
         $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/manage');
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
 
         // Feeds
         $feeds = array();
@@ -142,7 +141,7 @@ class feedsManage  {
         $this->tpl->clear_cache(null, "{$_SESSION['nickname']}");
 
         // Redirect
-        suxFunct::redirect(suxFunct::getPreviousURL($this->prev_url_preg));
+        suxFunct::redirect(suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']));
 
     }
 

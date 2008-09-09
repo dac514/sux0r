@@ -252,8 +252,7 @@ class suxPhoto {
 
         if (isset($clean['id'])) {
 
-            // UPDATE
-            $id = $clean['id'];            
+            // UPDATE                      
             unset($clean['users_id']); // Don't override the original submitter            
             $query = suxDB::prepareUpdateQuery($this->db_albums, $clean);
             $st = $this->db->prepare($query);
@@ -266,11 +265,11 @@ class suxPhoto {
             $query = suxDB::prepareInsertQuery($this->db_albums, $clean);
             $st = $this->db->prepare($query);
             $st->execute($clean);
-            $id = $this->db->lastInsertId();
+            $clean['id'] = $this->db->lastInsertId();
 
         }
 
-        return $id;
+        return $clean['id'];
 
     }
 
@@ -537,8 +536,7 @@ class suxPhoto {
 
         if (isset($clean['id'])) {
 
-            // UPDATE
-            $id = $clean['id'];            
+            // UPDATE                      
             unset($clean['users_id']); // Don't override the original submitter                        
             $query = suxDB::prepareUpdateQuery($this->db_photos, $clean);
             $st = $this->db->prepare($query);
@@ -551,11 +549,11 @@ class suxPhoto {
             $query = suxDB::prepareInsertQuery($this->db_photos, $clean);
             $st = $this->db->prepare($query);
             $st->execute($clean);
-            $id = $this->db->lastInsertId();
+            $clean['id'] = $this->db->lastInsertId();
 
         }
 
-        return $id;
+        return $clean['id'];
 
     }
 

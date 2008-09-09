@@ -333,22 +333,36 @@ class suxFunct {
     /**
     * Get this user's previous URL
     *
-    * @param string $preg regular expression
+    * @param string|array $skip
     * @return bool
     */
-    static function getPreviousURL($preg) {
-
-        $url = suxFunct::makeUrl('/home'); // Some default
-
-        if (isset($_SESSION['breadcrumbs'])) foreach($_SESSION['breadcrumbs'] as $val) {
-            if (!preg_match($preg, $val)) {
-                $url = suxFunct::makeUrl($val); // Overwrite
-                break;
-            }
+    static function getPreviousURL($skip) {
+        
+        if (!is_array($skip)) $skip = array($skip);
+        
+        foreach ($skip as $key => $val) {   
+            $val = str_replace('#', '', $val);            
+            $val = trim($val);
+            $val = trim($val, '/');
+            $val = "#^{$val}#i";               
+            $skip[$key] = $val;                        
         }
-
-        return $url;
-
+        
+        if (isset($_SESSION['breadcrumbs'])) foreach($_SESSION['breadcrumbs'] as $val) {   
+            
+            $ok = true;            
+            $url = suxFunct::makeUrl($val);         
+            
+            foreach ($skip as $val2) {                
+                if (preg_match($val2, $val)) $ok = false;
+            }
+            
+            if ($ok) return $url;                
+            
+        }
+        
+        return suxFunct::makeUrl('/home'); // Some default;
+        
     }
 
 

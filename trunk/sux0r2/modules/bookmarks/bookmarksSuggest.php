@@ -30,8 +30,7 @@ require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 class bookmarksSuggest  {
 
     // Variables
-    public $gtext = array();
-    protected $prev_url_preg = '#^bookmarks/[suggest]#i';
+    public $gtext = array();    
     private $module = 'bookmarks';
 
     // Objects
@@ -100,7 +99,7 @@ class bookmarksSuggest  {
 
         // Urls
         $this->r->text['form_url'] = suxFunct::makeUrl('/bookmarks/suggest');
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
@@ -134,7 +133,7 @@ class bookmarksSuggest  {
     function formSuccess() {
 
         // Template
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
         $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('success.tpl');
 

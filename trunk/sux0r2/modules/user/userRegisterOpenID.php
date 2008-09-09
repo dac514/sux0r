@@ -29,8 +29,7 @@ require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 class userRegisterOpenID  {
 
     // Variables
-    public $gtext = array();
-    protected $prev_url_preg = '#^user/[login|logout|register|edit]#i';
+    public $gtext = array();    
     private $module = 'user';
 
     // Objects
@@ -96,7 +95,7 @@ class userRegisterOpenID  {
 
         // Urls
         $this->r->text['form_url'] = suxFunct::makeUrl('/user/register/openid');
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_url_preg);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
