@@ -384,6 +384,8 @@ class blogEdit {
 
         if (isset($clean['category_id'])) foreach($clean['category_id'] as $val) {
             if (!empty($val) && $this->nb->isCategoryTrainer($val, $_SESSION['users_id'])) {
+                // Use"$title \n\n body" to train documents. If you change this 
+                // convention then you need to adjust bayesShared::filter()
                 $doc_id = $this->nb->trainDocument("{$clean['title']} \n\n {$clean['body']}", $val);
                 $this->link->saveLink('link_bayes_messages', 'bayes_documents', $doc_id, 'messages', $clean['id']);
             }

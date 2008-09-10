@@ -228,15 +228,13 @@ class bookmarks extends bayesShared {
     * @param int $feeds_id a feed id
     */
     function listing($alphasort = false) {
-        
+                     
+        // Assign stuff
         $this->r->text['form_url'] = suxFunct::makeUrl('/bookmarks'); // Form Url
-        $this->tpl->assign_by_ref('r', $this->r);
-        $this->alphasort = $alphasort; // Needs to be in externally accessible variable for filter()     
-        
-        // Sort links
+        $this->tpl->assign_by_ref('r', $this->r);                        
         $this->tpl->assign('datesort_url', suxFunct::makeUrl('/bookmarks'));
-        $this->tpl->assign('alphasort_url', suxFunct::makeUrl('/bookmarks', array('sort' => 'alpha')));          
-        
+        $this->tpl->assign('alphasort_url', suxFunct::makeUrl('/bookmarks', array('sort' => 'alpha')));
+        $this->alphasort = $alphasort; // Needs to be in externally accessible variable for filter()             
         $cache_id = false;
         
         if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
