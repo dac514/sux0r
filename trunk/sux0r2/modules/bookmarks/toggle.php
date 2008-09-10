@@ -1,7 +1,7 @@
 <?php
 
 // Ajax
-// Toggle subscription to feed
+// Toggle subscription to a bookmark
 
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/../../initialize.php');
@@ -21,7 +21,7 @@ function failure($msg = null) {
 // ---------------------------------------------------------------------------
 
 if (!isset($_SESSION['users_id'])) failure('Invalid user id');
-if (!isset($_POST['id']) || !filter_var($_POST['id'], FILTER_VALIDATE_INT) || $_POST['id'] < 1) failure('Invalid feed id');
+if (!isset($_POST['id']) || !filter_var($_POST['id'], FILTER_VALIDATE_INT) || $_POST['id'] < 1) failure('Invalid bookmark id');
 
 $id = $_POST['id'];
 
@@ -29,18 +29,18 @@ $id = $_POST['id'];
 // Secondary error checking
 // ---------------------------------------------------------------------------
 
-require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
-$feed = new suxRSS();
+require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
+$bm = new suxBookmarks();
 
-if (!$feed->getFeed($id)) failure('Invalid feed');
+if (!$bm->getBookmark($id)) failure('Invalid bookmark');
 
 // ---------------------------------------------------------------------------
 // Go
 // ---------------------------------------------------------------------------
 
-$module = 'feeds';
-$link = 'link_rss_users';
-$col = 'rss_feeds';
+$module = 'bookmarks';
+$link = 'link_bookmarks_users';
+$col = 'bookmarks';
 
 // Get image names from template config
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');

@@ -16,6 +16,9 @@
            
             <input type="hidden" id="nbfThreshold" name="threshold" value="{$threshold}" />
             <input type="hidden" id="filter2" name="filter" value="{$filter}" />
+            {foreach from=$r->text.hidden key=k item=v}
+            <input type="hidden" name="{$k}" value="{$v}" />                        
+            {/foreach}
             
             {* Slider *}
             <div id="nbfSlider">
