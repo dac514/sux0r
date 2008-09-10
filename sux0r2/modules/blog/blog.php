@@ -35,6 +35,7 @@ class blog extends bayesShared {
 
     // Variables
     public $tag_id; // For filter
+    public $cat_id; // For filter    
     public $gtext = array();
     private $module = 'blog';
 
@@ -49,7 +50,6 @@ class blog extends bayesShared {
     private $liuk;
     private $user;
     private $tags;
-
 
 
     /**
@@ -86,72 +86,68 @@ class blog extends bayesShared {
         $cache_id = false;
         
         $u = $this->user->getUserByNickname($author);
-        if ($u) {
-
-            if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
-
-                // ---------------------------------------------------------------
-                // Filtered results
-                // ---------------------------------------------------------------
-
-                $max = $this->msg->countFirstPostsByUser($u['users_id'], 'blog');
-                $eval = '$this->msg->getFirstPostsByUser(' .$u['users_id'] . ', \'blog\', $this->pager->limit, $start)';
-                $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval)); // Important: start must be reference
-
-                if ($start < $max) {
-                    if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
-                    else $params = array('filter' => $cat_id);
-                    $url = suxFunct::makeUrl('/blog/author/'. $author, $params);
-                    $this->r->text['pager'] = $this->pager->continueLink($start, $url);
-                }
-
-                $this->tpl->assign('filter', $cat_id);
-                if ($threshold !== false) $this->tpl->assign('threshold', $threshold);
-
-            }
-            else {
-
-                // ---------------------------------------------------------------
-                // Paged results, cached
-                // ---------------------------------------------------------------
-
-                // Start pager
-                $this->pager->setStart();
-
-                // Get nickname
-                if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
-                else $nn = 'nobody';
-
-                // "Cache Groups" using a vertical bar |
-                $cache_id = $nn . '|author|' . $author . '|' . $this->pager->start;
-                $this->tpl->caching = 1;
-
-                if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
-
-                    $this->pager->setPages($this->msg->countFirstPostsByUser($u['users_id'], 'blog'));
-                    $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/author/' . $author));
-                    $this->r->fp = $this->blogs($this->msg->getFirstPostsByUser($u['users_id'], 'blog', $this->pager->limit, $this->pager->start));
-
-                    if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
-
-                }
-
-            }
-
+        if(!$u) suxFunct::redirect(suxFunct::makeUrl('/blog'));  
+                
+        if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
+            
             // ---------------------------------------------------------------
-            // Sidelist
+            // Filtered results
             // ---------------------------------------------------------------
-
-            if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
-
-                $this->r->sidelist = $this->msg->getFirstPostsByUser($u['users_id'], 'blog'); // TODO: Too many blogs?
-                $this->r->text['sidelist'] = ucwords($author);
-
+            
+            $max = $this->msg->countFirstPostsByUser($u['users_id'], 'blog');
+            $eval = '$this->msg->getFirstPostsByUser(' .$u['users_id'] . ', \'blog\', $this->pager->limit, $start)';
+            $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval)); // Important: start must be reference
+            
+            if ($start < $max) {
+                if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
+                else $params = array('filter' => $cat_id);
+                $url = suxFunct::makeUrl('/blog/author/'. $author, $params);
+                $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
-
-
+            
+            $this->tpl->assign('filter', $cat_id);
+            if ($threshold !== false) $this->tpl->assign('threshold', $threshold);
+            
         }
-
+        else {
+            
+            // ---------------------------------------------------------------
+            // Paged results, cached
+            // ---------------------------------------------------------------
+                        
+            // Get nickname
+            if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
+            else $nn = 'nobody';
+            
+            // "Cache Groups" using a vertical bar |
+            $cache_id = $nn . '|author|' . $author . '|' . $this->pager->start;
+            $this->tpl->caching = 1;
+            
+            $this->pager->setStart(); // Start pager            
+            
+            if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
+                
+                $this->pager->setPages($this->msg->countFirstPostsByUser($u['users_id'], 'blog'));
+                $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/author/' . $author));
+                $this->r->fp = $this->blogs($this->msg->getFirstPostsByUser($u['users_id'], 'blog', $this->pager->limit, $this->pager->start));
+                
+                if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+                
+            }
+            
+        }
+        
+        // ---------------------------------------------------------------
+        // Sidelist
+        // ---------------------------------------------------------------
+        
+        if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
+            
+            $this->r->sidelist = $this->msg->getFirstPostsByUser($u['users_id'], 'blog'); // TODO: Too many blogs?
+            $this->r->text['sidelist'] = ucwords($author);
+            
+        }
+        
         if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
         else $this->tpl->display('scroll.tpl');
 
@@ -198,10 +194,7 @@ class blog extends bayesShared {
             // ---------------------------------------------------------------
             // Paged results, cached
             // ---------------------------------------------------------------
-            
-            // Start pager
-            $this->pager->setStart();
-            
+                        
             // Get nickname
             if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
             else $nn = 'nobody';
@@ -209,6 +202,8 @@ class blog extends bayesShared {
             // "Cache Groups" using a vertical bar |
             $cache_id = $nn . '|tag|' . $this->tag_id . '|' . $this->pager->start;
             $this->tpl->caching = 1;
+            
+            $this->pager->setStart(); // Start pager            
             
             if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
                 
@@ -255,8 +250,6 @@ class blog extends bayesShared {
 
         if (!$this->tpl->is_cached('cloud.tpl', $cache_id)) {
 
-            $db = suxDB::get();            
-
             $link = $this->link->getLinkTableName('messages', 'tags');
             $query = "
             SELECT tags.tag AS tag, tags.id AS id, COUNT(tags.id) AS quantity FROM tags
@@ -265,7 +258,6 @@ class blog extends bayesShared {
             WHERE messages.blog = 1 AND messages.draft = 0 {$this->_dateSql()}
             GROUP BY tag ORDER BY tag ASC
             ";
-
             $this->r->tc = $this->tags->tagcloud($query);
 
         }
@@ -279,136 +271,79 @@ class blog extends bayesShared {
     * Category
     */
     function category($cat_id) {
-
+        
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog/category/' . $cat_id); // Form Url
-        $this->tpl->assign_by_ref('r', $this->r);
-
+        $this->tpl->assign_by_ref('r', $this->r);        
         $cache_id = false;
+        
         $c = $this->nb->getCategory($cat_id);
-
-        if ($c) {
-
-            $db = suxDB::get();            
-
-            // ----------------------------------------------------------------
-            // Reusable SQL
-            // ----------------------------------------------------------------
-
-            // Innerjoin query
-            $innerjoin = '
-            INNER JOIN link_bayes_messages ON link_bayes_messages.messages_id = messages.id
-            INNER JOIN bayes_documents ON link_bayes_messages.bayes_documents_id = bayes_documents.id
-            INNER JOIN bayes_categories ON bayes_documents.bayes_categories_id = bayes_categories.id
-            ';                        
-
-            // ----------------------------------------------------------------
-            // SQL
-            // ----------------------------------------------------------------
-
-            // Count
-            $count_query = "
-            SELECT COUNT(*) FROM messages
-            {$innerjoin}
-            WHERE messages.thread_pos = 0 AND messages.blog = 1  AND messages.draft = 0 AND bayes_categories.id = ?
-            {$this->_dateSql()}
-            ";
-            $st = $db->prepare($count_query);
-            $st->execute(array($cat_id));
-            $count = $st->fetchColumn();
-
-            if ($count) {
-
-                // Select, with limits
-                $limit_query = "
-                SELECT messages.*, LENGTH(messages.body_plaintext) AS body_length FROM messages
-                {$innerjoin}
-                WHERE messages.thread_pos = 0 AND messages.blog = 1  AND messages.draft = 0 AND bayes_categories.id = ?
-                {$this->_dateSql()}
-                ORDER BY messages.published_on DESC
-                ";
-
-                if (list($vec_id, $cat_id2, $threshold, $start) = $this->nb->isValidFilter()) {
-
-                    // ---------------------------------------------------------------
-                    // Filtered results
-                    // ---------------------------------------------------------------
-
-                    $eval = '$this->_category("' . $limit_query . '", ' . $cat_id2 . ', $start)';
-                    $this->r->fp  = $this->blogs($this->filter($count, $vec_id, $cat_id2, $threshold, &$start, $eval)); // Important: start must be reference
-
-                    if ($start < $count) {
-                        if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id2);
-                        else $params = array('filter' => $cat_id2);
-                        $url = suxFunct::makeUrl('/blog/category/'. $cat_id, $params);
-                        $this->r->text['pager'] = $this->pager->continueLink($start, $url);
-                    }
-
-                    $this->tpl->assign('filter', $cat_id2);
-                    if ($threshold !== false) $this->tpl->assign('threshold', $threshold);
-
-                }
-                else {
-
-                    // ---------------------------------------------------------------
-                    // Paged results, cached
-                    // ---------------------------------------------------------------
-
-                    // Start pager
-                    $this->pager->setStart();
-
-                    // Get nickname
-                    if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
-                    else $nn = 'nobody';
-
-                    // "Cache Groups" using a vertical bar |
-                    $cache_id = $nn . '|category|' . $cat_id . '|' . $this->pager->start;
-                    $this->tpl->caching = 1;
-
-                    if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
-
-                        $this->pager->setPages($count);
-                        $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/category/' . $cat_id));
-
-                        if ($this->pager->start && $this->pager->limit) $limit_query .= "LIMIT {$this->pager->start}, {$this->pager->limit} ";
-                        elseif ($this->pager->limit) $limit_query .= "LIMIT {$this->pager->limit} ";
-
-                        $st = $db->prepare($limit_query);
-                        $st->execute(array($cat_id));
-                        $fp = $st->fetchAll(PDO::FETCH_ASSOC);
-                        $this->r->fp = $this->blogs($fp);
-
-                        if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
-
-                    }
-                }
-
-                // ---------------------------------------------------------------
-                // Sidelist
-                // ---------------------------------------------------------------
-
-                if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
-
-                    $select_query = "
-                    SELECT messages.id, messages.thread_id, messages.title FROM messages
-                    {$innerjoin}
-                    WHERE messages.thread_pos = 0 AND messages.blog = 1  AND messages.draft = 0 AND bayes_categories.id = ?
-                    {$this->_dateSql()}
-                    ORDER BY messages.published_on DESC
-                    ";
-
-                    $st = $db->prepare($select_query);
-                    $st->execute(array($cat_id));
-                    $sidelist = $st->fetchAll(PDO::FETCH_ASSOC);
-                    $this->r->sidelist = $sidelist;
-                    $this->r->text['sidelist'] = $c['category'];
-
-                }
+        if (!$c) suxFunct::redirect(suxFunct::makeUrl('/blog'));  
+        $this->cat_id = $cat_id; // Needs to be in externally accessible variable for filter()            
+        
+        $count = $this->countCategorizedItems($this->cat_id);    
+        
+        if (list($vec_id, $cat_id2, $threshold, $start) = $this->nb->isValidFilter()) {
+            
+            // ---------------------------------------------------------------
+            // Filtered results
+            // ---------------------------------------------------------------
+            
+            $eval = '$this->getCategorizedItems($this->cat_id, $this->pager->limit, $start)';                              
+            $this->r->fp  = $this->blogs($this->filter($count, $vec_id, $cat_id2, $threshold, &$start, $eval)); // Important: start must be reference
+            
+            if ($start < $count) {
+                if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id2);
+                else $params = array('filter' => $cat_id2);
+                $url = suxFunct::makeUrl('/blog/category/'. $this->cat_id, $params);
+                $this->r->text['pager'] = $this->pager->continueLink($start, $url);
+            }
+            
+            $this->tpl->assign('filter', $cat_id2);
+            if ($threshold !== false) $this->tpl->assign('threshold', $threshold);
+            
+        }
+        else {
+            
+            // ---------------------------------------------------------------
+            // Paged results, cached
+            // ---------------------------------------------------------------
+                        
+            // Get nickname
+            if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
+            else $nn = 'nobody';
+            
+            // "Cache Groups" using a vertical bar |
+            $cache_id = $nn . '|category|' . $this->cat_id . '|' . $this->pager->start;
+            $this->tpl->caching = 1;
+            
+            $this->pager->setStart(); // Start pager            
+            
+            if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
+                
+                $this->pager->setPages($count);
+                $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/category/' . $this->cat_id));
+                $this->r->fp = $this->blogs($this->getCategorizedItems($this->cat_id, $this->pager->limit, $this->pager->start));
+                
+                if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+                
             }
         }
-
+        
+        // ---------------------------------------------------------------
+        // Sidelist
+        // ---------------------------------------------------------------
+        
+        if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
+            
+            $this->r->sidelist = $this->getCategorizedSidelist($this->cat_id);
+            $this->r->text['sidelist'] = $c['category'];
+            
+        }
+        
+        
         if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
         else $this->tpl->display('scroll.tpl');
-
+        
     }
 
 
@@ -425,7 +360,6 @@ class blog extends bayesShared {
 
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog/month/' . $date); // Form Url
         $this->tpl->assign_by_ref('r', $this->r);
-
         $cache_id = false;
 
         if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
@@ -455,9 +389,6 @@ class blog extends bayesShared {
             // Paged results, cached
             // ---------------------------------------------------------------
 
-            // Start pager
-            $this->pager->setStart();
-
             // Get nickname
             if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
             else $nn = 'nobody';
@@ -465,6 +396,8 @@ class blog extends bayesShared {
             // "Cache Groups" using a vertical bar |
             $cache_id = $nn . '|month|' . date('Y-m', strtotime($date)) . '|' . $this->pager->start;
             $this->tpl->caching = 1;
+            
+            $this->pager->setStart(); // Start pager            
 
             if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
 
@@ -533,9 +466,6 @@ class blog extends bayesShared {
             // Paged results, cached
             // ---------------------------------------------------------------
 
-            // Start pager
-            $this->pager->setStart();
-
             // Get nickname
             if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
             else $nn = 'nobody';
@@ -543,6 +473,8 @@ class blog extends bayesShared {
             // "Cache Groups" using a vertical bar |
             $cache_id = $nn . '|listing|' . $this->pager->start;
             $this->tpl->caching = 1;
+            
+            $this->pager->setStart(); // Start pager            
 
             if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
 
@@ -570,9 +502,6 @@ class blog extends bayesShared {
 
         $this->tpl->assign_by_ref('r', $this->r);
 
-        $this->pager->limit = 100;
-        $this->pager->setStart();
-
         // Get nickname
         if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
         else $nn = 'nobody';
@@ -580,6 +509,10 @@ class blog extends bayesShared {
         // "Cache Groups" using a vertical bar |
         $cache_id = $nn . "|{$thread_id}|" . $this->pager->start;
         $this->tpl->caching = 1;
+        
+        // Start pager
+        $this->pager->limit = 100;
+        $this->pager->setStart();        
 
         if (!$this->tpl->is_cached('view.tpl', $cache_id)) {
 
@@ -644,27 +577,12 @@ class blog extends bayesShared {
 
     }
 
-
-    
-    /**
-    * Workaround function for $this->category()
-    */
-    protected function _category($q, $cat_id, $start) {
-
-        $q .= "LIMIT {$start}, {$this->pager->limit} ";
-        $db = suxDB::get();
-        $st = $db->prepare($q);
-        $st->execute(array($cat_id));
-        return $st->fetchAll(PDO::FETCH_ASSOC);
-        
-    }
-        
     
     // -----------------------------------------------------------------------
-    // Private functions for tag()
+    // Protected functions for $this->tag()
     // -----------------------------------------------------------------------
     
-    protected function countTaggedItems($tag_id) {
+    protected function countTaggedItems($id) {
         
         $db = suxDB::get();
         
@@ -676,13 +594,13 @@ class blog extends bayesShared {
         {$this->_dateSql()}
         ";
         $st = $db->prepare($count_query);
-        $st->execute(array($tag_id));                
+        $st->execute(array($id));                
         return $st->fetchColumn();
         
     }   
     
     
-    protected function getTaggedItems($tag_id, $limit, $start) {
+    protected function getTaggedItems($id, $limit, $start) {
         
         $db = suxDB::get();
         
@@ -697,13 +615,13 @@ class blog extends bayesShared {
         ";
         
         $st = $db->prepare($query);
-        $st->execute(array($tag_id));
+        $st->execute(array($id));
         return $st->fetchAll(PDO::FETCH_ASSOC);
         
     }   
     
     
-    protected function getTaggedSidelist($tag_id) {
+    protected function getTaggedSidelist($id) {
         
         $db = suxDB::get();
         
@@ -717,7 +635,77 @@ class blog extends bayesShared {
         ";
         
         $st = $db->prepare($query);
-        $st->execute(array($tag_id));
+        $st->execute(array($id));
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+        
+    }   
+    
+
+    // -----------------------------------------------------------------------
+    // Protected functions for $this->category()
+    // -----------------------------------------------------------------------    
+    
+    
+    protected function countCategorizedItems($id) {
+        
+        $db = suxDB::get();
+        
+        // Count
+        $count_query = "
+        SELECT COUNT(*) FROM messages
+        INNER JOIN link_bayes_messages ON link_bayes_messages.messages_id = messages.id
+        INNER JOIN bayes_documents ON link_bayes_messages.bayes_documents_id = bayes_documents.id
+        INNER JOIN bayes_categories ON bayes_documents.bayes_categories_id = bayes_categories.id
+        WHERE messages.thread_pos = 0 AND messages.blog = 1  AND messages.draft = 0 AND bayes_categories.id = ?
+        {$this->_dateSql()}
+        ";
+        $st = $db->prepare($count_query);
+        $st->execute(array($id));                
+        return $st->fetchColumn();
+        
+    }   
+    
+    
+    protected function getCategorizedItems($id, $limit, $start) {
+        
+        $db = suxDB::get();
+        
+        // Get Items
+        $query = "
+        SELECT messages.*, LENGTH(messages.body_plaintext) AS body_length FROM messages
+        INNER JOIN link_bayes_messages ON link_bayes_messages.messages_id = messages.id
+        INNER JOIN bayes_documents ON link_bayes_messages.bayes_documents_id = bayes_documents.id
+        INNER JOIN bayes_categories ON bayes_documents.bayes_categories_id = bayes_categories.id
+        WHERE messages.thread_pos = 0 AND messages.blog = 1  AND messages.draft = 0 AND bayes_categories.id = ?
+        {$this->_dateSql()}
+        ORDER BY messages.published_on DESC
+        LIMIT {$start}, {$limit}         
+        ";
+        
+        $st = $db->prepare($query);
+        $st->execute(array($id));
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+        
+    }   
+    
+    
+    protected function getCategorizedSidelist($id) {
+        
+        $db = suxDB::get();
+        
+        // Get Items
+        $query = "
+        SELECT messages.id, messages.thread_id, messages.title FROM messages
+        INNER JOIN link_bayes_messages ON link_bayes_messages.messages_id = messages.id
+        INNER JOIN bayes_documents ON link_bayes_messages.bayes_documents_id = bayes_documents.id
+        INNER JOIN bayes_categories ON bayes_documents.bayes_categories_id = bayes_categories.id
+        WHERE messages.thread_pos = 0 AND messages.blog = 1  AND messages.draft = 0 AND bayes_categories.id = ?
+        {$this->_dateSql()}
+        ORDER BY messages.published_on DESC   
+        ";
+        
+        $st = $db->prepare($query);
+        $st->execute(array($id));
         return $st->fetchAll(PDO::FETCH_ASSOC);
         
     }     

@@ -166,6 +166,18 @@ CREATE TABLE `link_bayes_bookmarks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `link_bookmarks_users`
+-- 
+
+CREATE TABLE `link_bookmarks_users` (
+  `bookmarks_id` int(11) NOT NULL,
+  `users_id` int(11) NOT NULL,
+  UNIQUE KEY `idx` (`bookmarks_id`,`users_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 -- --------------------------------------------------------
 

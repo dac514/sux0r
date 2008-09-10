@@ -832,11 +832,11 @@ class suxNaiveBayesian {
         elseif ($threshold > 0 && $threshold <= 1) {
             // Threshold
             $score = $this->categorize($text, $vec_id);
-            if ($score[$cat_id]['score'] < $threshold) return false;
+            if (round($score[$cat_id]['score'] * 100, 2) < round($threshold *100, 2)) return false;
         }
-
+        
         return true;
-
+        
     }
 
 
