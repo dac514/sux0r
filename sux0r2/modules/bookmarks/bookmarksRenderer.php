@@ -173,8 +173,64 @@ class bookmarksRenderer extends suxRenderer {
 
     }    
     
+    
+    /**
+    * @return string html
+    */    
+    function isSubscribed($bookmark_id) {
+        
+        if (!$this->isLoggedIn())
+            return  "<img src='{$this->url}/media/{$this->partition}/assets/sticky.gif' border='0' width='12' height='12' />";
+              
+        // Get config variables for template
+        $tpl = new suxTemplate($this->module);
+        $tpl->config_load('my.conf', $this->module);
+        $image = $tpl->get_config_vars('imgUnsubscribed');
+        
+        // Don't query the database unnecessarily.
+        static $img_cache = array();
+        if (isset($img_cache[$bookmark_id])) {
+            $image = $img_cache[$bookmark_id];
+        }
+        else {   
+            // If subscribed, change image
+            $query = 'SELECT COUNT(*) FROM link_bookmarks_users WHERE bookmarks_id = ? AND users_id = ? ';
+            $db = suxDB::get();
+            $st = $db->prepare($query);
+            $st->execute(array($bookmark_id, $_SESSION['users_id']));
+            if ($st->fetchColumn() > 0) $image = $tpl->get_config_vars('imgSubscribed');
+            $img_cache[$bookmark_id] = $image;
+        }
+              
+        $html = "<img src='{$this->url}/media/{$this->partition}/assets/{$image}' border='0' width='12' height='12'
+        onclick=\"toggleSubscription('{$bookmark_id}');\" 
+        style='cursor: pointer;'
+        class='subscription{$bookmark_id}'
+        />";
+        
+        return $html;
+        
+    }    
 
 
+}
+
+// -------------------------------------------------------------------------
+// Smarty {insert} functions
+// -------------------------------------------------------------------------
+
+/**
+* Render userInfo
+*
+* @global string $CONFIG['URL']
+* @global string $CONFIG['PARTITION']
+* @param array $params smarty {insert} parameters
+* @return string html
+*/
+function insert_myBookmarksLink($params) {
+    
+    return suxFunct::makeUrl('/bookmarks/user/' . @$_SESSION['nickname']);    
+    
 }
 
 

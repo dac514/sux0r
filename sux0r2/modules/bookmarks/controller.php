@@ -22,7 +22,11 @@
 *
 */
 
-function sux($action, $params = null) {
+function sux($action, $params = null) {    
+    
+    // Alphasort
+    $alphasort = false;
+    if (isset($_REQUEST['sort']) && $_REQUEST['sort'] == 'alpha') $alphasort = true;                 
 
     switch($action)
     {
@@ -83,8 +87,16 @@ function sux($action, $params = null) {
         // --------------------------------------------------------------------
         // User
         // --------------------------------------------------------------------
+        
+        if (empty($params[0])) {
+            suxFunct::redirect(suxFunct::makeUrl('/bookmarks'));
+        }        
+                
+        include_once('bookmarks.php');
+        $bm = new bookmarks();                      
+        $bm->user($params[0], $alphasort);
 
-        break; // TODO
+        break; 
 
 
     case 'tag' :
@@ -101,11 +113,7 @@ function sux($action, $params = null) {
         $bm = new bookmarks();
 
         if ($params[0] == 'cloud') $bm->tagcloud();
-        else {
-            $alphasort = false;
-            if (isset($_GET['sort']) && $_GET['sort'] == 'alpha') $alphasort = true;
-            $bm->tag($params[0], $alphasort);
-        }
+        else $bm->tag($params[0], $alphasort);        
 
         break;
 
@@ -118,9 +126,6 @@ function sux($action, $params = null) {
 
         include_once('bookmarks.php');
         $bm = new bookmarks();
-
-        $alphasort = false;
-        if (isset($_GET['sort']) && $_GET['sort'] == 'alpha') $alphasort = true;
 
         $bm->listing($alphasort);
 
