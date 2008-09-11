@@ -80,13 +80,15 @@ $CONFIG['CACHE_LIFETIME'] = 900;
 $CONFIG['TIMEZONE'] = 'America/Montreal';
 
 // A list of webpages to to skip when a user presses a "cancel" button
-// created in tanndem with the suxFunct::getPreviousURL() function
+// used in tandem with the suxFunct::getPreviousURL() function
 
 $CONFIG['PREV_SKIP'] = array(
     'blog/bookmarks',   
     'blog/edit',
     'blog/reply',
-    'bookmarks/suggest',
+    'bookmarks/approve',    
+    'bookmarks/edit',    
+    'bookmarks/suggest',        
     'cropper',           
     'feeds/approve',
     'feeds/edit',

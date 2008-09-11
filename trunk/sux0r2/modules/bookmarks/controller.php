@@ -37,7 +37,18 @@ function sux($action, $params = null) {
         // Approve
         // --------------------------------------------------------------------
 
-        break; // TODO
+        include_once('bookmarksApprove.php');
+        $bm = new bookmarks();
+
+        if ($bm->formValidate($_POST)) {
+            $bm->formProcess($_POST);
+            $bm->formSuccess();
+        }
+        else {
+            $bm->formBuild($_POST);
+        }
+        
+        break;
 
 
     case 'suggest' :
