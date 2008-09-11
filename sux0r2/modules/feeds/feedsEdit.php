@@ -34,6 +34,7 @@ class feedsEdit {
     public $gtext = array();
     private $module = 'feeds';    
     private $id;
+    private $prev_skip;
 
     // Objects
     public $tpl;
@@ -67,7 +68,12 @@ class feedsEdit {
             // Verfiy that we are allowed to edit this
             $this->id = $id;
         }
-
+        
+        // This module can fallback on approve module        
+        foreach ($GLOBALS['CONFIG']['PREV_SKIP'] as $val) {            
+            if (mb_strpos($val, 'feeds/approve') === false) 
+                $this->prev_skip[] = $val;            
+        }                
 
     }
 
@@ -142,7 +148,7 @@ class feedsEdit {
 
         // Additional variables
         $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/edit/' . $this->id);
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_skip);
 
         // Template
         $this->tpl->assign_by_ref('r', $this->r);
@@ -197,7 +203,7 @@ class feedsEdit {
         // TODO: Clear caches
 
         // Redirect
-        suxFunct::redirect(suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']));                
+        suxFunct::redirect(suxFunct::getPreviousURL($this->prev_skip));                
 
     }
     

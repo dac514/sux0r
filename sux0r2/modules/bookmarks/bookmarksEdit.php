@@ -274,8 +274,8 @@ class bookmarksEdit {
     function formSuccess() {
 
         // TODO: Clear caches
-        echo 'TODO';
 
+        suxFunct::redirect(suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']));          
 
     }
     
