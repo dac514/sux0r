@@ -34,6 +34,7 @@ class bookmarksEdit {
     // Variables
     public $gtext = array();        
     private $id;
+    private $prev_skip;    
     private $module = 'bookmarks';    
 
     // Objects
@@ -75,6 +76,13 @@ class bookmarksEdit {
             // Verfiy that we are allowed to edit this
             $this->id = $id;
         }
+        
+        
+        // This module can fallback on approve module        
+        foreach ($GLOBALS['CONFIG']['PREV_SKIP'] as $val) {            
+            if (mb_strpos($val, 'bookmarks/approve') === false) 
+                $this->prev_skip[] = $val;            
+        }              
 
 
     }
@@ -177,7 +185,7 @@ class bookmarksEdit {
 
         // Additional variables
         $this->r->text['form_url'] = suxFunct::makeUrl('/bookmarks/edit/' . $this->id);
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_skip);
 
         if (!$this->tpl->get_template_vars('Date_Year')) {
             // Today's Date
@@ -275,7 +283,7 @@ class bookmarksEdit {
 
         // TODO: Clear caches
 
-        suxFunct::redirect(suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']));          
+        suxFunct::redirect(suxFunct::getPreviousURL($this->prev_skip));          
 
     }
     

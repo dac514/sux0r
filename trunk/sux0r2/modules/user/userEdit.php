@@ -143,7 +143,7 @@ class userEdit {
 
             // Unset
             unset($u['password']);
-            unset($u['accesslevel']);
+            unset($u['root']);
 
             // Dob
             if (!empty($u['dob'])) {

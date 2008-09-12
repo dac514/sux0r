@@ -31,10 +31,10 @@ require_once('feedsRenderer.php');
 class feedsEdit {
 
     // Variables
-    public $gtext = array();
-    private $module = 'feeds';    
+    public $gtext = array();      
     private $id;
     private $prev_skip;
+    private $module = 'feeds';      
 
     // Objects
     public $tpl;

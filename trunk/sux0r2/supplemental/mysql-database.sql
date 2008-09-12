@@ -505,7 +505,7 @@ CREATE TABLE `users` (
   `nickname` varchar(64) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `accesslevel` int(11) NOT NULL,
+  `root` tinytext NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `nickname` (`nickname`),
   UNIQUE KEY `email` (`email`)
@@ -515,7 +515,23 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` VALUES (1, 'test', 'test@test.com', '24d7d9859810e5834bbfdcc9dd931fca', 0);
+INSERT INTO `users` VALUES (1, 'test', 'test@test.com', '24d7d9859810e5834bbfdcc9dd931fca', 1);
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `users_access`
+-- 
+
+CREATE TABLE `users_access` (
+  `id` int(11) NOT NULL auto_increment,
+  `users_id` int(11) NOT NULL,
+  `module` varchar(32) NOT NULL,
+  `accesslevel` int(11) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `users_id` (`users_id`,`module`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
 
 -- --------------------------------------------------------
 
