@@ -38,7 +38,7 @@ function sux($action, $params = null) {
         // --------------------------------------------------------------------
 
         include_once('bookmarksApprove.php');
-        $bm = new bookmarks();
+        $bm = new bookmarksApprove();
 
         if ($bm->formValidate($_POST)) {
             $bm->formProcess($_POST);

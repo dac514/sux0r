@@ -117,6 +117,20 @@ class suxBookmarks {
         return $st->fetchAll(PDO::FETCH_ASSOC);
 
     }
+    
+    
+    /**
+    * Get all published feeds
+    *
+    * @return array|false
+    */
+    function getUnpublishedBookmarks() {
+
+        $q = "SELECT * FROM {$this->db_table} WHERE draft = 1 ORDER BY title ASC ";
+        $st = $this->db->query($q);
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }    
 
 
     /**

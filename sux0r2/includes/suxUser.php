@@ -199,7 +199,7 @@ class suxUser {
             throw new Exception('Duplicate email');            
 
         unset($info['id'], $info['users_id']); // Don't allow spoofing of the id in the array
-        unset($info['accesslevel']); // Don't allow accesslevel changes with this function
+        unset($info['root']); // Don't allow root changes with this function
 
         // Encrypt the password
         if (!empty($info['password'])) {
