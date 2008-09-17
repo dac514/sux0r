@@ -159,21 +159,18 @@ input, select {
     margin-top: 5px;
 }
 
-#nbfCategories {
+#nbfCategoriesForm, #nbfSliderForm {
     float: left;
-}
-
-#nbfSlider {
-    float:left;
-    margin-left: 1em;
-    padding-top: 0.5em;
 }
 
 #nbfTrack {
+    float: left;
+    margin-left: 1em;
+    margin-top: 0.4em;
     width: 100px;
     background-color: #ccc;
     height: 10px;
-    float: left;
+
 }
 
 #nbfHandle {
@@ -186,10 +183,15 @@ input, select {
 #nbfPercentage {
     float: left;
     margin-left: 0.5em;
+    margin-top: 0.4em;
 }
 
-#nbfTopButton, #nbfThresholdButton {
-    float:left;
+#nbfTopButton {
+    margin-left: 0.5em;
+}
+
+#nbfThresholdButton {
+    float: left;
     margin-left: 0.5em;
 }
 
@@ -267,6 +269,10 @@ input, select {
     padding: 3px;
     background-color: #ff0000;
     border-bottom: 1px solid #eee;
+}
+
+.menulist li {
+    display: inline;
 }
 
 .menucontainer a:link, .menulist a:visited {

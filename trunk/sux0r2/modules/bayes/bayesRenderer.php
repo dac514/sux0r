@@ -85,7 +85,7 @@ class bayesRenderer extends suxRenderer {
                     Effect.Pulsate($(placeholder));
                 },
                 onFailure: function(transport){
-                    if (transport.responseText.strip()) 
+                    if (transport.responseText.strip())
                         alert(transport.responseText);
                 }
             });
@@ -612,11 +612,49 @@ function insert_bayesFilters($params) {
 
     if (isset($_GET['filter'])) $tpl->assign('filter', $_GET['filter']);
     if (isset($_GET['threshold']) && $_GET['threshold'] !== false) $tpl->assign('threshold', $_GET['threshold']);
-    if (isset($params['form_url'])) $r->text['form_url'] = $params['form_url'];    
-    if (isset($params['hidden']) && is_array($params['hidden'])) $r->text['hidden'] = $params['hidden'];    
+    if (isset($params['form_url'])) $r->text['form_url'] = $params['form_url'];
+    if (isset($params['hidden']) && is_array($params['hidden'])) $r->text['hidden'] = $params['hidden'];
 
     $tpl->assign_by_ref('r', $r);
     return $tpl->fetch('filters.tpl');
+
+}
+
+
+/**
+* Render bayesFilterScript
+*
+* @return string javascript
+*/
+function insert_bayesFilterScript() {
+
+    $threshold = 0;
+    if (isset($_GET['threshold']) && $_GET['threshold'] !== false) $threshold = $_GET['threshold'];
+
+    $script = "
+    <script type='text/javascript' language='javascript'>
+    // <![CDATA[
+    // Script has to come after slider otherwise it doesn't work
+    // It also has to be placed outside of a table or it doesn't work on IE6
+
+    // initial slider value
+    $('nbfThreshold').value = {$threshold};
+    $('nbfPercentage').innerHTML = ({$threshold} * 100).toFixed(2) + '%';
+
+    // horizontal slider control
+    new Control.Slider('nbfHandle', 'nbfTrack', {
+            sliderValue: {$threshold},
+            onSlide: function(v) {
+                $('nbfPercentage').innerHTML = (v * 100).toFixed(2) + '%';
+                $('nbfThreshold').value = v;
+            }
+    });
+
+    // ]]>
+    </script>
+    ";
+
+    return $script;
 
 }
 

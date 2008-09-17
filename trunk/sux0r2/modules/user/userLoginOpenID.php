@@ -52,7 +52,6 @@ class userLoginOpenID extends userRegisterOpenID {
         elseif ($this->user->maxPasswordFailures()) {
 
             // Too many password failures?
-            $this->tpl->assign_by_ref('r', $this->r);
             $this->tpl->display('pw_failure.tpl');
             die();
 
@@ -89,7 +88,6 @@ class userLoginOpenID extends userRegisterOpenID {
         $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
 
         // Template
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('login_openid.tpl');
 
     }

@@ -30,14 +30,14 @@ require_once('bookmarksRenderer.php');
 class bookmarksApprove  {
 
     // Variables
-    public $gtext = array();    
+    public $gtext = array();
     private $module = 'bookmarks';
 
     // Objects
     public $tpl;
     public $r;
     protected $user;
-    protected $bm;    
+    protected $bm;
 
     /**
     * Constructor
@@ -46,9 +46,10 @@ class bookmarksApprove  {
     function __construct() {
 
         $this->bm = new suxBookmarks();
-        $this->user = new suxUser(); // User        
+        $this->user = new suxUser(); // User
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new bookmarksRenderer($this->module); // Renderer
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
@@ -65,7 +66,7 @@ class bookmarksApprove  {
     * @param array $dirty reference to unverified $_POST
     * @return bool
     */
-    function formValidate(&$dirty) {        
+    function formValidate(&$dirty) {
         return suxValidate::formValidate($dirty, $this->tpl);
     }
 
@@ -86,9 +87,9 @@ class bookmarksApprove  {
             suxValidate::connect($this->tpl, true); // Reset connection
 
             // Register our validators
-            // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')    
-            
-            suxValidate::register_validator('bookmarks', 'bookmarks', 'isInt', true);            
+            // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
+
+            suxValidate::register_validator('bookmarks', 'bookmarks', 'isInt', true);
 
         }
 
@@ -97,9 +98,8 @@ class bookmarksApprove  {
         $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
 
         // bookmarks
-        $this->r->fp = $this->bm->getUnpublishedBookmarks();        
-        
-        $this->tpl->assign_by_ref('r', $this->r);
+        $this->r->fp = $this->bm->getUnpublishedBookmarks();
+
         $this->tpl->display('approve.tpl');
 
     }
@@ -111,14 +111,14 @@ class bookmarksApprove  {
     * @param array $clean reference to validated $_POST
     */
     function formProcess(&$clean) {
-        
+
         if (isset($clean['bookmarks'])) foreach ($clean['bookmarks'] as $key => $val) {
-            
+
             if ($val == 1) $this->bm->approveBookmark($key);
             else $this->bm->deleteBookmark($key);
-            
+
         }
-        
+
     }
 
 

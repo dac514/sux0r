@@ -30,9 +30,9 @@ require_once('photosRenderer.php');
 class photoUpload  {
 
     // Variables
-    public $gtext = array();        
+    public $gtext = array();
     private $extensions = 'jpg,jpeg,gif,png,zip'; // Supported extensions
-    private $module = 'photos';    
+    private $module = 'photos';
 
 
     // Objects
@@ -51,6 +51,7 @@ class photoUpload  {
         $this->photo = new suxPhoto($this->module); // Photos
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new photosRenderer($this->module); // Renderer
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
@@ -111,7 +112,6 @@ class photoUpload  {
         $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
 
         // Template
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('upload.tpl');
 
     }
@@ -222,7 +222,7 @@ class photoUpload  {
 
         // Template
         $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
-        $this->tpl->assign_by_ref('r', $this->r);
+
         $this->tpl->display('success.tpl');
 
     }

@@ -61,37 +61,37 @@ function toggleSubscription(bookmark_id) {
 	<tr>
         <td style="vertical-align:top;">
 			<div id="leftside">
-            
+
             <!-- Category filters -->
-            {insert name="bayesFilters" form_url=$r->text.form_url hidden=$sort}            
+            {insert name="bayesFilters" form_url=$r->text.form_url hidden=$sort}
 
             {* Bookmarks *}
             {if $r->fp}
             {foreach from=$r->fp item=foo}
 
                 <div style="border: 1px dashed #ccc; padding: 10px; margin: 10px;">
-                
+
                     <div style="float:left;margin-right:5px;">
                     {$r->isSubscribed($foo.id)}
-                    </div>                
-                
+                    </div>
+
                     <div style="float:left;">
                         <a href="{$foo.url}">{$foo.title}</a><br />
-                        <em>Published on: {$foo.published_on}</em><br />                                                                                                                                              
+                        <em>Published on: {$foo.published_on}</em><br />
                     </div>
-                    <div class="clearboth"></div>                    
-                    
+                    <div class="clearboth"></div>
+
                     <div>{$foo.body_html}</div>
-                    {$r->tags($foo.id)}                    
-                                        
+                    {$r->tags($foo.id)}
+
                     <!-- Naive Baysian Classification -->
                     <div class="categoryContainer">
-                                            
+
                         {capture name=document}{$foo.title} {$foo.body_plaintext}{/capture}
                         {$r->genericBayesInterface($foo.id, 'bookmarks', 'bookmarks', $smarty.capture.document)}
-                    </div>                       
-                                        
-                    
+                    </div>
+
+
                 </div>
 
 
@@ -109,21 +109,21 @@ function toggleSubscription(bookmark_id) {
 		</td>
 		<td style="vertical-align:top;">
 			<div id="rightside">
-            
-            {if $r->fp}             
+
+            {if $r->fp}
             <ul>
                 <li><a href="{$datesort_url}">Sort by date</a></li>
                 <li><a href="{$alphasort_url}">Sort alphabetically</a></li>
             </ul>
-            {/if}             
+            {/if}
 
-            
+
             <ul>
-                {if $r->isLoggedIn()}            
+                {if $r->isLoggedIn()}
                 <li><a href="{insert name="myBookmarksLink"}">My bookmarks</a></li>
                 {/if}
                 <li><a href="{$r->makeUrl('/bookmarks/tag/cloud')}">Tag cloud</a></li>
-                <li><em><a href="{$r->makeUrl('/bookmarks/suggest')}">Suggest a bookmark &raquo;</a></em></li>                               
+                <li><em><a href="{$r->makeUrl('/bookmarks/suggest')}">Suggest a bookmark &raquo;</a></em></li>
             </ul>
 
 			</div>
@@ -137,5 +137,7 @@ function toggleSubscription(bookmark_id) {
 		</td>
 	</tr>
 </table>
+
+{insert name="bayesFilterScript"}
 
 {include file=$r->xhtml_footer}

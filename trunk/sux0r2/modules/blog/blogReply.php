@@ -34,8 +34,8 @@ class blogReply {
     // Variables
     public $gtext = array();
     private $parent;
-    private $module = 'blog';    
-    
+    private $module = 'blog';
+
     // Objects
     public $tpl;
     public $r;
@@ -54,6 +54,7 @@ class blogReply {
 
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new blogRenderer($this->module); // Renderer
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
@@ -124,7 +125,6 @@ class blogReply {
         $this->tpl->assign('parent', "{$this->parent['title']} \n\n {$this->parent['body_plaintext']}");
 
         // Template
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('reply.tpl');
 
     }

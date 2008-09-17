@@ -39,12 +39,12 @@ class feeds extends bayesShared {
 
     // Objects
     public $r;
-    public $tpl;    
+    public $tpl;
 
     protected $rss;
     protected $nb;
     protected $pager;
-    
+
     private $liuk;
     private $user;
 
@@ -58,6 +58,7 @@ class feeds extends bayesShared {
 
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new feedsRenderer($this->module); // Renderer
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         $this->user = new suxUser();
@@ -74,15 +75,14 @@ class feeds extends bayesShared {
 
     function user($nickname) {
 
-        // Get users_id based on nickname        
-        $user = $this->user->getUserByNickname($nickname);            
-        if (!$user) suxFunct::redirect(suxFunct::makeUrl('/feeds'));        
+        // Get users_id based on nickname
+        $user = $this->user->getUserByNickname($nickname);
+        if (!$user) suxFunct::redirect(suxFunct::makeUrl('/feeds'));
         $this->users_id = $user['users_id']; // Needs to be in externally accessible variable for filter()
         unset($user);
-        
+
         // Assign stuff
         $this->r->text['form_url'] = suxFunct::makeUrl("/feeds/user/$nickname"); // Forum Url
-        $this->tpl->assign_by_ref('r', $this->r);
         $cache_id = false;
 
         if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
@@ -111,7 +111,7 @@ class feeds extends bayesShared {
 
             // ---------------------------------------------------------------
             // Paged results, cached
-            // ---------------------------------------------------------------                        
+            // ---------------------------------------------------------------
 
             // Get nickname
             if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
@@ -120,22 +120,22 @@ class feeds extends bayesShared {
             // "Cache Groups" using a vertical bar |
             $cache_id = "$nn|user|$nickname|{$this->pager->start}";
             $this->tpl->caching = 1;
-            
-            $this->pager->setStart(); // Start pager            
+
+            $this->pager->setStart(); // Start pager
 
             if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
-                                
+
                 // User has subscriptions, we need special JOIN queries
                 $this->pager->setPages($this->countUserItems($this->users_id));
-                $this->r->fp = $this->getUserItems($this->users_id, $this->pager->limit, $this->pager->start);                
-                
+                $this->r->fp = $this->getUserItems($this->users_id, $this->pager->limit, $this->pager->start);
+
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/feeds/user/$nickname"));
                 if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
-                
+
             }
 
         }
-        
+
         $this->tpl->assign('users_id', $this->users_id);
         if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
         else $this->tpl->display('scroll.tpl');
@@ -161,7 +161,6 @@ class feeds extends bayesShared {
 
         // Assign stuff
         $this->r->text['form_url'] = suxFunct::makeUrl("/feeds/$feeds_id"); // Forum Url
-        $this->tpl->assign_by_ref('r', $this->r);
         $cache_id = false;
 
         if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
@@ -207,8 +206,8 @@ class feeds extends bayesShared {
             // "Cache Groups" using a vertical bar |
             $cache_id = "$nn|listing|$feeds_id|{$this->pager->start}";
             $this->tpl->caching = 1;
-                        
-            $this->pager->setStart(); // Start pager            
+
+            $this->pager->setStart(); // Start pager
 
             if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
 
@@ -234,11 +233,11 @@ class feeds extends bayesShared {
         else $this->tpl->display('scroll.tpl');
 
     }
-    
-    
+
+
     // -----------------------------------------------------------------------
     // Protected functions for $this->user() & this->listing()
-    // -----------------------------------------------------------------------     
+    // -----------------------------------------------------------------------
 
     protected function countUserItems($users_id) {
 
@@ -269,7 +268,7 @@ class feeds extends bayesShared {
         INNER JOIN link_rss_users ON link_rss_users.rss_feeds_id = rss_feeds.id
         WHERE link_rss_users.users_id = ?
         ORDER BY rss_items.published_on DESC, rss_items.id DESC
-        LIMIT {$start}, {$limit}         
+        LIMIT {$start}, {$limit}
         ";
 
         $st = $db->prepare($query);

@@ -32,8 +32,8 @@ class userEdit {
     public $gtext = array(); // Language
     private $mode = 'register';
     private $users_id = null;
-    private $module = 'user';        
-    
+    private $module = 'user';
+
     // Objects
     public $tpl;
     public $r;
@@ -49,6 +49,7 @@ class userEdit {
         $this->user = new suxUser(); // User
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new userRenderer($this->module); // Renderer
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
@@ -248,7 +249,6 @@ class userEdit {
         $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
 
         // Template
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('edit.tpl');
 
     }
@@ -351,7 +351,6 @@ class userEdit {
         }
 
         // Template
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('success.tpl');
 
     }

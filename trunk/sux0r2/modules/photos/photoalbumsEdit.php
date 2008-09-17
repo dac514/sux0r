@@ -30,9 +30,9 @@ require_once('photosRenderer.php');
 class photoalbumsEdit {
 
     // Variables
-    public $gtext = array();        
+    public $gtext = array();
     private $id;
-    private $module = 'photos';    
+    private $module = 'photos';
 
     // Objects
     public $tpl;
@@ -51,6 +51,7 @@ class photoalbumsEdit {
         $this->user = new suxUser(); // User
         $this->photo = new suxPhoto($this->module); // Photos
         $this->tpl = new suxTemplate($this->module); // Template
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->r = new photosRenderer($this->module); // Renderer
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
@@ -163,7 +164,6 @@ class photoalbumsEdit {
         }
 
         // Template
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('edit.tpl');
 
     }
@@ -223,7 +223,7 @@ class photoalbumsEdit {
 
         // Template
         $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
-        $this->tpl->assign_by_ref('r', $this->r);
+
         $this->tpl->display('success.tpl');
 
     }

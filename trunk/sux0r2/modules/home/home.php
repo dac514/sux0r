@@ -45,6 +45,7 @@ class home {
 
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new homeRenderer($this->module); // Renderer
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->user = new suxUser();
         $this->r->text =& $this->gtext;
@@ -57,7 +58,6 @@ class home {
     */
     function display() {
 
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('home.tpl');
 
     }

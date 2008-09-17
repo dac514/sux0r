@@ -69,6 +69,7 @@ class openid {
         $this->user = new suxUser(); // User
         $this->r = new suxRenderer($this->module); // Renderer
         $this->tpl = new suxTemplate($this->module); // Template
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
 
 
@@ -627,7 +628,6 @@ class openid {
 
         $this->r->bool['analytics'] = false;
 
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('accept.tpl');
 
     }
@@ -713,7 +713,6 @@ class openid {
         $this->r->text['test_url'] = $this->profile['my_url'] . $q . 'openid.mode=test';
         $this->r->bool['debug'] = $this->profile['debug'];
 
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('no_mode.tpl');
 
     }
@@ -1397,7 +1396,6 @@ class openid {
         $this->r->text['message'] = $message;
         $this->r->bool['analytics'] = false;
 
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('wrap_html.tpl');
         exit;
 
@@ -1415,7 +1413,6 @@ class openid {
         $this->r->text =& $this->gtext;
         $this->r->text['url'] = $url;
 
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('refresh.tpl');
 
         $this->debug('Refresh: ' . $url);

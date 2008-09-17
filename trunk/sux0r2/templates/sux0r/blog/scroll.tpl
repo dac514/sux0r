@@ -186,4 +186,6 @@ Event.observe(window, 'load', function() {
 	</tr>
 </table>
 
+{insert name="bayesFilterScript"}
+
 {include file=$r->xhtml_footer}

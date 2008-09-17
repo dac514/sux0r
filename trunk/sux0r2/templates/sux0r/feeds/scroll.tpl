@@ -78,8 +78,8 @@ Event.observe(window, 'load', function() {
         <td style="vertical-align:top;">
 			<div id="leftside">
 
-                <p>{$r->text.feeds}</p>            
-            
+                <p>{$r->text.feeds}</p>
+
                 {if $r->feeds(true, $users_id)}
                 <ul>
                     {foreach from=$r->feeds(true, $users_id) item=foo}
@@ -88,7 +88,7 @@ Event.observe(window, 'load', function() {
                 </ul>
 
                 {else}
-                                
+
                 <ul>
                     {foreach from=$r->feeds(false, $users_id) item=foo}
                     <li><a href="{$r->makeUrl('/feeds')}/{$foo.id}">{$foo.title}</a></li>
@@ -124,7 +124,7 @@ Event.observe(window, 'load', function() {
                     </div>
                     <div style="float:left;margin-bottom: 1em;">
                     Feed: {$r->feedLink($foo.rss_feeds_id)}<br />
-                    <em>Published on: {$foo.published_on}</em
+                    <em>Published on: {$foo.published_on}</em>
                     </div>
                     <div class="clearboth"></div>
 
@@ -163,5 +163,7 @@ Event.observe(window, 'load', function() {
 		</td>
 	</tr>
 </table>
+
+{insert name="bayesFilterScript"}
 
 {include file=$r->xhtml_footer}

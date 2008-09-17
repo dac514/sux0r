@@ -51,6 +51,7 @@ class bayesEdit {
 
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new bayesRenderer($this->module); // Renderer
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
@@ -158,7 +159,6 @@ class bayesEdit {
         $this->r->text['form_url'] = suxFunct::makeUrl('/bayes');
 
         // Template
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('edit.tpl');
 
 

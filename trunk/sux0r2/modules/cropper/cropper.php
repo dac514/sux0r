@@ -32,7 +32,7 @@ class cropper {
 
     //Variables
     public $gtext = array();
-    private $module = 'cropper';    
+    private $module = 'cropper';
 
     // Objects
     public $tpl;
@@ -50,6 +50,7 @@ class cropper {
 
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new cropperRenderer($this->module); // Renderer
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
@@ -148,7 +149,6 @@ class cropper {
             $this->tpl->assign('form_url', suxFunct::makeUrl("/cropper/{$module}/{$id}"));
             $this->tpl->assign('prev_url', suxFunct::getPreviousURL('cropper'));
 
-            $this->tpl->assign_by_ref('r', $this->r);
             $this->tpl->display('cropper.tpl');
 
         }
