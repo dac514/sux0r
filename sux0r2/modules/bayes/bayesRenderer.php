@@ -606,8 +606,12 @@ class bayesRenderer extends suxRenderer {
 */
 function insert_bayesFilters($params) {
 
-    $tpl = new suxTemplate('bayes'); // Template
+    if (!isset($_SESSION['users_id'])) return null; // Anonymous user, skip
+
     $r = new bayesRenderer('bayes'); // Renderer
+    if (!$r->getUserCategories()) return null; // No categories, skip
+
+    $tpl = new suxTemplate('bayes'); // Template
     $r->text = suxFunct::gtext('bayes'); // Language
 
     if (isset($_GET['filter'])) $tpl->assign('filter', $_GET['filter']);
@@ -627,6 +631,11 @@ function insert_bayesFilters($params) {
 * @return string javascript
 */
 function insert_bayesFilterScript() {
+
+    if (!isset($_SESSION['users_id'])) return null; // Anonymous user, skip
+
+    $r = new bayesRenderer('bayes'); // Renderer
+    if (!$r->getUserCategories()) return null; // No categories, skip
 
     $threshold = 0;
     if (isset($_GET['threshold']) && $_GET['threshold'] !== false) $threshold = $_GET['threshold'];
