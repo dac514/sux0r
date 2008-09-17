@@ -1,5 +1,3 @@
-{if $r->getUserCategories()}
-
     <div id="nbf">
 
         {* Top *}
@@ -38,5 +36,3 @@
 
     </div>
 
-
-{/if}
