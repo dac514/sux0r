@@ -46,6 +46,7 @@ class userAuthenticate {
         $this->user = new suxUser(); // User
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new suxRenderer($this->module); // Renderer
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
 
@@ -76,7 +77,6 @@ class userAuthenticate {
 
             // Too many password failures?
             if ($this->user->maxPasswordFailures()) {
-                $this->tpl->assign_by_ref('r', $this->r);
                 $this->tpl->display('pw_failure.tpl');
                 die();
             }
@@ -103,7 +103,6 @@ class userAuthenticate {
         if ($this->user->loginCheck()) suxFunct::killSession();
 
         // Template
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('logout.tpl');
 
     }

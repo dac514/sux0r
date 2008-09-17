@@ -34,9 +34,9 @@ require_once('blogRenderer.php');
 class blogEdit {
 
     // Variables
-    public $gtext = array();        
+    public $gtext = array();
     private $id;
-    private $module = 'blog';    
+    private $module = 'blog';
 
     // Objects
     public $tpl;
@@ -57,6 +57,7 @@ class blogEdit {
 
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new blogRenderer($this->module); // Renderer
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
@@ -211,7 +212,6 @@ class blogEdit {
         }
 
         // Template
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('edit.tpl');
 
     }
@@ -384,7 +384,7 @@ class blogEdit {
 
         if (isset($clean['category_id'])) foreach($clean['category_id'] as $val) {
             if (!empty($val) && $this->nb->isCategoryTrainer($val, $_SESSION['users_id'])) {
-                // Use"$title \n\n body" to train documents. If you change this 
+                // Use"$title \n\n body" to train documents. If you change this
                 // convention then you need to adjust bayesShared::filter()
                 $doc_id = $this->nb->trainDocument("{$clean['title']} \n\n {$clean['body']}", $val);
                 $this->link->saveLink('link_bayes_messages', 'bayes_documents', $doc_id, 'messages', $clean['id']);

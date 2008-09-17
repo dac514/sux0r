@@ -32,10 +32,10 @@ require_once('bookmarksRenderer.php');
 class bookmarksEdit {
 
     // Variables
-    public $gtext = array();        
+    public $gtext = array();
     private $id;
-    private $prev_skip;    
-    private $module = 'bookmarks';    
+    private $prev_skip;
+    private $module = 'bookmarks';
 
     // Objects
     public $tpl;
@@ -55,6 +55,7 @@ class bookmarksEdit {
 
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new bookmarksRenderer($this->module); // Renderer
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
@@ -76,13 +77,13 @@ class bookmarksEdit {
             // Verfiy that we are allowed to edit this
             $this->id = $id;
         }
-        
-        
-        // This module can fallback on approve module        
-        foreach ($GLOBALS['CONFIG']['PREV_SKIP'] as $val) {            
-            if (mb_strpos($val, 'bookmarks/approve') === false) 
-                $this->prev_skip[] = $val;            
-        }              
+
+
+        // This module can fallback on approve module
+        foreach ($GLOBALS['CONFIG']['PREV_SKIP'] as $val) {
+            if (mb_strpos($val, 'bookmarks/approve') === false)
+                $this->prev_skip[] = $val;
+        }
 
 
     }
@@ -106,11 +107,11 @@ class bookmarksEdit {
     */
     function formBuild(&$dirty) {
 
-        unset($dirty['id']); // Don't allow spoofing       
+        unset($dirty['id']); // Don't allow spoofing
         $bookmark = array();
 
         if ($this->id) {
-            
+
             // Editing a bookmark post
             $tmp = $this->bm->getBookmark($this->id, true);
 
@@ -142,8 +143,8 @@ class bookmarksEdit {
             }
             $bookmark['tags'] = rtrim($bookmark['tags'], ', ');
 
-            
-            
+
+
 
         }
 
@@ -161,17 +162,17 @@ class bookmarksEdit {
         if (!suxValidate::is_registered_form()) {
 
             suxValidate::connect($this->tpl, true); // Reset connection
-            
+
             // Register our additional criterias
-            suxValidate::register_criteria('isDuplicateBookmark', 'this->isDuplicateBookmark');  
-            suxValidate::register_criteria('isValidBookmark', 'this->isValidBookmark');            
+            suxValidate::register_criteria('isDuplicateBookmark', 'this->isDuplicateBookmark');
+            suxValidate::register_criteria('isValidBookmark', 'this->isValidBookmark');
 
             // Register our validators
             if ($this->id) suxValidate::register_validator('integrity', 'integrity:id', 'hasIntegrity');
 
             suxValidate::register_validator('url', 'url', 'notEmpty', false, false, 'trim');
             suxValidate::register_validator('url2', 'url', 'isURL');
-            suxValidate::register_validator('url3', 'url', 'isDuplicateBookmark');            
+            suxValidate::register_validator('url3', 'url', 'isDuplicateBookmark');
             suxValidate::register_validator('url4', 'url', 'isValidBookmark');
             suxValidate::register_validator('title', 'title', 'notEmpty', false, false, 'trim');
             suxValidate::register_validator('body', 'body', 'notEmpty', false, false, 'trim');
@@ -202,7 +203,6 @@ class bookmarksEdit {
         }
 
         // Template
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('edit.tpl');
 
     }
@@ -235,20 +235,20 @@ class bookmarksEdit {
                 'published_on' => $clean['published_on'],
                 'draft' => @$clean['draft'],
             );
-        
+
         // --------------------------------------------------------------------
         // Id
-        // --------------------------------------------------------------------        
-                        
-        if (isset($clean['id']) && filter_var($clean['id'], FILTER_VALIDATE_INT) && $clean['id'] > 0) {            
-            // TODO: Check to see if this user is allowed to modify this bookmark            
+        // --------------------------------------------------------------------
+
+        if (isset($clean['id']) && filter_var($clean['id'], FILTER_VALIDATE_INT) && $clean['id'] > 0) {
+            // TODO: Check to see if this user is allowed to modify this bookmark
             $bookmark['id'] = $clean['id'];
-        }        
+        }
 
         // --------------------------------------------------------------------
         // Put $bookmark in database
-        // --------------------------------------------------------------------      
-        
+        // --------------------------------------------------------------------
+
         $clean['id'] = $this->bm->saveBookmark($_SESSION['users_id'], $bookmark);
 
         // --------------------------------------------------------------------
@@ -283,33 +283,33 @@ class bookmarksEdit {
 
         // TODO: Clear caches
 
-        suxFunct::redirect(suxFunct::getPreviousURL($this->prev_skip));          
+        suxFunct::redirect(suxFunct::getPreviousURL($this->prev_skip));
 
     }
-    
-    
+
+
     /**
     * for suxValidate, check if a duplicate url exists
     *
     * @return bool
     */
     function isDuplicateBookmark($value, $empty, &$params, &$formvars) {
-        
+
         if (empty($formvars['url'])) return false;
-        
+
         $tmp = $this->bm->getBookmark($formvars['url']);
-        if ($tmp === false ) return true; // No duplicate found    
-        
+        if ($tmp === false ) return true; // No duplicate found
+
         if ($this->id) {
             // This is an Bookmark editing itself, this is OK
-            if ($tmp['id'] == $this->id) return true; 
+            if ($tmp['id'] == $this->id) return true;
         }
-        
+
         return false;
-        
+
     }
-    
-    
+
+
     /**
     * for suxValidate, check if a bookmark is valid
     *
@@ -322,8 +322,8 @@ class bookmarksEdit {
         if (!$bm) return false;
         return true;
 
-    }    
-    
+    }
+
 
 
 }

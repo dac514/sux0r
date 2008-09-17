@@ -30,14 +30,14 @@ require_once('feedsRenderer.php');
 class feedsApprove  {
 
     // Variables
-    public $gtext = array();    
+    public $gtext = array();
     private $module = 'feeds';
 
     // Objects
     public $tpl;
     public $r;
     protected $user;
-    protected $rss;    
+    protected $rss;
 
     /**
     * Constructor
@@ -46,9 +46,10 @@ class feedsApprove  {
     function __construct() {
 
         $this->rss = new suxRSS();
-        $this->user = new suxUser(); // User        
+        $this->user = new suxUser(); // User
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new feedsRenderer($this->module); // Renderer
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
@@ -65,7 +66,7 @@ class feedsApprove  {
     * @param array $dirty reference to unverified $_POST
     * @return bool
     */
-    function formValidate(&$dirty) {        
+    function formValidate(&$dirty) {
         return suxValidate::formValidate($dirty, $this->tpl);
     }
 
@@ -86,9 +87,9 @@ class feedsApprove  {
             suxValidate::connect($this->tpl, true); // Reset connection
 
             // Register our validators
-            // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')    
-            
-            suxValidate::register_validator('feeds', 'feeds', 'isInt', true);            
+            // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
+
+            suxValidate::register_validator('feeds', 'feeds', 'isInt', true);
 
         }
 
@@ -97,9 +98,8 @@ class feedsApprove  {
         $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
 
         // Feeds
-        $this->r->fp = $this->rss->getUnpublishedFeeds();        
-        
-        $this->tpl->assign_by_ref('r', $this->r);
+        $this->r->fp = $this->rss->getUnpublishedFeeds();
+
         $this->tpl->display('approve.tpl');
 
     }
@@ -111,14 +111,14 @@ class feedsApprove  {
     * @param array $clean reference to validated $_POST
     */
     function formProcess(&$clean) {
-        
+
         if (isset($clean['feeds'])) foreach ($clean['feeds'] as $key => $val) {
-            
+
             if ($val == 1) $this->rss->approveFeed($key);
             else $this->rss->deleteFeed($key);
-            
+
         }
-        
+
     }
 
 

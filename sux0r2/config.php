@@ -1,15 +1,18 @@
 <?php
 
-/* Error reporting */
+/* ------------------------------------------------------------------------- */
+/* Error reporting and debugging */
+/* ------------------------------------------------------------------------- */
 
-// Development
-error_reporting(E_ALL | E_STRICT);
+error_reporting(E_ALL | E_STRICT); // Development
+// error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING); // Hosting
+
+// Debug
 include_once(dirname(__FILE__)  . '/includes/symbionts/dBug.php');
 
-// Hosting
-// error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
-
+/* ------------------------------------------------------------------------- */
 /* Configuration variables */
+/* ------------------------------------------------------------------------- */
 
 // Database parameters, PDO compatible
 $CONFIG['DSN'] =  array(
@@ -73,7 +76,7 @@ $CONFIG['SALT'] = 'flyingturtle';
 
 // Sux0r modules may cache templates, set the duration in seconds below.
 
-$CONFIG['CACHE_LIFETIME'] = 900;
+$CONFIG['CACHE_LIFETIME'] = 0;
 
 // Timzeone, pick yours from the list available at http://php.net/manual/en/timezones.php
 
@@ -82,23 +85,37 @@ $CONFIG['TIMEZONE'] = 'America/Montreal';
 // A list of webpages to to skip when a user presses a "cancel" button
 // used in tandem with the suxFunct::getPreviousURL() function
 
+/* ------------------------------------------------------------------------- */
+/* Advanced configuration variables */
+/* Don't modify these unless you know what you are doing */
+/* ------------------------------------------------------------------------- */
+
+$CONFIG['USERS_ACCESS_MODULES'] = array(
+    'blog',
+    'bookmarks',
+    'feeds',
+    'photos',
+    'user',
+    );
+
+
 $CONFIG['PREV_SKIP'] = array(
-    'blog/bookmarks',   
+    'blog/bookmarks',
     'blog/edit',
     'blog/reply',
-    'bookmarks/approve',    
-    'bookmarks/edit',    
-    'bookmarks/suggest',        
-    'cropper',           
+    'bookmarks/approve',
+    'bookmarks/edit',
+    'bookmarks/suggest',
+    'cropper',
     'feeds/approve',
     'feeds/edit',
     'feeds/manage',
-    'feeds/suggest',    
+    'feeds/suggest',
     'photos/album/annotate',
     'photos/album/edit',
-    'user/edit',           
+    'user/edit',
     'user/login',
-    'user/logout',   
+    'user/logout',
     'user/register',
     );
 

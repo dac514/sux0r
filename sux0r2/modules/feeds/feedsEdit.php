@@ -31,16 +31,16 @@ require_once('feedsRenderer.php');
 class feedsEdit {
 
     // Variables
-    public $gtext = array();      
+    public $gtext = array();
     private $id;
     private $prev_skip;
-    private $module = 'feeds';      
+    private $module = 'feeds';
 
     // Objects
     public $tpl;
     public $r;
     private $user;
-    private $rss;        
+    private $rss;
 
 
     /**
@@ -52,6 +52,7 @@ class feedsEdit {
 
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new feedsRenderer($this->module); // Renderer
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
@@ -68,12 +69,12 @@ class feedsEdit {
             // Verfiy that we are allowed to edit this
             $this->id = $id;
         }
-        
-        // This module can fallback on approve module        
-        foreach ($GLOBALS['CONFIG']['PREV_SKIP'] as $val) {            
-            if (mb_strpos($val, 'feeds/approve') === false) 
-                $this->prev_skip[] = $val;            
-        }                
+
+        // This module can fallback on approve module
+        foreach ($GLOBALS['CONFIG']['PREV_SKIP'] as $val) {
+            if (mb_strpos($val, 'feeds/approve') === false)
+                $this->prev_skip[] = $val;
+        }
 
     }
 
@@ -96,7 +97,7 @@ class feedsEdit {
     */
     function formBuild(&$dirty) {
 
-        unset($dirty['id']); // Don't allow spoofing        
+        unset($dirty['id']); // Don't allow spoofing
         $feed = array();
 
         if ($this->id) {
@@ -127,10 +128,10 @@ class feedsEdit {
         if (!suxValidate::is_registered_form()) {
 
             suxValidate::connect($this->tpl, true); // Reset connection
-            
+
             // Register our additional criterias
             suxValidate::register_criteria('isDuplicateFeed', 'this->isDuplicateFeed');
-            suxValidate::register_criteria('isValidFeed', 'this->isValidFeed');            
+            suxValidate::register_criteria('isValidFeed', 'this->isValidFeed');
 
             // Register our validators
             if ($this->id) suxValidate::register_validator('integrity', 'integrity:id', 'hasIntegrity');
@@ -138,7 +139,7 @@ class feedsEdit {
             suxValidate::register_validator('url', 'url', 'notEmpty', false, false, 'trim');
             suxValidate::register_validator('url2', 'url', 'isURL');
             suxValidate::register_validator('url3', 'url', 'isDuplicateFeed');
-            suxValidate::register_validator('url4', 'url', 'isValidFeed');            
+            suxValidate::register_validator('url4', 'url', 'isValidFeed');
 
             suxValidate::register_validator('title', 'title', 'notEmpty', false, false, 'trim');
             suxValidate::register_validator('body', 'body', 'notEmpty', false, false, 'trim');
@@ -151,7 +152,6 @@ class feedsEdit {
         $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_skip);
 
         // Template
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('edit.tpl');
 
     }
@@ -164,7 +164,7 @@ class feedsEdit {
     * @param array $clean reference to validated $_POST
     */
     function formProcess(&$clean) {
-        
+
         // --------------------------------------------------------------------
         // Create $feed array
         // --------------------------------------------------------------------
@@ -175,20 +175,20 @@ class feedsEdit {
                 'body' => $clean['body'],
                 'draft' => @$clean['draft'],
             );
-        
+
         // --------------------------------------------------------------------
         // Id
-        // --------------------------------------------------------------------        
-                        
-        if (isset($clean['id']) && filter_var($clean['id'], FILTER_VALIDATE_INT) && $clean['id'] > 0) {            
-            // TODO: Check to see if this user is allowed to modify this bookmark            
+        // --------------------------------------------------------------------
+
+        if (isset($clean['id']) && filter_var($clean['id'], FILTER_VALIDATE_INT) && $clean['id'] > 0) {
+            // TODO: Check to see if this user is allowed to modify this bookmark
             $feed['id'] = $clean['id'];
-        }           
+        }
 
         // --------------------------------------------------------------------
         // Put $feed in database
         // --------------------------------------------------------------------
-        
+
         $this->rss->saveFeed($_SESSION['users_id'], $feed);
 
 
@@ -203,11 +203,11 @@ class feedsEdit {
         // TODO: Clear caches
 
         // Redirect
-        suxFunct::redirect(suxFunct::getPreviousURL($this->prev_skip));                
+        suxFunct::redirect(suxFunct::getPreviousURL($this->prev_skip));
 
     }
-    
-    
+
+
     /**
     * for suxValidate, check if a duplicate url exists
     *
@@ -216,15 +216,15 @@ class feedsEdit {
     function isDuplicateFeed($value, $empty, &$params, &$formvars) {
 
         if (empty($formvars['url'])) return false;
-        
+
         $tmp = $this->rss->getFeed($formvars['url']);
-        if ($tmp === false ) return true; // No duplicate found    
-        
+        if ($tmp === false ) return true; // No duplicate found
+
         if ($this->id) {
             // This is an RSS editing itself, this is OK
-            if ($tmp['id'] == $this->id) return true; 
+            if ($tmp['id'] == $this->id) return true;
         }
-        
+
         return false;
 
     }
@@ -243,7 +243,7 @@ class feedsEdit {
         return true;
 
     }
-    
+
 
 
 }

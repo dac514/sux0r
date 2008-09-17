@@ -3,31 +3,29 @@
     <div id="nbf">
 
         {* Top *}
-        <form action="{$r->text.form_url}" method="get" accept-charset="utf-8" >
-            <div id="nbfCategories" >
-                {$r->text.categories} :
-                {html_options name='filter' id='filter' options=$r->getUserCategories() selected=$filter}
-            </div>
+        <form action="{$r->text.form_url}" method="get" accept-charset="utf-8" id="nbfCategoriesForm" >
+            {$r->text.categories} :
+            {html_options name='filter' id='filter' options=$r->getUserCategories() selected=$filter}
             <input id="nbfTopButton" type="submit" value="{$r->text.top}" />
         </form>
 
         {* Threshold *}
-        <form action="{$r->text.form_url}" method="get" accept-charset="utf-8" onsubmit="$('filter2').value = $('filter').value; return true;" >
-           
+        <form action="{$r->text.form_url}" method="get" accept-charset="utf-8"
+        onsubmit="$('filter2').value = $('filter').value; return true;"
+        id="nbfSliderForm" >
+
+            {* Hidden *}
             <input type="hidden" id="nbfThreshold" name="threshold" value="{$threshold}" />
             <input type="hidden" id="filter2" name="filter" value="{$filter}" />
             {foreach from=$r->text.hidden key=k item=v}
-            <input type="hidden" name="{$k}" value="{$v}" />                        
+            <input type="hidden" name="{$k}" value="{$v}" />
             {/foreach}
-            
+
             {* Slider *}
-            <div id="nbfSlider">
-                <div id="nbfTrack">
-                    <div id="nbfHandle"></div>
-                </div>
-                <div id="nbfPercentage">&nbsp;</div>
-            </div>
+            <div id="nbfTrack"><div id="nbfHandle"></div></div>
+            <div id="nbfPercentage">{$threshold*100|truncate:5:""}%</div>
             <input id="nbfThresholdButton" type="submit" value="{$r->text.threshold}" />
+
         </form>
 
         {if isset($threshold)}
@@ -40,28 +38,5 @@
 
     </div>
 
-    {literal}
-    <script type="text/javascript" language="javascript">
-    // <![CDATA[
-    // Script has to come after slider otherwise it doesn't work
-
-    // initial slider value
-    sv = {/literal}{if $threshold}{$threshold}{else}0{/if}{literal};
-    $('nbfThreshold').value = sv;
-    $('nbfPercentage').innerHTML = (sv * 100).toFixed(2) + '%';
-
-    // horizontal slider control
-    new Control.Slider('nbfHandle', 'nbfTrack', {
-            alignY: 5,
-            sliderValue: sv,
-            onSlide: function(v) {
-                $('nbfPercentage').innerHTML = (v * 100).toFixed(2) + '%';
-                $('nbfThreshold').value = v;
-            }
-    });
-
-    // ]]>
-    </script>
-    {/literal}
 
 {/if}

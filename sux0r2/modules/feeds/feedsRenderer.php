@@ -31,7 +31,7 @@ class feedsRenderer extends suxRenderer {
 
     // Arrays
     public $fp = array(); // Array of feeds
-    public $subscriptions = array(); // Array of subscription    
+    public $subscriptions = array(); // Array of subscription
     public $sidelist = array(); // Array of threads in sidebar
 
     // Objects
@@ -50,7 +50,7 @@ class feedsRenderer extends suxRenderer {
         parent::__construct($module); // Call parent
         $this->bayesRenderer = new bayesRenderer('bayes');
         $this->rss = new suxRSS();
-        $this->link = new suxLink();                
+        $this->link = new suxLink();
     }
 
 
@@ -82,27 +82,27 @@ class feedsRenderer extends suxRenderer {
     // Stuff like recent(), archives(), authors() is in the renderer because
     // there's no point in initializing if they aren't in the template
     // ------------------------------------------------------------------------
-    
-    
+
+
     /**
     * @return string html
-    */    
+    */
     function isSubscribed($feed_id) {
-        
+
         if (!$this->isLoggedIn())
-            return  "<img src='{$this->url}/media/{$this->partition}/assets/sticky.gif' border='0' width='12' height='12' />";
-              
+            return  "<img src='{$this->url}/media/{$this->partition}/assets/sticky.gif' border='0' width='12' height='12' alt='' />";
+
         // Get config variables for template
         $tpl = new suxTemplate($this->module);
         $tpl->config_load('my.conf', $this->module);
         $image = $tpl->get_config_vars('imgUnsubscribed');
-        
+
         // Don't query the database unnecessarily.
         static $img_cache = array();
         if (isset($img_cache[$feed_id])) {
             $image = $img_cache[$feed_id];
         }
-        else {   
+        else {
             // If subscribed, change image
             $query = 'SELECT COUNT(*) FROM link_rss_users WHERE rss_feeds_id = ? AND users_id = ? ';
             $db = suxDB::get();
@@ -111,33 +111,33 @@ class feedsRenderer extends suxRenderer {
             if ($st->fetchColumn() > 0) $image = $tpl->get_config_vars('imgSubscribed');
             $img_cache[$feed_id] = $image;
         }
-              
-        $html = "<img src='{$this->url}/media/{$this->partition}/assets/{$image}' border='0' width='12' height='12'
-        onclick=\"toggleSubscription('{$feed_id}');\" 
+
+        $html = "<img src='{$this->url}/media/{$this->partition}/assets/{$image}' border='0' width='12' height='12' alt=''
+        onclick=\"toggleSubscription('{$feed_id}');\"
         style='cursor: pointer;'
         class='subscription{$feed_id}'
         />";
-        
+
         return $html;
-        
+
     }
-    
-    
+
+
     /**
     * @return string html
     */
     function feedLink($id) {
-        
+
         $tmp = $this->rss->getFeed($id);
         if(!$tmp) return null;
-        
+
         $url = suxFunct::makeUrl("/feeds/{$id}");
         $html = "<a href='{$url}'>{$tmp['title']}</a>";
         return $html;
-        
+
     }
-    
-    
+
+
 
 
     /**
@@ -145,18 +145,18 @@ class feedsRenderer extends suxRenderer {
     * @return array
     */
     function feeds($subscribed = false, $users_id = null) {
-        
+
         // Caches
-        static $feeds = null;      
+        static $feeds = null;
         static $subscriptions = null;
-        
+
         if (!is_array($feeds)) $feeds = $this->rss->getFeeds();
         if (!is_array($subscriptions)) {
             $subscriptions = array();
             if (isset($users_id))
-                $subscriptions = $this->link->getLinks('link_rss_users', 'users', $users_id);          
+                $subscriptions = $this->link->getLinks('link_rss_users', 'users', $users_id);
         }
-                      
+
         $tmp = array();
         foreach($feeds as $feed) {
             if ($subscribed && in_array($feed['id'], $subscriptions)) {
@@ -166,12 +166,12 @@ class feedsRenderer extends suxRenderer {
                 $tmp[] =$feed;
             }
         }
-        
+
         return $tmp;
-        
+
     }
-    
-    
+
+
     /**
     * TinyMCE Initialization for bookmarks
     *
@@ -199,8 +199,8 @@ class feedsRenderer extends suxRenderer {
         ';
         return $this->tinyMce($init);
 
-    }    
-    
+    }
+
 
 }
 

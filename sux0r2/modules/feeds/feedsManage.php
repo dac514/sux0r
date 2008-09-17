@@ -31,7 +31,7 @@ require_once('feedsRenderer.php');
 class feedsManage  {
 
     // Variables
-    public $gtext = array();    
+    public $gtext = array();
     private $module = 'feeds';
 
     // Objects
@@ -52,6 +52,7 @@ class feedsManage  {
         $this->link = new suxLink();
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new feedsRenderer($this->module); // Renderer
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
@@ -108,10 +109,9 @@ class feedsManage  {
 
         // Subscriptions
         if (!isset($_POST['subscriptions'])) {
-            $this->r->subscriptions = $this->link->getLinks('link_rss_users', 'users', $_SESSION['users_id']);            
+            $this->r->subscriptions = $this->link->getLinks('link_rss_users', 'users', $_SESSION['users_id']);
         }
 
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('manage.tpl');
 
     }

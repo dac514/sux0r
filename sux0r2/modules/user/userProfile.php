@@ -49,6 +49,7 @@ class userProfile {
         $this->user = new suxUser(); // User
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new userRenderer($this->module); // Renderer
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
 
@@ -78,7 +79,6 @@ class userProfile {
             // Title
             $this->r->title .= " | {$fullprofile['nickname']}";
 
-            $this->tpl->assign_by_ref('r', $this->r);
 
         }
 

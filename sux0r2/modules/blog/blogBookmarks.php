@@ -39,7 +39,7 @@ class blogBookmarks {
     private $msg_id;
     private $found_links = array();
     private $module = 'blog';
-           
+
     // Objects
     public $tpl;
     public $r;
@@ -59,6 +59,7 @@ class blogBookmarks {
 
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new blogRenderer($this->module); // Renderer
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
@@ -194,7 +195,6 @@ class blogBookmarks {
 
         // Template
         $this->r->found_links = $this->found_links;
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('bookmarks.tpl');
 
     }

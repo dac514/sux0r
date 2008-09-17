@@ -32,9 +32,9 @@ class photosEdit {
 
     // Variables
     public $per_page; // Photos per page
-    public $gtext = array();        
+    public $gtext = array();
     private $id;
-    private $module = 'photos';    
+    private $module = 'photos';
 
     // Objects
     public $tpl;
@@ -55,6 +55,7 @@ class photosEdit {
         $this->photo = new suxPhoto($this->module); // Photos
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new photosRenderer($this->module); // Renderer
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
@@ -141,7 +142,6 @@ class photosEdit {
         $this->r->text['form_url'] = suxFunct::makeUrl('/photos/album/annotate/' . $this->id, array('page' => $_GET['page']));
         $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
 
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('annotate.tpl');
 
     }
@@ -178,7 +178,7 @@ class photosEdit {
 
         // Template
         $this->r->text['back_url'] = suxFunct::makeUrl('/photos/album/annotate/' . $this->id);
-        $this->tpl->assign_by_ref('r', $this->r);
+
         $this->tpl->display('success.tpl');
 
     }

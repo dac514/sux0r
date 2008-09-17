@@ -29,7 +29,7 @@ require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 class userRegisterOpenID  {
 
     // Variables
-    public $gtext = array();    
+    public $gtext = array();
     private $module = 'user';
 
     // Objects
@@ -46,6 +46,7 @@ class userRegisterOpenID  {
         $this->user = new suxUser(); // User
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new suxRenderer($this->module); // Renderer
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
@@ -98,7 +99,6 @@ class userRegisterOpenID  {
         $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
 
         // Template
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->tpl->display('register_openid.tpl');
 
     }

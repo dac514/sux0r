@@ -51,6 +51,7 @@ class photos {
 
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new photosRenderer($this->module); // Renderer
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         $this->user = new suxUser();
@@ -68,8 +69,6 @@ class photos {
     * List albums
     */
     function listing() {
-
-        $this->tpl->assign_by_ref('r', $this->r);
 
         // Start pager
         $this->pager->setStart();
@@ -99,7 +98,6 @@ class photos {
     */
     function album($id) {
 
-        $this->tpl->assign_by_ref('r', $this->r);
         $this->pager->limit = $this->per_page;
 
         // Start pager
@@ -132,8 +130,6 @@ class photos {
     * View photo
     */
     function view($id) {
-
-        $this->tpl->assign_by_ref('r', $this->r);
 
         // "Cache Groups" using a vertical bar |
         $cache_id = "view|{$id}|" . $this->pager->start;
