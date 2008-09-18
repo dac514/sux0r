@@ -127,8 +127,17 @@ class photoUpload  {
         if (!isset($_FILES['image']) || !is_uploaded_file($_FILES['image']['tmp_name']))
             throw new Exception('No file uploaded?');
 
-        // Begin collecting $photo array
-        // TODO: Avoid spoofing, check if this album belongs to this user,
+        // Avoid spoofing, check if this album belongs to this user,
+        if (!$this->photo->isAlbumOwner($clean['album'], $_SESSION['users_id'])) {
+            // Check that the user is allowed to be here
+            if (!$this->user->isRoot($_SESSION['users_id'])) {
+                $access = $this->user->getAccess($_SESSION['users_id'], $this->module);
+                if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin'])
+                    suxFunct::redirect(suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']));
+            }
+        }
+
+        // Commence collecting $photo array
         $photo['photoalbums_id'] = $clean['album'];
 
         // Get extension

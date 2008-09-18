@@ -66,6 +66,9 @@ $gtext['thanks'] = 'Thank you for registering';
 $gtext['timezone'] = 'Timezone';
 $gtext['url'] = 'URL';
 
+// Log messages
+$gtext['logged_in'] = 'logged in';
+$gtext['logged_out'] = 'logged out';
 
 
 /*

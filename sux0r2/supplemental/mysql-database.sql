@@ -155,9 +155,9 @@ CREATE TABLE `bookmarks` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `link_bayes_bookmarks`
--- 
+--
 
 CREATE TABLE `link_bayes_bookmarks` (
   `bookmarks_id` int(11) NOT NULL,
@@ -168,9 +168,9 @@ CREATE TABLE `link_bayes_bookmarks` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `link_bookmarks_users`
--- 
+--
 
 CREATE TABLE `link_bookmarks_users` (
   `bookmarks_id` int(11) NOT NULL,
@@ -519,18 +519,37 @@ INSERT INTO `users` VALUES (1, 'test', 'test@test.com', '24d7d9859810e5834bbfdcc
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `users_access`
--- 
+--
 
 CREATE TABLE `users_access` (
   `id` int(11) NOT NULL auto_increment,
   `users_id` int(11) NOT NULL,
   `module` varchar(32) NOT NULL,
-  `accesslevel` int(11) NOT NULL,
+  `accesslevel` int(3) NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `users_id` (`users_id`,`module`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_log`
+--
+
+CREATE TABLE `users_log` (
+  `id` int(11) NOT NULL auto_increment,
+  `users_id` int(11) NOT NULL,
+  `body_html` text NOT NULL,
+  `body_plaintext` text NOT NULL,
+  `ts` datetime NOT NULL,
+  `private` tinyint(1) NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `users_id` (`users_id`,`private`),
+  KEY `ts` (`ts`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
 -- --------------------------------------------------------

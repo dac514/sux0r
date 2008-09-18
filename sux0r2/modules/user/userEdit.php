@@ -67,9 +67,11 @@ class userEdit {
 
             if ($user != $_SESSION['nickname']) {
 
-                // TODO:
                 // Security check
-                // Only an administrator can modify other users
+                // Only a root user can modify other users
+                if (!$this->user->isRoot($_SESSION['users_id'])) {
+                    suxFunct::redirect(suxFunct::makeUrl('/home'));
+                }
 
                 $u = $this->user->getUserByNickname($user);
                 if ($u) $this->users_id = $u['users_id'];
@@ -292,9 +294,12 @@ class userEdit {
         if ($this->mode == 'edit') {
 
             if ($clean['nickname'] != $_SESSION['nickname']) {
-                // TODO:
                 // Security check
-                // Only an administrator can modify other users
+                // Only a root user can modify other users
+                if (!$this->user->isRoot($_SESSION['users_id'])) {
+                    suxFunct::redirect(suxFunct::makeUrl('/home'));
+                }
+
             }
 
             // Get users_id

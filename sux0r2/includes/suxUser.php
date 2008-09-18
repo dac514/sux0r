@@ -32,9 +32,15 @@ class suxUser {
     protected $db_table = 'users';
     protected $db_table_info = 'users_info';
     protected $db_table_openid = 'users_openid';
+    protected $db_table_access = 'users_access';
+    // MyISAM (faster, no rollback)
+    protected $db_table_log = 'users_log';
 
-    // Variables
-    private $max_failures = 4; // Maximum authetication failures allowed
+    // Maximum authetication failures allowed
+    private $max_failures = 4;
+    // If you change these, then you need to adjust your database columns
+    private $max_access = 999;
+    private $max_module_length = 32;
 
 
     /**
@@ -143,40 +149,6 @@ class suxUser {
     }
 
 
-    /**
-    * Get all users
-    *
-    * @return array
-    */
-    function getUsers() {
-
-        $q = "
-        SELECT
-        {$this->db_table}.id,
-        {$this->db_table}.nickname,
-        {$this->db_table}.email,
-        {$this->db_table_info}.given_name,
-        {$this->db_table_info}.family_name,
-        {$this->db_table_info}.street_address,
-        {$this->db_table_info}.locality,
-        {$this->db_table_info}.region,
-        {$this->db_table_info}.postcode,
-        {$this->db_table_info}.country,
-        {$this->db_table_info}.tel,
-        {$this->db_table_info}.url,
-        {$this->db_table_info}.dob,
-        {$this->db_table_info}.gender,
-        {$this->db_table_info}.language,
-        {$this->db_table_info}.timezone,
-        FROM {$this->db_table} LEFT JOIN {$this->db_table_info}
-        ON {$this->db_table}.id = {$this->db_table_info}.users_id
-        ";
-
-        $st = $this->db->query($q);
-        return $st->fetchAll(PDO::FETCH_ASSOC);
-
-    }
-
 
     /**
     * Set user
@@ -193,13 +165,23 @@ class suxUser {
 
         if ($id != null && (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1))
             throw new Exception('Invalid user id');
-        if (!empty($info['nickname']) && $this->getUserByNickname($info['nickname']))
-            throw new Exception('Duplicate nickname');
-        if (!empty($info['email']) && $this->getUserByEmail($info['email']))
-            throw new Exception('Duplicate email');            
+
+        if (!empty($info['nickname'])) {
+            $tmp = $this->getUserByNickname($info['nickname']);
+            if ($tmp['users_id'] != $id) throw new Exception('Duplicate nickname');
+        }
+
+        if (!empty($info['email'])) {
+            $tmp = $this->getUserByEmail($info['email']);
+            if ($tmp['users_id'] != $id) throw new Exception('Duplicate email');
+
+        }
 
         unset($info['id'], $info['users_id']); // Don't allow spoofing of the id in the array
         unset($info['root']); // Don't allow root changes with this function
+        unset($info['banned']); // Don't allow banned changes with this function
+        unset($info['image']); // Don't allow image changes with this function
+
 
         // Encrypt the password
         if (!empty($info['password'])) {
@@ -246,36 +228,34 @@ class suxUser {
         $this->inTransaction = true;
 
         if ($id) {
-            
+
             // UPDATE
-            
             $user['id'] = $id;
             $query = suxDB::prepareUpdateQuery($this->db_table, $user);
             $st = $this->db->prepare($query);
             $st->execute($user);
-            
+
             $info['users_id'] = $id;
-            
+
             $query = suxDB::prepareUpdateQuery($this->db_table_info, $info, 'users_id');
             $st = $this->db->prepare($query);
-            $res = $st->execute($info);            
-            
+            $res = $st->execute($info);
+
         }
         else {
-            
+
             // INSERT
-            
             $query = suxDB::prepareInsertQuery($this->db_table, $user);
             $st = $this->db->prepare($query);
             $st->execute($user);
-            
+
             $id = $this->db->lastInsertId();
             $info['users_id'] = $id;
-            
+
             $query = suxDB::prepareInsertQuery($this->db_table_info, $info);
             $st = $this->db->prepare($query);
-            $st->execute($info);            
-            
+            $st->execute($info);
+
         }
 
         if ($openid_url) $this->attachOpenID($openid_url, $id);
@@ -285,6 +265,226 @@ class suxUser {
         $this->inTransaction = false;
 
         return $id;
+
+    }
+
+
+    function saveImage($users_id, $image) {
+
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
+
+        $st = $this->db->prepare("UPDATE {$this->db_table_info} SET image = ? WHERE users_id = ? LIMIT 1 ");
+        $st->execute(array($image, $users_id));
+
+    }
+
+    // -----------------------------------------------------------------------
+    // User access
+    // -----------------------------------------------------------------------
+
+    /**
+    * Check if a user is banned
+    *
+    * @param int $users_id
+    * @return bool
+    */
+    function isBanned($users_id) {
+
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
+
+        $st = $this->db->prepare("SELECT banned FROM {$this->db_table} WHERE id = ? ");
+        $st->execute(array($users_id));
+        $id = $st->fetchColumn();
+
+        if ($id == 1) return true;
+        else return false;
+
+    }
+
+
+    /**
+    * Ban a user
+    *
+    * @param int $users_id
+    * @return bool
+    */
+    function ban($users_id) {
+
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
+
+        $st = $this->db->prepare("UPDATE {$this->db_table} SET banned = 1 WHERE id = ? ");
+        $st->execute(array($users_id));
+
+    }
+
+
+    /**
+    * Unban a user
+    *
+    * @param int $users_id
+    * @return bool
+    */
+    function unban($users_id) {
+
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
+
+        $st = $this->db->prepare("UPDATE {$this->db_table} SET banned = 0 WHERE id = ? ");
+        $st->execute(array($users_id));
+
+    }
+
+
+
+    /**
+    * Check if a user has root access
+    *
+    * @param int $users_id
+    * @return bool
+    */
+    function isRoot($users_id) {
+
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
+
+        $st = $this->db->prepare("SELECT root FROM {$this->db_table} WHERE id = ? ");
+        $st->execute(array($users_id));
+        $id = $st->fetchColumn();
+
+        if ($id == 1) return true;
+        else return false;
+
+    }
+
+
+    /**
+    * Root a user
+    *
+    * @param int $users_id
+    * @return bool
+    */
+    function root($users_id) {
+
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
+
+        $st = $this->db->prepare("UPDATE {$this->db_table} SET root = 1 WHERE id = ? ");
+        $st->execute(array($users_id));
+
+    }
+
+
+    /**
+    * Unroot a user
+    *
+    * @param int $users_id
+    * @return bool
+    */
+    function unroot($users_id) {
+
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
+
+        $st = $this->db->prepare("UPDATE {$this->db_table} SET root = 0 WHERE id = ? ");
+        $st->execute(array($users_id));
+
+    }
+
+
+
+    /**
+    * Check access level for a given module
+    *
+    * @param int $users_id
+    * @param string $module
+    * @return int
+    */
+    function getAccess($users_id, $module) {
+
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
+
+        $q = "
+        SELECT {$this->db_table_access}.accesslevel FROM {$this->db_table_access}
+        INNER JOIN {$this->db_table}  ON {$this->db_table_access} .users_id = {$this->db_table} .id
+        WHERE {$this->db_table_access}.users_id = ? AND {$this->db_table_access}.module = ?
+        LIMIT 1
+        ";
+
+        $st = $this->db->prepare($q);
+        $st->execute(array($users_id, $module));
+        return $st->fetchColumn();
+
+    }
+
+
+    /**
+    * Save a user's access level
+    *
+    * @param int $users_id
+    * @param string $module
+    * @param int $access
+    */
+    function saveAccess($users_id, $module, $access) {
+
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
+        if (mb_strlen($module) > $this->max_module_length) throw new Exception('Module name too long');
+        if (!filter_var($access, FILTER_VALIDATE_INT) || $access < 0 || $access > $this->max_access) throw new Exception('Invalid access integer');
+
+        $clean['users_id'] = $users_id;
+        $clean['module'] = $module;
+        $clean['access'] = $access;
+
+        $query = "SELECT id FROM {$this->db_table_access} WHERE users_id = ? AND module = ? LIMIT 1 ";
+        $st = $this->db->prepare($query);
+        $st->execute(array($clean['users_id'], $clean['module']));
+        $edit = $st->fetch(PDO::FETCH_ASSOC);
+
+        if ($edit['id']) {
+
+            // UPDATE
+            $clean['id'] = $edit['id'];
+            $query = suxDB::prepareUpdateQuery($this->db_table_access, $clean);
+            $st = $this->db->prepare($query);
+            $st->execute($clean);
+
+        }
+        else {
+
+            // INSERT
+            $query = suxDB::prepareInsertQuery($this->db_table_access, $clean);
+            $st = $this->db->prepare($query);
+            $st->execute($clean);
+
+        }
+
+
+    }
+
+
+    /**
+    * Write something to the users_log table
+    *
+    * @param int $users_id
+    * @param string $body_html
+    * @param int $private
+    */
+    function log($users_id, $body_html, $private = 0) {
+
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
+        if ($private != 0 && $private != 1) $private = 0;
+
+        $clean['users_id'] = $users_id;
+        $clean['private'] = $private;
+        $clean['body_html'] = suxFunct::sanitizeHtml($body_html, -1);
+
+        // Convert and copy body to UTF-8 plaintext
+        require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
+        $converter = new suxHtml2UTF8($clean['body_html']);
+        $clean['body_plaintext']  = $converter->getText();
+
+        // Timestamp
+        $clean['ts'] = date('c');
+
+        // INSERT
+        $query = suxDB::prepareInsertQuery($this->db_table_log, $clean);
+        $st = $this->db->prepare($query);
+        $st->execute($clean);
 
     }
 
@@ -429,16 +629,22 @@ class suxUser {
 
         $proceed = false;
 
-        if (!empty($_SESSION['users_id']) &&  !empty($_SESSION['nickname']) && !empty($_SESSION['token'])) {
+        if (!empty($_SESSION['users_id']) && !empty($_SESSION['nickname']) && !empty($_SESSION['token'])) {
             if ($this->tokenCheck($_SESSION['users_id'], $_SESSION['token'])) {
                 $proceed = true;
             }
         }
 
+        // Forecfully check if a user is banned
+        if ($proceed && $this->isBanned($_SESSION['users_id'])) {
+            suxFunct::killSession();
+            suxFunct::redirect(suxFunct::makeUrl('/banned'));
+        }
+
+        // Conditionally redirect
         if (!$proceed && $redirect) {
             suxFunct::killSession();
             suxFunct::redirect($redirect);
-            exit;
         }
 
         return $proceed;
