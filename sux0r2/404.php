@@ -9,7 +9,7 @@ $text = suxFunct::gtext(); // Language
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-    <title><?php echo $GLOBALS['CONFIG']['TITLE']; ?> - 404 Not Found</title>
+    <title>404 Not Found</title>
     <style>
     body  { font-family: Arial, Helvetica, sans-serif; background-color: #ffffff; }
     a:link, a:visited, a:active { font-weight: bold; color: #000000; text-decoration: underline; }
