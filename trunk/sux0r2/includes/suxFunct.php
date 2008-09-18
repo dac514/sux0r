@@ -87,7 +87,7 @@ class suxFunct {
                 );
         }
         elseif ($trusted < 0) {
-            // Overkill, i.e. allow a small subset of elements to pass
+            // Paranoid mode, i.e. only allow a small subset of elements to pass
             // Transform strike and u to span for better XHTML 1-strict compliance
             $config = array(
                 'elements' => 'a,em,strike,strong,u,p,br,img,li,ol,ul',
@@ -337,32 +337,32 @@ class suxFunct {
     * @return bool
     */
     static function getPreviousURL($skip) {
-        
+
         if (!is_array($skip)) $skip = array($skip);
-        
-        foreach ($skip as $key => $val) {   
-            $val = str_replace('#', '', $val);            
+
+        foreach ($skip as $key => $val) {
+            $val = str_replace('#', '', $val);
             $val = trim($val);
             $val = trim($val, '/');
-            $val = "#^{$val}#i";               
-            $skip[$key] = $val;                        
+            $val = "#^{$val}#i";
+            $skip[$key] = $val;
         }
-        
-        if (isset($_SESSION['breadcrumbs'])) foreach($_SESSION['breadcrumbs'] as $val) {   
-            
-            $ok = true;            
-            $url = suxFunct::makeUrl($val);         
-            
-            foreach ($skip as $val2) {                
+
+        if (isset($_SESSION['breadcrumbs'])) foreach($_SESSION['breadcrumbs'] as $val) {
+
+            $ok = true;
+            $url = suxFunct::makeUrl($val);
+
+            foreach ($skip as $val2) {
                 if (preg_match($val2, $val)) $ok = false;
             }
-            
-            if ($ok) return $url;                
-            
+
+            if ($ok) return $url;
+
         }
-        
+
         return suxFunct::makeUrl('/home'); // Some default;
-        
+
     }
 
 

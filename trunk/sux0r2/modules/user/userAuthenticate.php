@@ -61,6 +61,8 @@ class userAuthenticate {
 
         if ($this->user->loginCheck() || !$this->user->loginCheck() && $this->user->authenticate()) {
 
+            $this->user->log($_SESSION['users_id'], $this->gtext['logged_in'], 1); // Log, private
+
             // Redirect to previous page
             if (isset($_SESSION['breadcrumbs'])) foreach($_SESSION['breadcrumbs'] as $val) {
                 if (!preg_match('#^user/[login|logout|register|edit]#i', $val)) {
@@ -100,7 +102,10 @@ class userAuthenticate {
 
         // Don't kill session (with password failures, perhaps?) if the
         // user isn't actually logged in.
-        if ($this->user->loginCheck()) suxFunct::killSession();
+        if ($this->user->loginCheck()) {
+            $this->user->log($_SESSION['users_id'], $this->gtext['logged_out'], 1); // Log, private
+            suxFunct::killSession();
+        }
 
         // Template
         $this->tpl->display('logout.tpl');

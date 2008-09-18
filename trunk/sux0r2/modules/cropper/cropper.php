@@ -27,7 +27,6 @@ require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once('cropperRenderer.php');
 
-
 class cropper {
 
     //Variables
@@ -115,7 +114,12 @@ class cropper {
         if (!$image['image']) throw new Exception('$image not found');
 
         if ($image['users_id'] != $_SESSION['users_id']) {
-            // TODO, verify we are allowed to edit this
+            // Check that the user is allowed to be here
+            if (!$this->user->isRoot($_SESSION['users_id'])) {
+                $access = $this->user->getAccess($_SESSION['users_id'], $module);
+                if ($access < $GLOBALS['CONFIG']['ACCESS'][$module]['admin'])
+                    suxFunct::redirect(suxFunct::getPreviousURL('cropper'));
+            }
         }
 
         // Assign a url to the fullsize version of the image
@@ -181,7 +185,12 @@ class cropper {
         if (!$image['image']) throw new Exception('$image not found');
 
         if ($image['users_id'] != $_SESSION['users_id']) {
-            // TODO, verify we are allowed to edit this
+            // Check that the user is allowed to be here
+            if (!$this->user->isRoot($_SESSION['users_id'])) {
+                $access = $this->user->getAccess($_SESSION['users_id'], $clean['module']);
+                    if ($access < $GLOBALS['CONFIG']['ACCESS'][$clean['module']]['admin'])
+                    suxFunct::redirect(suxFunct::getPreviousURL('cropper'));
+            }
         }
 
         $path_to_dest = "{$GLOBALS['CONFIG']['PATH']}/data/{$clean['module']}/{$image['image']}";
@@ -241,6 +250,7 @@ class cropper {
 
         if ($module == 'blog') $table = 'messages';
         elseif ($module == 'photos') $table = 'photos';
+        elseif ($module == 'user') $table = 'users_info';
         else $table = false;
 
         return $table;

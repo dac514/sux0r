@@ -76,7 +76,7 @@ $CONFIG['SALT'] = 'flyingturtle';
 
 // Sux0r modules may cache templates, set the duration in seconds below.
 
-$CONFIG['CACHE_LIFETIME'] = 0;
+$CONFIG['CACHE_LIFETIME'] = 900;
 
 // Timzeone, pick yours from the list available at http://php.net/manual/en/timezones.php
 
@@ -90,14 +90,22 @@ $CONFIG['TIMEZONE'] = 'America/Montreal';
 /* Don't modify these unless you know what you are doing */
 /* ------------------------------------------------------------------------- */
 
-$CONFIG['USERS_ACCESS_MODULES'] = array(
-    'blog',
-    'bookmarks',
-    'feeds',
-    'photos',
-    'user',
+$CONFIG['ACCESS'] = array(
+    'blog' => array(
+        'publisher' => 500,
+        'admin' => 999,
+        ),
+    'bookmarks' => array(
+        'admin' => 999,
+        ),
+    'feeds'  => array(
+        'admin' => 999,
+        ),
+    'photos'  => array(
+        'publisher' => 500,
+        'admin' => 999,
+        ),
     );
-
 
 $CONFIG['PREV_SKIP'] = array(
     'blog/bookmarks',
@@ -113,6 +121,7 @@ $CONFIG['PREV_SKIP'] = array(
     'feeds/suggest',
     'photos/album/annotate',
     'photos/album/edit',
+    'photos/upload',
     'user/edit',
     'user/login',
     'user/logout',

@@ -43,7 +43,14 @@ if (!empty($_GET['c'])) {
 
 // Pre-sanitize controller
 $controller = mb_strtolower($controller);
-if (!preg_match('/^(\w|\-)+$/', $controller) || !is_file(dirname(__FILE__) . "/modules/{$controller}/controller.php")) {
+
+if ($controller == 'banned') {
+    // Banned
+    echo suxFunct::getIncludeContents(dirname(__FILE__) . '/banned.php');
+    exit;
+}
+elseif (!preg_match('/^(\w|\-)+$/', $controller) || !is_file(dirname(__FILE__) . "/modules/{$controller}/controller.php")) {
+    // 404 Not Found
     if (!headers_sent()) header('HTTP/1.0 404 Not Found');
     echo suxFunct::getIncludeContents(dirname(__FILE__) . '/404.php');
     exit;
