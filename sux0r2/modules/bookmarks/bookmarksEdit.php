@@ -66,18 +66,17 @@ class bookmarksEdit {
         $this->link = new suxLink();
         $this->tags = new suxTags();
 
-        // This module has config variables, load them
-        // $this->tpl->config_load('my.conf', $this->module);
-
         // Redirect if not logged in
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
 
-        if (filter_var($id, FILTER_VALIDATE_INT)) {
-            // TODO:
-            // Verfiy that we are allowed to edit this
-            $this->id = $id;
+        // Check that the user is allowed to be here
+        if (!$this->user->isRoot($_SESSION['users_id'])) {
+            $access = $this->user->getAccess($_SESSION['users_id'], $this->module);
+            if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin'])
+                suxFunct::redirect(suxFunct::makeUrl('/bookmarks'));
         }
 
+        $this->id = $id;
 
         // This module can fallback on approve module
         foreach ($GLOBALS['CONFIG']['PREV_SKIP'] as $val) {
