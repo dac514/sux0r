@@ -102,7 +102,7 @@ class bookmarksApprove  {
 
         // Urls
         $this->r->text['form_url'] = suxFunct::makeUrl('/bookmarks/approve');
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         // bookmarks
         $this->r->fp = $this->bm->getUnpublishedBookmarks();
@@ -135,7 +135,7 @@ class bookmarksApprove  {
     function formSuccess() {
 
         // Redirect
-        suxFunct::redirect(suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']));
+        suxFunct::redirect(suxFunct::getPreviousURL());
 
     }
 

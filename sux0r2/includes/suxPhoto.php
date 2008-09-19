@@ -252,8 +252,8 @@ class suxPhoto {
 
         if (isset($clean['id'])) {
 
-            // UPDATE                      
-            unset($clean['users_id']); // Don't override the original submitter            
+            // UPDATE
+            unset($clean['users_id']); // Don't override the original submitter
             $query = suxDB::prepareUpdateQuery($this->db_albums, $clean);
             $st = $this->db->prepare($query);
             $st->execute($clean);
@@ -447,7 +447,7 @@ class suxPhoto {
     * Count photos by photoalbums_id
     *
     * @param int $photoalbums_id photoalbums id
-    * @return array|false
+    * @return int
     */
     function countPhotos($photoalbums_id) {
 
@@ -536,8 +536,8 @@ class suxPhoto {
 
         if (isset($clean['id'])) {
 
-            // UPDATE                      
-            unset($clean['users_id']); // Don't override the original submitter                        
+            // UPDATE
+            unset($clean['users_id']); // Don't override the original submitter
             $query = suxDB::prepareUpdateQuery($this->db_photos, $clean);
             $st = $this->db->prepare($query);
             $st->execute($clean);

@@ -373,8 +373,13 @@ function insert_userInfo($params) {
 
     if (!empty($_SESSION['nickname'])) {
 
-        $url_profile = suxFunct::makeUrl('/user/profile/' . $_SESSION['nickname']);
+        $u = new suxUser();
+        if ($u->isRoot($_SESSION['users_id'])) {
+            $url_admin = suxFunct::makeUrl('/admin');
+            $tmp .= "<span id='adminLink'>[ <a href='{$url_admin}'>{$text['admin']}</a> ]</span> ";
+        }
 
+        $url_profile = suxFunct::makeUrl('/user/profile/' . $_SESSION['nickname']);
         $tmp .= "<strong>{$text['welcome']}:</strong> <a href='{$url_profile}'>{$_SESSION['nickname']}</a> | ";
         $tmp .= "<a href='{$url_logout}'>{$text['logout']}</a> \n";
 

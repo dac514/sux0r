@@ -102,7 +102,7 @@ class feedsApprove  {
 
         // Urls
         $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/approve');
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         // Feeds
         $this->r->fp = $this->rss->getUnpublishedFeeds();
@@ -135,7 +135,7 @@ class feedsApprove  {
     function formSuccess() {
 
         // Redirect
-        suxFunct::redirect(suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']));
+        suxFunct::redirect(suxFunct::getPreviousURL());
 
     }
 

@@ -132,15 +132,16 @@ class photosEdit {
         // --------------------------------------------------------------------
 
         // Start pager
+        $this->pager->limit = $this->per_page;
         $this->pager->setStart();
-        // $this->pager->limit = $this->per_page;
+
 
         $this->pager->setPages($this->photo->countPhotos($this->id));
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/photos/album/annotate/{$this->id}"));
         $this->r->pho = $this->photo->getPhotos($this->id, $this->pager->limit, $this->pager->start);
 
         $this->r->text['form_url'] = suxFunct::makeUrl('/photos/album/annotate/' . $this->id, array('page' => $_GET['page']));
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         $this->tpl->display('annotate.tpl');
 
@@ -177,7 +178,7 @@ class photosEdit {
         // $this->tpl->clear_cache(null, "album|{$this->id}"); // Clear cache
 
         // Template
-        $this->r->text['back_url'] = suxFunct::makeUrl('/photos/album/annotate/' . $this->id);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         $this->tpl->display('success.tpl');
 

@@ -111,6 +111,15 @@ input, select {
     overflow: hidden;
 }
 
+#adminLink {
+    color: #cccccc;
+    margin-right: 0.4em;
+}
+
+#adminLink a {
+    color: #999999;
+}
+
 
 /* }}} */
 
@@ -401,3 +410,5 @@ pre {
     word-wrap: break-word; /* Internet Explorer 5.5+ */
     width: 99%;
 }
+
+

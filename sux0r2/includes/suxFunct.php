@@ -336,9 +336,10 @@ class suxFunct {
     * @param string|array $skip
     * @return bool
     */
-    static function getPreviousURL($skip) {
+    static function getPreviousURL($skip = null) {
 
-        if (!is_array($skip)) $skip = array($skip);
+        if ($skip == null) $skip = $GLOBALS['CONFIG']['PREV_SKIP'];
+        elseif (!is_array($skip)) $skip = array($skip);
 
         foreach ($skip as $key => $val) {
             $val = str_replace('#', '', $val);

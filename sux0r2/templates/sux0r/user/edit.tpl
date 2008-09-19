@@ -1,5 +1,15 @@
 {capture name=header}
 
+<style type="text/css">
+label {ldelim}
+    float: left;
+    width: 140px;
+    margin-right: 0.5em;
+    padding-top: 0.2em;
+    text-align: right;
+{rdelim}
+</style>
+
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
 {include file=$r->xhtml_header}{/strip}

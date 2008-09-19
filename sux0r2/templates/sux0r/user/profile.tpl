@@ -25,9 +25,14 @@
 
 
             <!-- menu -->
+            <strong>User: {$r->profile.nickname|capitalize}</strong>
+
             <div class='menucontainer'>
             <ul class='menulist'>
-            <li><a href='{$r->makeUrl('/user/profile')}/{$r->profile.nickname}' class='selected'>{$r->profile.nickname}</a></li>
+            <li><a href='{$r->makeUrl('/blog/author')}/{$r->profile.nickname}' >Blog</a></li>
+            <li><a href='{$r->makeUrl('/feeds/user')}/{$r->profile.nickname}' >Feeds</a></li>
+            <li><a href='{$r->makeUrl('/bookmarks/user')}/{$r->profile.nickname}' >Bookmarks</a></li>
+            <li><div style="padding-bottom: 1em"></div></li>
             {insert name="editMenu" nickname=$r->profile.nickname}
             </ul>
             </div>
@@ -39,6 +44,7 @@
 		<td style="vertical-align:top;">
 			<div id="middle2">
 
+            {* Profile info *}
             {capture name=profile}
 
                 <p>
@@ -104,7 +110,17 @@
                 </p>
             {/capture}
 
-            {$r->widget('Profile', $smarty.capture.profile, null, 'http://localhost:8888/sux0r2/media/sux0r/assets/nullwhore.png')}
+            {* Image *}
+            {capture name=image}{strip}
+
+                {if $r->profile.image}
+                {$r->makeUrl('/', null, true)}/data/user/{$r->profile.image}
+                {/if}
+
+            {/strip}{/capture}
+
+
+            {$r->widget('Profile', $smarty.capture.profile, null, $smarty.capture.image)}
             {$r->widget('Friends', 'Todo')}
 
             </div>

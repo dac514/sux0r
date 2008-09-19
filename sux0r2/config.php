@@ -108,6 +108,7 @@ $CONFIG['ACCESS'] = array(
     );
 
 $CONFIG['PREV_SKIP'] = array(
+    'bayes',
     'blog/bookmarks',
     'blog/edit',
     'blog/reply',
@@ -122,6 +123,7 @@ $CONFIG['PREV_SKIP'] = array(
     'photos/album/annotate',
     'photos/album/edit',
     'photos/upload',
+    'user/avatar',
     'user/edit',
     'user/login',
     'user/logout',

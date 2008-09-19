@@ -85,7 +85,7 @@ class userLoginOpenID extends userRegisterOpenID {
 
         // Urls
         $this->r->text['form_url'] = suxFunct::makeUrl('/user/login/openid');
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         // Template
         $this->tpl->display('login_openid.tpl');
