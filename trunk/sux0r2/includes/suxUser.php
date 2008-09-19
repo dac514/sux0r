@@ -137,14 +137,50 @@ class suxUser {
 
 
     /**
-    * Too many password failures?
+    * Count users
     *
-    * @return bool
+    * @return int
     */
-    function maxPasswordFailures() {
+    function countUsers() {
 
-        if (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->max_failures) return true;
-        else return false;
+        $query = "SELECT COUNT(*) FROM {$this->db_table} ";
+
+        $st = $this->db->query($query);
+        return $st->fetchColumn();
+
+    }
+
+
+    /**
+    * Get users
+    *
+    * @param int $photoalbums_id photoalbums id
+    * @param int $limit sql limit value
+    * @param int $start sql start of limit value
+    * @return array|false
+    */
+    function getUsers($limit = null, $start = 0) {
+
+        $query = "
+        SELECT
+        {$this->db_table}.id,
+        {$this->db_table}.nickname,
+        {$this->db_table}.email,
+        {$this->db_table}.root,
+        {$this->db_table}.banned,
+        MAX({$this->db_table_log}.ts) AS last_active
+        FROM {$this->db_table}
+        LEFT JOIN {$this->db_table_log} ON {$this->db_table}.id = {$this->db_table_log}.users_id
+        GROUP BY {$this->db_table}.id
+        ORDER BY root DESC, last_active DESC
+        ";
+
+        // Limit
+        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        elseif ($limit) $query .= "LIMIT {$limit} ";
+
+        $st = $this->db->query($query);
+        return $st->fetchAll(PDO::FETCH_ASSOC);
 
     }
 
@@ -269,6 +305,29 @@ class suxUser {
     }
 
 
+    /**
+    * Get user image
+    *
+    * @param int $id users_id
+    * @return string image name
+    */
+    function getImage($users_id) {
+
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
+
+        $st = $this->db->prepare("SELECT image FROM {$this->db_table_info} WHERE users_id = ? LIMIT 1 ");
+        $st->execute(array($users_id));
+        return $st->fetchColumn();
+
+    }
+
+
+    /**
+    * Save user image
+    *
+    * @param int $id users_id
+    * @param string $image
+    */
     function saveImage($users_id, $image) {
 
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
@@ -277,6 +336,9 @@ class suxUser {
         $st->execute(array($image, $users_id));
 
     }
+
+
+
 
     // -----------------------------------------------------------------------
     // User access
@@ -485,6 +547,19 @@ class suxUser {
         $query = suxDB::prepareInsertQuery($this->db_table_log, $clean);
         $st = $this->db->prepare($query);
         $st->execute($clean);
+
+    }
+
+
+    /**
+    * Too many password failures?
+    *
+    * @return bool
+    */
+    function maxPasswordFailures() {
+
+        if (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->max_failures) return true;
+        else return false;
 
     }
 

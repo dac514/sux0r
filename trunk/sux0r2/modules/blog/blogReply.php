@@ -118,7 +118,7 @@ class blogReply {
 
         // Additional variables
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog/reply/' . $this->parent['id']);
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         // Parent
         $this->tpl->assign('parent_id', $this->parent['id']);

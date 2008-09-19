@@ -55,12 +55,18 @@
 <p>
 {strip}
     {capture name=error}
-    {validate id="image" message="invalid file type, jpg, gif, and png only!"}
+    {validate id="image" message="Invalid file type"}
+    {validate id="image2" message="File is too big"}
     {/capture}
 {/strip}
 <label for="image" {if $smarty.capture.error}class="error"{/if} >Image: </label>
 <input type="file" name="image" class="imageFile" />
 {$smarty.capture.error}
+</p>
+
+<p>
+{$r->text.max_filesize}: {$r->text.upload_max_filesize}<br />
+{$r->text.extensions}: {$r->text.supported}
 </p>
 
 <p>

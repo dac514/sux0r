@@ -36,6 +36,7 @@ class blogEdit {
     // Variables
     public $gtext = array();
     private $id;
+    private $extensions = 'jpg,jpeg,gif,png'; // Supported extensions
     private $module = 'blog';
 
     // Objects
@@ -183,7 +184,8 @@ class blogEdit {
             // Register our validators
             if ($this->id) suxValidate::register_validator('integrity', 'integrity:id', 'hasIntegrity');
             suxValidate::register_validator('title', 'title', 'notEmpty', false, false, 'trim');
-            suxValidate::register_validator('image', 'image:jpg,jpeg,gif,png', 'isFileType', true);
+            suxValidate::register_validator('image', 'image:' . $this->extensions, 'isFileType', true);
+            suxValidate::register_validator('image2','image:' . ini_get('upload_max_filesize'), 'isFileSize', true);
             suxValidate::register_validator('body', 'body', 'notEmpty', false, false, 'trim');
             suxValidate::register_validator('date', 'Date:Date_Year:Date_Month:Date_Day', 'isDate', false, false, 'makeDate');
             suxValidate::register_validator('time', 'Time_Hour', 'isInt');
@@ -193,9 +195,11 @@ class blogEdit {
 
         }
 
-        // Additional variables
+        // Additional
+        $this->r->text['upload_max_filesize'] =  ini_get('upload_max_filesize');
+        $this->r->text['supported'] =  $this->extensions;
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog/edit/' . $this->id);
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         if (!$this->tpl->get_template_vars('Date_Year')) {
             // Today's Date

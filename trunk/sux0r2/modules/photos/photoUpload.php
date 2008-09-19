@@ -109,7 +109,7 @@ class photoUpload  {
 
         // Urls
         $this->r->text['form_url'] = suxFunct::makeUrl('/photos/upload');
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         // Template
         $this->tpl->display('upload.tpl');
@@ -133,7 +133,7 @@ class photoUpload  {
             if (!$this->user->isRoot($_SESSION['users_id'])) {
                 $access = $this->user->getAccess($_SESSION['users_id'], $this->module);
                 if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin'])
-                    suxFunct::redirect(suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']));
+                    suxFunct::redirect(suxFunct::getPreviousURL());
             }
         }
 
@@ -230,7 +230,7 @@ class photoUpload  {
     function formSuccess() {
 
         // Template
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         $this->tpl->display('success.tpl');
 

@@ -105,21 +105,44 @@ function sux($action, $params = null) {
         // Edit Registration
         // --------------------------------------------------------------------
 
-            $user = !empty($params[0]) ? $params[0]: null;
+        $user = !empty($params[0]) ? $params[0]: null;
 
-            // Edit profile registration
-            include_once('userEdit.php');
-            $reg = new userEdit('edit', $user);
+        // Edit profile registration
+        include_once('userEdit.php');
+        $reg = new userEdit('edit', $user);
 
-            if ($reg->formValidate($_POST)) {
+        if ($reg->formValidate($_POST)) {
 
-                $reg->formProcess($_POST);
-                $reg->formSuccess();
+            $reg->formProcess($_POST);
+            $reg->formSuccess();
 
-            }
-            else $reg->formBuild($_POST, $_GET);
+        }
+        else $reg->formBuild($_POST, $_GET);
 
-            break;
+        break;
+
+
+    case 'avatar' : // User avatar
+
+        // --------------------------------------------------------------------
+        // Edit Avatar
+        // --------------------------------------------------------------------
+
+        $user = !empty($params[0]) ? $params[0]: null;
+
+        // Edit avatar
+        include_once('userAvatar.php');
+        $reg = new userAvatar($user);
+
+        if ($reg->formValidate($_POST)) {
+
+            $reg->formProcess($_POST);
+            $reg->formSuccess();
+
+        }
+        else $reg->formBuild($_POST);
+
+        break;
 
 
     case 'profile' : // User profile
@@ -129,13 +152,28 @@ function sux($action, $params = null) {
         // --------------------------------------------------------------------
 
         include_once('userProfile.php');
-        if (!empty($params[0])) {
-            $u = new userProfile($params[0]);
-            if ($u->profile) $u->displayProfile();
-            else $u->notFound();
-            break;
+
+        if (empty($params[0])) {
+            if (isset($_SESSION['nickname'])) {
+                suxFunct::redirect(suxFunct::makeUrl('/user/profile/' . $_SESSION['nickname']));
+            }
+            else {
+                suxFunct::redirect(suxFunct::makeUrl('/user/register'));
+            }
         }
 
+        $u = new userProfile($params[0]);
+        if ($u->profile) $u->displayProfile();
+        else $u->notFound();
+        break;
+
+    default:
+
+        // --------------------------------------------------------------------
+        // Redirect to homepage
+        // --------------------------------------------------------------------
+
+        suxFunct::redirect(suxFunct::makeUrl('/home'));
 
     }
 

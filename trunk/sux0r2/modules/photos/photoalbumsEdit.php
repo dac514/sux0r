@@ -147,7 +147,7 @@ class photoalbumsEdit {
 
         // Additional variables
         $this->r->text['form_url'] = suxFunct::makeUrl('/photos/album/edit/' . $this->id);
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         if (!$this->tpl->get_template_vars('Date_Year')) {
             // Today's Date
@@ -222,7 +222,7 @@ class photoalbumsEdit {
         // $this->tpl->clear_cache(null, $_SESSION['nickname']); // Clear cache
 
         // Template
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         $this->tpl->display('success.tpl');
 

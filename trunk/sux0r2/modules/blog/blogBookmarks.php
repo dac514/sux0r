@@ -191,7 +191,7 @@ class blogBookmarks {
 
         // Additional variables
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog/bookmarks/' . $this->msg_id);
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         // Template
         $this->r->found_links = $this->found_links;

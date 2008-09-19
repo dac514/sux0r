@@ -28,20 +28,43 @@ function sux($action, $params = null) {
     {
 
 
-    case 'todo' :
+    case 'access' :
 
         // --------------------------------------------------------------------
-        // Todo
+        // Access
         // --------------------------------------------------------------------
 
         if (empty($params[0])) {
-            suxFunct::redirect(suxFunct::makeUrl('/home'));
+            suxFunct::redirect(suxFunct::makeUrl('/admin'));
         }
 
-        include_once('admin.php');
-        $admin = new admin();
-        $admin->todo($params[0]);
+        include_once('adminAccess.php');
+        $edit = new adminAccess($params[0]);
+
+        if ($edit->formValidate($_POST)) {
+            $edit->formProcess($_POST);
+            $edit->formSuccess();
+        }
+        else {
+            $edit->formBuild($_POST);
+        }
+
         break;
+
+
+    case 'log' :
+
+        // --------------------------------------------------------------------
+        // Log
+        // --------------------------------------------------------------------
+
+        if (empty($params[0])) {
+            suxFunct::redirect(suxFunct::makeUrl('/admin'));
+        }
+
+        include_once('adminLog.php');
+        $admin = new adminLog($params[0]);
+        $admin->display();
 
 
     default:
@@ -52,7 +75,7 @@ function sux($action, $params = null) {
 
         include_once('admin.php');
         $admin = new admin();
-        $admin->main();
+        $admin->userlist();
         break;
 
     }

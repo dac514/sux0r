@@ -98,7 +98,7 @@ class feedsManage  {
 
         // Urls
         $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/manage');
-        $this->r->text['back_url'] = suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']);
+        $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         // Feeds
         $feeds = array();
@@ -141,7 +141,7 @@ class feedsManage  {
         $this->tpl->clear_cache(null, "{$_SESSION['nickname']}");
 
         // Redirect
-        suxFunct::redirect(suxFunct::getPreviousURL($GLOBALS['CONFIG']['PREV_SKIP']));
+        suxFunct::redirect(suxFunct::getPreviousURL());
 
     }
 

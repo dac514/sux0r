@@ -22,6 +22,7 @@
 *
 */
 
+require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once('adminRenderer.php');
 
@@ -29,12 +30,14 @@ require_once('adminRenderer.php');
 class admin {
 
     // Variables
+    public $per_page = 100;
     private $module = 'admin';
 
     // Objects
     public $r;
-    public $tpl;    
-    
+    public $tpl;
+    private $pager;
+
 
     /**
     * Constructor
@@ -44,22 +47,35 @@ class admin {
 
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new adminRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template        
+        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         $this->user = new suxUser();
+        $this->pager = new suxPager();
+
+        // Redirect if not logged in
+        $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
+
+        // Security check
+        if (!$this->user->isRoot($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/home'));
 
     }
-    
-    
-    function main() {
-        
-         
-         $this->tpl->display('scroll.tpl');
-        
+
+
+    function userlist() {
+
+        $this->pager->limit = $this->per_page;
+        $this->pager->setStart();
+
+        $this->pager->setPages($this->user->countUsers());
+        $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/admin"));
+        $this->r->ulist = $this->user->getUsers($this->pager->limit, $this->pager->start);
+
+        $this->tpl->display('userlist.tpl');
+
     }
-    
-   
+
+
 }
 
 

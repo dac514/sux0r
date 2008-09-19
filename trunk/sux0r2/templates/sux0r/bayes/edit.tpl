@@ -68,7 +68,6 @@
 	<tr>
 		<td colspan="2" style="vertical-align:top;">
 			<div id="header">
-            {insert name="userInfo"}
 			</div>
 		</td>
 	</tr>
@@ -78,6 +77,10 @@
 
     {* Content *}
     <div id="middle">
+
+        <div style="margin-left: 5px; margin-bottom: 10px;">
+        [ <a href="{$r->makeUrl('/user/profile')}">Back to my profile &raquo;</a> ]
+        </div>
 
         {if $validate.default.is_error !== false}
         <p class="errorWarning">{$r->text.form_error} :</p>
