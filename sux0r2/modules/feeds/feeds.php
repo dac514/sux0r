@@ -152,6 +152,9 @@ class feeds extends bayesShared {
     */
     function listing($feeds_id = null) {
 
+        // Debug
+        // echo suxDB::prepareSearchQuery('rss_items', 'i am testing search queries');
+
         // Check if the user has any subscriptions
         $subscriptions = array();
         if (isset($_SESSION['users_id'])) {

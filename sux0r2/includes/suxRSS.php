@@ -160,8 +160,8 @@ class suxRSS extends DOMDocument {
         return $st->fetchAll(PDO::FETCH_ASSOC);
 
     }
-    
-    
+
+
     /**
     * Get all published feeds
     *
@@ -174,7 +174,7 @@ class suxRSS extends DOMDocument {
         return $st->fetchAll(PDO::FETCH_ASSOC);
 
     }
-    
+
 
 
     /**
@@ -244,19 +244,19 @@ class suxRSS extends DOMDocument {
         require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
         $converter = new suxHtml2UTF8($clean['body_html']);
         $clean['body_plaintext']  = $converter->getText();
-                
+
         // Id
-        if (isset($url['id'])) {                
+        if (isset($url['id'])) {
             if (!filter_var($url['id'], FILTER_VALIDATE_INT) || $url['id'] < 1) throw new Exception('Invalid id');
             else $clean['id'] = $url['id'];
         }
-        else {            
+        else {
             $query = "SELECT id FROM {$this->db_feeds} WHERE url = ? LIMIT 1 ";
             $st = $this->db->prepare($query);
             $st->execute(array($clean['url']));
-            $edit = $st->fetch(PDO::FETCH_ASSOC); 
-            if ($edit) $clean['id'] = $edit['id'];                            
-        }        
+            $edit = $st->fetch(PDO::FETCH_ASSOC);
+            if ($edit) $clean['id'] = $edit['id'];
+        }
 
         // Draft, boolean / tinyint
         $clean['draft'] = 0;
@@ -270,7 +270,7 @@ class suxRSS extends DOMDocument {
 
         if (isset($clean['id'])) {
 
-            // UPDATE            
+            // UPDATE
             unset($clean['users_id']); // Don't override the original suggestor
             $query = suxDB::prepareUpdateQuery($this->db_feeds, $clean);
             $st = $this->db->prepare($query);
@@ -313,42 +313,42 @@ class suxRSS extends DOMDocument {
         return $st->fetchColumn();
 
     }
-    
-    
+
+
 
     /**
     * @param int $id feed id
     */
     function deleteFeed($id) {
-        
+
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
-        
+
         $this->db->beginTransaction();
         $this->inTransaction = true;
-        
+
         $st = $this->db->prepare("DELETE FROM {$this->db_items} WHERE rss_feeds_id = ? ");
         $st->execute(array($id));
-        
+
         $st = $this->db->prepare("DELETE FROM {$this->db_feeds} WHERE id = ? LIMIT 1 ");
-        $st->execute(array($id));       
-        
+        $st->execute(array($id));
+
         $this->db->commit();
-        $this->inTransaction = false;  
-        
+        $this->inTransaction = false;
+
     }
-    
-    
+
+
     /**
     * @param int $id feed id
     */
     function approveFeed($id) {
-        
+
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
-        
+
         $st = $this->db->prepare("UPDATE {$this->db_feeds} SET draft = 0 WHERE id = ? ");
-        $st->execute(array($id));           
-        
-    }    
+        $st->execute(array($id));
+
+    }
 
 
     /**

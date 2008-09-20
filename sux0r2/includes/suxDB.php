@@ -54,7 +54,7 @@ class suxDB {
     // ------------------------------------------------------------------------
 
     /**
-    * Get a PDO database connection
+    * Get a PDO database connection, singleton design
     *
     * @param string $key PDO dsn key
     */
@@ -188,6 +188,46 @@ class suxDB {
         $query = $query . $column . $placeholders . $where;
 
         return "$query "; // Add space, just incase
+
+    }
+
+
+
+    /**
+    * Autogenerate cheap SQL SEARCH query, for a table with `title`
+    * and `body_plaintext` columns
+    *
+    * @param string $table the name of a table to insert into
+    * @param string $string search query
+    * @param string $op SQL operator, AND/OR
+    * @return string|false SQL query
+    */
+    static function prepareSearchQuery($table, $string, $where = '', $op = 'AND') {
+
+        $tokens = suxFunct::parseTokens($string);
+
+        $op = mb_strtoupper($op);
+        if ($op != 'AND') $op = 'OR'; // Enforce OR/AND
+
+        $db = self::get();
+        $q = "SELECT * FROM {$table} WHERE ( ";
+        foreach ($tokens as $string) {
+            //quote
+            $string = $db->quote($string);
+            // replace the first character
+            $tmp = substr($string, 0, 1);
+            $string = substr_replace($string, "{$tmp}%", 0, 1);
+            // replace the last character
+            $tmp = substr($string, -1, 1);
+            $string = substr_replace($string, "%{$tmp}", -1, 1);
+            // append to query
+            $q .= "(title LIKE {$string} OR body_plaintext LIKE {$string}) $op ";
+        }
+        $q = rtrim($q, "$op "); // Remove trailing OR
+        if (trim($where)) $q .= "AND $where "; // Append additional $where query
+        $q .= ') ';
+
+        return $q;
 
     }
 
