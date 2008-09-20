@@ -43,8 +43,6 @@ class suxNaiveBayesian {
     protected $db_table_cache = 'bayes_cache';
 
     // If you change these, then you need to adjust your database columns
-    private $min_token_length = 3;
-    private $max_token_length = 64;
     private $max_category_length = 64;
     private $max_vector_length = 64;
 
@@ -834,9 +832,9 @@ class suxNaiveBayesian {
             $score = $this->categorize($text, $vec_id);
             if (round($score[$cat_id]['score'] * 100, 2) < round($threshold *100, 2)) return false;
         }
-        
+
         return true;
-        
+
     }
 
 
@@ -880,68 +878,7 @@ class suxNaiveBayesian {
     */
     private function parseTokens($string, $stopwords = true) {
 
-        $rawtokens = array();
-        $tokens    = array();
-
-        $string = mb_strtolower($string);
-
-        // \w means alphanumeric characters.
-        // Usually, non-English letters and numbers are included.
-        // \W is the negated version of \w
-        //
-        // TODO: We're splitting on "anything that isn't a word" which is good
-        // for languages with punctuation and spaces. But what about Chinese,
-        // Japanese, and other languages that don't use them? How do we
-        // identify tokens in those cases?
-
-        $rawtokens = mb_split("\W", $string);
-
-        // remove unwanted tokens
-        foreach ($rawtokens as $token) {
-            $token = trim($token);
-            if ($this->acceptableToken($token, $stopwords)) @$tokens[$token]++;
-        }
-        return $tokens;
-    }
-
-
-    /**
-    * @param string $string a token to inspect
-    * @param bool $stopwords use stopwords?
-    * @return bool
-    */
-    private function acceptableToken($token, $stopwords) {
-
-        // Cache
-        static $ignore_list = null;
-        if ($stopwords && !is_array($ignore_list)) {
-
-            //. Get stopwords
-            $ignore_list = array();
-            $dir = dirname(__FILE__) . '/symbionts/stopwords';
-            foreach (new DirectoryIterator($dir) as $file) {
-                if (preg_match('/^[a-z]{2}\.txt$/', $file)) {
-                    $ignore_list = array_merge($ignore_list, file("{$dir}/{$file}", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
-                }
-            }
-            // Add generic internet cruft for good measure
-            $ignore_list = array_merge($ignore_list, array('http', 'https', 'mailto', 'www', 'com', 'net', 'org', 'biz', 'info'));
-
-            // array_clip removes duplicates and increase speed by using isset() instead of in_array()
-            $ignore_list = array_flip($ignore_list);
-
-        }
-
-        if (!(
-            empty($token) ||
-            (mb_strlen($token) < $this->min_token_length) ||
-            (mb_strlen($token) > $this->max_token_length) ||
-            ctype_digit($token) ||
-            ($stopwords && isset($ignore_list[$token]))
-            )) return true;
-
-        return false;
-
+        return suxFunct::parseTokens($string, $stopwords, true);
     }
 
 

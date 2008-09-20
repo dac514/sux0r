@@ -24,6 +24,8 @@
 
 class suxFunct {
 
+    // Stopwords cache
+    private static $stopwords;
 
     // Static class, no cloning or instantiating allowed
     final private function __construct() { }
@@ -471,6 +473,68 @@ class suxFunct {
 
         if (!is_array($gtext) || !count($gtext)) return false; // something is wrong
         else return $gtext;
+
+    }
+
+
+    /**
+    * Parse a string and turn it into an array of valid tokens
+    *
+    * @param string $string
+    * @param bool $use_stopwords
+    * @return array
+    */
+    static function parseTokens($string, $use_stopwords = true, $count = false) {
+
+        // \w means alphanumeric characters.
+        // Usually, non-English letters and numbers are included.
+        // \W is the negated version of \w
+        //
+        // TODO: We're splitting on "anything that isn't a word" which is good
+        // for languages with punctuation and spaces. But what about Chinese,
+        // Japanese, and other languages that don't use them? How do we
+        // identify tokens in those cases?
+
+        $string = mb_strtolower($string);
+        $rawtokens = mb_split("\W", $string);
+        if (!count($rawtokens)) return array();
+
+        if ($use_stopwords && !is_array(self::$stopwords)) {
+            //. Get stopwords
+            self::$stopwords = array();
+            $dir = dirname(__FILE__) . '/symbionts/stopwords';
+            foreach (new DirectoryIterator($dir) as $file) {
+                if (preg_match('/^[a-z]{2}\.txt$/', $file)) {
+                    self::$stopwords = array_merge(self::$stopwords, file("{$dir}/{$file}", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+                }
+            }
+            // Add generic internet cruft for good measure
+            self::$stopwords = array_merge(self::$stopwords, array('http', 'https', 'mailto', 'www', 'com', 'net', 'org', 'biz', 'info'));
+
+            // array_clip removes duplicates and increase speed by using isset() instead of in_array()
+            self::$stopwords = array_flip(self::$stopwords);
+
+        }
+
+        // IMPORTANT:
+        // If you change the number 64 below, you need to adjust
+        // suxNaiveBayesian() and the corresponding token DB column accordingly
+
+        $tokens = array();
+        foreach ($rawtokens as $val) {
+            if (!(
+                empty($val) ||
+                (mb_strlen($val) < 3) ||
+                (mb_strlen($val) > 64) ||
+                ctype_digit($val) ||
+                (isset(self::$stopwords[$val]))
+                )) {
+                    if ($count) @$tokens[$val]++;
+                    else $tokens[] = $val;
+                }
+        }
+
+        return $tokens;
 
     }
 
