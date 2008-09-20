@@ -244,7 +244,8 @@ class suxRenderer {
             else $search = $_GET['search'];
         }
 
-        $search = mb_strtoupper(trim($_GET['search']));
+        $search = trim(mb_strtoupper(strip_tags($search)));
+
         $words = array();
         $rawtokens = mb_split("\W", $search);
         foreach ($rawtokens as $v) {
