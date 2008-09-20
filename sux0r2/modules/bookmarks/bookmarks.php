@@ -94,7 +94,7 @@ class bookmarks extends bayesShared {
         if ($this->alphasort) $sort['sort'] = 'alpha';
         $this->tpl->assign('sort', $sort);
 
-        if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
+        if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
             // Filtered results
@@ -103,7 +103,7 @@ class bookmarks extends bayesShared {
             // User has subscriptions, we need special JOIN queries
             $max = $this->countUserItems($this->users_id);
             $eval = '$this->getUserItems($this->users_id, $this->alphasort, $this->pager->limit, $start)';
-            $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval); // Important: start must be reference
+            $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval, $search); // Important: start must be reference
 
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
@@ -112,9 +112,6 @@ class bookmarks extends bayesShared {
                 $url = suxFunct::makeUrl("/bookmarks/user/$nickname", $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
-
-            $this->tpl->assign('filter', $cat_id);
-            if ($threshold !== false) $this->tpl->assign('threshold', $threshold);
 
         }
         else {
@@ -179,14 +176,14 @@ class bookmarks extends bayesShared {
 
         $count = $this->countTaggedItems($this->tag_id);
 
-        if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
+        if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
             // Filtered results
             // ---------------------------------------------------------------
 
             $eval = '$this->getTaggedItems($this->tag_id, $this->alphasort, $this->pager->limit, $start)';
-            $this->r->fp  = $this->filter($count, $vec_id, $cat_id, $threshold, &$start, $eval); // Important: start must be reference
+            $this->r->fp  = $this->filter($count, $vec_id, $cat_id, $threshold, &$start, $eval, $search); // Important: start must be reference
 
             if ($start < $count) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
@@ -195,9 +192,6 @@ class bookmarks extends bayesShared {
                 $url = suxFunct::makeUrl('/bookmarks/tag/'. $this->tag_id, $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
-
-            $this->tpl->assign('filter', $cat_id);
-            if ($threshold !== false) $this->tpl->assign('threshold', $threshold);
 
         }
         else {
@@ -289,7 +283,7 @@ class bookmarks extends bayesShared {
         if ($this->alphasort) $sort['sort'] = 'alpha';
         $this->tpl->assign('sort', $sort);
 
-        if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
+        if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
             // Filtered results
@@ -297,7 +291,7 @@ class bookmarks extends bayesShared {
 
             $max = $this->bm->countBookmarks();
             $eval = '$this->bm->getBookmarks($this->pager->limit, $start, $this->alphasort)';
-            $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval); // Important: start must be reference
+            $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval, $search); // Important: start must be reference
 
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
@@ -308,8 +302,6 @@ class bookmarks extends bayesShared {
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
 
-            $this->tpl->assign('filter', $cat_id);
-            if ($threshold !== false) $this->tpl->assign('threshold', $threshold);
 
         }
         else {

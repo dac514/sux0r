@@ -168,6 +168,14 @@ input, select {
     margin-top: 5px;
 }
 
+#nbSearchBox {
+    float: right;
+}
+
+#nbSearch {
+    width: 80px;
+}
+
 #nbfCategoriesForm, #nbfSliderForm {
     float: left;
 }

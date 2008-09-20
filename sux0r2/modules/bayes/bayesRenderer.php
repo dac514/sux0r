@@ -616,6 +616,7 @@ function insert_bayesFilters($params) {
 
     if (isset($_GET['filter'])) $tpl->assign('filter', $_GET['filter']);
     if (isset($_GET['threshold']) && $_GET['threshold'] !== false) $tpl->assign('threshold', $_GET['threshold']);
+    if (isset($_GET['search'])) $tpl->assign('search', $_GET['search']);
     if (isset($params['form_url'])) $r->text['form_url'] = $params['form_url'];
     if (isset($params['hidden']) && is_array($params['hidden'])) $r->text['hidden'] = $params['hidden'];
 
