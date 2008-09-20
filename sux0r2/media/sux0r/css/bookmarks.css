@@ -1,3 +1,8 @@
 .widerInput {
     width: 350px;
 }
+
+#nbf {
+    margin-left: 10px;
+    margin-right: 10px;
+}

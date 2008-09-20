@@ -26,14 +26,11 @@ $valid_modules = array('blog', 'feeds', 'bookmarks');
 function getBody($link, $id) {
 
     $body = false;
-    
-    // Use"$title \n\n body" to train documents. If you change this 
-    // convention then you need to adjust bayesShared::filter()
 
     if ($link == 'messages') {
         require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
         $msg = new suxThreadedMessages();
-        $body = $msg->getMessage($id);        
+        $body = $msg->getMessage($id);
         $body = "{$body['title']} \n\n {$body['body_plaintext']}";
     }
     elseif ($link == 'rss') {
@@ -43,10 +40,10 @@ function getBody($link, $id) {
         $body = "{$body['title']} \n\n {$body['body_plaintext']}";
     }
     elseif ($link == 'bookmarks') {
-        require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');                                
-        $bm = new suxBookmarks();        
+        require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
+        $bm = new suxBookmarks();
         $body = $bm->getBookmark($id);
-        $body = "{$body['title']} \n\n {$body['body_plaintext']}";           
+        $body = "{$body['title']} \n\n {$body['body_plaintext']}";
     }
 
     return $body;
