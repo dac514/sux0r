@@ -128,7 +128,7 @@ Event.observe(window, 'load', function() {
                     </div>
                     <div class="clearboth"></div>
 
-                    <div class="rssItem">{$foo.body_html}</div>
+                    <div class="rssItem">{insert name="highlight" html=$foo.body_html}</div>
                     <div class="clearboth"></div>
 
                     <!-- Read more -->
@@ -142,7 +142,8 @@ Event.observe(window, 'load', function() {
 
                 {/capture}
 
-                {$r->widget($foo.title, $smarty.capture.feed, $foo.url)}
+                {capture name=title_HL}{insert name="highlight" html=$foo.title}{/capture}
+                {$r->widget($smarty.capture.title_HL, $smarty.capture.feed, $foo.url)}
 
 
             {/foreach}

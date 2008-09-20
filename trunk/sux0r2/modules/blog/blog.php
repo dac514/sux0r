@@ -290,8 +290,7 @@ class blog extends bayesShared {
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
 
-            $this->tpl->assign('filter', $cat_id2);
-            if ($threshold !== false) $this->tpl->assign('threshold', $threshold);
+
 
         }
         else {
@@ -370,6 +369,7 @@ class blog extends bayesShared {
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
 
+
         }
         else {
 
@@ -440,6 +440,7 @@ class blog extends bayesShared {
                 $url = suxFunct::makeUrl('/blog/', $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
+
 
         }
         else {
