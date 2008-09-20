@@ -31,7 +31,7 @@ require_once('bayesUser.php');
 class bayesEdit {
 
     // Variables
-    public $caches = array('blog', 'feeds'); // Modules that cache bayes interfaces
+    public $caches = array('blog', 'feeds', 'bookmarks'); // Modules that cache bayes interfaces
     public $gtext = array();
     private $module = 'bayes'; // Module
 
