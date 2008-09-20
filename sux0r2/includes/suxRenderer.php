@@ -194,7 +194,7 @@ class suxRenderer {
         if ($size) {
 
             $width = $size[0]; // Keep width for template variable
-            $alt = str_replace("'", "\'", $title); // Escape
+            $alt = str_replace("'", "\'", strip_tags($title)); // Escape
 
             $tmp = '';
             if ($url) $tmp .= "<a href='{$url}'>";
@@ -224,6 +224,52 @@ class suxRenderer {
         $path = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $this->partition ;
         if (!file_exists("$path/widget.tpl")) $path = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r';
         return $tpl->fetch("file:$path/widget.tpl");
+
+    }
+
+
+    /**
+    * Highlight HTML
+    *
+    * @global string $_GET['search']
+    * @param string $html the text to highlight
+    * @param string $search
+    * @return string
+    */
+    static function highlight($html, $search = null) {
+
+        if (!$search) {
+            // Try to fallback on GET query
+            if (!isset($_GET['search']) || !trim($_GET['search'])) return $html;
+            else $search = $_GET['search'];
+        }
+
+        $search = mb_strtoupper(trim($_GET['search']));
+        $words = array();
+        $rawtokens = mb_split("\W", $search);
+        foreach ($rawtokens as $v) {
+            if (trim($v)) $words[] = $v;
+        }
+
+        $replacements = array();
+        foreach($words as $word) {
+            $replacements[] = "<span class='highlight'>$word</span>";
+        }
+
+        // Split up the content into chunks delimited by a reasonable aproximation
+        // of what an HTML element looks like
+
+        $parts = preg_split("{(<(?:\"[^\"]*\"|'[^']*'|[^'\">])*>)}", $html, -1, PREG_SPLIT_DELIM_CAPTURE); // Unlimited number of chunks
+        foreach ($parts as $i => $part) {
+            // Skip if this part is an HTML element
+            if (isset($part[0]) && ($part[0] == '<')) { continue; }
+            // Wrap the words with <span/>s
+            $parts[$i] = str_ireplace($words, $replacements, $part); // TODO, make multi-byte compatible
+        }
+
+        $html = implode('', $parts);
+
+        return $html;
 
     }
 
@@ -294,6 +340,7 @@ class suxRenderer {
         return suxFunct::makeUrl($path, $query, $full);
 
     }
+
 
     /**
     * TinyMCE Initialization
@@ -401,6 +448,25 @@ function insert_userInfo($params) {
     $tmp .= '</div>' . "\n";
 
     return $tmp;
+
+}
+
+
+/**
+* Highlight wrapper
+*
+* @param array $params smarty {insert} parameters
+* @return string html
+*/
+function insert_highlight($params) {
+
+    if (!isset($params['html'])) return false;
+    $html = $params['html'];
+
+    $search = null;
+    if (isset($params['search'])) $search = $params['search'];
+
+    return suxRenderer::highlight($html, $search);
 
 }
 

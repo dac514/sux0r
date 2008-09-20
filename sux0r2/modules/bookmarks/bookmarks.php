@@ -113,6 +113,7 @@ class bookmarks extends bayesShared {
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
 
+
         }
         else {
 
@@ -192,6 +193,7 @@ class bookmarks extends bayesShared {
                 $url = suxFunct::makeUrl('/bookmarks/tag/'. $this->tag_id, $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
+
 
         }
         else {

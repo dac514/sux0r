@@ -1,14 +1,13 @@
 <div id="nbf">
 
-
     {* Top *}
     <form action="{$r->text.form_url}" method="get" accept-charset="utf-8"
     onsubmit="$('nbSearch2').value = $('nbSearch').value; return true;"
     id="nbfCategoriesForm" >
-    <input type="hidden" id="nbSearch2" name="search" value="{$search}" />
         {$r->text.categories} :
         {html_options name='filter' id='filter' options=$r->getUserCategories() selected=$filter}
         <input id="nbfTopButton" type="submit" value="{$r->text.top}" />
+        <input type="hidden" id="nbSearch2" name="search" value="{$search}" />
     </form>
 
     {* Threshold *}
@@ -40,7 +39,6 @@
     <div id="nbSearchBox">{$r->text.search} : <input type="text" id='nbSearch' name='search' value='{$search}' /></div>
 
     <div class='clearboth'></div>
-
 
 </div>
 

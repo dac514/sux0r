@@ -120,6 +120,9 @@ input, select {
     color: #999999;
 }
 
+.highlight {
+    background-color: yellow;
+}
 
 /* }}} */
 

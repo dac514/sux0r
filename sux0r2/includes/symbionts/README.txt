@@ -82,7 +82,6 @@ Scriptaculous
 * Licence: MIT
 * Website: http://script.aculo.us/
 
-
 Smarty
 * Path: ./Smarty/
 * Version: 2.6.19

@@ -76,12 +76,12 @@ function toggleSubscription(bookmark_id) {
                     </div>
 
                     <div style="float:left;">
-                        <a href="{$foo.url}">{$foo.title}</a><br />
+                        <a href="{$foo.url}">{insert name="highlight" html=$foo.title}</a><br />
                         <em>Published on: {$foo.published_on}</em><br />
                     </div>
                     <div class="clearboth"></div>
 
-                    <div>{$foo.body_html}</div>
+                    <div>{insert name="highlight" html=$foo.body_html}</div>
                     {$r->tags($foo.id)}
 
                     <!-- Naive Baysian Classification -->

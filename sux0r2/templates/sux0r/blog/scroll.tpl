@@ -131,7 +131,7 @@ Event.observe(window, 'load', function() {
 
                     <!-- Content -->
                     <p>By <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a> <em>on {$foo.published_on}</em></p>
-                    <p>{$foo.body_html}</p>
+                    <p>{insert name="highlight" html=$foo.body_html}</p>
                     <div class="clearboth"></div>
 
 
@@ -164,7 +164,8 @@ Event.observe(window, 'load', function() {
 
                 {/capture}
 
-                {$r->widget($foo.title, $smarty.capture.blog, $smarty.capture.blog_url, $smarty.capture.blog_img)}
+                {capture name=title_HL}{insert name="highlight" html=$foo.title}{/capture}
+                {$r->widget($smarty.capture.title_HL, $smarty.capture.blog, $smarty.capture.blog_url, $smarty.capture.blog_img)}
 
 
             {/foreach}
