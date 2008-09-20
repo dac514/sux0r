@@ -752,7 +752,9 @@ class suxNaiveBayesian {
 
         // Try to create a coherant md5 from similar documents by
         // normalizing line breaks and white spaces
-        $md5 = md5(preg_replace('/\n+|\s+/', ' ', $vector_id . $document));
+        $tmp = preg_replace('/\n+/', ' ', $vector_id . $document);
+        $tmp = preg_replace('/\s+/', ' ', $tmp);
+        $md5 = md5($tmp);
 
         // Check cache
         if ($scores = $this->checkCache($md5)) return $scores;
