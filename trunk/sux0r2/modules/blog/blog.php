@@ -88,7 +88,7 @@ class blog extends bayesShared {
         $u = $this->user->getUserByNickname($author);
         if(!$u) suxFunct::redirect(suxFunct::makeUrl('/blog'));
 
-        if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
+        if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
             // Filtered results
@@ -96,7 +96,7 @@ class blog extends bayesShared {
 
             $max = $this->msg->countFirstPostsByUser($u['users_id'], 'blog');
             $eval = '$this->msg->getFirstPostsByUser(' .$u['users_id'] . ', \'blog\', $this->pager->limit, $start)';
-            $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval)); // Important: start must be reference
+            $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval, $search)); // Important: start must be reference
 
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
@@ -105,8 +105,6 @@ class blog extends bayesShared {
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
 
-            $this->tpl->assign('filter', $cat_id);
-            if ($threshold !== false) $this->tpl->assign('threshold', $threshold);
 
         }
         else {
@@ -168,14 +166,14 @@ class blog extends bayesShared {
 
         $count = $this->countTaggedItems($this->tag_id);
 
-        if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
+        if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
             // Filtered results
             // ---------------------------------------------------------------
 
             $eval = '$this->getTaggedItems($this->tag_id, $this->pager->limit, $start)';
-            $this->r->fp  = $this->blogs($this->filter($count, $vec_id, $cat_id, $threshold, &$start, $eval)); // Important: start must be reference
+            $this->r->fp  = $this->blogs($this->filter($count, $vec_id, $cat_id, $threshold, &$start, $eval, $search)); // Important: start must be reference
 
             if ($start < $count) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
@@ -184,8 +182,6 @@ class blog extends bayesShared {
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
 
-            $this->tpl->assign('filter', $cat_id);
-            if ($threshold !== false) $this->tpl->assign('threshold', $threshold);
 
         }
         else {
@@ -278,14 +274,14 @@ class blog extends bayesShared {
 
         $count = $this->countCategorizedItems($this->cat_id);
 
-        if (list($vec_id, $cat_id2, $threshold, $start) = $this->nb->isValidFilter()) {
+        if (list($vec_id, $cat_id2, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
             // Filtered results
             // ---------------------------------------------------------------
 
             $eval = '$this->getCategorizedItems($this->cat_id, $this->pager->limit, $start)';
-            $this->r->fp  = $this->blogs($this->filter($count, $vec_id, $cat_id2, $threshold, &$start, $eval)); // Important: start must be reference
+            $this->r->fp  = $this->blogs($this->filter($count, $vec_id, $cat_id2, $threshold, &$start, $eval, $search)); // Important: start must be reference
 
             if ($start < $count) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id2);
@@ -357,7 +353,7 @@ class blog extends bayesShared {
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog/month/' . $date); // Form Url
         $cache_id = false;
 
-        if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
+        if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
             // Filtered results
@@ -365,7 +361,7 @@ class blog extends bayesShared {
 
             $max = $this->msg->countFirstPostsByMonth($datetime, 'blog');
             $eval = '$this->msg->getFirstPostsByMonth(\'' . $datetime . '\', \'blog\', $this->pager->limit, $start)';
-            $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval)); // Important: start must be reference
+            $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval, $search)); // Important: start must be reference
 
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
@@ -373,9 +369,6 @@ class blog extends bayesShared {
                 $url = suxFunct::makeUrl('/blog/month/'. $date, $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
-
-            $this->tpl->assign('filter', $cat_id);
-            if ($threshold !== false) $this->tpl->assign('threshold', $threshold);
 
         }
         else {
@@ -431,7 +424,7 @@ class blog extends bayesShared {
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog'); // Form Url
         $cache_id = false;
 
-        if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
+        if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
             // Filtered results
@@ -439,7 +432,7 @@ class blog extends bayesShared {
 
             $max = $this->msg->countFirstPosts('blog');
             $eval = '$this->msg->getFirstPosts(\'blog\', $this->pager->limit, $start)';
-            $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval)); // Important: start must be reference
+            $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval, $search)); // Important: start must be reference
 
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
@@ -447,10 +440,6 @@ class blog extends bayesShared {
                 $url = suxFunct::makeUrl('/blog/', $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
-
-            $this->tpl->assign('filter', $cat_id);
-            if ($threshold !== false) $this->tpl->assign('threshold', $threshold);
-
 
         }
         else {

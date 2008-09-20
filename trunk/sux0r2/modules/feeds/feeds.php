@@ -85,7 +85,7 @@ class feeds extends bayesShared {
         $this->r->text['form_url'] = suxFunct::makeUrl("/feeds/user/$nickname"); // Forum Url
         $cache_id = false;
 
-        if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
+        if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
             // Filtered results
@@ -94,7 +94,7 @@ class feeds extends bayesShared {
             // User has subscriptions, we need special JOIN queries
             $max = $this->countUserItems($this->users_id);
             $eval = '$this->getUserItems($this->users_id, $this->pager->limit, $start)';
-            $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval); // Important: start must be reference
+            $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval, $search); // Important: start must be reference
 
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
@@ -103,8 +103,6 @@ class feeds extends bayesShared {
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
 
-            $this->tpl->assign('filter', $cat_id);
-            if ($threshold !== false) $this->tpl->assign('threshold', $threshold);
 
         }
         else {
@@ -166,7 +164,7 @@ class feeds extends bayesShared {
         $this->r->text['form_url'] = suxFunct::makeUrl("/feeds/$feeds_id"); // Forum Url
         $cache_id = false;
 
-        if (list($vec_id, $cat_id, $threshold, $start) = $this->nb->isValidFilter()) {
+        if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
             // Filtered results
@@ -182,8 +180,8 @@ class feeds extends bayesShared {
                 $max = $this->countUserItems($_SESSION['users_id']);
                 $eval = '$this->getUserItems($_SESSION[\'users_id\'], $this->pager->limit, $start)';
             }
-            // Important: start must be reference
-            $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval);
+
+            $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval, $search);  // Important: start must be reference
 
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
@@ -192,8 +190,6 @@ class feeds extends bayesShared {
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
 
-            $this->tpl->assign('filter', $cat_id);
-            if ($threshold !== false) $this->tpl->assign('threshold', $threshold);
 
         }
         else {

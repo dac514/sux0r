@@ -508,7 +508,9 @@ class bayesUser extends suxNaiveBayesian {
         if (!isset($_GET['start'])) $_GET['start'] = 0;
         else if (!filter_var($_GET['start'], FILTER_VALIDATE_INT) || $_GET['start'] < 1) $_GET['start'] = 0;
 
-        return array($vec_id, $_GET['filter'], $_GET['threshold'], $_GET['start']);
+        if (!isset($_GET['search'])) $_GET['search'] = '';
+
+        return array($vec_id, $_GET['filter'], $_GET['threshold'], $_GET['start'], $_GET['search']);
 
     }
 
@@ -583,23 +585,24 @@ class bayesUser extends suxNaiveBayesian {
 // ---------------------------------------------------------------------------
 
 abstract class bayesShared {
-            
+
     protected $pager; // suxPager() object to be declared in child
     protected $nb; // suxNaiveBayesian() object to be declared in child
-    
-    abstract function __construct();    
-    
+
+    abstract function __construct();
+
     /**
-    * Filter    
+    * Filter
     *
     * @param int $max
     * @param int $vec_id
     * @param int $cat_id
     * @param float $threshold
     * @param int $start
-    * @param string $eval    
-    */       
-    protected function filter($max, $vec_id, $cat_id, $threshold, $start, $eval) {
+    * @param string $eval
+    * @param string $search
+    */
+    protected function filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search) {
 
         // -------------------------------------------------------------------
         // Get items based on score, variable paging
@@ -611,6 +614,12 @@ abstract class bayesShared {
         $timer = microtime(true);
         $timeout_max = ini_get('max_execution_time') * 0.333333;
         if ($timeout_max > 30) $timeout_max = 30;
+
+        $search = mb_strtolower(trim($search));
+        if ($search) {
+            $rawtokens = mb_split("\W", $search);
+            $rawtoken_count = count($rawtokens);
+        }
 
         // Start filtering
         $i = 0;
@@ -625,6 +634,14 @@ abstract class bayesShared {
                 if (!$this->nb->passesThreshold($threshold, $vec_id, $cat_id, "{$val['title']} \n\n {$val['body_plaintext']}")) {
                     unset($results[$key]);
                     continue;
+                }
+                if ($search) {
+                    $found = 0;
+                    foreach ($rawtokens as $token) {
+                        if (mb_stripos("{$val['title']} \n\n {$val['body_plaintext']}", $token) !== false)
+                            ++$found;
+                    }
+                    if ($found != $rawtoken_count) unset($results[$key]);
                 }
             }
 
@@ -648,32 +665,32 @@ abstract class bayesShared {
 
         return $results;
 
-    }  
+    }
 
 
     /**
     * Reusable SQL for date constraint
     */
     protected function _dateSql() {
-        
+
         static $date = null; // Cache
         if ($date != null) return $date;
-        
+
         $db = suxDb::get();
         $db_driver = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
-        
+
         // Date query, database specic
         if ($db_driver == 'mysql') {
             $date = 'AND NOT published_on > \'' . date('Y-m-d H:i:s') . '\' ';
         }
         else {
             throw new Exception('Unsupported database driver');
-        }     
-        
+        }
+
         return $date;
-        
-    }      
-    
+
+    }
+
 }
 
 
