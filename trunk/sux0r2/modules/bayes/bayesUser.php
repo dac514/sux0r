@@ -634,14 +634,14 @@ abstract class bayesShared {
             $results = array_merge($results, $tmp);
 
             foreach ($results as $key => $val) {
-                if (!$this->nb->passesThreshold($threshold, $vec_id, $cat_id, "{$val['title']} \n\n {$val['body_plaintext']}")) {
+                if (!$this->nb->passesThreshold($threshold, $vec_id, $cat_id, "{$val['title']} {$val['body_plaintext']}")) {
                     unset($results[$key]);
                     continue;
                 }
                 if ($search) {
                     $found = 0;
                     foreach ($rawtokens as $token) {
-                        if (mb_stripos("{$val['title']} \n\n {$val['body_plaintext']}", $token) !== false)
+                        if (mb_stripos("{$val['title']} {$val['body_plaintext']}", $token) !== false)
                             ++$found;
                     }
                     if ($found != $rawtoken_count) unset($results[$key]);

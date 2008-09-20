@@ -750,8 +750,12 @@ class suxNaiveBayesian {
         $converter = new suxHtml2UTF8($document);
         $document = $converter->getText();
 
+        // Try to create a coherant md5 from similar documents
+        $tmp = preg_replace('/\n+/', ' ', $vector_id . $document);
+        $tmp = preg_replace('/\s+/', ' ', $tmp);
+        $md5 = md5($tmp);
+
         // Check cache
-        $md5 = md5($vector_id . $document);
         if ($scores = $this->checkCache($md5)) return $scores;
 
         $scores = array();
