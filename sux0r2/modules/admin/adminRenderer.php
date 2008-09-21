@@ -27,7 +27,7 @@ require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
 class adminRenderer extends suxRenderer {
 
-    // Arrays        
+    // Arrays
     public $gtext = array();
 
     // Objects
@@ -44,6 +44,37 @@ class adminRenderer extends suxRenderer {
         parent::__construct($module); // Call parent
         $this->gtext = suxFunct::gtext('admin'); // Language
         $this->user = new suxUser();
+
+    }
+
+    /**
+    * Get a user's access levels
+    *
+    * @global $CONFIG['ACCESS']
+    * @param int $users_id
+    * @return string html
+    */
+    function getAccessLevels($users_id) {
+
+        $access = array();
+        foreach ($GLOBALS['CONFIG']['ACCESS']  as $key => $val) {
+            $level = $this->user->getAccess($users_id, $key);
+            if ($level) {
+                $tmp = $GLOBALS['CONFIG']['ACCESS'][$key];
+                $tmp = array_flip($tmp);
+                $access[$key] = $tmp[$level];
+            }
+        }
+
+        if (!count($access)) return null;
+
+        $html = '';
+        foreach ($access as $key => $val) {
+            $key = ucfirst($key);
+            $html .= "[$key: $val ] ";
+        }
+
+        return $html;
 
     }
 

@@ -26,21 +26,29 @@
     <thead>
         <tr>
             <td>username</td>
-            <td>last active</td>
-            <td>root</td>
             <td>banned</td>
-            <td>edit access</td>
+            <td>root</td>
+            <td>access</td>
+            <td>edit</td>
+            <td>last active</td>
+
+
         </tr>
     </thead>
 
     {foreach from=$r->ulist item=foo}
 
     <tr>
-        <td><a href="{$r->makeUrl('/user/edit')}/{$foo.nickname}">{$foo.nickname}</a></td>
+        <td><a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a></td>
+        <td style="text-align:center;">{if $foo.banned}x{/if}</td>
+        <td style="text-align:center;">{if $foo.root}x{/if}</td>
+        <td>{$r->getAccessLevels($foo.users_id)}</td>
+        <td style="text-align:center;">
+            <a href="{$r->makeUrl('/user/edit')}/{$foo.nickname}">profile</a> |
+            <a href="{$r->makeUrl('/admin/access')}/{$foo.nickname}">access</a>
+        </td>
         <td><a href="{$r->makeUrl('/admin/log')}/{$foo.nickname}">{$foo.last_active}</a></td>
-        <td>{if $foo.root}x{/if}</td>
-        <td>{if $foo.banned}x{/if}</td>
-        <td><a href="{$r->makeUrl('/admin/access')}/{$foo.nickname}">edit</a></td> {*TODO: Ajax tooltip to see user access *}
+
     </tr>
 
     {/foreach}
