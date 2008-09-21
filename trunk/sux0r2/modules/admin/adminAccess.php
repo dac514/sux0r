@@ -1,7 +1,7 @@
 <?php
 
 /**
-* userAvatar
+* adminAccess
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -22,26 +22,25 @@
 *
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
-require_once('userRenderer.php');
+require_once('adminRenderer.php');
 
-class userAvatar  {
+class adminAccess {
 
     // Variables
     private $nickname;
     private $users_id;
-    private $image;
-    public $gtext = array();
-    private $extensions = 'jpg,jpeg,gif,png'; // Supported extensions
-    private $module = 'user';
-
+    private $root;
+    private $banned;
+    public $gtext = array(); // Language
+    private $module = 'admin';
 
     // Objects
     public $tpl;
     public $r;
     private $user;
+
 
     /**
     * Constructor
@@ -51,7 +50,7 @@ class userAvatar  {
 
         $this->user = new suxUser(); // User
         $this->tpl = new suxTemplate($this->module); // Template
-        $this->r = new userRenderer($this->module); // Renderer
+        $this->r = new adminRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
@@ -60,23 +59,17 @@ class userAvatar  {
         // Redirect if not logged in
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
 
-        // This module has config variables, load them
-        $this->tpl->config_load('my.conf', $this->module);
+        // Security check
+        if (!$this->user->isRoot($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/home'));
 
-        // Security check. Is the user allowed to edit this?
-        $tmp = $this->user->getUserByNickname($nickname, true);
+
+        $tmp = $this->user->getUserByNickname($nickname);
         if (!$tmp) suxFunct::redirect(suxFunct::getPreviousURL()); // Invalid user
-        elseif ($tmp['users_id'] != $_SESSION['users_id']) {
-            // Check that the user is allowed to be here
-            if (!$this->user->isRoot($_SESSION['users_id'])) {
-                suxFunct::redirect(suxFunct::getPreviousURL());
-            }
-        }
 
-        // Pre assign variables
         $this->nickname = $nickname;
         $this->users_id = $tmp['users_id'];
-        $this->image = $tmp['image'];
+        $this->root = $tmp['root'];
+        $this->banned = $tmp['banned'];
 
     }
 
@@ -88,7 +81,9 @@ class userAvatar  {
     * @return bool
     */
     function formValidate(&$dirty) {
+
         return suxValidate::formValidate($dirty, $this->tpl);
+
     }
 
 
@@ -96,8 +91,41 @@ class userAvatar  {
     * Build the form and show the template
     *
     * @param array $dirty reference to unverified $_POST
+    * @param array $filthy reference to unverified $_GET
     */
     function formBuild(&$dirty) {
+
+        // --------------------------------------------------------------------
+        // Pre assign template variables, maybe overwritten by &$dirty
+        // --------------------------------------------------------------------
+
+        $this->tpl->assign('root', $this->root);
+        $this->tpl->assign('banned', $this->banned);
+
+        // Dynamically create access dropdowns
+        $myOptions = array();
+        $mySelect = array();
+        $tmp = array('0' => '---');
+        foreach($GLOBALS['CONFIG']['ACCESS'] as $key => $val) {
+
+            // Manipulate the array into something Smarty can use
+            $tmp2 = $tmp;
+            $val = array_flip($val);
+            foreach ($val as $key2 => $val2) $tmp2[$key2] = $val2;
+            $val = $tmp2;
+
+            $myOptions[$key] = $val;
+            $mySelect[$key] = $this->user->getAccess($this->users_id, $key);
+
+        }
+
+        if (!empty($dirty)) foreach ($dirty as $key => $val) {
+            // Use the submitted values
+            if (isset($mySelect[$key])) $mySelect[$key] = $val;
+        }
+
+        $this->tpl->assign('myOptions', $myOptions);
+        $this->tpl->assign('mySelect', $mySelect);
 
         // --------------------------------------------------------------------
         // Form logic
@@ -113,32 +141,26 @@ class userAvatar  {
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
 
-            $empty = false;
-            if ($this->image) $empty = true;
-
             suxValidate::register_validator('integrity', 'integrity:users_id:nickname', 'hasIntegrity');
-            suxValidate::register_validator('image', 'image:' . $this->extensions, 'isFileType', $empty);
-            suxValidate::register_validator('image2','image:' . ini_get('upload_max_filesize'), 'isFileSize', $empty);
-
         }
 
         // --------------------------------------------------------------------
         // Template
         // --------------------------------------------------------------------
 
-        // Additional
+        $this->tpl->assign('access', $GLOBALS['CONFIG']['ACCESS']);
         $this->tpl->assign('nickname', $this->nickname);
         $this->tpl->assign('users_id', $this->users_id);
-        $this->tpl->assign('image', $this->image);
-        $this->r->text['upload_max_filesize'] =  ini_get('upload_max_filesize');
-        $this->r->text['supported'] =  $this->extensions;
-        $this->r->text['form_url'] = suxFunct::makeUrl("/user/avatar/{$this->nickname}");
+        $this->r->text['form_url'] = suxFunct::makeUrl("/admin/access/{$this->nickname}");
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
+        if ($this->users_id == $_SESSION['users_id']) $this->tpl->assign('disabled', 'disabled="disabled"');
 
         // Display template
-        $this->tpl->display('avatar.tpl');
+        $this->tpl->display('access.tpl');
+
 
     }
+
 
 
     /**
@@ -148,45 +170,26 @@ class userAvatar  {
     */
     function formProcess(&$clean) {
 
-        // Security check
-        if ($clean['users_id'] != $_SESSION['users_id']) {
-            // Check that the user is allowed to be here
-            if (!$this->user->isRoot($_SESSION['users_id'])) {
-                suxFunct::redirect(suxFunct::getPreviousURL());
+        // Root
+        if (isset($clean['root'])) $this->user->root($this->users_id);
+        elseif ($this->users_id != $_SESSION['users_id']) {
+            // Don't allow a user to unroot themselves
+            $this->user->unroot($this->users_id);
+        }
+
+        // Banned
+        if (!isset($clean['banned'])) $this->user->unban($this->users_id);
+        elseif ($this->users_id != $_SESSION['users_id']) {
+            // Don't allow a user to ban themselves
+            $this->user->ban($this->users_id);
+        }
+
+        foreach($GLOBALS['CONFIG']['ACCESS'] as $key => $val) {
+            if (isset($clean[$key])) {
+                if ($clean[$key]) $this->user->saveAccess($this->users_id, $key, $clean[$key]);
+                else $this->user->removeAccess($this->users_id, $key);
             }
         }
-
-        // Commence $clean array
-        $user['users_id'] = $clean['users_id'];
-        $user['image']  = false;
-
-        // Unset image?
-        if (!empty($clean['unset_image'])) $user['image'] = ''; // Set to empty string
-
-        // Image?
-        if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
-
-            $format = explode('.', $_FILES['image']['name']);
-            $format = strtolower(end($format)); // Extension
-
-            list($resize, $fullsize) = suxPhoto::renameImage($_FILES['image']['name']);
-            $user['image'] = $resize; // Add image to user array
-            $resize = suxFunct::dataDir($this->module) . "/{$resize}";
-            $fullsize = suxFunct::dataDir($this->module) . "/{$fullsize}";
-
-            suxPhoto::resizeImage($format, $_FILES['image']['tmp_name'], $resize,
-                $this->tpl->get_config_vars('thumbnailWidth'),
-                $this->tpl->get_config_vars('thumbnailHeight')
-                );
-            move_uploaded_file($_FILES['image']['tmp_name'], $fullsize);
-
-        }
-
-        // Update $user into database
-        if ($user['image'] !== false) $this->user->saveImage($user['users_id'], $user['image']);
-
-        // Clear approptiate template caches
-        $this->tpl->clear_cache('profile.tpl', $this->nickname);
 
     }
 
@@ -196,13 +199,10 @@ class userAvatar  {
     */
     function formSuccess() {
 
-        $this->r->bool['edit'] = true;
-        $this->r->text['back_url'] = suxFunct::getPreviousURL();
-
-        // Template
-        $this->tpl->display('success.tpl');
+        suxFunct::redirect(suxFunct::getPreviousURL());
 
     }
+
 
 
 

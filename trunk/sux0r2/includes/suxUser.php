@@ -172,7 +172,7 @@ class suxUser {
         FROM {$this->db_table}
         LEFT JOIN {$this->db_table_log} ON {$this->db_table}.id = {$this->db_table_log}.users_id
         GROUP BY {$this->db_table}.id
-        ORDER BY root DESC, last_active DESC
+        ORDER BY root DESC, nickname ASC
         ";
 
         // Limit
@@ -490,7 +490,7 @@ class suxUser {
 
         $clean['users_id'] = $users_id;
         $clean['module'] = $module;
-        $clean['access'] = $access;
+        $clean['accesslevel'] = $access;
 
         $query = "SELECT id FROM {$this->db_table_access} WHERE users_id = ? AND module = ? LIMIT 1 ";
         $st = $this->db->prepare($query);
@@ -515,6 +515,27 @@ class suxUser {
 
         }
 
+
+    }
+
+
+    /**
+    * Remove a user's access level
+    *
+    * @param int $users_id
+    * @param string $module
+    */
+    function removeAccess($users_id, $module) {
+
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
+        if (mb_strlen($module) > $this->max_module_length) throw new Exception('Module name too long');
+
+        $clean['users_id'] = $users_id;
+        $clean['module'] = $module;
+
+        $query = "DELETE FROM {$this->db_table_access} WHERE users_id = ? AND module = ? LIMIT 1 ";
+        $st = $this->db->prepare($query);
+        $st->execute(array($clean['users_id'], $clean['module']));
 
     }
 
