@@ -157,9 +157,11 @@ class suxUser {
     * @param int $photoalbums_id photoalbums id
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
+    * @param string $sort
+    * @param string $order
     * @return array|false
     */
-    function getUsers($limit = null, $start = 0) {
+    function getUsers($limit = null, $start = 0, $sort = null, $order = 'DESC') {
 
         $query = "
         SELECT
@@ -172,8 +174,22 @@ class suxUser {
         FROM {$this->db_table}
         LEFT JOIN {$this->db_table_log} ON {$this->db_table}.id = {$this->db_table_log}.users_id
         GROUP BY {$this->db_table}.id
-        ORDER BY root DESC, nickname ASC
         ";
+
+        // Sort / Order
+        $tmp = 'ORDER BY root DESC, nickname ASC ';
+        if ($sort) {
+            $sort = mb_strtolower($sort);
+            $order = mb_strtoupper($order);
+            if (in_array($sort, array('id', 'nickname', 'email', 'root', 'banned', 'ts'))) {
+
+                if ($order != 'DESC') $order = 'ASC';
+                else $order = 'DESC';
+                $tmp = "ORDER BY $sort $order ";
+
+            }
+        }
+        $query .= $tmp;
 
         // Limit
         if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";

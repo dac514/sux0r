@@ -64,13 +64,21 @@ class admin {
 
     function userlist() {
 
+        // Sort / Order
+        $sort = null;
+        if (isset($_GET['sort'])) $sort = $_GET['sort'];
+        $order = null;
+        if (isset($_GET['order'])) $order = $_GET['order'];
+
+        // Pager
         $this->pager->limit = $this->per_page;
         $this->pager->setStart();
 
         $this->pager->setPages($this->user->countUsers());
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/admin"));
-        $this->r->ulist = $this->user->getUsers($this->pager->limit, $this->pager->start);
+        $this->r->ulist = $this->user->getUsers($this->pager->limit, $this->pager->start, $sort, $order);
 
+        // Template
         $this->tpl->display('userlist.tpl');
 
     }
