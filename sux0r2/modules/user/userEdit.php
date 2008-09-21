@@ -105,7 +105,7 @@ class userEdit {
     function formBuild(&$dirty, &$filthy) {
 
         // --------------------------------------------------------------------
-        // Get existing user info if available
+        // Pre assign template variables, maybe overwritten by &$dirty
         // --------------------------------------------------------------------
 
         $u = array();
@@ -226,7 +226,7 @@ class userEdit {
 
 
         // --------------------------------------------------------------------
-        // DONE: Form Logic
+        // Template
         // --------------------------------------------------------------------
 
         // Defaults
@@ -239,7 +239,6 @@ class userEdit {
 
 
         // Additional variables
-
         $this->r->text['form_url'] = suxFunct::makeUrl('/user/register'); // Register
 
         // Overrides for edit mode

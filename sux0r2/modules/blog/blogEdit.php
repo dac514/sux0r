@@ -104,6 +104,10 @@ class blogEdit {
     */
     function formBuild(&$dirty) {
 
+        // --------------------------------------------------------------------
+        // Pre assign template variables, maybe overwritten by &$dirty
+        // --------------------------------------------------------------------
+
         $blog = array();
 
         if ($this->id) {
@@ -167,7 +171,6 @@ class blogEdit {
         }
 
         // Assign blog
-        // new dBug($blog);
         $this->tpl->assign($blog);
 
         // --------------------------------------------------------------------
@@ -194,6 +197,10 @@ class blogEdit {
 
 
         }
+
+        // --------------------------------------------------------------------
+        // Template
+        // --------------------------------------------------------------------
 
         // Additional
         $this->r->text['upload_max_filesize'] =  ini_get('upload_max_filesize');
