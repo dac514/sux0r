@@ -163,7 +163,7 @@ class suxUser {
 
         $query = "
         SELECT
-        {$this->db_table}.id,
+        {$this->db_table}.id as users_id,
         {$this->db_table}.nickname,
         {$this->db_table}.email,
         {$this->db_table}.root,
