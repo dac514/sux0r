@@ -115,8 +115,8 @@ class cropper {
 
         if ($image['users_id'] != $_SESSION['users_id']) {
             // Check that the user is allowed to be here
-            if (!$this->user->isRoot($_SESSION['users_id'])) {
-                $access = $this->user->getAccess($_SESSION['users_id'], $module);
+            if (!$this->user->isRoot()) {
+                $access = $this->user->getAccess($module);
                 if ($access < $GLOBALS['CONFIG']['ACCESS'][$module]['admin'])
                     suxFunct::redirect(suxFunct::getPreviousURL('cropper'));
             }
@@ -186,8 +186,8 @@ class cropper {
 
         if ($image['users_id'] != $_SESSION['users_id']) {
             // Check that the user is allowed to be here
-            if (!$this->user->isRoot($_SESSION['users_id'])) {
-                $access = $this->user->getAccess($_SESSION['users_id'], $clean['module']);
+            if (!$this->user->isRoot()) {
+                $access = $this->user->getAccess($clean['module']);
                     if ($access < $GLOBALS['CONFIG']['ACCESS'][$clean['module']]['admin'])
                     suxFunct::redirect(suxFunct::getPreviousURL('cropper'));
             }

@@ -422,7 +422,7 @@ function insert_userInfo($params) {
     if (!empty($_SESSION['nickname'])) {
 
         $u = new suxUser();
-        if ($u->isRoot($_SESSION['users_id'])) {
+        if ($u->isRoot()) {
             $url_admin = suxFunct::makeUrl('/admin');
             $tmp .= "<span id='adminLink'>[ <a href='{$url_admin}'>{$text['admin']}</a> ]</span> ";
         }

@@ -17,24 +17,6 @@ img.rssIcon {
     vertical-align: top;
 }
 
-.calendar, .calendar caption {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-}
-
-.calendar th, .calendar td {
-        text-align: center;
-}
-
-.calendar-month {
-    font-size: 12px;
-    font-weight: bold;
-    text-align: center;
-}
-
-
 input, select {
     width: 350px;
 }
@@ -47,6 +29,18 @@ input.captcha {
     background: #ffffff url("../assets/openid_icon.gif") no-repeat 0 50%;
     padding-left: 18px !important;
     padding-top: .2em !important;
+}
+
+
+ul.miniFeed {
+    list-style-type: none;
+    padding: 0;
+}
+
+.miniFeed li {
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #cccccc;
 }
 
 /* Revert */

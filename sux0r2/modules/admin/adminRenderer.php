@@ -58,7 +58,7 @@ class adminRenderer extends suxRenderer {
 
         $access = array();
         foreach ($GLOBALS['CONFIG']['ACCESS']  as $key => $val) {
-            $level = $this->user->getAccess($users_id, $key);
+            $level = $this->user->getAccess($key, $users_id);
             if ($level) {
                 $tmp = $GLOBALS['CONFIG']['ACCESS'][$key];
                 $tmp = array_flip($tmp);
@@ -71,7 +71,7 @@ class adminRenderer extends suxRenderer {
         $html = '';
         foreach ($access as $key => $val) {
             $key = ucfirst($key);
-            $html .= "[$key: $val ] ";
+            $html .= "[ $key: $val ] ";
         }
 
         return $html;

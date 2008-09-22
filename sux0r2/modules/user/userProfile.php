@@ -37,6 +37,7 @@ class userProfile {
     public $tpl;
     public $r;
     private $user;
+    private $minifeed_limit = 10;
 
 
     /**
@@ -57,6 +58,8 @@ class userProfile {
         $this->profile = $this->user->getUserByNickname($nickname);
         unset($this->profile['password']); // We don't need this
 
+        if (!$this->profile) suxFunct::redirect(suxFunct::getPreviousURL()); // Redirect for invalid profiles
+
     }
 
 
@@ -76,9 +79,8 @@ class userProfile {
             if (!isset($fullprofile['dob']) || $fullprofile['dob'] == '0000-00-00') unset($fullprofile['dob']); // NULL date
             $this->r->profile =& $fullprofile; // Assign
 
-            // Title
-            $this->r->title .= " | {$fullprofile['nickname']}";
-
+            $this->r->title .= " | {$fullprofile['nickname']}"; // <title></title>
+            $this->r->minifeed = $this->user->getLog($this->minifeed_limit, 0, $this->profile['users_id']); // Minifeed array
 
         }
 
@@ -87,15 +89,6 @@ class userProfile {
     }
 
 
-    /**
-    * Profile not found
-    */
-    function notFound() {
-
-        echo 'no profile found';
-        exit;
-
-    }
 
 
 

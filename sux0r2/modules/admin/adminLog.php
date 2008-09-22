@@ -1,7 +1,7 @@
 <?php
 
 /**
-* admin
+* adminLog
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -27,9 +27,11 @@ require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once('adminRenderer.php');
 
 
-class admin {
+class adminLog {
 
     // Variables
+    private $users_id;
+    private $nickname;
     public $per_page = 100;
     private $module = 'admin';
 
@@ -42,8 +44,9 @@ class admin {
     /**
     * Constructor
     *
+    * @param string nickname
     */
-    function __construct() {
+    function __construct($nickname = null) {
 
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new adminRenderer($this->module); // Renderer
@@ -59,42 +62,42 @@ class admin {
         // Security check
         if (!$this->user->isRoot()) suxFunct::redirect(suxFunct::makeUrl('/home'));
 
+        $tmp = $this->user->getUserByNickname($nickname);
+
+        if ($tmp) {
+            $this->users_id = $tmp['users_id'];
+            $this->nickname = $tmp['nickname'];
+        }
+
     }
 
 
-    function userlist() {
+    function display() {
 
-        // Sort / Order
-        $sort = null;
-        if (isset($_GET['sort'])) $sort = $_GET['sort'];
-        $order = null;
-        if (isset($_GET['order'])) $order = $_GET['order'];
+        $order = 'desc';
+        if (isset($_GET['order'])) {
+            $order = $_GET['order'];
+            $this->tpl->assign('sort', 'ts');
+        }
 
         // Extra params for pager
         $params = array();
-        if ($sort) $params = array('sort' => $sort, 'order' => $order);
+        if ($order) $params = array('order' => $order);
 
         // Pager
         $this->pager->limit = $this->per_page;
         $this->pager->setStart();
 
-        $this->pager->setPages($this->user->countUsers());
-        $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/admin', $params));
-        $this->r->ulist = $this->user->getUsers($this->pager->limit, $this->pager->start, $sort, $order);
+        $this->pager->setPages($this->user->countLog());
+        $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/admin/log/{$this->nickname}", $params));
+        $this->r->ulog = $this->user->getLog($this->pager->limit, $this->pager->start, $this->users_id, $order, true);
 
         // Template
-        $this->tpl->assign('sort', $sort);
+        $inverse = ($order != 'desc') ? 'desc' : 'asc';
+        $this->tpl->assign('ts_sort_url', suxFunct::makeUrl("/admin/log/{$this->nickname}", array('order' => $inverse)));
+        $this->tpl->assign('nickname', $this->nickname);
 
-        $inverse = ($sort == 'nickname' && $order != 'desc') ? 'desc' : 'asc';
-        $this->tpl->assign('nickname_sort_url', suxFunct::makeUrl('/admin', array('sort' => 'nickname', 'order' => $inverse)));
-        $inverse = ($sort == 'banned' && $order != 'desc') ? 'desc' : 'asc';
-        $this->tpl->assign('banned_sort_url', suxFunct::makeUrl('/admin', array('sort' => 'banned', 'order' => $inverse)));
-        $inverse = ($sort == 'root' && $order != 'desc') ? 'desc' : 'asc';
-        $this->tpl->assign('root_sort_url', suxFunct::makeUrl('/admin', array('sort' => 'root', 'order' => $inverse)));
-        $inverse = ($sort == 'ts' && $order != 'desc') ? 'desc' : 'asc';
-        $this->tpl->assign('ts_sort_url', suxFunct::makeUrl('/admin', array('sort' => 'ts', 'order' => $inverse)));
-
-        $this->tpl->display('userlist.tpl');
+        $this->tpl->display('log.tpl');
 
     }
 

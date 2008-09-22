@@ -58,8 +58,8 @@ class bookmarksApprove  {
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
 
         // Check that the user is allowed be here
-        if (!$this->user->isRoot($_SESSION['users_id'])) {
-            $access = $this->user->getAccess($_SESSION['users_id'], $this->module);
+        if (!$this->user->isRoot()) {
+            $access = $this->user->getAccess($this->module);
             if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin'])
                 suxFunct::redirect(suxFunct::makeUrl('/bookmarks'));
         }

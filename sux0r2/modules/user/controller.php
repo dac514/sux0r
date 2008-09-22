@@ -99,7 +99,7 @@ function sux($action, $params = null) {
         break;
 
 
-    case 'edit' : // User profile
+    case 'edit' :
 
         // --------------------------------------------------------------------
         // Edit Registration
@@ -122,7 +122,7 @@ function sux($action, $params = null) {
         break;
 
 
-    case 'avatar' : // User avatar
+    case 'avatar' :
 
         // --------------------------------------------------------------------
         // Edit Avatar
@@ -145,7 +145,30 @@ function sux($action, $params = null) {
         break;
 
 
-    case 'profile' : // User profile
+    case 'openid' :
+
+        // --------------------------------------------------------------------
+        // Edit OpenIDs
+        // --------------------------------------------------------------------
+
+        $user = !empty($params[0]) ? $params[0]: null;
+
+        // Edit avatar
+        include_once('userOpenID.php');
+        $oid = new userOpenID($user);
+
+        if ($oid->formValidate($_POST)) {
+
+            $oid->formProcess($_POST);
+            $oid->formSuccess();
+
+        }
+        else $oid->formBuild($_POST);
+
+        break;
+
+
+    case 'profile' :
 
         // --------------------------------------------------------------------
         // Show user profile
@@ -163,8 +186,8 @@ function sux($action, $params = null) {
         }
 
         $u = new userProfile($params[0]);
-        if ($u->profile) $u->displayProfile();
-        else $u->notFound();
+        $u->displayProfile();
+
         break;
 
     default:
