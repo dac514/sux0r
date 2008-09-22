@@ -57,31 +57,23 @@ class suxUser {
     /**
     * Get user
     *
-    * @param int $id users_id
+    * @param int $users_id users_id
     * @param bool $full_profile the entire profile?
     * @return array|false
     */
-    function getUser($id = null, $full_profile = false) {
+    function getUser($users_id, $full_profile = false) {
 
-        // This user
-        if (!$id) {
-            if ($this->loginCheck()) $id = $_SESSION['users_id'];
-            else return false;
-        }
-
-        // Any user
-        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
-            throw new Exception('Invalid user id');
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
 
         $st = $this->db->prepare("SELECT * FROM {$this->db_table} WHERE id = ? ");
-        $st->execute(array($id));
+        $st->execute(array($users_id));
         $user = $st->fetch(PDO::FETCH_ASSOC);
 
         if (!$user) return false; // User doesn't exist?
 
         if ($full_profile) {
             $st = $this->db->prepare("SELECT * FROM {$this->db_table_info} WHERE users_id = ? ");
-            $st->execute(array($id));
+            $st->execute(array($users_id));
             $tmp = $st->fetch(PDO::FETCH_ASSOC);
             if (is_array($tmp)) {
                 unset($tmp['id'], $tmp['users_id']); // Unset ids
@@ -154,7 +146,6 @@ class suxUser {
     /**
     * Get users
     *
-    * @param int $photoalbums_id photoalbums id
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
     * @param string $sort
@@ -181,10 +172,9 @@ class suxUser {
         if ($sort) {
             $sort = mb_strtolower($sort);
             $order = mb_strtoupper($order);
-            if (in_array($sort, array('id', 'nickname', 'email', 'root', 'banned', 'ts'))) {
+            if (in_array($sort, array('users_id', 'nickname', 'email', 'root', 'banned', 'ts'))) {
 
                 if ($order != 'DESC') $order = 'ASC';
-                else $order = 'DESC';
                 $tmp = "ORDER BY $sort $order ";
 
             }
@@ -203,29 +193,32 @@ class suxUser {
 
 
     /**
-    * Set user
+    * Save user
     *
     * @param array $info keys match SQL table columns of users and users_info
-    * @param int $id users_id
+    * @param int $users_id users_id
     * @return int users_id
     */
-    function saveUser(array $info, $id = null) {
+    function saveUser(array $info, $users_id = null) {
+
+        /* If users_id is provide, saveUser() will update an existing user.
+        Otherwise it will insert a new one */
 
         // --------------------------------------------------------------------
         // Sanitize
         // --------------------------------------------------------------------
 
-        if ($id != null && (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1))
+        if ($users_id != null && (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1))
             throw new Exception('Invalid user id');
 
         if (!empty($info['nickname'])) {
             $tmp = $this->getUserByNickname($info['nickname']);
-            if ($tmp['users_id'] != $id) throw new Exception('Duplicate nickname');
+            if ($tmp['users_id'] != $users_id) throw new Exception('Duplicate nickname');
         }
 
         if (!empty($info['email'])) {
             $tmp = $this->getUserByEmail($info['email']);
-            if ($tmp['users_id'] != $id) throw new Exception('Duplicate email');
+            if ($tmp['users_id'] != $users_id) throw new Exception('Duplicate email');
 
         }
 
@@ -279,15 +272,15 @@ class suxUser {
         $this->db->beginTransaction();
         $this->inTransaction = true;
 
-        if ($id) {
+        if ($users_id) {
 
             // UPDATE
-            $user['id'] = $id;
+            $user['id'] = $users_id;
             $query = suxDB::prepareUpdateQuery($this->db_table, $user);
             $st = $this->db->prepare($query);
             $st->execute($user);
 
-            $info['users_id'] = $id;
+            $info['users_id'] = $users_id;
 
             $query = suxDB::prepareUpdateQuery($this->db_table_info, $info, 'users_id');
             $st = $this->db->prepare($query);
@@ -301,8 +294,8 @@ class suxUser {
             $st = $this->db->prepare($query);
             $st->execute($user);
 
-            $id = $this->db->lastInsertId();
-            $info['users_id'] = $id;
+            $users_id = $this->db->lastInsertId();
+            $info['users_id'] = $users_id;
 
             $query = suxDB::prepareInsertQuery($this->db_table_info, $info);
             $st = $this->db->prepare($query);
@@ -310,13 +303,13 @@ class suxUser {
 
         }
 
-        if ($openid_url) $this->attachOpenID($openid_url, $id);
+        if ($openid_url) $this->attachOpenID($openid_url, $users_id);
 
         // Commit
         $this->db->commit();
         $this->inTransaction = false;
 
-        return $id;
+        return $users_id;
 
     }
 
@@ -324,12 +317,20 @@ class suxUser {
     /**
     * Get user image
     *
-    * @param int $id users_id
+    * @param int $users_id users_id
     * @return string image name
     */
-    function getImage($users_id) {
+    function getImage($users_id = null) {
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
+        // This user
+        if (!$users_id) {
+            if (!empty($_SESSION['users_id'])) $users_id = $_SESSION['users_id'];
+            else return false;
+        }
+
+        // Any user
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
+            throw new Exception('Invalid user id');
 
         $st = $this->db->prepare("SELECT image FROM {$this->db_table_info} WHERE users_id = ? LIMIT 1 ");
         $st->execute(array($users_id));
@@ -341,12 +342,20 @@ class suxUser {
     /**
     * Save user image
     *
-    * @param int $id users_id
     * @param string $image
+    * @param int $users_id users_id
     */
-    function saveImage($users_id, $image) {
+    function saveImage($image, $users_id = null) {
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
+        // This user
+        if (!$users_id) {
+            if (!empty($_SESSION['users_id'])) $users_id = $_SESSION['users_id'];
+            else return false;
+        }
+
+        // Any user
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
+            throw new Exception('Invalid user id');
 
         $st = $this->db->prepare("UPDATE {$this->db_table_info} SET image = ? WHERE users_id = ? LIMIT 1 ");
         $st->execute(array($image, $users_id));
@@ -366,15 +375,23 @@ class suxUser {
     * @param int $users_id
     * @return bool
     */
-    function isBanned($users_id) {
+    function isBanned($users_id = null) {
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
+        // This user
+        if (!$users_id) {
+            if (!empty($_SESSION['users_id'])) $users_id = $_SESSION['users_id'];
+            else return false;
+        }
 
-        $st = $this->db->prepare("SELECT banned FROM {$this->db_table} WHERE id = ? ");
+        // Any user
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
+            throw new Exception('Invalid user id');
+
+        $st = $this->db->prepare("SELECT banned FROM {$this->db_table} WHERE id = ? LIMIT 1 ");
         $st->execute(array($users_id));
-        $id = $st->fetchColumn();
+        $banned = $st->fetchColumn();
 
-        if ($id == 1) return true;
+        if ($banned == 1) return true;
         else return false;
 
     }
@@ -389,6 +406,7 @@ class suxUser {
     function ban($users_id) {
 
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
+
 
         $st = $this->db->prepare("UPDATE {$this->db_table} SET banned = 1 WHERE id = ? ");
         $st->execute(array($users_id));
@@ -419,15 +437,23 @@ class suxUser {
     * @param int $users_id
     * @return bool
     */
-    function isRoot($users_id) {
+    function isRoot($users_id = null) {
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
+        // This user
+        if (!$users_id) {
+            if (!empty($_SESSION['users_id'])) $users_id = $_SESSION['users_id'];
+            else return false;
+        }
 
-        $st = $this->db->prepare("SELECT root FROM {$this->db_table} WHERE id = ? ");
+        // Any user
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
+            throw new Exception('Invalid user id');
+
+        $st = $this->db->prepare("SELECT root FROM {$this->db_table} WHERE id = ? LIMIT 1 ");
         $st->execute(array($users_id));
-        $id = $st->fetchColumn();
+        $root = $st->fetchColumn();
 
-        if ($id == 1) return true;
+        if ($root == 1) return true;
         else return false;
 
     }
@@ -469,13 +495,21 @@ class suxUser {
     /**
     * Check access level for a given module
     *
-    * @param int $users_id
     * @param string $module
+    * @param int $users_id
     * @return int
     */
-    function getAccess($users_id, $module) {
+    function getAccess($module, $users_id = null) {
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
+        // This user
+        if (!$users_id) {
+            if (!empty($_SESSION['users_id'])) $users_id = $_SESSION['users_id'];
+            else return false;
+        }
+
+        // Any user
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
+            throw new Exception('Invalid user id');
 
         $q = "
         SELECT {$this->db_table_access}.accesslevel FROM {$this->db_table_access}
@@ -494,15 +528,24 @@ class suxUser {
     /**
     * Save a user's access level
     *
-    * @param int $users_id
     * @param string $module
     * @param int $access
+    * @param int $users_id
     */
-    function saveAccess($users_id, $module, $access) {
+    function saveAccess($module, $access, $users_id = null) {
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
         if (mb_strlen($module) > $this->max_module_length) throw new Exception('Module name too long');
         if (!filter_var($access, FILTER_VALIDATE_INT) || $access < 0 || $access > $this->max_access) throw new Exception('Invalid access integer');
+
+        // This user
+        if (!$users_id) {
+            if (!empty($_SESSION['users_id'])) $users_id = $_SESSION['users_id'];
+            else return false;
+        }
+
+        // Any user
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
+            throw new Exception('Invalid user id');
 
         $clean['users_id'] = $users_id;
         $clean['module'] = $module;
@@ -538,13 +581,22 @@ class suxUser {
     /**
     * Remove a user's access level
     *
-    * @param int $users_id
     * @param string $module
+    * @param int $users_id
     */
-    function removeAccess($users_id, $module) {
+    function removeAccess($module, $users_id = null) {
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
         if (mb_strlen($module) > $this->max_module_length) throw new Exception('Module name too long');
+
+        // This user
+        if (!$users_id) {
+            if (!empty($_SESSION['users_id'])) $users_id = $_SESSION['users_id'];
+            else return false;
+        }
+
+        // Any user
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
+            throw new Exception('Invalid user id');
 
         $clean['users_id'] = $users_id;
         $clean['module'] = $module;
@@ -557,15 +609,87 @@ class suxUser {
 
 
     /**
+    * Count log
+    *
+    * @param int $users_id
+    * @return int
+    */
+    function countLog($users_id = null) {
+
+        $query = "SELECT COUNT(*) FROM {$this->db_table_log} ";
+
+        if ($users_id) {
+            if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
+            $query .= "WHERE users_id = {$users_id} ";
+        }
+
+        $st = $this->db->query($query);
+        return $st->fetchColumn();
+
+    }
+
+
+    /**
+    * Get log
+    *
+    * @param int $limit sql limit value
+    * @param int $start sql start of limit value
+    * @param int $users_id
+    * @param string $order
+    * @param bool $full_log
+    * @return array|false
+    */
+    function getLog($limit = null, $start = 0, $users_id = null, $order = 'DESC', $full_log = false) {
+
+        $query = "
+        SELECT {$this->db_table_log}.*,
+        {$this->db_table}.nickname,
+        {$this->db_table}.email
+        FROM {$this->db_table_log}
+        INNER JOIN {$this->db_table} ON {$this->db_table_log}.users_id = {$this->db_table}.id
+        ";
+
+        if ($full_log === false) $query .= "WHERE private = 0 ";
+
+        if ($users_id) {
+            if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
+            $query .= ($full_log === false) ? 'AND ' : 'WHERE ';
+            $query .= "users_id = {$users_id} ";
+        }
+
+        $order = mb_strtoupper($order);
+        if ($order != 'DESC') $order = 'ASC';
+        $query .= "ORDER BY ts {$order} ";
+
+        // Limit
+        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        elseif ($limit) $query .= "LIMIT {$limit} ";
+
+        $st = $this->db->query($query);
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+
+    /**
     * Write something to the users_log table
     *
     * @param int $users_id
     * @param string $body_html
     * @param int $private
     */
-    function log($users_id, $body_html, $private = 0) {
+    function log($users_id = null, $body_html, $private = 0) {
 
-        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
+        // This user
+        if (!$users_id) {
+            if (!empty($_SESSION['users_id'])) $users_id = $_SESSION['users_id'];
+            else return false;
+        }
+
+        // Any user
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
+            throw new Exception('Invalid user id');
+
         if ($private != 0 && $private != 1) $private = 0;
 
         $clean['users_id'] = $users_id;
@@ -584,6 +708,32 @@ class suxUser {
         $query = suxDB::prepareInsertQuery($this->db_table_log, $clean);
         $st = $this->db->prepare($query);
         $st->execute($clean);
+
+    }
+
+
+    /**
+    * Togle the private flag on a log table entry
+    *
+    * @param int $id users_log id
+    * @return int flag (0 or 1)
+    */
+    function toggleLogPrivateFlag($id) {
+
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) throw new Exception('Invalid id');
+
+        $query = "SELECT private FROM {$this->db_table_log} WHERE id = ? ";
+        $st = $this->db->prepare($query);
+        $st->execute(array($id));
+
+        $flag = 1;
+        if ($st->fetchColumn() == 1) $flag = 0;
+
+        $query = "UPDATE {$this->db_table_log} SET private = ? WHERE id = ? LIMIT 1 ";
+        $st = $this->db->prepare($query);
+        $st->execute(array($flag, $id));
+
+        return $flag;
 
     }
 
@@ -631,24 +781,24 @@ class suxUser {
     /**
     * Get a list of openids by users_id
     *
-    * @param int $id users_id
+    * @param int $users_id users_id
     * @return array
     */
-    function getOpenIDs($id = null) {
+    function getOpenIDs($users_id = null) {
 
         // This user
-        if (!$id) {
-            if ($this->loginCheck()) $id = $_SESSION['users_id'];
+        if (!$users_id) {
+            if (!empty($_SESSION['users_id'])) $users_id = $_SESSION['users_id'];
             else return false;
         }
 
         // Any user
-        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
             throw new Exception('Invalid user id');
 
         // Get the Ids
         $st = $this->db->prepare("SELECT id, openid_url FROM {$this->db_table_openid} WHERE users_id = ? ");
-        $st->execute(array($id));
+        $st->execute(array($users_id));
         $openids = $st->fetchAll(PDO::FETCH_ASSOC);
 
         return $openids;
@@ -660,18 +810,18 @@ class suxUser {
     * Attach an openid to a user
     *
     * @param string $openid_url url
-    * @param int $id users_id
+    * @param int $users_id users_id
     */
-    function attachOpenID($openid_url, $id = null) {
+    function attachOpenID($openid_url, $users_id = null) {
 
         // This user
-        if (!$id) {
-            if ($this->loginCheck()) $id = $_SESSION['users_id'];
+        if (!$users_id) {
+            if (!empty($_SESSION['users_id'])) $users_id = $_SESSION['users_id'];
             else return false;
         }
 
         // Any user
-        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
             throw new Exception('Invalid user id');
 
         // Canonicalize url
@@ -679,7 +829,7 @@ class suxUser {
 
         // Sql
         $oid = array(
-            'users_id' => $id,
+            'users_id' => $users_id,
             'openid_url' => $openid_url,
             );
 
@@ -699,29 +849,19 @@ class suxUser {
 
 
     /**
-    * Detach an openid from a user
+    * Detach an openid from system
     *
     * @param string $openid_url url
-    * @param int $id users_id
+    * @param int $users_id users_id
     */
-    function detachOpenID($openid_url, $id = null) {
-
-        // This user
-        if (!$id) {
-            if ($this->loginCheck()) $id = $_SESSION['users_id'];
-            else return false;
-        }
-
-        // Any user
-        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
-            throw new Exception('Invalid user id');
+    function detachOpenID($openid_url) {
 
         // Canonicalize url
         $openid_url = suxFunct::canonicalizeUrl($openid_url);
 
-        $query = "DELETE FROM {$this->db_table_openid} WHERE openid_url = ? AND users_id = ? ";
+        $query = "DELETE FROM {$this->db_table_openid} WHERE openid_url = ? LIMIT 1 ";
         $st = $this->db->prepare($query);
-        $st->execute(array($openid_url, $id));
+        $st->execute(array($openid_url));
 
     }
 
@@ -742,7 +882,7 @@ class suxUser {
         $proceed = false;
 
         if (!empty($_SESSION['users_id']) && !empty($_SESSION['nickname']) && !empty($_SESSION['token'])) {
-            if ($this->tokenCheck($_SESSION['users_id'], $_SESSION['token'])) {
+            if ($this->tokenCheck($_SESSION['token'], $_SESSION['users_id'])) {
                 $proceed = true;
             }
         }
@@ -839,7 +979,8 @@ class suxUser {
                 if ($hdr['response'] == $ok) {
                     // successful login!
                     unset($_SESSION['uniqid'], $_SESSION['failures']);
-                    $this->setSession($hdr['username'], true);
+                    $u = $this->getUserByNickname($hdr['username']);
+                    $this->setSession($u['users_id']);
                     return true;
                 }
 
@@ -875,13 +1016,11 @@ class suxUser {
     * Set a user session
     *
     * @global string $CONFIG['SALT']
-    * @param string $id
-    * @param bool $nickame use nickname instead of users_id
+    * @param string $users_id
     */
-    function setSession($id, $nickname = false) {
+    function setSession($users_id) {
 
-        if ($nickname) $user = $this->getUserByNickname($id, true);
-        else $user = $this->getUser($id, true);
+        $user = $this->getUser($users_id, true);
 
         if (!$user) {
             suxFunct::killSession();
@@ -936,16 +1075,16 @@ class suxUser {
     * Check if a token is valid
     *
     * @global string $CONFIG['SALT']
-    * @param int $id user id
-    * @param string $id token
+    * @param string $token token
+    * @param int $users_id user id
     * @return bool
     */
-    private function tokenCheck($id, $token) {
+    private function tokenCheck($token, $users_id) {
 
-        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) return false;
 
         $st = $this->db->prepare("SELECT password FROM {$this->db_table} WHERE id = ? ");
-        $st->execute(array($id));
+        $st->execute(array($users_id));
         $row = $st->fetch();
 
         if (empty($row['password'])) {

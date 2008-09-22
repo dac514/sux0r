@@ -58,13 +58,14 @@ function sux($action, $params = null) {
         // Log
         // --------------------------------------------------------------------
 
-        if (empty($params[0])) {
-            suxFunct::redirect(suxFunct::makeUrl('/admin'));
-        }
+        $nickname = null;
+        if (!empty($params[0])) $nickname = $params[0];
 
         include_once('adminLog.php');
-        $admin = new adminLog($params[0]);
+        $admin = new adminLog($nickname);
         $admin->display();
+
+        break;
 
 
     default:

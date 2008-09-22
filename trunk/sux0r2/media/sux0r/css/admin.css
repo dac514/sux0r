@@ -1,3 +1,30 @@
 .widerInput {
     width: 350px;
 }
+
+.adminTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.adminTable td, .adminTable th {
+    padding: 4px;
+}
+
+.adminTable thead tr td {
+    border: 1px solid #666666;
+    background-color: #eeeeee;
+    text-align: center;
+}
+
+.adminTable tbody tr td {
+    border: 1px solid #666666;
+    text-align: center;
+}
+
+.adminTable .selected {
+    background-color: yellow;
+}
+
+

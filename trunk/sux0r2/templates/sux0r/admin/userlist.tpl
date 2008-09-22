@@ -1,7 +1,5 @@
 {capture name=header}
 
-    <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
-
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
 {include file=$r->xhtml_header}{/strip}
@@ -22,28 +20,29 @@
     <fieldset>
     <legend>Administration</legend>
 
-    <table border="1" width="100%">
+    <table class="adminTable">
     <thead>
         <tr>
-            <td>username</td>
-            <td>banned</td>
-            <td>root</td>
+            <td {if $sort == 'nickname'}class="selected"{/if}><a href="{$nickname_sort_url}">username</a></td>
+            <td {if $sort == 'banned'}class="selected"{/if}><a href="{$banned_sort_url}">banned</a></td>
+            <td {if $sort == 'root'}class="selected"{/if}><a a href="{$root_sort_url}">root</a></td>
             <td>access</td>
             <td>edit</td>
-            <td>last active</td>
+            <td {if $sort == 'ts'}class="selected"{/if}><a href="{$ts_sort_url}">last active</a></td>
 
 
         </tr>
     </thead>
+    <tbody>
 
     {foreach from=$r->ulist item=foo}
 
     <tr>
-        <td><a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a></td>
-        <td style="text-align:center;">{if $foo.banned}x{/if}</td>
-        <td style="text-align:center;">{if $foo.root}x{/if}</td>
-        <td>{$r->getAccessLevels($foo.users_id)}</td>
-        <td style="text-align:center;">
+        <td style="text-align:left;"><a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a></td>
+        <td>{if $foo.banned}x{/if}</td>
+        <td>{if $foo.root}x{/if}</td>
+        <td style="text-align:left;">{$r->getAccessLevels($foo.users_id)}</td>
+        <td>
             <a href="{$r->makeUrl('/user/edit')}/{$foo.nickname}">profile</a> |
             <a href="{$r->makeUrl('/admin/access')}/{$foo.nickname}">access</a>
         </td>
@@ -53,6 +52,7 @@
 
     {/foreach}
 
+    </tbody>
     </table>
 
     <p>{$r->text.pager}</p>

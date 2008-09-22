@@ -68,7 +68,7 @@ class userAvatar  {
         if (!$tmp) suxFunct::redirect(suxFunct::getPreviousURL()); // Invalid user
         elseif ($tmp['users_id'] != $_SESSION['users_id']) {
             // Check that the user is allowed to be here
-            if (!$this->user->isRoot($_SESSION['users_id'])) {
+            if (!$this->user->isRoot()) {
                 suxFunct::redirect(suxFunct::getPreviousURL());
             }
         }
@@ -151,7 +151,7 @@ class userAvatar  {
         // Security check
         if ($clean['users_id'] != $_SESSION['users_id']) {
             // Check that the user is allowed to be here
-            if (!$this->user->isRoot($_SESSION['users_id'])) {
+            if (!$this->user->isRoot()) {
                 suxFunct::redirect(suxFunct::getPreviousURL());
             }
         }
@@ -183,7 +183,7 @@ class userAvatar  {
         }
 
         // Update $user into database
-        if ($user['image'] !== false) $this->user->saveImage($user['users_id'], $user['image']);
+        if ($user['image'] !== false) $this->user->saveImage($user['image'], $user['users_id']);
 
         // Clear approptiate template caches
         $this->tpl->clear_cache('profile.tpl', $this->nickname);

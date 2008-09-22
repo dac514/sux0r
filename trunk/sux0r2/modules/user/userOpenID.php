@@ -1,7 +1,7 @@
 <?php
 
 /**
-* feedsApprove
+* userOpenID
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -22,33 +22,33 @@
 *
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
-require_once('feedsRenderer.php');
+require_once('userRenderer.php');
 
-class feedsApprove  {
+class userOpenID  {
 
     // Variables
+    private $nickname;
+    private $users_id;
     public $gtext = array();
-    private $module = 'feeds';
+    private $module = 'user';
+
 
     // Objects
     public $tpl;
     public $r;
-    protected $user;
-    protected $rss;
+    private $user;
 
     /**
     * Constructor
     *
     */
-    function __construct() {
+    function __construct($nickname) {
 
-        $this->rss = new suxRSS();
         $this->user = new suxUser(); // User
         $this->tpl = new suxTemplate($this->module); // Template
-        $this->r = new feedsRenderer($this->module); // Renderer
+        $this->r = new userRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
@@ -57,12 +57,19 @@ class feedsApprove  {
         // Redirect if not logged in
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
 
-        // Check that the user is allowed be here
-        if (!$this->user->isRoot()) {
-            $access = $this->user->getAccess($this->module);
-            if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin'])
-                suxFunct::redirect(suxFunct::makeUrl('/feeds'));
+        // Security check. Is the user allowed to edit this?
+        $tmp = $this->user->getUserByNickname($nickname, true);
+        if (!$tmp) suxFunct::redirect(suxFunct::getPreviousURL()); // Invalid user
+        elseif ($tmp['users_id'] != $_SESSION['users_id']) {
+            // Check that the user is allowed to be here
+            if (!$this->user->isRoot()) {
+                suxFunct::redirect(suxFunct::getPreviousURL());
+            }
         }
+
+        // Pre assign variables
+        $this->nickname = $nickname;
+        $this->users_id = $tmp['users_id'];
 
     }
 
@@ -78,13 +85,16 @@ class feedsApprove  {
     }
 
 
-
     /**
     * Build the form and show the template
     *
     * @param array $dirty reference to unverified $_POST
     */
     function formBuild(&$dirty) {
+
+        // --------------------------------------------------------------------
+        // Form logic
+        // --------------------------------------------------------------------
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
         else suxValidate::disconnect();
@@ -96,18 +106,24 @@ class feedsApprove  {
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
 
-            suxValidate::register_validator('feeds', 'feeds', 'isInt', true);
+            suxValidate::register_validator('integrity', 'integrity:users_id:nickname', 'hasIntegrity');
 
         }
 
-        // Urls
-        $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/approve');
+        // --------------------------------------------------------------------
+        // Template
+        // --------------------------------------------------------------------
+
+        // Additional
+        $this->tpl->assign('nickname', $this->nickname);
+        $this->tpl->assign('users_id', $this->users_id);
+        $this->r->text['form_url'] = suxFunct::makeUrl("/user/openid/{$this->nickname}");
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
-        // Feeds
-        $this->r->fp = $this->rss->getUnpublishedFeeds();
+        $this->r->openids = $this->user->getOpenIDs($this->users_id);
 
-        $this->tpl->display('approve.tpl');
+        // Display template
+        $this->tpl->display('openid.tpl');
 
     }
 
@@ -119,12 +135,26 @@ class feedsApprove  {
     */
     function formProcess(&$clean) {
 
-        if (isset($clean['feeds'])) foreach ($clean['feeds'] as $key => $val) {
+        // Security check
+        if ($clean['users_id'] != $_SESSION['users_id']) {
+            // Check that the user is allowed to be here
+            if (!$this->user->isRoot()) {
+                suxFunct::redirect(suxFunct::getPreviousURL());
+            }
+        }
 
-            if ($val == 1) $this->rss->approveFeed($key);
-            else $this->rss->deleteFeed($key);
+        if (isset($clean['detach'])) foreach ($clean['detach'] as $url) {
+
+            if (!$this->user->isRoot()) {
+                $tmp = $this->user->getUserByOpenID($url);
+                if ($tmp['users_id'] != $_SESSION['users_id'])
+                    continue; // Skip
+            }
+
+            $this->user->detachOpenID($url);
 
         }
+
 
     }
 
@@ -134,8 +164,11 @@ class feedsApprove  {
     */
     function formSuccess() {
 
-        // Redirect
-        suxFunct::redirect(suxFunct::getPreviousURL());
+        $this->r->bool['edit'] = true;
+        $this->r->text['back_url'] = suxFunct::getPreviousURL();
+
+        // Template
+        $this->tpl->display('success.tpl');
 
     }
 

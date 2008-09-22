@@ -66,17 +66,16 @@ class userEdit {
             }
 
             if ($user != $_SESSION['nickname']) {
-
                 // Security check
                 // Only a root user can modify other users
-                if (!$this->user->isRoot($_SESSION['users_id'])) {
+                if (!$this->user->isRoot()) {
                     suxFunct::redirect(suxFunct::makeUrl('/home'));
                 }
-
-                $u = $this->user->getUserByNickname($user);
-                if ($u) $this->users_id = $u['users_id'];
-
             }
+
+            // Get user
+            $u = $this->user->getUserByNickname($user);
+            if ($u) $this->users_id = $u['users_id'];
 
         }
 
@@ -295,7 +294,7 @@ class userEdit {
             if ($clean['nickname'] != $_SESSION['nickname']) {
                 // Security check
                 // Only a root user can modify other users
-                if (!$this->user->isRoot($_SESSION['users_id'])) {
+                if (!$this->user->isRoot()) {
                     suxFunct::redirect(suxFunct::makeUrl('/home'));
                 }
 
@@ -322,7 +321,7 @@ class userEdit {
         // --------------------------------------------------------------------
 
         if (isset($id) && filter_var($id, FILTER_VALIDATE_INT)) $this->user->saveUser($clean, $id);
-        else $this->user->saveUser($clean);
+        else $id = $this->user->saveUser($clean);
 
         // --------------------------------------------------------------------
         // Cleanup
@@ -335,7 +334,7 @@ class userEdit {
 
         // Reset session
         if ($this->mode == 'edit' && $clean['nickname'] == $_SESSION['nickname']) {
-            $this->user->setSession($clean['nickname'], true);
+            $this->user->setSession($id);
         }
 
     }

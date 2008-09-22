@@ -60,7 +60,7 @@ class adminAccess {
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
 
         // Security check
-        if (!$this->user->isRoot($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/home'));
+        if (!$this->user->isRoot()) suxFunct::redirect(suxFunct::makeUrl('/home'));
 
 
         $tmp = $this->user->getUserByNickname($nickname);
@@ -115,7 +115,7 @@ class adminAccess {
             $val = $tmp2;
 
             $myOptions[$key] = $val;
-            $mySelect[$key] = $this->user->getAccess($this->users_id, $key);
+            $mySelect[$key] = $this->user->getAccess($key, $this->users_id);
 
         }
 
@@ -186,8 +186,8 @@ class adminAccess {
 
         foreach($GLOBALS['CONFIG']['ACCESS'] as $key => $val) {
             if (isset($clean[$key])) {
-                if ($clean[$key]) $this->user->saveAccess($this->users_id, $key, $clean[$key]);
-                else $this->user->removeAccess($this->users_id, $key);
+                if ($clean[$key]) $this->user->saveAccess($key, $clean[$key], $this->users_id);
+                else $this->user->removeAccess($key, $this->users_id);
             }
         }
 

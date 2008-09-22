@@ -99,14 +99,6 @@
                 {$r->text.timezone} : {$r->profile.timezone} <br />
                 {/if}
 
-
-                {*
-                {$r->profile.users_id}
-                {$r->profile.accesslevel}
-                {$r->profile.pavatar}
-                {$r->profile.microid}
-                *}
-
                 </p>
             {/capture}
 
@@ -130,7 +122,13 @@
 
 
             <h2><a href="#todo" class="noBg"><img class="rssIcon" src="{$r->url}/media/{$r->partition}/assets/rss_icon.png" alt="RSS Feed" /></a> Minifeed</h2>
-            <p>Todo</p>
+            <ul class="miniFeed">
+            {foreach from=$r->minifeed item=foo}
+            <li><em><strong>{$foo.ts}</strong></em> <br />{$foo.body_html}</li>
+            {foreachelse}
+            <li>Nothing yet...</li>
+            {/foreach}
+            </ul>
 
 
 			</div>

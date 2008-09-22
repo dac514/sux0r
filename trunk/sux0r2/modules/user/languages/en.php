@@ -1,13 +1,15 @@
 <?php
 
+$gtext['alert_detach'] = 'Are you sure you want to remove these OpenIDs from your account?';
 $gtext['back'] = 'Back';
 $gtext['cancel'] = 'Cancel';
 $gtext['captcha'] = 'Anti-spam code';
 $gtext['country'] = 'Country';
 $gtext['dob'] = 'Birthday';
+$gtext['detach'] = 'Detach';
 $gtext['edit_avatar'] = 'Edit Avatar';
 $gtext['edit_bayes'] = 'Edit Bayesian';
-$gtext['edit_friends'] = 'Edit Friends';
+$gtext['edit_openid'] = 'Edit OpenID';
 $gtext['edit_profile'] = 'Edit Profile';
 $gtext['editing'] = 'Editing';
 $gtext['email'] = 'Email';
@@ -68,10 +70,6 @@ $gtext['url'] = 'URL';
 
 $gtext['extensions'] = 'Supported extensions';
 $gtext['max_filesize'] = 'Maximum file size';
-
-// Log messages
-$gtext['logged_in'] = 'logged in';
-$gtext['logged_out'] = 'logged out';
 
 
 /*

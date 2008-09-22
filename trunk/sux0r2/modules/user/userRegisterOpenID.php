@@ -30,6 +30,7 @@ class userRegisterOpenID  {
 
     // Variables
     public $gtext = array();
+    private $prev_skip = array();
     private $module = 'user';
 
     // Objects
@@ -50,6 +51,12 @@ class userRegisterOpenID  {
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
+
+        // This module can fallback on user/openid module
+        foreach ($GLOBALS['CONFIG']['PREV_SKIP'] as $val) {
+            if (mb_strpos($val, 'user/openid') === false)
+                $this->prev_skip[] = $val;
+        }
 
     }
 
@@ -96,7 +103,7 @@ class userRegisterOpenID  {
 
         // Urls
         $this->r->text['form_url'] = suxFunct::makeUrl('/user/register/openid');
-        $this->r->text['back_url'] = suxFunct::getPreviousURL();
+        $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_skip);
 
         // Template
         $this->tpl->display('register_openid.tpl');
