@@ -115,11 +115,11 @@ class feeds extends bayesShared {
             if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
             else $nn = 'nobody';
 
+            $this->pager->setStart(); // Start pager
+
             // "Cache Groups" using a vertical bar |
             $cache_id = "$nn|user|$nickname|{$this->pager->start}";
             $this->tpl->caching = 1;
-
-            $this->pager->setStart(); // Start pager
 
             if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
 
@@ -202,11 +202,11 @@ class feeds extends bayesShared {
             if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
             else $nn = 'nobody';
 
+            $this->pager->setStart(); // Start pager
+
             // "Cache Groups" using a vertical bar |
             $cache_id = "$nn|listing|$feeds_id|{$this->pager->start}";
             $this->tpl->caching = 1;
-
-            $this->pager->setStart(); // Start pager
 
             if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
 

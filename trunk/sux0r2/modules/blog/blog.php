@@ -117,11 +117,11 @@ class blog extends bayesShared {
             if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
             else $nn = 'nobody';
 
+            $this->pager->setStart(); // Start pager
+
             // "Cache Groups" using a vertical bar |
             $cache_id = $nn . '|author|' . $author . '|' . $this->pager->start;
             $this->tpl->caching = 1;
-
-            $this->pager->setStart(); // Start pager
 
             if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
 
@@ -194,11 +194,11 @@ class blog extends bayesShared {
             if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
             else $nn = 'nobody';
 
+            $this->pager->setStart(); // Start pager
+
             // "Cache Groups" using a vertical bar |
             $cache_id = $nn . '|tag|' . $this->tag_id . '|' . $this->pager->start;
             $this->tpl->caching = 1;
-
-            $this->pager->setStart(); // Start pager
 
             if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
 
@@ -303,11 +303,11 @@ class blog extends bayesShared {
             if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
             else $nn = 'nobody';
 
+            $this->pager->setStart(); // Start pager
+
             // "Cache Groups" using a vertical bar |
             $cache_id = $nn . '|category|' . $this->cat_id . '|' . $this->pager->start;
             $this->tpl->caching = 1;
-
-            $this->pager->setStart(); // Start pager
 
             if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
 
@@ -381,11 +381,11 @@ class blog extends bayesShared {
             if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
             else $nn = 'nobody';
 
+            $this->pager->setStart(); // Start pager
+
             // "Cache Groups" using a vertical bar |
             $cache_id = $nn . '|month|' . date('Y-m', strtotime($date)) . '|' . $this->pager->start;
             $this->tpl->caching = 1;
-
-            $this->pager->setStart(); // Start pager
 
             if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
 
@@ -453,11 +453,11 @@ class blog extends bayesShared {
             if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
             else $nn = 'nobody';
 
+            $this->pager->setStart(); // Start pager
+
             // "Cache Groups" using a vertical bar |
             $cache_id = $nn . '|listing|' . $this->pager->start;
             $this->tpl->caching = 1;
-
-            $this->pager->setStart(); // Start pager
 
             if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
 
@@ -487,13 +487,13 @@ class blog extends bayesShared {
         if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
         else $nn = 'nobody';
 
-        // "Cache Groups" using a vertical bar |
-        $cache_id = $nn . "|{$thread_id}|" . $this->pager->start;
-        $this->tpl->caching = 1;
-
         // Start pager
         $this->pager->limit = 100;
         $this->pager->setStart();
+
+        // "Cache Groups" using a vertical bar |
+        $cache_id = $nn . "|{$thread_id}|" . $this->pager->start;
+        $this->tpl->caching = 1;
 
         if (!$this->tpl->is_cached('view.tpl', $cache_id)) {
 
