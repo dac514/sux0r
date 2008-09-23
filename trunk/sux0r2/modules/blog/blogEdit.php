@@ -76,12 +76,27 @@ class blogEdit {
         // Redirect if not logged in
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
 
-        if (filter_var($id, FILTER_VALIDATE_INT)) {
-            // TODO:
-            // Verfiy that we are allowed to edit this
-            $this->id = $id;
+        // Check that the user is allowed to be here
+        if (!$this->user->isRoot()) {
+            $access = $this->user->getAccess($this->module);
+            if ($access < $GLOBALS['CONFIG']['ACCESS']['photos']['admin']) {
+
+                if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['publisher'])
+                    suxFunct::redirect(suxFunct::makeUrl('/blog'));
+
+                // Verfiy that we are allowed to edit this
+                if (filter_var($id, FILTER_VALIDATE_INT)) {
+                    $tmp = $this->msg->getMessage($id, true);
+
+                    if ($tmp['thread_pos'] === 0) suxFunct::redirect(suxFunct::makeUrl('/blog'));
+                    elseif ($tmp['users_id'] != $_SESSION['users_id']) suxFunct::redirect(suxFunct::makeUrl('/blog'));
+                }
+
+            }
         }
 
+        // Assign id:
+        $this->id = $id;
 
     }
 
@@ -237,14 +252,32 @@ class blogEdit {
     function formProcess(&$clean) {
 
         // --------------------------------------------------------------------
-        // Sanity check
+        // Security check
         // --------------------------------------------------------------------
 
-        // Message id, edit mode
-        if (isset($clean['id']) && filter_var($clean['id'], FILTER_VALIDATE_INT)) {
-            // TODO: Check to see if this user is allowed to modify this blog
-            // $clean['id'] = false // on fail
+        // Check that the user is allowed to be here
+        if (!$this->user->isRoot()) {
+            $access = $this->user->getAccess($this->module);
+            if ($access < $GLOBALS['CONFIG']['ACCESS']['photos']['admin']) {
+                if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['publisher'])
+                    suxFunct::redirect(suxFunct::makeUrl('/blog'));
+
+                if (isset($clean['id']) && filter_var($clean['id'], FILTER_VALIDATE_INT)) {
+                    // Verfiy that we are allowed to edit this
+                    if (filter_var($clean['id'], FILTER_VALIDATE_INT)) {
+
+                        $tmp = $this->msg->getMessage($clean['id'], true);
+                        if ($tmp['thread_pos'] === 0) suxFunct::redirect(suxFunct::makeUrl('/blog'));
+                        elseif ($tmp['users_id'] != $_SESSION['users_id']) suxFunct::redirect(suxFunct::makeUrl('/blog'));
+
+                    }
+                }
+            }
         }
+
+        // --------------------------------------------------------------------
+        // Sanity check
+        // --------------------------------------------------------------------
 
         // Date
         $clean['published_on'] = "{$clean['Date']} {$clean['Time_Hour']}:{$clean['Time_Minute']}:{$clean['Time_Second']}";
@@ -413,6 +446,7 @@ class blogEdit {
     function formSuccess() {
 
         $this->tpl->clear_cache(null, $_SESSION['nickname']); // Clear cache
+
         suxFunct::redirect(suxFunct::makeUrl('/blog/bookmarks/' . $this->id)); // Pass this on to bookmarks for scanning
 
     }

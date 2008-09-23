@@ -269,7 +269,9 @@ class bayesEdit {
                 if (!isset($clean['trainer'])) $clean['trainer'] = 0;
                 if (!isset($clean['owner'])) $clean['owner'] = 0;
                 $this->nb->shareVector($clean['users_id'], $clean['vector_id'], $clean['trainer'], $clean['owner']);
-                // TODO, clear caches for $clean['users_id'] (we need to get their partition, too)
+
+                // TODO
+                // clear caches for $clean['users_id'] (we need to get their partition, too)
             }
             break;
 
@@ -278,7 +280,9 @@ class bayesEdit {
             foreach ($clean['unshare'] as $val) {
                 foreach ($val as $vectors_id => $users_id) {
                     $this->nb->unshareVector($users_id, $vectors_id);
-                    // TODO, clear caches for $users_id (we need to get their partition, too)
+
+                    // TODO,
+                    // clear caches for $users_id (we need to get their partition, too)
                 }
             }
             break;

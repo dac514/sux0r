@@ -69,11 +69,7 @@ class blogReply {
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
 
         $parent = $this->msg->getMessage($parent_id);
-        if (!$parent) {
-            // TODO: Beautify
-            echo 'Invalid message';
-            exit;
-        }
+        if (!$parent) suxFunct::redirect(suxFunct::getPreviousURL()); // Invalid message, redirect
 
         $this->parent = $parent;
 

@@ -47,6 +47,11 @@ class photoUpload  {
     */
     function __construct($id = null) {
 
+        if ($id) {
+            if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
+                suxFunct::redirect(suxFunct::makeURL('/photos')); // Invalid id
+        }
+
         $this->user = new suxUser(); // User
         $this->photo = new suxPhoto($this->module); // Photos
         $this->tpl = new suxTemplate($this->module); // Template
@@ -62,6 +67,16 @@ class photoUpload  {
         // This module has config variables, load them
         $this->tpl->config_load('my.conf', $this->module);
 
+        // Check that the user is allowed to upload photos
+        if (!$this->user->isRoot()) {
+            $access = $this->user->getAccess($this->module);
+            if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin']) {
+                if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['publisher'])
+                    suxFunct::redirect(suxFunct::makeURL('/photos'));
+            }
+        }
+
+        // Assign id to template
         if (filter_var($id, FILTER_VALIDATE_INT) && $id > 0) $this->tpl->assign('album', $id);
 
     }
@@ -127,13 +142,12 @@ class photoUpload  {
         if (!isset($_FILES['image']) || !is_uploaded_file($_FILES['image']['tmp_name']))
             throw new Exception('No file uploaded?');
 
-        // Avoid spoofing, check if this album belongs to this user,
-        if (!$this->photo->isAlbumOwner($clean['album'], $_SESSION['users_id'])) {
-            // Check that the user is allowed to be here
-            if (!$this->user->isRoot()) {
-                $access = $this->user->getAccess($this->module);
-                if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin'])
-                    suxFunct::redirect(suxFunct::getPreviousURL());
+        // Check that the user is allowed to upload photos
+        if (!$this->user->isRoot()) {
+            $access = $this->user->getAccess($this->module);
+            if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin']) {
+                if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['publisher']) suxFunct::redirect(suxFunct::makeURL('/photos'));
+                elseif (!$this->photo->isAlbumOwner($clean['album'], $_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeURL('/photos'));
             }
         }
 

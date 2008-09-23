@@ -75,7 +75,9 @@ class userEdit {
 
             // Get user
             $u = $this->user->getUserByNickname($user);
-            if ($u) $this->users_id = $u['users_id'];
+            if (!$u) suxFunct::redirect(suxFunct::getPreviousURL()); // Invalid user
+
+            $this->users_id = $u['users_id'];
 
         }
 
@@ -138,8 +140,6 @@ class userEdit {
 
         }
         elseif ($this->mode == 'edit') {
-
-            // Edit mode
 
             $u = $this->user->getUser($this->users_id, true);
 
@@ -320,8 +320,16 @@ class userEdit {
         // SQL
         // --------------------------------------------------------------------
 
-        if (isset($id) && filter_var($id, FILTER_VALIDATE_INT)) $this->user->saveUser($clean, $id);
-        else $id = $this->user->saveUser($clean);
+        if (isset($id) && filter_var($id, FILTER_VALIDATE_INT)) {
+            $this->user->saveUser($clean, $id);
+            if ($id == $_SESSION['users_id']) $tmp = 'edited self';
+            else $tmp = "edited users_id: {$id}";
+            $this->user->log($_SESSION['users_id'], "sux0r::userEdit() $tmp", 1); // Log, private
+        }
+        else {
+            $id = $this->user->saveUser($clean);
+            $this->user->log($id, "sux0r::userEdit() new user: {$id} ", 1); // Log, private
+        }
 
         // --------------------------------------------------------------------
         // Cleanup

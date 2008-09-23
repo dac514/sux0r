@@ -170,6 +170,9 @@ class adminAccess {
     */
     function formProcess(&$clean) {
 
+        // Security check
+        if (!$this->user->isRoot()) suxFunct::redirect(suxFunct::makeUrl('/home'));
+
         // Root
         if (isset($clean['root'])) $this->user->root($this->users_id);
         elseif ($this->users_id != $_SESSION['users_id']) {
@@ -190,6 +193,9 @@ class adminAccess {
                 else $this->user->removeAccess($key, $this->users_id);
             }
         }
+
+        // Log, private
+        $this->user->log($_SESSION['users_id'], "sux0r::adminAccess() edited users_id: {$this->users_id} ", 1);
 
     }
 
