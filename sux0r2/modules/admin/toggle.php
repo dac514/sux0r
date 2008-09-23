@@ -21,7 +21,7 @@ function failure($msg = null) {
 // ---------------------------------------------------------------------------
 
 if (!isset($_SESSION['users_id'])) failure('Invalid user id');
-if (!isset($_POST['id']) || !filter_var($_POST['id'], FILTER_VALIDATE_INT) || $_POST['id'] < 1) failure('Invalid bookmark id');
+if (!isset($_POST['id']) || !filter_var($_POST['id'], FILTER_VALIDATE_INT) || $_POST['id'] < 1) failure('Invalid id');
 
 $id = $_POST['id'];
 
@@ -39,6 +39,9 @@ if (!$u->isRoot()) failure('Not admin');
 $image = 'lock2.gif';
 $flag = $u->toggleLogPrivateFlag($id);
 if ($flag) $image = 'lock1.gif';
+
+// Log, private
+$u->log($_SESSION['users_id'], "sux0r::adminLog() toggled id: $id", 1);
 
 echo trim($image);
 exit;

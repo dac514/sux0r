@@ -33,6 +33,7 @@ class photosRenderer extends suxRenderer {
 
     // Objects
     private $photo;
+    private $user;
 
     /**
     * Constructor
@@ -42,6 +43,7 @@ class photosRenderer extends suxRenderer {
     function __construct($module) {
         parent::__construct($module); // Call parent
         $this->photo = new suxPhoto($module);
+        $this->user = new suxUser();
     }
 
 
@@ -93,7 +95,16 @@ class photosRenderer extends suxRenderer {
         if (is_array($tmp)) return $tmp;
         $tmp = array();
 
-        $albums = $this->photo->getAlbums($_SESSION['users_id'], null, 0, true);
+        // Users id
+        $users_id = $_SESSION['users_id'];
+        if ($this->user->isRoot()) $users_id = null;
+        else {
+            $access = $this->user->getAccess('photos');
+            if ($access >= $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin']) $users_id = null;
+        }
+
+        // Get albums
+        $albums = $this->photo->getAlbums($users_id, null, 0, true);
 
         $tmp[''] = '---';
         foreach ($albums as $album) {
@@ -154,11 +165,15 @@ function insert_editLinks($params) {
 
     if (!isset($_SESSION['users_id'])) return null;
 
-    $photo = new suxPhoto();
-    // TODO, check if the user is allowed
+    // Check that the user is allowed to create a new album
+    $u = new suxUser();
+    if (!$u->isRoot()) {
+        $access = $u->getAccess('photos');
+        if ($access < $GLOBALS['CONFIG']['ACCESS']['photos']['publisher'])
+            return null;
+    }
 
     $new = suxFunct::makeUrl('/photos/album/edit/');
-
     $html = '';
     $html .= "<a href='{$new}'>New album &raquo;</a><br />";
 
@@ -179,8 +194,16 @@ function insert_editLinks2($params) {
     if (empty($params['album_id'])) return null;
     if (!filter_var($params['album_id'], FILTER_VALIDATE_INT) || $params['album_id'] < 1) return null;
 
-    $photo = new suxPhoto();
-    if (!$photo->isAlbumOwner($params['album_id'], $_SESSION['users_id'])) return null;
+    // Check that the user is allowed to edit this album
+    $u = new suxUser();
+    if (!$u->isRoot()) {
+        $photo = new suxPhoto();
+        $access = $u->getAccess('photos');
+        if ($access < $GLOBALS['CONFIG']['ACCESS']['photos']['admin']) {
+            if ($access < $GLOBALS['CONFIG']['ACCESS']['photos']['publisher']) return null;
+            elseif (!$photo->isAlbumOwner($params['album_id'], $_SESSION['users_id'])) return null;
+        }
+    }
 
     $edit = suxFunct::makeUrl('/photos/album/edit/' . $params['album_id']);
     $annotate = suxFunct::makeUrl('/photos/album/annotate/' . $params['album_id']);

@@ -49,7 +49,10 @@ class photosEdit {
     *
     * @param int $id album id
     */
-    function __construct($id = null) {
+    function __construct($id) {
+
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
+            suxFunct::redirect(suxFunct::makeURL('/photos')); // Invalid id
 
         $this->user = new suxUser(); // User
         $this->photo = new suxPhoto($this->module); // Photos
@@ -64,11 +67,17 @@ class photosEdit {
         // Redirect if not logged in
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
 
-        if (filter_var($id, FILTER_VALIDATE_INT)) {
-            // TODO:
-            // Verfiy that we are allowed to edit this
-            $this->id = $id;
+        // Check that the user is allowed to edit this album
+        if (!$this->user->isRoot()) {
+            $access = $this->user->getAccess($this->module);
+            if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin']) {
+                if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['publisher']) suxFunct::redirect(suxFunct::makeURL('/photos'));
+                elseif (!$this->$photo->isAlbumOwner($id, $_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeURL('/photos'));
+            }
         }
+
+        // Assign id
+        $this->id = $id;
 
         // This module has config variables, load them
         $this->tpl->config_load('my.conf', $this->module);
@@ -97,17 +106,15 @@ class photosEdit {
 
         $photoalbum = array();
 
-        if ($this->id) {
+        // Editing a photoalbum
+        $tmp = $this->photo->getAlbum($this->id, true);
+        if (!$tmp) suxFunct::redirect(suxFunct::makeURL('/photos')); // Invalid id
 
-            // Editing a photoalbum
-            $tmp = $this->photo->getAlbum($this->id, true);
+        $photoalbum['id'] = $tmp['id'];
+        $photoalbum['cover'] = $tmp['thumbnail'];
 
-            $photoalbum['id'] = $tmp['id'];
-            $photoalbum['cover'] = $tmp['thumbnail'];
-
-            // Don't allow spoofing
-            unset($dirty['id']);
-        }
+        // Don't allow spoofing
+        unset($dirty['id']);
 
         $this->tpl->assign($photoalbum);
 
@@ -135,7 +142,6 @@ class photosEdit {
         $this->pager->limit = $this->per_page;
         $this->pager->setStart();
 
-
         $this->pager->setPages($this->photo->countPhotos($this->id));
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/photos/album/annotate/{$this->id}"));
         $this->r->pho = $this->photo->getPhotos($this->id, $this->pager->limit, $this->pager->start);
@@ -154,6 +160,15 @@ class photosEdit {
     * @param array $clean reference to validated $_POST
     */
     function formProcess(&$clean) {
+
+        // Check that the user is allowed to edit this album
+        if (!$this->user->isRoot()) {
+            $access = $this->user->getAccess($this->module);
+            if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin']) {
+                if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['publisher']) suxFunct::redirect(suxFunct::makeURL('/photos'));
+                elseif (!$this->$photo->isAlbumOwner($clean['id'], $_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeURL('/photos'));
+            }
+        }
 
         // Set cover
         if (isset($clean['cover'])) $this->photo->saveThumbnail($clean['id'], $clean['cover']);
@@ -174,12 +189,8 @@ class photosEdit {
     */
     function formSuccess() {
 
-        // TODO?
-        // $this->tpl->clear_cache(null, "album|{$this->id}"); // Clear cache
-
         // Template
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
-
         $this->tpl->display('success.tpl');
 
     }

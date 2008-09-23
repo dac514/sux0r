@@ -81,22 +81,18 @@ class blogBookmarks {
 
         $msg = $this->msg->getMessage($msg_id, true);
 
-        if (!$msg) {
-            // TODO: No message, skip?
-        }
+        if (!$msg)
+            suxFunct::redirect(suxFunct::getPreviousURL()); // No message, skip
 
-        if ($msg['users_id'] != $_SESSION['users_id']) {
-            // TODO: Not the user's message, skip?
-        }
+        if ($msg['users_id'] != $_SESSION['users_id'])
+            suxFunct::redirect(suxFunct::getPreviousURL()); // Not the user's message, skip
 
         $matches = array();
         $pattern = '/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/i'; // href pattern
         preg_match_all($pattern, $msg['body_html'], $matches);
 
         $count = count($matches[1]);
-        if (!$count) {
-            // TODO: No links, skip?
-        }
+        if (!$count) suxFunct::redirect(suxFunct::getPreviousURL()); //  No links, skip
 
         // Limit the amount of time we wait for a connection to a remote server to 5 seconds
         ini_set('default_socket_timeout', 5);
@@ -125,6 +121,9 @@ class blogBookmarks {
 
             }
         }
+
+        $count = count($this->found_links);
+        if (!$count) suxFunct::redirect(suxFunct::getPreviousURL()); //  No links, skip
 
     }
 
@@ -208,7 +207,6 @@ class blogBookmarks {
     */
     function formProcess(&$clean) {
 
-
         if (isset($clean['url']) && is_array($clean['url'])) {
             $count = count($clean['url']);
             for ($i = 0; $i < $count; ++$i) {
@@ -223,8 +221,18 @@ class blogBookmarks {
             }
         }
 
-        // TODO, handoff
-        exit;
+
+    }
+
+
+    /**
+    * The form was successfuly processed
+    */
+    function formSuccess() {
+
+        // TODO: Same message as suggest bookmark from bookmarks module
+
+        suxFunct::redirect(suxFunct::getPreviousURL()); // Redirect
 
     }
 

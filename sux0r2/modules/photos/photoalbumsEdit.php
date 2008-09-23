@@ -48,6 +48,11 @@ class photoalbumsEdit {
     */
     function __construct($id = null) {
 
+        if ($id) {
+            if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
+                suxFunct::redirect(suxFunct::makeURL('/photos')); // Invalid id
+        }
+
         $this->user = new suxUser(); // User
         $this->photo = new suxPhoto($this->module); // Photos
         $this->tpl = new suxTemplate($this->module); // Template
@@ -61,12 +66,19 @@ class photoalbumsEdit {
         // Redirect if not logged in
         $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
 
-        if (filter_var($id, FILTER_VALIDATE_INT)) {
-            // TODO:
-            // Verfiy that we are allowed to edit this
-            $this->id = $id;
+        // Check that the user is allowed to edit this album
+        if (!$this->user->isRoot()) {
+            $access = $this->user->getAccess($this->module);
+            if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin']) {
+                if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['publisher']) suxFunct::redirect(suxFunct::makeURL('/photos'));
+                elseif ($id) {
+                    if (!$this->$photo->isAlbumOwner($id, $_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeURL('/photos'));
+                }
+            }
         }
 
+        // Assign id
+        $this->id = $id;
 
     }
 
@@ -178,14 +190,23 @@ class photoalbumsEdit {
     function formProcess(&$clean) {
 
         // --------------------------------------------------------------------
-        // Sanity check
+        // Security check
         // --------------------------------------------------------------------
 
-        // Message id, edit mode
-        if (isset($clean['id']) && filter_var($clean['id'], FILTER_VALIDATE_INT)) {
-            // TODO: Check to see if this user is allowed to modify this photoalbum
-            // $clean['id'] = false // on fail
+        // Check that the user is allowed to edit this album
+        if (!$this->user->isRoot()) {
+            $access = $this->user->getAccess($this->module);
+            if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin']) {
+                if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['publisher']) suxFunct::redirect(suxFunct::makeURL('/photos'));
+                elseif (isset($clean['id']) && filter_var($clean['id'], FILTER_VALIDATE_INT)) {
+                    if (!$this->$photo->isAlbumOwner($clean['id'], $_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeURL('/photos'));
+                }
+            }
         }
+
+        // --------------------------------------------------------------------
+        // Sanity check
+        // --------------------------------------------------------------------
 
         // Date
         $clean['published_on'] = "{$clean['Date']} {$clean['Time_Hour']}:{$clean['Time_Minute']}:{$clean['Time_Second']}";
