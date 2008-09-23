@@ -32,6 +32,7 @@
             <li><a href='{$r->makeUrl('/blog/author')}/{$r->profile.nickname}' >Blog</a></li>
             <li><a href='{$r->makeUrl('/feeds/user')}/{$r->profile.nickname}' >Feeds</a></li>
             <li><a href='{$r->makeUrl('/bookmarks/user')}/{$r->profile.nickname}' >Bookmarks</a></li>
+            <li><a href='{$r->makeUrl('/photos/user')}/{$r->profile.nickname}' >Photo Albums</a></li>
             <li><div style="padding-bottom: 1em"></div></li>
             {insert name="editMenu" nickname=$r->profile.nickname}
             </ul>

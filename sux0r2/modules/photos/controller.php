@@ -133,6 +133,23 @@ function sux($action, $params = null) {
         }
 
 
+    case 'user' :
+
+        // --------------------------------------------------------------------
+        // User
+        // --------------------------------------------------------------------
+
+        if (empty($params[0])) {
+            suxFunct::redirect(suxFunct::makeUrl('/photos'));
+        }
+
+        include_once('photos.php');
+        $photos = new photos();
+        $photos->listing($params[0]);
+
+        break;
+
+
     default:
 
         include_once('photos.php');

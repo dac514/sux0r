@@ -68,20 +68,27 @@ class photos {
     /**
     * List albums
     */
-    function listing() {
+    function listing($nickname = null) {
+
+        $users_id = null;
+        if ($nickname) {
+            $user = $this->user->getUserByNickname($nickname);
+            if (!$user) suxFunct::redirect(suxFunct::makeUrl('/photos')); // Invalid user
+            else $users_id = $user['users_id'];
+        }
 
         // Start pager
         $this->pager->setStart();
 
         // "Cache Groups" using a vertical bar |
-        $cache_id = 'listing|' . $this->pager->start;
+        $cache_id = "listing|$nickname|" . $this->pager->start;
         $this->tpl->caching = 0; // TODO, turn cache on
 
         if (!$this->tpl->is_cached('list.tpl', $cache_id)) {
 
             $this->pager->setPages($this->photo->countAlbums());
             $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/photos'));
-            $this->r->pho = $this->photo->getAlbums(null, $this->pager->limit, $this->pager->start);
+            $this->r->pho = $this->photo->getAlbums($users_id, $this->pager->limit, $this->pager->start);
 
             if ($this->r->pho == false || !count($this->r->pho))
                 $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
@@ -132,7 +139,7 @@ class photos {
     function view($id) {
 
         // "Cache Groups" using a vertical bar |
-        $cache_id = "view|{$id}|" . $this->pager->start;
+        $cache_id = "view|{$id}";
         $this->tpl->caching = 0; // TODO, turn cache on
 
         if (!$this->tpl->is_cached('view.tpl', $cache_id)) {

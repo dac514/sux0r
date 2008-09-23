@@ -78,6 +78,7 @@ class bookmarks extends bayesShared {
         // Get users_id based on nickname
         $user = $this->user->getUserByNickname($nickname);
         if (!$user) suxFunct::redirect(suxFunct::makeUrl('/bookmarks'));
+
         // Needs to be in externally accessible variable for filter()
         $this->users_id = $user['users_id'];
         $this->alphasort = $alphasort;
@@ -125,11 +126,11 @@ class bookmarks extends bayesShared {
             if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
             else $nn = 'nobody';
 
+            $this->pager->setStart(); // Start pager
+
             // "Cache Groups" using a vertical bar |
             $cache_id = "$nn|user|$nickname|{$this->pager->start}";
             $this->tpl->caching = 1;
-
-            $this->pager->setStart(); // Start pager
 
             if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
 
@@ -206,12 +207,12 @@ class bookmarks extends bayesShared {
             if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
             else $nn = 'nobody';
 
+            $this->pager->setStart(); // Start pager
+
             // "Cache Groups" using a vertical bar |
             if ($alphasort) $cache_id = "$nn|tags|{$this->tag_id}|alphasort|{$this->pager->start}";
             else $cache_id = "$nn|tags|{$this->tag_id}|datesort|{$this->pager->start}";
-            $this->tpl->caching = 0; // TODO: Turn on caching
-
-            $this->pager->setStart(); // Start pager
+            $this->tpl->caching = 1;
 
             if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
 
