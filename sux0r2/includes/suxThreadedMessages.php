@@ -21,6 +21,8 @@
 * @license    http://www.gnu.org/licenses/agpl.html
 */
 
+require_once(dirname(__FILE__) . '/suxLink.php');
+
 class suxThreadedMessages {
 
     // Database stuff
@@ -415,6 +417,13 @@ class suxThreadedMessages {
         // Commit
         $this->db->commit();
         $this->inTransaction = false;
+
+        // Delete links, too
+        $link = new suxLink();
+        $links = $link->getLinkTables('messages');
+        foreach ($links as $table) {
+            $link->deleteLink($table, $link->getLinkColumnName($table, 'messages'), $id);
+        }
 
     }
 
@@ -1050,6 +1059,50 @@ class suxThreadedMessages {
         return $st->fetchAll(PDO::FETCH_ASSOC);
 
     }
+
+
+    /**
+    * Delete thread
+    *
+    * @param int $thread_id thread id
+    */
+    function deleteThread($thread_id) {
+
+        if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id < 1) return false;
+
+        // Begin transaction
+        $this->db->beginTransaction();
+        $this->inTransaction = true;
+
+        $st = $this->db->prepare("SELECT id FROM {$this->db_table} WHERE thread_id = ? ");
+        $st->execute(array($thread_id));
+        $result = $st->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach($result as $key => $val) {
+
+            $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE id = ? LIMIT 1 ");
+            $st->execute(array($val['id']));
+
+            $st = $this->db->prepare("DELETE FROM {$this->db_table_hist} WHERE messages_id = ? ");
+            $st->execute(array($val['id']));
+
+        }
+
+        // Commit
+        $this->db->commit();
+        $this->inTransaction = false;
+
+        // Delete links, too
+        $link = new suxLink();
+        $links = $link->getLinkTables('messages');
+        foreach($result as $key => $val) {
+            foreach ($links as $table) {
+                $link->deleteLink($table, $link->getLinkColumnName($table, 'messages'), $val['id']);
+            }
+        }
+
+    }
+
 
 
     // ----------------------------------------------------------------------------

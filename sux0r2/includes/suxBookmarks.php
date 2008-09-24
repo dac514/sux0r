@@ -22,6 +22,8 @@
 *
 */
 
+require_once(dirname(__FILE__) . '/suxLink.php');
+
 class suxBookmarks {
 
     // Database suff
@@ -276,6 +278,13 @@ class suxBookmarks {
 
         $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE id = ? LIMIT 1 ");
         $st->execute(array($id));
+
+        // Delete links, too
+        $link = new suxLink();
+        $links = $link->getLinkTables('bookmarks');
+        foreach ($links as $table) {
+            $link->deleteLink($table, $link->getLinkColumnName($table, 'bookmarks'), $id);
+        }
 
     }
 

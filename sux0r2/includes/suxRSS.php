@@ -25,6 +25,8 @@
 *
 */
 
+require_once(dirname(__FILE__) . '/suxLink.php');
+
 class suxRSS extends DOMDocument {
 
     // --------------------------------------------------------------------
@@ -146,18 +148,43 @@ class suxRSS extends DOMDocument {
 
 
     /**
-    * Get all published feeds
+    * Get feeds
     *
+    * @param int $limit sql limit value
+    * @param int $start sql start of limit value
+    * @param bool $unpub select un-published?
     * @return array|false
     */
-    function getFeeds($unpub = false) {
+    function getFeeds($limit = null, $start = 0, $unpub = false) {
 
-        $q = "SELECT * FROM {$this->db_feeds} ";
-        if (!$unpub) $q .= 'WHERE draft = 0 ';
-        $q .= 'ORDER BY title ASC ';
+        $query = "SELECT * FROM {$this->db_feeds} ";
+        if (!$unpub) $query .= 'WHERE draft = 0 ';
+        $query .= 'ORDER BY title ASC ';
 
-        $st = $this->db->query($q);
+        // Limit
+        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        elseif ($limit) $query .= "LIMIT {$limit} ";
+
+        $st = $this->db->query($query);
         return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+
+    /**
+    * Count albums
+    *
+    * @param bool $unpub select un-published?
+    * @return array|false
+    */
+    function countFeeds($unpub = false) {
+
+        $query = "SELECT COUNT(*) FROM {$this->db_feeds} ";
+        if (!$unpub) $query .= 'WHERE draft = 0 ';
+
+        $st = $this->db->prepare($query);
+        $st->execute();
+        return $st->fetchColumn();
 
     }
 

@@ -56,6 +56,11 @@ class blogEdit {
     */
     function __construct($id = null) {
 
+        if ($id) {
+            if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
+                suxFunct::redirect(suxFunct::makeURL('/bookmarks')); // Invalid id
+        }
+
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new blogRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
@@ -79,7 +84,7 @@ class blogEdit {
         // Check that the user is allowed to be here
         if (!$this->user->isRoot()) {
             $access = $this->user->getAccess($this->module);
-            if ($access < $GLOBALS['CONFIG']['ACCESS']['photos']['admin']) {
+            if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin']) {
 
                 if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['publisher'])
                     suxFunct::redirect(suxFunct::makeUrl('/blog'));
@@ -258,7 +263,7 @@ class blogEdit {
         // Check that the user is allowed to be here
         if (!$this->user->isRoot()) {
             $access = $this->user->getAccess($this->module);
-            if ($access < $GLOBALS['CONFIG']['ACCESS']['photos']['admin']) {
+            if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin']) {
                 if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['publisher'])
                     suxFunct::redirect(suxFunct::makeUrl('/blog'));
 

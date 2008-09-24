@@ -26,5 +26,8 @@ $gtext['approve_2'] = 'Approve';
 
 $gtext['edit'] = 'edit';
 
+$gtext['delete'] = 'Delete';
+$gtext['alert_delete'] = 'Are you sure you want to delete these bookmarks?';
+
 
 ?>

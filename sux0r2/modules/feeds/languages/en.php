@@ -20,4 +20,7 @@ $gtext['manage'] = 'Manage feeds';
 $gtext['approve'] = 'Approve feeds';
 $gtext['approve_2'] = 'Approve';
 
+$gtext['delete'] = 'Delete';
+$gtext['alert_delete'] = 'Are you sure you want to delete these feeds? Items will also be deleted.';
+
 ?>

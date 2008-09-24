@@ -22,14 +22,36 @@
 *
 */
 
-function sux($action, $params = null) {    
-    
+function sux($action, $params = null) {
+
     // Alphasort
     $alphasort = false;
-    if (isset($_REQUEST['sort']) && $_REQUEST['sort'] == 'alpha') $alphasort = true;                 
+    if (isset($_REQUEST['sort']) && $_REQUEST['sort'] == 'alpha') $alphasort = true;
 
     switch($action)
     {
+
+
+    case 'admin' :
+
+        // --------------------------------------------------------------------
+        // Admin
+        // --------------------------------------------------------------------
+
+        include_once('bookmarksAdmin.php');
+        $admin = new bookmarksAdmin();
+
+        if ($admin->formValidate($_POST)) {
+            $admin->formProcess($_POST);
+            $admin->formSuccess();
+        }
+        else {
+            $admin->formBuild($_POST);
+        }
+
+
+        break;
+
 
     case 'approve' :
 
@@ -47,7 +69,7 @@ function sux($action, $params = null) {
         else {
             $bm->formBuild($_POST);
         }
-        
+
         break;
 
 
@@ -98,16 +120,16 @@ function sux($action, $params = null) {
         // --------------------------------------------------------------------
         // User
         // --------------------------------------------------------------------
-        
+
         if (empty($params[0])) {
             suxFunct::redirect(suxFunct::makeUrl('/bookmarks'));
-        }        
-                
+        }
+
         include_once('bookmarks.php');
-        $bm = new bookmarks();                      
+        $bm = new bookmarks();
         $bm->user($params[0], $alphasort);
 
-        break; 
+        break;
 
 
     case 'tag' :
@@ -124,7 +146,7 @@ function sux($action, $params = null) {
         $bm = new bookmarks();
 
         if ($params[0] == 'cloud') $bm->tagcloud();
-        else $bm->tag($params[0], $alphasort);        
+        else $bm->tag($params[0], $alphasort);
 
         break;
 

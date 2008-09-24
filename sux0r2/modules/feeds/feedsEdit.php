@@ -50,6 +50,11 @@ class feedsEdit {
     */
     function __construct($id = null) {
 
+        if ($id) {
+            if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
+                suxFunct::redirect(suxFunct::makeURL('/feeds')); // Invalid id
+        }
+
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new feedsRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
@@ -76,6 +81,9 @@ class feedsEdit {
             if (mb_strpos($val, 'feeds/approve') === false)
                 $this->prev_skip[] = $val;
         }
+
+        // Assign id:
+        $this->id = $id;
 
     }
 

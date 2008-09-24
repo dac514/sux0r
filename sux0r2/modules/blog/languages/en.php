@@ -13,5 +13,7 @@ $gtext['submit'] = 'Submit';
 $gtext['tags'] = 'Tags';
 
 $gtext['edit'] = 'edit';
+$gtext['delete'] = 'Delete';
+$gtext['alert_delete'] = 'Are you sure you want to delete this blog? Comments will also be deleted.';
 
 ?>

@@ -27,6 +27,26 @@ function sux($action, $params = null) {
     switch($action)
     {
 
+    case 'admin' :
+
+        // --------------------------------------------------------------------
+        // Admin
+        // --------------------------------------------------------------------
+
+        include_once('blogAdmin.php');
+        $admin = new blogAdmin();
+
+        if ($admin->formValidate($_POST)) {
+            $admin->formProcess($_POST);
+            $admin->formSuccess();
+        }
+        else {
+            $admin->formBuild($_POST);
+        }
+
+
+        break;
+
 
     case 'edit' :
 
