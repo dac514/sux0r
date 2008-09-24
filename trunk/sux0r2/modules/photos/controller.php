@@ -27,6 +27,27 @@ function sux($action, $params = null) {
     switch($action)
     {
 
+    case 'admin' :
+
+        // --------------------------------------------------------------------
+        // Admin
+        // --------------------------------------------------------------------
+
+        include_once('photosAdmin.php');
+        $admin = new photosAdmin();
+
+        if ($admin->formValidate($_POST)) {
+            $admin->formProcess($_POST);
+            $admin->formSuccess();
+        }
+        else {
+            $admin->formBuild($_POST);
+        }
+
+
+        break;
+
+
     case 'view':
 
         // --------------------------------------------------------------------

@@ -27,6 +27,27 @@ function sux($action, $params = null) {
     switch($action)
     {
 
+    case 'admin' :
+
+        // --------------------------------------------------------------------
+        // Admin
+        // --------------------------------------------------------------------
+
+        include_once('feedsAdmin.php');
+        $admin = new feedsAdmin();
+
+        if ($admin->formValidate($_POST)) {
+            $admin->formProcess($_POST);
+            $admin->formSuccess();
+        }
+        else {
+            $admin->formBuild($_POST);
+        }
+
+
+        break;
+
+
     case 'approve' :
 
         // --------------------------------------------------------------------
@@ -43,10 +64,10 @@ function sux($action, $params = null) {
         else {
             $feeds->formBuild($_POST);
         }
-        
+
         break;
 
-        
+
     case 'edit' :
 
         // --------------------------------------------------------------------
@@ -65,7 +86,7 @@ function sux($action, $params = null) {
         else {
             $edit->formBuild($_POST);
         }
-        
+
         break;
 
 
@@ -107,23 +128,23 @@ function sux($action, $params = null) {
         }
 
         break;
-        
-        
+
+
     case 'user' :
 
         // --------------------------------------------------------------------
         // User
         // --------------------------------------------------------------------
-        
+
         if (empty($params[0])) {
             suxFunct::redirect(suxFunct::makeUrl('/feeds'));
-        }        
-                
+        }
+
         include_once('feeds.php');
-        $feeds = new feeds();        
+        $feeds = new feeds();
         $feeds->user($params[0]);
 
-        break;      
+        break;
 
 
     default:

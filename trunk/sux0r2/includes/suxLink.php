@@ -82,7 +82,7 @@ class suxLink {
     * correct linked table name.
     *
     * @param string $table name of a link table
-    * @param string $table name of column in the link table
+    * @param string $link name of column in the link table
     * @return string
     **/
     function getLinkColumnName($table, $link) {

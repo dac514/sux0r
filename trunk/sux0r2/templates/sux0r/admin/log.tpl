@@ -67,7 +67,7 @@ function togglePrivate(log_id) {
 
     {foreach from=$r->ulog item=foo}
 
-    <tr>
+    <tr style="background-color:{cycle values="#ffffff,#eeeeee"}">
         <td style="text-align:left;"><a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a></td>
         <td style="text-align:left;">{$foo.body_html}</td>
         <td>{$foo.ts}</td>

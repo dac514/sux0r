@@ -471,7 +471,7 @@ function insert_edit($params) {
         $allowed = true;
         if (!$u->isRoot()) {
             $access = $u->getAccess('blog');
-            if ($access < $GLOBALS['CONFIG']['ACCESS']['photos']['admin']) {
+            if ($access < $GLOBALS['CONFIG']['ACCESS']['blog']['admin']) {
                 if ($access < $GLOBALS['CONFIG']['ACCESS']['blog']['publisher']) $allowed = false;
                 else {
                     $tmp = $m->getMessage($params['id'], true);

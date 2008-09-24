@@ -37,7 +37,7 @@
 
     {foreach from=$r->ulist item=foo}
 
-    <tr>
+    <tr style="background-color:{cycle values="#ffffff,#eeeeee"}">
         <td style="text-align:left;"><a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a></td>
         <td>{if $foo.banned}x{/if}</td>
         <td>{if $foo.root}x{/if}</td>

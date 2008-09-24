@@ -53,6 +53,11 @@ class bookmarksEdit {
     */
     function __construct($id = null) {
 
+        if ($id) {
+            if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
+                suxFunct::redirect(suxFunct::makeURL('/bookmarks')); // Invalid id
+        }
+
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new bookmarksRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
@@ -76,14 +81,14 @@ class bookmarksEdit {
                 suxFunct::redirect(suxFunct::makeUrl('/bookmarks'));
         }
 
-        $this->id = $id;
-
         // This module can fallback on approve module
         foreach ($GLOBALS['CONFIG']['PREV_SKIP'] as $val) {
             if (mb_strpos($val, 'bookmarks/approve') === false)
                 $this->prev_skip[] = $val;
         }
 
+        // Assign id:
+        $this->id = $id;
 
     }
 

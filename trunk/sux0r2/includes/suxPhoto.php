@@ -21,6 +21,8 @@
 * @license    http://www.gnu.org/licenses/agpl.html
 */
 
+require_once(dirname(__FILE__) . '/suxLink.php');
+
 class suxPhoto {
 
     // Database stuff
@@ -333,6 +335,49 @@ class suxPhoto {
     }
 
 
+    /**
+    * Delete photoalbum
+    *
+    * @param int $id album id
+    */
+    function deleteAlbum($id) {
+
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
+
+        // Begin transaction
+        $this->db->beginTransaction();
+        $this->inTransaction = true;
+
+        $st = $this->db->prepare("DELETE FROM {$this->db_albums} WHERE id = ? LIMIT 1 ");
+        $st->execute(array($id));
+
+        $st = $this->db->prepare("SELECT id FROM {$this->db_photos} WHERE photoalbums_id = ? ");
+        $st->execute(array($id));
+        $result = $st->fetchAll(PDO::FETCH_ASSOC); // Use with link deletion
+
+        $st = $this->db->prepare("DELETE FROM {$this->db_photos} WHERE photoalbums_id = ? ");
+        $st->execute(array($id));
+
+        // Commit
+        $this->db->commit();
+        $this->inTransaction = false;
+
+        // Delete links, too
+        $link = new suxLink();
+        $links = $link->getLinkTables('photoalbums');
+        foreach ($links as $table) {
+            $link->deleteLink($table, $link->getLinkColumnName($table, 'photoalbums'), $id);
+        }
+        $links = $link->getLinkTables('photos');
+        foreach($result as $key => $val) {
+            foreach ($links as $table) {
+                $link->deleteLink($table, $link->getLinkColumnName($table, 'photos'), $val['id']);
+            }
+        }
+
+    }
+
+
 
     // ------------------------------------------------------------------------
     // Photo functions
@@ -569,6 +614,13 @@ class suxPhoto {
 
         $st = $this->db->prepare("DELETE FROM {$this->db_photos} WHERE id = ? LIMIT 1 ");
         $st->execute(array($id));
+
+        // Delete links, too
+        $link = new suxLink();
+        $links = $link->getLinkTables('photos');
+        foreach ($links as $table) {
+            $link->deleteLink($table, $link->getLinkColumnName($table, 'photos'), $id);
+        }
 
     }
 
