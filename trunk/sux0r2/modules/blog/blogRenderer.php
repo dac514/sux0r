@@ -449,5 +449,47 @@ class blogRenderer extends suxRenderer {
 
 }
 
+// -------------------------------------------------------------------------
+// Smarty {insert} functions
+// -------------------------------------------------------------------------
+
+
+/**
+* Render edit div
+*
+*/
+function insert_edit($params) {
+
+    if (!isset($_SESSION['users_id'])) return null;
+    if (!isset($params['id'])) return null;
+
+    // Cache
+    static $allowed = null;
+    if ($allowed === null) {
+        $u = new suxUser();
+        $m = new suxThreadedMessages();
+        $allowed = true;
+        if (!$u->isRoot()) {
+            $access = $u->getAccess('blog');
+            if ($access < $GLOBALS['CONFIG']['ACCESS']['photos']['admin']) {
+                if ($access < $GLOBALS['CONFIG']['ACCESS']['blog']['publisher']) $allowed = false;
+                else {
+                    $tmp = $m->getMessage($params['id'], true);
+                    if ($tmp['users_id'] != $_SESSION['users_id']) $allowed = false;
+                }
+            }
+        }
+    }
+    if (!$allowed) return null;
+
+    $url = suxFunct::makeUrl('/blog/edit/' . $params['id']);
+    $text = suxFunct::gtext('blog');
+
+    $html = "<div class='edit'>[ <a href='$url'>{$text['edit']}</a> ]</div>";
+
+    return $html;
+
+}
+
 
 ?>

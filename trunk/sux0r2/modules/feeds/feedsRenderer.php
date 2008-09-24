@@ -204,5 +204,40 @@ class feedsRenderer extends suxRenderer {
 
 }
 
+// -------------------------------------------------------------------------
+// Smarty {insert} functions
+// -------------------------------------------------------------------------
+
+/**
+* Render approve link between <li> tags
+*
+*/
+function insert_approveLi($params) {
+
+    if (!isset($_SESSION['users_id'])) return null;
+
+    // Check that the user is allowed to edit this album
+    $u = new suxUser();
+    if (!$u->isRoot()) {
+        $access = $u->getAccess('feeds');
+        if ($access < $GLOBALS['CONFIG']['ACCESS']['feeds']['admin']) return null;
+    }
+
+    $query = "SELECT COUNT(*) FROM rss_feeds WHERE draft = 1  ";
+
+    $db = suxDB::get();
+    $st = $db->prepare($query);
+    $st->execute();
+
+    $count = $st->fetchColumn();
+    $url = suxFunct::makeUrl('/feeds/approve/');
+    $text = suxFunct::gtext('feeds');
+
+    $html = "<li><a href='$url'>{$text['approve_2']} ($count)</a></li>";
+
+    return $html;
+
+}
+
 
 ?>

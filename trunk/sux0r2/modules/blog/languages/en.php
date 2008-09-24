@@ -12,4 +12,6 @@ $gtext['max_filesize'] = 'Maximum file size';
 $gtext['submit'] = 'Submit';
 $gtext['tags'] = 'Tags';
 
+$gtext['edit'] = 'edit';
+
 ?>

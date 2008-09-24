@@ -6,3 +6,8 @@
     margin-left: 10px;
     margin-right: 10px;
 }
+
+.edit {
+    text-align: right;
+    color: red;
+}

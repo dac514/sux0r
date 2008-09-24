@@ -22,6 +22,9 @@ $gtext['none'] = 'None';
 $gtext['bayes_categories'] = 'Bayes Categories';
 
 $gtext['approve'] = 'Approve Bookmarks';
+$gtext['approve_2'] = 'Approve';
+
+$gtext['edit'] = 'edit';
 
 
 ?>

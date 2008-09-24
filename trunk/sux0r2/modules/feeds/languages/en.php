@@ -17,4 +17,7 @@ $gtext['back'] = 'Back';
 $gtext['feeds'] = 'RSS Feeds';
 $gtext['manage'] = 'Manage feeds';
 
+$gtext['approve'] = 'Approve feeds';
+$gtext['approve_2'] = 'Approve';
+
 ?>

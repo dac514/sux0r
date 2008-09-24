@@ -99,6 +99,7 @@ Event.observe(window, 'load', function() {
                 {if $r->isLoggedIn()}
                 <p>Actions</p>
                 <ul>
+                    {insert name="approveLi"}
                     <li><em><a href="{$r->makeUrl('/feeds/manage')}">{$r->text.manage} &raquo;</a></em></li>
                     <li><em><a href="{$r->makeUrl('/feeds/suggest')}">{$r->text.suggest} &raquo;</a></em></li>
                 </ul>
