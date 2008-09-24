@@ -69,6 +69,12 @@ label {
     padding-right: 10px;
 }
 
+.edit {
+    margin-top: 4px;
+    text-align: right;
+    color: red;
+}
+
 /* Revert */
 
 .htmlSelect select {

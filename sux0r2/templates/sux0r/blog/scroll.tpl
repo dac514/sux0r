@@ -162,6 +162,8 @@ Event.observe(window, 'load', function() {
                         {$r->genericBayesInterface($foo.id, 'messages', 'blog', $smarty.capture.document)}
                     </div>
 
+                    {if $r->isLoggedIn()}{insert name="edit" id=$foo.id}{/if}
+
                 {/capture}
 
                 {capture name=title_HL}{insert name="highlight" html=$foo.title}{/capture}

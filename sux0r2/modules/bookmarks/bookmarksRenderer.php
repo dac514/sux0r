@@ -33,7 +33,7 @@ class bookmarksRenderer extends suxRenderer {
     public $sidelist = array(); // Array of threads in sidebar
     public $gtext = array();
     public $tc = array(); // Tagcloud
-    private $bayesRenderer;    
+    private $bayesRenderer;
 
     // Objects
     private $user;
@@ -49,7 +49,7 @@ class bookmarksRenderer extends suxRenderer {
         parent::__construct($module); // Call parent
         $this->gtext = suxFunct::gtext('bookmarks'); // Language
         $this->user = new suxUser();
-        $this->bayesRenderer = new bayesRenderer('bayes');        
+        $this->bayesRenderer = new bayesRenderer('bayes');
 
     }
 
@@ -148,8 +148,8 @@ class bookmarksRenderer extends suxRenderer {
         return $this->tinyMce($init);
 
     }
-    
-        
+
+
     /**
     * @return string javascript
     */
@@ -171,28 +171,28 @@ class bookmarksRenderer extends suxRenderer {
 
         return $this->bayesRenderer->genericBayesInterface($id, $link, $module, $document);
 
-    }    
-    
-    
+    }
+
+
     /**
     * @return string html
-    */    
+    */
     function isSubscribed($bookmark_id) {
-        
+
         if (!$this->isLoggedIn())
             return  "<img src='{$this->url}/media/{$this->partition}/assets/sticky.gif' border='0' width='12' height='12' />";
-              
+
         // Get config variables for template
         $tpl = new suxTemplate($this->module);
         $tpl->config_load('my.conf', $this->module);
         $image = $tpl->get_config_vars('imgUnsubscribed');
-        
+
         // Don't query the database unnecessarily.
         static $img_cache = array();
         if (isset($img_cache[$bookmark_id])) {
             $image = $img_cache[$bookmark_id];
         }
-        else {   
+        else {
             // If subscribed, change image
             $query = 'SELECT COUNT(*) FROM link_bookmarks_users WHERE bookmarks_id = ? AND users_id = ? ';
             $db = suxDB::get();
@@ -201,16 +201,16 @@ class bookmarksRenderer extends suxRenderer {
             if ($st->fetchColumn() > 0) $image = $tpl->get_config_vars('imgSubscribed');
             $img_cache[$bookmark_id] = $image;
         }
-              
+
         $html = "<img src='{$this->url}/media/{$this->partition}/assets/{$image}' border='0' width='12' height='12'
-        onclick=\"toggleSubscription('{$bookmark_id}');\" 
+        onclick=\"toggleSubscription('{$bookmark_id}');\"
         style='cursor: pointer;'
         class='subscription{$bookmark_id}'
         />";
-        
+
         return $html;
-        
-    }    
+
+    }
 
 
 }
@@ -228,9 +228,71 @@ class bookmarksRenderer extends suxRenderer {
 * @return string html
 */
 function insert_myBookmarksLink($params) {
-    
-    return suxFunct::makeUrl('/bookmarks/user/' . @$_SESSION['nickname']);    
-    
+
+    return suxFunct::makeUrl('/bookmarks/user/' . @$_SESSION['nickname']);
+
+}
+
+
+/**
+* Render approve link between <li> tags
+*
+*/
+function insert_approveLi($params) {
+
+    if (!isset($_SESSION['users_id'])) return null;
+
+    // Check that the user is allowed to edit
+    $u = new suxUser();
+    if (!$u->isRoot()) {
+        $access = $u->getAccess('bookmarks');
+        if ($access < $GLOBALS['CONFIG']['ACCESS']['bookmarks']['admin']) return null;
+    }
+
+    $query = "SELECT COUNT(*) FROM bookmarks WHERE draft = 1  ";
+
+    $db = suxDB::get();
+    $st = $db->prepare($query);
+    $st->execute();
+
+    $count = $st->fetchColumn();
+    $url = suxFunct::makeUrl('/bookmarks/approve/');
+    $text = suxFunct::gtext('bookmarks');
+
+    $html = "<li><a href='$url'>{$text['approve_2']} ($count)</a></li>";
+
+    return $html;
+
+}
+
+/**
+* Render edit div
+*
+*/
+function insert_edit($params) {
+
+    if (!isset($_SESSION['users_id'])) return null;
+    if (!isset($params['id'])) return null;
+
+    // Cache
+    static $allowed = null;
+    if ($allowed === null) {
+        $u = new suxUser();
+        $allowed = true;
+        if (!$u->isRoot()) {
+            $access = $u->getAccess('bookmarks');
+            if ($access < $GLOBALS['CONFIG']['ACCESS']['bookmarks']['admin']) $allowed = false;
+        }
+    }
+    if (!$allowed) return null;
+
+    $url = suxFunct::makeUrl('/bookmarks/edit/' . $params['id']);
+    $text = suxFunct::gtext('bookmarks');
+
+    $html = "<div class='edit'>[ <a href='$url'>{$text['edit']}</a> ]</div>";
+
+    return $html;
+
 }
 
 

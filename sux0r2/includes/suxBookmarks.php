@@ -117,8 +117,8 @@ class suxBookmarks {
         return $st->fetchAll(PDO::FETCH_ASSOC);
 
     }
-    
-    
+
+
     /**
     * Get all published feeds
     *
@@ -130,7 +130,7 @@ class suxBookmarks {
         $st = $this->db->query($q);
         return $st->fetchAll(PDO::FETCH_ASSOC);
 
-    }    
+    }
 
 
     /**
@@ -207,18 +207,18 @@ class suxBookmarks {
         require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
         $converter = new suxHtml2UTF8($clean['body_html']);
         $clean['body_plaintext']  = $converter->getText();
-        
+
         // Id
-        if (isset($url['id'])) {                
+        if (isset($url['id'])) {
             if (!filter_var($url['id'], FILTER_VALIDATE_INT) || $url['id'] < 1) throw new Exception('Invalid id');
             else $clean['id'] = $url['id'];
         }
-        else {            
+        else {
             $query = "SELECT id FROM {$this->db_table} WHERE url = ? LIMIT 1 ";
             $st = $this->db->prepare($query);
             $st->execute(array($clean['url']));
-            $edit = $st->fetch(PDO::FETCH_ASSOC); 
-            if ($edit) $clean['id'] = $edit['id'];                            
+            $edit = $st->fetch(PDO::FETCH_ASSOC);
+            if ($edit) $clean['id'] = $edit['id'];
         }
 
         // Publish date
@@ -243,11 +243,11 @@ class suxBookmarks {
 
         if (isset($clean['id'])) {
 
-            // UPDATE              
+            // UPDATE
             unset($clean['users_id']); // Don't override the original submitter
             $query = suxDB::prepareUpdateQuery($this->db_table, $clean);
             $st = $this->db->prepare($query);
-            $st->execute($clean);         
+            $st->execute($clean);
 
         }
         else {
@@ -278,19 +278,19 @@ class suxBookmarks {
         $st->execute(array($id));
 
     }
-    
-    
+
+
     /**
     * @param int $id bookmark id
     */
     function approveBookmark($id) {
-        
+
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
-        
+
         $st = $this->db->prepare("UPDATE {$this->db_table} SET draft = 0 WHERE id = ? ");
-        $st->execute(array($id));           
-        
-    }      
+        $st->execute(array($id));
+
+    }
 
 
 	/**
@@ -312,7 +312,7 @@ class suxBookmarks {
         if (preg_match('/<title>(.*?)<\/title>/is', $webpage, $found)) {
             $title = html_entity_decode(strip_tags($found[1]), ENT_QUOTES, 'UTF-8');
         }
-        // TODO: Meta preg for description?
+        // TODO: preg the meta data for description?
 
         return array(
             'title' => $title,

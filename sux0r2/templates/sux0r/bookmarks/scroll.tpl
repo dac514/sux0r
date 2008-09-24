@@ -78,6 +78,7 @@ function toggleSubscription(bookmark_id) {
                     <div style="float:left;">
                         <a href="{$foo.url}">{insert name="highlight" html=$foo.title}</a><br />
                         <em>Published on: {$foo.published_on}</em><br />
+
                     </div>
                     <div class="clearboth"></div>
 
@@ -91,6 +92,7 @@ function toggleSubscription(bookmark_id) {
                         {$r->genericBayesInterface($foo.id, 'bookmarks', 'bookmarks', $smarty.capture.document)}
                     </div>
 
+                    {if $r->isLoggedIn()}{insert name="edit" id=$foo.id}{/if}
 
                 </div>
 
@@ -120,10 +122,12 @@ function toggleSubscription(bookmark_id) {
 
             <ul>
                 {if $r->isLoggedIn()}
+                {insert name="approveLi"}
                 <li><a href="{insert name="myBookmarksLink"}">My bookmarks</a></li>
                 {/if}
                 <li><a href="{$r->makeUrl('/bookmarks/tag/cloud')}">Tag cloud</a></li>
                 <li><em><a href="{$r->makeUrl('/bookmarks/suggest')}">Suggest a bookmark &raquo;</a></em></li>
+
             </ul>
 
 			</div>

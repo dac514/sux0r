@@ -173,6 +173,9 @@ function insert_editLinks($params) {
             return null;
     }
 
+    // TODO
+    // $text = suxFunct::gtext('photos');
+
     $new = suxFunct::makeUrl('/photos/album/edit/');
     $html = '';
     $html .= "<a href='{$new}'>New album &raquo;</a><br />";
@@ -208,6 +211,9 @@ function insert_editLinks2($params) {
     $edit = suxFunct::makeUrl('/photos/album/edit/' . $params['album_id']);
     $annotate = suxFunct::makeUrl('/photos/album/annotate/' . $params['album_id']);
     $upload = suxFunct::makeUrl('/photos/upload/' . $params['album_id']);
+
+    // TODO
+    // $text = suxFunct::gtext('photos');
 
     $html = '';
     $html .= "<a href='{$edit}'>Edit properties &raquo;</a><br />";
