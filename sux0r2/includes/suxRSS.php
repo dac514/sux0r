@@ -350,16 +350,33 @@ class suxRSS extends DOMDocument {
 
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
 
-        $this->db->beginTransaction();
+        $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
-
-        $st = $this->db->prepare("DELETE FROM {$this->db_items} WHERE rss_feeds_id = ? ");
-        $st->execute(array($id));
 
         $st = $this->db->prepare("DELETE FROM {$this->db_feeds} WHERE id = ? LIMIT 1 ");
         $st->execute(array($id));
 
-        $this->db->commit();
+        $st = $this->db->prepare("SELECT id FROM {$this->db_items} WHERE rss_feeds_id = ? ");
+        $st->execute(array($id));
+        $result = $st->fetchAll(PDO::FETCH_ASSOC); // Used with link deletion
+
+        $st = $this->db->prepare("DELETE FROM {$this->db_items} WHERE rss_feeds_id = ? ");
+        $st->execute(array($id));
+
+        // Delete links, too
+        $link = new suxLink();
+        $links = $link->getLinkTables('rss');
+        foreach ($links as $table) {
+            if ($table == 'link_rss_users')
+                $link->deleteLink($table, $link->getLinkColumnName($table, 'rss'), $id);
+            else {
+                foreach($result as $key => $val) {
+                    $link->deleteLink($table, $link->getLinkColumnName($table, 'rss'), $val['id']);
+                }
+            }
+        }
+
+        suxDB::commitTransaction($tid);
         $this->inTransaction = false;
 
     }

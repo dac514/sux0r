@@ -276,6 +276,9 @@ class suxBookmarks {
 
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
 
+        $tid = suxDB::requestTransaction();
+        $this->inTransaction = true;
+
         $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE id = ? LIMIT 1 ");
         $st->execute(array($id));
 
@@ -285,6 +288,9 @@ class suxBookmarks {
         foreach ($links as $table) {
             $link->deleteLink($table, $link->getLinkColumnName($table, 'bookmarks'), $id);
         }
+
+        suxDB::commitTransaction($tid);
+        $this->inTransaction = false;
 
     }
 

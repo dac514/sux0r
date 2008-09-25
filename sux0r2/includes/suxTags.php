@@ -123,7 +123,7 @@ class suxTags {
 
 
     /**
-    * Delete bookmark
+    * Delete tag
     *
     * @param int $id tag id
     */
@@ -131,8 +131,21 @@ class suxTags {
 
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
 
+        $tid = suxDB::requestTransaction();
+        $this->inTransaction = true;
+
         $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE id = ? LIMIT 1 ");
         $st->execute(array($id));
+
+        // Delete links, too
+        $link = new suxLink();
+        $links = $link->getLinkTables('tags');
+        foreach ($links as $table) {
+            $link->deleteLink($table, $link->getLinkColumnName($table, 'tags'), $id);
+        }
+
+        suxDB::commitTransaction($tid);
+        $this->inTransaction = false;
 
     }
 
@@ -159,8 +172,8 @@ class suxTags {
         return $tags;
 
     }
-    
-    
+
+
     /**
     * Return a tag cloud data structure
     *
@@ -182,7 +195,7 @@ class suxTags {
             $tags[$row['tag']] = $row['quantity'];
             $category_id[$row['tag']] = $row['id'];
         }
-        
+
         if (!count($tags)) return false; // Nothing to do?
 
         $max_size = 250; // max font size in %
@@ -215,7 +228,7 @@ class suxTags {
 
         return $data;
 
-    }    
+    }
 
 
     // ----------------------------------------------------------------------------

@@ -425,7 +425,6 @@ class blogEdit {
 
         foreach ($tmp as $val) {
             $this->nb->untrainDocument($val['id']);
-            $this->link->deleteLink('link_bayes_messages', 'bayes_documents', $val['id']);
         }
 
         // Regcategorize

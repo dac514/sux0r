@@ -187,7 +187,7 @@ class suxLink {
             $id2[] = $tmp;
         }
 
-        $this->db->beginTransaction();
+        $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
 
         foreach ($id2 as $key => $val) {
@@ -213,7 +213,7 @@ class suxLink {
             }
         }
 
-        $this->db->commit();
+        suxDB::commitTransaction($tid);
         $this->inTransaction = false;
 
     }
@@ -235,7 +235,7 @@ class suxLink {
             $id[] = $tmp;
         }
 
-        $this->db->beginTransaction();
+        $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
 
         foreach ($id as $key => $val) {
@@ -244,7 +244,7 @@ class suxLink {
             else $st->execute(array($val));
         }
 
-        $this->db->commit();
+        suxDB::commitTransaction($tid);
         $this->inTransaction = false;
 
     }

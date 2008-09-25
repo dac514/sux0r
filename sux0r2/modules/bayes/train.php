@@ -131,7 +131,6 @@ $vec_id = $nb->getVectorByCategory($cat_id);
 foreach ($tmp as $val) {
     if (isset($vec_id[$val['bayes_vectors_id']])) {
         $nb->untrainDocument($val['id']);
-        $suxLink->deleteLink($link_table, 'bayes_documents', $val['id']);
     }
 }
 

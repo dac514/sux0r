@@ -26,6 +26,10 @@
 *
 */
 
+// User/link intergration is purposely left out of this class for reusability
+// reasons. An extended version of this class, with user integration, is
+// located in ./modules/bayes/bayesUser.php
+
 require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
 
 class suxNaiveBayesian {
@@ -126,7 +130,7 @@ class suxNaiveBayesian {
             $categories[] = $row['id'];
         }
 
-        $this->db->beginTransaction();
+        $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
 
         $count = 0;
@@ -156,7 +160,7 @@ class suxNaiveBayesian {
 
         $this->updateProbabilities();
 
-        $this->db->commit();
+        suxDB::commitTransaction($tid);
         $this->inTransaction = false;
 
         return ($count > 0 ? true : false);
@@ -294,7 +298,7 @@ class suxNaiveBayesian {
 
         if (!filter_var($category_id, FILTER_VALIDATE_INT) || $category_id < 1) return false;
 
-        $this->db->beginTransaction();
+        $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
 
         // As we are updating probabilities, we must clear the cache
@@ -319,7 +323,7 @@ class suxNaiveBayesian {
 
         $this->updateProbabilities();
 
-        $this->db->commit();
+        suxDB::commitTransaction($tid);
         $this->inTransaction = false;
 
         return ($count > 0 ? true : false);
@@ -453,7 +457,7 @@ class suxNaiveBayesian {
         $converter = new suxHtml2UTF8($content);
         $content = $converter->getText();
 
-        $this->db->beginTransaction();
+        $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
 
         // As we are updating probabilities, we must clear the cache
@@ -474,7 +478,7 @@ class suxNaiveBayesian {
 
         $this->updateProbabilities();
 
-        $this->db->commit();
+        suxDB::commitTransaction($tid);
         $this->inTransaction = false;
 
         return $insert_id;
@@ -490,7 +494,7 @@ class suxNaiveBayesian {
 
         if (!filter_var($document_id, FILTER_VALIDATE_INT) || $document_id < 1) return false;
 
-        $this->db->beginTransaction();
+        $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
 
         // As we are updating probabilities, we must clear the cache
@@ -515,7 +519,7 @@ class suxNaiveBayesian {
         $this->removeDocument($document_id);
         $this->updateProbabilities();
 
-        $this->db->commit();
+        suxDB::commitTransaction($tid);
         $this->inTransaction = false;
 
         return true;
@@ -662,13 +666,16 @@ class suxNaiveBayesian {
 
 
     /**
-    * @return bool
+    * Update probabilities
     */
     function updateProbabilities() {
 
         // A vector is an array of categories. Probabilities must be
         // contrained to vector and not the entire tokens table. We need to
         // join tokens to categories, which containes vector_ids.
+
+        $tid = suxDB::requestTransaction();
+        $this->inTransaction = true;
 
         // Get vector_ids that are actually being used
         $vectors = array();
@@ -731,8 +738,8 @@ class suxNaiveBayesian {
 
         }
 
-        // TODO: This function never returns false?
-        return true;
+        suxDB::commitTransaction($tid);
+        $this->inTransaction = false;
 
     }
 
@@ -835,6 +842,7 @@ class suxNaiveBayesian {
         elseif ($threshold > 0 && $threshold <= 1) {
             // Threshold
             $score = $this->categorize($text, $vec_id);
+            if (empty($score[$cat_id])) return false;
             if (round($score[$cat_id]['score'] * 100, 2) < round($threshold *100, 2)) return false;
         }
 
@@ -1010,7 +1018,7 @@ class suxNaiveBayesian {
     * @param  string $document_id document id, must be unique
     * @return bool
     */
-    private function removeDocument($document_id) {
+    protected function removeDocument($document_id) {
 
         $st = $this->db->prepare("DELETE FROM {$this->db_table_doc} WHERE id = ? LIMIT 1 ");
         return $st->execute(array($document_id));
