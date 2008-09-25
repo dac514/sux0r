@@ -379,7 +379,7 @@ class bayesRenderer extends suxRenderer {
             foreach ($this->nb->getCategoriesByVector($key) as $key2 => $val2) {
                 $y[$key2] = "{$val2['category']}";
             }
-
+            if (count($y) < 2) continue; // Skip
             $tmp[$x] = $y;
         }
 

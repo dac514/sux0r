@@ -269,7 +269,7 @@ class suxUser {
         // --------------------------------------------------------------------
 
         // Begin transaction
-        $this->db->beginTransaction();
+        $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
 
         if ($users_id) {
@@ -306,7 +306,7 @@ class suxUser {
         if ($openid_url) $this->attachOpenID($openid_url, $users_id);
 
         // Commit
-        $this->db->commit();
+        suxDB::commitTransaction($tid);
         $this->inTransaction = false;
 
         return $users_id;

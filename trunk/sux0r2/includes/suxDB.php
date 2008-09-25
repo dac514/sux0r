@@ -44,6 +44,7 @@ class suxDB {
 
     public static $dsn = array();
     private static $db = array();
+    private static $transaction = array();
 
     // Static class, no cloning or instantiating allowed
     final private function __construct() { }
@@ -66,9 +67,7 @@ class suxDB {
             $key = array_shift($key);
         }
 
-        if (!isset(self::$dsn[$key])) {
-            throw new Exception("Unknown DSN: $key");
-        }
+        if (!isset(self::$dsn[$key])) throw new Exception("Unknown DSN: $key");
 
         // Connect if not already connected
         if (!isset(self::$db[$key])) {
@@ -106,6 +105,61 @@ class suxDB {
 
         // Return the connection
         return self::$db[$key];
+
+    }
+
+
+    /**
+    * Request transaction
+    *
+    * @param string $key PDO dsn key
+    * @return string unique id
+    */
+    static function requestTransaction($key = null) {
+
+        if (!$key) {
+            // Assume we want the first key from the DSN
+            $key = array_keys(self::$dsn);
+            $key = array_shift($key);
+        }
+
+        if (!isset(self::$dsn[$key])) throw new Exception("Unknown DSN: $key");
+
+        $tid = uniqid();
+        if (empty(self::$transaction[$key])) {
+            self::$transaction[$key] = $tid;
+            $db = self::get($key);
+            $db->beginTransaction();
+        }
+
+        return $tid;
+
+    }
+
+
+    /**
+    * Commit transaction
+    *
+    * @param string $tid unique id
+    * @param string $key PDO dsn key
+    */
+    static function commitTransaction($tid, $key = null) {
+
+        if (!$key) {
+            // Assume we want the first key from the DSN
+            $key = array_keys(self::$dsn);
+            $key = array_shift($key);
+        }
+
+        if (!isset(self::$dsn[$key])) throw new Exception("Unknown DSN: $key");
+
+        if (empty(self::$transaction[$key])) throw new Exception("Transaction was never initiated for: $key");
+
+        if($tid == self::$transaction[$key]) {
+            $db = self::get($key);
+            $db->commit();
+            unset(self::$transaction[$key]);
+        }
 
     }
 

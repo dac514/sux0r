@@ -23,6 +23,7 @@
 */
 
 require_once(dirname(__FILE__) . '/../../includes/suxNaiveBayesian.php');
+require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 
 class bayesUser extends suxNaiveBayesian {
 
@@ -32,6 +33,9 @@ class bayesUser extends suxNaiveBayesian {
     A trainer is allowed to train, NOT untrain
     A user who is neither an owner nor a trainer is allowed to categorize
     */
+
+    // Objects
+    private $link;
 
     // Variables
     protected $db_table_auth = 'bayes_auth';
@@ -43,6 +47,7 @@ class bayesUser extends suxNaiveBayesian {
     */
     function __construct() {
         parent::__construct(); // Call parent
+        $this->link = new suxLink();
     }
 
     // --------------------------------------------------------------------
@@ -528,12 +533,8 @@ class bayesUser extends suxNaiveBayesian {
 
         /*
         We rewrite the entire function instead of calling parent because
-        we need to use transactions i.e. we don't want risk failing and
-        leave a floating vector without any owner
-
-        Furthermore, E_STRICT complains that the parent should be compatible
-        if we do a regular override (we have a different number of
-        required parameters)
+        E_STRICT complains that the parent should be compatible
+        (we have a different number of required parameters)
         */
 
         if (mb_strlen($vector) > $this->getMaxVectorLength()) return false;
@@ -541,7 +542,7 @@ class bayesUser extends suxNaiveBayesian {
 
         $vector = strip_tags($vector); // Sanitize
 
-        $this->db->beginTransaction();
+        $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
 
         $st = $this->db->prepare("INSERT INTO {$this->db_table_vec} (vector) VALUES (?) ");
@@ -551,7 +552,7 @@ class bayesUser extends suxNaiveBayesian {
         $st = $this->db->prepare("INSERT INTO {$this->db_table_auth} (bayes_vectors_id, users_id, owner) VALUES (?, ?, 1) ");
         $st->execute(array($vector_id, $users_id));
 
-        $this->db->commit();
+        suxDB::commitTransaction($tid);
         $this->inTransaction = false;
 
         return true;
@@ -561,20 +562,95 @@ class bayesUser extends suxNaiveBayesian {
 
     /**
     * @param string $vector_id vector id
+    * @return bool
     */
     function removeVector($vector_id) {
 
-        /*
-        We call the parent with transactions then do one final delete from the
-        auth table i.e. we are willing to risk failure on the last step because
-        we are lazy
-        */
+        /* Override parent */
 
-        parent::removeVector($vector_id);
+        if (!filter_var($vector_id, FILTER_VALIDATE_INT) || $vector_id < 1) return false;
+
+        $tid = suxDB::requestTransaction();
+        $this->inTransaction = true;
+
+        // Remove any links to vector documents in associated link tables
+        $links = $this->link->getLinkTables('bayes');
+        foreach ($this->getDocumentsByVector($vector_id) as $key => $val) {
+            foreach ($links as $tmp) {
+                $this->link->deleteLink($tmp, 'bayes_documents', $key);
+            }
+        }
+
         $st = $this->db->prepare("DELETE FROM {$this->db_table_auth} WHERE bayes_vectors_id = ? ");
         $st->execute(array($vector_id));
 
+        $_bool = parent::removeVector($vector_id);
+
+        suxDB::commitTransaction($tid);
+        $this->inTransaction = false;
+
+        return $_bool;
+
     }
+
+
+
+    /**
+    * @param int $category_id category id
+    * @return bool
+    */
+    function removeCategory($category_id) {
+
+        /* Override parent */
+
+        if (!filter_var($category_id, FILTER_VALIDATE_INT) || $category_id < 1) return false;
+
+        $tid = suxDB::requestTransaction();
+        $this->inTransaction = true;
+
+        // Remove any links to category documents in associated link tables
+        $links = $this->link->getLinkTables('bayes');
+        foreach ($this->getDocumentsByCategory($category_id) as $key => $val) {
+            foreach ($links as $tmp) {
+                $this->link->deleteLink($tmp, 'bayes_documents', $key);
+            }
+        }
+
+        $_bool = parent::removeCategory($category_id);
+
+        suxDB::commitTransaction($tid);
+        $this->inTransaction = false;
+
+        return $_bool;
+    }
+
+
+    /**
+    * @param  string $document_id document id, must be unique
+    * @return bool
+    */
+    protected function removeDocument($document_id) {
+
+        /* Override parent */
+
+        $tid = suxDB::requestTransaction();
+        $this->inTransaction = true;
+
+        // Remove any links to category documents in associated link tables
+        $links = $this->link->getLinkTables('bayes');
+        foreach ($links as $tmp) {
+            $this->link->deleteLink($tmp, 'bayes_documents', $document_id);
+        }
+
+        $_bool = parent::removeDocument($document_id);
+
+        suxDB::commitTransaction($tid);
+        $this->inTransaction = false;
+
+        return $_bool;
+
+    }
+
 
 
 }

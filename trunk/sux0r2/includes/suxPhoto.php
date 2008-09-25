@@ -345,7 +345,7 @@ class suxPhoto {
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
 
         // Begin transaction
-        $this->db->beginTransaction();
+        $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
 
         $st = $this->db->prepare("DELETE FROM {$this->db_albums} WHERE id = ? LIMIT 1 ");
@@ -353,14 +353,10 @@ class suxPhoto {
 
         $st = $this->db->prepare("SELECT id FROM {$this->db_photos} WHERE photoalbums_id = ? ");
         $st->execute(array($id));
-        $result = $st->fetchAll(PDO::FETCH_ASSOC); // Use with link deletion
+        $result = $st->fetchAll(PDO::FETCH_ASSOC); // Used with link deletion
 
         $st = $this->db->prepare("DELETE FROM {$this->db_photos} WHERE photoalbums_id = ? ");
         $st->execute(array($id));
-
-        // Commit
-        $this->db->commit();
-        $this->inTransaction = false;
 
         // Delete links, too
         $link = new suxLink();
@@ -374,6 +370,10 @@ class suxPhoto {
                 $link->deleteLink($table, $link->getLinkColumnName($table, 'photos'), $val['id']);
             }
         }
+
+        // Commit
+        suxDB::commitTransaction($tid);
+        $this->inTransaction = false;
 
     }
 
@@ -612,6 +612,9 @@ class suxPhoto {
 
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
 
+        $tid = suxDB::requestTransaction();
+        $this->inTransaction = true;
+
         $st = $this->db->prepare("DELETE FROM {$this->db_photos} WHERE id = ? LIMIT 1 ");
         $st->execute(array($id));
 
@@ -621,6 +624,9 @@ class suxPhoto {
         foreach ($links as $table) {
             $link->deleteLink($table, $link->getLinkColumnName($table, 'photos'), $id);
         }
+
+        suxDB::commitTransaction($tid);
+        $this->inTransaction = false;
 
     }
 

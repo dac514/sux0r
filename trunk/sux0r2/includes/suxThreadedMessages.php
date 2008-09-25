@@ -195,7 +195,7 @@ class suxThreadedMessages {
         */
 
         // Begin transaction
-        $this->db->beginTransaction();
+        $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
 
         if ($clean['parent_id']) {
@@ -249,7 +249,7 @@ class suxThreadedMessages {
         $insert_id = $this->db->lastInsertId();
 
         // Commit
-        $this->db->commit();
+        suxDB::commitTransaction($tid);
         $this->inTransaction = false;
 
         return $insert_id;
@@ -371,7 +371,7 @@ class suxThreadedMessages {
         if (!$edit) throw new Exception('No message to edit?');
 
         // Begin transaction
-        $this->db->beginTransaction();
+        $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
 
         $edit['messages_id'] = $clean['id'];
@@ -389,7 +389,7 @@ class suxThreadedMessages {
         $st->execute($clean);
 
         // Commit
-        $this->db->commit();
+        suxDB::commitTransaction($tid);
         $this->inTransaction = false;
 
     }
@@ -405,7 +405,7 @@ class suxThreadedMessages {
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
 
         // Begin transaction
-        $this->db->beginTransaction();
+        $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
 
         $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE id = ? LIMIT 1 ");
@@ -414,16 +414,16 @@ class suxThreadedMessages {
         $st = $this->db->prepare("DELETE FROM {$this->db_table_hist} WHERE messages_id = ? ");
         $st->execute(array($id));
 
-        // Commit
-        $this->db->commit();
-        $this->inTransaction = false;
-
         // Delete links, too
         $link = new suxLink();
         $links = $link->getLinkTables('messages');
         foreach ($links as $table) {
             $link->deleteLink($table, $link->getLinkColumnName($table, 'messages'), $id);
         }
+
+        // Commit
+        suxDB::commitTransaction($tid);
+        $this->inTransaction = false;
 
     }
 
@@ -1071,7 +1071,7 @@ class suxThreadedMessages {
         if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id < 1) return false;
 
         // Begin transaction
-        $this->db->beginTransaction();
+        $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
 
         $st = $this->db->prepare("SELECT id FROM {$this->db_table} WHERE thread_id = ? ");
@@ -1088,10 +1088,6 @@ class suxThreadedMessages {
 
         }
 
-        // Commit
-        $this->db->commit();
-        $this->inTransaction = false;
-
         // Delete links, too
         $link = new suxLink();
         $links = $link->getLinkTables('messages');
@@ -1100,6 +1096,11 @@ class suxThreadedMessages {
                 $link->deleteLink($table, $link->getLinkColumnName($table, 'messages'), $val['id']);
             }
         }
+
+        // Commit
+        suxDB::commitTransaction($tid);
+        $this->inTransaction = false;
+
 
     }
 
