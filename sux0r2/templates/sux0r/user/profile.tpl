@@ -1,5 +1,7 @@
 {capture name=header}
+
 <link rel="openid.server" href="{$r->makeUrl('/openid', null, true)}" />
+
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
 {include file=$r->xhtml_header}{/strip}
@@ -112,7 +114,25 @@
 
 
             {$r->widget($r->text.profile, $smarty.capture.profile, null, $smarty.capture.image)}
-            {$r->widget($r->text.friends, 'Todo')}
+
+
+            {* Acquaintances *}
+            {if $r->acquaintances($r->profile.users_id)}
+            {capture name=acquaintances}{strip}
+                {$r->acquaintances($r->profile.users_id)}
+            {/strip}{/capture}
+            {$r->widget($r->text.acquaintances, $smarty.capture.acquaintances)}
+            {/if}
+
+
+            {* Stalkers *}
+            {if $r->stalkers($r->profile.users_id)}
+            {capture name=stalkers}{strip}
+                {$r->stalkers($r->profile.users_id)}
+            {/strip}{/capture}
+            {$r->widget($r->text.stalkers, $smarty.capture.stalkers)}
+            {/if}
+
 
             </div>
 		</td>

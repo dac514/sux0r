@@ -124,6 +124,7 @@ $CONFIG['PREV_SKIP'] = array(
     'photos/album/annotate',
     'photos/album/edit',
     'photos/upload',
+    'society/relationship',
     'user/avatar',
     'user/edit',
     'user/login',
