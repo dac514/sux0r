@@ -16,7 +16,7 @@
 <div id="middle">
 
 <fieldset>
-<legend>Upload</legend>
+<legend>{$r->text.upload_2}</legend>
 
 <form action="{$r->text.form_url}" name="default" method="post" enctype="multipart/form-data" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />

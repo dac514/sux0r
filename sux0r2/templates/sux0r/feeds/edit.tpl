@@ -1,6 +1,6 @@
 {capture name=header}
 
-{$r->tinyMceEditor()}
+    {$r->tinyMceEditor()}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
@@ -12,7 +12,7 @@
 <div id="middle">
 
 <fieldset>
-<legend>Edit</legend>
+<legend>{$r->text.edit}</legend>
 
 <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />
@@ -35,10 +35,10 @@
     {validate id="url" message=$r->text.form_error_1}
     {validate id="url2" message=$r->text.form_error_2}
     {validate id="url3" message=$r->text.form_error_3}
-    {validate id="url4" message=$r->text.form_error_4}    
+    {validate id="url4" message=$r->text.form_error_4}
     {/capture}
 {/strip}
-<label for="url" {if $smarty.capture.error}class="error"{/if} >URL :</label>
+<label for="url" {if $smarty.capture.error}class="error"{/if} >{$r->text.url} :</label>
 <input type="text" name="url" value="{if $url}{$url}{else}http://{/if}" class="widerInput" />
 {$smarty.capture.error}
 </p>
@@ -49,7 +49,7 @@
     {validate id="title" message="title cannot be empty"}
     {/capture}
 {/strip}
-<label for="title" {if $smarty.capture.error}class="error"{/if} >Title :</label>
+<label for="title" {if $smarty.capture.error}class="error"{/if} >{$r->text.title} :</label>
 <input type="text" name="title" value="{$title}" class="widerInput" />
 {$smarty.capture.error}
 </p>
@@ -61,7 +61,7 @@
     {validate id="body" message="Body cannot be empty"}
     {/capture}
 {/strip}
-<span {if $smarty.capture.error}class="error"{/if}>Body: </span> {$smarty.capture.error}
+<span {if $smarty.capture.error}class="error"{/if}>{$r->text.body} : </span> {$smarty.capture.error}
 </p>
 
 <p>
@@ -69,7 +69,7 @@
 </p>
 
 <p>
-<label for="draft">Save as draft:</label>
+<label for="draft">{$r->text.save_draft} :</label>
 <input type="checkbox" name="draft" value="1" {if $draft}checked="checked"{/if} />
 </p>
 

@@ -79,7 +79,7 @@
     <div id="middle">
 
         <div style="margin-left: 5px; margin-bottom: 10px;">
-        [ <a href="{$r->makeUrl('/user/profile')}">Back to my profile &raquo;</a> ]
+        [ <a href="{$r->makeUrl('/user/profile')}">{$r->text.back_2} &raquo;</a> ]
         </div>
 
         {if $validate.default.is_error !== false}

@@ -1,5 +1,8 @@
 <?php
 
+// Always UTF-8
+// Always uppercase the first word
+
 $gtext['add'] = 'Add';
 $gtext['add_doc'] = 'Train document';
 $gtext['alert_cat'] = 'Are you sure you want to delete this category?';
@@ -7,6 +10,7 @@ $gtext['alert_doc'] = 'Are you sure you want to delete this document?';
 $gtext['alert_unshare'] = 'Are you sure you want to unshare these vectors?';
 $gtext['alert_vec'] = 'Are you sure you want to delete this vector?';
 $gtext['back'] = 'Back';
+$gtext['back_2'] = 'Back to my profile';
 $gtext['cat_doc'] = 'Categorize document';
 $gtext['categories'] = 'Categories';
 $gtext['categorize'] = 'Categorize';

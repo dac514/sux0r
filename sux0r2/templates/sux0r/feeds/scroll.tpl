@@ -1,62 +1,61 @@
 {capture name=header}
 
-{if $r->isLoggedIn()}
-    {$r->genericBayesInterfaceInit()}
-{else}
-    <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
-{/if}
+    {if $r->isLoggedIn()}
+        {$r->genericBayesInterfaceInit()}
+    {else}
+        <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
+    {/if}
 
-{literal}
-<script type="text/javascript">
-// <![CDATA[
+    {literal}
+    <script type="text/javascript">
+    // <![CDATA[
+    {/literal}{if $r->isLoggedIn()}{literal}
+    // Toggle subscription to a feed
+    function toggleSubscription(feed_id) {
 
-{/literal}{if $r->isLoggedIn()}{literal}
-// Toggle subscription to a feed
-function toggleSubscription(feed_id) {
+        var url = '{/literal}{$r->url}/modules/feeds/toggle.php{literal}';
+        var pars = { id: feed_id };
 
-    var url = '{/literal}{$r->url}/modules/feeds/toggle.php{literal}';
-    var pars = { id: feed_id };
-
-    new Ajax.Request(url, {
-            method: 'post',
-            parameters: pars,
-            onSuccess: function(transport) {
-                // Toggle images
-                var myImage = transport.responseText.strip();
-                var myClass = 'img.subscription' + feed_id;
-                var res = $$(myClass);
-                for (i = 0; i < res.length; i++) {
-                    res[i].src = '{/literal}{$r->url}/media/{$r->partition}/assets/{literal}' + myImage;
+        new Ajax.Request(url, {
+                method: 'post',
+                parameters: pars,
+                onSuccess: function(transport) {
+                    // Toggle images
+                    var myImage = transport.responseText.strip();
+                    var myClass = 'img.subscription' + feed_id;
+                    var res = $$(myClass);
+                    for (i = 0; i < res.length; i++) {
+                        res[i].src = '{/literal}{$r->url}/media/{$r->partition}/assets/{literal}' + myImage;
+                    }
+                },
+                onFailure: function(transport){
+                    if (transport.responseText.strip())
+                        alert(transport.responseText);
                 }
-            },
-            onFailure: function(transport){
-                if (transport.responseText.strip())
-                    alert(transport.responseText);
+        });
+
+    }
+    {/literal}{/if}{literal}
+
+    // Set the maximum width of an image
+    function maximumWidth(myId, maxW) {
+        var pix = document.getElementById(myId).getElementsByTagName('img');
+        for (i = 0; i < pix.length; i++) {
+            w = pix[i].width;
+            h = pix[i].height;
+            if (w > maxW) {
+                f = 1 - ((w - maxW) / w);
+                pix[i].width = w * f;
+                pix[i].height = h * f;
             }
-    });
-
-}
-{/literal}{/if}{literal}
-
-// Set the maximum width of an image
-function maximumWidth(myId, maxW) {
-    var pix = document.getElementById(myId).getElementsByTagName('img');
-    for (i = 0; i < pix.length; i++) {
-        w = pix[i].width;
-        h = pix[i].height;
-        if (w > maxW) {
-            f = 1 - ((w - maxW) / w);
-            pix[i].width = w * f;
-            pix[i].height = h * f;
         }
     }
-}
-Event.observe(window, 'load', function() {
-    maximumWidth({/literal}'rightside', {#maxPhotoWidth#}{literal});
-});
-// ]]>
-</script>
-{/literal}
+    Event.observe(window, 'load', function() {
+        maximumWidth({/literal}'rightside', {#maxPhotoWidth#}{literal});
+    });
+    // ]]>
+    </script>
+    {/literal}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
@@ -97,7 +96,7 @@ Event.observe(window, 'load', function() {
                 {/if}
 
                 {if $r->isLoggedIn()}
-                <p>Actions</p>
+                <p>{$r->text.actions}</p>
                 <ul>
                     {insert name="approveLi"}
                     <li><em><a href="{$r->makeUrl('/feeds/manage')}">{$r->text.manage} &raquo;</a></em></li>
@@ -124,8 +123,8 @@ Event.observe(window, 'load', function() {
                     {$r->isSubscribed($foo.rss_feeds_id)}
                     </div>
                     <div style="float:left;margin-bottom: 1em;">
-                    Feed: {$r->feedLink($foo.rss_feeds_id)}<br />
-                    <em>Published on: {$foo.published_on}</em>
+                    {$r->text.feed} : {$r->feedLink($foo.rss_feeds_id)}<br />
+                    <em>{$r->text.published_on} : {$foo.published_on}</em>
                     </div>
                     <div class="clearboth"></div>
 
@@ -133,7 +132,7 @@ Event.observe(window, 'load', function() {
                     <div class="clearboth"></div>
 
                     <!-- Read more -->
-                    <p><a href="{$foo.url}">Read more &raquo;</a></p>
+                    <p><a href="{$foo.url}">{$r->text.read_more} &raquo;</a></p>
 
                     <!-- Naive Baysian Classification -->
                     <div class="categoryContainer">
@@ -149,7 +148,7 @@ Event.observe(window, 'load', function() {
 
             {/foreach}
             {else}
-                <p>Not found.</p>
+                <p>{$r->text.not_found}</p>
             {/if}
 
             {$r->text.pager}

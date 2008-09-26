@@ -1,46 +1,46 @@
 {capture name=header}
 
-{if $r->isLoggedIn()}
-    {$r->genericBayesInterfaceInit()}
-{else}
-    <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
-{/if}
+    {if $r->isLoggedIn()}
+        {$r->genericBayesInterfaceInit()}
+    {else}
+        <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
+    {/if}
 
-{literal}
-<script type="text/javascript">
-// <![CDATA[
+    {literal}
+    <script type="text/javascript">
+    // <![CDATA[
 
-{/literal}{if $r->isLoggedIn()}{literal}
-// Toggle subscription to a bookmark
-function toggleSubscription(bookmark_id) {
+    {/literal}{if $r->isLoggedIn()}{literal}
+    // Toggle subscription to a bookmark
+    function toggleSubscription(bookmark_id) {
 
-    var url = '{/literal}{$r->url}/modules/bookmarks/toggle.php{literal}';
-    var pars = { id: bookmark_id };
+        var url = '{/literal}{$r->url}/modules/bookmarks/toggle.php{literal}';
+        var pars = { id: bookmark_id };
 
-    new Ajax.Request(url, {
-            method: 'post',
-            parameters: pars,
-            onSuccess: function(transport) {
-                // Toggle images
-                var myImage = transport.responseText.strip();
-                var myClass = 'img.subscription' + bookmark_id;
-                var res = $$(myClass);
-                for (i = 0; i < res.length; i++) {
-                    res[i].src = '{/literal}{$r->url}/media/{$r->partition}/assets/{literal}' + myImage;
+        new Ajax.Request(url, {
+                method: 'post',
+                parameters: pars,
+                onSuccess: function(transport) {
+                    // Toggle images
+                    var myImage = transport.responseText.strip();
+                    var myClass = 'img.subscription' + bookmark_id;
+                    var res = $$(myClass);
+                    for (i = 0; i < res.length; i++) {
+                        res[i].src = '{/literal}{$r->url}/media/{$r->partition}/assets/{literal}' + myImage;
+                    }
+                },
+                onFailure: function(transport){
+                    if (transport.responseText.strip())
+                        alert(transport.responseText);
                 }
-            },
-            onFailure: function(transport){
-                if (transport.responseText.strip())
-                    alert(transport.responseText);
-            }
-    });
+        });
 
-}
-{/literal}{/if}{literal}
+    }
+    {/literal}{/if}{literal}
 
-// ]]>
-</script>
-{/literal}
+    // ]]>
+    </script>
+    {/literal}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
@@ -77,7 +77,7 @@ function toggleSubscription(bookmark_id) {
 
                     <div style="float:left;">
                         <a href="{$foo.url}">{insert name="highlight" html=$foo.title}</a><br />
-                        <em>Published on: {$foo.published_on}</em><br />
+                        <em>{$r->text.published_on} : {$foo.published_on}</em><br />
 
                     </div>
                     <div class="clearboth"></div>
@@ -87,7 +87,6 @@ function toggleSubscription(bookmark_id) {
 
                     <!-- Naive Baysian Classification -->
                     <div class="categoryContainer">
-
                         {capture name=document}{$foo.title} {$foo.body_plaintext}{/capture}
                         {$r->genericBayesInterface($foo.id, 'bookmarks', 'bookmarks', $smarty.capture.document)}
                     </div>
@@ -100,7 +99,7 @@ function toggleSubscription(bookmark_id) {
             {/foreach}
             {else}
                 <div style="border: 1px dashed #ccc; padding: 10px; margin: 10px;">
-                Not found.
+                {$r->text.not_found}
                 </div>
             {/if}
 
@@ -114,8 +113,8 @@ function toggleSubscription(bookmark_id) {
 
             {if $r->fp}
             <ul>
-                <li><a href="{$datesort_url}">Sort by date</a></li>
-                <li><a href="{$alphasort_url}">Sort alphabetically</a></li>
+                <li><a href="{$datesort_url}">{$r->text.sort_date}</a></li>
+                <li><a href="{$alphasort_url}">{$r->text.sort_alpha}</a></li>
             </ul>
             {/if}
 
@@ -123,11 +122,10 @@ function toggleSubscription(bookmark_id) {
             <ul>
                 {if $r->isLoggedIn()}
                 {insert name="approveLi"}
-                <li><a href="{insert name="myBookmarksLink"}">My bookmarks</a></li>
+                <li><a href="{insert name="myBookmarksLink"}">{$r->text.my_bookmarks}</a></li>
                 {/if}
-                <li><a href="{$r->makeUrl('/bookmarks/tag/cloud')}">Tag cloud</a></li>
-                <li><em><a href="{$r->makeUrl('/bookmarks/suggest')}">Suggest a bookmark &raquo;</a></em></li>
-
+                <li><a href="{$r->makeUrl('/bookmarks/tag/cloud')}">{$r->text.tag_cloud}</a></li>
+                <li><em><a href="{$r->makeUrl('/bookmarks/suggest')}">{$r->text.suggest} &raquo;</a></em></li>
             </ul>
 
 			</div>

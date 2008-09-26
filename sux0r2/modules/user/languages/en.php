@@ -1,19 +1,27 @@
 <?php
 
+// Always UTF-8
+// Always uppercase the first word
+
 $gtext['alert_detach'] = 'Are you sure you want to remove these OpenIDs from your account?';
+$gtext['avatar'] = 'Avatar';
 $gtext['back'] = 'Back';
+$gtext['blog'] = 'Blog';
+$gtext['bookmarks'] = 'Bookmarks';
 $gtext['cancel'] = 'Cancel';
 $gtext['captcha'] = 'Anti-spam code';
 $gtext['country'] = 'Country';
-$gtext['dob'] = 'Birthday';
 $gtext['detach'] = 'Detach';
+$gtext['dob'] = 'Birthday';
 $gtext['edit_avatar'] = 'Edit Avatar';
 $gtext['edit_bayes'] = 'Edit Bayesian';
 $gtext['edit_openid'] = 'Edit OpenID';
 $gtext['edit_profile'] = 'Edit Profile';
 $gtext['editing'] = 'Editing';
 $gtext['email'] = 'Email';
+$gtext['extensions'] = 'Supported extensions';
 $gtext['family_name'] = 'Last name';
+$gtext['feeds'] = 'Feeds';
 $gtext['female'] = 'Female';
 $gtext['form_error'] = 'The form was not submitted, see errors below';
 $gtext['form_error_1'] = 'Nickname cannot be empty';
@@ -29,31 +37,37 @@ $gtext['form_error_10'] = 'Duplicate URL';
 $gtext['form_error_11'] = 'Invalid captcha';
 $gtext['form_error_12'] = 'Data integrity failure';
 $gtext['form_error_13'] = '"nobody" is reserved, please use another nickname';
+$gtext['form_error_14'] = 'Invalid file type';
+$gtext['form_error_15'] = 'File is too big';
 $gtext['form_problem'] = 'The form was not submitted, please try again';
+$gtext['friends'] = 'Friends';
 $gtext['gender'] = 'Gender';
 $gtext['given_name'] = 'First name';
 $gtext['homepage'] = 'Back to homepage';
+$gtext['image'] = 'Image';
 $gtext['language'] = 'Language';
 $gtext['locality'] = 'City';
 $gtext['logout'] = 'Logout complete';
-
-$gtext['logout2'] = 'As this site uses
-<a href="http://en.wikipedia.org/wiki/Digest_access_authentication">HTTP Digest
-Authentication</a> you should exit your browser. This is because
-your browser will cache your credentials and automatically log you back in the next
-time it is prompted to do so. You will not see the login box, as this will happen
-transparently. The illusion is that it looks like you never actually logged out,
-when in fact you did, and were then logged back in without knowing.';
-
+$gtext['logout2'] = 'As this site uses <a href="http://en.wikipedia.org/wiki/Digest_access_authentication">HTTP Digest Authentication</a> you should exit your browser. This is because your browser will cache your credentials and automatically log you back in the next time it is prompted to do so. You will not see the login box, as this will happen transparently. The illusion is that it looks like you never actually logged out, when in fact you did, and were then logged back in without knowing.';
 $gtext['male'] = 'Male';
+$gtext['max_filesize'] = 'Maximum file size';
+$gtext['minifeed'] = 'Minifeed';
 $gtext['name'] = 'Name';
 $gtext['nickname'] = 'Nickname';
+$gtext['nothing'] = 'Nothing to see here';
+$gtext['openid'] = 'OpenID';
 $gtext['openid_login'] = 'OpenID Login';
+$gtext['openid_msg_1'] = 'The following OpenIDs are currently attached to your account. You can use any of them to sign in';
+$gtext['openid_none'] = 'There are currently no OpenIDs registered to this account';
 $gtext['openid_reg'] = 'OpenID Registration';
+$gtext['openid_register'] = 'Register a new OpenID';
 $gtext['password'] = 'Password';
 $gtext['password_verify'] = 'Verify password';
+$gtext['photoalbums'] = 'Photo albums';
 $gtext['postcode'] = 'Zip/Postal Code';
 $gtext['previous_page'] = 'Back to previous page';
+$gtext['profile'] = 'Profile';
+$gtext['profile_of'] = 'Profile of';
 $gtext['pw_failure'] = 'Too many password failures';
 $gtext['pw_failure_2'] = 'Too many password failures. You must restart your browser to try again.';
 $gtext['reg'] = 'Registration';
@@ -66,10 +80,8 @@ $gtext['success_register'] = 'Thank you for completing the registration form. Yo
 $gtext['tel'] = 'Telephone';
 $gtext['thanks'] = 'Thank you for registering';
 $gtext['timezone'] = 'Timezone';
+$gtext['unset_image'] = 'Unsert current image';
 $gtext['url'] = 'URL';
-
-$gtext['extensions'] = 'Supported extensions';
-$gtext['max_filesize'] = 'Maximum file size';
 
 
 /*

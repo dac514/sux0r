@@ -1,9 +1,9 @@
 {capture name=header}{literal}
 
-<style type="text/css">
-    #leftside { width: 468px; margin-left: 2px; }
-    #rightside { width: 468px; }
-</style>
+    <style type="text/css">
+        #leftside { width: 468px; margin-left: 2px; }
+        #rightside { width: 468px; }
+    </style>
 
 {/literal}{/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
@@ -33,13 +33,11 @@
             {foreach from=$r->pho item=foo name=bar}
             {if $smarty.foreach.bar.iteration % 2 != 0}
 
-
-
                 {capture name=album}
                     <p>
                     {$foo.published_on}<br />
                     {$foo.title}<br />
-                    {$r->countPhotos($foo.id)} Photos
+                    {$r->countPhotos($foo.id)} {$r->text.photos}
                     </p>
                     {$foo.body_html}
                     <p>{insert name="editLinks2" album_id=$foo.id}</p>
@@ -72,7 +70,7 @@
                     <p>
                     {$foo.published_on}<br />
                     {$foo.title}<br />
-                    {$r->countPhotos($foo.id)} Photos
+                    {$r->countPhotos($foo.id)} {$r->text.photos}
                     </p>
                     {$foo.body_html}
                     <p>{insert name="editLinks2" album_id=$foo.id}</p>

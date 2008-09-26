@@ -27,11 +27,8 @@
 
     <div id="middle">
 
-    Lorem ipsum dolor sit amet, consec tetuer Lorem ipsum dolor sit amet
-    <p />
-
     <fieldset>
-    <legend>Administration</legend>
+    <legend>{$r->text.admin}</legend>
 
     <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
     <input type="hidden" name="token" value="{$token}" />
@@ -44,11 +41,11 @@
     <table class="adminTable">
     <thead>
         <tr>
-            <td>title</td>
-            <td>published_on</td>
-            <td>draft</td>
-            <td>suggested by</td>
-            <td>delete</td>
+            <td>{$r->text.title|lower}</td>
+            <td>{$r->text.published_on|lower}</td>
+            <td>{$r->text.draft|lower}</td>
+            <td>{$r->text.suggested|lower}</td>
+            <td>{$r->text.delete|lower}</td>
         </tr>
     </thead>
     <tbody>

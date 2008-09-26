@@ -37,9 +37,9 @@
             </div>
 
             <div style="margin-top: 20px;">
-                <a href="{$r->makeUrl('/feeds/edit')}/{$foo.id}">Edit</a> | <a href="{$foo.url}" target="_blank">URL</a> |
-                <input type="radio" name="feeds[{$foo.id}]" id="f_k_{$foo.id}" value="1" /><label for="f_k_{$foo.id}" >Approve</label> |
-                <input type="radio" name="feeds[{$foo.id}]" id="f_d_{$foo.id}" value="0" /><label for="f_d_{$foo.id}" >Delete</label>
+                <a href="{$r->makeUrl('/feeds/edit')}/{$foo.id}">{$r->text.edit}</a> | <a href="{$foo.url}" target="_blank">{$r->text.url}</a> |
+                <input type="radio" name="feeds[{$foo.id}]" id="f_k_{$foo.id}" value="1" /><label for="f_k_{$foo.id}" >{$r->text.approve_2}</label> |
+                <input type="radio" name="feeds[{$foo.id}]" id="f_d_{$foo.id}" value="0" /><label for="f_d_{$foo.id}" >{$r->text.delete}</label>
 
             </div>
 
@@ -50,7 +50,7 @@
 
         {/foreach}
     {else}
-    Nothing to approve
+        {$r->text.nothing}
     {/if}
 
 

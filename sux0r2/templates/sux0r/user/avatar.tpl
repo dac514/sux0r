@@ -10,7 +10,7 @@
 <div id="middle">
 
 <fieldset>
-<legend>Avatar: {$nickname}</legend>
+<legend>{$r->text.avatar}: {$nickname}</legend>
 
 <form action="{$r->text.form_url}" name="default" method="post" enctype="multipart/form-data" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />
@@ -34,7 +34,7 @@
 </p>
 
 <p>
-<label for="unset_image">Unset current image:</label>
+<label for="unset_image">{$r->text.unset_image} :</label>
 <input type="checkbox" name="unset_image" value="1" {if $unset_image}checked="checked"{/if} /><br />
 </p>
 {/if}
@@ -42,11 +42,11 @@
 <p>
 {strip}
     {capture name=error}
-    {validate id="image" message="Invalid file type"}
-    {validate id="image2" message="File is too big"}
+    {validate id="image" message=$r->text.form_error_14}
+    {validate id="image2" message=$r->text.form_error_15}
     {/capture}
 {/strip}
-<label for="image" {if $smarty.capture.error}class="error"{/if} >Image: </label>
+<label for="image" {if $smarty.capture.error}class="error"{/if} >{$r->text.image} : </label>
 <input type="file" name="image" class="imageFile" />
 {$smarty.capture.error}
 </p>

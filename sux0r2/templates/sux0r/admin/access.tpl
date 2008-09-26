@@ -20,7 +20,7 @@ label {ldelim}
 <div id="middle">
 
 <fieldset>
-<legend>Access: {$nickname}</legend>
+<legend>{$r->text.access}: {$nickname}</legend>
 
 <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />
@@ -36,10 +36,10 @@ label {ldelim}
 <p class="errorWarning">{$r->text.form_problem} :</p>
 {/if}
 
-{if $disabled}<p><label>&nbsp;</label>You are editing yourself, some features are disabled for safety reasons.</p>{/if}
+{if $disabled}<p><label>&nbsp;</label>{$r->text.yourself}</p>{/if}
 
 <p>
-<label for="root">Root :</label>
+<label for="root">{$r->text.root} :</label>
 <input type="checkbox" name="root" value="1" {if $root}checked="checked"{/if} {$disabled} /><br />
 </p>
 
@@ -48,10 +48,9 @@ label {ldelim}
 {/foreach}
 
 <p>
-<label for="banned">Banned :</label>
+<label for="banned">{$r->text.banned} :</label>
 <input type="checkbox" name="banned" value="1" {if $banned}checked="checked"{/if} {$disabled} /><br />
 </p>
-
 
 
 <p>
