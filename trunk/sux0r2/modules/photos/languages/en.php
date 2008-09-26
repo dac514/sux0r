@@ -28,6 +28,7 @@ $gtext['form_error_7'] = 'Invalid time';
 $gtext['form_problem'] = 'The form was not submitted, please try again';
 $gtext['max_filesize'] = 'Maximum file size';
 $gtext['next'] = 'Next';
+$gtext['new_album'] = 'New album';
 $gtext['ok'] = 'Ok';
 $gtext['photos'] = 'Photos';
 $gtext['prev'] = 'Previous';

@@ -468,7 +468,7 @@ CREATE TABLE `socialnetwork` (
   `relationship` varchar(255) default NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `friendship` (`users_id`,`friend_users_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `socialnetwork`

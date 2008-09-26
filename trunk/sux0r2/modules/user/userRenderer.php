@@ -22,6 +22,8 @@
 *
 */
 
+require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
+require_once(dirname(__FILE__) . '/../../includes/suxSocialNetwork.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
 class userRenderer extends suxRenderer {
@@ -156,6 +158,110 @@ class userRenderer extends suxRenderer {
     }
 
 
+    /**
+    * Get the acquaintances
+    *
+    * @param int $users_id
+    * @return string html
+    */
+    function acquaintances($users_id) {
+
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) return null;
+
+        // Cache
+        static $html = null;
+        if ($html != null) return $html;
+        $html = '';
+
+        $soc = new suxSocialNetwork();
+
+        $rel = $soc->getRelationships($users_id);
+        if (!$rel) return $html;
+
+        $user = new suxUser();
+        $tpl = new suxTemplate('user');
+        $tpl->config_load('my.conf', 'user');
+
+        $tw = $tpl->get_config_vars('thumbnailWidth');
+        $th = $tpl->get_config_vars('thumbnailHeight');
+
+        foreach ($rel as $val) {
+
+            $u = $user->getUser($val['friend_users_id'], true);
+            if (!$u) continue; // Skip
+
+            $url = suxFunct::makeUrl('/user/profile/' . $u['nickname']);
+
+            if (empty($u['image'])) {
+                $img = suxFunct::makeUrl('/') . "/media/{$this->partition}/assets/proletariat.gif";
+            }
+            else {
+                $img = suxFunct::makeUrl('/') . "/data/user/{$u['image']}";
+            }
+
+            $html .= "<a href='$url' rel='{$val['relationship']}' class='friend'>";
+            $html .= "<img src='$img' class='friend' width='$tw' height='$th' alt='{$u['nickname']}' title = '{$u['nickname']}' />";
+            $html .= "</a>";
+
+        }
+
+        return $html;
+
+    }
+
+
+    /**
+    * Get the stalkers
+    *
+    * @param int $users_id
+    * @return string html
+    */
+    function stalkers($users_id) {
+
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) return null;
+
+        // Cache
+        static $html = null;
+        if ($html != null) return $html;
+        $html = '';
+
+        $soc = new suxSocialNetwork();
+
+        $rel = $soc->getStalkers($users_id);
+        if (!$rel) return $html;
+
+        $user = new suxUser();
+        $tpl = new suxTemplate('user');
+        $tpl->config_load('my.conf', 'user');
+
+        $tw = $tpl->get_config_vars('thumbnailWidth');
+        $th = $tpl->get_config_vars('thumbnailHeight');
+
+        foreach ($rel as $val) {
+
+            $u = $user->getUser($val['users_id'], true);
+            if (!$u) continue; // Skip
+
+            $url = suxFunct::makeUrl('/user/profile/' . $u['nickname']);
+
+            if (empty($u['image'])) {
+                $img = suxFunct::makeUrl('/') . "/media/{$this->partition}/assets/proletariat.gif";
+            }
+            else {
+                $img = suxFunct::makeUrl('/') . "/data/user/{$u['image']}";
+            }
+
+            $html .= "<a href='$url' class='stalker'>";
+            $html .= "<img src='$img' class='stalker' width='$tw' height='$th' alt='{$u['nickname']}' title = '{$u['nickname']}' />";
+            $html .= "</a>";
+
+        }
+
+        return $html;
+
+    }
+
+
 }
 
 
@@ -172,15 +278,20 @@ class userRenderer extends suxRenderer {
 function insert_editMenu($params) {
 
     if (empty($params['nickname'])) return null;
-    if ($params['nickname'] != $_SESSION['nickname']) return null;
+    if (empty($_SESSION['users_id'])) return null;
 
     $text = suxFunct::gtext('user');
 
     $tmp = '';
-    $tmp .= '<li><a href="' . suxFunct::makeUrl("/bayes") . '">' . $text['edit_bayes'] . '</a></li>' . "\n";
-    $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/edit/{$params['nickname']}") . '">' . $text['edit_profile'] . '</a></li>' . "\n";
-    $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/avatar/{$params['nickname']}") . '">' . $text['edit_avatar'] . '</a></li>' . "\n";
-    $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/openid/{$params['nickname']}") . '">' . $text['edit_openid'] . '</a></li>' . "\n";
+    if ($params['nickname'] != $_SESSION['nickname']) {
+        $tmp .= '<li><a href="' . suxFunct::makeUrl("/society/relationship/{$params['nickname']}") . '">' . $text['edit_relationship'] . '</a></li>' . "\n";
+    }
+    else {
+        $tmp .= '<li><a href="' . suxFunct::makeUrl("/bayes") . '">' . $text['edit_bayes'] . '</a></li>' . "\n";
+        $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/edit/{$params['nickname']}") . '">' . $text['edit_profile'] . '</a></li>' . "\n";
+        $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/avatar/{$params['nickname']}") . '">' . $text['edit_avatar'] . '</a></li>' . "\n";
+        $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/openid/{$params['nickname']}") . '">' . $text['edit_openid'] . '</a></li>' . "\n";
+    }
 
     return $tmp;
 

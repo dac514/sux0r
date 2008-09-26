@@ -31,7 +31,6 @@ class bookmarksRenderer extends suxRenderer {
     // Arrays
     public $fp = array(); // Array of first posts
     public $sidelist = array(); // Array of threads in sidebar
-    public $gtext = array();
     public $tc = array(); // Tagcloud
     private $bayesRenderer;
 
@@ -47,7 +46,6 @@ class bookmarksRenderer extends suxRenderer {
     function __construct($module) {
 
         parent::__construct($module); // Call parent
-        $this->gtext = suxFunct::gtext('bookmarks'); // Language
         $this->user = new suxUser();
         $this->bayesRenderer = new bayesRenderer('bayes');
 
@@ -92,10 +90,10 @@ class bookmarksRenderer extends suxRenderer {
             $html .= "<a href='{$url}'>{$val['tag']}</a>, ";
         }
 
-        if (!$html) $html = $this->gtext['none'];
+        if (!$html) $html = $this->text['none'];
         else $html = rtrim($html, ', ');
 
-        $html = "{$this->gtext['tags']}: " . $html . '';
+        $html = "{$this->text['tags']}: " . $html . '';
 
         return $html;
 

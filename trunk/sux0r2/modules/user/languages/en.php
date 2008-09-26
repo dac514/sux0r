@@ -3,6 +3,7 @@
 // Always UTF-8
 // Always uppercase the first word
 
+$gtext['acquaintances'] = 'Acquaintances';
 $gtext['alert_detach'] = 'Are you sure you want to remove these OpenIDs from your account?';
 $gtext['avatar'] = 'Avatar';
 $gtext['back'] = 'Back';
@@ -15,6 +16,7 @@ $gtext['detach'] = 'Detach';
 $gtext['dob'] = 'Birthday';
 $gtext['edit_avatar'] = 'Edit Avatar';
 $gtext['edit_bayes'] = 'Edit Bayesian';
+$gtext['edit_relationship'] = 'Edit Relationship';
 $gtext['edit_openid'] = 'Edit OpenID';
 $gtext['edit_profile'] = 'Edit Profile';
 $gtext['editing'] = 'Editing';
@@ -72,6 +74,7 @@ $gtext['pw_failure'] = 'Too many password failures';
 $gtext['pw_failure_2'] = 'Too many password failures. You must restart your browser to try again.';
 $gtext['reg'] = 'Registration';
 $gtext['region'] = 'State/Province';
+$gtext['stalkers'] = 'Stalkers';
 $gtext['street_address'] = 'Address';
 $gtext['submit'] = 'Submit';
 $gtext['success'] = 'Success!';

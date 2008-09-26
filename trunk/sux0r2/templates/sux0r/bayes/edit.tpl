@@ -103,7 +103,7 @@
             {/capture}
         {/strip}
 
-        <label for="vector" {if $smarty.capture.error}class="error"{/if} >{$r->text.new_vec} :</label>
+        <label {if $smarty.capture.error}class="error"{/if} >{$r->text.new_vec} :</label>
         <input type="text" name="vector" value="{$vector}" />
         <input type="submit" class="button" value="{$r->text.add}" />
         {$smarty.capture.error}
@@ -125,7 +125,7 @@
             {/capture}
         {/strip}
 
-        <label for="vector_id" {if $smarty.capture.error}class="error"{/if} >{$r->text.remove_vec} :</label>
+        <label {if $smarty.capture.error}class="error"{/if} >{$r->text.remove_vec} :</label>
         {html_options name='vector_id' options=$r->getUserOwnedVectors() selected=$vector_id}
         <input type="button" class="button" value="{$r->text.delete}" onclick="rm('remvec', '{$r->text.alert_vec}');" />
         {$smarty.capture.error}
@@ -156,7 +156,7 @@
             {/capture}
         {/strip}
 
-        <label for="category" {if $smarty.capture.error}class="error"{/if} >{$r->text.new_cat} :</label>
+        <label {if $smarty.capture.error}class="error"{/if} >{$r->text.new_cat} :</label>
         <input type="text" name="category" value="{$category}" />
         {html_options name='vector_id' options=$r->getUserOwnedVectors() selected=$vector_id}
         <input type="submit" class="button" value="{$r->text.add}" />
@@ -179,7 +179,7 @@
             {/capture}
         {/strip}
 
-        <label for="category_id" {if $smarty.capture.error}class="error"{/if} >{$r->text.remove_cat} :</label>
+        <label {if $smarty.capture.error}class="error"{/if} >{$r->text.remove_cat} :</label>
         {html_options name='category_id' options=$r->getUserOwnedCategories() selected=$category_id}
         <input type="button" class="button" value="{$r->text.delete}" onclick="rm('remcat', '{$r->text.alert_cat}');" />
         {$smarty.capture.error}
@@ -211,7 +211,7 @@
             {/capture}
         {/strip}
 
-        <label for="document" {if $smarty.capture.error}class="error"{/if} >{$r->text.add_doc} :</label>
+        <label {if $smarty.capture.error}class="error"{/if} >{$r->text.add_doc} :</label>
         <textarea name="document" cols='50' rows='10'>{$document}</textarea><br />
         <label>&nbsp;</label>{html_options name='category_id' options=$r->getUserTrainableCategories() selected=$category_id}
         <input type="submit" class="button" value="{$r->text.train}" />
@@ -234,7 +234,7 @@
             {/capture}
         {/strip}
 
-        <label for="document_id" {if $smarty.capture.error}class="error"{/if} >{$r->text.remove_doc} :</label>
+        <label {if $smarty.capture.error}class="error"{/if} >{$r->text.remove_doc} :</label>
         <select name="document_id" onchange="getDoc(this.value);">
         <option value="">---</option>
         {html_options options=$r->getUserOwnedDocuments() selected=$document_id}
@@ -262,7 +262,7 @@
         {* This is Ajax, no token or action is needed *}
 
         <p>
-        <label for="document" >{$r->text.cat_doc} :</label>
+        <label >{$r->text.cat_doc} :</label>
         <textarea name="cat_document" cols='50' rows='10'>{$cat_document}</textarea><br />
         <label>&nbsp;</label>{html_options name='vector_id' options=$r->getUserSharedVectors() selected=$vector_id}
         <input type="button" class="button" value="{$r->text.categorize}" onclick="getCat(this.form.cat_document.value, this.form.vector_id.value);" />
@@ -297,31 +297,26 @@
         {validate id="sharevec5" form="sharevec" assign="sharevec_error5" message=$r->text.form_error_10}
         {validate id="sharevec6" form="sharevec" assign="sharevec_error6" message=$r->text.form_error_11}
 
-        <label for="vector_id" {if $sharevec_error1}class="error"{/if} >{$r->text.share_vec} :</label>
+        <label {if $sharevec_error1}class="error"{/if} >{$r->text.share_vec} :</label>
             {html_options name='vector_id' options=$r->getUserOwnedVectors() selected=$vector_id}
             {$sharevec_error1}
         </p>
 
         <p>
-        <label for="users_id" {if $sharevec_error2 || $sharevec_error5 || $sharevec_error6}class="error"{/if} >{$r->text.with} :</label>
-            {* TODO: Get users from socialnetwork *}
-            <select name="users_id">
-            <option value="1">test</option>
-            <option value="2">conner_bw</option>
-            <option value="999">fake user</option>
-            </select>
+        <label {if $sharevec_error2 || $sharevec_error5 || $sharevec_error6}class="error"{/if} >{$r->text.with} :</label>
+            {html_options name='users_id' options=$r->getFriends() selected=$users_id}
             {$sharevec_error2}
             {$sharevec_error5}
             {$sharevec_error6}
         </p>
 
         <p>
-        <label for="trainer">&nbsp;</label>
+        <label>&nbsp;</label>
             <input type="checkbox" name="trainer" value="1" /> <span {if $sharevec_error3}class="error"{/if}>{$r->text.trainer}</span>
             {$sharevec_error3}
         </p>
         <p>
-        <label for="trainer">&nbsp;</label>
+        <label>&nbsp;</label>
             <input type="checkbox" name="owner" value="1" /> <span {if $sharevec_error4}class="error"{/if}>{$r->text.owner2}</span>
             {$sharevec_error4}
         </p>

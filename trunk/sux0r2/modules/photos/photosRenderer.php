@@ -173,12 +173,11 @@ function insert_editLinks($params) {
             return null;
     }
 
-    // TODO
-    // $text = suxFunct::gtext('photos');
+    $text = suxFunct::gtext('photos');
 
     $new = suxFunct::makeUrl('/photos/album/edit/');
     $html = '';
-    $html .= "<a href='{$new}'>New album &raquo;</a><br />";
+    $html .= "<a href='{$new}'>{$text['new_album']} &raquo;</a><br />";
 
     return $html;
 
@@ -212,13 +211,12 @@ function insert_editLinks2($params) {
     $annotate = suxFunct::makeUrl('/photos/album/annotate/' . $params['album_id']);
     $upload = suxFunct::makeUrl('/photos/upload/' . $params['album_id']);
 
-    // TODO
-    // $text = suxFunct::gtext('photos');
+    $text = suxFunct::gtext('photos');
 
     $html = '';
-    $html .= "<a href='{$edit}'>Edit properties &raquo;</a><br />";
-    $html .= "<a href='{$upload}'>Upload photos &raquo;</a><br />";
-    $html .= "<a href='{$annotate}'>Annotate photos &raquo;</a>";
+    $html .= "<a href='{$edit}'>{$text['edit']} &raquo;</a><br />";
+    $html .= "<a href='{$upload}'>{$text['upload']} &raquo;</a><br />";
+    $html .= "<a href='{$annotate}'>{$text['annotate']} &raquo;</a>";
 
     return $html;
 

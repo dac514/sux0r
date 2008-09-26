@@ -47,7 +47,7 @@
     {/capture}
 {/strip}
 
-<label for="nickname" {if $smarty.capture.error}class="error"{/if} >* {$r->text.nickname} :</label>
+<label {if $smarty.capture.error}class="error"{/if} >* {$r->text.nickname} :</label>
 <input type="text" name="nickname" value="{$nickname}" {if $r->bool.edit}readonly="readonly"{/if} />
 {$smarty.capture.error}
 
@@ -66,7 +66,7 @@
     {/capture}
 {/strip}
 
-<label for="email" {if $smarty.capture.error}class="error"{/if} >* {$r->text.email} :</label>
+<label {if $smarty.capture.error}class="error"{/if} >* {$r->text.email} :</label>
 <input type="text" name="email" value="{$email}" />
 {$smarty.capture.error}
 </p>
@@ -88,13 +88,13 @@
         {/capture}
     {/strip}
 
-    <label for="password" {if $smarty.capture.error}class="error"{/if}>* {$r->text.password} :</label>
+    <label {if $smarty.capture.error}class="error"{/if}>* {$r->text.password} :</label>
     <input type="password" name="password" value="{$password}" />
     {$smarty.capture.error}
     </p>
 
     <p>
-    <label for="password_verify">{$r->text.password_verify} :</label>
+    <label>{$r->text.password_verify} :</label>
     <input type="password" name="password_verify" value="{$password_verify}" />
     </p>
 
@@ -102,47 +102,47 @@
 
 
 <p>
-<label for="given_name">{$r->text.given_name} :</label>
+<label>{$r->text.given_name} :</label>
 <input type="text" name="given_name" value="{$given_name}" />
 </p>
 
 <p>
-<label for="family_name">{$r->text.family_name} :</label>
+<label>{$r->text.family_name} :</label>
 <input type="text" name="family_name" value="{$family_name}" />
 </p>
 
 <p>
-<label for="street_address">{$r->text.street_address} :</label>
+<label>{$r->text.street_address} :</label>
 <input type="text" name="street_address" value="{$street_address}" />
 </p>
 
 <p>
-<label for="locality">{$r->text.locality} :</label>
+<label>{$r->text.locality} :</label>
 <input type="text" name="locality" value="{$locality}" />
 </p>
 
 <p>
-<label for="region">{$r->text.region} :</label>
+<label>{$r->text.region} :</label>
 <input type="text" name="region" value="{$region}" />
 </p>
 
 <p>
-<label for="postcode">{$r->text.postcode} :</label>
+<label>{$r->text.postcode} :</label>
 <input type="text" name="postcode" value="{$postcode}" />
 </p>
 
 <p>
-<label for="country">{$r->text.country} :</label>
+<label>{$r->text.country} :</label>
 {html_options name='country' options=$r->getCountries() selected=$country}
 </p>
 
 <p>
-<label for="tel">{$r->text.tel} :</label>
+<label>{$r->text.tel} :</label>
 <input type="text" name="tel" value="{$tel}" />
 </p>
 
 <p>
-<label for="url">{$r->text.url} :</label>
+<label>{$r->text.url} :</label>
 <input type="text" name="url" value="{$url}" />
 </p>
 
@@ -155,7 +155,7 @@
 
 
 <p>
-<label for="gender">{$r->text.gender} :</label>
+<label>{$r->text.gender} :</label>
 <span class="htmlRadios">
 {html_radios name='gender' options=$r->getGenders() selected=$gender}
 </span>
@@ -163,12 +163,12 @@
 
 
 <p>
-<label for="language">{$r->text.language} :</label>
+<label>{$r->text.language} :</label>
 {html_options name='language' options=$r->getLanguages() selected=$language}
 </p>
 
 <p>
-<label for="timezone">{$r->text.timezone} :</label>
+<label>{$r->text.timezone} :</label>
 {html_options name='timezone' options=$r->getTimezones() selected=$timezone}
 </p>
 
@@ -179,7 +179,7 @@
         {validate id="captcha" message=$r->text.form_error_11}
         {/capture}
     {/strip}
-    <label for="captcha" {if $smarty.capture.error}class="error"{/if} >* {$r->text.captcha} :</label>
+    <label {if $smarty.capture.error}class="error"{/if} >* {$r->text.captcha} :</label>
     <img src="{$r->url}/modules/captcha/getImage.php" alt="Captcha" />
     <br />
     <label>&nbsp;</label>

@@ -27,9 +27,6 @@ require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
 class adminRenderer extends suxRenderer {
 
-    // Arrays
-    public $gtext = array();
-
     // Objects
     private $user;
 
@@ -42,7 +39,6 @@ class adminRenderer extends suxRenderer {
     function __construct($module) {
 
         parent::__construct($module); // Call parent
-        $this->gtext = suxFunct::gtext('admin'); // Language
         $this->user = new suxUser();
 
     }

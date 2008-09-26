@@ -30,6 +30,7 @@ class suxSocialNetwork {
     // Database suff
     protected $db;
     protected $inTransaction = false;
+    // MyISAM (faster, no rollback)
     protected $db_table = 'socialnetwork';
 
     // Enum (zero or one value)
@@ -55,24 +56,65 @@ class suxSocialNetwork {
 
 
     /**
-    * Set relationship
+    * Get relationships
     *
     * @param int $uid users_id
     * @param int $fid the users_id of the friend
-    * @param string $rel relationship based on XFN
-    * @return bool
+    * @return array
     */
-    function saveRelationship($uid, $fid, $rel) {
+    function getRelationship($uid, $fid) {
 
-        // --------------------------------------------------------------------
-        // Sanitize
-        // --------------------------------------------------------------------
+        if (!filter_var($uid, FILTER_VALIDATE_INT) || $uid < 1) throw new Exception('Invalid user id');
 
-        if (!filter_var($uid, FILTER_VALIDATE_INT) || $uid < 1)
-            throw new Exception('Invalid user id');
+        $st = $this->db->prepare("SELECT id, friend_users_id, relationship FROM {$this->db_table} WHERE users_id = ? AND friend_users_id = ? LIMIT 1 ");
+        $st->execute(array($uid, $fid));
+        return $st->fetch(PDO::FETCH_ASSOC);
 
-        if (!filter_var($fid, FILTER_VALIDATE_INT) || $fid < 1)
-            throw new Exception('Invalid friend id');
+    }
+
+
+    /**
+    * Get relationships
+    *
+    * @param int $uid users_id
+    * @return array
+    */
+    function getRelationships($uid) {
+
+        if (!filter_var($uid, FILTER_VALIDATE_INT) || $uid < 1) throw new Exception('Invalid user id');
+
+        $st = $this->db->prepare("SELECT id, friend_users_id, relationship FROM {$this->db_table} WHERE users_id = ? ");
+        $st->execute(array($uid));
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+
+    /**
+    * Get stalkers
+    *
+    * @param int $uid users_id
+    * @return array
+    */
+    function getStalkers($uid) {
+
+        if (!filter_var($uid, FILTER_VALIDATE_INT) || $uid < 1) throw new Exception('Invalid user id');
+
+        $st = $this->db->prepare("SELECT id, users_id, relationship FROM {$this->db_table} WHERE friend_users_id = ? ");
+        $st->execute(array($uid));
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+
+
+    /**
+    * Convert a relationship string into an array
+    *
+    * @param string relationship based on XFN
+    * @return array
+    */
+    function relationshipArray($rel) {
 
         $rel = strip_tags($rel); // Strip tags
         $rel = mb_strtolower($rel);
@@ -96,9 +138,9 @@ class suxSocialNetwork {
                 break;
             }
             // Enum, overwrite
-            elseif (in_array($val, $this->xfn_friendship)) $friendship = "$val ";
-            elseif (in_array($val, $this->xfn_geographical)) $geographical = "$val ";
-            elseif (in_array($val, $this->xfn_family)) $family = "$val ";
+            elseif (in_array($val, $this->xfn_friendship)) $friendship = $val;
+            elseif (in_array($val, $this->xfn_geographical)) $geographical = $val;
+            elseif (in_array($val, $this->xfn_family)) $family = $val;
             // Set, append
             elseif (in_array($val, $this->xfn_physical)) $physical .= "$val ";
             elseif (in_array($val, $this->xfn_professional)) $professional .= "$val ";
@@ -106,13 +148,41 @@ class suxSocialNetwork {
 
         }
 
+        $physical = rtrim($physical);
+        $professional = rtrim($professional);
+        $romantic = rtrim($romantic);
+
+        return array($identity, $friendship, $physical, $professional, $geographical, $family, $romantic);
+
+    }
+
+
+    /**
+    * Save relationship
+    *
+    * @param int $uid users_id
+    * @param int $fid the users_id of the friend
+    * @param string $rel relationship based on XFN
+    * @return bool
+    */
+    function saveRelationship($uid, $fid, $rel) {
+
+        // --------------------------------------------------------------------
+        // Sanitize
+        // --------------------------------------------------------------------
+
+        if (!filter_var($uid, FILTER_VALIDATE_INT) || $uid < 1) throw new Exception('Invalid user id');
+        if (!filter_var($fid, FILTER_VALIDATE_INT) || $fid < 1) throw new Exception('Invalid friend id');
+
+        list($identity, $friendship, $physical, $professional, $geographical, $family, $romantic) = $this->relationshipArray($rel);
+
         if ($identity) {
-            $rel = rtrim($identity);
+            $rel = $identity;
         }
         else {
-            $rel = rtrim($friendship . $physical . $professional . $geographical . $family . $romantic);
+            $rel = "$friendship $physical $professional $geographical $family $romantic";
         }
-
+        $rel = trim($rel);
 
         // --------------------------------------------------------------------
         // Go!
@@ -148,10 +218,28 @@ class suxSocialNetwork {
     /**
     * Delete relationship
     *
-    * @param int $id users_id
+    * @param int $uid users_id
+    * @param int $fid the users_id of the friend
     * @return bool
     */
-    function deleteRelationship($id) {
+    function deleteRelationship($uid, $fid) {
+
+        if (!filter_var($uid, FILTER_VALIDATE_INT) || $uid < 1) throw new Exception('Invalid user id');
+        if (!filter_var($fid, FILTER_VALIDATE_INT) || $fid < 1) throw new Exception('Invalid friend id');
+
+        $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE users_id = ? AND friend_users_id = ? LIMIT 1 ");
+        return $st->execute(array($uid, $fid));
+
+    }
+
+
+    /**
+    * Delete relationship by id
+    *
+    * @param int $id primary key
+    * @return bool
+    */
+    function deleteRelationshipById($id) {
 
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
 

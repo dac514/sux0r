@@ -22,14 +22,12 @@
 *
 */
 
+require_once(dirname(__FILE__) . '/../../includes/suxSocialNetwork.php');
 require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 require_once('bayesUser.php');
 
 class bayesRenderer extends suxRenderer {
-
-    // Arrays
-    public $gtext = array();
 
     // Objects
     private $nb;
@@ -44,7 +42,6 @@ class bayesRenderer extends suxRenderer {
     function __construct($module) {
 
         parent::__construct($module); // Call parent
-        $this->gtext = suxFunct::gtext('bayes'); // Language
         $this->nb = new bayesUser();
         $this->link = new suxLink();
 
@@ -389,6 +386,36 @@ class bayesRenderer extends suxRenderer {
 
 
     /**
+    * Get {html_options} formated friends array
+    *
+    * @return array
+    */
+    function getFriends() {
+
+        // Cache
+        static $tmp = null;
+        if (is_array($tmp)) return $tmp;
+        $tmp = array();
+
+        $soc = new suxSocialNetwork();
+        $user = new suxUser();
+
+        $rel = $soc->getRelationships($_SESSION['users_id']);
+        if (!$rel) return $tmp;
+
+        foreach ($rel as $val) {
+            $u = $user->getUser($val['friend_users_id']);
+            if (!$u) continue; // Skip
+            $tmp[$val['friend_users_id']] = $u['nickname'];
+        }
+
+        return $tmp;
+
+    }
+
+
+
+    /**
     * Get documents
     *
     * @return array
@@ -422,18 +449,17 @@ class bayesRenderer extends suxRenderer {
         static $html = null;
         if ($html) return $html; // Cache
 
-        $text =& $this->gtext;
         $cat = 0;
         $html = "<div id='bStats'><ul>\n";
         foreach ($this->getSharedVectorsArray() as $key => $val) {
             $html .= "<li class='bStatsVec'>{$val['vector']}";
-            if (!$this->nb->isVectorOwner($key, $_SESSION['users_id'])) $html .= ' <em>(' . $text['shared'] . ')/em>';
+            if (!$this->nb->isVectorOwner($key, $_SESSION['users_id'])) $html .= ' <em>(' . $this->text['shared'] . ')/em>';
             $html .= ":</li>\n<ul>\n";
             foreach ($this->nb->getCategoriesByVector($key) as $key2 => $val2) {
                 $doc_count = $this->nb->getDocumentCountByCategory($key2);
                 $html .= "<li class='bStatsCat'>{$val2['category']}:</li>";
                 $html .= "<ul>\n";
-                $html .= "<li class='bStatsDoc'>{$text['documents']}: $doc_count</li><li class='bStatsTok'>{$text['tokens']}: {$val2['token_count']}</li>\n";
+                $html .= "<li class='bStatsDoc'>{$this->text['documents']}: $doc_count</li><li class='bStatsTok'>{$this->text['tokens']}: {$val2['token_count']}</li>\n";
                 $html .= "</ul>\n";
                 ++$cat;
             }
@@ -454,13 +480,12 @@ class bayesRenderer extends suxRenderer {
         static $html = null;
         if ($html) return $html; // Cache
 
-        $text =& $this->gtext;
         $html .= "<table class='shared'><thead><tr>
-        <th>{$text['vector']}</th>
-        <th>{$text['user']}</th>
-        <th>{$text['trainer']}</th>
-        <th>{$text['owner']}</th>
-        <th>{$text['unshare']}</th>
+        <th>{$this->text['vector']}</th>
+        <th>{$this->text['user']}</th>
+        <th>{$this->text['trainer']}</th>
+        <th>{$this->text['owner']}</th>
+        <th>{$this->text['unshare']}</th>
         </tr></thead><tbody>\n";
 
         $user = new suxUser();
