@@ -1,5 +1,8 @@
 <?php
 
+// Always UTF-8
+// Always uppercase the first word
+
 $gtext['cancel'] = 'Cancel';
 $gtext['cancelled'] = 'Cancelled!';
 $gtext['form_error'] = 'The form was not submitted, see errors below';

@@ -1,39 +1,37 @@
 {capture name=header}
 
-{if $r->isLoggedIn()}
-    {$r->genericBayesInterfaceInit()}
-{else}
-    <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
-{/if}
+    {if $r->isLoggedIn()}
+        {$r->genericBayesInterfaceInit()}
+    {else}
+        <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
+    {/if}
 
-{literal}
-<script type="text/javascript">
-// <![CDATA[
-// Set the maximum width of an image
-function maximumWidth(myId, maxW) {
-    var pix = document.getElementById(myId).getElementsByTagName('img');
-    for (i = 0; i < pix.length; i++) {
-        w = pix[i].width;
-        h = pix[i].height;
-        if (w > maxW) {
-            f = 1 - ((w - maxW) / w);
-            pix[i].width = w * f;
-            pix[i].height = h * f;
+    {literal}
+    <script type="text/javascript">
+    // <![CDATA[
+    // Set the maximum width of an image
+    function maximumWidth(myId, maxW) {
+        var pix = document.getElementById(myId).getElementsByTagName('img');
+        for (i = 0; i < pix.length; i++) {
+            w = pix[i].width;
+            h = pix[i].height;
+            if (w > maxW) {
+                f = 1 - ((w - maxW) / w);
+                pix[i].width = w * f;
+                pix[i].height = h * f;
+            }
         }
     }
-}
-Event.observe(window, 'load', function() {
-    maximumWidth('suxBlog', {/literal}{#maxPhotoWidth#}{literal});
-});
-// ]]>
-</script>
-{/literal}
+    Event.observe(window, 'load', function() {
+        maximumWidth('suxBlog', {/literal}{#maxPhotoWidth#}{literal});
+    });
+    // ]]>
+    </script>
+    {/literal}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
 {include file=$r->xhtml_header}{/strip}
-
-
 
 <table id="proselytizer" >
 	<tr>
@@ -53,7 +51,7 @@ Event.observe(window, 'load', function() {
 
 
                 {if $r->sidelist}
-                <div id="sidelist">
+                <div class="sidelist">
                 <p>{$r->text.sidelist}</p>
                 <ul>
                     {foreach from=$r->sidelist item=foo}
@@ -65,7 +63,7 @@ Event.observe(window, 'load', function() {
 
 
                 {if $r->archives()}
-                <div id="archives">
+                <div class="archives">
                 <p>{$r->text.archives}</p>
                 <ul>
                 {foreach from=$r->archives() item=foo}
@@ -77,7 +75,7 @@ Event.observe(window, 'load', function() {
                 {/if}
 
                 {if $r->authors()}
-                <div id="archives">
+                <div class="authors">
                 <p>{$r->text.authors}</p>
                 <ul>
                 {foreach from=$r->authors() item=foo}
@@ -86,6 +84,10 @@ Event.observe(window, 'load', function() {
                 </ul>
                 </div>
                 {/if}
+
+                <ul>
+                <li><a href="{$r->makeUrl('/blog/tag/cloud')}">{$r->text.tag_cloud}</a></li>
+                </ul>
 
 
 			</div>
@@ -110,13 +112,13 @@ Event.observe(window, 'load', function() {
                 {capture name=blog}
 
                     <!-- Content -->
-                    <p>By <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a> <em>on {$foo.published_on}</em></p>
+                    <p>{$r->text.by} <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a> <em>{$r->text.on|lower} {$foo.published_on}</em></p>
                     <p>{$foo.body_html}</p>
                     <div class="clearboth"></div>
 
                     <!-- Reply -->
                     <p>
-                    <a href="{$r->makeUrl('/blog/reply')}/{$foo.id}">Reply</a>
+                    <a href="{$r->makeUrl('/blog/reply')}/{$foo.id}">{$r->text.reply}</a>
                     {$r->tags($foo.id)}
                     </p>
 
@@ -150,7 +152,7 @@ Event.observe(window, 'load', function() {
 
             {/foreach}
             {else}
-                <p>Not found.</p>
+                <p>{$r->text.not_found}</p>
             {/if}
 
             {* ------------------------------------------------------------------------------------------------------ *}
@@ -160,36 +162,31 @@ Event.observe(window, 'load', function() {
             {if $r->comments}
             {foreach from=$r->comments item=foo}
 
+                <div class="comment" id="suxComment{$foo.id}" style="margin-left:{$r->indenter($foo.level)}px;">
+                <a name="comment-{$foo.id}"></a>
+                <!-- Content -->
+                <p><strong>{$foo.title}</strong> {$r->text.by|lower} <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a> {$r->text.on|lower} {$foo.published_on}</p>
+                <p>{$foo.body_html}</p>
+                <p><a href="{$r->makeUrl('/blog/reply')}/{$foo.id}">{$r->text.reply}</a></p>
+                </div>
 
-                    <div class="comment" id="suxComment{$foo.id}" style="margin-left:{$r->indenter($foo.level)}px;">
-                    <a name="comment-{$foo.id}"></a>
-
-                    <!-- Content -->
-                    <p><strong>{$foo.title}</strong> by <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a> on {$foo.published_on}</p>
-                    <p>{$foo.body_html}</p>
-                    <p><a href="{$r->makeUrl('/blog/reply')}/{$foo.id}">Reply</a></p>
-
-                    </div>
-
-                    {literal}
-                    <script type="text/javascript">
-                    // <![CDATA[
-                    // Set the maximum width of an image
-                    Event.observe(window, 'load', function() {
-                            maximumWidth({/literal}'suxComment{$foo.id}', {math equation="x - y" x=#maxPhotoWidth# y=$r->indenter($foo.level)}{literal});
-                    });
-                    // ]]>
-                    </script>
-                    {/literal}
-
+                {literal}
+                <script type="text/javascript">
+                // <![CDATA[
+                // Set the maximum width of an image
+                Event.observe(window, 'load', function() {
+                        maximumWidth({/literal}'suxComment{$foo.id}', {math equation="x - y" x=#maxPhotoWidth# y=$r->indenter($foo.level)}{literal});
+                });
+                // ]]>
+                </script>
+                {/literal}
 
             {/foreach}
             {else}
-                <p>No comments.</p>
+                <p>{$r->text.no_comments}</p>
             {/if}
 
             {* ------------------------------------------------------------------------------------------------------ *}
-
 
             {$r->text.pager}
 

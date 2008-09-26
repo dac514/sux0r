@@ -1,27 +1,27 @@
 {capture name=header}
 
-{literal}
-<script type="text/javascript">
-// <![CDATA[
-// Set the maximum width of an image
-function maximumWidth(myId, maxW) {
-    var pix = document.getElementById(myId).getElementsByTagName('img');
-    for (i = 0; i < pix.length; i++) {
-        w = pix[i].width;
-        h = pix[i].height;
-        if (w > maxW) {
-            f = 1 - ((w - maxW) / w);
-            pix[i].width = w * f;
-            pix[i].height = h * f;
+    {literal}
+    <script type="text/javascript">
+    // <![CDATA[
+    // Set the maximum width of an image
+    function maximumWidth(myId, maxW) {
+        var pix = document.getElementById(myId).getElementsByTagName('img');
+        for (i = 0; i < pix.length; i++) {
+            w = pix[i].width;
+            h = pix[i].height;
+            if (w > maxW) {
+                f = 1 - ((w - maxW) / w);
+                pix[i].width = w * f;
+                pix[i].height = h * f;
+            }
         }
     }
-}
-window.onload = function() {
-    maximumWidth({/literal}'suxPhoto', {#maxPhotoWidth#}{literal});
-}
-// ]]>
-</script>
-{/literal}
+    window.onload = function() {
+        maximumWidth({/literal}'suxPhoto', {#maxPhotoWidth#}{literal});
+    }
+    // ]]>
+    </script>
+    {/literal}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
@@ -58,10 +58,9 @@ window.onload = function() {
                 <div class="widget">
                     <h2><a href="{$r->text.back_url}">{$r->album.title}</a></h2>
 
-
                     <div class="prevNext" style="width:{#maxPhotoWidth#}px;">
-                        {if $r->text.prev_id}<a href="{$r->makeUrl('photos/view')}/{$r->text.prev_id}" class="previous">&laquo; Previous</a>{/if}
-                        {if $r->text.next_id}<a href="{$r->makeUrl('photos/view')}/{$r->text.next_id}" class="next">Next &raquo;</a>{/if}
+                        {if $r->text.prev_id}<a href="{$r->makeUrl('photos/view')}/{$r->text.prev_id}" class="previous">&laquo; {$r->text.prev}</a>{/if}
+                        {if $r->text.next_id}<a href="{$r->makeUrl('photos/view')}/{$r->text.next_id}" class="next">{$r->text.next} &raquo;</a>{/if}
                     </div>
 
                     <p id="suxPhoto">

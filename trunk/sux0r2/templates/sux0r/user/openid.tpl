@@ -23,7 +23,7 @@
 <div id="middle">
 
 <fieldset>
-<legend>Edit OpenIDs: {$nickname}</legend>
+<legend>{$r->text.openid}: {$nickname}</legend>
 
 <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />
@@ -39,18 +39,16 @@
 <p class="errorWarning">{$r->text.form_problem} :</p>
 {/if}
 
-<p>The following OpenIDs are currently attached to your account. You can use any of them to sign in:</p>
+<p>{$r->text.openid_msg_1} :</p>
 
-
-            <ul style="list-style-type: none;">
-            {foreach from=$r->openids item=foo}
-            <li><input type="checkbox" name="detach[]" value="{$foo.openid_url}" style="width: auto;" /> {$foo.openid_url}</li>
-            {foreachelse}
-            <li><span style="margin-left: 2em">Nothing here...</span></li>
-            {/foreach}
-            <li><span style="margin-left: 2em"><a href="{$r->makeUrl('/user/register/openid')}">Register a new OpenID &raquo;</a></span></li>
-            </ul>
-
+<ul style="list-style-type: none;">
+{foreach from=$r->openids item=foo}
+<li><input type="checkbox" name="detach[]" value="{$foo.openid_url}" style="width: auto;" /> {$foo.openid_url}</li>
+{foreachelse}
+<li><span style="margin-left: 2em;">{$r->text.openid_none}</span></li>
+{/foreach}
+<li><span style="margin-left: 2em"><a href="{$r->makeUrl('/user/register/openid')}">{$r->text.openid_register} &raquo;</a></span></li>
+</ul>
 
 <p>
 <label>&nbsp;</label>

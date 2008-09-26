@@ -1,5 +1,8 @@
 <?php
 
+// Always UTF-8
+// Always uppercase the first word
+
 $gtext['accept_mode'] = 'The client site you are attempting to log into has requested that you trust the following URL';
 $gtext['always'] = 'Always';
 $gtext['cancelled'] = 'Request cancelled';

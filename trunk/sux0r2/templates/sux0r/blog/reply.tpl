@@ -1,6 +1,6 @@
 {capture name=header}
 
-{$r->tinyMceComment()}
+    {$r->tinyMceComment()}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
@@ -12,7 +12,7 @@
 <div id="middle">
 
 <fieldset>
-<legend>Reply</legend>
+<legend>{$r->text.reply}</legend>
 
 <div class="parentContainer">
 <pre>{$parent|trim}</pre>
@@ -32,13 +32,14 @@
 <p class="errorWarning">{$r->text.form_problem} :</p>
 {/if}
 
+
 <p>
 {strip}
     {capture name=error}
-    {validate id="title" message="title cannot be empty"}
+    {validate id="title" message=$r->text.error_1}
     {/capture}
 {/strip}
-<label for="title" {if $smarty.capture.error}class="error"{/if} >Title :</label>
+<label for="title" {if $smarty.capture.error}class="error"{/if} >{$r->text.title} :</label>
 <input type="text" name="title" value="{$title}" class="widerInput" />
 {$smarty.capture.error}
 </p>
@@ -46,10 +47,10 @@
 <p>
 {strip}
     {capture name=error}
-    {validate id="body" message="Body cannot be empty"}
+    {validate id="body" message=$r->text.error_2}
     {/capture}
 {/strip}
-<span {if $smarty.capture.error}class="error"{/if}>Body: </span> {$smarty.capture.error}
+<span {if $smarty.capture.error}class="error"{/if}>{$r->text.body} : </span> {$smarty.capture.error}
 </p>
 
 <p><textarea name="body" class="mceEditor">{$body}</textarea></p>
@@ -61,7 +62,6 @@
 </p>
 
 </form>
-
 
 </div>
 

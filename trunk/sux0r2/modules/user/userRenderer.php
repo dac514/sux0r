@@ -172,13 +172,7 @@ class userRenderer extends suxRenderer {
 function insert_editMenu($params) {
 
     if (empty($params['nickname'])) return null;
-
-    if ($params['nickname'] != $_SESSION['nickname']) {
-        // TODO:
-        // Security check
-        // Only an administrator can modify other users
-        return null;
-    }
+    if ($params['nickname'] != $_SESSION['nickname']) return null;
 
     $text = suxFunct::gtext('user');
 
@@ -187,8 +181,6 @@ function insert_editMenu($params) {
     $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/edit/{$params['nickname']}") . '">' . $text['edit_profile'] . '</a></li>' . "\n";
     $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/avatar/{$params['nickname']}") . '">' . $text['edit_avatar'] . '</a></li>' . "\n";
     $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/openid/{$params['nickname']}") . '">' . $text['edit_openid'] . '</a></li>' . "\n";
-
-
 
     return $tmp;
 

@@ -1,14 +1,14 @@
 {capture name=header}
 
-<style type="text/css">
-label {ldelim}
-    float: left;
-    width: 140px;
-    margin-right: 0.5em;
-    padding-top: 0.2em;
-    text-align: right;
-{rdelim}
-</style>
+    <style type="text/css">
+    label {ldelim}
+        float: left;
+        width: 140px;
+        margin-right: 0.5em;
+        padding-top: 0.2em;
+        text-align: right;
+    {rdelim}
+    </style>
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
@@ -75,7 +75,7 @@ label {ldelim}
 {if $r->bool.openid}
 
     <p>
-    <label>OpenID :</label> {$r->text.openid_url}
+    <label>{$r->text.openid} :</label> {$r->text.openid_url}
     </p>
 
 {else}

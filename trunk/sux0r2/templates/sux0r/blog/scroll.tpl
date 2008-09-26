@@ -1,39 +1,37 @@
 {capture name=header}
 
-{if $r->isLoggedIn()}
-    {$r->genericBayesInterfaceInit()}
-{else}
-    <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
-{/if}
+    {if $r->isLoggedIn()}
+        {$r->genericBayesInterfaceInit()}
+    {else}
+        <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
+    {/if}
 
-{literal}
-<script type="text/javascript">
-// <![CDATA[
-// Set the maximum width of an image
-function maximumWidth(myId, maxW) {
-    var pix = document.getElementById(myId).getElementsByTagName('img');
-    for (i = 0; i < pix.length; i++) {
-        w = pix[i].width;
-        h = pix[i].height;
-        if (w > maxW) {
-            f = 1 - ((w - maxW) / w);
-            pix[i].width = w * f;
-            pix[i].height = h * f;
+    {literal}
+    <script type="text/javascript">
+    // <![CDATA[
+    // Set the maximum width of an image
+    function maximumWidth(myId, maxW) {
+        var pix = document.getElementById(myId).getElementsByTagName('img');
+        for (i = 0; i < pix.length; i++) {
+            w = pix[i].width;
+            h = pix[i].height;
+            if (w > maxW) {
+                f = 1 - ((w - maxW) / w);
+                pix[i].width = w * f;
+                pix[i].height = h * f;
+            }
         }
     }
-}
-Event.observe(window, 'load', function() {
-    maximumWidth('rightside', {/literal}{#maxPhotoWidth#}{literal});
-});
-// ]]>
-</script>
-{/literal}
+    Event.observe(window, 'load', function() {
+        maximumWidth('rightside', {/literal}{#maxPhotoWidth#}{literal});
+    });
+    // ]]>
+    </script>
+    {/literal}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
 {include file=$r->xhtml_header}{/strip}
-
-
 
 <table id="proselytizer" >
 	<tr>
@@ -51,9 +49,8 @@ Event.observe(window, 'load', function() {
         <td style="vertical-align:top;">
 			<div id="leftside">
 
-
                 {if $r->sidelist}
-                <div id="sidelist">
+                <div class="sidelist">
                 <p>{$r->text.sidelist}</p>
                 <ul>
                     {foreach from=$r->sidelist item=foo}
@@ -65,7 +62,7 @@ Event.observe(window, 'load', function() {
 
 
                 {if $r->archives()}
-                <div id="archives">
+                <div class="archives">
                 <p>{$r->text.archives}</p>
                 <ul>
                 {foreach from=$r->archives() item=foo}
@@ -77,7 +74,7 @@ Event.observe(window, 'load', function() {
                 {/if}
 
                 {if $r->authors()}
-                <div id="archives">
+                <div class="authors">
                 <p>{$r->text.authors}</p>
                 <ul>
                 {foreach from=$r->authors() item=foo}
@@ -87,23 +84,21 @@ Event.observe(window, 'load', function() {
                 </div>
                 {/if}
 
+                <ul>
+                <li><a href="{$r->makeUrl('/blog/tag/cloud')}">{$r->text.tag_cloud}</a></li>
+                </ul>
 
                 {if $r->recent()}
-                <div id="recent">
-                <p>Most recent comments:</p>
+                <div class="recent">
+                <p>{$r->text.recent_comments} :</p>
                 {foreach from=$r->recent() item=foo}
                     <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}#comment-{$foo.id}">{$foo.title}</a>
-                    by <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a>
-                    in <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">{$foo.title_fp}</a>
-                    on {$foo.published_on}<br /><br />
+                    {$r->text.by|lower} <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a>
+                    {$r->text.in|lower} <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">{$foo.title_fp}</a>
+                    {$r->text.on|lower} {$foo.published_on}<br /><br />
                 {/foreach}
                 </div>
                 {/if}
-
-                <ul>
-                <li><a href="{$r->makeUrl('/blog/tag/cloud')}">Tag cloud</a></li>
-                </ul>
-
 
 
 			</div>
@@ -113,7 +108,6 @@ Event.observe(window, 'load', function() {
 
             <!-- Category filters -->
             {insert name="bayesFilters" form_url=$r->text.form_url}
-
 
             {* Blogs *}
             {if $r->fp}
@@ -130,15 +124,15 @@ Event.observe(window, 'load', function() {
                 {capture name=blog}
 
                     <!-- Content -->
-                    <p>By <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a> <em>on {$foo.published_on}</em></p>
+                    <p>{$r->text.by} <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a> <em>{$r->text.on|lower} {$foo.published_on}</em></p>
                     <p>{insert name="highlight" html=$foo.body_html}</p>
                     <div class="clearboth"></div>
 
 
                     <!-- Permanlink, Comments -->
                     <p>
-                    <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">Permanent Link</a>,
-                    <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}#comments">Comments ({$foo.comments})</a>
+                    <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">{$r->text.p_link}</a>,
+                    <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}#comments">{$r->text.comments} ({$foo.comments})</a>
                     {$r->tags($foo.id)}
                     </p>
 
@@ -172,7 +166,7 @@ Event.observe(window, 'load', function() {
 
             {/foreach}
             {else}
-                <p>Not found.</p>
+                <p>{$r->text.not_found}</p>
             {/if}
 
             {$r->text.pager}

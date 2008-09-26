@@ -12,7 +12,7 @@
 <div id="middle">
 
 <fieldset>
-<legend>Edit</legend>
+<legend>{$r->text.edit}</legend>
 
 <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />
@@ -32,10 +32,10 @@
 <p>
 {strip}
     {capture name=error}
-    {validate id="title" message="title cannot be empty"}
+    {validate id="title" message=$r->text.form_error_4}
     {/capture}
 {/strip}
-<label for="title" {if $smarty.capture.error}class="error"{/if} >{$r->text.dob} Title :</label>
+<label for="title" {if $smarty.capture.error}class="error"{/if} >{$r->text.title} :</label>
 <input type="text" name="title" value="{$title}" class="widerInput" />
 {$smarty.capture.error}
 </p>
@@ -43,10 +43,10 @@
 <p>
 {strip}
     {capture name=error}
-    {validate id="body" message="Body cannot be empty"}
+    {validate id="body" message=$r->text.form_error_5}
     {/capture}
 {/strip}
-<span {if $smarty.capture.error}class="error"{/if}>Body: </span> {$smarty.capture.error}
+<span {if $smarty.capture.error}class="error"{/if}>{$r->text.body} : </span> {$smarty.capture.error}
 </p>
 
 <p>
@@ -54,17 +54,17 @@
 </p>
 
 <p>
-<label for="draft">Save as draft:</label>
+<label for="draft">{$r->text.save_draft} :</label>
 <input type="checkbox" name="draft" value="1" {if $draft}checked="checked"{/if} />
 </p>
 
 <p>
 {strip}
     {capture name=error}
-    {validate id="date" message="invalid date"}
+    {validate id="date" message=$r->text.form_error_6}
     {/capture}
 {/strip}
-<label {if $smarty.capture.error}class="error"{/if} >{$r->text.dob} Date :</label>
+<label {if $smarty.capture.error}class="error"{/if} >{$r->text.date} :</label>
 <span class="htmlSelect">
 {html_select_date time="$Date_Year-$Date_Month-$Date_Day" field_order='YMD'  start_year='-5' end_year='+1' }
 </span>
@@ -74,12 +74,12 @@
 <p>
 {strip}
     {capture name=error}
-    {validate id="time" message="invalid time"}
-    {validate id="time2" message="invalid time"}
-    {validate id="time3" message="invalid time"}
+    {validate id="time" message=$r->text.form_error_7}
+    {validate id="time2" message=$r->text.form_error_7}
+    {validate id="time3" message=$r->text.form_error_7}
     {/capture}
 {/strip}
-<label {if $smarty.capture.error}class="error"{/if} >{$r->text.dob} Time :</label>
+<label {if $smarty.capture.error}class="error"{/if} >{$r->text.time} :</label>
 <span class="htmlSelect">
 {html_select_time time="$Time_Hour:$Time_Minute:$Time_Second" use_24_hours=true}
 </span>

@@ -9,7 +9,7 @@
 		<td colspan="3" style="vertical-align:top;">
 			<div id="header">
 
-                <h1>Profile of: {$r->profile.nickname}</h1>
+                <h1>{$r->text.profile_of} : {$r->profile.nickname}</h1>
                 {insert name="userInfo"}
                 {$r->navlist()}
 
@@ -25,14 +25,12 @@
 
 
             <!-- menu -->
-            <strong>User: {$r->profile.nickname|capitalize}</strong>
-
             <div class='menucontainer'>
             <ul class='menulist'>
-            <li><a href='{$r->makeUrl('/blog/author')}/{$r->profile.nickname}' >Blog</a></li>
-            <li><a href='{$r->makeUrl('/feeds/user')}/{$r->profile.nickname}' >Feeds</a></li>
-            <li><a href='{$r->makeUrl('/bookmarks/user')}/{$r->profile.nickname}' >Bookmarks</a></li>
-            <li><a href='{$r->makeUrl('/photos/user')}/{$r->profile.nickname}' >Photo Albums</a></li>
+            <li><a href='{$r->makeUrl('/blog/author')}/{$r->profile.nickname}'>{$r->text.blog}</a></li>
+            <li><a href='{$r->makeUrl('/feeds/user')}/{$r->profile.nickname}'>{$r->text.feeds}</a></li>
+            <li><a href='{$r->makeUrl('/bookmarks/user')}/{$r->profile.nickname}'>{$r->text.bookmarks}</a></li>
+            <li><a href='{$r->makeUrl('/photos/user')}/{$r->profile.nickname}'>{$r->text.photoalbums}</a></li>
             <li><div style="padding-bottom: 1em"></div></li>
             {insert name="editMenu" nickname=$r->profile.nickname}
             </ul>
@@ -113,24 +111,22 @@
             {/strip}{/capture}
 
 
-            {$r->widget('Profile', $smarty.capture.profile, null, $smarty.capture.image)}
-            {$r->widget('Friends', 'Todo')}
+            {$r->widget($r->text.profile, $smarty.capture.profile, null, $smarty.capture.image)}
+            {$r->widget($r->text.friends, 'Todo')}
 
             </div>
 		</td>
 		<td style="vertical-align:top;">
 			<div id="rightside">
 
-
-            <h2><a href="#todo" class="noBg"><img class="rssIcon" src="{$r->url}/media/{$r->partition}/assets/rss_icon.png" alt="RSS Feed" /></a> Minifeed</h2>
+            <h2><a href="#todo" class="noBg"><img class="rssIcon" src="{$r->url}/media/{$r->partition}/assets/rss_icon.png" alt="RSS Feed" /></a> {$r->text.minifeed}</h2>
             <ul class="miniFeed">
             {foreach from=$r->minifeed item=foo}
             <li><em><strong>{$foo.ts}</strong></em> <br />{$foo.body_html}</li>
             {foreachelse}
-            <li>Nothing yet...</li>
+            <li>{$r->text.nothing}</li>
             {/foreach}
             </ul>
-
 
 			</div>
 		</td>
