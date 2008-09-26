@@ -64,5 +64,6 @@ $gtext['vector'] = 'Vector';
 $gtext['vectors'] = 'Vectors';
 $gtext['with'] = 'With friend';
 $gtext['search'] = 'Keywords';
+$gtext['shared'] = 'Shared';
 
 ?>

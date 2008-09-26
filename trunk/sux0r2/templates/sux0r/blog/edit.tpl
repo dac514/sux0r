@@ -1,6 +1,10 @@
 {capture name=header}
 
-    {$r->tinyMceEditor()}
+    {if $thread_pos}
+         {$r->tinyMceComment()}
+    {else}
+        {$r->tinyMceEditor()}
+    {/if}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
@@ -40,34 +44,38 @@
 {$smarty.capture.error}
 </p>
 
-{if $image}
-<!-- Current image -->
-<p>
-<a href="{$r->makeUrl('/cropper/blog')}/{$id}"><img src="{$r->url}/data/blog/{$image}" alt="" border="0" /></a>
-</p>
+{if !$thread_pos}
 
-<p>
-<label for="unset_image">{$r->text.unset_image} :</label>
-<input type="checkbox" name="unset_image" value="1" {if $unset_image}checked="checked"{/if} /><br />
-</p>
+    {if $image}
+    <!-- Current image -->
+    <p>
+    <a href="{$r->makeUrl('/cropper/blog')}/{$id}"><img src="{$r->url}/data/blog/{$image}" alt="" border="0" /></a>
+    </p>
+
+    <p>
+    <label for="unset_image">{$r->text.unset_image} :</label>
+    <input type="checkbox" name="unset_image" value="1" {if $unset_image}checked="checked"{/if} /><br />
+    </p>
+    {/if}
+
+    <p>
+    {strip}
+        {capture name=error}
+        {validate id="image" message=$r->text.error_3}
+        {validate id="image2" message=$r->text.error_4}
+        {/capture}
+    {/strip}
+    <label for="image" {if $smarty.capture.error}class="error"{/if} >{$r->text.image} : </label>
+    <input type="file" name="image" class="imageFile" />
+    {$smarty.capture.error}
+    </p>
+
+    <p>
+    {$r->text.max_filesize}: {$r->text.upload_max_filesize}<br />
+    {$r->text.extensions}: {$r->text.supported}
+    </p>
+
 {/if}
-
-<p>
-{strip}
-    {capture name=error}
-    {validate id="image" message=$r->text.error_3}
-    {validate id="image2" message=$r->text.error_4}
-    {/capture}
-{/strip}
-<label for="image" {if $smarty.capture.error}class="error"{/if} >{$r->text.image} : </label>
-<input type="file" name="image" class="imageFile" />
-{$smarty.capture.error}
-</p>
-
-<p>
-{$r->text.max_filesize}: {$r->text.upload_max_filesize}<br />
-{$r->text.extensions}: {$r->text.supported}
-</p>
 
 <p>
 {strip}
@@ -82,10 +90,12 @@
 <textarea name="body" class="mceEditor">{$body}</textarea>
 </p>
 
-<p>
-<label for="draft">{$r->text.save_draft} :</label>
-<input type="checkbox" name="draft" value="1" {if $draft}checked="checked"{/if} />
-</p>
+{if !$thread_pos}
+    <p>
+    <label for="draft">{$r->text.save_draft} :</label>
+    <input type="checkbox" name="draft" value="1" {if $draft}checked="checked"{/if} />
+    </p>
+{/if}
 
 <p>
 {strip}
@@ -116,22 +126,26 @@
 {$smarty.capture.error}
 </p>
 
-<!-- Regular tags -->
-<p>
-<label for="tags" >{$r->text.tags_2} :</label>
-<input type="text" name="tags" value="{$tags}" class="widerInput" />
-</p>
+{if !$thread_pos}
 
-<!-- Bayesian categories -->
-{capture name=tags}
-    {foreach from=$r->getTrainerVectors() key=k item=v}
-    {$v}: <span class="htmlSelect">{html_options name='category_id[]' options=$r->getCategoriesByVector($k) selected=$category_id}</span>
-    {/foreach}
-{/capture}
+    <!-- Regular tags -->
+    <p>
+    <label for="tags" >{$r->text.tags_2} :</label>
+    <input type="text" name="tags" value="{$tags}" class="widerInput" />
+    </p>
 
-{if $smarty.capture.tags|trim}
-<p>{$smarty.capture.tags}</p>
-{if $linked}<p><em>{$r->text.linked_to}: {$linked}</em></p>{/if}
+    <!-- Bayesian categories -->
+    {capture name=tags}
+        {foreach from=$r->getTrainerVectors() key=k item=v}
+        {$v}: <span class="htmlSelect">{html_options name='category_id[]' options=$r->getCategoriesByVector($k) selected=$category_id}</span>
+        {/foreach}
+    {/capture}
+
+    {if $smarty.capture.tags|trim}
+    <p>{$smarty.capture.tags}</p>
+    {if $linked}<p><em>{$r->text.linked_to}: {$linked}</em></p>{/if}
+    {/if}
+
 {/if}
 
 
