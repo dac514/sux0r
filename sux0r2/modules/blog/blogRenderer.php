@@ -463,22 +463,27 @@ function insert_edit($params) {
 
     // Cache
     static $allowed = null;
-    if ($allowed === null) {
+    $allowed2 = true;
+    if ($allowed == null) {
         $u = new suxUser();
-        $m = new suxThreadedMessages();
         $allowed = true;
         if (!$u->isRoot()) {
             $access = $u->getAccess('blog');
-            if ($access < $GLOBALS['CONFIG']['ACCESS']['blog']['admin']) {
-                if ($access < $GLOBALS['CONFIG']['ACCESS']['blog']['publisher']) $allowed = false;
-                else {
-                    $tmp = $m->getMessage($params['id'], true);
-                    if ($tmp['users_id'] != $_SESSION['users_id']) $allowed = false;
-                }
-            }
+            if ($access < $GLOBALS['CONFIG']['ACCESS']['blog']['admin']) $allowed = false;
         }
     }
-    if (!$allowed) return null;
+    if (!$allowed) {
+        $m = new suxThreadedMessages();
+        if ($access < $GLOBALS['CONFIG']['ACCESS']['blog']['publisher']) {
+            $allowed = false;
+            $allowed2 = false;
+        }
+        else {
+            $tmp = $m->getMessage($params['id'], true);
+            if ($tmp['users_id'] != $_SESSION['users_id']) $allowed2 = false;
+        }
+        if (!$allowed2) return null;
+    }
 
     $url = suxFunct::makeUrl('/blog/edit/' . $params['id']);
     $text = suxFunct::gtext('blog');

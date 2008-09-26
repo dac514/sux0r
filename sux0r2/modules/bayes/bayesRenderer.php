@@ -453,7 +453,7 @@ class bayesRenderer extends suxRenderer {
         $html = "<div id='bStats'><ul>\n";
         foreach ($this->getSharedVectorsArray() as $key => $val) {
             $html .= "<li class='bStatsVec'>{$val['vector']}";
-            if (!$this->nb->isVectorOwner($key, $_SESSION['users_id'])) $html .= ' <em>(' . $this->text['shared'] . ')/em>';
+            if (!$this->nb->isVectorOwner($key, $_SESSION['users_id'])) $html .= ' <em>(' . $this->text['shared'] . ')</em>';
             $html .= ":</li>\n<ul>\n";
             foreach ($this->nb->getCategoriesByVector($key) as $key2 => $val2) {
                 $doc_count = $this->nb->getDocumentCountByCategory($key2);

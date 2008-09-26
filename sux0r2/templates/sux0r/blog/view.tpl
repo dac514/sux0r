@@ -136,18 +136,20 @@
 
                     <!-- Naive Baysian Classification -->
                     <div class="categoryContainer">
-
                         {$r->authorCategories($foo.id, $foo.users_id)}
                         {capture name=document}{$foo.title} {$foo.body_plaintext}{/capture}
                         {$r->genericBayesInterface($foo.id, 'messages', 'blog', $smarty.capture.document)}
-
                     </div>
+
+                    {if $r->isLoggedIn()}{insert name="edit" id=$foo.id}{/if}
 
                 {/capture}
 
                 <div id="suxBlog">
                 {$r->widget($foo.title, $smarty.capture.blog, $smarty.capture.blog_url, $smarty.capture.blog_img)}
                 </div>
+
+
 
 
             {/foreach}
@@ -168,6 +170,7 @@
                 <p><strong>{$foo.title}</strong> {$r->text.by|lower} <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a> {$r->text.on|lower} {$foo.published_on}</p>
                 <p>{$foo.body_html}</p>
                 <p><a href="{$r->makeUrl('/blog/reply')}/{$foo.id}">{$r->text.reply}</a></p>
+                {if $r->isLoggedIn()}{insert name="edit" id=$foo.id}{/if}
                 </div>
 
                 {literal}

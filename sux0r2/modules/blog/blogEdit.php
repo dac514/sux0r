@@ -85,16 +85,13 @@ class blogEdit {
         if (!$this->user->isRoot()) {
             $access = $this->user->getAccess($this->module);
             if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin']) {
-
                 if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['publisher'])
                     suxFunct::redirect(suxFunct::makeUrl('/blog'));
 
                 // Verfiy that we are allowed to edit this
                 if (filter_var($id, FILTER_VALIDATE_INT)) {
                     $tmp = $this->msg->getMessage($id, true);
-
-                    if ($tmp['thread_pos'] === 0) suxFunct::redirect(suxFunct::makeUrl('/blog'));
-                    elseif ($tmp['users_id'] != $_SESSION['users_id']) suxFunct::redirect(suxFunct::makeUrl('/blog'));
+                    if ($tmp['users_id'] != $_SESSION['users_id']) suxFunct::redirect(suxFunct::makeUrl('/blog'));
                 }
 
             }
@@ -141,6 +138,7 @@ class blogEdit {
             $blog['image'] = $tmp['image'];
             $blog['body'] = $tmp['body_html'];
             $blog['draft'] = $tmp['draft'];
+            $blog['thread_pos'] = $tmp['thread_pos'];
 
             // Get publish date
             // regex must match '2008-06-18 16:53:29' or '2008-06-18T16:53:29-04:00'
@@ -269,13 +267,8 @@ class blogEdit {
 
                 if (isset($clean['id']) && filter_var($clean['id'], FILTER_VALIDATE_INT)) {
                     // Verfiy that we are allowed to edit this
-                    if (filter_var($clean['id'], FILTER_VALIDATE_INT)) {
-
-                        $tmp = $this->msg->getMessage($clean['id'], true);
-                        if ($tmp['thread_pos'] === 0) suxFunct::redirect(suxFunct::makeUrl('/blog'));
-                        elseif ($tmp['users_id'] != $_SESSION['users_id']) suxFunct::redirect(suxFunct::makeUrl('/blog'));
-
-                    }
+                    $tmp = $this->msg->getMessage($clean['id'], true);
+                    if ($tmp['users_id'] != $_SESSION['users_id']) suxFunct::redirect(suxFunct::makeUrl('/blog'));
                 }
             }
         }
