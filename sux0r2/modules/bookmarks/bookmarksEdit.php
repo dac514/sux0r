@@ -206,6 +206,8 @@ class bookmarksEdit {
             $this->tpl->assign('Time_Second', date('s'));
         }
 
+        $this->r->title .= " | {$this->r->text['edit_2']}";
+
         // Template
         $this->tpl->display('edit.tpl');
 

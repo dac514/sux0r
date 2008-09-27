@@ -79,7 +79,8 @@ class userProfile {
             if (!isset($fullprofile['dob']) || $fullprofile['dob'] == '0000-00-00') unset($fullprofile['dob']); // NULL date
             $this->r->profile =& $fullprofile; // Assign
 
-            $this->r->title .= " | {$fullprofile['nickname']}"; // <title></title>
+            $this->r->title .= " | {$fullprofile['nickname']}";
+
             $this->r->minifeed = $this->user->getLog($this->minifeed_limit, 0, $this->profile['users_id']); // Minifeed array
 
         }

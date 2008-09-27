@@ -175,6 +175,8 @@ class photoalbumsEdit {
             $this->tpl->assign('Time_Second', date('s'));
         }
 
+        $this->r->title .= " | {$this->r->text['edit_2']}";
+
         // Template
         $this->tpl->display('edit.tpl');
 
@@ -244,6 +246,7 @@ class photoalbumsEdit {
 
         // Template
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
+        $this->r->title .= " | {$this->r->text['success']}";
 
         $this->tpl->display('success.tpl');
 

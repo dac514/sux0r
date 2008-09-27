@@ -126,6 +126,8 @@ class photoUpload  {
         $this->r->text['form_url'] = suxFunct::makeUrl('/photos/upload');
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
+        $this->r->title .= " | {$this->r->text['upload']}";
+
         // Template
         $this->tpl->display('upload.tpl');
 
@@ -245,6 +247,7 @@ class photoUpload  {
 
         // Template
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
+        $this->r->title .= " | {$this->r->text['success']}";
 
         $this->tpl->display('success.tpl');
 

@@ -240,6 +240,8 @@ class blogEdit {
             $this->tpl->assign('Time_Second', date('s'));
         }
 
+        $this->r->title .= " | {$this->r->text['edit_2']}";
+
         // Template
         $this->tpl->display('edit.tpl');
 
@@ -341,7 +343,7 @@ class blogEdit {
         // --------------------------------------------------------------------
 
         // Parse tags
-        $tags = suxTags::parse($clean['tags']);
+        $tags = @suxTags::parse($clean['tags']);
 
         // Save tags into database
         $tag_ids = array();

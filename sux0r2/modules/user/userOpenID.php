@@ -121,6 +121,7 @@ class userOpenID  {
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         $this->r->openids = $this->user->getOpenIDs($this->users_id);
+        $this->r->title .= " | {$this->r->text['edit_openid']}";
 
         // Display template
         $this->tpl->display('openid.tpl');
@@ -164,11 +165,7 @@ class userOpenID  {
     */
     function formSuccess() {
 
-        $this->r->bool['edit'] = true;
-        $this->r->text['back_url'] = suxFunct::getPreviousURL();
-
-        // Template
-        $this->tpl->display('success.tpl');
+        suxFunct::redirect(suxFunct::makeUrl("/user/openid/{$this->nickname}"));
 
     }
 

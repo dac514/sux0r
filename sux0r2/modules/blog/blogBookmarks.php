@@ -192,6 +192,8 @@ class blogBookmarks {
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog/bookmarks/' . $this->msg_id);
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
+        $this->r->title .= " | {$this->r->text['suggest_bookmarks']}  ";
+
         // Template
         $this->r->found_links = $this->found_links;
         $this->tpl->display('bookmarks.tpl');

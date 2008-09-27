@@ -17,6 +17,7 @@ $gtext['categorize'] = 'Categorize';
 $gtext['categorized_on'] = 'Categorized on';
 $gtext['delete'] = 'Delete';
 $gtext['documents'] = 'Documents';
+$gtext['edit_bayes'] = 'Edit Bayesian Categories';
 $gtext['error'] = 'Error';
 $gtext['filter1'] = 'Filtering by top';
 $gtext['filter2'] = 'Filtering by threshold';

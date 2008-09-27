@@ -4,11 +4,13 @@
 // Always uppercase the first word
 
 $gtext['access'] = 'Access';
+$gtext['activity_log'] = 'Activity Log';
 $gtext['admin'] = 'Administration';
 $gtext['back'] = 'Back to administration';
 $gtext['banned'] = 'Banned';
 $gtext['cancel'] = 'Cancel';
 $gtext['edit'] = 'Edit';
+$gtext['edit_access'] = 'Edit Access';
 $gtext['form_error'] = 'The form was not submitted, see errors below';
 $gtext['form_problem'] = 'The form was not submitted, please try again';
 $gtext['last_active'] = 'Last active';

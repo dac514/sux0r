@@ -160,6 +160,8 @@ class feedsEdit {
         $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/edit/' . $this->id);
         $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_skip);
 
+        $this->r->title .= " | {$this->r->text['edit_2']}";
+
         // Template
         $this->tpl->display('edit.tpl');
 

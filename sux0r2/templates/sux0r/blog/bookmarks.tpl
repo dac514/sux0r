@@ -12,7 +12,7 @@
 <div id="middle">
 
 <fieldset>
-<legend>{$r->text.bookmarks}</legend>
+<legend>{$r->text.suggest_bookmarks}</legend>
 
 <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />

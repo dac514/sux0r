@@ -97,9 +97,8 @@ class userRegisterOpenID  {
 
         }
 
-
         // Title
-        $this->r->title .= ' | Register';
+        $this->r->title .= " | {$this->r->text['openid_reg']}";
 
         // Urls
         $this->r->text['form_url'] = suxFunct::makeUrl('/user/register/openid');

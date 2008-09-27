@@ -120,6 +120,8 @@ class blogReply {
         $this->tpl->assign('parent_id', $this->parent['id']);
         $this->tpl->assign('parent', "{$this->parent['title']} \n\n {$this->parent['body_plaintext']}");
 
+        $this->r->title .= " | {$this->r->text['blog']} | {$this->r->text['reply']}";
+
         // Template
         $this->tpl->display('reply.tpl');
 

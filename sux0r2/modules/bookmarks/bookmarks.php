@@ -95,6 +95,8 @@ class bookmarks extends bayesShared {
         if ($this->alphasort) $sort['sort'] = 'alpha';
         $this->tpl->assign('sort', $sort);
 
+        $this->r->title .= " | {$this->r->text['bookmarks']} | $nickname";
+
         if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
@@ -178,6 +180,8 @@ class bookmarks extends bayesShared {
 
         $count = $this->countTaggedItems($this->tag_id);
 
+        $this->r->title .= " | {$this->r->text['bookmarks']} | {$this->r->text['tag']} | {$tag['tag']}";
+
         if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
@@ -260,6 +264,8 @@ class bookmarks extends bayesShared {
 
             $this->r->tc = $this->tags->tagcloud($query);
 
+            $this->r->title .= " | {$this->r->text['bookmarks']} | {$this->r->text['tag_cloud']}";
+
         }
 
         $this->tpl->display('cloud.tpl', $cache_id);
@@ -285,6 +291,8 @@ class bookmarks extends bayesShared {
         $sort = array();
         if ($this->alphasort) $sort['sort'] = 'alpha';
         $this->tpl->assign('sort', $sort);
+
+        $this->r->title .= " | {$this->r->text['bookmarks']}";
 
         if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 

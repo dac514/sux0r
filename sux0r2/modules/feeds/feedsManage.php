@@ -112,6 +112,8 @@ class feedsManage  {
             $this->r->subscriptions = $this->link->getLinks('link_rss_users', 'users', $_SESSION['users_id']);
         }
 
+        $this->r->title .= " | {$this->r->text['manage']}";
+
         $this->tpl->display('manage.tpl');
 
     }

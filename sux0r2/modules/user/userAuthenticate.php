@@ -79,6 +79,7 @@ class userAuthenticate {
 
             // Too many password failures?
             if ($this->user->maxPasswordFailures()) {
+                $this->r->title .= " | {$this->r->text['pw_failure']}";
                 $this->tpl->display('pw_failure.tpl');
                 die();
             }
@@ -106,6 +107,8 @@ class userAuthenticate {
             $this->user->log($_SESSION['users_id'], 'sux0r::userAuthenticate() logout', 1); // Log, private
             suxFunct::killSession();
         }
+
+        $this->r->title .= " | {$this->r->text['logout']}";
 
         // Template
         $this->tpl->display('logout.tpl');

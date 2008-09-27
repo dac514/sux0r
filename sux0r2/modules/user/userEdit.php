@@ -248,6 +248,10 @@ class userEdit {
 
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
+
+        if ($this->mode == 'edit') $this->r->title .= " | {$this->r->text['edit_profile']}";
+        else $this->r->title .= " | {$this->r->text['reg']}";
+
         // Template
         $this->tpl->display('edit.tpl');
 
@@ -360,6 +364,8 @@ class userEdit {
             $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         }
+
+        $this->r->title .= " | {$this->r->text['success']}";
 
         // Template
         $this->tpl->display('success.tpl');

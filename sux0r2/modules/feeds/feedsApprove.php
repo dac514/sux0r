@@ -107,6 +107,8 @@ class feedsApprove  {
         // Feeds
         $this->r->fp = $this->rss->getUnpublishedFeeds();
 
+        $this->r->title .= " | {$this->r->text['approve']}";
+
         $this->tpl->display('approve.tpl');
 
     }

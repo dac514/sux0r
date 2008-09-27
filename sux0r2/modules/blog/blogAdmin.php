@@ -127,6 +127,8 @@ class blogAdmin {
         }
 
 
+        $this->r->title .= " | {$this->r->text['blog']} | {$this->r->text['admin']}";
+
         // Display
         $this->tpl->display('admin.tpl');
 

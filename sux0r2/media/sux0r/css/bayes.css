@@ -24,6 +24,7 @@ fieldset {
 
 .active {
     height: 140px;
+    width: 640px;
     overflow: auto;
     border: 1px solid #cccccc;
     margin: 10px;

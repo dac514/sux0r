@@ -103,6 +103,8 @@ class feedsSuggest  {
         $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/suggest');
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
+        $this->r->title .= " | {$this->r->text['suggest']}";
+
         // Template
         $this->tpl->display('suggest.tpl');
 
@@ -135,6 +137,8 @@ class feedsSuggest  {
 
         // Template
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
+        $this->r->title .= " | {$this->r->text['success']}";
+
         $this->tpl->display('success.tpl');
 
     }

@@ -85,6 +85,8 @@ class feeds extends bayesShared {
         $this->r->text['form_url'] = suxFunct::makeUrl("/feeds/user/$nickname"); // Forum Url
         $cache_id = false;
 
+        $this->r->title .= " | {$this->r->text['feeds']} | $nickname";
+
         if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
@@ -150,9 +152,6 @@ class feeds extends bayesShared {
     */
     function listing($feeds_id = null) {
 
-        // Debug
-        // echo suxDB::prepareSearchQuery('rss_items', 'i am testing search queries');
-
         // Check if the user has any subscriptions
         $subscriptions = array();
         if (isset($_SESSION['users_id'])) {
@@ -163,6 +162,16 @@ class feeds extends bayesShared {
         // Assign stuff
         $this->r->text['form_url'] = suxFunct::makeUrl("/feeds/$feeds_id"); // Forum Url
         $cache_id = false;
+
+        // Title
+        if ($feeds_id) {
+            $this->r->title .= " | {$this->r->text['feed']}";
+            $tmp = $this->rss->getFeed($feeds_id);
+            if ($tmp) $this->r->title .= " | {$tmp['title']}";
+        }
+        else {
+            $this->r->title .= " | {$this->r->text['feeds']}";
+        }
 
         if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 

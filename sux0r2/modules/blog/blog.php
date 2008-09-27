@@ -88,6 +88,8 @@ class blog extends bayesShared {
         $u = $this->user->getUserByNickname($author);
         if(!$u) suxFunct::redirect(suxFunct::makeUrl('/blog'));
 
+        $this->r->title .= " | {$this->r->text['blog']} | $author";
+
         if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
@@ -165,6 +167,8 @@ class blog extends bayesShared {
         $this->tag_id = $tag_id; // Needs to be in externally accessible variable for filter()
 
         $count = $this->countTaggedItems($this->tag_id);
+
+        $this->r->title .= " | {$this->r->text['blog']} | {$this->r->text['tag']} | {$tag['tag']}";
 
         if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
@@ -253,6 +257,8 @@ class blog extends bayesShared {
             ";
             $this->r->tc = $this->tags->tagcloud($query);
 
+            $this->r->title .= " | {$this->r->text['blog']} | {$this->r->text['tag_cloud']} ";
+
         }
 
         $this->tpl->display('cloud.tpl', $cache_id);
@@ -273,6 +279,8 @@ class blog extends bayesShared {
         $this->cat_id = $cat_id; // Needs to be in externally accessible variable for filter()
 
         $count = $this->countCategorizedItems($this->cat_id);
+
+        $this->r->title .= " | {$this->r->text['blog']}  | {$this->r->text['category']} | {$c['category']}";
 
         if (list($vec_id, $cat_id2, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
@@ -352,6 +360,8 @@ class blog extends bayesShared {
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog/month/' . $date); // Form Url
         $cache_id = false;
 
+        $this->r->title .= " | {$this->r->text['blog']}  | " .  date('F Y', strtotime($date));
+
         if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
@@ -423,6 +433,8 @@ class blog extends bayesShared {
 
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog'); // Form Url
         $cache_id = false;
+
+        $this->r->title .= " | {$this->r->text['blog']}";
 
         if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
@@ -503,6 +515,8 @@ class blog extends bayesShared {
                 // This is not a blog post, redirect
                 suxFunct::redirect(suxFunct::makeUrl('/blog'));
             }
+
+            $this->r->title .= " | {$this->r->text['blog']} | {$fp[0]['title']}";
 
             $this->pager->setPages($this->msg->countThread($thread_id, 'blog'));
             $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/view/' . $thread_id));
