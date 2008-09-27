@@ -180,6 +180,12 @@ class societyEdit {
         if (empty($rel)) $this->soc->deleteRelationship($_SESSION['users_id'], $fid);
         else $this->soc->saveRelationship($_SESSION['users_id'], $fid, $rel);
 
+        // Clear approptiate template caches
+        $tpl = new suxTemplate('user');
+        $tpl->clear_cache('profile.tpl', $_SESSION['nickname']);
+        $u = $this->user->getUser($clean['users_id']);
+        $tpl->clear_cache('profile.tpl', $u['nickname']);
+
     }
 
 
@@ -187,6 +193,7 @@ class societyEdit {
     * The form was successfuly processed
     */
     function formSuccess() {
+
 
         suxFunct::redirect(suxFunct::getPreviousURL());
 

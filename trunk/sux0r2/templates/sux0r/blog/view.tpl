@@ -1,5 +1,8 @@
 {capture name=header}
 
+    {* RSS Feed *}
+    <link rel="alternate" type="application/rss+xml" title="{$r->sitename} | {$r->text.blog}" href="{$r->makeUrl('/blog/rss', null, true)}" />
+
     {if $r->isLoggedIn()}
         {$r->genericBayesInterfaceInit()}
     {else}
@@ -199,7 +202,7 @@
 	<tr>
 		<td colspan="2" style="vertical-align:bottom;">
 			<div id="footer">
-			Footer
+			{$r->copyright()}
 			</div>
 		</td>
 	</tr>

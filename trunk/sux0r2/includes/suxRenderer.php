@@ -37,6 +37,7 @@ class suxRenderer {
     public $url; // Site URL Prefix, e.g. /my/sux0r
     public $partition; // sux0r parition name
     public $title; // Variable to put between <title> tags
+    public $sitename; // Alternate title variable
     public $stylesheets; // Variable to put stylesheets/text
     public $header; // Variable to put header/text
     public $nav_selected; // Selected key for $nav array
@@ -75,6 +76,7 @@ class suxRenderer {
         // Defaults
         $this->url = $GLOBALS['CONFIG']['URL'];
         $this->title = $GLOBALS['CONFIG']['TITLE'];
+        $this->sitename = $GLOBALS['CONFIG']['TITLE'];
         $this->bool['analytics'] = true;
 
         // Stylesheets
@@ -385,6 +387,19 @@ class suxRenderer {
         </script>' . "\n";
 
         return $js;
+
+    }
+
+
+    /**
+    * Copyright
+    *
+    * @return string html
+    */
+    function copyright() {
+
+        $text = suxFunct::gtext();
+        return $text['copyright'];
 
     }
 

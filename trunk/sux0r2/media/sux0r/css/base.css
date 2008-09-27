@@ -141,6 +141,13 @@ input, select {
     font-weight: bold;
 }
 
+#footer {
+    margin-top: 10px;
+    padding: 5px;
+    text-align: center;
+    background-color: #eeeeee;
+}
+
 /* }}} */
 
 /* {{{ genericBayesInterface */

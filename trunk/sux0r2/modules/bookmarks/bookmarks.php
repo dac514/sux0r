@@ -1,7 +1,7 @@
 <?php
 
 /**
-* blog
+* bookmarks
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -345,6 +345,43 @@ class bookmarks extends bayesShared {
 
     }
 
+
+    /**
+    * Display RSS Feed
+    */
+    function rss() {
+
+        // Cache
+        $cache_id = 'rss';
+        $this->tpl->caching = 1;
+
+        if (!$this->tpl->is_cached('rss.tpl', $cache_id)) {
+
+            $fp = $this->bm->getBookmarks($this->pager->limit);
+            if ($fp) {
+
+                require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
+                $rss = new suxRSS();
+                $title = "{$this->r->title} | {$this->r->text['bookmarks']}";
+                $url = suxFunct::makeUrl('/bookmarks', null, true);
+                $rss->outputRSS($title, $url, null);
+
+                foreach($fp as $item) {
+                    $rss->addOutputItem($item['title'], $item['url'], $item['body_html']);
+                }
+
+                $this->tpl->assign('xml', $rss->saveXML());
+            }
+
+        }
+
+        // Template
+        header('Content-type: text/xml; charset=utf-8');
+        $this->tpl->display('rss.tpl', $cache_id);
+
+    }
+
+
     // -----------------------------------------------------------------------
     // Protected functions for $this->user()
     // -----------------------------------------------------------------------
@@ -399,9 +436,9 @@ class bookmarks extends bayesShared {
 
         // Count
         $count_query = "
-        SELECT COUNT(*) FROM messages
-        INNER JOIN link_messages_tags ON link_messages_tags.messages_id = messages.id
-        WHERE messages.thread_pos = 0 AND messages.blog = 1  AND messages.draft = 0 AND link_messages_tags.tags_id = ?
+        SELECT COUNT(*) FROM bookmarks
+        INNER JOIN link_bookmarks_tags ON link_bookmarks_tags.bookmarks_id = bookmarks.id
+        WHERE bookmarks.draft = 0 AND link_bookmarks_tags.tags_id = ?
         {$this->_dateSql()}
         ";
         $st = $db->prepare($count_query);

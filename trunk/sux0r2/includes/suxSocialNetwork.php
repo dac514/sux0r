@@ -56,7 +56,7 @@ class suxSocialNetwork {
 
 
     /**
-    * Get relationships
+    * Get one relationship
     *
     * @param int $uid users_id
     * @param int $fid the users_id of the friend
@@ -74,18 +74,70 @@ class suxSocialNetwork {
 
 
     /**
-    * Get relationships
+    * Count relationships
     *
-    * @param int $uid users_id
-    * @return array
+    * @param bool $unpub select un-published?
+    * @return int
     */
-    function getRelationships($uid) {
+    function countRelationships($uid) {
 
         if (!filter_var($uid, FILTER_VALIDATE_INT) || $uid < 1) throw new Exception('Invalid user id');
 
-        $st = $this->db->prepare("SELECT id, friend_users_id, relationship FROM {$this->db_table} WHERE users_id = ? ");
+        // SQL Query
+        $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE users_id = ? ";
+
+        // Execute
+        $st = $this->db->prepare($query);
+        $st->execute(array($uid));
+        return $st->fetchColumn();
+
+
+    }
+
+
+    /**
+    * Get relationships
+    *
+    * @param int $uid users_id
+    * @param int $limit sql limit value
+    * @param int $start sql start of limit value
+    * @return array
+    */
+    function getRelationships($uid, $limit = null, $start = 0) {
+
+        if (!filter_var($uid, FILTER_VALIDATE_INT) || $uid < 1) throw new Exception('Invalid user id');
+
+        $query = "SELECT id, friend_users_id, relationship FROM {$this->db_table} WHERE users_id = ? ";
+
+        // Limit
+        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        elseif ($limit) $query .= "LIMIT {$limit} ";
+
+        $st = $this->db->prepare($query);
         $st->execute(array($uid));
         return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+
+    /**
+    * Count relationships
+    *
+    * @param bool $unpub select un-published?
+    * @return int
+    */
+    function countStalkers($uid) {
+
+        if (!filter_var($uid, FILTER_VALIDATE_INT) || $uid < 1) throw new Exception('Invalid user id');
+
+        // SQL Query
+        $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE friend_users_id = ? ";
+
+        // Execute
+        $st = $this->db->prepare($query);
+        $st->execute(array($uid));
+        return $st->fetchColumn();
+
 
     }
 
@@ -94,13 +146,21 @@ class suxSocialNetwork {
     * Get stalkers
     *
     * @param int $uid users_id
+    * @param int $limit sql limit value
+    * @param int $start sql start of limit value
     * @return array
     */
-    function getStalkers($uid) {
+    function getStalkers($uid, $limit = null, $start = 0) {
 
         if (!filter_var($uid, FILTER_VALIDATE_INT) || $uid < 1) throw new Exception('Invalid user id');
 
-        $st = $this->db->prepare("SELECT id, users_id, relationship FROM {$this->db_table} WHERE friend_users_id = ? ");
+        $query = "SELECT id, users_id, relationship FROM {$this->db_table} WHERE friend_users_id = ? ";
+
+        // Limit
+        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        elseif ($limit) $query .= "LIMIT {$limit} ";
+
+        $st = $this->db->prepare($query);
         $st->execute(array($uid));
         return $st->fetchAll(PDO::FETCH_ASSOC);
 

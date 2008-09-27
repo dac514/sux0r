@@ -1,5 +1,8 @@
 {capture name=header}
 
+    {* RSS Feed *}
+    <link rel="alternate" type="application/rss+xml" title="{$r->sitename} | {$r->text.bookmarks}" href="{$r->makeUrl('/bookmarks/rss', null, true)}" />
+
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
 {include file=$r->xhtml_header}{/strip}
@@ -20,7 +23,7 @@
 </div>
 
 <div id="footer">
-    Footer
+    {$r->copyright()}
 </div>
 
 

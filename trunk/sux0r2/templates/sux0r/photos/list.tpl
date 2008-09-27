@@ -1,11 +1,16 @@
-{capture name=header}{literal}
+{capture name=header}
 
+    {* RSS Feed *}
+    <link rel="alternate" type="application/rss+xml" title="{$r->sitename} | {$r->text.photos}" href="{$r->makeUrl('/photos/rss', null, true)}" />
+
+    {literal}
     <style type="text/css">
         #leftside { width: 468px; margin-left: 2px; }
         #rightside { width: 468px; }
     </style>
+    {/literal}
 
-{/literal}{/capture}{strip}
+{/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
 {include file=$r->xhtml_header}{/strip}
 
@@ -101,7 +106,7 @@
 	<tr>
 		<td colspan="2" style="vertical-align:bottom;">
 			<div id="footer">
-			Footer
+			{$r->copyright()}
 			</div>
 		</td>
 	</tr>

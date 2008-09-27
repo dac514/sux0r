@@ -55,7 +55,7 @@ class userProfile {
         $this->r->text =& $this->gtext;
 
         // Profile
-        $this->profile = $this->user->getUserByNickname($nickname);
+        $this->profile = $this->user->getUserByNickname($nickname, true);
         unset($this->profile['password']); // We don't need this
 
         if (!$this->profile) suxFunct::redirect(suxFunct::getPreviousURL()); // Redirect for invalid profiles
@@ -68,24 +68,58 @@ class userProfile {
     */
     function displayProfile() {
 
-        $this->tpl->caching = 1; // Enable cache
         $cache_id = $this->profile['nickname'];
+        $this->tpl->caching = 1;
 
         if(!$this->tpl->is_cached('profile.tpl', $cache_id)) {
 
-            // Full Profile
-            $fullprofile = $this->user->getUser($this->profile['users_id'], true);
-            unset($fullprofile['password']); // We don't need this
-            if (!isset($fullprofile['dob']) || $fullprofile['dob'] == '0000-00-00') unset($fullprofile['dob']); // NULL date
-            $this->r->profile =& $fullprofile; // Assign
 
-            $this->r->title .= " | {$fullprofile['nickname']}";
+            if (!isset($this->profile['dob']) || $this->profile['dob'] == '0000-00-00') unset($this->profile['dob']); // NULL date
 
+            $this->r->profile =& $this->profile; // Assign
+            $this->r->title .= " | {$this->profile['nickname']}";
             $this->r->minifeed = $this->user->getLog($this->minifeed_limit, 0, $this->profile['users_id']); // Minifeed array
 
         }
 
         $this->tpl->display('profile.tpl', $cache_id);
+
+    }
+
+
+    /**
+    * Display RSS Feed
+    */
+    function rss() {
+
+        // Cache
+        $cache_id = $this->profile['nickname'] . '|rss';
+        $this->tpl->caching = 1;
+
+        if (!$this->tpl->is_cached('rss.tpl', $cache_id)) {
+
+            $fp = $this->user->getLog(($this->minifeed_limit * 5), 0, $this->profile['users_id']);
+            if ($fp) {
+
+                require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
+                $rss = new suxRSS();
+                $title = "{$this->r->title} | {$this->profile['nickname']}";
+                $url = suxFunct::makeUrl('/user/profile/' . $this->profile['nickname'], null, true);
+                $rss->outputRSS($title, $url, null);
+
+                foreach($fp as $item) {
+                    $url2 = $url . '#' . strtotime($item['ts']);
+                    $rss->addOutputItem($item['ts'], $url2, $item['body_html']);
+                }
+
+                $this->tpl->assign('xml', $rss->saveXML());
+            }
+
+        }
+
+        // Template
+        header('Content-type: text/xml; charset=utf-8');
+        $this->tpl->display('rss.tpl', $cache_id);
 
     }
 

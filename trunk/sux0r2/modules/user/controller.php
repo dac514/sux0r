@@ -176,6 +176,7 @@ function sux($action, $params = null) {
 
         include_once('userProfile.php');
 
+        // Nickname
         if (empty($params[0])) {
             if (isset($_SESSION['nickname'])) {
                 suxFunct::redirect(suxFunct::makeUrl('/user/profile/' . $_SESSION['nickname']));
@@ -186,9 +187,18 @@ function sux($action, $params = null) {
         }
 
         $u = new userProfile($params[0]);
-        $u->displayProfile();
+
+        if (!empty($params[1]) && $params[1] == 'rss') {
+            // RSS
+            $u->rss();
+        }
+        else {
+            // Profile
+            $u->displayProfile();
+        }
 
         break;
+
 
     default:
 
