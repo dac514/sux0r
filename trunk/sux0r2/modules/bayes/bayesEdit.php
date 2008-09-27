@@ -158,6 +158,8 @@ class bayesEdit {
         // Additional variables
         $this->r->text['form_url'] = suxFunct::makeUrl('/bayes');
 
+        $this->r->title .= " | {$this->r->text['edit_bayes']}";
+
         // Template
         $this->tpl->display('edit.tpl');
 

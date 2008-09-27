@@ -153,6 +153,8 @@ class cropper {
             $this->tpl->assign('form_url', suxFunct::makeUrl("/cropper/{$module}/{$id}"));
             $this->tpl->assign('prev_url', suxFunct::getPreviousURL('cropper'));
 
+            $this->r->title .= " | {$this->r->text['crop_image']}";
+
             $this->tpl->display('cropper.tpl');
 
         }

@@ -3,42 +3,39 @@
 // Always UTF-8
 // Always uppercase the first word
 
-$gtext['form_error'] = 'The form was not submitted, see errors below';
-$gtext['form_problem'] = 'The form was not submitted, please try again';
-$gtext['submit'] = 'Submit';
-$gtext['cancel'] = 'Cancel';
-$gtext['relationship'] = 'Relationship with';
-
-$gtext['friendship'] = 'Friendship';
-$gtext['contact'] = 'Contact';
 $gtext['acquaintance'] = 'Acquaintance';
-$gtext['friend'] = 'Friend';
-$gtext['none'] = 'None';
-$gtext['physical'] = 'Physical';
-$gtext['met'] = 'Met';
-$gtext['professional'] = 'Professional';
+$gtext['cancel'] = 'Cancel';
+$gtext['child'] = 'Child';
+$gtext['co_resident'] = 'Co-resident';
 $gtext['co_worker'] = 'Co-worker';
 $gtext['colleague'] = 'Colleague';
-$gtext['geographical'] = 'Geographical';
-$gtext['co_resident'] = 'Co-resident';
-$gtext['neighbor'] = 'Neighbor';
-$gtext['none'] = 'None';
-$gtext['family'] = 'Family';
-$gtext['child'] = 'Child';
-$gtext['parent'] = 'Parent';
-$gtext['sibling'] = 'Sibling';
-$gtext['spouse'] = 'Spouse';
-$gtext['kin'] = 'Kin';
-$gtext['none'] = 'None';
-$gtext['romantic'] = 'Romantic';
-$gtext['muse'] = 'Muse';
+$gtext['contact'] = 'Contact';
 $gtext['crush'] = 'Crush';
 $gtext['date'] = 'Date';
-$gtext['sweetheart'] = 'Sweetheart';
-
-$gtext['myself'] = 'Myself';
+$gtext['edit_relationship'] = 'Edit Relationship';
+$gtext['family'] = 'Family';
+$gtext['form_error'] = 'The form was not submitted, see errors below';
+$gtext['form_problem'] = 'The form was not submitted, please try again';
+$gtext['friend'] = 'Friend';
+$gtext['friendship'] = 'Friendship';
+$gtext['geographical'] = 'Geographical';
+$gtext['kin'] = 'Kin';
 $gtext['me'] = 'Me, and I';
-
-
+$gtext['met'] = 'Met';
+$gtext['muse'] = 'Muse';
+$gtext['myself'] = 'Myself';
+$gtext['neighbor'] = 'Neighbor';
+$gtext['none'] = 'None';
+$gtext['none'] = 'None';
+$gtext['none'] = 'None';
+$gtext['parent'] = 'Parent';
+$gtext['physical'] = 'Physical';
+$gtext['professional'] = 'Professional';
+$gtext['relationship'] = 'Relationship with';
+$gtext['romantic'] = 'Romantic';
+$gtext['sibling'] = 'Sibling';
+$gtext['spouse'] = 'Spouse';
+$gtext['submit'] = 'Submit';
+$gtext['sweetheart'] = 'Sweetheart';
 
 ?>

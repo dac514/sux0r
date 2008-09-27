@@ -125,6 +125,8 @@ class bookmarksAdmin {
             $this->r->fp[$key]['nickname'] = $u['nickname'];
         }
 
+        $this->r->title .= " | {$this->r->text['bookmarks']}  | {$this->r->text['admin']}";
+
         // Display
         $this->tpl->display('admin.tpl');
 

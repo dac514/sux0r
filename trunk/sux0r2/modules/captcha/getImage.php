@@ -7,7 +7,7 @@ require_once(dirname(__FILE__) . '/../../includes/symbionts/jpgraph/src/jpgraph_
 
 function getChallenge() {
 
-    // Note: Neither '0' (digit) or 'O' (letter) can be used to avoid confusion
+    // Note: Don't use '0' (digit) or 'O' (letter) to avoid confusion
     $possible = '123456789ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijklmnpqrstuvwxyz';
     $code = '';
     for ($i = 0; $i < 5; ++$i) {

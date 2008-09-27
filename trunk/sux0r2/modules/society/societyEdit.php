@@ -141,7 +141,7 @@ class societyEdit {
         $this->tpl->assign('users_id', $this->users_id);
         $this->r->text['form_url'] = suxFunct::makeUrl("/society/relationship/{$this->nickname}");
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
-
+        $this->r->title .= " | {$this->r->text['edit_relationship']}";
 
         // Display template
         $this->tpl->display('relationship.tpl');

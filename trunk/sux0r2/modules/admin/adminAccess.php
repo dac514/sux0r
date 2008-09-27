@@ -155,6 +155,8 @@ class adminAccess {
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
         if ($this->users_id == $_SESSION['users_id']) $this->tpl->assign('disabled', 'disabled="disabled"');
 
+        $this->r->title .= " | {$this->r->text['edit_access']}";
+
         // Display template
         $this->tpl->display('access.tpl');
 

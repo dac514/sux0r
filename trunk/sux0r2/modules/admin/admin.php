@@ -94,6 +94,8 @@ class admin {
         $inverse = ($sort == 'ts' && $order != 'desc') ? 'desc' : 'asc';
         $this->tpl->assign('ts_sort_url', suxFunct::makeUrl('/admin', array('sort' => 'ts', 'order' => $inverse)));
 
+        $this->r->title .= " | {$this->r->text['admin']}";
+
         $this->tpl->display('userlist.tpl');
 
     }

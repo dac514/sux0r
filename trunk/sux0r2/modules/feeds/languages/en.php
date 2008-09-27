@@ -14,6 +14,7 @@ $gtext['cancel'] = 'Cancel';
 $gtext['delete'] = 'Delete';
 $gtext['draft'] = 'Draft';
 $gtext['edit'] = 'Edit';
+$gtext['edit_2'] = 'Edit RSS Feed';
 $gtext['feed'] = 'Feed';
 $gtext['feeds'] = 'RSS Feeds';
 $gtext['form_error'] = 'The form was not submitted, see errors below';

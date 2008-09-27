@@ -93,6 +93,8 @@ class photos {
             if ($this->r->pho == false || !count($this->r->pho))
                 $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
+            $this->r->title .= " | {$this->r->text['photos']}";
+
         }
 
         $this->tpl->display('list.tpl', $cache_id);
@@ -124,6 +126,7 @@ class photos {
                 $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
             else {
                 $this->r->album = $this->photo->getAlbum($id);
+                $this->r->title .= " | {$this->r->text['photos']} | {$this->r->album['title']}";
             }
 
         }
@@ -180,6 +183,8 @@ class photos {
                 $this->r->text['prev_id'] = $prev_id;
                 $this->r->text['next_id'] = $next_id;
                 $this->r->text['back_url'] = suxFunct::makeUrl('photos/album/' . $this->r->pho['photoalbums_id'], array('page' => $page));
+
+                $this->r->title .= " | {$this->r->text['photos']} | {$this->r->album['title']}";
 
             }
 

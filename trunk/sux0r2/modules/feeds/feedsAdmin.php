@@ -126,6 +126,8 @@ class feedsAdmin {
             $this->r->fp[$key]['feeds_count'] = $this->rss->countItems($val['id']);
         }
 
+        $this->r->title .= " | {$this->r->text['feeds']} | {$this->r->text['admin']}";
+
         // Display
         $this->tpl->display('admin.tpl');
 

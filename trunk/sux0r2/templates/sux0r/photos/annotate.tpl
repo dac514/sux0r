@@ -13,7 +13,7 @@
 <div id="middle">
 
 <fieldset>
-<legend>{$r->text.annotate}</legend>
+<legend>{$r->text.annotate_2}</legend>
 
 <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />
@@ -66,7 +66,7 @@
     {/literal}
 
     <div class="clearboth"></div>
-    
+
     </div>
 
 {/foreach}

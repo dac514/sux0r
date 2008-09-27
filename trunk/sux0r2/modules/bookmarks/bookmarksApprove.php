@@ -107,6 +107,8 @@ class bookmarksApprove  {
         // bookmarks
         $this->r->fp = $this->bm->getUnpublishedBookmarks();
 
+        $this->r->title .= " | {$this->r->text['approve']}";
+
         $this->tpl->display('approve.tpl');
 
     }

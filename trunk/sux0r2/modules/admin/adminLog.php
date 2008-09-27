@@ -97,6 +97,8 @@ class adminLog {
         $this->tpl->assign('ts_sort_url', suxFunct::makeUrl("/admin/log/{$this->nickname}", array('order' => $inverse)));
         $this->tpl->assign('nickname', $this->nickname);
 
+        $this->r->title .= " | {$this->r->text['activity_log']}";
+
         $this->tpl->display('log.tpl');
 
     }

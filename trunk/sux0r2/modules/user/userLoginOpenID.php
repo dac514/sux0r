@@ -49,11 +49,13 @@ class userLoginOpenID extends userRegisterOpenID {
             suxFunct::redirect(suxFunct::makeUrl('/user/profile/' . $_SESSION['nickname']));
 
         }
-        elseif ($this->user->maxPasswordFailures()) {
-
+        else{
             // Too many password failures?
-            $this->tpl->display('pw_failure.tpl');
-            die();
+            if ($this->user->maxPasswordFailures()) {
+                $this->r->title .= " | {$this->r->text['pw_failure']}";
+                $this->tpl->display('pw_failure.tpl');
+                die();
+            }
 
         }
 
@@ -86,6 +88,8 @@ class userLoginOpenID extends userRegisterOpenID {
         // Urls
         $this->r->text['form_url'] = suxFunct::makeUrl('/user/login/openid');
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
+
+        $this->r->title .= " | {$this->r->text['openid_login']}";
 
         // Template
         $this->tpl->display('login_openid.tpl');

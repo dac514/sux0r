@@ -149,6 +149,8 @@ class photosEdit {
         $this->r->text['form_url'] = suxFunct::makeUrl('/photos/album/annotate/' . $this->id, array('page' => $_GET['page']));
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
+        $this->r->title .= " | {$this->r->text['annotate_2']}";
+
         $this->tpl->display('annotate.tpl');
 
     }
@@ -191,6 +193,8 @@ class photosEdit {
 
         // Template
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
+        $this->r->title .= " | {$this->r->text['success']}";
+
         $this->tpl->display('success.tpl');
 
     }

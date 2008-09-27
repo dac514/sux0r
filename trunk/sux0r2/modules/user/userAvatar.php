@@ -134,6 +134,7 @@ class userAvatar  {
         $this->r->text['supported'] =  $this->extensions;
         $this->r->text['form_url'] = suxFunct::makeUrl("/user/avatar/{$this->nickname}");
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
+        $this->r->title .= " | {$this->r->text['edit_avatar']}";
 
         // Display template
         $this->tpl->display('avatar.tpl');
@@ -198,6 +199,7 @@ class userAvatar  {
 
         $this->r->bool['edit'] = true;
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
+        $this->r->title .= " | {$this->r->text['success']}";
 
         // Template
         $this->tpl->display('success.tpl');

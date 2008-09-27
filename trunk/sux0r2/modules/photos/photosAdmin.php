@@ -127,6 +127,8 @@ class photosAdmin {
         }
 
 
+        $this->r->title .= " | {$this->r->text['photos']} | {$this->r->text['admin']}";
+
         // Display
         $this->tpl->display('admin.tpl');
 

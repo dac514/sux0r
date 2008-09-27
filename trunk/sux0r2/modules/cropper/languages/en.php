@@ -5,6 +5,7 @@
 
 $gtext['cancel'] = 'Cancel';
 $gtext['cancelled'] = 'Cancelled!';
+$gtext['crop_image'] = 'Crop Image';
 $gtext['form_error'] = 'The form was not submitted, see errors below';
 $gtext['form_problem'] = 'The form was not submitted, please try again';
 $gtext['height'] = 'height';
