@@ -541,6 +541,44 @@ class blog extends bayesShared {
     }
 
 
+    /**
+    * Display RSS Feed
+    */
+    function rss() {
+
+        // Cache
+        $cache_id = 'rss';
+        $this->tpl->caching = 1;
+
+        if (!$this->tpl->is_cached('rss.tpl', $cache_id)) {
+
+            $fp = $this->blogs($this->msg->getFirstPosts('blog', $this->pager->limit));
+            if ($fp) {
+
+                require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
+                $rss = new suxRSS();
+                $title = "{$this->r->title} | {$this->r->text['blog']}";
+                $url = suxFunct::makeUrl('/blog', null, true);
+                $rss->outputRSS($title, $url, null);
+
+                foreach($fp as $item) {
+                    $url = suxFunct::makeUrl('/blog/view/' . $item['thread_id'], null, true);
+                    $rss->addOutputItem($item['title'], $url, $item['body_html']);
+                }
+
+                $this->tpl->assign('xml', $rss->saveXML());
+            }
+
+        }
+
+        // Template
+        header('Content-type: text/xml; charset=utf-8');
+        $this->tpl->display('rss.tpl', $cache_id);
+
+    }
+
+
+
 
     /**
     * @param array threaded messages

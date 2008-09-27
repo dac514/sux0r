@@ -26,6 +26,7 @@
 */
 
 require_once(dirname(__FILE__) . '/suxLink.php');
+require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
 
 class suxRSS extends DOMDocument {
 
@@ -103,8 +104,6 @@ class suxRSS extends DOMDocument {
     * Cron, fetch RSS items and insert them into the database
     */
     function cron() {
-
-        require_once('suxHtml2UTF8.php');
 
         $q = "SELECT id, url FROM {$this->db_feeds} WHERE draft = 0 ";
         $st = $this->db->query($q);
@@ -268,7 +267,6 @@ class suxRSS extends DOMDocument {
         $clean['body_html'] = suxFunct::sanitizeHtml($url['body'], $trusted);
 
         // Convert and copy body to UTF-8 plaintext
-        require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
         $converter = new suxHtml2UTF8($clean['body_html']);
         $clean['body_plaintext']  = $converter->getText();
 

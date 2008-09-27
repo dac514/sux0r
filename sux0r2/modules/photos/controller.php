@@ -170,12 +170,24 @@ function sux($action, $params = null) {
 
         break;
 
+    case 'rss':
+
+        // --------------------------------------------------------------------
+        // RSS
+        // --------------------------------------------------------------------
+
+        include_once('photos.php');
+        $photos = new photos();
+        $photos->rss();
+        break;
+
 
     default:
 
         include_once('photos.php');
         $photos = new photos();
         $photos->listing();
+        break;
 
     }
 

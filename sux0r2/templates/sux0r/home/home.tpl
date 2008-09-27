@@ -71,7 +71,7 @@
 	<tr>
 		<td colspan="2" style="vertical-align:bottom;">
 			<div id="footer">
-			Footer
+			{$r->copyright()}
 			</div>
 		</td>
 	</tr>

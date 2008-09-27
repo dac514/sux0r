@@ -151,6 +151,18 @@ function sux($action, $params = null) {
         break;
 
 
+    case 'rss':
+
+        // --------------------------------------------------------------------
+        // RSS
+        // --------------------------------------------------------------------
+
+        include_once('bookmarks.php');
+        $bm = new bookmarks();
+        $bm->rss();
+        break;
+
+
     default:
 
         // --------------------------------------------------------------------
@@ -159,9 +171,7 @@ function sux($action, $params = null) {
 
         include_once('bookmarks.php');
         $bm = new bookmarks();
-
         $bm->listing($alphasort);
-
         break;
 
     }

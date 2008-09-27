@@ -139,7 +139,7 @@
 		<td style="vertical-align:top;">
 			<div id="rightside">
 
-            <h2><a href="#todo" class="noBg"><img class="rssIcon" src="{$r->url}/media/{$r->partition}/assets/rss_icon.png" alt="RSS Feed" /></a> {$r->text.minifeed}</h2>
+            <h2><a href="{$r->makeURL('/user/profile', null, true)}/{$r->profile.nickname}/rss" class="noBg"><img class="rssIcon" src="{$r->url}/media/{$r->partition}/assets/rss_icon.png" alt="RSS Feed" /></a> {$r->text.minifeed}</h2>
             <ul class="miniFeed">
             {foreach from=$r->minifeed item=foo}
             <li><em><strong>{$foo.ts}</strong></em> <br />{$foo.body_html}</li>
@@ -154,7 +154,7 @@
 	<tr>
 		<td colspan="3" style="vertical-align:bottom;">
 			<div id="footer">
-			Footer
+			{$r->copyright()}
 			</div>
 		</td>
 	</tr>

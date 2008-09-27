@@ -1,5 +1,8 @@
 {capture name=header}
 
+    {* RSS Feed *}
+    <link rel="alternate" type="application/rss+xml" title="{$r->sitename} | {$r->text.photos}" href="{$r->makeUrl('/photos/rss', null, true)}" />
+
     {literal}
     <script type="text/javascript">
     // <![CDATA[
@@ -85,7 +88,7 @@
 	<tr>
 		<td colspan="2" style="vertical-align:bottom;">
 			<div id="footer">
-			Footer
+			{$r->copyright()}
 			</div>
 		</td>
 	</tr>
