@@ -334,8 +334,27 @@ class blogEdit {
 
             // New
             $clean['id'] = $this->msg->saveMessage($_SESSION['users_id'], $msg, null, true);
+            $tmp = $this->msg->getMessage($clean['id']); // Is actually published?
+            if ($tmp) {
+                // Log message
+                $log = '';
+                $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
+                $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
+                $log .= mb_strtolower($this->r->text['posted_blog']);
+                $url = suxFunct::makeUrl("/blog/view/{$tmp['thread_id']}", null, true);
+                $log .= " <a href='$url'>{$tmp['title']}</a>";
+
+                // Log
+                $this->user->log($log);
+
+                // Clear cache
+                $tpl = new suxTemplate('user');
+                $tpl->clear_cache('profile.tpl', $_SESSION['nickname']);
+            }
 
         }
+
+        $this->user->log("sux0r::blogEdit()  messages_id: {$clean['id']}", $_SESSION['users_id'], 1); // Private
 
 
         // --------------------------------------------------------------------

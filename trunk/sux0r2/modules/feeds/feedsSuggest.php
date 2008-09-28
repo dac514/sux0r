@@ -125,7 +125,9 @@ class feedsSuggest  {
         $rss['body'] = isset($feed['description']) ? $feed['description'] : '';
         $rss['draft'] = 1;
 
-        $this->rss->saveFeed($_SESSION['users_id'], $rss);
+        $id = $this->rss->saveFeed($_SESSION['users_id'], $rss);
+
+        $this->user->log("sux0r::feedsSuggest() feeds_id: {$id}", $_SESSION['users_id'], 1); // Private
 
     }
 

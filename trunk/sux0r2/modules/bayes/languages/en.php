@@ -44,8 +44,11 @@ $gtext['remove_cat'] = 'Remove category';
 $gtext['remove_doc'] = 'Untrain document';
 $gtext['remove_vec'] = 'Remove vector';
 $gtext['scores'] = 'Scores';
+$gtext['search'] = 'Keywords';
 $gtext['share'] = 'Share';
+$gtext['share_category'] = 'Shared a bayesian category with';
 $gtext['share_vec'] = 'Share vector';
+$gtext['shared'] = 'Shared';
 $gtext['stats'] = 'Stats';
 $gtext['synopsis'] = 'Synopsis';
 $gtext['synopsis_1'] = 'A vector is a list of categories. You must have at least two categories in a vector to do <a href="http://en.wikipedia.org/wiki/Naive_Bayes_classifier">Bayesian classification</a>.';
@@ -60,11 +63,10 @@ $gtext['train'] = 'Train';
 $gtext['trainer'] = 'Allow user to train documents?';
 $gtext['trainer'] = 'Trainer';
 $gtext['unshare'] = 'Unshare';
+$gtext['unshare_category'] = 'Unshared a bayesian category with';
 $gtext['user'] = 'User';
 $gtext['vector'] = 'Vector';
 $gtext['vectors'] = 'Vectors';
 $gtext['with'] = 'With friend';
-$gtext['search'] = 'Keywords';
-$gtext['shared'] = 'Shared';
 
 ?>

@@ -138,6 +138,10 @@ foreach ($tmp as $val) {
 $doc_id = $nb->trainDocument($body, $cat_id);
 $suxLink->saveLink($link_table, 'bayes_documents', $doc_id, $link_table2, $id);
 
+
+// Log
+$user->log("sux0r::bayes::train() doc_id: $doc_id, cat_id: $cat_id", $_SESSION['users_id'], 1); // Private
+
 // ---------------------------------------------------------------------------
 // Clear template caches
 // ---------------------------------------------------------------------------

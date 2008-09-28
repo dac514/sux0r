@@ -197,7 +197,7 @@ class adminAccess {
         }
 
         // Log, private
-        $this->user->log($_SESSION['users_id'], "sux0r::adminAccess() edited users_id: {$this->users_id} ", 1);
+        $this->user->log("sux0r::adminAccess() users_id: {$this->users_id} ", $_SESSION['users_id'], 1);
 
     }
 

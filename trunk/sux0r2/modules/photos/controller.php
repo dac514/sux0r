@@ -70,8 +70,8 @@ function sux($action, $params = null) {
         // Upload
         // --------------------------------------------------------------------
 
-        include_once('photoUpload.php');
-        $edit = new photoUpload(@$params[0]);
+        include_once('photosUpload.php');
+        $edit = new photosUpload(@$params[0]);
 
         if ($edit->formValidate($_POST)) {
             $edit->formProcess($_POST);

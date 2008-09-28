@@ -124,7 +124,9 @@ class bookmarksSuggest  {
         $bookmark['body'] = isset($bm['description']) ? $bm['description'] : '';
         $bookmark['draft'] = 1;
 
-        $this->bm->saveBookmark($_SESSION['users_id'], $bookmark);
+        $id = $this->bm->saveBookmark($_SESSION['users_id'], $bookmark);
+
+        $this->user->log("sux0r::bookmarksSuggest() bookmarks_id: {$id}", $_SESSION['users_id'], 1); // Private
 
     }
 

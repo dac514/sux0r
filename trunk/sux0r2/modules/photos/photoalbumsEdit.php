@@ -231,7 +231,29 @@ class photoalbumsEdit {
         // Put $album in database
         // --------------------------------------------------------------------
 
-        $this->photo->saveAlbum($_SESSION['users_id'], $album);
+        $id = $this->photo->saveAlbum($_SESSION['users_id'], $album);
+
+        $this->user->log("sux0r::photoalbumsEdit() photoalbums_id: $id", $_SESSION['users_id'], 1); // Private
+
+        if(!isset($clean['id'])) {
+            $tmp = $this->photo->getAlbum($id); // Is actually published?
+            if ($tmp) {
+                // Log message
+                $log = '';
+                $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
+                $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
+                $log .= mb_strtolower($this->r->text['created_album']);
+                $url = suxFunct::makeUrl("/photos/album/{$tmp['id']}", null, true);
+                $log .= " <a href='$url'>{$tmp['title']}</a>";
+
+                // Log
+                $this->user->log($log);
+
+                // Clear cache
+                $tpl = new suxTemplate('user');
+                $tpl->clear_cache('profile.tpl', $_SESSION['nickname']);
+            }
+        }
 
     }
 

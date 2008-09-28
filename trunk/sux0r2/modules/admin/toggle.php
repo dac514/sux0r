@@ -41,7 +41,7 @@ $flag = $u->toggleLogPrivateFlag($id);
 if ($flag) $image = 'lock1.gif';
 
 // Log, private
-$u->log($_SESSION['users_id'], "sux0r::adminLog() toggled id: $id", 1);
+$u->log("sux0r::admin::toggle() users_log_id: $id", $_SESSION['users_id'], 1);
 
 echo trim($image);
 exit;

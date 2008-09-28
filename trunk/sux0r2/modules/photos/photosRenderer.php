@@ -177,7 +177,7 @@ function insert_editLinks($params) {
 
     $new = suxFunct::makeUrl('/photos/album/edit/');
     $html = '';
-    $html .= "<a href='{$new}'>{$text['new_album']} &raquo;</a><br />";
+    $html .= "<a href='{$new}'>{$text['new']} &raquo;</a><br />";
 
     return $html;
 

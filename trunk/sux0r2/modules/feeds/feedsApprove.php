@@ -123,8 +123,15 @@ class feedsApprove  {
 
         if (isset($clean['feeds'])) foreach ($clean['feeds'] as $key => $val) {
 
-            if ($val == 1) $this->rss->approveFeed($key);
-            else $this->rss->deleteFeed($key);
+            if ($val == 1) {
+                $this->rss->approveFeed($key);
+                $this->user->log("sux0r::feedsApprove() feeds_id: {$key}", $_SESSION['users_id'], 1); // Private
+
+            }
+            else {
+                $this->rss->deleteFeed($key);
+                $this->user->log("sux0r::feedsApprove() deleted feeds_id: {$key}", $_SESSION['users_id'], 1); // Private
+            }
 
         }
 

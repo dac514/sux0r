@@ -233,6 +233,8 @@ class cropper {
         imagedestroy($image);
         imagedestroy($thumb);
 
+        $this->user->log("sux0r::cropper()  $table, id: {$clean['id']}", $_SESSION['users_id'], 1); // Private
+
     }
 
     function formSuccess() {

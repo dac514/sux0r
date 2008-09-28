@@ -674,11 +674,11 @@ class suxUser {
     /**
     * Write something to the users_log table
     *
-    * @param int $users_id
     * @param string $body_html
+    * @param int $users_id
     * @param int $private
     */
-    function log($users_id = null, $body_html, $private = 0) {
+    function log($body_html, $users_id = null, $private = 0) {
 
         // This user
         if (!$users_id) {

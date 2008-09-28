@@ -325,14 +325,29 @@ class userEdit {
         // --------------------------------------------------------------------
 
         if (isset($id) && filter_var($id, FILTER_VALIDATE_INT)) {
+
             $this->user->saveUser($clean, $id);
-            if ($id == $_SESSION['users_id']) $tmp = 'edited self';
-            else $tmp = "edited users_id: {$id}";
-            $this->user->log($_SESSION['users_id'], "sux0r::userEdit() $tmp", 1); // Log, private
+
+            // Log
+            if ($id == $_SESSION['users_id']) {
+                // Self edit
+                $log = '';
+                $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
+                $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
+                $log .= mb_strtolower($this->r->text['changed_profile']);
+                $this->user->log($log);
+            }
+            else {
+                // Administrator edit
+                $this->user->log("sux0r::userEdit() users_id: {$id}", $_SESSION['users_id'], 1); // Log, private
+            }
+
         }
         else {
+
             $id = $this->user->saveUser($clean);
-            $this->user->log($id, "sux0r::userEdit() new user: {$id} ", 1); // Log, private
+            $this->user->log("sux0r::userEdit() new users_id: {$id} ", $id, 1); // Log, private
+
         }
 
         // --------------------------------------------------------------------

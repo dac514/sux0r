@@ -13,6 +13,7 @@ $gtext['body'] = 'Body';
 $gtext['cancel'] = 'Cancel';
 $gtext['clickme'] = 'Click here to edit this text';
 $gtext['cover'] = 'Album Cover';
+$gtext['created_album'] = 'Created the photoalbum';
 $gtext['date'] = 'Date';
 $gtext['delete'] = 'Delete';
 $gtext['draft'] = 'Draft';
@@ -29,8 +30,8 @@ $gtext['form_error_6'] = 'Invalid date';
 $gtext['form_error_7'] = 'Invalid time';
 $gtext['form_problem'] = 'The form was not submitted, please try again';
 $gtext['max_filesize'] = 'Maximum file size';
+$gtext['new'] = 'New Photoalbum';
 $gtext['next'] = 'Next';
-$gtext['new_album'] = 'New album';
 $gtext['ok'] = 'Ok';
 $gtext['photos'] = 'Photos';
 $gtext['prev'] = 'Previous';
@@ -45,5 +46,6 @@ $gtext['time'] = 'Time';
 $gtext['title'] = 'Title';
 $gtext['upload'] = 'Upload image(s)';
 $gtext['upload_2'] = 'Upload';
+$gtext['uploaded_images'] = 'Upload image(s) to the photoalbum ';
 
 ?>

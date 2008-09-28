@@ -200,7 +200,9 @@ class feedsEdit {
         // Put $feed in database
         // --------------------------------------------------------------------
 
-        $this->rss->saveFeed($_SESSION['users_id'], $feed);
+        $id = $this->rss->saveFeed($_SESSION['users_id'], $feed);
+
+        $this->user->log("sux0r::feedsEdit() feeds_id: {$id}", $_SESSION['users_id'], 1); // Private
 
 
     }

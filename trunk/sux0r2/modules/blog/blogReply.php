@@ -139,7 +139,29 @@ class blogReply {
         $msg['title'] = $clean['title'];
         $msg['body'] = $clean['body'];
 
-        $this->msg->saveMessage($_SESSION['users_id'], $msg, $clean['parent_id']);
+        $id = $this->msg->saveMessage($_SESSION['users_id'], $msg, $clean['parent_id']);
+
+        $this->user->log("sux0r::blogReply()  messages_id: {$id}", $_SESSION['users_id'], 1); // Private
+
+        $tmp = $this->msg->getMessage($clean['parent_id']); // Is actually published?
+        if ($tmp) {
+            // Log message
+            $log = '';
+            $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
+            $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
+            $log .= mb_strtolower($this->r->text['replied_blog']);
+            $url = suxFunct::makeUrl("/blog/view/{$tmp['thread_id']}", null, true);
+            $log .= " <a href='$url'>{$tmp['title']}</a>";
+
+            // Log
+            $this->user->log($log);
+
+            // Clear cache
+            $tpl = new suxTemplate('user');
+            $tpl->clear_cache('profile.tpl', $_SESSION['nickname']);
+
+        }
+
 
     }
 
