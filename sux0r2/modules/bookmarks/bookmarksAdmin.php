@@ -148,8 +148,11 @@ class bookmarksAdmin {
         }
 
         if (isset($clean['delete'])) foreach($clean['delete'] as $id => $val) {
-                $this->bm->deleteBookmark($id);
+            $this->bm->deleteBookmark($id);
+            $this->user->log("sux0r::bookmarksAdmin() deleted bookmarks_id: {$id}", $_SESSION['users_id'], 1); // Private
         }
+
+        $this->tpl->clear_all_cache();
 
     }
 

@@ -12,7 +12,7 @@
 <div id="middle">
 
 <fieldset>
-<legend>{$r->text.edit_2}</legend>
+<legend>{if $id}{$r->text.edit_2}{else}{$r->text.new}{/if}</legend>
 
 <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />

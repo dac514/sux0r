@@ -61,7 +61,7 @@ class userAuthenticate {
 
         if ($this->user->loginCheck() || !$this->user->loginCheck() && $this->user->authenticate()) {
 
-            $this->user->log($_SESSION['users_id'], 'sux0r::userAuthenticate() login', 1); // Log, private
+            $this->user->log("sux0r::userAuthenticate() login [IP: {$_SERVER['REMOTE_ADDR']}]", $_SESSION['users_id'], 1); // Log, private
 
             // Redirect to previous page
             if (isset($_SESSION['breadcrumbs'])) foreach($_SESSION['breadcrumbs'] as $val) {
@@ -104,7 +104,7 @@ class userAuthenticate {
         // Don't kill session (with password failures, perhaps?) if the
         // user isn't actually logged in.
         if ($this->user->loginCheck()) {
-            $this->user->log($_SESSION['users_id'], 'sux0r::userAuthenticate() logout', 1); // Log, private
+            $this->user->log('sux0r::userAuthenticate() logout', $_SESSION['users_id'], 1); // Log, private
             suxFunct::killSession();
         }
 

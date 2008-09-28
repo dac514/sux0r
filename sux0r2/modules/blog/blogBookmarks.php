@@ -224,6 +224,9 @@ class blogBookmarks {
         }
 
 
+        $this->user->log("sux0r::blogBookmarks()", $_SESSION['users_id'], 1); // Private
+
+
     }
 
 

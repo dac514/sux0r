@@ -150,7 +150,10 @@ class feedsAdmin {
 
         if (isset($clean['delete'])) foreach($clean['delete'] as $id => $val) {
                 $this->rss->deleteFeed($id);
+                $this->user->log("sux0r::feedsAdmin() deleted feeds_id: {$id}", $_SESSION['users_id'], 1); // Private
         }
+
+        $this->tpl->clear_all_cache();
 
     }
 

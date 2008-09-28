@@ -154,8 +154,11 @@ class blogAdmin {
             $tmp = $this->msg->getFirstPost($thread_id, true);
             if ($tmp && $tmp['blog'] == 1 && $tmp['thread_pos'] == 0) {
                 $this->msg->deleteThread($thread_id);
+                $this->user->log("sux0r::blogAdmin() deleted thread_id: {$thread_id}", $_SESSION['users_id'], 1); // Private
             }
         }
+
+        $this->tpl->clear_all_cache();
 
     }
 

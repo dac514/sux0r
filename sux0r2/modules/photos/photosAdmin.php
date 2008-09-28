@@ -150,8 +150,11 @@ class photosAdmin {
         }
 
         if (isset($clean['delete'])) foreach($clean['delete'] as $id => $val) {
-                $this->photos->deleteAlbum($id);
+            $this->photos->deleteAlbum($id);
+            $this->user->log("sux0r::photosAdmin() deleted photoalbums_id: $id", $_SESSION['users_id'], 1); // Private
         }
+
+        $this->tpl->clear_all_cache();
 
     }
 

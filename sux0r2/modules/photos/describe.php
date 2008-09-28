@@ -39,6 +39,9 @@ try {
     $tmp = $photo->getPhoto($clean['id']);
     if ($tmp['description']) echo $tmp['description'];
     else echo $text['clickme'];
+
+    $user->log("sux0r::photos::describe() photos_id: {$clean['id']}", $_SESSION['users_id'], 1); // Private
+
 }
 catch (Exception $e) {
     echo $e->getMessage();

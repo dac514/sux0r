@@ -196,6 +196,7 @@ class bayesEdit {
 
             $this->nb->addVectorWithUser($clean['vector'], $_SESSION['users_id']);
             unset($clean['vector']);
+            $this->user->log("sux0r::bayesEdit() addvec", $_SESSION['users_id'], 1); // Private
             break;
 
         case 'remvec':
@@ -204,6 +205,7 @@ class bayesEdit {
             if ($this->nb->isVectorOwner($clean['vector_id'], $_SESSION['users_id'])) {
                 // Remove vector
                 $this->nb->removeVector($clean['vector_id']);
+                $this->user->log("sux0r::bayesEdit() remvec id: {$clean['vector_id']}", $_SESSION['users_id'], 1); // Private
             }
             unset($clean['vector_id']);
             break;
@@ -213,6 +215,7 @@ class bayesEdit {
             // Security check
             if ($this->nb->isVectorOwner($clean['vector_id'], $_SESSION['users_id'])) {
                 $this->nb->addCategory($clean['category'], $clean['vector_id']);
+                $this->user->log("sux0r::bayesEdit() addcat", $_SESSION['users_id'], 1); // Private
             }
             unset($clean['category']);
             break;
@@ -223,6 +226,7 @@ class bayesEdit {
             if ($this->nb->isCategoryOwner($clean['category_id'], $_SESSION['users_id'])) {
                 // Remove category
                 $this->nb->removeCategory($clean['category_id']);
+                $this->user->log("sux0r::bayesEdit() remcat id: {$clean['category_id']}", $_SESSION['users_id'], 1); // Private
             }
             unset($clean['category_id']);
             break;
@@ -232,6 +236,7 @@ class bayesEdit {
             // Security check
             if ($this->nb->isCategoryTrainer($clean['category_id'], $_SESSION['users_id'])) {
                 $this->nb->trainDocument($clean['document'], $clean['category_id']);
+                $this->user->log("sux0r::bayesEdit() adddoc", $_SESSION['users_id'], 1); // Private
             }
             unset($clean['document']);
             break;
@@ -242,6 +247,7 @@ class bayesEdit {
             if ($this->nb->isDocumentOwner($clean['document_id'], $_SESSION['users_id'])) {
                 // Remove document
                 $this->nb->untrainDocument($clean['document_id']);
+                $this->user->log("sux0r::bayesEdit() remdoc id: {$clean['document_id']}", $_SESSION['users_id'], 1); // Private
             }
             unset($clean['document_id']);
             break;
@@ -254,19 +260,63 @@ class bayesEdit {
                 if (!isset($clean['owner'])) $clean['owner'] = 0;
                 $this->nb->shareVector($clean['users_id'], $clean['vector_id'], $clean['trainer'], $clean['owner']);
 
-                // TODO
-                // clear caches for $clean['users_id'] (we need to get their partition, too)
+                // clear caches for $clean['users_id'] (TODO: we need to get their partition, too)
+                $u = $this->user->getUser($clean['users_id']);
+                foreach ($this->caches as $module) {
+                    $tpl = new suxTemplate($module);
+                    $tpl->clear_cache(null, "{$u['nickname']}");
+                }
+
+                // Log message
+                $log = '';
+                $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
+                $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
+                $log .= mb_strtolower($this->r->text['share_category']);
+                $url = suxFunct::makeUrl("/user/profile/{$u['nickname']}", null, true);
+                $log .= " <a href='$url'>{$u['nickname']}</a>";
+
+                // Log
+                $this->user->log($log);
+                $this->user->log($log, $u['users_id']);
+
+                // Clear caches
+                $tpl = new suxTemplate('user');
+                $tpl->clear_cache('profile.tpl', $_SESSION['nickname']);
+                $tpl->clear_cache('profile.tpl', $u['nickname']);
+
             }
             break;
 
         case 'unsharevec' :
 
+            $tpl = new suxTemplate('user');
             foreach ($clean['unshare'] as $val) {
                 foreach ($val as $vectors_id => $users_id) {
                     $this->nb->unshareVector($users_id, $vectors_id);
 
-                    // TODO,
-                    // clear caches for $users_id (we need to get their partition, too)
+                    $u = $this->user->getUser($users_id);
+
+                    // clear caches for $clean['users_id'] (TODO: we need to get their partition, too)
+                    foreach ($this->caches as $module) {
+                        $tpl = new suxTemplate($module);
+                        $tpl->clear_cache(null, "{$u['nickname']}");
+                    }
+
+                    // Log message
+                    $log = '';
+                    $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
+                    $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
+                    $log .= mb_strtolower($this->r->text['unshare_category']);
+                    $url = suxFunct::makeUrl("/user/profile/{$u['nickname']}", null, true);
+                    $log .= " <a href='$url'>{$u['nickname']}</a>";
+
+                    // Log
+                    $this->user->log($log);
+                    $this->user->log($log, $u['users_id']);
+
+                    $tpl->clear_cache('profile.tpl', $_SESSION['nickname']);
+                    $tpl->clear_cache('profile.tpl', $u['nickname']);
+
                 }
             }
             break;

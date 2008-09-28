@@ -186,6 +186,21 @@ class userAvatar  {
         // Update $user into database
         if ($user['image'] !== false) $this->user->saveImage($user['image'], $user['users_id']);
 
+        // Log
+        if ($user['users_id'] == $_SESSION['users_id']) {
+            // Self edit
+            $log = '';
+            $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
+            $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
+            $log .= mb_strtolower($this->r->text['changed_avatar']);
+            $this->user->log($log);
+        }
+        else {
+            // Administrator edit
+            $this->user->log("sux0r::userAvatar() users_id: {$user['users_id']}", $_SESSION['users_id'], 1); // Log, private
+        }
+
+
         // Clear approptiate template caches
         $this->tpl->clear_cache('profile.tpl', $this->nickname);
 

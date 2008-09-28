@@ -6,6 +6,7 @@
 $gtext['acquaintance'] = 'Acquaintance';
 $gtext['cancel'] = 'Cancel';
 $gtext['child'] = 'Child';
+$gtext['change_relation'] = 'Edited their relationship with';
 $gtext['co_resident'] = 'Co-resident';
 $gtext['co_worker'] = 'Co-worker';
 $gtext['colleague'] = 'Colleague';
@@ -13,6 +14,7 @@ $gtext['contact'] = 'Contact';
 $gtext['crush'] = 'Crush';
 $gtext['date'] = 'Date';
 $gtext['edit_relationship'] = 'Edit Relationship';
+$gtext['end_relation'] = 'terminated their relationship with';
 $gtext['family'] = 'Family';
 $gtext['form_error'] = 'The form was not submitted, see errors below';
 $gtext['form_problem'] = 'The form was not submitted, please try again';

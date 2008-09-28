@@ -53,7 +53,7 @@ $query = "SELECT COUNT(*) FROM {$link} WHERE {$col}_id = ? AND users_id = ? ";
 $st = $db->prepare($query);
 $st->execute(array($id, $_SESSION['users_id']));
 
-if ($st->fetchColumn() > 0) {    
+if ($st->fetchColumn() > 0) {
     // Delete
     $query = "DELETE FROM {$link} WHERE {$col}_id = ? AND users_id = ? ";
     $st = $db->prepare($query);
@@ -66,6 +66,10 @@ else {
     $suxLink->saveLink($link, 'users', $_SESSION['users_id'], $col, $id);
     $image = $tpl->get_config_vars('imgSubscribed');
 }
+
+// Log
+$user = new suxUser();
+$user->log("sux0r::feeds::toggle() bookmarks_id: {$id}", $_SESSION['users_id'], 1); // Private
 
 // ---------------------------------------------------------------------------
 // Clear template caches

@@ -160,6 +160,8 @@ class societyEdit {
 
         $fid = $clean['users_id'];
         $rel = '';
+        $u = $this->user->getUser($clean['users_id']);
+        $log = '';
 
         // Don't let the user establish a relationship with themselves
         if ($fid == $_SESSION['users_id'])
@@ -177,13 +179,37 @@ class societyEdit {
 
         // Set relationship
         $rel = trim($rel);
-        if (empty($rel)) $this->soc->deleteRelationship($_SESSION['users_id'], $fid);
-        else $this->soc->saveRelationship($_SESSION['users_id'], $fid, $rel);
+        if (empty($rel)) {
 
-        // Clear approptiate template caches
+            $this->soc->deleteRelationship($_SESSION['users_id'], $fid);
+
+            // Log message
+            $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
+            $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
+            $log .= mb_strtolower($this->r->text['end_relation']);
+            $url = suxFunct::makeUrl("/user/profile/{$u['nickname']}", null, true);
+            $log .= " <a href='$url'>{$u['nickname']}</a>";
+
+        }
+        else {
+            $this->soc->saveRelationship($_SESSION['users_id'], $fid, $rel);
+
+            // Log message
+            $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
+            $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
+            $log .= mb_strtolower($this->r->text['change_relation']);
+            $url = suxFunct::makeUrl("/user/profile/{$u['nickname']}", null, true);
+            $log .= " <a href='$url'>{$u['nickname']}</a>";
+
+        }
+
+        // Log
+        $this->user->log($log);
+        $this->user->log($log, $u['users_id']);
+
+        // Clear caches
         $tpl = new suxTemplate('user');
         $tpl->clear_cache('profile.tpl', $_SESSION['nickname']);
-        $u = $this->user->getUser($clean['users_id']);
         $tpl->clear_cache('profile.tpl', $u['nickname']);
 
     }
@@ -193,7 +219,6 @@ class societyEdit {
     * The form was successfuly processed
     */
     function formSuccess() {
-
 
         suxFunct::redirect(suxFunct::getPreviousURL());
 

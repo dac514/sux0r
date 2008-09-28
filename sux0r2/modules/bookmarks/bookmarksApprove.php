@@ -123,8 +123,14 @@ class bookmarksApprove  {
 
         if (isset($clean['bookmarks'])) foreach ($clean['bookmarks'] as $key => $val) {
 
-            if ($val == 1) $this->bm->approveBookmark($key);
-            else $this->bm->deleteBookmark($key);
+            if ($val == 1) {
+                $this->bm->approveBookmark($key);
+                $this->user->log("sux0r::bookmarksApprove() bookmarks_id: {$key}", $_SESSION['users_id'], 1); // Private
+            }
+            else {
+                $this->bm->deleteBookmark($key);
+                $this->user->log("sux0r::bookmarksApprove() deleted bookmarks_id: {$key}", $_SESSION['users_id'], 1); // Private
+            }
 
         }
 

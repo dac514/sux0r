@@ -1,7 +1,7 @@
 <?php
 
 /**
-* photoUpload
+* photosUpload
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -27,7 +27,7 @@ require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('photosRenderer.php');
 
-class photoUpload  {
+class photosUpload  {
 
     // Variables
     public $gtext = array();
@@ -196,7 +196,7 @@ class photoUpload  {
             // ----------------------------------------------------------------
 
             $tmp_dir = $GLOBALS['CONFIG']['PATH'] . '/temporary/' . md5(uniqid(mt_rand(), true));
-            if (!is_dir($tmp_dir) && !mkdir($tmp_dir, 0777, true))  throw new Exception('Can\'t create temp dir ' . $tmp_dir);
+            if (!is_dir($tmp_dir) && !mkdir($tmp_dir, 0777, true)) throw new Exception('Can\'t create temp dir ' . $tmp_dir);
 
             if (suxFunct::unzip($_FILES['image']['tmp_name'], $tmp_dir)) {
 
@@ -236,6 +236,25 @@ class photoUpload  {
 
         }
 
+        $this->user->log("sux0r::photosUpload() photoalbums_id: {$photo['photoalbums_id']}", $_SESSION['users_id'], 1); // Private
+
+        $tmp = $this->photo->getAlbum($photo['photoalbums_id']); // Is actually published?
+        if ($tmp) {
+            // Log message
+            $log = '';
+            $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
+            $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
+            $log .= mb_strtolower($this->r->text['uploaded_images']);
+            $url = suxFunct::makeUrl("/photos/album/{$tmp['id']}", null, true);
+            $log .= " <a href='$url'>{$tmp['title']}</a>";
+
+            // Log
+            $this->user->log($log);
+
+            // Clear cache
+            $tpl = new suxTemplate('user');
+            $tpl->clear_cache('profile.tpl', $_SESSION['nickname']);
+        }
 
     }
 

@@ -223,6 +223,16 @@ class bookmarksEdit {
     function formProcess(&$clean) {
 
         // --------------------------------------------------------------------
+        // Security check
+        // --------------------------------------------------------------------
+
+        if (!$this->user->isRoot()) {
+            $access = $this->user->getAccess($this->module);
+            if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin'])
+                suxFunct::redirect(suxFunct::makeUrl('/bookmarks'));
+        }
+
+        // --------------------------------------------------------------------
         // Sanity check
         // --------------------------------------------------------------------
 
@@ -247,7 +257,6 @@ class bookmarksEdit {
         // --------------------------------------------------------------------
 
         if (isset($clean['id']) && filter_var($clean['id'], FILTER_VALIDATE_INT) && $clean['id'] > 0) {
-            // TODO: Check to see if this user is allowed to modify this bookmark
             $bookmark['id'] = $clean['id'];
         }
 
@@ -277,6 +286,8 @@ class bookmarksEdit {
         foreach ($tag_ids as $id) {
             $this->link->saveLink('link_bookmarks_tags', 'bookmarks', $clean['id'], 'tags', $id);
         }
+
+        $this->user->log("sux0r::bookmarksEdit() bookmarks_id: {$clean['id']}", $_SESSION['users_id'], 1); // Private
 
 
     }

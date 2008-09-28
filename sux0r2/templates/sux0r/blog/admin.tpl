@@ -43,6 +43,7 @@
         <tr>
             <td>{$r->text.title|lower}</td>
             <td>{$r->text.published|lower}</td>
+            <td>{$r->text.thread|lower}</td>
             <td>{$r->text.comments|lower}</td>
             <td>{$r->text.draft|lower}</td>
             <td>{$r->text.author|lower}</td>
@@ -56,6 +57,7 @@
     <tr style="background-color:{cycle values="#ffffff,#eeeeee"}">
         <td style="text-align: left;"><a href="{$r->makeUrl('/blog/edit')}/{$foo.id}">{$foo.title}</a></td>
         <td>{$foo.published_on}</td>
+        <td>{$foo.thread_id}</td>
         <td>{if $foo.comment_count}{$foo.comment_count}{/if}</td>
         <td>{if $foo.draft}x{/if}</td>
         <td><a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a></td>

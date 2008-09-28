@@ -131,6 +131,8 @@ class feedsManage  {
         if (isset($clean['subscriptions']) && count($clean['subscriptions']))
             $this->link->saveLink('link_rss_users', 'users', $_SESSION['users_id'], 'rss_feeds', $clean['subscriptions']);
 
+        $this->user->log("sux0r::feedManage()", $_SESSION['users_id'], 1); // Private
+
     }
 
 
