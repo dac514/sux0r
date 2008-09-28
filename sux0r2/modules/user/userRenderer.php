@@ -297,5 +297,45 @@ function insert_editMenu($params) {
 
 }
 
+/**
+* Render lament
+*
+* @param array $params smarty {insert} parameters
+* @return string html
+*/
+function insert_lament($params) {
+
+    if (empty($params['users_id'])) return null;
+    if (empty($_SESSION['users_id'])) return null;
+    if ($_SESSION['users_id'] != $params['users_id']) return null;
+
+    $text = suxFunct::gtext('user');
+    $url = suxFunct::makeUrl('/') . '/modules/user/lament.php';
+
+    $html = "
+        <div id='lament'>{$text['lament']}</div>
+        <script type='text/javascript'>
+        // <![CDATA[
+        new Ajax.InPlaceEditor(
+            'lament',
+            '$url', {
+                rows: 4,
+                clickToEditText: '{$text['lament']}',
+                savingText: '{$text['saving']}...',
+                okControl: 'button',
+                okText: '{$text['ok']}',
+                cancelControl: 'button',
+                cancelText: '{$text['cancel']}',
+                callback: function(form, value) {
+                    return 'lament='+encodeURIComponent(value)
+                }
+            });
+        // ]]>
+        </script>
+    ";
+
+    return $html;
+
+}
 
 ?>

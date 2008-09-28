@@ -12,6 +12,11 @@
     width: 250px;
 }
 
+#lament {
+    border: 1px dashed #cccccc;
+    padding: 4px;
+}
+
 img.rssIcon {
     border: 0;
     vertical-align: top;
@@ -61,5 +66,14 @@ input.imageFile {
     width: auto;
     border: 0;
     background: none;
+}
+
+form.inplaceeditor-form textarea, form.inplaceeditor-form input[type="text"] {
+    width: 100%;
+    background-color: #eeeeee;
+}
+
+form.inplaceeditor-form input[type="submit"] {
+  width: auto;
 }
 
