@@ -82,7 +82,7 @@ class suxFunct {
     */
     static function sanitizeHtml($html, $trusted = -1) {
 
-        if ($trusted) {
+        if ($trusted > 0) {
             // Allow all (*) except -script and -iframe
             $config = array(
                 'elements' => '*-script-iframe',

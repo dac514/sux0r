@@ -214,9 +214,9 @@ function insert_editLinks2($params) {
     $text = suxFunct::gtext('photos');
 
     $html = '';
-    $html .= "<a href='{$edit}'>{$text['edit']} &raquo;</a><br />";
+    $html .= "<a href='{$edit}'>{$text['edit_2']} &raquo;</a><br />";
     $html .= "<a href='{$upload}'>{$text['upload']} &raquo;</a><br />";
-    $html .= "<a href='{$annotate}'>{$text['annotate']} &raquo;</a>";
+    $html .= "<a href='{$annotate}'>{$text['annotate_2']} &raquo;</a>";
 
     return $html;
 

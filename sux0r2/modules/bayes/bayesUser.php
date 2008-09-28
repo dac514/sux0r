@@ -691,7 +691,7 @@ abstract class bayesShared {
         $timeout_max = ini_get('max_execution_time') * 0.333333;
         if ($timeout_max > 30) $timeout_max = 30;
 
-        $search = trim($search);
+        $search = trim(strip_tags($search));
         if ($search) {
             $rawtokens = mb_split("\W", $search);
             foreach ($rawtokens as $k => $v) {

@@ -240,7 +240,8 @@ class blogEdit {
             $this->tpl->assign('Time_Second', date('s'));
         }
 
-        $this->r->title .= " | {$this->r->text['edit_2']}";
+        if ($this->id) $this->r->title .= " | {$this->r->text['edit_2']}";
+        else $this->r->title .= " | {$this->r->text['new']}";
 
         // Template
         $this->tpl->display('edit.tpl');
