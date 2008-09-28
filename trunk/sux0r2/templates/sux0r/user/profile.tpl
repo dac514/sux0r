@@ -1,6 +1,12 @@
 {capture name=header}
 
-<link rel="openid.server" href="{$r->makeUrl('/openid', null, true)}" />
+    {* OpenID *}
+    <link rel="openid.server" href="{$r->makeUrl('/openid', null, true)}" />
+
+    {if $r->isLoggedIn()}
+    <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
+    <script src="{$r->url}/includes/symbionts/scriptaculous/src/scriptaculous.js" type="text/javascript"></script>
+    {/if}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
@@ -138,8 +144,10 @@
 		</td>
 		<td style="vertical-align:top;">
 			<div id="rightside">
-
             <h2><a href="{$r->makeURL('/user/profile', null, true)}/{$r->profile.nickname}/rss" class="noBg"><img class="rssIcon" src="{$r->url}/media/{$r->partition}/assets/rss_icon.png" alt="RSS Feed" /></a> {$r->text.minifeed}</h2>
+
+            {insert name="lament" users_id=$r->profile.users_id}
+
             <ul class="miniFeed">
             {foreach from=$r->minifeed item=foo}
             <li><em><strong>{$foo.ts}</strong></em> <br />{$foo.body_html}</li>

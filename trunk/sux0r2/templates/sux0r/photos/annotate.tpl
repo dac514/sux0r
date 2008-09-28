@@ -48,7 +48,7 @@
     // <![CDATA[
     new Ajax.InPlaceEditor(
         'editme{/literal}{$foo.id}{literal}',
-        '/sux0r2/modules/photos/describe.php', {
+        '{/literal}{$r->makeURL('/')}{literal}/modules/photos/describe.php', {
             rows: 5,
             cols: 80,
             clickToEditText: '{/literal}{$r->text.clickme}{literal}',
@@ -58,7 +58,7 @@
             cancelControl: 'button',
             cancelText: '{/literal}{$r->text.cancel}{literal}',
             callback: function(form, value) {
-                return 'id={/literal}{$foo.id}{literal}&description='+escape(value)
+                return 'id={/literal}{$foo.id}{literal}&description='+encodeURIComponent(value)
             }
         });
     // ]]>
