@@ -30,15 +30,14 @@
 
     </form>
 
-    {if isset($threshold)}
-        <div class="nbfFilteredBy" >{$r->text.filter2}</div>
-    {elseif $filter}
-        <div class="nbfFilteredBy" >{$r->text.filter1}</div>
-    {/if}
-
     <div id="nbSearchBox">{$r->text.search} : <input type="text" id='nbSearch' name='search' value='{$search}' /></div>
 
     <div class='clearboth'></div>
 
-</div>
+    {if isset($threshold)}
+        <div class="nbfFilteredBy" >{$r->text.filter2}{if $search}, {$r->text.search|lower}: {$search}{/if}</div>
+    {elseif $filter}
+        <div class="nbfFilteredBy" >{$r->text.filter1}{if $search}, {$r->text.search|lower}: {$search}{/if}</div>
+    {/if}
 
+</div>

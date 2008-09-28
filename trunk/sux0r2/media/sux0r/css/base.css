@@ -3,6 +3,7 @@
 body {
     margin: 0px;
     background-color: #cccccc;
+    background-image: url('../assets/bg.gif');
 }
 
 body, tr, td {
@@ -28,7 +29,7 @@ a.noBg {
 
 #encompasser {
     width: 98%;
-    margin: 1%;
+    margin: 0px;
 }
 
 #proselytizer {
@@ -36,29 +37,37 @@ a.noBg {
     margin-left: auto;
     margin-right: auto;
     background-color: #ffffff;
-    border: 3px solid #dddddd;
+    border: 4px solid #dddddd;
+    margin-top: 1%;
+    margin-bottom: 1%;
 }
 
 #middle {
-    padding: 10px;
+    margin: 10px;
 }
 
 table#proselytizer {
     border-collapse: collapse;
     text-align: center;
+    width: 972px;
+    border: 4px solid #ffffff;
 }
 
 #header h1 {
     float: left;
-    margin: 10px;
-    padding-top: 10px;
+    margin-top: 10px;
+    margin-left: 10px;
+    background-image: url('../assets/people.gif');
+    background-position: left;
+    background-repeat: no-repeat;
+    padding-left: 40px;
+    font-size: 22px;
 }
 
 #header .userinfo {
     float: right;
-    margin-top: 3px;
-    margin-right: 5px;
-
+    margin-top: 10px;
+    margin-right: 10px;
 }
 
 #header img.openidLogin {
@@ -66,6 +75,15 @@ table#proselytizer {
     vertical-align: middle;
 }
 
+#footer {
+    margin-top: 10px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    text-align: center;
+    background-color: #cccccc;
+    background-image: url('../assets/bg3.jpg');
+    border: 1px solid #dddddd;
+}
 
 fieldset {
     border: 1px solid #000000;
@@ -87,6 +105,10 @@ input, select {
     border: 1px solid #333333;
 }
 
+input[type="submit"], input[type="button"] {
+    border: 2px outset #cccccc;
+    width: auto;
+}
 
 .button {
     color: #ffffff;
@@ -124,6 +146,7 @@ input, select {
     background-color: yellow;
 }
 
+
 /* }}} */
 
 
@@ -139,14 +162,6 @@ input, select {
 
 .pager .currentPage {
     font-weight: bold;
-}
-
-#footer {
-    margin-top: 10px;
-    padding-bottom: 20px;
-    padding-top: 20px;
-    text-align: center;
-    background-color: #eeeeee;
 }
 
 /* }}} */
@@ -184,7 +199,7 @@ input, select {
 }
 
 #nbSearch {
-    width: 80px;
+    width: 100px;
 }
 
 #nbfCategoriesForm, #nbfSliderForm {
@@ -224,9 +239,6 @@ input, select {
 }
 
 .nbfFilteredBy {
-    float: left;
-    margin-left: 0.5em;
-    padding-top: 0.5em;
     color: red;
 }
 
@@ -333,6 +345,7 @@ input, select {
 }
 
 .widget h2 {
+    background-image: url('../assets/bg2.jpg');
     background-color: #cccccc;
     color: #000000;
     margin: 0 0 20px 0;
