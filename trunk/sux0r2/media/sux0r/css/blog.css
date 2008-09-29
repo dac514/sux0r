@@ -23,8 +23,10 @@
     padding-right: 4px;
 }
 
-#archives {
-
+.sideListTitle {
+    font-weight: bold;
+    background-color: pink;
+    padding: 3px;
 }
 
 .flair img {
@@ -75,18 +77,11 @@ label {
     color: red;
 }
 
-/* Revert */
-
-.htmlSelect select {
-    width: auto;
+.tagcloud{
+    text-align: center;
+    padding: 20px;
 }
 
-input.imageFile {
-    width: auto;
-    border: 0;
-    background: none;
-}
-
-input.revert, select.revert {
-    width: auto;
+.blogItem {
+    margin-bottom: 2em;
 }

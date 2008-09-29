@@ -9,6 +9,12 @@
 
 <div id="proselytizer">
 
+{* Header *}
+<div id="header">
+    {insert name="userInfo"}
+    <div class='clearboth'></div>
+</div>
+
 {* Content *}
 <div id="middle">
 
@@ -27,17 +33,17 @@
 {if $r->pho}
 {foreach from=$r->pho item=foo}
 
-    <div style="border: 1px dashed #ccc; padding: 10px; margin: 10px;">
+    <div class="annotateItem" style="">
 
     <div style="float:left;">
     <a href="{$r->makeUrl('/cropper/photos')}/{$foo.id}"><img src="{$r->url}/data/photos/{$foo.image}?time={php}echo time();{/php}" alt="" width="{#thumbnailWidth#}" height="{#thumbnailHeight#}" border="0" /></a>
     </div>
 
-    <div style="float:left; margin-left: 10px; width: 600px;">
+    <div class="annotateItemDesc" style="float:left;">
         <div id="editme{$foo.id}">{if $foo.description}{$foo.description}{else}{$r->text.clickme}{/if}</div>
     </div>
 
-    <div style="float:right;text-align: right; width: 180px">
+    <div class="annotateItemOptions" style="float:right;">
         <input type="radio" name="cover" id="cover{$foo.id}" value="{$foo.id}" {if $cover == $foo.id}checked="checked"{/if} /><label for="cover{$foo.id}">{$r->text.cover}</label> |
         <input type="checkbox" name="delete[]" id="delete{$foo.id}" value="{$foo.id}" /><label for="delete{$foo.id}">{$r->text.delete}</label>
     </div>
@@ -71,16 +77,16 @@
 
 {/foreach}
 
-<div style="margin: 10px;">
-    <p>{$r->text.pager}</p>
-    <p>
-    <input type="button" class="button" value="{$r->text.cancel}" onclick="document.location='{$r->text.back_url}';" />
-    <input type="submit" class="button" value="{$r->text.submit}" />
-    </p>
-</div>
 
+{$r->text.pager}
+{else}
+    <p>{$r->text.no_photos}...</p>
 {/if}
 
+<p>
+<input type="button" class="button" value="{$r->text.cancel}" onclick="document.location='{$r->text.back_url}';" />
+<input type="submit" class="button" value="{$r->text.submit}" />
+</p>
 
 
 </form>

@@ -54,7 +54,7 @@
 
                 {if $r->sidelist}
                 <div class="sidelist">
-                <p>{$r->text.sidelist}</p>
+                <p class="sideListTitle">{$r->text.sidelist}</p>
                 <ul>
                     {foreach from=$r->sidelist item=foo}
                         <li><a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">{$foo.title}</a></li>
@@ -89,9 +89,10 @@
 
                 <ul>
                 <li><a href="{$r->makeUrl('/blog/tag/cloud')}">{$r->text.tag_cloud}</a></li>
+                {insert name="adminLi"}
                 </ul>
 
-                {if $r->recent()}
+                {if $r->recent() && !$r->sidelist}
                 <div class="recent">
                 <p>{$r->text.recent_comments} :</p>
                 {foreach from=$r->recent() item=foo}
@@ -128,8 +129,7 @@
 
                     <!-- Content -->
                     <p>{$r->text.by} <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a> <em>{$r->text.on|lower} {$foo.published_on}</em></p>
-                    <p>{insert name="highlight" html=$foo.body_html}</p>
-                    <div class="clearboth"></div>
+                    <div class="blogItem">{insert name="highlight" html=$foo.body_html}</div>
 
 
                     <!-- Permanlink, Comments -->
@@ -143,21 +143,25 @@
                     <!-- Flair -->
                     {capture name=url assign=url}{$r->makeUrl('/blog/view', null, true)}/{$foo.thread_id}{/capture}
                     <div class="flair"><p>
-                    <a href='http://slashdot.org/slashdot-it.pl?op=basic&url={$url|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/slashdot.gif' alt='Slashdot' width='16' height='16' /></a>
-                    <a href='http://digg.com/submit?url={$url|escape:'url, UTF-8'}&title={$foo.title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/digg.gif' alt='Digg' width='16' height='16' /></a>
+                    <a href='http://slashdot.org/slashdot-it.pl?op=basic&amp;url={$url|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/slashdot.gif' alt='Slashdot' width='16' height='16' /></a>
+                    <a href='http://digg.com/submit?url={$url|escape:'url, UTF-8'}&amp;title={$foo.title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/digg.gif' alt='Digg' width='16' height='16' /></a>
                     <a href='http://www.facebook.com/share.php?u={$url|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/facebook.gif' alt='Facebook' width='16' height='16' /></a>
-                    <a href='http://www.myspace.com/index.cfm?fuseaction=postto&t={$foo.title|escape:'url, UTF-8'}&c=&u={$url|escape:'url, UTF-8'}&l=' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/myspace.gif' alt='Myspace' width='16' height='16' /></a>
-                    <a href='http://www.stumbleupon.com/submit?url={$url|escape:'url, UTF-8'}&title={$foo.title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/stumbleupon.gif' alt='StumbleUpon' width='16' height='16' /></a>
-                    <a href='http://del.icio.us/login/?url={$url|escape:'url, UTF-8'}&title={$foo.title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/delicious.gif' alt='Del.icio.us' width='16' height='16' /></a>
+                    <a href='http://www.myspace.com/index.cfm?fuseaction=postto&amp;t={$foo.title|escape:'url, UTF-8'}&amp;c=&amp;u={$url|escape:'url, UTF-8'}&amp;l=' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/myspace.gif' alt='Myspace' width='16' height='16' /></a>
+                    <a href='http://www.stumbleupon.com/submit?url={$url|escape:'url, UTF-8'}&amp;title={$foo.title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/stumbleupon.gif' alt='StumbleUpon' width='16' height='16' /></a>
+                    <a href='http://del.icio.us/login/?url={$url|escape:'url, UTF-8'}&amp;title={$foo.title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/delicious.gif' alt='Del.icio.us' width='16' height='16' /></a>
                     </p></div>
 
-
-                    <!-- Naive Baysian Classification -->
-                    <div class="categoryContainer">
+                    {capture name=nbc}{strip}
                         {$r->authorCategories($foo.id, $foo.users_id)}
                         {capture name=document}{$foo.title} {$foo.body_plaintext}{/capture}
                         {$r->genericBayesInterface($foo.id, 'messages', 'blog', $smarty.capture.document)}
-                    </div>
+                    {/strip}{/capture}
+                    {if $smarty.capture.nbc}
+                        <!-- Naive Baysian Classification -->
+                        <div class="categoryContainer">
+                        {$smarty.capture.nbc}
+                        </div>
+                    {/if}
 
                     {if $r->isLoggedIn()}{insert name="edit" id=$foo.id}{/if}
 

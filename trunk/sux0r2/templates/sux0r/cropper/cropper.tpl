@@ -18,7 +18,6 @@
 
     {validate id="integrity" message="integrity failure"}
 
-    <p>
     <form action="{$form_url}" name="default" method="post" accept-charset="utf-8" >
 
     <input type="hidden" name="token" value="{$token}" />
@@ -38,8 +37,6 @@
     <input class="button" type="submit" value="{$r->text.submit}" />
 
     </form>
-    </p>
-
 
     <p>
     <img id="cropperImage" src="{$url_to_source}" alt="Cropper" width="{$width}" height="{$height}" />

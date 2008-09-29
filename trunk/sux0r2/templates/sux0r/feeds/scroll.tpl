@@ -99,7 +99,7 @@
                 <p>{$r->text.actions}</p>
                 <ul>
                     {insert name="approveLi"}
-                    <li><em><a href="{$r->makeUrl('/feeds/manage')}">{$r->text.manage} &raquo;</a></em></li>
+                    <li><a href="{$r->makeUrl('/feeds/manage')}">{$r->text.manage}</a></li>
                     <li><em><a href="{$r->makeUrl('/feeds/suggest')}">{$r->text.suggest} &raquo;</a></em></li>
                 </ul>
                 {/if}
@@ -119,26 +119,31 @@
                 {capture name=feed}
 
                     <!-- Content -->
-                    <div style="float:left;margin-right:5px;">
+                    <div style="float:left; margin-right:0.5em;">
                     {$r->isSubscribed($foo.rss_feeds_id)}
                     </div>
-                    <div style="float:left;margin-bottom: 1em;">
+                    <div style="float:left; margin-bottom: 1em;">
                     {$r->text.feed} : {$r->feedLink($foo.rss_feeds_id)}<br />
                     <em>{$r->text.published_on} : {$foo.published_on}</em>
                     </div>
                     <div class="clearboth"></div>
 
                     <div class="rssItem">{insert name="highlight" html=$foo.body_html}</div>
-                    <div class="clearboth"></div>
 
                     <!-- Read more -->
-                    <p><a href="{$foo.url}">{$r->text.read_more} &raquo;</a></p>
+                    <p class="readMore"><a href="{$foo.url}">{$r->text.read_more} &raquo;</a></p>
 
-                    <!-- Naive Baysian Classification -->
-                    <div class="categoryContainer">
+                    {capture name=nbc}{strip}
                         {capture name=document}{$foo.title} {$foo.body_plaintext}{/capture}
                         {$r->genericBayesInterface($foo.id, 'rss', 'feeds', $smarty.capture.document)}
-                    </div>
+                    {/strip}{/capture}
+                    {if $smarty.capture.nbc}
+                        <!-- Naive Baysian Classification -->
+                        <div class="categoryContainer">
+                        {$smarty.capture.nbc}
+                        </div>
+                    {/if}
+
 
                 {/capture}
 

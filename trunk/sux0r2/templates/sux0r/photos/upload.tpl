@@ -34,7 +34,7 @@
     {/capture}
 {/strip}
 
-<label for="album" {if $smarty.capture.error2}class="error"{/if}>{$r->text.album} :</label>
+<label {if $smarty.capture.error2}class="error"{/if}>{$r->text.album} :</label>
 {html_options name='album' options=$r->getAlbums() selected=$album}
 {$smarty.capture.error2}
 </p>
@@ -48,7 +48,7 @@
     {/capture}
 {/strip}
 
-<label for="image" {if $smarty.capture.error1}class="error"{/if}>{$r->text.upload} :</label>
+<label {if $smarty.capture.error1}class="error"{/if}>{$r->text.upload} :</label>
 <input type="file" name="image" class="imageFile" />
 {$smarty.capture.error1}
 </p>

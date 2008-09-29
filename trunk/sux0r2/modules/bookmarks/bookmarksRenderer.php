@@ -93,7 +93,7 @@ class bookmarksRenderer extends suxRenderer {
         if (!$html) $html = $this->text['none'];
         else $html = rtrim($html, ', ');
 
-        $html = "{$this->text['tags']}: " . $html . '';
+        $html = "<div class='tags'>{$this->text['tags']}: " . $html . '</div>';
 
         return $html;
 
@@ -111,7 +111,7 @@ class bookmarksRenderer extends suxRenderer {
         $html = '';
         if ($tags) foreach ($tags as $key => $val) {
             $url = suxFunct::makeURL('/bookmarks/tag/' . $val['id']);
-            $html .= "<a href='{$url}' style='font-size: {$val['size']}%;' style='tag' s>{$key}</a> <span class='quantity' >({$val['quantity']})<span> ";
+            $html .= "<a href='{$url}' style='font-size: {$val['size']}%;' class='tag'>{$key}</a> <span class='quantity' >({$val['quantity']})</span> ";
         }
         return $html;
 
@@ -178,7 +178,7 @@ class bookmarksRenderer extends suxRenderer {
     function isSubscribed($bookmark_id) {
 
         if (!$this->isLoggedIn())
-            return  "<img src='{$this->url}/media/{$this->partition}/assets/sticky.gif' border='0' width='12' height='12' />";
+            return  "<img src='{$this->url}/media/{$this->partition}/assets/sticky.gif' border='0' width='12' height='12' alt='' />";
 
         // Get config variables for template
         $tpl = new suxTemplate($this->module);
@@ -200,7 +200,7 @@ class bookmarksRenderer extends suxRenderer {
             $img_cache[$bookmark_id] = $image;
         }
 
-        $html = "<img src='{$this->url}/media/{$this->partition}/assets/{$image}' border='0' width='12' height='12'
+        $html = "<img src='{$this->url}/media/{$this->partition}/assets/{$image}' border='0' width='12' height='12' alt=''
         onclick=\"toggleSubscription('{$bookmark_id}');\"
         style='cursor: pointer;'
         class='subscription{$bookmark_id}'
@@ -254,10 +254,13 @@ function insert_approveLi($params) {
     $st->execute();
 
     $count = $st->fetchColumn();
-    $url = suxFunct::makeUrl('/bookmarks/approve/');
     $text = suxFunct::gtext('bookmarks');
 
-    $html = "<li><a href='$url'>{$text['approve_2']} ($count)</a></li>";
+    $url = suxFunct::makeUrl('/bookmarks/admin/');
+    $html = "<li><a href='$url'>{$text['admin']}</a></li>\n";
+
+    $url = suxFunct::makeUrl('/bookmarks/approve/');
+    $html .= "<li><a href='$url'>{$text['approve_2']} ($count)</a></li>";
 
     return $html;
 

@@ -7,7 +7,54 @@
     margin-right: 10px;
 }
 
+#rightside ul {
+    margin-left: 15px;
+    padding: 0;
+}
+
+#rightside li {
+    margin-bottom: 4px;
+}
+
 .edit {
     text-align: right;
     color: red;
+    height: 1%; /* IE6, Holly Hack */
+}
+
+.bookmarkItem {
+    border: 1px dashed #ccc;
+    padding: 10px;
+    margin: 10px;
+}
+
+.approveItem {
+    border: 1px dashed #ccc;
+    padding: 10px;
+    margin: 10px;
+}
+
+.approveItemOptions {
+    margin-top: 20px;
+}
+
+.tagcloud{
+    text-align: center;
+    padding: 20px;
+}
+
+#rightside {
+    margin-top: 10px;
+}
+
+.tags{
+    margin-bottom: 0.5em;
+    height: 1%; /* IE6, Holly Hack */
+}
+
+.sideListTitle {
+    font-weight: bold;
+    background-color: pink;
+    padding: 3px;
+    margin-right: 20px;
 }

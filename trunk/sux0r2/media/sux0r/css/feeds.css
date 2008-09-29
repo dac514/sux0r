@@ -17,15 +17,6 @@
     width: 738px;
 }
 
-/*
-label {
-    float: left;
-    width: auto;
-    margin-right: 0.5em;
-    padding-top: 0.2em;
-    text-align: right;
-}
-*/
 
 .widerInput {
     width: 350px;
@@ -49,4 +40,22 @@ label {
 
 .rssItem img {
     border: none;
+}
+
+.readMore {
+    height: 1%; /* IE6, Holly Hack */
+}
+
+.approveItem {
+    border: 1px dashed #ccc;
+    padding: 10px;
+    margin: 10px;
+}
+
+.approveItemOptions {
+    margin-top: 20px;
+}
+
+.feedTable td {
+    padding-right: 30px;
 }

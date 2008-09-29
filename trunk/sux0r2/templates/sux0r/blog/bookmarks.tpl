@@ -8,6 +8,12 @@
 
 <div id="proselytizer">
 
+{* Header *}
+<div id="header">
+    {insert name="userInfo"}
+    <div class='clearboth'></div>
+</div>
+
 {* Content *}
 <div id="middle">
 
@@ -32,7 +38,7 @@
     {validate id=$var message=$r->text.error_8 append="error"}
 
     <p>
-    <label {if $error}class="error"{/if} for="url[{$smarty.foreach.foo.index}]">{$r->text.url} :</label>
+    <label {if $error}class="error"{/if}>{$r->text.url} :</label>
     <input type="text" name="url[{$smarty.foreach.foo.index}]" value="{if !is_numeric($k)}{$k}{/if}" class="widerInput" />
     {if $error}{foreach from=$error item=v2}{$v2}{/foreach}{/if}
     </p>
@@ -42,7 +48,7 @@
     {validate id=$var message=$r->text.error_1 append="error"}
 
     <p>
-    <label {if $error}class="error"{/if} for="title[{$smarty.foreach.foo.index}]">{$r->text.title} :</label>
+    <label {if $error}class="error"{/if}>{$r->text.title} :</label>
     <input type="text" name="title[{$smarty.foreach.foo.index}]" value="{$v.title}" class="widerInput" />
     {if $error}{foreach from=$error item=v2}{$v2}{/foreach}{/if}
     </p>
@@ -55,9 +61,9 @@
     <span {if $error}class="error"{/if} >{$r->text.body} :</span> {if $error}{foreach from=$error item=v2}{$v2}{/foreach}{/if}
     </p>
 
-    <p><textarea name="body[{$smarty.foreach.foo.index}]" class="mceEditor">{$v.body}</textarea></p>
+    <p><textarea name="body[{$smarty.foreach.foo.index}]" class="mceEditor" rows="10" cols="80">{$v.body}</textarea></p>
 
-    <div style="padding-bottom: 10px;"></div>
+    <p>&nbsp;</p>
 
 {/foreach}
 
@@ -68,6 +74,7 @@
 </p>
 
 </form>
+</fieldset>
 
 
 </div>

@@ -50,6 +50,12 @@
 
 <div id="proselytizer">
 
+{* Header *}
+<div id="header">
+    {insert name="userInfo"}
+    <div class='clearboth'></div>
+</div>
+
 {* Content *}
 <div id="middle">
 
@@ -116,6 +122,7 @@
 </p>
 
 </form>
+</fieldset>
 
 
 </div>

@@ -79,7 +79,7 @@ class blogEdit {
         $this->tpl->config_load('my.conf', $this->module);
 
         // Redirect if not logged in
-        $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
+        if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
         // Check that the user is allowed to be here
         if (!$this->user->isRoot()) {

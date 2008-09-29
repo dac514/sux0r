@@ -39,16 +39,13 @@
 
 <div id="proselytizer">
 
-    <div id="header">
-        <h1>sux0r - it sux0rs up all the web</h1>
-        {insert name="userInfo"}
-        {$r->navlist()}
-    </div>
+{* Header *}
+<div id="header">
+    {insert name="userInfo"}
+    <div class='clearboth'></div>
+</div>
 
     <div id="middle">
-
-    <a href="{$r->makeUrl('/admin')}">{$r->text.back} &raquo;</a>
-    <p />
 
     <fieldset>
     <legend>{$r->text.log}{if $nickname}: {$nickname}{/if}</legend>
@@ -58,7 +55,7 @@
         <tr>
             <td>{$r->text.nickname|lower}</td>
             <td>{$r->text.log|lower}</td>
-            <td {if $sort == 'ts'}class="selected"{/if}><a href="{$ts_sort_url}">{$r->text.timestamp|lower}</a></td>
+            <td {if $sort == 'ts'}class="selected"{/if}><a href="{$ts_sort_url|escape:'html'}">{$r->text.timestamp|lower}</a></td>
             <td>{$r->text.private|lower}</td>
         </tr>
     </thead>
@@ -85,9 +82,11 @@
     </tbody>
     </table>
 
-    <p>{$r->text.pager}</p>
+    {$r->text.pager}
 
     </fieldset>
+
+        <p><a href="{$r->makeUrl('/admin')}">{$r->text.back} &raquo;</a></p>
 
     </div>
 

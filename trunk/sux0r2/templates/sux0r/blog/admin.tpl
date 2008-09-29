@@ -19,11 +19,12 @@
 
 <div id="proselytizer">
 
-    <div id="header">
-        <h1>sux0r - it sux0rs up all the web</h1>
-        {insert name="userInfo"}
-        {$r->navlist()}
-    </div>
+{* Header *}
+<div id="header">
+    {insert name="userInfo"}
+    <div class='clearboth'></div>
+</div>
+
 
     <div id="middle">
 
@@ -69,7 +70,7 @@
     </tbody>
     </table>
 
-    <p>{$r->text.pager}</p>
+    {$r->text.pager}
 
     <p>
     <input type="button" class="button" value="{$r->text.delete}" onclick="rm('default', '{$r->text.alert_delete}');" />
@@ -78,6 +79,8 @@
     </form>
 
     </fieldset>
+
+    <p><a href="{$r->makeUrl('/blog')}">{$r->text.back} &raquo;</a></p>
 
     </div>
 

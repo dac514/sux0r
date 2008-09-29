@@ -6,7 +6,12 @@
 $gtext['access'] = 'Access';
 $gtext['activity_log'] = 'Activity Log';
 $gtext['admin'] = 'Administration';
-$gtext['back'] = 'Back to administration';
+$gtext['admin_blog'] = 'Blog Administration';
+$gtext['admin_bookmarks'] = 'Bookmarks Administration';
+$gtext['admin_feeds'] = 'Feeds Administration';
+$gtext['admin_photos'] = 'Photos Administration';
+$gtext['back'] = 'Back to Administration';
+$gtext['back_2'] = 'Back to Homepage';
 $gtext['banned'] = 'Banned';
 $gtext['cancel'] = 'Cancel';
 $gtext['edit'] = 'Edit';

@@ -16,6 +16,12 @@
 
 <div id="proselytizer">
 
+{* Header *}
+<div id="header">
+    {insert name="userInfo"}
+    <div class='clearboth'></div>
+</div>
+
 {* Content *}
 <div id="middle">
 
@@ -39,16 +45,16 @@
 {if $disabled}<p><label>&nbsp;</label>{$r->text.yourself}</p>{/if}
 
 <p>
-<label for="root">{$r->text.root} :</label>
+<label>{$r->text.root} :</label>
 <input type="checkbox" name="root" value="1" {if $root}checked="checked"{/if} {$disabled} /><br />
 </p>
 
 {foreach from=$myOptions key=k item=v}
-   <p><label for="$k">{$k|capitalize} :</label> {html_options name=$k options=$v selected=$mySelect.$k}</p>
+   <p><label>{$k|capitalize} :</label> {html_options name=$k options=$v selected=$mySelect.$k}</p>
 {/foreach}
 
 <p>
-<label for="banned">{$r->text.banned} :</label>
+<label>{$r->text.banned} :</label>
 <input type="checkbox" name="banned" value="1" {if $banned}checked="checked"{/if} {$disabled} /><br />
 </p>
 
@@ -60,6 +66,7 @@
 </p>
 
 </form>
+</fieldset>
 
 
 </div>

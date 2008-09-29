@@ -3,12 +3,13 @@
 // Always UTF-8
 // Always uppercase the first word
 
-$gtext['admin'] = 'Administration';
+$gtext['admin'] = 'Photos Administration';
 $gtext['album'] = 'Album';
 $gtext['alert_delete'] = 'Are you sure you want to delete these albums? Photos will also be deleted.';
 $gtext['annotate'] = 'Annotate';
 $gtext['annotate_2'] = 'Annotate photos';
 $gtext['back'] = 'Back';
+$gtext['back_2'] = 'Back to Photos';
 $gtext['body'] = 'Body';
 $gtext['cancel'] = 'Cancel';
 $gtext['clickme'] = 'Click here to edit this text';
@@ -32,6 +33,7 @@ $gtext['form_problem'] = 'The form was not submitted, please try again';
 $gtext['max_filesize'] = 'Maximum file size';
 $gtext['new'] = 'New Photoalbum';
 $gtext['next'] = 'Next';
+$gtext['no_photos'] = 'No photos';
 $gtext['ok'] = 'Ok';
 $gtext['photos'] = 'Photos';
 $gtext['prev'] = 'Previous';

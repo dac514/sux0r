@@ -58,7 +58,7 @@ class userAvatar  {
         suxValidate::register_object('this', $this); // Register self to validator
 
         // Redirect if not logged in
-        $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
+        if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
         // This module has config variables, load them
         $this->tpl->config_load('my.conf', $this->module);

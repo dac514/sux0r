@@ -3,12 +3,13 @@
 // Always UTF-8
 // Always uppercase the first word
 
-$gtext['admin'] = 'Administration';
+$gtext['admin'] = 'Blog Administration';
 $gtext['alert_delete'] = 'Are you sure you want to delete this blog? Comments will also be deleted.';
 $gtext['archives'] = 'Archives';
 $gtext['author'] = 'Author';
 $gtext['authors'] = 'Authors';
-$gtext['bayes_categories'] = 'Bayes Categories';
+$gtext['back'] = 'Back to Blog';
+$gtext['bayes_categories'] = 'Bayesian Categories By Author';
 $gtext['blog'] = 'Blog';
 $gtext['body'] = 'Body';
 $gtext['bookmarks'] = 'Bookmarks';

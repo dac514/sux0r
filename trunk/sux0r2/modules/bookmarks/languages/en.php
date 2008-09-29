@@ -3,11 +3,12 @@
 // Always UTF-8
 // Always uppercase the first word
 
-$gtext['admin'] = 'Administration';
+$gtext['admin'] = 'Bookmarks Administration';
 $gtext['alert_delete'] = 'Are you sure you want to delete these bookmarks?';
 $gtext['approve'] = 'Approve Bookmarks';
 $gtext['approve_2'] = 'Approve';
 $gtext['back'] = 'Back';
+$gtext['back_2'] = 'Back to Bookmarks';
 $gtext['bayes_categories'] = 'Bayes Categories';
 $gtext['body'] = 'Body';
 $gtext['bookmarks'] = 'Bookmarks';
@@ -37,7 +38,7 @@ $gtext['sort_alpha'] = 'Sort alphabetically';
 $gtext['sort_date'] = 'Sort by date';
 $gtext['submit'] = 'Submit';
 $gtext['success'] = 'Success!';
-$gtext['success2'] = 'An adminitrator will review your suggestion within the next few days.';
+$gtext['success2'] = 'An administrator will review your suggestion within the next few days.';
 $gtext['suggest'] = 'Suggest a bookmark';
 $gtext['suggested'] = 'Suggested by';
 $gtext['tag_cloud'] = 'Tag cloud';

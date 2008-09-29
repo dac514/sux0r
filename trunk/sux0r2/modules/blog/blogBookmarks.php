@@ -73,7 +73,7 @@ class blogBookmarks {
         $this->msg_id = $msg_id;
 
         // Redirect if not logged in
-        $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
+        if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
         // --------------------------------------------------------------------
         // Scan post for href links

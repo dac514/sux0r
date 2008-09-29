@@ -196,7 +196,7 @@ class suxRenderer {
         if ($size) {
 
             $width = $size[0]; // Keep width for template variable
-            $alt = str_replace("'", "\'", strip_tags($title)); // Escape
+            $alt = str_replace("'", "", strip_tags($title)); // Escape
 
             $tmp = '';
             if ($url) $tmp .= "<a href='{$url}'>";

@@ -26,7 +26,7 @@
 <div id="middle">
 
 <fieldset>
-<legend>{if $r->bool.edit}{$r->text.editing} : {$nickname}</a>{else}{$r->text.reg}{/if}</legend>
+<legend>{if $r->bool.edit}{$r->text.editing} : {$nickname}{else}{$r->text.reg}{/if}</legend>
 
 <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8">
 <input type="hidden" name="token" value="{$token}" />

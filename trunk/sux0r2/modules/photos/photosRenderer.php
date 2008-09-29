@@ -164,20 +164,26 @@ class photosRenderer extends suxRenderer {
 function insert_editLinks($params) {
 
     if (!isset($_SESSION['users_id'])) return null;
+    $br = null;
+    if (isset($params['br'])) $br = '<br />';
 
     // Check that the user is allowed to create a new album
     $u = new suxUser();
+    $text = suxFunct::gtext('photos');
+    $html = '';
+
     if (!$u->isRoot()) {
         $access = $u->getAccess('photos');
         if ($access < $GLOBALS['CONFIG']['ACCESS']['photos']['publisher'])
             return null;
     }
+    else {
+        $url = suxFunct::makeUrl('/photos/admin');
+        $html .= "<a href='{$url}'>{$text['admin']}</a>$br ";
+    }
 
-    $text = suxFunct::gtext('photos');
-
-    $new = suxFunct::makeUrl('/photos/album/edit/');
-    $html = '';
-    $html .= "<a href='{$new}'>{$text['new']} &raquo;</a><br />";
+    $url = suxFunct::makeUrl('/photos/album/edit/');
+    $html .= "<a href='{$url}'>{$text['new']}</a>$br ";
 
     return $html;
 
@@ -195,6 +201,9 @@ function insert_editLinks2($params) {
     if (!isset($_SESSION['users_id'])) return null;
     if (empty($params['album_id'])) return null;
     if (!filter_var($params['album_id'], FILTER_VALIDATE_INT) || $params['album_id'] < 1) return null;
+
+    $br = null;
+    if (isset($params['br'])) $br = '<br />';
 
     // Check that the user is allowed to edit this album
     $u = new suxUser();
@@ -214,9 +223,9 @@ function insert_editLinks2($params) {
     $text = suxFunct::gtext('photos');
 
     $html = '';
-    $html .= "<a href='{$edit}'>{$text['edit_2']} &raquo;</a><br />";
-    $html .= "<a href='{$upload}'>{$text['upload']} &raquo;</a><br />";
-    $html .= "<a href='{$annotate}'>{$text['annotate_2']} &raquo;</a>";
+    $html .= "<a href='{$edit}'>{$text['edit_2']}</a>$br";
+    $html .= "<a href='{$upload}'>{$text['upload']}</a>$br";
+    $html .= "<a href='{$annotate}'>{$text['annotate_2']}</a>$br";
 
     return $html;
 

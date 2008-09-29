@@ -230,10 +230,13 @@ function insert_approveLi($params) {
     $st->execute();
 
     $count = $st->fetchColumn();
-    $url = suxFunct::makeUrl('/feeds/approve/');
     $text = suxFunct::gtext('feeds');
 
-    $html = "<li><a href='$url'>{$text['approve_2']} ($count)</a></li>";
+    $url = suxFunct::makeUrl('/feeds/admin/');
+    $html = "<li><a href='$url'>{$text['admin']}</a></li>\n";
+
+    $url = suxFunct::makeUrl('/feeds/approve/');
+    $html .= "<li><a href='$url'>{$text['approve_2']} ($count)</a></li>";
 
     return $html;
 

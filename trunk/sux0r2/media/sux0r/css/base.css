@@ -27,8 +27,15 @@ a.noBg {
     background: none;
 }
 
+h1 {
+    font-size: 22px;
+}
+
+h2 {
+    font-size: 16px;
+}
+
 #encompasser {
-    width: 98%;
     margin: 0px;
 }
 
@@ -55,8 +62,7 @@ table#proselytizer {
 
 #header h1 {
     float: left;
-    margin-top: 10px;
-    margin-left: 10px;
+    margin: 10px;
     background-image: url('../assets/people.gif');
     background-position: left;
     background-repeat: no-repeat;
@@ -83,10 +89,12 @@ table#proselytizer {
     background-color: #cccccc;
     background-image: url('../assets/bg3.jpg');
     border: 1px solid #dddddd;
+    height: 1%; /* IE6, Holly Hack */
 }
 
 fieldset {
     border: 1px solid #000000;
+    padding: 10px;
 }
 
 legend {
@@ -99,10 +107,11 @@ legend {
     letter-spacing: 2px;
 }
 
-input, select {
+textarea, select, input[type="text"], input[type="password"], input[type="submit"], input[type="button"] {
     color: #000000;
-    background: #dddddd;
+    background: #e3e3e3;
     border: 1px solid #333333;
+    font-size: 11px;
 }
 
 input[type="submit"], input[type="button"] {
@@ -110,7 +119,7 @@ input[type="submit"], input[type="button"] {
     width: auto;
 }
 
-.button {
+input.button {
     color: #ffffff;
     background: #ff0000;
     border: 2px outset #cccccc;
@@ -154,6 +163,7 @@ input[type="submit"], input[type="button"] {
 
 .pager {
     margin-top: 5px;
+    height: 1%; /* IE6, Holly Hack */
 }
 
 .pager a, .pager span {
@@ -176,7 +186,6 @@ input[type="submit"], input[type="button"] {
 
 .nbInterface .nbCatDropdown {
     margin-right: 10px;
-
 }
 
 .nbVecTrained {
@@ -192,6 +201,7 @@ input[type="submit"], input[type="button"] {
 
 #nbf {
     margin-top: 5px;
+    border: 1px solid white; /* IE6 Hack */
 }
 
 #nbSearchBox {
@@ -213,7 +223,6 @@ input[type="submit"], input[type="button"] {
     width: 100px;
     background-color: #ccc;
     height: 10px;
-
 }
 
 #nbfHandle {
@@ -240,6 +249,7 @@ input[type="submit"], input[type="button"] {
 
 .nbfFilteredBy {
     color: red;
+    margin-top: 0.5em;
 }
 
 /* }}} */
@@ -294,7 +304,7 @@ input[type="submit"], input[type="button"] {
 /* {{{ Vertical Menu Container */
 
 .menucontainer {
-
+    height: 1%; /* IE6, Holly Hack */
 }
 
 .menucontainer ul {
@@ -345,13 +355,14 @@ input[type="submit"], input[type="button"] {
 }
 
 .widget h2 {
+    font-size: 17px;
     background-image: url('../assets/bg2.jpg');
     background-color: #cccccc;
     color: #000000;
-    margin: 0 0 20px 0;
-    padding: 5px 0 5px 5px;
+    margin: 0px 0px 20px 0px;
+    padding: 5px 0px 5px 5px;
     border-bottom: 1px solid black;
-
+    height: 1%; /* IE6, Holly Hack */
 }
 
 .widget h2 a:link, .widget h2 a:visited, .widget h2 a:active {
@@ -361,6 +372,7 @@ input[type="submit"], input[type="button"] {
 .widget .widgetContent {
     margin-left: 10px;
     margin-right: 10px;
+    height: 1%; /* IE6, Holly Hack */
 }
 
 .widget .widgetContent h2 {

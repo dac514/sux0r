@@ -24,10 +24,8 @@
 		<td style="vertical-align:top;">
 			<div id="leftside">
 
-            <p>
-            {insert name="editLinks"}
-            {insert name="editLinks2" album_id=$r->album.id}
-            </p>
+            {capture name=editLinks}{insert name="editLinks" br=true}{insert name="editLinks2" album_id=$r->album.id br=true}{/capture}
+            {if $smarty.capture.editLinks}<div class="editLinks">{$smarty.capture.editLinks}</div>{/if}
 
 			</div>
 		</td>
@@ -37,25 +35,29 @@
                 <div class="widget">
                     <h2><a href="{$r->makeUrl('/photos/album')}/{$r->album.id}">{$r->album.title}</a></h2>
 
-                    <div style="padding-left: 30px;">
+                    <div class="photoAlbumItem">
 
                     {if $r->pho}
+                    <div class="thumbnailLinks">
                     {foreach from=$r->pho item=foo name=bar}
 
                        {strip}
                        <a href="{$r->makeUrl('/photos/view')}/{$foo.id}">
-                       <img class="thumbnail" src="{$r->url}/data/photos/{$foo.image}" alt="" width="{#thumbnailWidth#}" height="{#thumbnailHeight#}" >
+                       <img class="thumbnail" src="{$r->url}/data/photos/{$foo.image}" alt="" width="{#thumbnailWidth#}" height="{#thumbnailHeight#}" />
                        </a>
                        {/strip}
 
                     {/foreach}
+                    </div>
+                    {else}
+                        {$r->text.no_photos}...
                     {/if}
 
                     <div class="clearboth"></div>
 
                     </div>
 
-                    <p>{$r->text.pager}</p>
+                    {$r->text.pager}
 
 
                     <div class="clearboth"></div>
