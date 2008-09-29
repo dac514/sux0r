@@ -61,7 +61,7 @@ class bayesEdit {
         $this->link = new suxLink();
 
         // Redirect if not logged in
-        $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
+        if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
 
     }

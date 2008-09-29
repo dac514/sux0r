@@ -639,7 +639,7 @@ class blog extends bayesShared {
 
         // Get Items
         $query = "
-        SELECT messages.*, LENGTH(messages.body_plaintext) AS body_length FROM messages
+        SELECT messages.* FROM messages
         INNER JOIN link_messages_tags ON link_messages_tags.messages_id = messages.id
         WHERE messages.thread_pos = 0 AND messages.blog = 1  AND messages.draft = 0 AND link_messages_tags.tags_id = ?
         {$this->_dateSql()}
@@ -705,7 +705,7 @@ class blog extends bayesShared {
 
         // Get Items
         $query = "
-        SELECT messages.*, LENGTH(messages.body_plaintext) AS body_length FROM messages
+        SELECT messages.* FROM messages
         INNER JOIN link_bayes_messages ON link_bayes_messages.messages_id = messages.id
         INNER JOIN bayes_documents ON link_bayes_messages.bayes_documents_id = bayes_documents.id
         INNER JOIN bayes_categories ON bayes_documents.bayes_categories_id = bayes_categories.id

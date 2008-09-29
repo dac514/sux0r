@@ -8,6 +8,12 @@
 
 <div id="proselytizer">
 
+{* Header *}
+<div id="header">
+    {insert name="userInfo"}
+    <div class='clearboth'></div>
+</div>
+
 {* Content *}
 <div id="middle">
 
@@ -39,7 +45,7 @@
     {validate id="title" message=$r->text.error_1}
     {/capture}
 {/strip}
-<label for="title" {if $smarty.capture.error}class="error"{/if} >{$r->text.title} :</label>
+<label {if $smarty.capture.error}class="error"{/if} >{$r->text.title} :</label>
 <input type="text" name="title" value="{$title}" class="widerInput" />
 {$smarty.capture.error}
 </p>
@@ -53,7 +59,7 @@
 <span {if $smarty.capture.error}class="error"{/if}>{$r->text.body} : </span> {$smarty.capture.error}
 </p>
 
-<p><textarea name="body" class="mceEditor">{$body}</textarea></p>
+<p><textarea name="body" class="mceEditor" rows="10" cols="80" >{$body}</textarea></p>
 
 <p>
 <label>&nbsp;</label>
@@ -62,6 +68,7 @@
 </p>
 
 </form>
+</fieldset>
 
 </div>
 

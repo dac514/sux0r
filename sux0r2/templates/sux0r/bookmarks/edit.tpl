@@ -8,6 +8,12 @@
 
 <div id="proselytizer">
 
+{* Header *}
+<div id="header">
+    {insert name="userInfo"}
+    <div class='clearboth'></div>
+</div>
+
 {* Content *}
 <div id="middle">
 
@@ -38,7 +44,7 @@
     {validate id="url4" message=$r->text.form_error_4}
     {/capture}
 {/strip}
-<label for="url" {if $smarty.capture.error}class="error"{/if} >{$r->text.url} :</label>
+<label {if $smarty.capture.error}class="error"{/if} >{$r->text.url} :</label>
 <input type="text" name="url" value="{if $url}{$url}{else}http://{/if}" class="widerInput" />
 {$smarty.capture.error}
 </p>
@@ -49,7 +55,7 @@
     {validate id="title" message=$r->text.form_error_5}
     {/capture}
 {/strip}
-<label for="title" {if $smarty.capture.error}class="error"{/if} >{$r->text.title} :</label>
+<label {if $smarty.capture.error}class="error"{/if} >{$r->text.title} :</label>
 <input type="text" name="title" value="{$title}" class="widerInput" />
 {$smarty.capture.error}
 </p>
@@ -65,11 +71,11 @@
 </p>
 
 <p>
-<textarea name="body" class="mceEditor">{$body}</textarea>
+<textarea name="body" class="mceEditor" rows="10" cols="80">{$body}</textarea>
 </p>
 
 <p>
-<label for="draft">{$r->text.save_draft} :</label>
+<label>{$r->text.save_draft} :</label>
 <input type="checkbox" name="draft" value="1" {if $draft}checked="checked"{/if} />
 </p>
 
@@ -104,7 +110,7 @@
 
 <!-- Tags -->
 <p>
-<label for="tags" >{$r->text.tags_2} :</label>
+<label>{$r->text.tags_2} :</label>
 <input type="text" name="tags" value="{$tags}" class="widerInput" />
 </p>
 
@@ -116,6 +122,7 @@
 </p>
 
 </form>
+</fieldset>
 
 
 </div>

@@ -5,8 +5,8 @@
 
     {literal}
     <style type="text/css">
-        #leftside { width: 468px; margin-left: 2px; }
-        #rightside { width: 468px; }
+        #leftside { width: 468px; margin-left: 2px; margin-top: 0px; }
+        #rightside { width: 468px; margin-top: 0px; }
     </style>
     {/literal}
 
@@ -22,11 +22,11 @@
                 <h1>sux0r - it sux0rs up all the web</h1>
                 {insert name="userInfo"}
                 {$r->navlist()}
-
+                <div class="clearboth"></div>
+                {capture name=editLinks}{insert name="editLinks"}{/capture}
+                {if $smarty.capture.editLinks}<div class="editLinks">{$smarty.capture.editLinks}</div>{/if}
 			</div>
-            <div class="clearboth"></div>
 
-            <div>{insert name="editLinks"}</div>
 		</td>
 	</tr>
 	<tr>
@@ -45,7 +45,9 @@
                     {$r->countPhotos($foo.id)} {$r->text.photos}
                     </p>
                     {$foo.body_html}
-                    <p>{insert name="editLinks2" album_id=$foo.id}</p>
+                    <div class="clearboth"></div>
+                    {capture name=editLinks}{insert name="editLinks2" album_id=$foo.id}{/capture}
+                    {if $smarty.capture.editLinks}<div class="editLinks">{$smarty.capture.editLinks}</div>{/if}
                 {/capture}
 
                 {capture name=album_url}
@@ -78,7 +80,9 @@
                     {$r->countPhotos($foo.id)} {$r->text.photos}
                     </p>
                     {$foo.body_html}
-                    <p>{insert name="editLinks2" album_id=$foo.id}</p>
+                    <div class="clearboth"></div>
+                    {capture name=editLinks}{insert name="editLinks2" album_id=$foo.id}{/capture}
+                    {if $smarty.capture.editLinks}<div class="editLinks">{$smarty.capture.editLinks}</div>{/if}
                 {/capture}
 
                 {capture name=album_url}
@@ -100,7 +104,7 @@
 	</tr>
     <tr>
         <td colspan="2" style="text-align:center;">
-           <p>{$r->text.pager}</p>
+           {$r->text.pager}
         </td>
     </tr>
 	<tr>

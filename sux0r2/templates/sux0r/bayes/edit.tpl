@@ -68,6 +68,8 @@
 	<tr>
 		<td colspan="2" style="vertical-align:top;">
 			<div id="header">
+                {insert name="userInfo"}
+                <div class='clearboth'></div>
 			</div>
 		</td>
 	</tr>
@@ -78,9 +80,7 @@
     {* Content *}
     <div id="middle">
 
-        <div style="margin-left: 5px; margin-bottom: 10px;">
-        [ <a href="{$r->makeUrl('/user/profile')}">{$r->text.back_2} &raquo;</a> ]
-        </div>
+
 
         {if $validate.default.is_error !== false}
         <p class="errorWarning">{$r->text.form_error} :</p>
@@ -352,23 +352,25 @@
         <input type="button" class="button" value="{$r->text.unshare}" onclick="rm('unsharevec', '{$r->text.alert_unshare}');"/>
         </center>
 
+        </form>
+
 
         {* // --------------------------------------------------------------- *}
 
         </fieldset>
 
+        <p><a href="{$r->makeUrl('/user/profile')}">{$r->text.back_2} &raquo;</a></p>
 
-			</div>
+        </div></div>
+
 		</td>
 		<td style="vertical-align:top;">
 			<div id="rightside">
 
             {capture name=stats}{$r->getCategoryStats()}{/capture}
             {if $smarty.capture.stats}
-            <p>
-            {$r->text.stats}:<br />
+            <p>{$r->text.stats}:</p>
             {$smarty.capture.stats}
-            </p>
             {/if}
 
             <p>{$r->text.synopsis}:</p>

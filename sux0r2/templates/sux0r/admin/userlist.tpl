@@ -6,26 +6,33 @@
 
 <div id="proselytizer">
 
-    <div id="header">
-        <h1>sux0r - it sux0rs up all the web</h1>
-        {insert name="userInfo"}
-        {$r->navlist()}
-    </div>
+{* Header *}
+<div id="header">
+    {insert name="userInfo"}
+    <div class='clearboth'></div>
+</div>
 
     <div id="middle">
 
     <fieldset>
     <legend>{$r->text.admin}</legend>
 
+    <p>
+    <a href="{$r->makeURL('/blog/admin')}">{$r->text.admin_blog}</a>,
+    <a href="{$r->makeURL('/feeds/admin')}">{$r->text.admin_feeds}</a>,
+    <a href="{$r->makeURL('/bookmarks/admin')}">{$r->text.admin_bookmarks}</a>,
+    <a href="{$r->makeURL('/photos/admin')}">{$r->text.admin_photos}</a>
+    </p>
+
     <table class="adminTable">
     <thead>
         <tr>
-            <td {if $sort == 'nickname'}class="selected"{/if}><a href="{$nickname_sort_url}">{$r->text.nickname|lower}</a></td>
-            <td {if $sort == 'banned'}class="selected"{/if}><a href="{$banned_sort_url}">{$r->text.banned|lower}</a></td>
-            <td {if $sort == 'root'}class="selected"{/if}><a a href="{$root_sort_url}">{$r->text.root|lower}</a></td>
+            <td {if $sort == 'nickname'}class="selected"{/if}><a href="{$nickname_sort_url|escape:'html'}">{$r->text.nickname|lower}</a></td>
+            <td {if $sort == 'banned'}class="selected"{/if}><a href="{$banned_sort_url|escape:'html'}">{$r->text.banned|lower}</a></td>
+            <td {if $sort == 'root'}class="selected"{/if}><a href="{$root_sort_url|escape:'html'}">{$r->text.root|lower}</a></td>
             <td>{$r->text.access|lower}</td>
             <td>{$r->text.edit|lower}</td>
-            <td {if $sort == 'ts'}class="selected"{/if}><a href="{$ts_sort_url}">{$r->text.last_active|lower}</a></td>
+            <td {if $sort == 'ts'}class="selected"{/if}><a href="{$ts_sort_url|escape:'html'}">{$r->text.last_active|lower}</a></td>
         </tr>
     </thead>
     <tbody>
@@ -50,9 +57,11 @@
     </tbody>
     </table>
 
-    <p>{$r->text.pager}</p>
+    {$r->text.pager}
 
     </fieldset>
+
+    <p><a href="{$r->makeUrl('/home')}">{$r->text.back_2} &raquo;</a></p>
 
     </div>
 

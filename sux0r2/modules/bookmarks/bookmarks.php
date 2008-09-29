@@ -171,6 +171,7 @@ class bookmarks extends bayesShared {
         $this->r->text['form_url'] = suxFunct::makeUrl('/bookmarks/tag/' . $tag_id); // Form Url
         $this->tpl->assign('datesort_url', suxFunct::makeUrl("/bookmarks/tag/$tag_id"));
         $this->tpl->assign('alphasort_url', suxFunct::makeUrl("/bookmarks/tag/$tag_id", array('sort' => 'alpha')));
+        $this->tpl->assign('sidetitle', $tag['tag']);
         $cache_id = false;
 
         // Sort, used in makeUrl() and passed as a hidden field to insert_bayesFilters()

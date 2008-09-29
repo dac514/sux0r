@@ -2,6 +2,7 @@
     width: 160px;
     margin-left: 10px;
     margin-right: 10px;
+    margin-top: 10px;
 }
 
 #middle2 {
@@ -10,6 +11,7 @@
 
 #rightside {
     width: 250px;
+    margin-top: 10px;
 }
 
 #lament {
@@ -22,7 +24,7 @@ img.rssIcon {
     vertical-align: top;
 }
 
-input, select {
+input[type="text"], input[type="password"], select {
     width: 350px;
 }
 
@@ -36,17 +38,33 @@ input.captcha {
     padding-top: .2em !important;
 }
 
+ul.miniFeed, ul.miniFeed li {
+    margin: 0;
+    padding: 0;
+}
 
 ul.miniFeed {
     list-style-type: none;
     padding: 0;
 }
 
-.miniFeed li {
+ul.miniFeed li {
+    margin-top: 10px;
     padding-bottom: 4px;
-    margin-bottom: 8px;
     border-bottom: 1px solid #cccccc;
 }
+
+ul.openidManage li {
+    padding-bottom: 0.5em;
+}
+
+img.friend, img.stalker {
+    float: left;
+    border: 1px solid #999999;
+    margin: 0 20px 20px 0;
+    padding: 5px;
+}
+
 
 /* Revert */
 
@@ -70,7 +88,6 @@ input.imageFile {
 
 form.inplaceeditor-form textarea, form.inplaceeditor-form input[type="text"] {
     width: 100%;
-    background-color: #eeeeee;
 }
 
 form.inplaceeditor-form input[type="submit"] {

@@ -49,8 +49,13 @@ class suxPager {
 		if (trim($url) == '') return null;
 
         $text = suxFunct::gtext();
+
+        // W3C valid url
         $q = mb_strpos($url, '?') ? '&' : '?';
-        $html = "<a href='{$url}{$q}start={$start}' class='nextPage'>{$text['continue']} &raquo;</a> ";
+        $url = $url . $q;
+        $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8', false);
+
+        $html = "<a href='{$url}start={$start}' class='nextPage'>{$text['continue']} &raquo;</a> ";
 		return "<div class='pager'>{$html}</div> ";
 
     }
@@ -122,15 +127,18 @@ class suxPager {
         }
         if ($_GET['page'] > $this->pages) $_GET['page'] = $this->pages;
 
-        $html = '';
+        // W3C valid url
         $q = mb_strpos($url, '?') ? '&' : '?';
+        $url = $url . $q;
+        $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8', false);
 
+        $html = '';
 		// Print the first and previous page links if necessary
 		if ($_GET['page'] != 1 && $_GET['page']) {
-            $html .= "<a href='{$url}{$q}page=1' class='firstPage'>[1]</a> ";
+            $html .= "<a href='{$url}page=1' class='firstPage'>[1]</a> ";
 		}
 		if (($_GET['page'] - 1) > 0) {
-            $html .= "<a href='{$url}{$q}page=" . ($_GET['page'] - 1) . "' class='prevPage'>&laquo;</a> ";
+            $html .= "<a href='{$url}page=" . ($_GET['page'] - 1) . "' class='prevPage'>&laquo;</a> ";
 		}
 
 		// Print the numeric page list; make the current page unlinked and bold
@@ -155,14 +163,14 @@ class suxPager {
         $tmp2 = '';
         while($lc) {
             $p = $_GET['page'] - $lc;
-            if ($p >= 1) $tmp2 .= "<a href='{$url}{$q}page={$p}' class='page'>{$p}</a> ";
+            if ($p >= 1) $tmp2 .= "<a href='{$url}page={$p}' class='page'>{$p}</a> ";
             --$lc;
         }
         $tmp = $tmp2 . $tmp;
         $tmp2 = '';
         while($rc) {
             $p = $_GET['page'] + $rc;
-            if ($p <= $this->pages) $tmp2 = "<a href='{$url}{$q}page={$p}' class='page'>{$p}</a> " . $tmp2;
+            if ($p <= $this->pages) $tmp2 = "<a href='{$url}page={$p}' class='page'>{$p}</a> " . $tmp2;
             --$rc;
         }
         $tmp .= $tmp2;
@@ -170,10 +178,10 @@ class suxPager {
 
 		// Print the Next and Last page links if necessary
 		if (($_GET['page'] + 1) <= $this->pages) {
-            $html .= "<a href='{$url}{$q}page=" . ($_GET['page'] + 1) . "' class='nextPage'>&raquo;</a> ";
+            $html .= "<a href='{$url}page=" . ($_GET['page'] + 1) . "' class='nextPage'>&raquo;</a> ";
 		}
 		if ($_GET['page'] != $this->pages && $this->pages != 0) {
-            $html .= "<a href='{$url}{$q}page={$this->pages}' class='lastPage'>[{$this->pages}]</a> ";
+            $html .= "<a href='{$url}page={$this->pages}' class='lastPage'>[{$this->pages}]</a> ";
 		}
 
 		return "<div class='pager'>{$html}</div> ";

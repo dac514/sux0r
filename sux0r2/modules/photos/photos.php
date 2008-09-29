@@ -122,12 +122,11 @@ class photos {
             $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/photos/album/{$id}"));
             $this->r->pho = $this->photo->getPhotos($id, $this->pager->limit, $this->pager->start);
 
+            $this->r->album = $this->photo->getAlbum($id);
+            $this->r->title .= " | {$this->r->text['photos']} | {$this->r->album['title']}";
+
             if ($this->r->pho == false || !count($this->r->pho))
                 $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
-            else {
-                $this->r->album = $this->photo->getAlbum($id);
-                $this->r->title .= " | {$this->r->text['photos']} | {$this->r->album['title']}";
-            }
 
         }
 
@@ -149,7 +148,7 @@ class photos {
 
             $this->r->pho = $this->photo->getPhoto($id);
             if ($this->r->pho == false || !count($this->r->pho))
-                $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+                suxFunct::redirect(suxFunct::getPreviousURL()); // Redirect
             else {
 
                 $this->r->pho['image'] = suxPhoto::t2fImage($this->r->pho['image']); // Fullsize

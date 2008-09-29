@@ -63,10 +63,54 @@ input.imageFile {
     background: none;
 }
 
-
 .thumbnail {
     float: left;
     border: 1px solid #999999;
     margin: 0 25px 25px 0;
     padding: 5px;
+}
+
+.thumbnailLinks {
+    height: 1%; /* IE6, Holly Hack */
+}
+
+
+.photoAlbumItem {
+    padding-left: 30px;
+}
+
+.annotateItem {
+    border: 1px dashed #ccc;
+    padding: 10px;
+    margin: 10px;
+    height: 1%; /* IE6, Holly Hack */
+}
+
+.annotateItemDesc {
+    margin-left: 10px;
+    width: 600px;
+}
+
+.annotateItemOptions {
+    text-align: right;
+    width: 180px
+}
+
+#leftside .editLinks, #rightside .editLinks  {
+    float: none;
+    padding: 8px;
+    border: 1px dashed #cccccc;
+    height: 1%; /* IE6, Holly Hack */
+}
+
+
+#header .editLinks {
+    margin-top: 0.5em;
+    margin-left: 0.5em;
+    height: 1%; /* IE6, Holly Hack */
+}
+
+.editLinks a {
+    margin-right: 1em;
+    height: 1%; /* IE6, Holly Hack */
 }

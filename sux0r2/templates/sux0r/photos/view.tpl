@@ -47,10 +47,8 @@
 		<td style="vertical-align:top;">
 			<div id="leftside">
 
-            <p>
-            {insert name="editLinks"}
-            {insert name="editLinks2" album_id=$r->album.id}
-            </p>
+            {capture name=editLinks}{insert name="editLinks" br=true}{insert name="editLinks2" album_id=$r->album.id br=true}{/capture}
+            {if $smarty.capture.editLinks}<div class="editLinks">{$smarty.capture.editLinks}</div>{/if}
 
 			</div>
 		</td>
@@ -67,7 +65,7 @@
                     </div>
 
                     <p id="suxPhoto">
-                    {if $r->pho.image}<img class="photo" src="{$r->url}/data/photos/{$r->pho.image}" alt="" >{/if}
+                    {if $r->pho.image}<img class="photo" src="{$r->url}/data/photos/{$r->pho.image}" alt="" />{/if}
                     </p>
 
                     {if $r->pho.description}

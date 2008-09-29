@@ -118,7 +118,7 @@ class blogRenderer extends suxRenderer {
         $html = '';
         foreach ($tags as $key => $val) {
             $url = suxFunct::makeURL('/blog/tag/' . $val['id']);
-            $html .= "<a href='{$url}' style='font-size: {$val['size']}%;' style='tag' s>{$key}</a> <span class='quantity' >({$val['quantity']})<span> ";
+            $html .= "<a href='{$url}' style='font-size: {$val['size']}%;' class='tag' >{$key}</a> <span class='quantity' >({$val['quantity']})</span> ";
         }
         return $html;
 
@@ -493,6 +493,36 @@ function insert_edit($params) {
     return $html;
 
 }
+
+
+/**
+* Render admin links wrapped in <li> tag
+*
+* @param array $params smarty {insert} parameters
+* @return string html
+*/
+function insert_adminLi($params) {
+
+    if (!isset($_SESSION['users_id'])) return null;
+
+    // Check that the user is allowed to admin
+    $u = new suxUser();
+    $text = suxFunct::gtext('blog');
+    $html = '';
+
+    if (!$u->isRoot()) {
+        $access = $u->getAccess('blog');
+        if ($access < $GLOBALS['CONFIG']['ACCESS']['blog']['publisher'])
+            return null;
+    }
+
+    $url = suxFunct::makeUrl('/blog/admin');
+    $html .= "<li><a href='{$url}'>{$text['admin']}</a></li>";
+
+    return $html;
+
+}
+
 
 
 ?>

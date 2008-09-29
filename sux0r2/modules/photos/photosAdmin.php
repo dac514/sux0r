@@ -59,10 +59,7 @@ class photosAdmin {
         $this->photos = new suxPhoto();
 
         // Redirect if not logged in
-        $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
-
-        // Security check
-        if (!$this->user->isRoot()) suxFunct::redirect(suxFunct::makeUrl('/home'));
+        if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
         // Check that the user is allowed to be here
         if (!$this->user->isRoot()) {

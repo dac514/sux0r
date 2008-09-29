@@ -12,6 +12,12 @@
 
 <div id="proselytizer">
 
+{* Header *}
+<div id="header">
+    {insert name="userInfo"}
+    <div class='clearboth'></div>
+</div>
+
 {* Content *}
 <div id="middle">
 
@@ -39,7 +45,7 @@
     {validate id="title" message=$r->text.error_1}
     {/capture}
 {/strip}
-<label for="title" {if $smarty.capture.error}class="error"{/if} >{$r->text.title} :</label>
+<label {if $smarty.capture.error}class="error"{/if} >{$r->text.title} :</label>
 <input type="text" name="title" value="{$title}" class="widerInput" />
 {$smarty.capture.error}
 </p>
@@ -53,7 +59,7 @@
     </p>
 
     <p>
-    <label for="unset_image">{$r->text.unset_image} :</label>
+    <label>{$r->text.unset_image} :</label>
     <input type="checkbox" name="unset_image" value="1" {if $unset_image}checked="checked"{/if} /><br />
     </p>
     {/if}
@@ -65,7 +71,7 @@
         {validate id="image2" message=$r->text.error_4}
         {/capture}
     {/strip}
-    <label for="image" {if $smarty.capture.error}class="error"{/if} >{$r->text.image} : </label>
+    <label {if $smarty.capture.error}class="error"{/if} >{$r->text.image} : </label>
     <input type="file" name="image" class="imageFile" />
     {$smarty.capture.error}
     </p>
@@ -87,12 +93,12 @@
 </p>
 
 <p>
-<textarea name="body" class="mceEditor">{$body}</textarea>
+<textarea name="body" class="mceEditor" rows="10" cols="80" >{$body}</textarea>
 </p>
 
 {if !$thread_pos}
     <p>
-    <label for="draft">{$r->text.save_draft} :</label>
+    <label>{$r->text.save_draft} :</label>
     <input type="checkbox" name="draft" value="1" {if $draft}checked="checked"{/if} />
     </p>
 {/if}
@@ -130,7 +136,7 @@
 
     <!-- Regular tags -->
     <p>
-    <label for="tags" >{$r->text.tags_2} :</label>
+    <label>{$r->text.tags_2} :</label>
     <input type="text" name="tags" value="{$tags}" class="widerInput" />
     </p>
 
@@ -156,6 +162,7 @@
 </p>
 
 </form>
+</fieldset>
 
 
 </div>

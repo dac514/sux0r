@@ -72,20 +72,20 @@
             {if $r->fp}
             {foreach from=$r->fp item=foo}
 
-                <div style="border: 1px dashed #ccc; padding: 10px; margin: 10px;">
+                <div class="bookmarkItem">
 
-                    <div style="float:left;margin-right:5px;">
+                    <div style="float:left; margin-right:0.5em;">
                     {$r->isSubscribed($foo.id)}
                     </div>
 
                     <div style="float:left;">
                         <a href="{$foo.url}">{insert name="highlight" html=$foo.title}</a><br />
-                        <em>{$r->text.published_on} : {$foo.published_on}</em><br />
-
+                        <em>{$r->text.published_on} : {$foo.published_on}</em>
                     </div>
                     <div class="clearboth"></div>
 
-                    <div>{insert name="highlight" html=$foo.body_html}</div>
+                    {insert name="highlight" html=$foo.body_html}
+
                     {$r->tags($foo.id)}
 
                     <!-- Naive Baysian Classification -->
@@ -101,7 +101,7 @@
 
             {/foreach}
             {else}
-                <div style="border: 1px dashed #ccc; padding: 10px; margin: 10px;">
+                <div class="bookmarkItem">
                 {$r->text.not_found}
                 </div>
             {/if}
@@ -114,13 +114,14 @@
 		<td style="vertical-align:top;">
 			<div id="rightside">
 
+            {if $sidetitle}<div class="sideListTitle">{$sidetitle}</div>{/if}
+
             {if $r->fp}
             <ul>
                 <li><a href="{$datesort_url}">{$r->text.sort_date}</a></li>
                 <li><a href="{$alphasort_url}">{$r->text.sort_alpha}</a></li>
             </ul>
             {/if}
-
 
             <ul>
                 {if $r->isLoggedIn()}

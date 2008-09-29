@@ -62,7 +62,7 @@ class societyEdit {
         suxValidate::register_object('this', $this); // Register self to validator
 
         // Redirect if not logged in
-        $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
+        if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
         $tmp = $this->user->getUserByNickname($nickname);
         if (!$tmp) suxFunct::redirect(suxFunct::getPreviousURL()); // Invalid user

@@ -66,7 +66,7 @@ class blogReply {
         $this->link = new suxLink();
 
         // Redirect if not logged in
-        $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
+        if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
         $parent = $this->msg->getMessage($parent_id);
         if (!$parent) suxFunct::redirect(suxFunct::getPreviousURL()); // Invalid message, redirect

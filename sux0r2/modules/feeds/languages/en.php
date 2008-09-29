@@ -4,11 +4,12 @@
 // Always uppercase the first word
 
 $gtext['actions'] = 'Actions';
-$gtext['admin'] = 'Administration';
+$gtext['admin'] = 'Feeds Administration';
 $gtext['alert_delete'] = 'Are you sure you want to delete these feeds? Items will also be deleted.';
 $gtext['approve'] = 'Approve feeds';
 $gtext['approve_2'] = 'Approve';
 $gtext['back'] = 'Back';
+$gtext['back_2'] = 'Back to Feeds';
 $gtext['body'] = 'Body';
 $gtext['cancel'] = 'Cancel';
 $gtext['delete'] = 'Delete';
@@ -32,7 +33,7 @@ $gtext['read_more'] = 'Read more';
 $gtext['save_draft'] = 'Save as draft';
 $gtext['submit'] = 'Submit';
 $gtext['success'] = 'Success!';
-$gtext['success2'] = 'An adminitrator will review your suggestion within the next few days.';
+$gtext['success2'] = 'An administrator will review your suggestion within the next few days.';
 $gtext['suggest'] = 'Suggest a feed';
 $gtext['suggested'] = 'Suggested by';
 $gtext['title'] = 'Title';

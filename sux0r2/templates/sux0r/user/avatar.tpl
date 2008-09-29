@@ -6,6 +6,12 @@
 
 <div id="proselytizer">
 
+{* Header *}
+<div id="header">
+    {insert name="userInfo"}
+    <div class='clearboth'></div>
+</div>
+
 {* Content *}
 <div id="middle">
 
@@ -34,7 +40,7 @@
 </p>
 
 <p>
-<label for="unset_image">{$r->text.unset_image} :</label>
+<label>{$r->text.unset_image} :</label>
 <input type="checkbox" name="unset_image" value="1" {if $unset_image}checked="checked"{/if} /><br />
 </p>
 {/if}
@@ -46,7 +52,7 @@
     {validate id="image2" message=$r->text.form_error_15}
     {/capture}
 {/strip}
-<label for="image" {if $smarty.capture.error}class="error"{/if} >{$r->text.image} : </label>
+<label {if $smarty.capture.error}class="error"{/if} >{$r->text.image} : </label>
 <input type="file" name="image" class="imageFile" />
 {$smarty.capture.error}
 </p>
@@ -64,6 +70,7 @@
 </p>
 
 </form>
+</fieldset>
 
 
 </div>

@@ -64,7 +64,7 @@ class photoalbumsEdit {
 
 
         // Redirect if not logged in
-        $this->user->loginCheck(suxfunct::makeUrl('/user/register'));
+        if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
         // Check that the user is allowed to edit this album
         if (!$this->user->isRoot()) {
@@ -72,7 +72,7 @@ class photoalbumsEdit {
             if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin']) {
                 if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['publisher']) suxFunct::redirect(suxFunct::makeURL('/photos'));
                 elseif ($id) {
-                    if (!$this->$photo->isAlbumOwner($id, $_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeURL('/photos'));
+                    if (!$this->photo->isAlbumOwner($id, $_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeURL('/photos'));
                 }
             }
         }
@@ -202,7 +202,7 @@ class photoalbumsEdit {
             if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin']) {
                 if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['publisher']) suxFunct::redirect(suxFunct::makeURL('/photos'));
                 elseif (isset($clean['id']) && filter_var($clean['id'], FILTER_VALIDATE_INT)) {
-                    if (!$this->$photo->isAlbumOwner($clean['id'], $_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeURL('/photos'));
+                    if (!$this->photo->isAlbumOwner($clean['id'], $_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeURL('/photos'));
                 }
             }
         }

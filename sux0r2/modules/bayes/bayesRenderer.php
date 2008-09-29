@@ -450,22 +450,22 @@ class bayesRenderer extends suxRenderer {
         if ($html) return $html; // Cache
 
         $cat = 0;
-        $html = "<div id='bStats'><ul>\n";
+        $html = "<ul id='bStats'>\n";
         foreach ($this->getSharedVectorsArray() as $key => $val) {
             $html .= "<li class='bStatsVec'>{$val['vector']}";
             if (!$this->nb->isVectorOwner($key, $_SESSION['users_id'])) $html .= ' <em>(' . $this->text['shared'] . ')</em>';
-            $html .= ":</li>\n<ul>\n";
+            $html .= ":\n<ul>\n";
             foreach ($this->nb->getCategoriesByVector($key) as $key2 => $val2) {
                 $doc_count = $this->nb->getDocumentCountByCategory($key2);
-                $html .= "<li class='bStatsCat'>{$val2['category']}:</li>";
+                $html .= "<li class='bStatsCat'>{$val2['category']}:";
                 $html .= "<ul>\n";
                 $html .= "<li class='bStatsDoc'>{$this->text['documents']}: $doc_count</li><li class='bStatsTok'>{$this->text['tokens']}: {$val2['token_count']}</li>\n";
-                $html .= "</ul>\n";
+                $html .= "</ul></li>\n";
                 ++$cat;
             }
-            $html .= "</ul>\n";
+            $html .= "</ul></li>\n";
         }
-        $html .= "</ul></div>\n";
+        $html .= "</ul>\n";
 
         if (!$cat) return null;
         else return $html;
