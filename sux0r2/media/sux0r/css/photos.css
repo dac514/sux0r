@@ -114,3 +114,7 @@ input.imageFile {
     margin-right: 1em;
     height: 1%; /* IE6, Holly Hack */
 }
+
+.pager {
+    margin-left: 10px;
+}
