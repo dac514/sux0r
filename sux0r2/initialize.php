@@ -21,6 +21,13 @@
 * @license    http://www.gnu.org/licenses/agpl.html
 */
 
+// Get rid of register_globals
+if (ini_get('register_globals')) {
+    foreach ($_REQUEST as $k => $v) {
+        unset($GLOBALS[$k]);
+    }
+}
+
 // Enforce config
 if (!isset($GLOBALS['CONFIG'])) {
     die("Something is wrong, can't initialize without configuration.");
@@ -48,13 +55,6 @@ ini_set('arg_separator.output', '&');
 
 // Set the default timezone
 date_default_timezone_set($GLOBALS['CONFIG']['TIMEZONE']);
-
-// Get rid of register_globals
-if (ini_get('register_globals')) {
-    foreach ($_REQUEST as $k => $v) {
-        unset($GLOBALS[$k]);
-    }
-}
 
 // Get rid of magic quotes
 if (get_magic_quotes_gpc() && (!ini_get('magic_quotes_sybase'))) {
