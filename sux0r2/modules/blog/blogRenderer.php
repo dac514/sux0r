@@ -116,7 +116,7 @@ class blogRenderer extends suxRenderer {
     function tagcloud($tags) {
 
         $html = '';
-        foreach ($tags as $key => $val) {
+        if ($tags) foreach ($tags as $key => $val) {
             $url = suxFunct::makeURL('/blog/tag/' . $val['id']);
             $html .= "<a href='{$url}' style='font-size: {$val['size']}%;' class='tag' >{$key}</a> <span class='quantity' >({$val['quantity']})</span> ";
         }
@@ -510,14 +510,21 @@ function insert_adminLi($params) {
     $text = suxFunct::gtext('blog');
     $html = '';
 
-    if (!$u->isRoot()) {
-        $access = $u->getAccess('blog');
+    $is_root = $u->isRoot();
+    $access = $u->getAccess('blog');
+
+    if (!$is_root) {
         if ($access < $GLOBALS['CONFIG']['ACCESS']['blog']['publisher'])
             return null;
     }
 
-    $url = suxFunct::makeUrl('/blog/admin');
-    $html .= "<li><a href='{$url}'>{$text['admin']}</a></li>";
+    if ($is_root || $access >= $GLOBALS['CONFIG']['ACCESS']['blog']['admin']) {
+        $url = suxFunct::makeUrl('/blog/admin');
+        $html .= "<li><a href='{$url}'>{$text['admin']}</a></li>";
+    }
+
+    $url = suxFunct::makeUrl('/blog/edit/');
+    $html .= "<li><a href='{$url}'>{$text['new']}</a></li>";
 
     return $html;
 

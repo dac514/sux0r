@@ -320,6 +320,7 @@ function insert_lament($params) {
             'lament',
             '$url', {
                 rows: 4,
+                cols: 25,
                 clickToEditText: '{$text['lament']}',
                 savingText: '{$text['saving']}...',
                 okControl: 'button',

@@ -117,7 +117,8 @@ class photosAdmin {
         $this->r->fp = $this->photos->getAlbums(null, $this->pager->limit, $this->pager->start, true);
 
         // Additional variables
-        foreach ($this->r->fp as $key => $val) {
+        if (!$this->r->fp) unset($this->r->fp);
+        else foreach ($this->r->fp as $key => $val) {
             $u = $this->user->getUser($val['users_id']);
             $this->r->fp[$key]['nickname'] = $u['nickname'];
             $this->r->fp[$key]['photos_count'] = $this->photos->countPhotos($val['id']);
