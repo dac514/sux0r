@@ -90,7 +90,7 @@ class photos {
             $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/photos'));
             $this->r->pho = $this->photo->getAlbums($users_id, $this->pager->limit, $this->pager->start);
 
-            foreach ($this->r->pho as $key => $val) {
+            if ($this->r->pho) foreach ($this->r->pho as $key => $val) {
                 $tmp = $this->user->getUser($val['users_id']);
                 $this->r->pho[$key]['nickname'] = $tmp['nickname'];
             }
