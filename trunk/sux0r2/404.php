@@ -20,7 +20,7 @@ $text = suxFunct::gtext(); // Language
 <body>
     <h1><?php echo $text['404_h1']; ?></h1>
     <p><?php echo $text['404_p1']; ?></p>
-    <p><a href="<?php echo $GLOBALS['CONFIG']['URL']; ?>"><?php echo $text['404_continue']; ?> &raquo;</a></p>
+    <p><a href="<?php echo $GLOBALS['CONFIG']['URL']; ?>/"><?php echo $text['404_continue']; ?> &raquo;</a></p>
     <p><img src="<?php echo $GLOBALS['CONFIG']['URL']; ?>/media/sux0r/assets/sewerhorse.jpg" alt="Sewer Horse Is Watching You" /></p>
 </body>
 </html>
