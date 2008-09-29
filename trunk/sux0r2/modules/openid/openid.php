@@ -839,7 +839,7 @@ class openid {
         // TODO:
         // get association, store key, fix $this->complete() to do calculations
         // locally, become a smart consumer... I need the help here :(
-        // WTF is dh_consumer_public = base64(btwoc(g ^ x mod p)) in PHP5? (What is x?!)
+        // WTF is dh_consumer_public = base64(btwoc(g ^ x mod p)) in PHP5?
         // See: http://openid.net/specs/openid-authentication-1_1.html#mode_associate
 
         $keys = array(

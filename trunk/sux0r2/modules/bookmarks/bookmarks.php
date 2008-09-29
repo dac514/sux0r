@@ -325,7 +325,7 @@ class bookmarks extends bayesShared {
             // "Cache Groups" using a vertical bar |
             if ($alphasort) $cache_id = "listing|alphasort|{$this->pager->start}";
             else $cache_id = "listing|datesort|{$this->pager->start}";
-            $this->tpl->caching = 0; // TODO: Turn on caching
+            $this->tpl->caching = 1;
 
             if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
 

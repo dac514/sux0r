@@ -192,7 +192,6 @@ class feedsEdit {
         // --------------------------------------------------------------------
 
         if (isset($clean['id']) && filter_var($clean['id'], FILTER_VALIDATE_INT) && $clean['id'] > 0) {
-            // TODO: Check to see if this user is allowed to modify this bookmark
             $feed['id'] = $clean['id'];
         }
 

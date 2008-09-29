@@ -201,7 +201,7 @@ class suxUser {
     */
     function saveUser(array $info, $users_id = null) {
 
-        /* If users_id is provide, saveUser() will update an existing user.
+        /* If users_id is provided, saveUser() will update an existing user.
         Otherwise it will insert a new one */
 
         // --------------------------------------------------------------------

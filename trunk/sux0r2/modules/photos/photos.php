@@ -82,7 +82,7 @@ class photos {
 
         // "Cache Groups" using a vertical bar |
         $cache_id = "listing|$nickname|" . $this->pager->start;
-        $this->tpl->caching = 0; // TODO, turn cache on
+        $this->tpl->caching = 1;
 
         if (!$this->tpl->is_cached('list.tpl', $cache_id)) {
 
@@ -114,7 +114,7 @@ class photos {
 
         // "Cache Groups" using a vertical bar |
         $cache_id = "album|{$id}|" . $this->pager->start;
-        $this->tpl->caching = 0; // TODO, turn cache on
+        $this->tpl->caching = 1;
 
         if (!$this->tpl->is_cached('album.tpl', $cache_id)) {
 
@@ -142,7 +142,7 @@ class photos {
 
         // "Cache Groups" using a vertical bar |
         $cache_id = "view|{$id}";
-        $this->tpl->caching = 0; // TODO, turn cache on
+        $this->tpl->caching = 1;
 
         if (!$this->tpl->is_cached('view.tpl', $cache_id)) {
 
