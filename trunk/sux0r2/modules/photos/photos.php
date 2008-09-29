@@ -90,6 +90,12 @@ class photos {
             $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/photos'));
             $this->r->pho = $this->photo->getAlbums($users_id, $this->pager->limit, $this->pager->start);
 
+            foreach ($this->r->pho as $key => $val) {
+                $tmp = $this->user->getUser($val['users_id']);
+                $this->r->pho[$key]['nickname'] = $tmp['nickname'];
+            }
+
+
             if ($this->r->pho == false || !count($this->r->pho))
                 $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
@@ -123,6 +129,9 @@ class photos {
             $this->r->pho = $this->photo->getPhotos($id, $this->pager->limit, $this->pager->start);
 
             $this->r->album = $this->photo->getAlbum($id);
+            $tmp = $this->user->getUser($this->r->album['users_id']);
+            $this->r->album['nickname'] = $tmp['nickname'];
+
             $this->r->title .= " | {$this->r->text['photos']} | {$this->r->album['title']}";
 
             if ($this->r->pho == false || !count($this->r->pho))
@@ -155,6 +164,8 @@ class photos {
 
                 // Album info
                 $this->r->album = $this->photo->getAlbum($this->r->pho['photoalbums_id']);
+                $tmp = $this->user->getUser($this->r->album['users_id']);
+                $this->r->album['nickname'] = $tmp['nickname'];
 
                 // Previous, next, and page number
                 $prev_id = null;

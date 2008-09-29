@@ -35,7 +35,7 @@
 		<td colspan="2" style="vertical-align:top;">
 			<div id="header">
 
-                <h1>sux0r - it sux0rs up all the web</h1>
+                <h1>{$r->text.header|lower}</h1>
                 {insert name="userInfo"}
                 {$r->navlist()}
 
@@ -47,8 +47,11 @@
 		<td style="vertical-align:top;">
 			<div id="leftside">
 
-            {capture name=editLinks}{insert name="editLinks" br=true}{insert name="editLinks2" album_id=$r->album.id br=true}{/capture}
-            {if $smarty.capture.editLinks}<div class="editLinks">{$smarty.capture.editLinks}</div>{/if}
+            <div class="editLinks">
+            <p>{$r->text.publisher}: <a href="{$r->makeURL('/user/profile')}/{$r->album.nickname}">{$r->album.nickname}</a></p>
+            {insert name="editLinks" br=true}
+            {insert name="editLinks2" album_id=$r->album.id br=true}
+            </div>
 
 			</div>
 		</td>

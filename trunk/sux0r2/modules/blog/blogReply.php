@@ -145,6 +145,10 @@ class blogReply {
 
         $tmp = $this->msg->getMessage($clean['parent_id']); // Is actually published?
         if ($tmp) {
+
+            // Clear all caches, cheap and easy
+            $this->tpl->clear_all_cache();
+
             // Log message
             $log = '';
             $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);

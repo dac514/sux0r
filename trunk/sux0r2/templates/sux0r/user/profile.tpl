@@ -29,8 +29,7 @@
         <td style="vertical-align:top;">
 			<div id="leftside">
 
-            <p>Lorem ipsum dolor sit amet, consec tetuer Lorem ipsum dolor sit amet</p>
-
+            <p>{$r->text.profile_intro}</p>
 
             <!-- menu -->
             <div class='menucontainer'>

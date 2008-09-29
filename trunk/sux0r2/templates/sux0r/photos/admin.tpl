@@ -38,6 +38,9 @@
     <input type="hidden" name="integrity" value="{$r->integrityHash($users_id, $nickname)}" />
     {validate id="integrity" message="integrity failure"}
 
+    <a href="{$r->makeUrl('/photos/album/edit')}">{$r->text.new}</a>,
+    <a href="{$r->makeUrl('/photos/upload')}">{$r->text.upload}</a>
+
     <table class="adminTable">
     <thead>
         <tr>

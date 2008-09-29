@@ -19,12 +19,11 @@
 		<td colspan="2" style="vertical-align:top;">
 			<div id="header">
 
-                <h1>sux0r - it sux0rs up all the web</h1>
+                <h1>{$r->text.header|lower}</h1>
                 {insert name="userInfo"}
                 {$r->navlist()}
                 <div class="clearboth"></div>
-                {capture name=editLinks}{insert name="editLinks"}{/capture}
-                {if $smarty.capture.editLinks}<div class="editLinks">{$smarty.capture.editLinks}</div>{/if}
+                {insert name="editLinks" div=true}
 			</div>
 
 		</td>
@@ -41,13 +40,12 @@
                 {capture name=album}
                     <p>
                     {$foo.published_on}<br />
-                    {$foo.title}<br />
+                    {$r->text.publisher}: <a href="{$r->makeURL('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a><br />
                     {$r->countPhotos($foo.id)} {$r->text.photos}
                     </p>
                     {$foo.body_html}
                     <div class="clearboth"></div>
-                    {capture name=editLinks}{insert name="editLinks2" album_id=$foo.id}{/capture}
-                    {if $smarty.capture.editLinks}<div class="editLinks">{$smarty.capture.editLinks}</div>{/if}
+                    {insert name="editLinks2" album_id=$foo.id div=true}
                 {/capture}
 
                 {capture name=album_url}
@@ -76,13 +74,12 @@
                 {capture name=album}
                     <p>
                     {$foo.published_on}<br />
-                    {$foo.title}<br />
+                    {$r->text.publisher}: <a href="{$r->makeURL('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a><br />
                     {$r->countPhotos($foo.id)} {$r->text.photos}
                     </p>
                     {$foo.body_html}
                     <div class="clearboth"></div>
-                    {capture name=editLinks}{insert name="editLinks2" album_id=$foo.id}{/capture}
-                    {if $smarty.capture.editLinks}<div class="editLinks">{$smarty.capture.editLinks}</div>{/if}
+                    {insert name="editLinks2" album_id=$foo.id div=true}
                 {/capture}
 
                 {capture name=album_url}

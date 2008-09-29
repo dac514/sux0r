@@ -38,6 +38,8 @@
     <input type="hidden" name="integrity" value="{$r->integrityHash($users_id, $nickname)}" />
     {validate id="integrity" message="integrity failure"}
 
+    <a href="{$r->makeUrl('/bookmarks/edit')}">{$r->text.new}</a>
+
     <table class="adminTable">
     <thead>
         <tr>

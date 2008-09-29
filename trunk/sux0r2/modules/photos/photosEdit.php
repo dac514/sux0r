@@ -183,6 +183,9 @@ class photosEdit {
             }
         }
 
+        // Clear all caches, cheap and easy
+        $this->tpl->clear_all_cache();
+
     }
 
 
