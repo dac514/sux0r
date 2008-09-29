@@ -36,7 +36,7 @@ if (!$prob) {
 <head>
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
     <title><?php echo $GLOBALS['CONFIG']['TITLE']; ?> - Dependencies</title>
-    <style>
+    <style type="text/css">
     body  { font-family: Arial, Helvetica, sans-serif; background-color: #ffffff; }
     a:link, a:visited, a:active { font-weight: bold; color: #000000; text-decoration: underline; }
     a:hover { color: #ffffff; background: #000000; }
