@@ -88,7 +88,7 @@ class adminLog {
         $this->pager->limit = $this->per_page;
         $this->pager->setStart();
 
-        $this->pager->setPages($this->user->countLog());
+        $this->pager->setPages($this->user->countLog($this->users_id));
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/admin/log/{$this->nickname}", $params));
         $this->r->ulog = $this->user->getLog($this->pager->limit, $this->pager->start, $this->users_id, $order, true);
 
