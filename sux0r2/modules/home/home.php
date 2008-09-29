@@ -58,6 +58,7 @@ class home {
     */
     function display() {
 
+        $this->tpl->caching = 1;
         $this->tpl->display('home.tpl');
 
     }

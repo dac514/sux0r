@@ -1,8 +1,19 @@
 #leftside {
     width: 468px;
     margin-left: 2px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#leftside p {
+    font-size: 12px;
+
 }
 
 #rightside {
     width: 468px;
+}
+
+.hl {
+    background-color: pink;
 }
