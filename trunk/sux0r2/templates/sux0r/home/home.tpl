@@ -21,49 +21,64 @@
 		<td style="vertical-align:top;">
 			<div id="leftside">
 
-            {$r->widget('Title', '<p>Lorem ipsum dolor sit amet, consectetuer...</p>', 'www.trotch.com', 'http://localhost:8888/sux0r2/media/sux0r/assets/nullwhore.png', 'Caption my big ass caption')}
+            <p><span class="hl">sux0r 2.0</span> is an extendable content management system (CMS) built
+            around the principles of Naive Bayesian probabilistic content.</p>
 
+            <p>
+            <a href="http://en.wikipedia.org/wiki/Naive_Bayes_classifier">Naive Bayesian Categorization</a>
+            is the ouija board of mathematics. Known for being good at filtering junk mail, the Naive Bayesian
+            algorithm can categorize anything so long as there are coherent reference
+            texts to work from. For example, categorizing documents in relation to a vector
+            of political manifestos, or religious holy books, make for a neat trick.
+            More subjective magic 8-ball categories could be  "good vs. bad" or
+            company press releases in relation to stock market prices.
+            </p>
 
-                <div class="widget">
-                    <h2>Lorem ipsum</h2>
-                    <div class="floatleft">
-                    <img src="{$r->url}/media/{$r->partition}/assets/nullwhore.png" alt="" width="80" height="80" /><br />
-                    Caption
-                    </div>
-                    <p>Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer
-                    Lorem ipsum dolor sit amet, consec tetuer Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer
-                    Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consect etuer Lorem ipsum dolor sit amet, consectetuer
-                    Lorem ipsum dolor sit amet, consec tetuer Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer
-                    </p>
-                    <div class="clearboth"></div>
-                    <b class="bb"><b></b></b>
-                </div>
+            <p>
+            In addition to being a blog, RSS aggregator, bookmark repository,
+            and photo publishing platform, <span class="hl">sux0r 2.0</span> allows users
+            to maintain multiple lists of Naive Bayesian categories. These category lists,
+            called vectors, can be shared with other users. This allows a group of trusted
+            friends to share, train, and use <span class="hl">sux0r</span> together.
+            </p>
+
+            <p>
+            <span class="hl">sux0r 2.0</span> is <a href="http://sourceforge.net/projects/sux0r/">open source</a> and is distributed under
+            the <a href="http://www.fsf.org/licensing/licenses/agpl-3.0.html">GNU Affero General Public License</a>.
+            </p>
 
 			</div>
 		</td>
 		<td style="vertical-align:top;">
 			<div id="rightside">
 
-                <div class="widget">
-                    <h2>Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, consectetuer</h2>
+            {* Capture content *}
 
-                    <!-- menu -->
-                    <div class='menucontainer'>
-                    <ul class='menulist'>
-                    <li><a href='#' class='selected'>Item One</a></li>
-                    <li><a href='cake'>Item Two</a></li>
-                    <li><a href='#'>Item Three</a></li>
-                    <li><a href='http://www.trotch.com'>Item Four</a></li>
-                    </ul>
-                    </div>
-                    <div class='clearboth'></div>
+            {capture name='title' assign='title'}CODENAME: Vorpal CMS{/capture}
 
-                    <div class="clearboth"></div>
-                    <b class="bb"><b></b></b>
-                </div>
+            {capture name='welcome' assign='welcome'}
+
+            <p>
+            2008-09-29: In many a drunken rant alone in front of a terminal, I dropped
+            buzzwords like "distributed blogging", "content refactoring" and "harnessing
+            the power of selfishness" which quite frankly sounds a lot like me
+            talking out of my ass. With that said, hopefully sux0r 2.0 is the starting point
+            for something good.
+            </p>
+
+            <p><em>Last year's technology, today...</em></p>
+
+            <p>
+            <a href="http://www.sux0r.org/user/profile/conner_bw">Dac / Conner_Bw</a>
+            </p>
 
 
+            {/capture}
+            {capture name='img' assign='img'}{$r->makeUrl('/', null, true)}/media/sux0r/assets/nullwhore.png{/capture}
+            {capture name='caption' assign='caption'}Nullwhore Lives{/capture}
 
+            {* Render widget *}
+            {$r->widget($title, $welcome, null, $img, $caption)}
 
 			</div>
 		</td>
