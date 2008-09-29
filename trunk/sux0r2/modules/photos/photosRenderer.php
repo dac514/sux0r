@@ -29,6 +29,7 @@ class photosRenderer extends suxRenderer {
 
     // Variables
     public $pho = array(); // Array of photo(s)
+    public $fp = array(); // Alternater array
     public $album = array(); // Array of album(s)
 
     // Objects
@@ -172,12 +173,15 @@ function insert_editLinks($params) {
     $text = suxFunct::gtext('photos');
     $html = '';
 
-    if (!$u->isRoot()) {
-        $access = $u->getAccess('photos');
+    $is_root = $u->isRoot();
+    $access = $u->getAccess('photos');
+
+    if (!$is_root) {
         if ($access < $GLOBALS['CONFIG']['ACCESS']['photos']['publisher'])
             return null;
     }
-    else {
+
+    if ($is_root || $access >= $GLOBALS['CONFIG']['ACCESS']['photos']['admin']) {
         $url = suxFunct::makeUrl('/photos/admin');
         $html .= "<a href='{$url}'>{$text['admin']}</a>$br ";
     }

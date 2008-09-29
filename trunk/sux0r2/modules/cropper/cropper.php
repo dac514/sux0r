@@ -117,7 +117,9 @@ class cropper {
             // Check that the user is allowed to be here
             if (!$this->user->isRoot()) {
                 $access = $this->user->getAccess($module);
-                if ($access < $GLOBALS['CONFIG']['ACCESS'][$module]['admin'])
+                if (!isset($GLOBALS['CONFIG']['ACCESS'][$module]['admin']))
+                    suxFunct::redirect(suxFunct::getPreviousURL('cropper'));
+                elseif ($access < $GLOBALS['CONFIG']['ACCESS'][$module]['admin'])
                     suxFunct::redirect(suxFunct::getPreviousURL('cropper'));
             }
         }
@@ -190,7 +192,9 @@ class cropper {
             // Check that the user is allowed to be here
             if (!$this->user->isRoot()) {
                 $access = $this->user->getAccess($clean['module']);
-                    if ($access < $GLOBALS['CONFIG']['ACCESS'][$clean['module']]['admin'])
+                if (!isset($GLOBALS['CONFIG']['ACCESS'][$module]['admin']))
+                    suxFunct::redirect(suxFunct::getPreviousURL('cropper'));
+                elseif ($access < $GLOBALS['CONFIG']['ACCESS'][$clean['module']]['admin'])
                     suxFunct::redirect(suxFunct::getPreviousURL('cropper'));
             }
         }
