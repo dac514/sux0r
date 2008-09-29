@@ -32,7 +32,7 @@ input.captcha {
     width: 175px;
 }
 
-.openidInput {
+input.openidInput {
     background: #ffffff url("../assets/openid_icon.gif") no-repeat 0 50%;
     padding-left: 18px !important;
     padding-top: .2em !important;

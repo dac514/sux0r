@@ -189,7 +189,8 @@ function insert_editLinks($params) {
     $url = suxFunct::makeUrl('/photos/album/edit/');
     $html .= "<a href='{$url}'>{$text['new']}</a>$br ";
 
-    return $html;
+    if (isset($params['div'])) return '<div class="editLinks">' . $html . '</div>';
+    else return $html;
 
 }
 
@@ -231,7 +232,8 @@ function insert_editLinks2($params) {
     $html .= "<a href='{$upload}'>{$text['upload']}</a>$br";
     $html .= "<a href='{$annotate}'>{$text['annotate_2']}</a>$br";
 
-    return $html;
+    if (isset($params['div'])) return '<div class="editLinks">' . $html . '</div>';
+    else return $html;
 
 }
 

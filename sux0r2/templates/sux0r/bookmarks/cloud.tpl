@@ -17,7 +17,7 @@
 
 {* Header *}
 <div id="header">
-    <h1>sux0r - it sux0rs up all the web</h1>
+    <h1>{$r->text.header|lower}</h1>
     {insert name="userInfo"}
     {$r->navlist()}
 </div>

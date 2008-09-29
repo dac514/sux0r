@@ -33,6 +33,7 @@ $gtext['error_8'] = 'URL is invalid';
 $gtext['extensions'] = 'Supported extensions';
 $gtext['form_error'] = 'The form was not submitted, see errors below';
 $gtext['form_problem'] = 'The form was not submitted, please try again';
+$gtext['header'] = 'Ironing our pants into the universe';
 $gtext['image'] = 'Image';
 $gtext['in'] = 'In';
 $gtext['linked_to'] = 'Linked to the following Bayes documents';

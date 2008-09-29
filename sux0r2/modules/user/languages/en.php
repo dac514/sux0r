@@ -74,6 +74,7 @@ $gtext['postcode'] = 'Zip/Postal Code';
 $gtext['previous_page'] = 'Back to previous page';
 $gtext['profile'] = 'Profile';
 $gtext['profile_of'] = 'Profile of';
+$gtext['profile_intro'] = 'This profile / URL is an OpenID Identity page';
 $gtext['pw_failure'] = 'Too many password failures';
 $gtext['pw_failure_2'] = 'Too many password failures. You must restart your browser to try again.';
 $gtext['reg'] = 'Registration';
