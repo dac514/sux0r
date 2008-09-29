@@ -1,6 +1,6 @@
 /*
-htmLawed_README.txt, 30 June 2008
-htmLawed 1.1, 29 June 2008
+htmLawed_README.txt, 27 September 2008
+htmLawed 1.1.1, 27 September 2008
 Copyright Santosh Patnaik
 GPL v3 license
 A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -140,6 +140,7 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 
   *  understands improperly spaced tag content (like, spread over more than a line) and properly spaces them  `
   *  attempts to *balance tags* for well-formedness  ^~`
+  *  understands when *omitable closing tags* like '</p>' (allowed in HTML 4, transitional, e.g.) are missing  ^~`
   *  attempts to permit only *validly nested tags*  ^~`
   *  option to *remove or neutralize bad content* ^~`
   *  attempts to *rectify common errors of plain-text misplacement* (e.g., directly inside 'blockquote') ^~`
@@ -1224,7 +1225,9 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 
   (The release date for the downloadable package of files containing documentation, demo script, test-cases, etc., besides the 'htmLawed.php' file may be updated independently if the secondary files are revised.)
 
-  Key: Version number - Release date. Notes
+  `Version number - Release date. Notes`
+
+  1.1.1 - 27 September 2008. Better nesting correction when omitable closing tags are absent
 
   1.1 - 29 June 2008. '$config["hook_tag"]' and '$config["format"]' introduced for custom tag/attribute check/modification/injection and output compaction/beautification; fixed a regex-in-$spec parsing bug
 

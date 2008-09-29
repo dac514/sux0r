@@ -57,14 +57,14 @@ dBug
 
 htmLawed
 * Path: ./htmLawed/
-* Version: 1.1
+* Version: 1.1.1
 * Licence: GPL 3
 * Website: http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/index.php
 
 
 JpGraph
 * Path: ./jpgraph/
-* Version: 2.3
+* Version: 2.3.3
 * Licence: QPL 1.0
 * Website: http://www.aditus.nu/jpgraph/
 
@@ -84,7 +84,7 @@ Scriptaculous
 
 Smarty
 * Path: ./Smarty/
-* Version: 2.6.19
+* Version: 2.6.20
 * Licence: LGPL 2.1
 * Website: http://www.smarty.net/
 
@@ -114,6 +114,6 @@ Stopwords
 
 TinyMCE
 * Path: ./tinymce/
-* Version: 3.1.0.1 (+ language files)
+* Version: 3.2.0.1 (+ language files)
 * Licence: LGPL 2.1
 * Website: http://tinymce.moxiecode.com/

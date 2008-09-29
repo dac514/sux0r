@@ -1,7 +1,7 @@
 tinyMCE.addI18n('ar.simple',{
-bold_desc:"\u0639\u0631\u064A\u0636 (Ctrl+B)",
-italic_desc:"\u0645\u0627\u0626\u0644 (Ctrl+I)",
-underline_desc:"\u062A\u062D\u062A\u0647 \u062E\u0637 (Ctrl+U)",
+bold_desc:"\u12AE\u1295\u1275\u122E\u120D \u1262 (Ctrl+B)",
+italic_desc:"\u12AE\u1295\u1275\u122E\u120D \u12A0\u12ED (Ctrl+I)",
+underline_desc:"\u12AE\u1295\u1275\u122E\u120D \u12EE (Ctrl+U)",
 striketrough_desc:"\u064A\u062A\u0648\u0633\u0637\u0647 \u062E\u0637",
 bullist_desc:"\u062A\u0639\u062F\u0627\u062F \u0646\u0642\u0637\u064A",
 numlist_desc:"\u062A\u0639\u062F\u0627\u062F \u0631\u0642\u0645\u064A",
