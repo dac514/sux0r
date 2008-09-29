@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 06, 2008 at 05:47 PM
+-- Generation Time: Sep 29, 2008 at 04:43 PM
 -- Server version: 5.0.41
 -- PHP Version: 5.2.5
 
@@ -33,6 +33,7 @@ CREATE TABLE `bayes_auth` (
 -- Dumping data for table `bayes_auth`
 --
 
+
 -- --------------------------------------------------------
 
 --
@@ -52,6 +53,7 @@ CREATE TABLE `bayes_cache` (
 --
 -- Dumping data for table `bayes_cache`
 --
+
 
 -- --------------------------------------------------------
 
@@ -74,6 +76,7 @@ CREATE TABLE `bayes_categories` (
 -- Dumping data for table `bayes_categories`
 --
 
+
 -- --------------------------------------------------------
 
 --
@@ -91,6 +94,7 @@ CREATE TABLE `bayes_documents` (
 --
 -- Dumping data for table `bayes_documents`
 --
+
 
 -- --------------------------------------------------------
 
@@ -112,6 +116,7 @@ CREATE TABLE `bayes_tokens` (
 -- Dumping data for table `bayes_tokens`
 --
 
+
 -- --------------------------------------------------------
 
 --
@@ -127,6 +132,7 @@ CREATE TABLE `bayes_vectors` (
 --
 -- Dumping data for table `bayes_vectors`
 --
+
 
 -- --------------------------------------------------------
 
@@ -153,6 +159,7 @@ CREATE TABLE `bookmarks` (
 -- Dumping data for table `bookmarks`
 --
 
+
 -- --------------------------------------------------------
 
 --
@@ -165,18 +172,9 @@ CREATE TABLE `link_bayes_bookmarks` (
   UNIQUE KEY `idx` (`bookmarks_id`,`bayes_documents_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
--- --------------------------------------------------------
-
 --
--- Table structure for table `link_bookmarks_users`
+-- Dumping data for table `link_bayes_bookmarks`
 --
-
-CREATE TABLE `link_bookmarks_users` (
-  `bookmarks_id` int(11) NOT NULL,
-  `users_id` int(11) NOT NULL,
-  UNIQUE KEY `idx` (`bookmarks_id`,`users_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- --------------------------------------------------------
@@ -194,6 +192,7 @@ CREATE TABLE `link_bayes_messages` (
 --
 -- Dumping data for table `link_bayes_messages`
 --
+
 
 -- --------------------------------------------------------
 
@@ -232,6 +231,23 @@ CREATE TABLE `link_bookmarks_tags` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `link_bookmarks_users`
+--
+
+CREATE TABLE `link_bookmarks_users` (
+  `bookmarks_id` int(11) NOT NULL,
+  `users_id` int(11) NOT NULL,
+  UNIQUE KEY `idx` (`bookmarks_id`,`users_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `link_bookmarks_users`
+--
+
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `link_messages_tags`
 --
 
@@ -244,6 +260,7 @@ CREATE TABLE `link_messages_tags` (
 --
 -- Dumping data for table `link_messages_tags`
 --
+
 
 -- --------------------------------------------------------
 
@@ -297,6 +314,7 @@ CREATE TABLE `messages` (
 -- Dumping data for table `messages`
 --
 
+
 -- --------------------------------------------------------
 
 --
@@ -320,6 +338,7 @@ CREATE TABLE `messages_history` (
 --
 -- Dumping data for table `messages_history`
 --
+
 
 -- --------------------------------------------------------
 
@@ -407,6 +426,7 @@ CREATE TABLE `photos` (
 -- Dumping data for table `photos`
 --
 
+
 -- --------------------------------------------------------
 
 --
@@ -431,6 +451,7 @@ CREATE TABLE `rss_feeds` (
 -- Dumping data for table `rss_feeds`
 --
 
+
 -- --------------------------------------------------------
 
 --
@@ -454,6 +475,7 @@ CREATE TABLE `rss_items` (
 --
 -- Dumping data for table `rss_items`
 --
+
 
 -- --------------------------------------------------------
 
@@ -487,7 +509,7 @@ CREATE TABLE `tags` (
   `tag` varchar(64) NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `tag` (`tag`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `tags`
@@ -505,17 +527,17 @@ CREATE TABLE `users` (
   `nickname` varchar(64) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `root` tinytext NOT NULL,
+  `root` tinyint(1) NOT NULL,
+  `banned` tinyint(1) NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `nickname` (`nickname`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` VALUES (1, 'test', 'test@test.com', '24d7d9859810e5834bbfdcc9dd931fca', 1);
 
 -- --------------------------------------------------------
 
@@ -532,24 +554,9 @@ CREATE TABLE `users_access` (
   UNIQUE KEY `users_id` (`users_id`,`module`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-
--- --------------------------------------------------------
-
 --
--- Table structure for table `users_log`
+-- Dumping data for table `users_access`
 --
-
-CREATE TABLE `users_log` (
-  `id` int(11) NOT NULL auto_increment,
-  `users_id` int(11) NOT NULL,
-  `body_html` text NOT NULL,
-  `body_plaintext` text NOT NULL,
-  `ts` datetime NOT NULL,
-  `private` tinyint(1) NOT NULL,
-  PRIMARY KEY  (`id`),
-  KEY `users_id` (`users_id`,`private`),
-  KEY `ts` (`ts`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
 -- --------------------------------------------------------
@@ -574,15 +581,38 @@ CREATE TABLE `users_info` (
   `gender` char(1) default NULL,
   `language` char(2) default NULL,
   `timezone` varchar(255) default NULL,
+  `image` varchar(255) default NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `users_id` (`users_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `users_info`
 --
 
-INSERT INTO `users_info` VALUES (1, 1, '', '', '', '', '', '', 'ca', '', '', '0000-00-00', 'm', 'en', 'America/Montreal');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_log`
+--
+
+CREATE TABLE `users_log` (
+  `id` int(11) NOT NULL auto_increment,
+  `users_id` int(11) NOT NULL,
+  `body_html` text NOT NULL,
+  `body_plaintext` text NOT NULL,
+  `ts` datetime NOT NULL,
+  `private` tinyint(1) NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `users_id` (`users_id`,`private`),
+  KEY `ts` (`ts`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `users_log`
+--
+
 
 -- --------------------------------------------------------
 
@@ -602,4 +632,5 @@ CREATE TABLE `users_openid` (
 --
 -- Dumping data for table `users_openid`
 --
+
 
