@@ -1,6 +1,6 @@
 tinyMCE.addI18n('ch.emotions_dlg',{
 title:"\u63D2\u5165\u8868\u60C5",
-desc:"\u8868\u60C5\u5217\u8868",
+desc:"\u8868\u60C5\u6E05\u5355",
 cool:"\u51B7\u9177",
 cry:"\u54ED\u6CE3",
 embarassed:"\u5C34\u5C2C",

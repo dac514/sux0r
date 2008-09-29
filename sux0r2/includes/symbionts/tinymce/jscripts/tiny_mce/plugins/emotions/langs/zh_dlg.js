@@ -1,7 +1,7 @@
 tinyMCE.addI18n('zh.emotions_dlg',{
 title:"\u63D2\u5165\u8868\u60C5",
-desc:"\u8868\u60C5\u5217\u8868",
-cool:"\u51B7\u9177",
+desc:"\u8868\u60C5\u6E05\u5355",
+cool:"\u9177",
 cry:"\u54ED\u6CE3",
 embarassed:"\u5C34\u5C2C",
 foot_in_mouth:"\u54A7\u5634",

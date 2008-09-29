@@ -1,8 +1,8 @@
 <?php
 
 /*
-htmLawedTest.php, 29 June 2008
-htmLawed 1.1, 29 June 2008
+htmLawedTest.php, 27 September 2008
+htmLawed 1.1.1, 27 September 2008
 Copyright Santosh Patnaik
 GPL v3 license
 A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -11,7 +11,10 @@ Test htmLawed; user provides text input; input and processed input are shown as 
 */
 
 // config
+$_errs = 0; // display PHP errors
 $_limit = 8000; // input character limit
+
+// more config
 $_hlimit = 1000; // input character limit for showing hexdumps
 $_hilite = 1; // 0 turns off slow Javascript-based code-highlighting, e.g., if $_limit is high
 $_w3c_validate = 1; // 1 to show buttons to send input/output to w3c validator
@@ -20,7 +23,7 @@ $_slife = 30; // session life in min.
 
 // errors
 error_reporting(E_ALL | (defined('E_STRICT') ? E_STRICT : 0));
-ini_set('display_errors', 0); // 1 to debug
+ini_set('display_errors', $_errs);
 
 // session
 session_name($_sid);

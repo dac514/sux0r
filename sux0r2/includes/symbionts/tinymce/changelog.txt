@@ -1,3 +1,85 @@
+Version 3.2.0.1 (2008-09-17)
+	Fixed bug where font sizes and faces wouldn't be changed correctly when there was a parent with a different style.
+	Fixed bug where adding fonts to the same selection would produce redundant spans.
+Version 3.2 (2008-09-11)
+	Added new text style support, it will now use span elements internally instead of font elements.
+	Added new improved support for the theme_advanced_font_sizes option, check the Wiki for details.
+	Added new keep_style setting that maintains the text style on return/enter on non IE browsers, enabled by default.
+	Added new onBeforeSetContent/onBeforeGetContent/onSetContent/onGetContent events to the Selection class.
+	Added new selectByIndex method to ListBox class. This enables you to select list items by an index instead of a value.
+	Added new possibility to the select method of the ListBox class. This can now have a selector function as it's value argument.
+	Added new possibility to skip the loading of popups css by setting the feature popup_css to the value false.
+	Added new possibility to skip translation of popups by setting the translate_i18n feature to false.
+	Added new element_format option enables you to produce HTML element endings instead of XHTML. But we are still in the XHTML is better camp.
+	Added missing allowfullscreen and quality options for flash elements, this will now get correctly stored.
+	Fixed bug where table cell dialog didn't close properly unless the accessibility_warnings option was set to false.
+	Fixed bug where the modal dialog blocker element for inlinepopups wasn't placed at a correct location if the page had scroll.
+	Fixed bug where non inline dialogs didn't close correctly if the inlinepopups plugin was used.
+	Fixed bug where non inline dialogs could make the modal dialog blocker to work incorrectly.
+	Fixed bug where style select wasn't populated correctly if you pressed the arrow. Patch by Hari Karam Singh.
+	Fixed bug where toggling the fullscreen mode didn't restore scrollbars on IE when the editor was inside a frame. Patch by Jacob Barrett.
+	Fixed bug where inserting flash contents using the template plugin didn't work correctly.
+	Fixed bug where inserting flash contents using the selection.setContent or mceInsertContent command didn't work correctly.
+	Fixed bug where IE would produce an exception if a comment started with -.
+	Fixed bug where the blockquote button would wrap lists incorrectly on non IE browsers.
+	Fixed bug where Opera would display BR elements in the element path.
+	Fixed bug where xhtmlxtras didn't insert elements correctly on IE.
+	Fixed bug where the buttons wasn't activated correctly in the xhtmlxtras plugin.
+	Fixed bug where adding an object as the style attribute for the dom setAttribs method wouldn't work.
+	Fixed bug where the background color would bleed out to parent container element in Gecko.
+	Fixed bug where the insert column actions for tables would fail if you did it in a thead or tfoot. Patch contributed by T Andersen (tan73).
+	Fixed bug where event blocker element wasn't positioned correctly for the inlinepopups plugin.
+	Fixed bug where pasting from Office 2007 would produce an odd comment in the contents.
+	Fixed bug where the paste as plain text could remove an extra character. Patch contributed by Speednet.
+	Fixed bug where some characters where missing for the paste_replace_list option. Patch contributed by Speednet.
+	Fixed bug where removing non existing editor instances by the mceRemoveControl command would produce an error.
+	Fixed bug where meta elements with the name description would produce errors in IE.
+	Fixed bug where color and background colors wouldn't be updated properly.
+	Fixed bug where the createMenuButton of tinymce.ControlManager didn't implement the last class argument.
+	Fixed bug where the editor_css option was relative from the TinyMCE installation directory not the current page.
+	Fixed bug where elements wouldn't be padded if the element contained bogus br elements. For example TD elements.
+	Fixed bug where parsing of <body > in fullpage plugin would produce an error.
+	Fixed bug where relative urls with just ./ would become an empty string.
+	Fixed bug where outdent button would be disabled if inline_styles where set to false.
+	Fixed bug where replace with an empty search string would produce an error on IE.
+	Fixed bug where restoring the overflow state of the body in fullscreen plugin running on IE would produce vertical scrollbars.
+	Fixed bug where pressing return/enter in list items would sometimes move the caret the to top of the content area in FF.
+	Fixed bug where the style listbox wouldn't be updated correctly if you used the use_native_selects option.
+	Fixed bug where WebKit browsers would produce a div element when ending list elements using return.
+	Fixed so translation of popup contents only occurs if it's needed.
+	Optimized the URI object in regards or converting absolute URIs to relative URIs.
+Version 3.1.1 (2008-08-18)
+	Added new getSize method to DOMUtils it will return the dimensions only of an element.
+	Added new alert/confirm methods to the tinyMCEPopup class to prevent focus problems and also to shorten method calls.
+	Added new plugin_preview_inline option to preview plugin to enable/disable native/inline dialogs.
+	Added new readonly option. If this is set the editor will only display the contents for the user.
+	Added missing tabindex and accesskey to input elements in the default valid_elements setup.
+	Updated firebug lite to 1.2, to enable it use the tiny_mce_dev.js?debug=1 on the development package.
+	Fixed so the preview dialog in the preview plugin uses inline dialogs/popups.
+	Fixed so CDATA sections remains intact through the serialization process of the DOM tree.
+	Fixed various issues with the getAttrib command. It will now return more correct values.
+	Fixed bug where the embed element wasn't properly parsed in the media plugin it now supports 3 formats.
+	Fixed bug where the noshade attribute was serialized incorrectly on IE.
+	Fixed bug where editing an existing link element didn't force it relative.
+	Fixed bug where image link creation fails on Safari if the image is aligned.
+	Fixed bug where it was possible to scroll the fullscreen mode in Opera 9.50.
+	Fixed bug where removal of center image alignment would fail. Patch contributed by Andrew Ozz.
+	Fixed bug where inlinedialogs didn't work properly if the doctype was incorrect in IE.
+	Fixed bug where cross domain loading didn't work correctly in Opera 9.50.
+	Fixed bug where breaking huge text blocks with return/enter key would scroll to end of block.
+	Fixed bug where replace button kept inserting the replacement text even if there is no more matches.
+	Fixed bug with fullpage plugin where value wasn't set correctly. Patch contributed by Pascal Chantelois.
+	Fixed bug where the dom utils setAttrib method call could produce an exception if the input was null/false.
+	Fixed bug where pressing backspace would sometimes remove one extra character in Gecko browsers.
+	Fixed bug where the native confirm/alert boxes would move focus to parent document if fired in dialogs.
+	Fixed bug where Opera 9.50 was telling you that the selection is collapsed even when it isn't.
+	Fixed bug where mceInsertContent would break up existing elements in Opera and Gecko.
+	Fixed bug where TinyMCE fails to detect some keyboard combos on Mac, contributed by MattyRob.
+	Fixed bug where replace all didn't move the caret to beginning of text before searching.
+	Fixed bug where the oninit callback wasn't executed correctly when the strict_loading_mode option was used, thanks goes to Nicholas Oxhoej.
+	Fixed bug where a access denied exception was thrown if some other script specified document.domain before loading TinyMCE.
+	Fixed so setting language to empty string will skip language loading if translations are made by some backend.
+	Fixed so dialog_type is automatically modal if you use the inlinepopups plugin use dialog_type : "window" to re-enable the old behavior.
 Version 3.1.0.1 (2008-06-18)
 	Fixed bug where the Opera line break fix didn't work correctly on Mac OS X and Unix.
 	Fixed bug where IE was producing the default value the maxlength attribute of input elements.

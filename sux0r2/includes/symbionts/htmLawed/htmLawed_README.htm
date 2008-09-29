@@ -110,8 +110,8 @@ span.totop a, span.totop a:visited {color: #6699cc;}
 
 <div id="body">
 <br />
-<div class="comment">htmLawed_README.txt, 30 June 2008<br />
-htmLawed 1.1, 29 June 2008<br />
+<div class="comment">htmLawed_README.txt, 27 September 2008<br />
+htmLawed 1.1.1, 27 September 2008<br />
 Copyright Santosh Patnaik<br />
 GPL v3 license<br />
 A PHP Labware internal utility &#45; <a href="http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed">http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed</a>&#160;</div>
@@ -189,6 +189,7 @@ A PHP Labware internal utility &#45; <a href="http://www.bioinformatics.org/phpl
 <br />
 &#160; * &#160;understands improperly spaced tag content (like, spread over more than a line) and properly spaces them &#160;`<br />
 &#160; * &#160;attempts to <strong>balance tags</strong>&#160;for well-formedness &#160;^~`<br />
+&#160; * &#160;understands when <strong>omitable closing tags</strong>&#160;like <span class="term">&lt;/p&gt;</span>&#160;(allowed in HTML 4, transitional, e.g.) are missing &#160;^~`<br />
 &#160; * &#160;attempts to permit only <strong>validly nested tags</strong>&#160; ^~`<br />
 &#160; * &#160;option to <strong>remove or neutralize bad content</strong>&#160;^~`<br />
 &#160; * &#160;attempts to <strong>rectify common errors of plain-text misplacement</strong>&#160;(e.g., directly inside <span class="term">blockquote</span>) ^~`<br />
@@ -1588,7 +1589,9 @@ A PHP Labware internal utility &#45; <a href="http://www.bioinformatics.org/phpl
 <br />
 &#160; (The release date for the downloadable package of files containing documentation, demo script, test-cases, etc., besides the <span class="term">htmLawed.php</span>&#160;file may be updated independently if the secondary files are revised.)<br />
 <br />
-&#160; Key: Version number - Release date. Notes<br />
+&#160; <em>Version number - Release date. Notes</em><br />
+<br />
+&#160; 1.1.1 - 27 September 2008. Better nesting correction when omitable closing tags are absent<br />
 <br />
 &#160; 1.1 - 29 June 2008. <span class="term">$config["hook_tag"]</span>&#160;and <span class="term">$config["format"]</span>&#160;introduced for custom tag/attribute check/modification/injection and output compaction/beautification; fixed a regex-in-$spec parsing bug<br />
 <br />
@@ -1945,7 +1948,7 @@ A PHP Labware internal utility &#45; <a href="http://www.bioinformatics.org/phpl
 </div>
 </div>
 <br />
-<hr /><br /><br /><span class="subtle"><small>HTM version of <em><a href="htmLawed_README.txt">htmLawed_README.txt</a></em> generated on 30 Jun, 2008 using <a href="http://www.bioinformatics.org/phplabware/internal_utilities">rTxt2htm</a> from PHP Labware</small></span>
+<hr /><br /><br /><span class="subtle"><small>HTM version of <em><a href="htmLawed_README.txt">htmLawed_README.txt</a></em> generated on 27 Sep, 2008 using <a href="http://www.bioinformatics.org/phplabware/internal_utilities">rTxt2htm</a> from PHP Labware</small></span>
 </div><!-- ended div body -->
 </div><!-- ended div top -->
 </body>

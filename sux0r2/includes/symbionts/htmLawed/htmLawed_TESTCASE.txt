@@ -1,12 +1,12 @@
 /*
-htmLawed_TESTCASE.txt, 29 June 2008
-htmLawed 1.1, 29 June 2008
+htmLawed_TESTCASE.txt, 27 September 2008
+htmLawed 1.1.1, 27 September 2008
 Copyright Santosh Patnaik
 GPL v3 license
 A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed
 */
 
-This file has UTF-8-encoded text with both correct and incorrect/malformed HTML/XHTML code to test htmLawed (test cases/samples). The entire text may also be used as a unit.
+This file has UTF-8-encoded text with both correct and incorrect/malformed HTML/XHTML code snippets to test htmLawed (test cases/samples). The entire text may also be used as a unit.
 
 ************************************************
 when viewing this file in a web browser, set the
@@ -196,7 +196,40 @@ Invalid: <em <!-- check -->>comment in tag content</em>, <!--check-->
 <h6>Lists</h6>
 
 <strong>Invalid character data</strong>: <ul><li>(item</li>)</ul><br />
-<strong>dd/dl/dt</strong>: <strong>dd/dl/dt</strong>: <dl><dt>a</dt>bad<dd>first <em>one</em></dd><dt>b</dt><dd>second</dd></dl><br />
+<strong>Definition list</strong>: <dl><dt>a</dt>bad<dd>first <em>one</em></dd><dt>b</dt><dd>second</dd></dl><br />
+<strong>Definition list, close-tags omitted</strong>: <dl><dt>a</dt>bad<dd>first <em>one</em></dd><dt>b<dd>second</dl><br />
+<strong>Definition lists, nested</strong>: <dl>
+ <dt>T1</dt>
+ <dd>D1</dd>
+ <dt>T2</dt>
+ <dd>D2<dl><dt>t1</dt><dd>d1</dd><dt>t2</dt><dd>d2</dd></dl></dd>
+ <dt>T3</dt>
+ <dd>D3</dd>
+ <dt>T4</dt>
+ <dd>D4<dl><dt>t1</dt><dd>d1</dd></dl></dd>
+</dl><br />
+<strong>Definition lists, nested, close-tags omitted</strong>: <dl>
+ <dt>T1
+ <dd>D1</dd>
+ <dt>T2</dt>
+ <dd>D2<dl><dt>t1<dd>d1<dt>t2</dt><dd>d2</dd></dl></dd>
+ <dt>T3
+ <dd>D3
+ <dt>T4
+ <dd>D4<dl><dt>t1<dd>d1</dl></dd>
+</dl><br />
+<strong>Nested</strong>: <ul>
+ <li>l1</li>
+ <li>l2<ol><li>lo1</li><li>lo2</li></ol></li>
+ <li>l3</li>
+ <li>l4<ol><li>lo3</li><li>lo4<ol><li>lo5</li></ol></li></ol></li>
+</ul><br />
+<strong>Nested, close-tags omitted</strong>: <ul>
+ <li>l1</li>
+ <li>l2<ol><li>lo1<li>lo2</ol>
+ <li>l3
+ <li>l4<ol><li>lo3<li>lo4<ol><li>lo5</ol></ol>
+</ul><br />
 <strong>Complex</strong>:
 <ol><script></script><li><table><tr><td>
 <ul><li id="search" class="widget widget_search">			<form id="searchform" method="get" action="http://kohei.us">
@@ -254,6 +287,32 @@ na Alemanha.
   A
   <rp>(</rp><rt>aaa</rt><rp>)</rp>
 </ruby>
+
+<h6>Tables</h6>
+
+<strong>Omitted closing tags:</strong> <table>
+<colgroup><col style="x" /><col style="y" />
+<thead>
+<tr><th>h1c1<th>h1c2
+<tbody>
+<tr><td>r1c1<td>r1c2
+<tr><td>r2c1<td>r2c2
+</table><br />
+<strong>Nested, omitted closing tags:</strong> <table>
+<colgroup><col style="x" /><col style="y" />
+<thead>
+<tr><th>h1c1<th>h1c2
+<tbody>
+<tr><td>r1c1<td>r1c2<table>
+<colgroup><col style="x" /><col style="y" />
+<thead>
+<tr><th>h1c1<th>h1c2
+<tbody>
+<tr><td>r1c1<td>r1c2
+<tr><td>r2c1<td>r2c2
+</table>
+<tr><td>r2c1<td>r2c2
+</table><br />
 
 <h6>URLs</h6>
 
