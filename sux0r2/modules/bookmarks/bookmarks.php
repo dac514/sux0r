@@ -322,9 +322,15 @@ class bookmarks extends bayesShared {
             // Paged results, cached
             // ---------------------------------------------------------------
 
+            // Get nickname
+            if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
+            else $nn = 'nobody';
+
+            $this->pager->setStart(); // Start pager
+
             // "Cache Groups" using a vertical bar |
-            if ($alphasort) $cache_id = "listing|alphasort|{$this->pager->start}";
-            else $cache_id = "listing|datesort|{$this->pager->start}";
+            if ($alphasort) $cache_id = "$nn|listing|alphasort|{$this->pager->start}";
+            else $cache_id = "$nn|listing|datesort|{$this->pager->start}";
             $this->tpl->caching = 1;
 
             if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
@@ -416,7 +422,7 @@ class bookmarks extends bayesShared {
         WHERE link_bookmarks_users.users_id = ?
         {$this->_dateSql()}
         ";
-        if ($alphasort) $query .= 'ORDER BY bookmarks.title DESC ';
+        if ($alphasort) $query .= 'ORDER BY bookmarks.title ASC ';
         else $query .= 'ORDER BY bookmarks.published_on DESC ';
         $query .= "LIMIT {$start}, {$limit} ";
 
@@ -460,7 +466,7 @@ class bookmarks extends bayesShared {
         WHERE bookmarks.draft = 0 AND link_bookmarks_tags.tags_id = ?
         {$this->_dateSql()}
         ";
-        if ($alphasort) $query .= 'ORDER BY title DESC ';
+        if ($alphasort) $query .= 'ORDER BY title ASC ';
         else $query .= 'ORDER BY published_on DESC ';
         $query .= "LIMIT {$start}, {$limit} ";
 
