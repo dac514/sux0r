@@ -281,10 +281,11 @@ class openid {
                 $this->error500('Invalid trust_root: "' . $trust_root . '"');
         }
 
-        // make sure i am this identifier
-        //if (suxFunct::canonicalizeUrl($identity) != suxFunct::canonicalizeUrl($this->profile['my_url'])) {
-        if (!mb_strpos($identity, 'user/profile') ||
-            !$this->urlDescends(suxFunct::canonicalizeUrl($identity), suxFunct::canonicalizeUrl(suxFunct::makeURL('/', null, true)))) {
+        // Make sure i am this identifier
+        if (
+            !mb_strpos($identity, 'user/profile') ||
+            !$this->urlDescends(suxFunct::canonicalizeUrl($identity), suxFunct::canonicalizeUrl(suxFunct::makeURL('/', null, true)))
+            ) {
 
             $this->debug("Invalid identity: $identity");
             $this->debug("IdP URL: " . $this->profile['my_url']);
@@ -375,7 +376,8 @@ class openid {
                 list ($assoc_handle, $shared_secret) = $this->newAssoc($lifetime);
             }
 
-            $keys['identity'] = $this->profile['my_url'];
+            // $keys['identity'] = $this->profile['my_url'];
+            $keys['identity'] = suxFunct::makeUrl('/user/profile/' . $_SESSION['nickname'], null, true);
             $keys['assoc_handle'] = $assoc_handle;
             $keys['return_to'] = $return_to;
 

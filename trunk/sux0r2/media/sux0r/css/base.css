@@ -92,6 +92,14 @@ table#proselytizer {
     height: 1%; /* IE6, Holly Hack */
 }
 
+.dataLicense, .dataLicense a {
+    color: #666666;
+}
+
+div.dataLicense {
+    margin-bottom: 10px;
+}
+
 fieldset {
     border: 1px solid #000000;
     padding: 10px;

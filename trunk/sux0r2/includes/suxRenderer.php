@@ -403,6 +403,18 @@ class suxRenderer {
 
     }
 
+    /**
+    * Copyright
+    *
+    * @return string html
+    */
+    function dataLicense() {
+
+        $text = suxFunct::gtext();
+        return $text['data_license'];
+
+    }
+
 
 }
 

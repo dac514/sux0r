@@ -51,6 +51,7 @@ and, as such, should be dealt with according to their own licenses.
 
 7. Setup a CRON job to get RSS feeds by calling
    'http://YOURSITE/modules/feeds/cron.php' every =~ 15 minutes
+   (example: /bin/nice /usr/bin/wget -q -O /dev/null "http://www.sux0r.org/modules/feeds/cron.php")
 
 
 ### FOOTNOTES ###

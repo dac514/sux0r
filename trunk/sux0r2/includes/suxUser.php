@@ -218,8 +218,7 @@ class suxUser {
 
         if (!empty($info['email'])) {
             $tmp = $this->getUserByEmail($info['email']);
-            if ($tmp['users_id'] != $users_id) throw new Exception('Duplicate email');
-
+            if ($tmp && $tmp['users_id'] != $users_id) throw new Exception('Duplicate email');
         }
 
         unset($info['id'], $info['users_id']); // Don't allow spoofing of the id in the array
