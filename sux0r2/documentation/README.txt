@@ -2,6 +2,10 @@ sux0r 2.0 _Beta1
 http://www.sux0r.org/
 All spelling mistakes are final and will not be refunded
 
+### SPONSOR ###
+
+sux0r is hosted by Network Redux: http://www.networkredux.com/
+
 
 ### LICENSE ###
 
@@ -51,12 +55,12 @@ and, as such, should be dealt with according to their own licenses.
 
 7. Setup a CRON job to get RSS feeds by calling
    'http://YOURSITE/modules/feeds/cron.php' every =~ 15 minutes
-   (example: /bin/nice /usr/bin/wget -q -O /dev/null "http://www.sux0r.org/modules/feeds/cron.php")
+   (example: /bin/nice /usr/bin/wget -q -O /dev/null "http://YOURSITE/modules/feeds/cron.php")
 
 
 ### FOOTNOTES ###
 
-- Pages pass W3C Validation
+- Pages pass W3C Validation (as best I can test)
 
 - Tested with: (OS X) Firefox 2.0.0.17, (OS X) Safari 3.1.2, Opera 9.2 (OS X)
   (Win XP) Internet Explorer 6, (Win XP) Firefox 3.0.1
@@ -64,7 +68,7 @@ and, as such, should be dealt with according to their own licenses.
 - Maybe it works with other configurations? I don't know yet, hence why this
   is  Beta1
 
-- In addition to MySQL, I will support Postgresql and SQLite. It's a work in
+- In addition to MySQL, I will support PostgreSQL and SQLite. It's a work in
   progress. Again, Beta1. If someone wants to send me a translated version
   of the db-mysql.sql file for either it would save me a lot of grief.
 
