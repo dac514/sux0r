@@ -212,7 +212,8 @@ class feedsEdit {
     */
     function formSuccess() {
 
-        // TODO: Clear caches
+        // clear all caches with "nickname" as the first cache_id group
+        $this->tpl->clear_cache(null, "{$_SESSION['nickname']}");
 
         // Redirect
         suxFunct::redirect(suxFunct::getPreviousURL($this->prev_skip));
