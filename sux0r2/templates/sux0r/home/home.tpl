@@ -21,25 +21,24 @@
 		<td style="vertical-align:top;">
 			<div id="leftside">
 
-            <p><span class="hl">sux0r 2.0</span> is an extendable content management system (CMS) built
-            around the principles of Naive Bayesian probabilistic content.</p>
+            <p><span class="hl">sux0r 2.0</span> is a blogging package, an RSS aggregator, a bookmark repository,
+            and a photo publishing platform with a focus on Naive Bayesian categorization and probabilistic content.</p>
 
             <p>
-            <a href="http://en.wikipedia.org/wiki/Naive_Bayes_classifier">Naive Bayesian Categorization</a>
+            <a href="http://en.wikipedia.org/wiki/Naive_Bayes_classifier">Naive Bayesian categorization</a>
             is the ouija board of mathematics. Known for being good at filtering junk mail, the Naive Bayesian
             algorithm can categorize anything so long as there are coherent reference
             texts to work from. For example, categorizing documents in relation to a vector
-            of political manifestos, or religious holy books, make for a neat trick.
+            of political manifestos, or religious holy books, makes for a neat trick.
             More subjective magic 8-ball categories could be  "good vs. bad" or
             company press releases in relation to stock market prices.
             </p>
 
             <p>
-            In addition to being a blog, RSS aggregator, bookmark repository,
-            and photo publishing platform, <span class="hl">sux0r 2.0</span> allows users
-            to maintain multiple lists of Naive Bayesian categories. These category lists,
-            called vectors, can be shared with other users. This allows a group of trusted
-            friends to share, train, and use <span class="hl">sux0r</span> together.
+            <span class="hl">sux0r 2.0</span> allows users
+            to maintain lists of Naive Bayesian categories. These lists
+            can be shared with other users. This allows groups
+            to share, train, and use <span class="hl">sux0r</span> together.
             </p>
 
             <p>
@@ -57,6 +56,10 @@
             {capture name='title' assign='title'}CODENAME: Vorpal CMS{/capture}
 
             {capture name='welcome' assign='welcome'}
+
+            <p>
+            2008-10-02: <a href="http://sourceforge.net/people/viewjob.php?group_id=131752&amp;job_id=31512">Translations Wanted</a>.
+            </p>
 
             <p>
             2008-09-29: In many a drunken rant alone in front of a terminal, I dropped
