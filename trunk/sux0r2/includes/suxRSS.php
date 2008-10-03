@@ -312,6 +312,9 @@ class suxRSS extends DOMDocument {
 
         }
 
+        // Clear cache
+        $this->deleteCache($clean['url']);
+
         return $clean['id'];
 
     }
@@ -389,6 +392,12 @@ class suxRSS extends DOMDocument {
 
         $st = $this->db->prepare("UPDATE {$this->db_feeds} SET draft = 0 WHERE id = ? ");
         $st->execute(array($id));
+
+        $st = $this->db->prepare("SELECT url FROM {$this->db_feeds} WHERE id = ? LIMIT 1 ");
+        $st->execute(array($id));
+
+        $url = $st->fetch(PDO::FETCH_ASSOC);
+        $this->deleteCache($url['url']);
 
     }
 
@@ -516,6 +525,9 @@ class suxRSS extends DOMDocument {
             throw new Exception('Invalid cache directory');
         }
 
+        // Canonicalize Url
+        $rss_url = suxFunct::canonicalizeUrl($rss_url);
+
         // Go
         $cache_file = $this->cache_dir . '/' . md5($rss_url);
         $result = false;
@@ -560,6 +572,23 @@ class suxRSS extends DOMDocument {
 
 		return $result;
 	}
+
+
+	/**
+	* Delete an RSS cache
+    *
+    * @param string $rss_url a URL to an RSS Feed
+	*/
+    private function deleteCache($rss_url) {
+
+        // Canonicalize Url
+        $rss_url = suxFunct::canonicalizeUrl($rss_url);
+
+        $cache_file = $this->cache_dir . '/' . md5($rss_url);
+
+        if (is_file($cache_file)) unlink($cache_file);
+
+    }
 
 
 	/**
