@@ -52,9 +52,16 @@ if (isset($_POST) && count($_POST)) {
         $clean['email'] = $_POST['email'];
         $clean['password'] = $_POST['password'];
 
-        $uid = $u->saveUser($clean);
-        $u->root($uid);
-        $rooted = true;
+        try {
+            $uid = $u->saveUser($clean);
+            $u->root($uid);
+            $rooted = true;
+        }
+        catch (Exception $e) {
+            echo $e->getMessage() . "\n";
+            echo "File: " . $e->getFile() . "\n";
+            echo "Line: " . $e->getLine() . "\n\n";
+        }
 
     }
 

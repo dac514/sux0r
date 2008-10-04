@@ -14,11 +14,13 @@ include_once(dirname(__FILE__)  . '/includes/symbionts/dBug.php');
 /* Configuration variables */
 /* ------------------------------------------------------------------------- */
 
-// Database parameters, PDO compatible
+// Database parameters, PDO compatible, NB: first key is default
 $CONFIG['DSN'] =  array(
-    'sux0r' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
+    'sux0r' => array('pgsql:host=localhost;dbname=sux0r', 'postgres', 'root'),
+    // 'sux0r' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
     );
 
+    
 // Site title
 $CONFIG['TITLE'] = 'sux0r';
 
@@ -76,7 +78,7 @@ $CONFIG['SALT'] = 'flyingturtle';
 
 // Sux0r modules may cache templates, set the duration in seconds below.
 
-$CONFIG['CACHE_LIFETIME'] = 900;
+$CONFIG['CACHE_LIFETIME'] = 0;
 
 // Timzeone, pick yours from the list available at http://php.net/manual/en/timezones.php
 

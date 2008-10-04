@@ -122,7 +122,7 @@ class suxLink {
             $q =   "SELECT name FROM sqlite_master WHERE type = 'table' ";
             break;
 
-        case 'postgresql':
+        case 'pgsql':
             $q = "SELECT * FROM information_schema.tables WHERE table_schema = 'public' and table_type = 'BASE TABLE' ";
             break;
 

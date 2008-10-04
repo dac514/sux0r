@@ -527,12 +527,12 @@ CREATE TABLE `users` (
   `nickname` varchar(64) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `root` tinyint(1) NOT NULL,
-  `banned` tinyint(1) NOT NULL,
+  `root` tinyint(1) default NULL,
+  `banned` tinyint(1) default NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `nickname` (`nickname`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT= 1;
 
 --
 -- Dumping data for table `users`

@@ -295,7 +295,7 @@ class suxUser {
 
             $users_id = $this->db->lastInsertId();
             $info['users_id'] = $users_id;
-
+         
             $query = suxDB::prepareInsertQuery($this->db_table_info, $info);
             $st = $this->db->prepare($query);
             $st->execute($info);
@@ -407,7 +407,7 @@ class suxUser {
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
 
 
-        $st = $this->db->prepare("UPDATE {$this->db_table} SET banned = 1 WHERE id = ? ");
+        $st = $this->db->prepare("UPDATE {$this->db_table} SET banned = true WHERE id = ? ");
         $st->execute(array($users_id));
 
     }
@@ -423,7 +423,7 @@ class suxUser {
 
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
 
-        $st = $this->db->prepare("UPDATE {$this->db_table} SET banned = 0 WHERE id = ? ");
+        $st = $this->db->prepare("UPDATE {$this->db_table} SET banned = false WHERE id = ? ");
         $st->execute(array($users_id));
 
     }
@@ -468,7 +468,7 @@ class suxUser {
 
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
 
-        $st = $this->db->prepare("UPDATE {$this->db_table} SET root = 1 WHERE id = ? ");
+        $st = $this->db->prepare("UPDATE {$this->db_table} SET root = true WHERE id = ? ");
         $st->execute(array($users_id));
 
     }
@@ -484,7 +484,7 @@ class suxUser {
 
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
 
-        $st = $this->db->prepare("UPDATE {$this->db_table} SET root = 0 WHERE id = ? ");
+        $st = $this->db->prepare("UPDATE {$this->db_table} SET root = false WHERE id = ? ");
         $st->execute(array($users_id));
 
     }
