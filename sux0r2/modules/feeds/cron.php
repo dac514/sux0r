@@ -11,7 +11,9 @@ try {
     $rss->cron();
 }
 catch (Exception $e) {
-	echo $e->getMessage();
+	echo $e->getMessage() . "\n";
+    echo "File: " . $e->getFile() . "\n";
+    echo "Line: " . $e->getLine() . "\n\n";    
 }
 
 ?>
