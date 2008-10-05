@@ -56,7 +56,7 @@ class suxTags {
         $col = 'id';
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) $col = 'tag';
 
-        $query = "SELECT * FROM {$this->db_table} WHERE {$col} = ? LIMIT 1";
+        $query = "SELECT * FROM {$this->db_table} WHERE {$col} = ? ";
         $st = $this->db->prepare($query);
         $st->execute(array($id));
 
@@ -96,7 +96,7 @@ class suxTags {
         // Go!
         // --------------------------------------------------------------------
 
-        $query = "SELECT id FROM {$this->db_table} WHERE tag = ? LIMIT 1 ";
+        $query = "SELECT id FROM {$this->db_table} WHERE tag = ? ";
         $st = $this->db->prepare($query);
         $st->execute(array($clean['tag']));
         $tag = $st->fetch(PDO::FETCH_ASSOC);
@@ -113,7 +113,9 @@ class suxTags {
             $query = suxDB::prepareInsertQuery($this->db_table, $clean);
             $st = $this->db->prepare($query);
             $st->execute($clean);
-            $id = $this->db->lastInsertId();
+            
+            if ($this->db_driver == 'pgsql') $id = $this->db->lastInsertId("{$this->db_table}_id_seq"); // PgSql
+            else $id = $this->db->lastInsertId();            
 
         }
 
@@ -134,7 +136,7 @@ class suxTags {
         $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
 
-        $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE id = ? LIMIT 1 ");
+        $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE id = ? ");
         $st->execute(array($id));
 
         // Delete links, too

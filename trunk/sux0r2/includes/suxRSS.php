@@ -105,7 +105,7 @@ class suxRSS extends DOMDocument {
     */
     function cron() {
 
-        $q = "SELECT id, url FROM {$this->db_feeds} WHERE draft = 0 ";
+        $q = "SELECT id, url FROM {$this->db_feeds} WHERE draft = false ";
         $st = $this->db->query($q);
 
         // Resused prepared statement
@@ -157,7 +157,7 @@ class suxRSS extends DOMDocument {
     function getFeeds($limit = null, $start = 0, $unpub = false) {
 
         $query = "SELECT * FROM {$this->db_feeds} ";
-        if (!$unpub) $query .= 'WHERE draft = 0 ';
+        if (!$unpub) $query .= 'WHERE draft = false ';
         $query .= 'ORDER BY title ASC ';
 
         // Limit
@@ -179,7 +179,7 @@ class suxRSS extends DOMDocument {
     function countFeeds($unpub = false) {
 
         $query = "SELECT COUNT(*) FROM {$this->db_feeds} ";
-        if (!$unpub) $query .= 'WHERE draft = 0 ';
+        if (!$unpub) $query .= 'WHERE draft = false ';
 
         $st = $this->db->prepare($query);
         $st->execute();
@@ -195,7 +195,7 @@ class suxRSS extends DOMDocument {
     */
     function getUnpublishedFeeds() {
 
-        $q = "SELECT * FROM {$this->db_feeds} WHERE draft = 1 ORDER BY title ASC ";
+        $q = "SELECT * FROM {$this->db_feeds} WHERE draft = true ORDER BY title ASC ";
         $st = $this->db->query($q);
         return $st->fetchAll(PDO::FETCH_ASSOC);
 
@@ -214,11 +214,11 @@ class suxRSS extends DOMDocument {
 
         // Pick a query
         if (filter_var($id, FILTER_VALIDATE_INT) && $id > 0) {
-            $query = "SELECT * FROM {$this->db_feeds} WHERE id = ? LIMIT 1 ";
+            $query = "SELECT * FROM {$this->db_feeds} WHERE id = ? ";
         }
         else {
             $id = suxFunct::canonicalizeUrl($id);
-            $query = "SELECT * FROM {$this->db_feeds} WHERE url = ? LIMIT 1 ";
+            $query = "SELECT * FROM {$this->db_feeds} WHERE url = ? ";
         }
 
         $st = $this->db->prepare($query);
@@ -276,7 +276,7 @@ class suxRSS extends DOMDocument {
             else $clean['id'] = $url['id'];
         }
         else {
-            $query = "SELECT id FROM {$this->db_feeds} WHERE url = ? LIMIT 1 ";
+            $query = "SELECT id FROM {$this->db_feeds} WHERE url = ? ";
             $st = $this->db->prepare($query);
             $st->execute(array($clean['url']));
             $edit = $st->fetch(PDO::FETCH_ASSOC);
@@ -284,8 +284,8 @@ class suxRSS extends DOMDocument {
         }
 
         // Draft, boolean / tinyint
-        $clean['draft'] = 0;
-        if (isset($url['draft'])) $clean['draft'] = 1;
+        $clean['draft'] = false;
+        if (@$url['draft']) $clean['draft'] = true;
 
         // We now have the $clean[] array
 
@@ -308,7 +308,9 @@ class suxRSS extends DOMDocument {
             $query = suxDB::prepareInsertQuery($this->db_feeds, $clean);
             $st = $this->db->prepare($query);
             $st->execute($clean);
-            $clean['id'] = $this->db->lastInsertId();
+            
+            if ($this->db_driver == 'pgsql') $clean['id'] = $this->db->lastInsertId("{$this->db_feeds}_id_seq"); // PgSql
+            else $clean['id'] = $this->db->lastInsertId();                        
 
         }
 
@@ -354,7 +356,7 @@ class suxRSS extends DOMDocument {
         $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
 
-        $st = $this->db->prepare("DELETE FROM {$this->db_feeds} WHERE id = ? LIMIT 1 ");
+        $st = $this->db->prepare("DELETE FROM {$this->db_feeds} WHERE id = ? ");
         $st->execute(array($id));
 
         $st = $this->db->prepare("SELECT id FROM {$this->db_items} WHERE rss_feeds_id = ? ");
@@ -390,10 +392,10 @@ class suxRSS extends DOMDocument {
 
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
 
-        $st = $this->db->prepare("UPDATE {$this->db_feeds} SET draft = 0 WHERE id = ? ");
+        $st = $this->db->prepare("UPDATE {$this->db_feeds} SET draft = false WHERE id = ? ");
         $st->execute(array($id));
 
-        $st = $this->db->prepare("SELECT url FROM {$this->db_feeds} WHERE id = ? LIMIT 1 ");
+        $st = $this->db->prepare("SELECT url FROM {$this->db_feeds} WHERE id = ? ");
         $st->execute(array($id));
 
         $url = $st->fetch(PDO::FETCH_ASSOC);
@@ -414,7 +416,7 @@ class suxRSS extends DOMDocument {
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
             throw new Exception('Invalid message id');
 
-        $query = "SELECT * FROM {$this->db_items} WHERE id = ? LIMIT 1 ";
+        $query = "SELECT * FROM {$this->db_items} WHERE id = ? ";
         $st = $this->db->prepare($query);
         $st->execute(array($id));
 

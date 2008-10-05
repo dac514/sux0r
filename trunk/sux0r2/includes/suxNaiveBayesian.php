@@ -138,7 +138,7 @@ class suxNaiveBayesian {
         // As we are updating probabilities, we must clear the cache
         $this->deleteCache($vector_id);
 
-        $st = $this->db->prepare("DELETE FROM {$this->db_table_vec} WHERE id = ? LIMIT 1 ");
+        $st = $this->db->prepare("DELETE FROM {$this->db_table_vec} WHERE id = ? ");
         $st->execute(array($vector_id));
         $count += $st->rowCount();
 
@@ -173,7 +173,7 @@ class suxNaiveBayesian {
     */
     function getVector($vector_id) {
 
-        $st = $this->db->prepare("SELECT * FROM {$this->db_table_vec} WHERE id = ? LIMIT 1 ");
+        $st = $this->db->prepare("SELECT * FROM {$this->db_table_vec} WHERE id = ? ");
         $st->execute(array($vector_id));
 
         if ($row = $st->fetch(PDO::FETCH_ASSOC)) {
@@ -271,7 +271,7 @@ class suxNaiveBayesian {
         if (!filter_var($vector_id, FILTER_VALIDATE_INT) || $vector_id < 1) return false;
 
         // Make sure vector exists
-        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_vec} WHERE id = ? LIMIT 1 ");
+        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_vec} WHERE id = ? ");
         $st->execute(array($vector_id));
         if ($st->fetchColumn() < 1) return false;
 
@@ -309,7 +309,7 @@ class suxNaiveBayesian {
 
         $count = 0;
 
-        $st = $this->db->prepare("DELETE FROM {$this->db_table_cat} WHERE id = ? LIMIT 1 ");
+        $st = $this->db->prepare("DELETE FROM {$this->db_table_cat} WHERE id = ? ");
         $st->execute(array($category_id));
         $count += $st->rowCount();
 
@@ -336,7 +336,7 @@ class suxNaiveBayesian {
     */
     function getCategory($category_id) {
 
-        $st = $this->db->prepare("SELECT * FROM {$this->db_table_cat} WHERE id = ? LIMIT 1 ");
+        $st = $this->db->prepare("SELECT * FROM {$this->db_table_cat} WHERE id = ? ");
         $st->execute(array($category_id));
 
         if ($row = $st->fetch(PDO::FETCH_ASSOC)) {
@@ -448,7 +448,7 @@ class suxNaiveBayesian {
         if (!filter_var($category_id, FILTER_VALIDATE_INT) || $category_id < 1) return false;
 
         // Make sure category exists
-        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_cat} WHERE id = ? LIMIT 1 ");
+        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_cat} WHERE id = ? ");
         $st->execute(array($category_id));
         if ($st->fetchColumn() < 1) return false;
 
@@ -474,7 +474,9 @@ class suxNaiveBayesian {
 
         // MySQL InnoDB with transaction reports the last insert id as 0 after
         // commit, the real ids are only reported before committing.
-        $insert_id = $this->db->lastInsertId();
+        
+        if ($this->db_driver == 'pgsql') $insert_id = $this->db->lastInsertId("{$this->db_table_doc}_id_seq"); // PgSql
+        else $insert_id = $this->db->lastInsertId();        
 
         $this->updateProbabilities();
 
@@ -912,7 +914,7 @@ class suxNaiveBayesian {
             $q = "
             SELECT COUNT(*) FROM {$this->db_table_tok}
             INNER JOIN {$this->db_table_cat} ON {$this->db_table_tok}.bayes_categories_id = {$this->db_table_cat}.id
-            WHERE {$this->db_table_tok}.token = ? AND {$this->db_table_cat}.bayes_vectors_id = ? LIMIT 1
+            WHERE {$this->db_table_tok}.token = ? AND {$this->db_table_cat}.bayes_vectors_id = ? 
             ";
             $st = $this->db->prepare($q);
         }
@@ -1020,7 +1022,7 @@ class suxNaiveBayesian {
     */
     protected function removeDocument($document_id) {
 
-        $st = $this->db->prepare("DELETE FROM {$this->db_table_doc} WHERE id = ? LIMIT 1 ");
+        $st = $this->db->prepare("DELETE FROM {$this->db_table_doc} WHERE id = ? ");
         return $st->execute(array($document_id));
 
     }

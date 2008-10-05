@@ -114,7 +114,7 @@ class bayesUser extends suxNaiveBayesian {
 
         $query = "SELECT {$this->db_table_vec}.* FROM {$this->db_table_vec}
         INNER JOIN {$this->db_table_auth} ON {$this->db_table_vec}.id = {$this->db_table_auth}.bayes_vectors_id
-        WHERE {$this->db_table_auth}.users_id = ? AND {$this->db_table_auth}.owner = 1
+        WHERE {$this->db_table_auth}.users_id = ? AND {$this->db_table_auth}.owner = true
         ORDER BY {$this->db_table_vec}.vector ASC ";
 
         $st = $this->db->prepare($query);
@@ -142,7 +142,7 @@ class bayesUser extends suxNaiveBayesian {
         // Note: Owner of a vector implies trainer
         $query = "SELECT {$this->db_table_vec}.* FROM {$this->db_table_vec}
         INNER JOIN {$this->db_table_auth} ON {$this->db_table_vec}.id = {$this->db_table_auth}.bayes_vectors_id
-        WHERE {$this->db_table_auth}.users_id = ? AND ({$this->db_table_auth}.owner = 1 OR {$this->db_table_auth}.trainer = 1)
+        WHERE {$this->db_table_auth}.users_id = ? AND ({$this->db_table_auth}.owner = true OR {$this->db_table_auth}.trainer = true)
         ORDER BY {$this->db_table_vec}.vector ASC ";
 
         $st = $this->db->prepare($query);
@@ -203,7 +203,7 @@ class bayesUser extends suxNaiveBayesian {
         if (!filter_var($users_id, FILTER_VALIDATE_INT)  || $users_id < 1) return false;
 
         $query = "SELECT COUNT(*) FROM {$this->db_table_auth}
-        WHERE bayes_vectors_id = ? AND users_id = ? AND owner = 1 LIMIT 1 ";
+        WHERE bayes_vectors_id = ? AND users_id = ? AND owner = true ";
 
         $st = $this->db->prepare($query);
         $st->execute(array($vector_id, $users_id));
@@ -226,7 +226,7 @@ class bayesUser extends suxNaiveBayesian {
         $query = "SELECT COUNT(*) FROM {$this->db_table_auth}
         INNER JOIN {$this->db_table_vec} ON {$this->db_table_auth}.bayes_vectors_id = {$this->db_table_vec}.id
         WHERE {$this->db_table_auth}.bayes_vectors_id = ? AND {$this->db_table_auth}.users_id = ?
-        AND ({$this->db_table_auth}.owner = 1 OR {$this->db_table_auth}.trainer = 1) LIMIT 1 ";
+        AND ({$this->db_table_auth}.owner = true OR {$this->db_table_auth}.trainer = true) ";
 
         $st = $this->db->prepare($query);
         $st->execute(array($vector_id, $users_id));
@@ -249,7 +249,7 @@ class bayesUser extends suxNaiveBayesian {
         $query = "SELECT COUNT(*) FROM {$this->db_table_auth}
         INNER JOIN {$this->db_table_vec} ON {$this->db_table_auth}.bayes_vectors_id = {$this->db_table_vec}.id
         WHERE {$this->db_table_auth}.bayes_vectors_id = ? AND {$this->db_table_auth}.users_id = ?
-        LIMIT 1 ";
+        ";
 
         $st = $this->db->prepare($query);
         $st->execute(array($vector_id, $users_id));
@@ -270,7 +270,7 @@ class bayesUser extends suxNaiveBayesian {
 
         $query = "SELECT COUNT(*) FROM {$this->db_table_auth}
         INNER JOIN {$this->db_table_cat} ON {$this->db_table_auth}.bayes_vectors_id = {$this->db_table_cat}.bayes_vectors_id
-        WHERE {$this->db_table_cat}.id = ? AND {$this->db_table_auth}.users_id = ? AND {$this->db_table_auth}.owner = 1 LIMIT 1 ";
+        WHERE {$this->db_table_cat}.id = ? AND {$this->db_table_auth}.users_id = ? AND {$this->db_table_auth}.owner = true ";
 
         $st = $this->db->prepare($query);
         $st->execute(array($category_id, $users_id));
@@ -293,7 +293,7 @@ class bayesUser extends suxNaiveBayesian {
         $query = "SELECT COUNT(*) FROM {$this->db_table_auth}
         INNER JOIN {$this->db_table_cat} ON {$this->db_table_auth}.bayes_vectors_id = {$this->db_table_cat}.bayes_vectors_id
         WHERE {$this->db_table_cat}.id = ? AND {$this->db_table_auth}.users_id = ?
-        AND ({$this->db_table_auth}.owner = 1 OR {$this->db_table_auth}.trainer = 1) LIMIT 1 ";
+        AND ({$this->db_table_auth}.owner = true OR {$this->db_table_auth}.trainer = true) ";
 
         $st = $this->db->prepare($query);
         $st->execute(array($category_id, $users_id));
@@ -316,7 +316,7 @@ class bayesUser extends suxNaiveBayesian {
         $query = "SELECT COUNT(*) FROM {$this->db_table_auth}
         INNER JOIN {$this->db_table_cat} ON {$this->db_table_auth}.bayes_vectors_id = {$this->db_table_cat}.bayes_vectors_id
         WHERE {$this->db_table_cat}.id = ? AND {$this->db_table_auth}.users_id = ?
-        LIMIT 1 ";
+        ";
 
         $st = $this->db->prepare($query);
         $st->execute(array($category_id, $users_id));
@@ -338,7 +338,7 @@ class bayesUser extends suxNaiveBayesian {
         $query = "SELECT COUNT(*) FROM {$this->db_table_auth}
         INNER JOIN {$this->db_table_cat} ON {$this->db_table_auth}.bayes_vectors_id = {$this->db_table_cat}.bayes_vectors_id
         INNER JOIN {$this->db_table_doc} ON {$this->db_table_cat}.id = {$this->db_table_doc}.bayes_categories_id
-        WHERE {$this->db_table_doc}.id = ? AND {$this->db_table_auth}.users_id = ? AND {$this->db_table_auth}.owner = 1 LIMIT 1 ";
+        WHERE {$this->db_table_doc}.id = ? AND {$this->db_table_auth}.users_id = ? AND {$this->db_table_auth}.owner = true ";
 
         $st = $this->db->prepare($query);
         $st->execute(array($document_id, $users_id));
@@ -362,7 +362,7 @@ class bayesUser extends suxNaiveBayesian {
         INNER JOIN {$this->db_table_cat} ON {$this->db_table_auth}.bayes_vectors_id = {$this->db_table_cat}.bayes_vectors_id
         INNER JOIN {$this->db_table_doc} ON {$this->db_table_cat}.id = {$this->db_table_doc}.bayes_categories_id
         WHERE {$this->db_table_doc}.id = ? AND {$this->db_table_auth}.users_id = ?
-        AND ({$this->db_table_auth}.owner = 1 OR {$this->db_table_auth}.trainer = 1) LIMIT 1 ";
+        AND ({$this->db_table_auth}.owner = true OR {$this->db_table_auth}.trainer = true) ";
 
         $st = $this->db->prepare($query);
         $st->execute(array($document_id, $users_id));
@@ -386,7 +386,7 @@ class bayesUser extends suxNaiveBayesian {
         INNER JOIN {$this->db_table_cat} ON {$this->db_table_auth}.bayes_vectors_id = {$this->db_table_cat}.bayes_vectors_id
         INNER JOIN {$this->db_table_doc} ON {$this->db_table_cat}.id = {$this->db_table_doc}.bayes_categories_id
         WHERE {$this->db_table_doc}.id = ? AND {$this->db_table_auth}.users_id = ?
-        LIMIT 1 ";
+        ";
 
         $st = $this->db->prepare($query);
         $st->execute(array($document_id, $users_id));
@@ -413,14 +413,14 @@ class bayesUser extends suxNaiveBayesian {
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) return false;
         if (!filter_var($vector_id, FILTER_VALIDATE_INT) || $vector_id < 1) return false;
         if ($users_id == $_SESSION['users_id']) return false; // Cannot share a vector with one's self
-        if ($trainer != 1) $trainer = 0;
-        if ($owner != 1) $owner = 0;
+        $trainer = ($trainer) ? true : false;
+        $owner = ($owner) ? true : false;
 
         // --------------------------------------------------------------------
         // Go!
         // --------------------------------------------------------------------
 
-        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_auth} WHERE users_id = ? AND bayes_vectors_id = ? LIMIT 1 ");
+        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_auth} WHERE users_id = ? AND bayes_vectors_id = ? ");
         $st->execute(array($users_id, $vector_id));
 
         $shared = array(
@@ -474,7 +474,7 @@ class bayesUser extends suxNaiveBayesian {
         if ($st->fetchColumn() <= 1) return false;
 
         // DELETE
-        $st = $this->db->prepare("DELETE FROM {$this->db_table_auth} WHERE users_id = ? AND bayes_vectors_id = ? LIMIT 1 ");
+        $st = $this->db->prepare("DELETE FROM {$this->db_table_auth} WHERE users_id = ? AND bayes_vectors_id = ? ");
         return $st->execute(array($users_id, $vector_id));
 
     }
@@ -547,9 +547,11 @@ class bayesUser extends suxNaiveBayesian {
 
         $st = $this->db->prepare("INSERT INTO {$this->db_table_vec} (vector) VALUES (?) ");
         $st->execute(array($vector));
-        $vector_id = $this->db->lastInsertId();
+        
+        if ($this->db_driver == 'pgsql') $vector_id = $this->db->lastInsertId("{$this->db_table_vec}_id_seq"); // PgSql
+        else $vector_id = $this->db->lastInsertId();
 
-        $st = $this->db->prepare("INSERT INTO {$this->db_table_auth} (bayes_vectors_id, users_id, owner) VALUES (?, ?, 1) ");
+        $st = $this->db->prepare("INSERT INTO {$this->db_table_auth} (bayes_vectors_id, users_id, owner) VALUES (?, ?, true) ");
         $st->execute(array($vector_id, $users_id));
 
         suxDB::commitTransaction($tid);

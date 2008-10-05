@@ -116,7 +116,7 @@ $query = "
 SELECT bayes_documents.id, bayes_auth.bayes_vectors_id FROM bayes_documents
 {$innerjoin}
 WHERE {$link_table2}.id = ?
-AND bayes_auth.users_id = ? AND (bayes_auth.owner = 1 OR bayes_auth.trainer = 1)
+AND bayes_auth.users_id = ? AND (bayes_auth.owner = true OR bayes_auth.trainer = true)
 "; // Note: bayes_auth WHERE condition equivilant to nb->isCategoryTrainer()
 
 $db = suxDB::get();

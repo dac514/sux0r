@@ -240,6 +240,9 @@ class bookmarksEdit {
         $clean['published_on'] = "{$clean['Date']} {$clean['Time_Hour']}:{$clean['Time_Minute']}:{$clean['Time_Second']}";
         $clean['published_on'] = date('Y-m-d H:i:s', strtotime($clean['published_on'])); // Sanitize
 
+        // Draft
+        $clean['draft'] = isset($clean['draft']) ? true : false;
+        
         // --------------------------------------------------------------------
         // Create $bookmark array
         // --------------------------------------------------------------------
@@ -249,7 +252,7 @@ class bookmarksEdit {
                 'title' => $clean['title'],
                 'body' => $clean['body'],
                 'published_on' => $clean['published_on'],
-                'draft' => @$clean['draft'],
+                'draft' => $clean['draft'],
             );
 
         // --------------------------------------------------------------------

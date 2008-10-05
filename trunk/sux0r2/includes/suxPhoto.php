@@ -60,7 +60,7 @@ class suxPhoto {
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) return false;
 
-        $query = "SELECT COUNT(*) FROM {$this->db_albums} WHERE id = ? AND users_id = ? LIMIT 1 ";
+        $query = "SELECT COUNT(*) FROM {$this->db_albums} WHERE id = ? AND users_id = ? ";
 
         $st = $this->db->prepare($query);
         $st->execute(array($id, $users_id));
@@ -83,19 +83,18 @@ class suxPhoto {
             throw new Exception('Invalid album id');
 
         $query = "SELECT * FROM {$this->db_albums} WHERE id = ? ";
+        
+        // Publish / Draft
         if (!$unpub) {
-            // Only show published items
-            $query .= "AND draft = 0 ";
-            if ($this->db_driver == 'mysql') {
-                // MySql
+            if ($this->db_driver == 'pgsql' || $this->db_driver == 'mysql') {
+                // PgSql / MySql
+                $query .= "AND draft = false ";
                 $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
             }
             else {
                 throw new Exception('Unsupported database driver');
             }
         }
-        $query .= 'LIMIT 1 ';
-
 
         $st = $this->db->prepare($query);
         $st->execute(array($id));
@@ -126,12 +125,12 @@ class suxPhoto {
         $query = "SELECT * FROM {$this->db_albums} ";
         if ($users_id) $query .= 'WHERE users_id = ? ';
 
+        // Publish / Draft
         if (!$unpub) {
-            // Only show published items
             $query .= $users_id ? 'AND ' : 'WHERE ';
-            $query .= 'draft = 0 ';
-            if ($this->db_driver == 'mysql') {
-                // MySql
+            if ($this->db_driver == 'pgsql' || $this->db_driver == 'mysql') {
+                // PgSql / MySql
+                $query .= 'draft = false ';
                 $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
             }
             else {
@@ -171,12 +170,12 @@ class suxPhoto {
         $query = "SELECT COUNT(*) FROM {$this->db_albums} ";
         if ($users_id) $query .= 'WHERE users_id = ? ';
 
+        // Publish / Draft
         if (!$unpub) {
-            // Only show published items
             $query .= $users_id ? 'AND ' : 'WHERE ';
-            $query .= 'draft = 0 ';
-            if ($this->db_driver == 'mysql') {
-                // MySql
+            if ($this->db_driver == 'pgsql' || $this->db_driver == 'mysql') {
+                // PgSql / MySql
+                $query .= 'draft = false ';
                 $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
             }
             else {
@@ -232,8 +231,8 @@ class suxPhoto {
         $clean['body_plaintext']  = $converter->getText();
 
         // Draft, boolean / tinyint
-        $clean['draft'] = 0;
-        if (isset($album['draft'])) $clean['draft'] = 1;
+        $clean['draft'] = false;
+        if (@$album['draft']) $clean['draft'] = true;
 
         // Publish date
         if (isset($album['published_on'])) {
@@ -251,28 +250,61 @@ class suxPhoto {
         // --------------------------------------------------------------------
         // Go!
         // --------------------------------------------------------------------
-
+        
+        // http://ca.php.net/manual/en/pdostatement.execute.php#84990    
+        // As of 5.2.6 you still can't use this function's $input_parameters to 
+        // pass a boolean to PostgreSQL. To do that, you'll have to call 
+        // bindParam() with explicit types for *each& parameter in the query.
+        // Annoying much? This sucks more than you can imagine.
+        
         if (isset($clean['id'])) {
-
+            
             // UPDATE
             unset($clean['users_id']); // Don't override the original submitter
             $query = suxDB::prepareUpdateQuery($this->db_albums, $clean);
             $st = $this->db->prepare($query);
-            $st->execute($clean);
-
+            
+            if  ($this->db_driver == 'pgsql') {        
+                $st->bindParam(':id', $clean['id'], PDO::PARAM_INT);
+                $st->bindParam(':title', $clean['title'], PDO::PARAM_STR);
+                $st->bindParam(':body_html', $clean['body_html'], PDO::PARAM_STR);            
+                $st->bindParam(':body_plaintext', $clean['body_plaintext'], PDO::PARAM_STR);  
+                $st->bindParam(':draft', $clean['draft'], PDO::PARAM_BOOL);                  
+                $st->bindParam(':published_on', $clean['published_on'], PDO::PARAM_STR);  
+                $st->execute();      
+            }        
+            else {
+                $st->execute($clean);
+            } 
+            
+            
         }
         else {
-
+            
             // INSERT
             $query = suxDB::prepareInsertQuery($this->db_albums, $clean);
             $st = $this->db->prepare($query);
-            $st->execute($clean);
-            $clean['id'] = $this->db->lastInsertId();
-
+            
+            if  ($this->db_driver == 'pgsql') {        
+                $st->bindParam(':users_id', $clean['users_id'], PDO::PARAM_INT);
+                $st->bindParam(':title', $clean['title'], PDO::PARAM_STR);
+                $st->bindParam(':body_html', $clean['body_html'], PDO::PARAM_STR);            
+                $st->bindParam(':body_plaintext', $clean['body_plaintext'], PDO::PARAM_STR);  
+                $st->bindParam(':draft', $clean['draft'], PDO::PARAM_BOOL);                  
+                $st->bindParam(':published_on', $clean['published_on'], PDO::PARAM_STR);  
+                $st->execute();         
+            }        
+            else {
+                $st->execute($clean);
+            } 
+            
+            if ($this->db_driver == 'pgsql') $clean['id'] = $this->db->lastInsertId("{$this->db_albums}_id_seq"); // PgSql
+            else $clean['id'] = $this->db->lastInsertId();            
+            
         }
-
+        
         return $clean['id'];
-
+        
     }
 
 
@@ -288,7 +320,7 @@ class suxPhoto {
         if (!filter_var($photoalbums_id, FILTER_VALIDATE_INT) || $photoalbums_id < 1)
             throw new Exception('Invalid photoalbums id');
 
-        $query = "SELECT thumbnail FROM {$this->db_albums} WHERE id = ? LIMIT 1 ";
+        $query = "SELECT thumbnail FROM {$this->db_albums} WHERE id = ? ";
 
         $st = $this->db->prepare($query);
         $st->execute(array($photoalbums_id));
@@ -296,7 +328,7 @@ class suxPhoto {
 
         if ($thumbnail) {
 
-            $query = "SELECT * FROM {$this->db_photos} WHERE id = ? LIMIT 1 ";
+            $query = "SELECT * FROM {$this->db_photos} WHERE id = ? ";
             $st = $this->db->prepare($query);
             $st->execute(array($thumbnail));
             $photo = $st->fetch(PDO::FETCH_ASSOC);
@@ -305,7 +337,7 @@ class suxPhoto {
 
         }
 
-        $query = "SELECT * FROM {$this->db_photos} WHERE photoalbums_id = ? ORDER BY image LIMIT 1 ";
+        $query = "SELECT * FROM {$this->db_photos} WHERE photoalbums_id = ? ORDER BY image ";
         $st = $this->db->prepare($query);
         $st->execute(array($photoalbums_id));
         return $st->fetch(PDO::FETCH_ASSOC);
@@ -348,7 +380,7 @@ class suxPhoto {
         $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
 
-        $st = $this->db->prepare("DELETE FROM {$this->db_albums} WHERE id = ? LIMIT 1 ");
+        $st = $this->db->prepare("DELETE FROM {$this->db_albums} WHERE id = ? ");
         $st->execute(array($id));
 
         $st = $this->db->prepare("SELECT id FROM {$this->db_photos} WHERE photoalbums_id = ? ");
@@ -394,7 +426,7 @@ class suxPhoto {
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) return false;
 
-        $query = "SELECT COUNT(*) FROM {$this->db_photos} WHERE id = ? AND users_id = ? LIMIT 1 ";
+        $query = "SELECT COUNT(*) FROM {$this->db_photos} WHERE id = ? AND users_id = ? ";
 
         $st = $this->db->prepare($query);
         $st->execute(array($id, $users_id));
@@ -415,7 +447,7 @@ class suxPhoto {
         if (!filter_var($id, FILTER_VALIDATE_INT)  || $id < 1)
             throw new Exception('Invalid photo id');
 
-        $query = "SELECT * FROM {$this->db_photos} WHERE id = ? LIMIT 1 ";
+        $query = "SELECT * FROM {$this->db_photos} WHERE id = ? ";
         $st = $this->db->prepare($query);
         $st->execute(array($id));
 
@@ -520,7 +552,7 @@ class suxPhoto {
     */
     function isDupe($md5, $users_id, $photoalbums_id) {
 
-        $q = "SELECT COUNT(*) FROM {$this->db_photos} WHERE md5 = ? AND users_id = ? AND photoalbums_id = ? LIMIT 1 ";
+        $q = "SELECT COUNT(*) FROM {$this->db_photos} WHERE md5 = ? AND users_id = ? AND photoalbums_id = ? ";
         $st = $this->db->prepare($q);
         $st->execute(array($md5, $users_id, $photoalbums_id));
         if ($st->fetchColumn() < 1) return false;
@@ -594,7 +626,9 @@ class suxPhoto {
             $query = suxDB::prepareInsertQuery($this->db_photos, $clean);
             $st = $this->db->prepare($query);
             $st->execute($clean);
-            $clean['id'] = $this->db->lastInsertId();
+
+            if ($this->db_driver == 'pgsql') $clean['id'] = $this->db->lastInsertId("{$this->db_photos}_id_seq"); // PgSql
+            else $clean['id'] = $this->db->lastInsertId();            
 
         }
 
@@ -615,7 +649,7 @@ class suxPhoto {
         $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
 
-        $st = $this->db->prepare("DELETE FROM {$this->db_photos} WHERE id = ? LIMIT 1 ");
+        $st = $this->db->prepare("DELETE FROM {$this->db_photos} WHERE id = ? ");
         $st->execute(array($id));
 
         // Delete links, too

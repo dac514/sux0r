@@ -259,7 +259,7 @@ class bookmarks extends bayesShared {
             SELECT tags.tag AS tag, tags.id AS id, COUNT(tags.id) AS quantity FROM tags
             INNER JOIN {$link} ON {$link}.tags_id = tags.id
             INNER JOIN bookmarks ON {$link}.bookmarks_id = bookmarks.id
-            WHERE bookmarks.draft = 0 {$this->_dateSql()}
+            WHERE bookmarks.draft = false {$this->_dateSql()}
             GROUP BY tag ORDER BY tag ASC
             ";
 
@@ -445,7 +445,7 @@ class bookmarks extends bayesShared {
         $count_query = "
         SELECT COUNT(*) FROM bookmarks
         INNER JOIN link_bookmarks_tags ON link_bookmarks_tags.bookmarks_id = bookmarks.id
-        WHERE bookmarks.draft = 0 AND link_bookmarks_tags.tags_id = ?
+        WHERE bookmarks.draft = false AND link_bookmarks_tags.tags_id = ?
         {$this->_dateSql()}
         ";
         $st = $db->prepare($count_query);
@@ -463,7 +463,7 @@ class bookmarks extends bayesShared {
         $query = "
         SELECT bookmarks.* FROM bookmarks
         INNER JOIN link_bookmarks_tags ON link_bookmarks_tags.bookmarks_id = bookmarks.id
-        WHERE bookmarks.draft = 0 AND link_bookmarks_tags.tags_id = ?
+        WHERE bookmarks.draft = false AND link_bookmarks_tags.tags_id = ?
         {$this->_dateSql()}
         ";
         if ($alphasort) $query .= 'ORDER BY title ASC ';

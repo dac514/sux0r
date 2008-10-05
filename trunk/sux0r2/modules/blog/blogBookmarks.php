@@ -217,7 +217,7 @@ class blogBookmarks {
                     $bookmark['url'] = $clean['url'][$i];
                     $bookmark['title'] = $clean['title'][$i];
                     $bookmark['body'] = $clean['body'][$i];
-                    $bookmark['draft'] = 1; // Admin approves bookmarks, like dmoz.org
+                    $bookmark['draft'] = true; // Admin approves bookmarks, like dmoz.org
                     $this->bookmarks->saveBookmark($_SESSION['users_id'], $bookmark);
                 }
             }

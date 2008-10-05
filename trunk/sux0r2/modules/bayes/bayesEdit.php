@@ -256,8 +256,9 @@ class bayesEdit {
 
             // Security check
             if ($this->nb->isVectorOwner($clean['vector_id'], $_SESSION['users_id'])) {
-                if (!isset($clean['trainer'])) $clean['trainer'] = 0;
-                if (!isset($clean['owner'])) $clean['owner'] = 0;
+                
+                $clean['trainer'] = isset($clean['trainer']) ? true : false;
+                $clean['owner'] = isset($clean['owner']) ? true : false;
                 $this->nb->shareVector($clean['users_id'], $clean['vector_id'], $clean['trainer'], $clean['owner']);
 
                 // clear caches for $clean['users_id'] (TODO: we need to get their partition, too)

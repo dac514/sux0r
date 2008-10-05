@@ -126,7 +126,6 @@ class feedsApprove  {
             if ($val == 1) {
                 $this->rss->approveFeed($key);
                 $this->user->log("sux0r::feedsApprove() feeds_id: {$key}", $_SESSION['users_id'], 1); // Private
-
             }
             else {
                 $this->rss->deleteFeed($key);

@@ -105,7 +105,7 @@ class cropper {
         // Get image from database
         // --------------------------------------------------------------------
 
-        $query = "SELECT users_id, image FROM {$table} WHERE id = ? LIMIT 1 ";
+        $query = "SELECT users_id, image FROM {$table} WHERE id = ? ";
         $db = suxDB::get();
         $st = $db->prepare($query);
         $st->execute(array($id));
@@ -180,7 +180,7 @@ class cropper {
         // Get image from database
         // --------------------------------------------------------------------
 
-        $query = "SELECT users_id, image FROM {$table} WHERE id = ? LIMIT 1 ";
+        $query = "SELECT users_id, image FROM {$table} WHERE id = ? ";
         $db = suxDB::get();
         $st = $db->prepare($query);
         $st->execute(array($clean['id']));

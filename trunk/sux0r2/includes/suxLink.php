@@ -200,7 +200,7 @@ class suxLink {
             if ($form["{$table2}_id"]) {
 
                 // Make sure this doesn't already exist
-                $query = suxDB::prepareCountQuery($link, $form) . 'LIMIT 1 ';
+                $query = suxDB::prepareCountQuery($link, $form);
                 $st = $this->db->prepare($query);
                 $st->execute($form);
 
