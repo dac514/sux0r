@@ -260,7 +260,7 @@ CREATE TABLE photos (
   users_id integer NOT NULL,
   photoalbums_id integer NOT NULL,
   image varchar(255) NOT NULL,
-  description text NOT NULL,
+  description text,
   md5 character(32) NOT NULL,
   CONSTRAINT photos_pkey PRIMARY KEY (id),
   CONSTRAINT photos_grouping UNIQUE (md5,users_id,photoalbums_id)
