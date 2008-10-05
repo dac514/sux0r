@@ -306,6 +306,8 @@ class blogEdit {
 
         }
 
+        // Draft
+        $clean['draft'] = isset($clean['draft']) ? true : false;
 
         // --------------------------------------------------------------------
         // Create $msg array
@@ -316,8 +318,8 @@ class blogEdit {
                 'image' => @$clean['image'],
                 'body' => $clean['body'],
                 'published_on' => $clean['published_on'],
-                'draft' => @$clean['draft'],
-                'blog' => 1,
+                'draft' => $clean['draft'],
+                'blog' => true,
             );
 
         // --------------------------------------------------------------------

@@ -122,7 +122,7 @@ class bookmarksSuggest  {
         $bookmark['url'] = $clean['url'];
         $bookmark['title'] = isset($bm['title']) ? $bm['title'] : '---';
         $bookmark['body'] = isset($bm['description']) ? $bm['description'] : '';
-        $bookmark['draft'] = 1;
+        $bookmark['draft'] = true;
 
         $id = $this->bm->saveBookmark($_SESSION['users_id'], $bookmark);
 

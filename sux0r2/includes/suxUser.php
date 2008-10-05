@@ -49,6 +49,7 @@ class suxUser {
     function __construct() {
 
     	$this->db = suxDB::get();
+        $this->db_driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
         set_exception_handler(array($this, 'exceptionHandler'));
 
     }
@@ -164,7 +165,7 @@ class suxUser {
         MAX({$this->db_table_log}.ts) AS last_active
         FROM {$this->db_table}
         LEFT JOIN {$this->db_table_log} ON {$this->db_table}.id = {$this->db_table_log}.users_id
-        GROUP BY {$this->db_table}.id
+        GROUP BY {$this->db_table}.id, {$this->db_table}.nickname, {$this->db_table}.email, {$this->db_table}.root, {$this->db_table}.banned
         ";
 
         // Sort / Order
@@ -183,7 +184,7 @@ class suxUser {
 
         // Limit
         if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
-        elseif ($limit) $query .= "LIMIT {$limit} ";
+        elseif ($limit) $query .= "LIMIT {$limit} ";        
 
         $st = $this->db->query($query);
         return $st->fetchAll(PDO::FETCH_ASSOC);
@@ -259,6 +260,9 @@ class suxUser {
             if ($key == 'url') $info[$key] = filter_var($val, FILTER_SANITIZE_URL);
             else $info[$key] = strip_tags($val);
         }
+        
+        // Date of birth
+        if (empty($info['dob'])) $info['dob'] = null;
 
 
         // We now have two arrays, $user[] and $info[]
@@ -266,6 +270,7 @@ class suxUser {
         // --------------------------------------------------------------------
         // Go!
         // --------------------------------------------------------------------
+
 
         // Begin transaction
         $tid = suxDB::requestTransaction();
@@ -292,8 +297,10 @@ class suxUser {
             $query = suxDB::prepareInsertQuery($this->db_table, $user);
             $st = $this->db->prepare($query);
             $st->execute($user);
-
-            $users_id = $this->db->lastInsertId();
+            
+            if ($this->db_driver == 'pgsql') $users_id = $this->db->lastInsertId("{$this->db_table}_id_seq"); // PgSql
+            else $users_id = $this->db->lastInsertId();              
+            
             $info['users_id'] = $users_id;
          
             $query = suxDB::prepareInsertQuery($this->db_table_info, $info);
@@ -331,7 +338,7 @@ class suxUser {
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
             throw new Exception('Invalid user id');
 
-        $st = $this->db->prepare("SELECT image FROM {$this->db_table_info} WHERE users_id = ? LIMIT 1 ");
+        $st = $this->db->prepare("SELECT image FROM {$this->db_table_info} WHERE users_id = ? ");
         $st->execute(array($users_id));
         return $st->fetchColumn();
 
@@ -356,7 +363,7 @@ class suxUser {
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
             throw new Exception('Invalid user id');
 
-        $st = $this->db->prepare("UPDATE {$this->db_table_info} SET image = ? WHERE users_id = ? LIMIT 1 ");
+        $st = $this->db->prepare("UPDATE {$this->db_table_info} SET image = ? WHERE users_id = ? ");
         $st->execute(array($image, $users_id));
 
     }
@@ -386,11 +393,11 @@ class suxUser {
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
             throw new Exception('Invalid user id');
 
-        $st = $this->db->prepare("SELECT banned FROM {$this->db_table} WHERE id = ? LIMIT 1 ");
+        $st = $this->db->prepare("SELECT banned FROM {$this->db_table} WHERE id = ? ");
         $st->execute(array($users_id));
         $banned = $st->fetchColumn();
 
-        if ($banned == 1) return true;
+        if ($banned) return true;
         else return false;
 
     }
@@ -448,11 +455,11 @@ class suxUser {
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
             throw new Exception('Invalid user id');
 
-        $st = $this->db->prepare("SELECT root FROM {$this->db_table} WHERE id = ? LIMIT 1 ");
+        $st = $this->db->prepare("SELECT root FROM {$this->db_table} WHERE id = ? ");
         $st->execute(array($users_id));
         $root = $st->fetchColumn();
 
-        if ($root == 1) return true;
+        if ($root) return true;
         else return false;
 
     }
@@ -514,7 +521,6 @@ class suxUser {
         SELECT {$this->db_table_access}.accesslevel FROM {$this->db_table_access}
         INNER JOIN {$this->db_table}  ON {$this->db_table_access} .users_id = {$this->db_table} .id
         WHERE {$this->db_table_access}.users_id = ? AND {$this->db_table_access}.module = ?
-        LIMIT 1
         ";
 
         $st = $this->db->prepare($q);
@@ -550,7 +556,7 @@ class suxUser {
         $clean['module'] = $module;
         $clean['accesslevel'] = $access;
 
-        $query = "SELECT id FROM {$this->db_table_access} WHERE users_id = ? AND module = ? LIMIT 1 ";
+        $query = "SELECT id FROM {$this->db_table_access} WHERE users_id = ? AND module = ? ";
         $st = $this->db->prepare($query);
         $st->execute(array($clean['users_id'], $clean['module']));
         $edit = $st->fetch(PDO::FETCH_ASSOC);
@@ -600,8 +606,9 @@ class suxUser {
         $clean['users_id'] = $users_id;
         $clean['module'] = $module;
 
-        $query = "DELETE FROM {$this->db_table_access} WHERE users_id = ? AND module = ? LIMIT 1 ";
+        $query = "DELETE FROM {$this->db_table_access} WHERE users_id = ? AND module = ? ";
         $st = $this->db->prepare($query);
+        
         $st->execute(array($clean['users_id'], $clean['module']));
 
     }
@@ -648,7 +655,7 @@ class suxUser {
         INNER JOIN {$this->db_table} ON {$this->db_table_log}.users_id = {$this->db_table}.id
         ";
 
-        if ($full_log === false) $query .= "WHERE private = 0 ";
+        if ($full_log === false) $query .= "WHERE private = false ";
 
         if ($users_id) {
             if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
@@ -677,7 +684,7 @@ class suxUser {
     * @param int $users_id
     * @param int $private
     */
-    function log($body_html, $users_id = null, $private = 0) {
+    function log($body_html, $users_id = null, $private = false) {
 
         // This user
         if (!$users_id) {
@@ -688,9 +695,9 @@ class suxUser {
         // Any user
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
             throw new Exception('Invalid user id');
-
-        if ($private != 0 && $private != 1) $private = 0;
-
+        
+        $private = $private ? true : false;
+                
         $clean['users_id'] = $users_id;
         $clean['private'] = $private;
         $clean['body_html'] = suxFunct::sanitizeHtml($body_html, -1);
@@ -702,11 +709,28 @@ class suxUser {
 
         // Timestamp
         $clean['ts'] = date('c');
-
+        
         // INSERT
-        $query = suxDB::prepareInsertQuery($this->db_table_log, $clean);
+        $query = suxDB::prepareInsertQuery($this->db_table_log, $clean); 
         $st = $this->db->prepare($query);
-        $st->execute($clean);
+        
+        // http://ca.php.net/manual/en/pdostatement.execute.php#84990    
+        // As of 5.2.6 you still can't use this function's $input_parameters to 
+        // pass a boolean to PostgreSQL. To do that, you'll have to call 
+        // bindParam() with explicit types for *each& parameter in the query.
+        // Annoying much? This sucks more than you can imagine.
+            
+        if  ($this->db_driver == 'pgsql') {        
+            $st->bindParam(':users_id', $clean['users_id'], PDO::PARAM_INT);
+            $st->bindParam(':private', $clean['private'], PDO::PARAM_BOOL);
+            $st->bindParam(':body_html', $clean['body_html'], PDO::PARAM_STR);            
+            $st->bindParam(':body_plaintext', $clean['body_plaintext'], PDO::PARAM_STR);  
+            $st->bindParam(':ts', $clean['ts'], PDO::PARAM_STR);  
+            $st->execute();      
+        }        
+        else {
+            $st->execute($clean);
+        }
 
     }
 
@@ -725,12 +749,26 @@ class suxUser {
         $st = $this->db->prepare($query);
         $st->execute(array($id));
 
-        $flag = 1;
-        if ($st->fetchColumn() == 1) $flag = 0;
+        $flag = true;
+        if ($st->fetchColumn()) $flag = false;
 
-        $query = "UPDATE {$this->db_table_log} SET private = ? WHERE id = ? LIMIT 1 ";
+        $query = "UPDATE {$this->db_table_log} SET private = ? WHERE id = ? ";
         $st = $this->db->prepare($query);
-        $st->execute(array($flag, $id));
+        
+        // http://ca.php.net/manual/en/pdostatement.execute.php#84990    
+        // As of 5.2.6 you still can't use this function's $input_parameters to 
+        // pass a boolean to PostgreSQL. To do that, you'll have to call 
+        // bindParam() with explicit types for *each& parameter in the query.
+        // Annoying much? This sucks more than you can imagine.
+        
+        if  ($this->db_driver == 'pgsql') {        
+            $st->bindParam(1, $flag, PDO::PARAM_BOOL);
+            $st->bindParam(2, $id, PDO::PARAM_INT);
+            $st->execute();      
+        }        
+        else {
+            $st->execute(array($flag, $id));
+        }       
 
         return $flag;
 
@@ -832,7 +870,7 @@ class suxUser {
             'openid_url' => $openid_url,
             );
 
-        $query = suxDB::prepareCountQuery($this->db_table_openid, $oid) . 'LIMIT 1 ';
+        $query = suxDB::prepareCountQuery($this->db_table_openid, $oid);
         $st = $this->db->prepare($query);
         $st->execute($oid);
 
@@ -858,7 +896,7 @@ class suxUser {
         // Canonicalize url
         $openid_url = suxFunct::canonicalizeUrl($openid_url);
 
-        $query = "DELETE FROM {$this->db_table_openid} WHERE openid_url = ? LIMIT 1 ";
+        $query = "DELETE FROM {$this->db_table_openid} WHERE openid_url = ? ";
         $st = $this->db->prepare($query);
         $st->execute(array($openid_url));
 

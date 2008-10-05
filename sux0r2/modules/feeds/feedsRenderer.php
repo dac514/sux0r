@@ -223,7 +223,7 @@ function insert_approveLi($params) {
         if ($access < $GLOBALS['CONFIG']['ACCESS']['feeds']['admin']) return null;
     }
 
-    $query = "SELECT COUNT(*) FROM rss_feeds WHERE draft = 1  ";
+    $query = "SELECT COUNT(*) FROM rss_feeds WHERE draft = true ";
 
     $db = suxDB::get();
     $st = $db->prepare($query);

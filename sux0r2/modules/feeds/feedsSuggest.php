@@ -123,7 +123,7 @@ class feedsSuggest  {
         $rss['url'] = $clean['url'];
         $rss['title'] = isset($feed['title']) ? $feed['title'] : '---';
         $rss['body'] = isset($feed['description']) ? $feed['description'] : '';
-        $rss['draft'] = 1;
+        $rss['draft'] = true;
 
         $id = $this->rss->saveFeed($_SESSION['users_id'], $rss);
 

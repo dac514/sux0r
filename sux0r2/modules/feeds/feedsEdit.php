@@ -175,6 +175,9 @@ class feedsEdit {
     * @param array $clean reference to validated $_POST
     */
     function formProcess(&$clean) {
+        
+        // Draft
+        $clean['draft'] = isset($clean['draft']) ? true: false;
 
         // --------------------------------------------------------------------
         // Create $feed array
@@ -184,7 +187,7 @@ class feedsEdit {
                 'url' => $clean['url'],
                 'title' => $clean['title'],
                 'body' => $clean['body'],
-                'draft' => @$clean['draft'],
+                'draft' => $clean['draft'],
             );
 
         // --------------------------------------------------------------------

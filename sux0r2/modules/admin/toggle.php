@@ -36,12 +36,20 @@ if (!$u->isRoot()) failure('Not admin');
 // Go
 // ---------------------------------------------------------------------------
 
-$image = 'lock2.gif';
-$flag = $u->toggleLogPrivateFlag($id);
-if ($flag) $image = 'lock1.gif';
-
-// Log, private
-$u->log("sux0r::admin::toggle() users_log_id: $id", $_SESSION['users_id'], 1);
+try {    
+    $image = 'lock2.gif';
+    $flag = $u->toggleLogPrivateFlag($id);
+    if ($flag) $image = 'lock1.gif';
+    
+    // Log, private
+    $u->log("sux0r::admin::toggle() users_log_id: $id", $_SESSION['users_id'], 1);
+}
+catch (Exception $e) {
+    $message = $e->getMessage();
+    $message .= "File: " . $e->getFile() . "\n";
+    $message .= "Line: " . $e->getLine() . "\n\n";
+    failure($message);   
+}
 
 echo trim($image);
 exit;

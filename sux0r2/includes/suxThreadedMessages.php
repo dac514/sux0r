@@ -90,8 +90,6 @@ class suxThreadedMessages {
             }
         }
         
-        $query .= 'LIMIT 1 ';
-        
         $st = $this->db->prepare($query);
         $st->execute(array($id));
 
@@ -158,18 +156,18 @@ class suxThreadedMessages {
         else $clean['published_on'] = date('c');
 
         // Draft, boolean / tinyint
-        $clean['draft'] = 0;
-        if (isset($msg['draft'])) $clean['draft'] = 1;
+        $clean['draft'] = false;
+        if (@$msg['draft']) $clean['draft'] = true;
 
         // Types of threaded messages
-        $clean['blog'] = 0;
-        $clean['forum'] = 0;
-        $clean['wiki'] = 0;
-        $clean['slideshow'] = 0;
-        if (isset($msg['blog'])) $clean['blog'] = 1;
-        if (isset($msg['forum'])) $clean['forum'] = 1;
-        if (isset($msg['wiki'])) $clean['wiki'] = 1;
-        if (isset($msg['slideshow'])) $clean['slideshow'] = 1;
+        $clean['blog'] = false;
+        $clean['forum'] = false;
+        $clean['wiki'] = false;
+        $clean['slideshow'] = false;
+        if (isset($msg['blog'])) $clean['blog'] = true;
+        if (isset($msg['forum'])) $clean['forum'] = true;
+        if (isset($msg['wiki'])) $clean['wiki'] = true;
+        if (isset($msg['slideshow'])) $clean['slideshow'] = true;
 
         if (!$clean['forum'] && !$clean['blog'] && !$clean['wiki'] && !$clean['slideshow'])
             throw new Exception('No message type specified?');
@@ -247,7 +245,9 @@ class suxThreadedMessages {
 
         // MySQL InnoDB with transaction reports the last insert id as 0 after
         // commit, the real ids are only reported before committing.
-        $insert_id = $this->db->lastInsertId();
+
+        if ($this->db_driver == 'pgsql') $insert_id = $this->db->lastInsertId("{$this->db_table}_id_seq"); // PgSql
+        else $insert_id = $this->db->lastInsertId();        
 
         // Commit
         suxDB::commitTransaction($tid);
@@ -267,7 +267,7 @@ class suxThreadedMessages {
     */
     private function biggestThreadPos($thread_id, $parent_id) {
 
-        $st = $this->db->prepare("SELECT id, thread_pos FROM {$this->db_table} WHERE thread_id = ? AND parent_id = ? ORDER BY thread_pos DESC LIMIT 1 ");
+        $st = $this->db->prepare("SELECT id, thread_pos FROM {$this->db_table} WHERE thread_id = ? AND parent_id = ? ORDER BY thread_pos DESC ");
         $st->execute(array($thread_id, $parent_id));
         $result = $st->fetch(PDO::FETCH_ASSOC);
 
@@ -334,26 +334,26 @@ class suxThreadedMessages {
         }
 
         // Draft, boolean / tinyint
-        $clean['draft'] = 0;
-        if (isset($msg['draft'])) $clean['draft'] = 1;
+        $clean['draft'] = false;
+        if (@$msg['draft']) $clean['draft'] = true;
 
 
         // Types of threaded messages
         if (isset($msg['blog'])) {
-            if ($msg['blog'] == 0) $clean['blog'] = 0;
-            else $clean['blog'] = 1;
+            if ($msg['blog'] == false) $clean['blog'] = false;
+            else $clean['blog'] = true;
         }
         if (isset($msg['forum'])) {
-            if ($msg['forum'] == 0) $clean['forum'] = 0;
-            else $clean['forum'] = 1;
+            if ($msg['forum'] == false) $clean['forum'] = false;
+            else $clean['forum'] = true;
         }
         if (isset($msg['wiki'])) {
-            if ($msg['wiki'] == 0) $clean['wiki'] = 0;
-            else $clean['wiki'] = 1;
+            if ($msg['wiki'] == false) $clean['wiki'] = false;
+            else $clean['wiki'] = true;
         }
         if (isset($msg['slideshow'])) {
-            if ($msg['slideshow'] == 0) $clean['slideshow'] = 0;
-            else $clean['slideshow'] = 1;
+            if ($msg['slideshow'] == false) $clean['slideshow'] = false;
+            else $clean['slideshow'] = true;
         }
 
 
@@ -409,7 +409,7 @@ class suxThreadedMessages {
         $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
 
-        $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE id = ? LIMIT 1 ");
+        $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE id = ? ");
         $st->execute(array($id));
 
         $st = $this->db->prepare("DELETE FROM {$this->db_table_hist} WHERE messages_id = ? ");
@@ -457,7 +457,7 @@ class suxThreadedMessages {
             }
         }
 
-        $query .= "ORDER BY published_on DESC LIMIT 1";
+        $query .= "ORDER BY published_on DESC ";
 
         // Execute
         $st = $this->db->prepare($query);
@@ -1136,7 +1136,7 @@ class suxThreadedMessages {
 
         foreach($result as $key => $val) {
 
-            $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE id = ? LIMIT 1 ");
+            $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE id = ? ");
             $st->execute(array($val['id']));
 
             $st = $this->db->prepare("DELETE FROM {$this->db_table_hist} WHERE messages_id = ? ");

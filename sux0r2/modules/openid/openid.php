@@ -992,7 +992,7 @@ class openid {
 
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
 
-        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_trust} WHERE users_id = ? AND auth_url = ? LIMIT 1 ");
+        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_trust} WHERE users_id = ? AND auth_url = ? ");
         $st->execute(array($id, $url));
 
         if ($st->fetchColumn() > 0) return true;
@@ -1017,7 +1017,7 @@ class openid {
             'auth_url' => $url,
             );
 
-        $query = suxDB::prepareCountQuery($this->db_table_trust, $trusted) . 'LIMIT 1 ';
+        $query = suxDB::prepareCountQuery($this->db_table_trust, $trusted);
         $st = $this->db->prepare($query);
         $st->execute($trusted);
 
@@ -1045,7 +1045,7 @@ class openid {
         $st->execute(array(time()));
 
         // Delete association
-        $st = $this->db->prepare("DELETE FROM {$this->db_table_sec} WHERE id = ? LIMIT 1 ");
+        $st = $this->db->prepare("DELETE FROM {$this->db_table_sec} WHERE id = ? ");
         $st->execute(array($id));
 
     }
@@ -1086,8 +1086,10 @@ class openid {
         $shared_secret = $this->newSecret();
         $st = $this->db->prepare("INSERT INTO {$this->db_table_sec} (expiration, shared_secret) VALUES (?, ?) ");
         $st->execute(array($expiration, base64_encode($shared_secret)));
-        $id = $this->db->lastInsertId();
-
+               
+        if ($this->db_driver == 'pgsql') $id = $this->db->lastInsertId("{$this->db_table_sec}_id_seq"); // PgSql
+        else $id = $this->db->lastInsertId();
+        
         $this->debug('Started new assoc session: ' . $id);
 
         return array($id, $shared_secret);

@@ -252,7 +252,7 @@ class blog extends bayesShared {
             SELECT tags.tag AS tag, tags.id AS id, COUNT(tags.id) AS quantity FROM tags
             INNER JOIN {$link} ON {$link}.tags_id = tags.id
             INNER JOIN messages ON {$link}.messages_id = messages.id
-            WHERE messages.blog = 1 AND messages.draft = 0 {$this->_dateSql()}
+            WHERE messages.blog = true AND messages.draft = false {$this->_dateSql()}
             GROUP BY tag ORDER BY tag ASC
             ";
             $this->r->tc = $this->tags->tagcloud($query);
@@ -623,7 +623,7 @@ class blog extends bayesShared {
         $count_query = "
         SELECT COUNT(*) FROM messages
         INNER JOIN link_messages_tags ON link_messages_tags.messages_id = messages.id
-        WHERE messages.thread_pos = 0 AND messages.blog = 1  AND messages.draft = 0 AND link_messages_tags.tags_id = ?
+        WHERE messages.thread_pos = 0 AND messages.blog = true  AND messages.draft = false AND link_messages_tags.tags_id = ?
         {$this->_dateSql()}
         ";
         $st = $db->prepare($count_query);
@@ -641,7 +641,7 @@ class blog extends bayesShared {
         $query = "
         SELECT messages.* FROM messages
         INNER JOIN link_messages_tags ON link_messages_tags.messages_id = messages.id
-        WHERE messages.thread_pos = 0 AND messages.blog = 1  AND messages.draft = 0 AND link_messages_tags.tags_id = ?
+        WHERE messages.thread_pos = 0 AND messages.blog = true  AND messages.draft = false AND link_messages_tags.tags_id = ?
         {$this->_dateSql()}
         ORDER BY messages.published_on DESC
         LIMIT {$start}, {$limit}
@@ -662,7 +662,7 @@ class blog extends bayesShared {
         $query = "
         SELECT messages.id, messages.thread_id, messages.title FROM messages
         INNER JOIN link_messages_tags ON link_messages_tags.messages_id = messages.id
-        WHERE messages.thread_pos = 0 AND messages.blog = 1  AND messages.draft = 0 AND link_messages_tags.tags_id = ?
+        WHERE messages.thread_pos = 0 AND messages.blog = true  AND messages.draft = false AND link_messages_tags.tags_id = ?
         {$this->_dateSql()}
         ORDER BY messages.published_on DESC
         ";
@@ -689,7 +689,7 @@ class blog extends bayesShared {
         INNER JOIN link_bayes_messages ON link_bayes_messages.messages_id = messages.id
         INNER JOIN bayes_documents ON link_bayes_messages.bayes_documents_id = bayes_documents.id
         INNER JOIN bayes_categories ON bayes_documents.bayes_categories_id = bayes_categories.id
-        WHERE messages.thread_pos = 0 AND messages.blog = 1  AND messages.draft = 0 AND bayes_categories.id = ?
+        WHERE messages.thread_pos = 0 AND messages.blog = true  AND messages.draft = false AND bayes_categories.id = ?
         {$this->_dateSql()}
         ";
         $st = $db->prepare($count_query);
@@ -709,7 +709,7 @@ class blog extends bayesShared {
         INNER JOIN link_bayes_messages ON link_bayes_messages.messages_id = messages.id
         INNER JOIN bayes_documents ON link_bayes_messages.bayes_documents_id = bayes_documents.id
         INNER JOIN bayes_categories ON bayes_documents.bayes_categories_id = bayes_categories.id
-        WHERE messages.thread_pos = 0 AND messages.blog = 1  AND messages.draft = 0 AND bayes_categories.id = ?
+        WHERE messages.thread_pos = 0 AND messages.blog = true  AND messages.draft = false AND bayes_categories.id = ?
         {$this->_dateSql()}
         ORDER BY messages.published_on DESC
         LIMIT {$start}, {$limit}
@@ -732,7 +732,7 @@ class blog extends bayesShared {
         INNER JOIN link_bayes_messages ON link_bayes_messages.messages_id = messages.id
         INNER JOIN bayes_documents ON link_bayes_messages.bayes_documents_id = bayes_documents.id
         INNER JOIN bayes_categories ON bayes_documents.bayes_categories_id = bayes_categories.id
-        WHERE messages.thread_pos = 0 AND messages.blog = 1  AND messages.draft = 0 AND bayes_categories.id = ?
+        WHERE messages.thread_pos = 0 AND messages.blog = true  AND messages.draft = false AND bayes_categories.id = ?
         {$this->_dateSql()}
         ORDER BY messages.published_on DESC
         ";

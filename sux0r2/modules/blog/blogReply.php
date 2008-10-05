@@ -135,7 +135,7 @@ class blogReply {
     */
     function formProcess(&$clean) {
 
-        $msg['blog'] = 1;
+        $msg['blog'] = true;
         $msg['title'] = $clean['title'];
         $msg['body'] = $clean['body'];
 

@@ -149,7 +149,7 @@ class blogAdmin {
         if (isset($clean['delete'])) foreach($clean['delete'] as $thread_id => $val) {
             // Validate that this is something we're allowed to delete
             $tmp = $this->msg->getFirstPost($thread_id, true);
-            if ($tmp && $tmp['blog'] == 1 && $tmp['thread_pos'] == 0) {
+            if ($tmp && $tmp['blog'] && $tmp['thread_pos'] == 0) {
                 $this->msg->deleteThread($thread_id);
                 $this->user->log("sux0r::blogAdmin() deleted thread_id: {$thread_id}", $_SESSION['users_id'], 1); // Private
             }

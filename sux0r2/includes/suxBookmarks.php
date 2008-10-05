@@ -57,11 +57,11 @@ class suxBookmarks {
         // SQL Query
         $query = "SELECT COUNT(*) FROM {$this->db_table} ";
 
+        // Publish / Draft
         if (!$unpub) {
-            // Only show published items
-            $query .= "WHERE draft = 0 ";
-            if ($this->db_driver == 'mysql') {
-                // MySql
+            if ($this->db_driver == 'pgsql' || $this->db_driver == 'mysql') {
+                // PgSql / MySql
+                $query .= "WHERE draft = false ";
                 $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
             }
             else {
@@ -93,11 +93,11 @@ class suxBookmarks {
         // SQL Query
         $query = "SELECT * FROM {$this->db_table} ";
 
+        // Publish / Draft
         if (!$unpub) {
-            // Only show published items
-            $query .= "WHERE draft = 0 ";
-            if ($this->db_driver == 'mysql') {
-                // MySql
+            if ($this->db_driver == 'pgsql' || $this->db_driver == 'mysql') {
+                // PgSql / MySql
+                $query .= "WHERE draft = false ";
                 $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
             }
             else {
@@ -128,7 +128,7 @@ class suxBookmarks {
     */
     function getUnpublishedBookmarks() {
 
-        $q = "SELECT * FROM {$this->db_table} WHERE draft = 1 ORDER BY title ASC ";
+        $q = "SELECT * FROM {$this->db_table} WHERE draft = true ORDER BY title ASC ";
         $st = $this->db->query($q);
         return $st->fetchAll(PDO::FETCH_ASSOC);
 
@@ -151,18 +151,18 @@ class suxBookmarks {
         }
 
         $query = "SELECT * FROM {$this->db_table} WHERE {$col} = ? ";
+        
+        // Publish / Draft
         if (!$unpub) {
-            // Only show published items
-            $query .= "AND draft = 0 ";
-            if ($this->db_driver == 'mysql') {
-                // MySql
+            if ($this->db_driver == 'pgsql' || $this->db_driver == 'mysql') {
+                // PgSql / MySql
+                $query .= "AND draft = true ";
                 $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
             }
             else {
                 throw new Exception('Unsupported database driver');
             }
         }
-        $query .= 'LIMIT 1 ';
 
         $st = $this->db->prepare($query);
         $st->execute(array($id));
@@ -216,7 +216,7 @@ class suxBookmarks {
             else $clean['id'] = $url['id'];
         }
         else {
-            $query = "SELECT id FROM {$this->db_table} WHERE url = ? LIMIT 1 ";
+            $query = "SELECT id FROM {$this->db_table} WHERE url = ? ";
             $st = $this->db->prepare($query);
             $st->execute(array($clean['url']));
             $edit = $st->fetch(PDO::FETCH_ASSOC);
@@ -234,8 +234,8 @@ class suxBookmarks {
         else $clean['published_on'] = date('c');
 
         // Draft, boolean / tinyint
-        $clean['draft'] = 0;
-        if (isset($url['draft'])) $clean['draft'] = 1;
+        $clean['draft'] = false;
+        if (@$url['draft']) $clean['draft'] = true;
 
         // We now have the $clean[] array
 
@@ -258,7 +258,9 @@ class suxBookmarks {
             $query = suxDB::prepareInsertQuery($this->db_table, $clean);
             $st = $this->db->prepare($query);
             $st->execute($clean);
-            $clean['id'] = $this->db->lastInsertId();
+            
+            if ($this->db_driver == 'pgsql') $clean['id'] = $this->db->lastInsertId("{$this->db_table}_id_seq"); // PgSql
+            else $clean['id'] = $this->db->lastInsertId();
 
         }
 
@@ -279,7 +281,7 @@ class suxBookmarks {
         $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
 
-        $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE id = ? LIMIT 1 ");
+        $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE id = ? ");
         $st->execute(array($id));
 
         // Delete links, too
@@ -302,7 +304,7 @@ class suxBookmarks {
 
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
 
-        $st = $this->db->prepare("UPDATE {$this->db_table} SET draft = 0 WHERE id = ? ");
+        $st = $this->db->prepare("UPDATE {$this->db_table} SET draft = false WHERE id = ? ");
         $st->execute(array($id));
 
     }

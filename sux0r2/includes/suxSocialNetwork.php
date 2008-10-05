@@ -66,7 +66,7 @@ class suxSocialNetwork {
 
         if (!filter_var($uid, FILTER_VALIDATE_INT) || $uid < 1) throw new Exception('Invalid user id');
 
-        $st = $this->db->prepare("SELECT id, friend_users_id, relationship FROM {$this->db_table} WHERE users_id = ? AND friend_users_id = ? LIMIT 1 ");
+        $st = $this->db->prepare("SELECT id, friend_users_id, relationship FROM {$this->db_table} WHERE users_id = ? AND friend_users_id = ? ");
         $st->execute(array($uid, $fid));
         return $st->fetch(PDO::FETCH_ASSOC);
 
@@ -248,7 +248,7 @@ class suxSocialNetwork {
         // Go!
         // --------------------------------------------------------------------
 
-        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table} WHERE users_id = ? AND friend_users_id = ? LIMIT 1 ");
+        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table} WHERE users_id = ? AND friend_users_id = ? ");
         $st->execute(array($uid, $fid));
 
         $socialnetwork = array(
@@ -287,7 +287,7 @@ class suxSocialNetwork {
         if (!filter_var($uid, FILTER_VALIDATE_INT) || $uid < 1) throw new Exception('Invalid user id');
         if (!filter_var($fid, FILTER_VALIDATE_INT) || $fid < 1) throw new Exception('Invalid friend id');
 
-        $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE users_id = ? AND friend_users_id = ? LIMIT 1 ");
+        $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE users_id = ? AND friend_users_id = ? ");
         return $st->execute(array($uid, $fid));
 
     }
@@ -303,7 +303,7 @@ class suxSocialNetwork {
 
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
 
-        $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE id = ? LIMIT 1 ");
+        $st = $this->db->prepare("DELETE FROM {$this->db_table} WHERE id = ? ");
         return $st->execute(array($id));
 
     }
