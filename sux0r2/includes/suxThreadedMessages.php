@@ -157,17 +157,17 @@ class suxThreadedMessages {
 
         // Draft, boolean / tinyint
         $clean['draft'] = false;
-        if (@$msg['draft']) $clean['draft'] = true;
+        if (isset($msg['draft']) && $msg['draft']) $clean['draft'] = true;
 
         // Types of threaded messages
         $clean['blog'] = false;
         $clean['forum'] = false;
         $clean['wiki'] = false;
         $clean['slideshow'] = false;
-        if (isset($msg['blog'])) $clean['blog'] = true;
-        if (isset($msg['forum'])) $clean['forum'] = true;
-        if (isset($msg['wiki'])) $clean['wiki'] = true;
-        if (isset($msg['slideshow'])) $clean['slideshow'] = true;
+        if (isset($msg['blog']) && $msg['blog']) $clean['blog'] = true;
+        if (isset($msg['forum']) && $msg['forum']) $clean['forum'] = true;
+        if (isset($msg['wiki']) && $msg['wiki']) $clean['wiki'] = true;
+        if (isset($msg['slideshow']) && $msg['slideshow']) $clean['slideshow'] = true;
 
         if (!$clean['forum'] && !$clean['blog'] && !$clean['wiki'] && !$clean['slideshow'])
             throw new Exception('No message type specified?');
@@ -241,8 +241,35 @@ class suxThreadedMessages {
 
         $query = suxDB::prepareInsertQuery($this->db_table, $clean);
         $st = $this->db->prepare($query);
-        $st->execute($clean);
-
+        
+        // http://bugs.php.net/bug.php?id=44597 
+        // As of 5.2.6 you still can't use this function's $input_parameters to 
+        // pass a boolean to PostgreSQL. To do that, you'll have to call 
+        // bindParam() with explicit types for *each* parameter in the query.
+        // Annoying much? This sucks more than you can imagine.            
+        
+        if  ($this->db_driver == 'pgsql') {                 
+            $st->bindParam(':users_id', $clean['users_id'], PDO::PARAM_INT);
+            $st->bindParam(':title', $clean['title'], PDO::PARAM_STR);
+            if (isset($clean['image'])) $st->bindParam(':image', $clean['image'], PDO::PARAM_STR);
+            $st->bindParam(':body_html', $clean['body_html'], PDO::PARAM_STR);
+            $st->bindParam(':body_plaintext', $clean['body_plaintext'], PDO::PARAM_STR);
+            $st->bindParam(':thread_id', $clean['thread_id'], PDO::PARAM_INT);
+            $st->bindParam(':parent_id', $clean['parent_id'], PDO::PARAM_INT);
+            $st->bindParam(':level', $clean['level'], PDO::PARAM_INT);
+            $st->bindParam(':thread_pos', $clean['thread_pos'], PDO::PARAM_INT);
+            $st->bindParam(':draft', $clean['draft'], PDO::PARAM_BOOL);
+            $st->bindParam(':published_on', $clean['published_on'], PDO::PARAM_STR);
+            $st->bindParam(':forum', $clean['forum'], PDO::PARAM_BOOL);
+            $st->bindParam(':blog', $clean['blog'], PDO::PARAM_BOOL);
+            $st->bindParam(':wiki', $clean['wiki'], PDO::PARAM_BOOL);
+            $st->bindParam(':slideshow', $clean['slideshow'], PDO::PARAM_BOOL);            
+            $st->execute();      
+        }   
+        else {         
+            $st->execute($clean);
+        }
+        
         // MySQL InnoDB with transaction reports the last insert id as 0 after
         // commit, the real ids are only reported before committing.
 
@@ -286,7 +313,7 @@ class suxThreadedMessages {
     *
     * @param int $messages_id messages_id
     * @param int $users_id users_id
-    * @param array $msg required keys => (title, body) optional keys => (published_on)
+    * @param array $msg required keys => (title, body) optional keys => (published_on, image)
     * @param int $trusted passed on to sanitizeHtml()
     */
     function editMessage($messages_id, $users_id, array $msg, $trusted = -1) {
@@ -335,24 +362,23 @@ class suxThreadedMessages {
 
         // Draft, boolean / tinyint
         $clean['draft'] = false;
-        if (@$msg['draft']) $clean['draft'] = true;
-
+        if (isset($msg['draft']) && $msg['draft']) $clean['draft'] = true;
 
         // Types of threaded messages
         if (isset($msg['blog'])) {
-            if ($msg['blog'] == false) $clean['blog'] = false;
+            if (!$msg['blog']) $clean['blog'] = false;
             else $clean['blog'] = true;
         }
         if (isset($msg['forum'])) {
-            if ($msg['forum'] == false) $clean['forum'] = false;
+            if (!$msg['forum']) $clean['forum'] = false;
             else $clean['forum'] = true;
         }
         if (isset($msg['wiki'])) {
-            if ($msg['wiki'] == false) $clean['wiki'] = false;
+            if (!$msg['wiki']) $clean['wiki'] = false;
             else $clean['wiki'] = true;
         }
         if (isset($msg['slideshow'])) {
-            if ($msg['slideshow'] == false) $clean['slideshow'] = false;
+            if (!$msg['slideshow']) $clean['slideshow'] = false;
             else $clean['slideshow'] = true;
         }
 
@@ -387,7 +413,30 @@ class suxThreadedMessages {
         // Update the message
         $query = suxDB::prepareUpdateQuery($this->db_table, $clean);
         $st = $this->db->prepare($query);
-        $st->execute($clean);
+        
+        // http://bugs.php.net/bug.php?id=44597 
+        // As of 5.2.6 you still can't use this function's $input_parameters to 
+        // pass a boolean to PostgreSQL. To do that, you'll have to call 
+        // bindParam() with explicit types for *each* parameter in the query.
+        // Annoying much? This sucks more than you can imagine.            
+        
+        if  ($this->db_driver == 'pgsql') {                 
+            $st->bindParam(':id', $clean['id'], PDO::PARAM_INT);
+            $st->bindParam(':title', $clean['title'], PDO::PARAM_STR);
+            if (isset($clean['image'])) $st->bindParam(':image', $clean['image'], PDO::PARAM_STR);
+            $st->bindParam(':body_html', $clean['body_html'], PDO::PARAM_STR);
+            $st->bindParam(':body_plaintext', $clean['body_plaintext'], PDO::PARAM_STR);
+            $st->bindParam(':draft', $clean['draft'], PDO::PARAM_BOOL);
+            if (isset($clean['published_on'])) $st->bindParam(':published_on', $clean['published_on'], PDO::PARAM_STR);
+            if (isset($clean['forum'])) $st->bindParam(':forum', $clean['forum'], PDO::PARAM_BOOL);
+            if (isset($clean['blog'])) $st->bindParam(':blog', $clean['blog'], PDO::PARAM_BOOL);
+            if (isset($clean['wiki'])) $st->bindParam(':wiki', $clean['wiki'], PDO::PARAM_BOOL);
+            if (isset($clean['slideshow'])) $st->bindParam(':slideshow', $clean['slideshow'], PDO::PARAM_BOOL);            
+            $st->execute();      
+        }   
+        else {         
+            $st->execute($clean);
+        }        
 
         // Commit
         suxDB::commitTransaction($tid);

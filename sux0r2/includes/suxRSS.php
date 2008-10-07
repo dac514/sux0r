@@ -285,13 +285,19 @@ class suxRSS extends DOMDocument {
 
         // Draft, boolean / tinyint
         $clean['draft'] = false;
-        if (@$url['draft']) $clean['draft'] = true;
+        if (isset($url['draft']) && $url['draft']) $clean['draft'] = true;
 
         // We now have the $clean[] array
 
         // --------------------------------------------------------------------
         // Go!
         // --------------------------------------------------------------------
+        
+        // http://bugs.php.net/bug.php?id=44597 
+        // As of 5.2.6 you still can't use this function's $input_parameters to 
+        // pass a boolean to PostgreSQL. To do that, you'll have to call 
+        // bindParam() with explicit types for *each* parameter in the query.
+        // Annoying much? This sucks more than you can imagine.    
 
         if (isset($clean['id'])) {
 
@@ -299,7 +305,19 @@ class suxRSS extends DOMDocument {
             unset($clean['users_id']); // Don't override the original suggestor
             $query = suxDB::prepareUpdateQuery($this->db_feeds, $clean);
             $st = $this->db->prepare($query);
-            $st->execute($clean);
+            
+            if  ($this->db_driver == 'pgsql') {        
+                $st->bindParam(':id', $clean['id'], PDO::PARAM_INT);
+                $st->bindParam(':url', $clean['url'], PDO::PARAM_STR);
+                $st->bindParam(':title', $clean['title'], PDO::PARAM_STR);
+                if (isset($clean['body_html'])) $st->bindParam(':body_html', $clean['body_html'], PDO::PARAM_STR);
+                if (isset($clean['body_plaintext'])) $st->bindParam(':body_plaintext', $clean['body_plaintext'], PDO::PARAM_STR);
+                $st->bindParam(':draft', $clean['draft'], PDO::PARAM_BOOL);
+                $st->execute();      
+            }   
+            else {                          
+                $st->execute($clean);
+            }           
 
         }
         else {
@@ -307,7 +325,19 @@ class suxRSS extends DOMDocument {
             // INSERT
             $query = suxDB::prepareInsertQuery($this->db_feeds, $clean);
             $st = $this->db->prepare($query);
-            $st->execute($clean);
+
+            if  ($this->db_driver == 'pgsql') {        
+                $st->bindParam(':users_id', $clean['users_id'], PDO::PARAM_INT);
+                $st->bindParam(':url', $clean['url'], PDO::PARAM_STR);
+                $st->bindParam(':title', $clean['title'], PDO::PARAM_STR);
+                if (isset($clean['body_html'])) $st->bindParam(':body_html', $clean['body_html'], PDO::PARAM_STR);
+                if (isset($clean['body_plaintext'])) $st->bindParam(':body_plaintext', $clean['body_plaintext'], PDO::PARAM_STR);
+                $st->bindParam(':draft', $clean['draft'], PDO::PARAM_BOOL);
+                $st->execute();      
+            }   
+            else {                          
+                $st->execute($clean);
+            }    
             
             if ($this->db_driver == 'pgsql') $clean['id'] = $this->db->lastInsertId("{$this->db_feeds}_id_seq"); // PgSql
             else $clean['id'] = $this->db->lastInsertId();                        

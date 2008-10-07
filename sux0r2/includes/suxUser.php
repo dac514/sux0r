@@ -413,7 +413,6 @@ class suxUser {
 
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
 
-
         $st = $this->db->prepare("UPDATE {$this->db_table} SET banned = true WHERE id = ? ");
         $st->execute(array($users_id));
 
@@ -714,10 +713,10 @@ class suxUser {
         $query = suxDB::prepareInsertQuery($this->db_table_log, $clean); 
         $st = $this->db->prepare($query);
         
-        // http://ca.php.net/manual/en/pdostatement.execute.php#84990    
+        // http://bugs.php.net/bug.php?id=44597    
         // As of 5.2.6 you still can't use this function's $input_parameters to 
         // pass a boolean to PostgreSQL. To do that, you'll have to call 
-        // bindParam() with explicit types for *each& parameter in the query.
+        // bindParam() with explicit types for *each* parameter in the query.
         // Annoying much? This sucks more than you can imagine.
             
         if  ($this->db_driver == 'pgsql') {        
@@ -755,10 +754,10 @@ class suxUser {
         $query = "UPDATE {$this->db_table_log} SET private = ? WHERE id = ? ";
         $st = $this->db->prepare($query);
         
-        // http://ca.php.net/manual/en/pdostatement.execute.php#84990    
+        // http://bugs.php.net/bug.php?id=44597    
         // As of 5.2.6 you still can't use this function's $input_parameters to 
         // pass a boolean to PostgreSQL. To do that, you'll have to call 
-        // bindParam() with explicit types for *each& parameter in the query.
+        // bindParam() with explicit types for *each* parameter in the query.
         // Annoying much? This sucks more than you can imagine.
         
         if  ($this->db_driver == 'pgsql') {        

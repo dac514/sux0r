@@ -404,12 +404,12 @@ class bayesUser extends suxNaiveBayesian {
     /**
     * @param string $users_id users id
     * @param string $vector_id vector id
-    * @param int $trainer either 0/null or 1
-    * @param int $owner either 0/null or 1
+    * @param bool $trainer 
+    * @param bool $owner
     * @return bool
     */
     function shareVector($users_id, $vector_id, $trainer, $owner) {
-
+        
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) return false;
         if (!filter_var($vector_id, FILTER_VALIDATE_INT) || $vector_id < 1) return false;
         if ($users_id == $_SESSION['users_id']) return false; // Cannot share a vector with one's self
@@ -429,7 +429,13 @@ class bayesUser extends suxNaiveBayesian {
             'trainer' => $trainer,
             'owner' => $owner,
             );
-
+        
+        // http://bugs.php.net/bug.php?id=44597   
+        // As of 5.2.6 you still can't use this function's $input_parameters to 
+        // pass a boolean to PostgreSQL. To do that, you'll have to call 
+        // bindParam() with explicit types for *each& parameter in the query.
+        // Annoying much? This sucks more than you can imagine.
+        
         if ($st->fetchColumn() > 0) {
 
             // Don't allow un-ownership if there is only one owner, probably due to a race condition
@@ -442,7 +448,17 @@ class bayesUser extends suxNaiveBayesian {
             SET trainer = :trainer, owner = :owner
             WHERE users_id = :users_id AND bayes_vectors_id = :bayes_vectors_id ";
             $st = $this->db->prepare($query);
-            return $st->execute($shared);
+            
+            if  ($this->db_driver == 'pgsql') {        
+                $st->bindParam(':trainer', $shared['trainer'], PDO::PARAM_BOOL);
+                $st->bindParam(':owner', $shared['owner'], PDO::PARAM_BOOL);
+                $st->bindParam(':users_id', $shared['users_id'], PDO::PARAM_INT);            
+                $st->bindParam(':bayes_vectors_id', $shared['bayes_vectors_id'], PDO::PARAM_INT);  
+                return $st->execute();      
+            }             
+            else { 
+                return $st->execute($shared);
+            }
 
         }
         else {
@@ -450,7 +466,18 @@ class bayesUser extends suxNaiveBayesian {
             // INSERT
             $query = suxDB::prepareInsertQuery($this->db_table_auth, $shared);
             $st = $this->db->prepare($query);
-            return $st->execute($shared);
+            
+            if  ($this->db_driver == 'pgsql') {        
+                $st->bindParam(':trainer', $shared['trainer'], PDO::PARAM_BOOL);
+                $st->bindParam(':owner', $shared['owner'], PDO::PARAM_BOOL);
+                $st->bindParam(':users_id', $shared['users_id'], PDO::PARAM_INT);            
+                $st->bindParam(':bayes_vectors_id', $shared['bayes_vectors_id'], PDO::PARAM_INT);  
+                return $st->execute();      
+            }             
+            else { 
+                return $st->execute($shared);
+            }            
+            
 
         }
 
