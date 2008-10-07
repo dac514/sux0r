@@ -216,7 +216,7 @@ class photoalbumsEdit {
         $clean['published_on'] = date('Y-m-d H:i:s', strtotime($clean['published_on'])); // Sanitize
 
         // Draft
-        $clean['draft'] = isset($clean['draft']) ? true : false;
+        $clean['draft'] = (isset($clean['draft']) && $clean['draft']) ? true : false;
         
         // --------------------------------------------------------------------
         // Create $album array

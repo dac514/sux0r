@@ -150,7 +150,7 @@ class blogRenderer extends suxRenderer {
         $query = "
         SELECT bayes_categories.category, bayes_categories.id FROM bayes_categories
         {$innerjoin}
-        WHERE messages.id = ? AND bayes_auth.users_id = ? AND (bayes_auth.owner = 1 OR bayes_auth.trainer = 1)
+        WHERE messages.id = ? AND bayes_auth.users_id = ? AND (bayes_auth.owner = true OR bayes_auth.trainer = true)
         ";
 
         $db = suxDB::get();

@@ -307,7 +307,7 @@ class blogEdit {
         }
 
         // Draft
-        $clean['draft'] = isset($clean['draft']) ? true : false;
+        $clean['draft'] = (isset($clean['draft']) && $clean['draft']) ? true : false;
 
         // --------------------------------------------------------------------
         // Create $msg array
@@ -436,7 +436,7 @@ class blogEdit {
         SELECT bayes_documents.id FROM bayes_documents
         {$innerjoin}
         WHERE messages.id = ?
-        AND bayes_auth.users_id = ? AND (bayes_auth.owner = 1 OR bayes_auth.trainer = 1)
+        AND bayes_auth.users_id = ? AND (bayes_auth.owner = true OR bayes_auth.trainer = true)
         "; // Note: bayes_auth WHERE condition equivilant to nb->isCategoryTrainer()
 
         $db = suxDB::get();
