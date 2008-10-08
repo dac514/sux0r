@@ -110,7 +110,7 @@ class suxBookmarks {
         else $query .= 'ORDER BY published_on DESC ';
 
         // Limit
-        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
 
         // Execute

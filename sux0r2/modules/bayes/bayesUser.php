@@ -788,7 +788,7 @@ abstract class bayesShared {
         $db_driver = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
 
         // Date query, database specic
-        if ($db_driver == 'mysql') {
+        if ($db_driver == 'pgsql' || $db_driver == 'mysql') {
             $date = 'AND NOT published_on > \'' . date('Y-m-d H:i:s') . '\' ';
         }
         else {

@@ -604,7 +604,7 @@ class suxThreadedMessages {
                 
         $query .= "ORDER BY thread_id, thread_pos "; // Order
         // Limit
-        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
 
         // Execute
@@ -698,7 +698,7 @@ class suxThreadedMessages {
         $query .= "GROUP BY users_id ORDER BY count DESC ";
 
         // Limits
-        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
 
         // Execute
@@ -748,7 +748,7 @@ class suxThreadedMessages {
         $query .= "ORDER BY published_on DESC "; // Order
         
         // Limit
-        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
 
         // Execute
@@ -832,7 +832,7 @@ class suxThreadedMessages {
             
         $query .= "ORDER BY published_on DESC "; // Order
         // Limit
-        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
 
 
@@ -925,7 +925,7 @@ class suxThreadedMessages {
         $query .= "GROUP BY users_id ORDER BY count DESC ";        
 
         // Limits
-        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
 
         // Execute
@@ -975,7 +975,7 @@ class suxThreadedMessages {
         $query .= "ORDER BY published_on DESC "; // Order
         
         // Limit
-        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
 
         // Execute
@@ -1015,13 +1015,13 @@ class suxThreadedMessages {
             if ($this->db_driver == 'mysql') {
                 // MySql
                 $query .= "AND MONTH(published_on) =  MONTH('{$date}') "; // Month
-                $query .= "AND YEAR(published_on) = YEAR('{$date}')"; // Year
+                $query .= "AND YEAR(published_on) = YEAR('{$date}') "; // Year
                 $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
             }
             elseif ($this->db_driver == 'pgsql') {                
                 // PgSQL                           
-                $query .= "AND EXTRACT(MONTH FROM published_on) =  EXTRACT(MONTH FROM '{$date}') "; // Month
-                $query .= "AND EXTRACT(YEAR FROM published_on) = EXTRACT(YEAR FROM '{$date}')"; // Year
+                $query .= "AND EXTRACT(MONTH FROM published_on) =  EXTRACT(MONTH FROM timestamp '{$date}') "; // Month
+                $query .= "AND EXTRACT(YEAR FROM published_on) = EXTRACT(YEAR FROM timestamp '{$date}') "; // Year
                 $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
             }            
             else {
@@ -1074,7 +1074,7 @@ class suxThreadedMessages {
         elseif ($this->db_driver == 'pgsql') {
             // PgSql
             
-            $query = "SELECT COUNT(*) AS count, 
+            $query = "SELECT DISTINCT COUNT(*) AS count, 
             EXTRACT(YEAR FROM published_on) AS year, 
             EXTRACT(MONTH FROM published_on) AS month
             FROM {$this->db_table} WHERE thread_pos = 0 ";
@@ -1086,18 +1086,17 @@ class suxThreadedMessages {
             }
             if ($type) $query .= "AND {$type} = true "; // Type
             
-            $query .= "GROUP BY id,published_on ORDER BY published_on DESC ";
+            $query .= "GROUP BY year, month ORDER BY year DESC, month DESC ";
             
         }
         else {
             throw new Exception('Unsupported database driver');
         }       
-
+        
         // Limits
-        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
-
-
+        
         // Execute
         $st = $this->db->query($query);
         return $st->fetchAll(PDO::FETCH_ASSOC);
@@ -1142,8 +1141,8 @@ class suxThreadedMessages {
             }
             elseif ($this->db_driver == 'pgsql') {
                 // PgSql
-                $query .= "AND EXTRACT(MONTH FROM published_on) =  EXTRACT(MONTH FROM '{$date}')  "; // Month
-                $query .= "AND EXTRACT(YEAR FROM published_on) =  EXTRACT(YEAR FROM '{$date}') "; // Year
+                $query .= "AND EXTRACT(MONTH FROM published_on) =  EXTRACT(MONTH FROM timestamp '{$date}')  "; // Month
+                $query .= "AND EXTRACT(YEAR FROM published_on) =  EXTRACT(YEAR FROM timestamp '{$date}') "; // Year
                 $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
             }            
             else {
@@ -1156,7 +1155,7 @@ class suxThreadedMessages {
         
         $query .= "ORDER BY published_on DESC "; // Order
         // Limit
-        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
 
         // Execute

@@ -276,7 +276,7 @@ class feeds extends bayesShared {
         INNER JOIN link_rss_users ON link_rss_users.rss_feeds_id = rss_feeds.id
         WHERE link_rss_users.users_id = ?
         ORDER BY rss_items.published_on DESC, rss_items.id DESC
-        LIMIT {$start}, {$limit}
+        LIMIT {$limit} OFFSET {$start}
         ";
 
         $st = $db->prepare($query);

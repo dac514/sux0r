@@ -110,7 +110,7 @@ class suxSocialNetwork {
         $query = "SELECT id, friend_users_id, relationship FROM {$this->db_table} WHERE users_id = ? ";
 
         // Limit
-        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
 
         $st = $this->db->prepare($query);
@@ -157,7 +157,7 @@ class suxSocialNetwork {
         $query = "SELECT id, users_id, relationship FROM {$this->db_table} WHERE friend_users_id = ? ";
 
         // Limit
-        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
 
         $st = $this->db->prepare($query);
