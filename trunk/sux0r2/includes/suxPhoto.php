@@ -86,14 +86,9 @@ class suxPhoto {
         
         // Publish / Draft
         if (!$unpub) {
-            if ($this->db_driver == 'pgsql' || $this->db_driver == 'mysql') {
-                // PgSql / MySql
-                $query .= "AND draft = false ";
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
-            }
-            else {
-                throw new Exception('Unsupported database driver');
-            }
+            // PgSql / MySql
+            $query .= "AND draft = false ";
+            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
 
         $st = $this->db->prepare($query);
@@ -128,14 +123,9 @@ class suxPhoto {
         // Publish / Draft
         if (!$unpub) {
             $query .= $users_id ? 'AND ' : 'WHERE ';
-            if ($this->db_driver == 'pgsql' || $this->db_driver == 'mysql') {
-                // PgSql / MySql
-                $query .= 'draft = false ';
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
-            }
-            else {
-                throw new Exception('Unsupported database driver');
-            }
+            // PgSql / MySql
+            $query .= 'draft = false ';
+            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
         $query .= 'ORDER BY published_on DESC ';
 
@@ -173,14 +163,9 @@ class suxPhoto {
         // Publish / Draft
         if (!$unpub) {
             $query .= $users_id ? 'AND ' : 'WHERE ';
-            if ($this->db_driver == 'pgsql' || $this->db_driver == 'mysql') {
-                // PgSql / MySql
-                $query .= 'draft = false ';
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
-            }
-            else {
-                throw new Exception('Unsupported database driver');
-            }
+            // PgSql / MySql
+            $query .= 'draft = false ';
+            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
 
         $st = $this->db->prepare($query);

@@ -80,14 +80,9 @@ class suxThreadedMessages {
         
         // Publish date / draft
         if (!$unpub) {
-            if ($this->db_driver == 'mysql' || $this->db_driver == 'pgsql') {
-                // MySql / PgSql
-                $query .= "AND draft = false ";
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
-            }             
-            else {
-                throw new Exception('Unsupported database driver');
-            }
+            // MySql / PgSql
+            $query .= "AND draft = false ";
+            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
         
         $st = $this->db->prepare($query);
@@ -496,14 +491,9 @@ class suxThreadedMessages {
 
         // Publish date / draft
         if (!$unpub) {
-            if ($this->db_driver == 'mysql' || $this->db_driver == 'pgsql') {
-                // MySql / PgSql
-                $query .= "AND draft = false ";
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
-            }            
-            else {
-                throw new Exception('Unsupported database driver');
-            }
+            // MySql / PgSql
+            $query .= "AND draft = false ";
+            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
 
         $query .= "ORDER BY published_on DESC ";
@@ -543,14 +533,9 @@ class suxThreadedMessages {
 
         // Publish date / draft
         if (!$unpub) {
-            if ($this->db_driver == 'mysql' || $this->db_driver == 'pgsql') {
-                // MySql / PgSql
-                $query .= "AND draft = false ";
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
-            }            
-            else {
-                throw new Exception('Unsupported database driver');
-            }
+            // MySql / PgSql
+            $query .= "AND draft = false ";
+            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Type
@@ -589,14 +574,9 @@ class suxThreadedMessages {
 
         // Publish date / draft
         if (!$unpub) {
-            if ($this->db_driver == 'mysql' || $this->db_driver == 'pgsql') {
-                // MySql / PgSql
-                $query .= "AND draft = false ";
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
-            }             
-            else {
-                throw new Exception('Unsupported database driver');
-            }
+            // MySql / PgSql
+            $query .= "AND draft = false ";
+            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Type
@@ -638,14 +618,9 @@ class suxThreadedMessages {
 
         // Publish date / draft
         if (!$unpub) {
-            if ($this->db_driver == 'mysql' || $this->db_driver == 'pgsql') {
-                // MySql / PgSql
-                $query .= "AND draft = false ";
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
-            }             
-            else {
-                throw new Exception('Unsupported database driver');
-            }
+            // MySql / PgSql
+            $query .= "AND draft = false ";
+            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Type
@@ -673,23 +648,15 @@ class suxThreadedMessages {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
-
-        // Query
-        if ($this->db_driver == 'mysql' || $this->db_driver == 'pgsql') {
-     
-            // Mysql / PgSql
-            $query = "SELECT COUNT(*) AS count, users_id FROM {$this->db_table} ";
-            
-            if (!$unpub) {
-                // Only show published items
-                $query .= "AND draft = false ";
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
-            } 
-            
-        }        
-        else {
-            throw new Exception('Unsupported database driver');
-        }
+                
+        // Mysql / PgSql
+        $query = "SELECT COUNT(*) AS count, users_id FROM {$this->db_table} ";
+        
+        if (!$unpub) {
+            // Only show published items
+            $query .= "AND draft = false ";
+            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
+        } 
         
         // Type
         if ($type) $query .= "AND {$type} = true "; 
@@ -732,14 +699,9 @@ class suxThreadedMessages {
 
         // Publish date / draft
         if (!$unpub) {            
-            if ($this->db_driver == 'mysql' || $this->db_driver == 'pgsql') {
-                // MySql / PgSql
-                $query .= "AND draft = false ";
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
-            }              
-            else {
-                throw new Exception('Unsupported database driver');
-            }
+            // MySql / PgSql
+            $query .= "AND draft = false ";
+            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Type
@@ -776,14 +738,9 @@ class suxThreadedMessages {
 
         // Publish date / Draft
         if (!$unpub) {
-            if ($this->db_driver == 'mysql' || $this->db_driver == 'pgsql') {
-                // PgSql
-                $query .= "AND draft = false ";
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
-            }
-            else {
-                throw new Exception('Unsupported database driver');
-            }
+            // PgSql / MySql
+            $query .= "AND draft = false ";
+            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Type
@@ -817,14 +774,9 @@ class suxThreadedMessages {
 
         // Publish date / Draft
         if (!$unpub) {
-            if ($this->db_driver == 'mysql' || $this->db_driver == 'pgsql') {
-                // MySql / PgSql
-                $query .= "AND draft = false ";
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
-            }            
-            else {
-                throw new Exception('Unsupported database driver');
-            }
+            // MySql / PgSql
+            $query .= "AND draft = false ";
+            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Type
@@ -864,15 +816,10 @@ class suxThreadedMessages {
         $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE users_id = ? AND thread_pos = 0 ";
 
         // Publish date / draft
-        if (!$unpub) {
-            if ($this->db_driver == 'mysql' || $this->db_driver == 'pgsql') {
-                // MySql / PgSql
-                $query .= "AND draft = false ";
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
-            }            
-            else {
-                throw new Exception('Unsupported database driver');
-            }
+        if (!$unpub) {            
+            // MySql / PgSql
+            $query .= "AND draft = false ";
+            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Type
@@ -899,24 +846,16 @@ class suxThreadedMessages {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
-
-        // Query
-        if ($this->db_driver == 'mysql' || $this->db_driver == 'pgsql') {
-            
-            // MySql / PgSql
-            $query = "SELECT COUNT(*) AS count, users_id
-            FROM {$this->db_table} WHERE thread_pos = 0 ";
-
-            if (!$unpub) {
-                // Only show published items
-                $query .= "AND draft = false ";
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
-            }            
-
-        }        
-        else {
-            throw new Exception('Unsupported database driver');
-        }
+        
+        // MySql / PgSql
+        $query = "SELECT COUNT(*) AS count, users_id
+        FROM {$this->db_table} WHERE thread_pos = 0 ";
+        
+        if (!$unpub) {
+            // Only show published items
+            $query .= "AND draft = false ";
+            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
+        }            
         
         // Type
         if ($type) $query .= "AND {$type} = true "; 
@@ -959,14 +898,9 @@ class suxThreadedMessages {
 
         // Publish date / draft
         if (!$unpub) {
-            if ($this->db_driver == 'mysql' || $this->db_driver == 'pgsql') {
-                // MySql / PgSql
-                $query .= "AND draft = false ";                
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
-            }            
-            else {
-                throw new Exception('Unsupported database driver');
-            }
+            // MySql / PgSql
+            $query .= "AND draft = false ";                
+            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Type
@@ -1233,14 +1167,9 @@ class suxThreadedMessages {
 
         // Publish date / Draft
         if (!$unpub) {
-            if ($this->db_driver == 'mysql' || $this->db_driver == 'pgsql') {
-                // MySql / PgSql
-                $query .= "AND draft = false ";
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
-            }            
-            else {
-                throw new Exception('Unsupported database driver');
-            }
+            // MySql / PgSql
+            $query .= "AND draft = false ";
+            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Type
@@ -1275,14 +1204,9 @@ class suxThreadedMessages {
 
         // Publish date / draft
         if (!$unpub) {         
-            if ($this->db_driver == 'mysql' || $this->db_driver == 'pgsql') {
-                // MySql / PgSql
-                $query .= "AND draft = false ";
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
-            }
-            else {
-                throw new Exception('Unsupported database driver');
-            }
+            // MySql / PgSql
+            $query .= "AND draft = false ";
+            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Execute

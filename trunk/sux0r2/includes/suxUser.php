@@ -1063,7 +1063,7 @@ class suxUser {
             return false;
         }
 
-        session_regenerate_id();
+        @session_regenerate_id();
 
         $_SESSION['users_id'] = $user['users_id'];
         $_SESSION['nickname'] = $user['nickname'];

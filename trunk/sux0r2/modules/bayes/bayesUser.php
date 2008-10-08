@@ -780,23 +780,14 @@ abstract class bayesShared {
     * Reusable SQL for date constraint
     */
     protected function _dateSql() {
-
+        
         static $date = null; // Cache
         if ($date != null) return $date;
-
-        $db = suxDb::get();
-        $db_driver = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
-
-        // Date query, database specic
-        if ($db_driver == 'pgsql' || $db_driver == 'mysql') {
-            $date = 'AND NOT published_on > \'' . date('Y-m-d H:i:s') . '\' ';
-        }
-        else {
-            throw new Exception('Unsupported database driver');
-        }
-
+               
+        $date = 'AND NOT published_on > \'' . date('Y-m-d H:i:s') . '\' ';
+        
         return $date;
-
+        
     }
 
 }
