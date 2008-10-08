@@ -59,14 +59,9 @@ class suxBookmarks {
 
         // Publish / Draft
         if (!$unpub) {
-            if ($this->db_driver == 'pgsql' || $this->db_driver == 'mysql') {
-                // PgSql / MySql
-                $query .= "WHERE draft = false ";
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
-            }
-            else {
-                throw new Exception('Unsupported database driver');
-            }
+            // PgSql / MySql
+            $query .= "WHERE draft = false ";
+            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";      
         }
 
         // Execute
@@ -95,14 +90,9 @@ class suxBookmarks {
 
         // Publish / Draft
         if (!$unpub) {
-            if ($this->db_driver == 'pgsql' || $this->db_driver == 'mysql') {
-                // PgSql / MySql
-                $query .= "WHERE draft = false ";
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
-            }
-            else {
-                throw new Exception('Unsupported database driver');
-            }
+            // PgSql / MySql
+            $query .= "WHERE draft = false ";
+            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Order
@@ -153,15 +143,10 @@ class suxBookmarks {
         $query = "SELECT * FROM {$this->db_table} WHERE {$col} = ? ";
         
         // Publish / Draft
-        if (!$unpub) {
-            if ($this->db_driver == 'pgsql' || $this->db_driver == 'mysql') {
-                // PgSql / MySql
-                $query .= "AND draft = true ";
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
-            }
-            else {
-                throw new Exception('Unsupported database driver');
-            }
+        if (!$unpub) {           
+            // PgSql / MySql
+            $query .= "AND draft = false ";
+            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
 
         $st = $this->db->prepare($query);
@@ -349,25 +334,28 @@ class suxBookmarks {
     * @return array|false
 	*/
 	function fetchBookmark($url) {
-
+        
         // Search the webpage for info we can use
-        $webpage = @file_get_contents($url, null, null, 0, 16384); // Quit after 16 kilobytes
-
+        $webpage = @file_get_contents($url, null, null, 0, 8192); // Quit after 8 kilobytes
+        
         $title = null;
         $description = null;
-
+        
         // <title>
         $found = array();
         if (preg_match('/<title>(.*?)<\/title>/is', $webpage, $found)) {
             $title = html_entity_decode(strip_tags($found[1]), ENT_QUOTES, 'UTF-8');
         }
-        // TODO: preg the meta data for description?
-
+        // Meta description
+        if (preg_match('/<meta[^>]+name="description"[^>]+content="([^"]*)"[^>]*>/i', $webpage, $found)) {            
+            $description = html_entity_decode(strip_tags($found[1]), ENT_QUOTES, 'UTF-8');
+        }
+        
         return array(
             'title' => $title,
             'description' => $description,
             );
-
+        
     }
 
 

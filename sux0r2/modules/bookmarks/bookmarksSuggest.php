@@ -154,7 +154,7 @@ class bookmarksSuggest  {
     function isDuplicateBookmark($value, $empty, &$params, &$formvars) {
 
         if (empty($formvars['url'])) return false;
-        if ($this->bm->getBookmark($formvars['url'])) return false;
+        if ($this->bm->getBookmark($formvars['url'], true)) return false;
         return true;
 
     }

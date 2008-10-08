@@ -140,7 +140,7 @@ class photosRenderer extends suxRenderer {
 
         $image = null;
         $tmp = $this->photo->getThumbnail($photoalbums_id);
-        if ($tmp) $image = suxFunct::makeUrl('/data/photos/' . $tmp['image'], null, true);
+        if ($tmp) $image = suxFunct::makeUrl('/data/photos/' . rawurlencode($tmp['image']), null, true);
 
         return $image;
 

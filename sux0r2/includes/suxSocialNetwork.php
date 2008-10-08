@@ -178,7 +178,7 @@ class suxSocialNetwork {
 
         $rel = strip_tags($rel); // Strip tags
         $rel = mb_strtolower($rel);
-        $rel = mb_split("\W", $rel); // \w means alphanumeric characters, \W is the negated version of \w
+        $rel = mb_split("\s", $rel); // split on whitespace
 
         $identity = '';
         $friendship = '';
@@ -241,6 +241,7 @@ class suxSocialNetwork {
         }
         else {
             $rel = "$friendship $physical $professional $geographical $family $romantic";
+            $rel = preg_replace('/\s+/', ' ', $rel); // Normalize whitespaces
         }
         $rel = trim($rel);
 

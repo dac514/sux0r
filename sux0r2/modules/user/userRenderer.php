@@ -196,6 +196,7 @@ class userRenderer extends suxRenderer {
                 $img = suxFunct::makeUrl('/') . "/media/{$this->partition}/assets/proletariat.gif";
             }
             else {
+                $u['image'] = rawurlencode($u['image']);
                 $img = suxFunct::makeUrl('/') . "/data/user/{$u['image']}";
             }
 
@@ -248,6 +249,7 @@ class userRenderer extends suxRenderer {
                 $img = suxFunct::makeUrl('/') . "/media/{$this->partition}/assets/proletariat.gif";
             }
             else {
+                $u['image'] = rawurlencode($u['image']);
                 $img = suxFunct::makeUrl('/') . "/data/user/{$u['image']}";
             }
 

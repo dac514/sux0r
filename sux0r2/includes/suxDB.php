@@ -43,6 +43,7 @@ class suxDB {
     // difficult to manage. The option is here for future developement.
 
     public static $dsn = array();
+    private static $supported = array('mysql', 'pgsql');
     private static $db = array();
     private static $transaction = array();
 
@@ -87,6 +88,11 @@ class suxDB {
 
                 // Throw exceptions every time an error is encountered
                 self::$db[$key]->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                
+                // Check if we support this database
+                if (!in_array(self::$db[$key]->getAttribute(PDO::ATTR_DRIVER_NAME), self::$supported)) {
+                    throw new Exception('Unsupported database driver');
+                }
 
                 // MySQL Specfic
                 if (self::$db[$key]->getAttribute(PDO::ATTR_DRIVER_NAME) == 'mysql') {
