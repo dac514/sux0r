@@ -20,6 +20,10 @@ $gtext['copyright'] = '<a href="http://www.sux0r.org/">sux0r</a> is copyright &c
 <a href="http://www.trotch.com/">Trotch Inc</a> ' . date('Y') . ' and is distributed under
 the <a href="http://www.fsf.org/licensing/licenses/agpl-3.0.html">GNU Affero General Public License</a>.';
 
+$gtext['data_license'] = 'Unless otherwise specified, contents of this site are copyright by the contributors and available under the <br />
+<a href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0</a> .
+Contributors should be attributed by full name or nickname.';
+
 /* Now back our regular scheduled program */
 
 $gtext['404_continue'] = 'ç¹å»æ­¤å¤ç»§ç»­';
