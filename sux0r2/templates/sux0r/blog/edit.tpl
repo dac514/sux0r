@@ -55,7 +55,7 @@
     {if $image}
     <!-- Current image -->
     <p>
-    <a href="{$r->makeUrl('/cropper/blog')}/{$id}"><img src="{$r->url}/data/blog/{$image}" alt="" border="0" /></a>
+    <a href="{$r->makeUrl('/cropper/blog')}/{$id}"><img src="{$r->url}/data/blog/{$image|escape:'url'}" alt="" border="0" /></a>
     </p>
 
     <p>

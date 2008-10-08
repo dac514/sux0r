@@ -112,7 +112,7 @@
             {capture name=image}{strip}
 
                 {if $r->profile.image}
-                {$r->makeUrl('/', null, true)}/data/user/{$r->profile.image}
+                {$r->makeUrl('/', null, true)}/data/user/{$r->profile.image|escape:'url'}
                 {/if}
 
             {/strip}{/capture}
