@@ -36,7 +36,7 @@
 {if $image}
 <!-- Current image -->
 <p>
-<a href="{$r->makeUrl('/cropper/user')}/{$users_id}"><img src="{$r->url}/data/user/{$image}" alt="" border="0" /></a>
+<a href="{$r->makeUrl('/cropper/user')}/{$users_id}"><img src="{$r->url}/data/user/{$image|escape:'url'}" alt="" border="0" /></a>
 </p>
 
 <p>

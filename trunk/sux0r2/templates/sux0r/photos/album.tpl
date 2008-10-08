@@ -25,10 +25,12 @@
 			<div id="leftside">
 
             <div class="editLinks">
-            <p>{$r->text.publisher}: <a href="{$r->makeURL('/user/profile')}/{$r->album.nickname}">{$r->album.nickname}</a></p>
+            <p>{$r->text.publisher}: <a href="{$r->makeURL('/user/profile')}/{$r->album.nickname}">{$r->album.nickname}</a></p>  
             {insert name="editLinks" br=true}
             {insert name="editLinks2" album_id=$r->album.id br=true}
             </div>
+            
+            {$r->album.body_html}
 
 			</div>
 		</td>
@@ -46,7 +48,7 @@
 
                        {strip}
                        <a href="{$r->makeUrl('/photos/view')}/{$foo.id}">
-                       <img class="thumbnail" src="{$r->url}/data/photos/{$foo.image}" alt="" width="{#thumbnailWidth#}" height="{#thumbnailHeight#}" />
+                       <img class="thumbnail" src="{$r->url}/data/photos/{$foo.image|escape:'url'}" alt="" width="{#thumbnailWidth#}" height="{#thumbnailHeight#}" />
                        </a>
                        {/strip}
 
