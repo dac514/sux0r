@@ -74,7 +74,7 @@ class suxPager {
     $p->setStart();
     $count = SELECT COUNT(*)
     $p->setPages($count);
-    $query = "SELECT * FROM table WHERE condition = 1 ORDER BY title LIMIT {$p->start}, {$p->limit} ";
+    $query = "SELECT * FROM table WHERE condition = 1 ORDER BY title LIMIT {$p->limit} OFFSET {$p->start} ";
     $pagelist = $p->pageList('http://some.url/');
     echo $pagelist;
 

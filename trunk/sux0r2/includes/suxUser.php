@@ -183,7 +183,7 @@ class suxUser {
         $query .= $tmp;
 
         // Limit
-        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";        
 
         $st = $this->db->query($query);
@@ -667,7 +667,7 @@ class suxUser {
         $query .= "ORDER BY ts {$order} ";
 
         // Limit
-        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
 
         $st = $this->db->query($query);

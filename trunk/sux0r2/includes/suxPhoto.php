@@ -140,7 +140,7 @@ class suxPhoto {
         $query .= 'ORDER BY published_on DESC ';
 
         // Limit
-        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
 
         $st = $this->db->prepare($query);
@@ -475,7 +475,7 @@ class suxPhoto {
         $query = "SELECT * FROM {$this->db_photos} WHERE photoalbums_id = ? ORDER BY image ";
 
         // Limit
-        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
 
         $st = $this->db->prepare($query);
@@ -506,7 +506,7 @@ class suxPhoto {
         $query = "SELECT * FROM {$this->db_photos} WHERE users_id = ? ORDER BY photoalbums_id, image ";
 
         // Limit
-        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
 
         $st = $this->db->prepare($query);

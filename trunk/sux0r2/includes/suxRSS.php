@@ -161,7 +161,7 @@ class suxRSS extends DOMDocument {
         $query .= 'ORDER BY title ASC ';
 
         // Limit
-        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
 
         $st = $this->db->query($query);
@@ -477,7 +477,7 @@ class suxRSS extends DOMDocument {
         $query .= "ORDER BY published_on DESC, id DESC "; // Order
 
         // Limit
-        if ($start && $limit) $query .= "LIMIT {$start}, {$limit} ";
+        if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
 
         // Execute

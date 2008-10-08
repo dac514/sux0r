@@ -260,7 +260,7 @@ class bookmarks extends bayesShared {
             INNER JOIN {$link} ON {$link}.tags_id = tags.id
             INNER JOIN bookmarks ON {$link}.bookmarks_id = bookmarks.id
             WHERE bookmarks.draft = false {$this->_dateSql()}
-            GROUP BY tag ORDER BY tag ASC
+            GROUP BY tag, tags.id ORDER BY tag ASC
             ";
 
             $this->r->tc = $this->tags->tagcloud($query);
@@ -424,7 +424,7 @@ class bookmarks extends bayesShared {
         ";
         if ($alphasort) $query .= 'ORDER BY bookmarks.title ASC ';
         else $query .= 'ORDER BY bookmarks.published_on DESC ';
-        $query .= "LIMIT {$start}, {$limit} ";
+        $query .= "LIMIT {$limit} OFFSET {$start} ";
 
         $st = $db->prepare($query);
         $st->execute(array($users_id));
@@ -468,7 +468,7 @@ class bookmarks extends bayesShared {
         ";
         if ($alphasort) $query .= 'ORDER BY title ASC ';
         else $query .= 'ORDER BY published_on DESC ';
-        $query .= "LIMIT {$start}, {$limit} ";
+        $query .= "LIMIT {$limit} OFFSET {$start} ";
 
         $st = $db->prepare($query);
         $st->execute(array($id));

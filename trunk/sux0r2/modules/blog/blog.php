@@ -253,8 +253,8 @@ class blog extends bayesShared {
             INNER JOIN {$link} ON {$link}.tags_id = tags.id
             INNER JOIN messages ON {$link}.messages_id = messages.id
             WHERE messages.blog = true AND messages.draft = false {$this->_dateSql()}
-            GROUP BY tag ORDER BY tag ASC
-            ";
+            GROUP BY tag, tags.id ORDER BY tag ASC
+            ";            
             $this->r->tc = $this->tags->tagcloud($query);
 
             $this->r->title .= " | {$this->r->text['blog']} | {$this->r->text['tag_cloud']} ";
@@ -644,7 +644,7 @@ class blog extends bayesShared {
         WHERE messages.thread_pos = 0 AND messages.blog = true  AND messages.draft = false AND link_messages_tags.tags_id = ?
         {$this->_dateSql()}
         ORDER BY messages.published_on DESC
-        LIMIT {$start}, {$limit}
+        LIMIT {$limit} OFFSET {$start}
         ";
 
         $st = $db->prepare($query);
@@ -712,7 +712,7 @@ class blog extends bayesShared {
         WHERE messages.thread_pos = 0 AND messages.blog = true  AND messages.draft = false AND bayes_categories.id = ?
         {$this->_dateSql()}
         ORDER BY messages.published_on DESC
-        LIMIT {$start}, {$limit}
+        LIMIT {$limit} OFFSET {$start}
         ";
 
         $st = $db->prepare($query);
