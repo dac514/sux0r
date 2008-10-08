@@ -117,13 +117,13 @@ class suxLink {
         case 'mysql':
             $q = "SHOW TABLES ";
             break;
-
+            
         case 'sqlite':
-            $q =   "SELECT name FROM sqlite_master WHERE type = 'table' ";
+            $q = "SELECT name FROM sqlite_master WHERE type = 'table' ";
             break;
-
+            
         case 'pgsql':
-            $q = "SELECT * FROM information_schema.tables WHERE table_schema = 'public' and table_type = 'BASE TABLE' ";
+            $q = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' and table_type = 'BASE TABLE' ";
             break;
 
         default:
