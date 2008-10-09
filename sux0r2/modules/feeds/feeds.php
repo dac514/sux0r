@@ -96,7 +96,7 @@ class feeds extends bayesShared {
             // User has subscriptions, we need special JOIN queries
             $max = $this->countUserItems($this->users_id);
             $eval = '$this->getUserItems($this->users_id, $this->pager->limit, $start)';
-            $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval, $search); // Important: start must be reference
+            $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search); // Important: $start is a reference
 
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
@@ -190,7 +190,7 @@ class feeds extends bayesShared {
                 $eval = '$this->getUserItems($_SESSION[\'users_id\'], $this->pager->limit, $start)';
             }
 
-            $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval, $search);  // Important: start must be reference
+            $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search);  // Important: $start is a reference
 
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);

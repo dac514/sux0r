@@ -98,7 +98,7 @@ class blog extends bayesShared {
 
             $max = $this->msg->countFirstPostsByUser($u['users_id'], 'blog');
             $eval = '$this->msg->getFirstPostsByUser(' .$u['users_id'] . ', \'blog\', $this->pager->limit, $start)';
-            $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval, $search)); // Important: start must be reference
+            $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search)); // Important: $start is a reference
 
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
@@ -177,7 +177,7 @@ class blog extends bayesShared {
             // ---------------------------------------------------------------
 
             $eval = '$this->getTaggedItems($this->tag_id, $this->pager->limit, $start)';
-            $this->r->fp  = $this->blogs($this->filter($count, $vec_id, $cat_id, $threshold, &$start, $eval, $search)); // Important: start must be reference
+            $this->r->fp  = $this->blogs($this->filter($count, $vec_id, $cat_id, $threshold, $start, $eval, $search)); // Important: $start is a reference
 
             if ($start < $count) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
@@ -254,7 +254,7 @@ class blog extends bayesShared {
             INNER JOIN messages ON {$link}.messages_id = messages.id
             WHERE messages.blog = true AND messages.draft = false {$this->_dateSql()}
             GROUP BY tag, tags.id ORDER BY tag ASC
-            ";            
+            ";
             $this->r->tc = $this->tags->tagcloud($query);
 
             $this->r->title .= " | {$this->r->text['blog']} | {$this->r->text['tag_cloud']} ";
@@ -289,7 +289,7 @@ class blog extends bayesShared {
             // ---------------------------------------------------------------
 
             $eval = '$this->getCategorizedItems($this->cat_id, $this->pager->limit, $start)';
-            $this->r->fp  = $this->blogs($this->filter($count, $vec_id, $cat_id2, $threshold, &$start, $eval, $search)); // Important: start must be reference
+            $this->r->fp  = $this->blogs($this->filter($count, $vec_id, $cat_id2, $threshold, $start, $eval, $search)); // Important: $start is a reference
 
             if ($start < $count) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id2);
@@ -370,7 +370,7 @@ class blog extends bayesShared {
 
             $max = $this->msg->countFirstPostsByMonth($datetime, 'blog');
             $eval = '$this->msg->getFirstPostsByMonth(\'' . $datetime . '\', \'blog\', $this->pager->limit, $start)';
-            $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval, $search)); // Important: start must be reference
+            $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search)); // Important: $start is a reference
 
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
@@ -444,7 +444,7 @@ class blog extends bayesShared {
 
             $max = $this->msg->countFirstPosts('blog');
             $eval = '$this->msg->getFirstPosts(\'blog\', $this->pager->limit, $start)';
-            $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval, $search)); // Important: start must be reference
+            $this->r->fp  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search)); // Important: $start is a reference
 
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
