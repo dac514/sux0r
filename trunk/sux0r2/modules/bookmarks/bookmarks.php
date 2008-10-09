@@ -106,7 +106,7 @@ class bookmarks extends bayesShared {
             // User has subscriptions, we need special JOIN queries
             $max = $this->countUserItems($this->users_id);
             $eval = '$this->getUserItems($this->users_id, $this->alphasort, $this->pager->limit, $start)';
-            $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval, $search); // Important: start must be reference
+            $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search); // Important: $start is a reference
 
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
@@ -190,7 +190,7 @@ class bookmarks extends bayesShared {
             // ---------------------------------------------------------------
 
             $eval = '$this->getTaggedItems($this->tag_id, $this->alphasort, $this->pager->limit, $start)';
-            $this->r->fp  = $this->filter($count, $vec_id, $cat_id, $threshold, &$start, $eval, $search); // Important: start must be reference
+            $this->r->fp  = $this->filter($count, $vec_id, $cat_id, $threshold, $start, $eval, $search); // Important: $start is a reference
 
             if ($start < $count) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
@@ -303,7 +303,7 @@ class bookmarks extends bayesShared {
 
             $max = $this->bm->countBookmarks();
             $eval = '$this->bm->getBookmarks($this->pager->limit, $start, $this->alphasort)';
-            $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, &$start, $eval, $search); // Important: start must be reference
+            $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search); // Important: $start is a reference
 
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
