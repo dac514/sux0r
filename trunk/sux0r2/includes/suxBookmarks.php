@@ -61,7 +61,7 @@ class suxBookmarks {
         if (!$unpub) {
             // PgSql / MySql
             $query .= "WHERE draft = false ";
-            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";      
+            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Execute
@@ -141,9 +141,9 @@ class suxBookmarks {
         }
 
         $query = "SELECT * FROM {$this->db_table} WHERE {$col} = ? ";
-        
+
         // Publish / Draft
-        if (!$unpub) {           
+        if (!$unpub) {
             // PgSql / MySql
             $query .= "AND draft = false ";
             $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
@@ -228,20 +228,20 @@ class suxBookmarks {
         // Go!
         // --------------------------------------------------------------------
 
-        // http://bugs.php.net/bug.php?id=44597 
-        // As of 5.2.6 you still can't use this function's $input_parameters to 
-        // pass a boolean to PostgreSQL. To do that, you'll have to call 
+        // http://bugs.php.net/bug.php?id=44597
+        // As of 5.2.6 you still can't use this function's $input_parameters to
+        // pass a boolean to PostgreSQL. To do that, you'll have to call
         // bindParam() with explicit types for *each* parameter in the query.
-        // Annoying much? This sucks more than you can imagine.    
-        
+        // Annoying much? This sucks more than you can imagine.
+
         if (isset($clean['id'])) {
 
             // UPDATE
             unset($clean['users_id']); // Don't override the original submitter
             $query = suxDB::prepareUpdateQuery($this->db_table, $clean);
             $st = $this->db->prepare($query);
-            
-            if  ($this->db_driver == 'pgsql') {        
+
+            if  ($this->db_driver == 'pgsql') {
                 $st->bindParam(':id', $clean['id'], PDO::PARAM_INT);
                 $st->bindParam(':url', $clean['url'], PDO::PARAM_STR);
                 $st->bindParam(':title', $clean['title'], PDO::PARAM_STR);
@@ -249,20 +249,20 @@ class suxBookmarks {
                 $st->bindParam(':body_plaintext', $clean['body_plaintext'], PDO::PARAM_STR);
                 $st->bindParam(':published_on', $clean['published_on'], PDO::PARAM_STR);
                 $st->bindParam(':draft', $clean['draft'], PDO::PARAM_BOOL);
-                $st->execute();      
-            }   
-            else {                          
+                $st->execute();
+            }
+            else {
                 $st->execute($clean);
             }
-            
+
         }
         else {
 
             // INSERT
             $query = suxDB::prepareInsertQuery($this->db_table, $clean);
             $st = $this->db->prepare($query);
-            
-            if  ($this->db_driver == 'pgsql') {        
+
+            if  ($this->db_driver == 'pgsql') {
                 $st->bindParam(':users_id', $clean['users_id'], PDO::PARAM_INT);
                 $st->bindParam(':url', $clean['url'], PDO::PARAM_STR);
                 $st->bindParam(':title', $clean['title'], PDO::PARAM_STR);
@@ -270,12 +270,12 @@ class suxBookmarks {
                 $st->bindParam(':body_plaintext', $clean['body_plaintext'], PDO::PARAM_STR);
                 $st->bindParam(':published_on', $clean['published_on'], PDO::PARAM_STR);
                 $st->bindParam(':draft', $clean['draft'], PDO::PARAM_BOOL);
-                $st->execute();      
-            }   
-            else {                          
+                $st->execute();
+            }
+            else {
                 $st->execute($clean);
             }
-            
+
             if ($this->db_driver == 'pgsql') $clean['id'] = $this->db->lastInsertId("{$this->db_table}_id_seq"); // PgSql
             else $clean['id'] = $this->db->lastInsertId();
 
@@ -334,28 +334,28 @@ class suxBookmarks {
     * @return array|false
 	*/
 	function fetchBookmark($url) {
-        
+
         // Search the webpage for info we can use
         $webpage = @file_get_contents($url, null, null, 0, 8192); // Quit after 8 kilobytes
-        
+
         $title = null;
         $description = null;
-        
+
         // <title>
         $found = array();
         if (preg_match('/<title>(.*?)<\/title>/is', $webpage, $found)) {
             $title = html_entity_decode(strip_tags($found[1]), ENT_QUOTES, 'UTF-8');
         }
         // Meta description
-        if (preg_match('/<meta[^>]+name="description"[^>]+content="([^"]*)"[^>]*>/i', $webpage, $found)) {            
+        if (preg_match('/<meta[^>]+name="description"[^>]+content="([^"]*)"[^>]*>/i', $webpage, $found)) {
             $description = html_entity_decode(strip_tags($found[1]), ENT_QUOTES, 'UTF-8');
         }
-        
+
         return array(
             'title' => $title,
             'description' => $description,
             );
-        
+
     }
 
 

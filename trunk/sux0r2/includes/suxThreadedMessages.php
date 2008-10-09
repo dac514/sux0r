@@ -75,16 +75,16 @@ class suxThreadedMessages {
         // Sanity check
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
             throw new Exception('Invalid message id');
-        
+
         $query = "SELECT * FROM {$this->db_table} WHERE id = ? ";
-        
+
         // Publish date / draft
         if (!$unpub) {
             // MySql / PgSql
             $query .= "AND draft = false ";
             $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
-        
+
         $st = $this->db->prepare($query);
         $st->execute(array($id));
 
@@ -236,14 +236,14 @@ class suxThreadedMessages {
 
         $query = suxDB::prepareInsertQuery($this->db_table, $clean);
         $st = $this->db->prepare($query);
-        
-        // http://bugs.php.net/bug.php?id=44597 
-        // As of 5.2.6 you still can't use this function's $input_parameters to 
-        // pass a boolean to PostgreSQL. To do that, you'll have to call 
+
+        // http://bugs.php.net/bug.php?id=44597
+        // As of 5.2.6 you still can't use this function's $input_parameters to
+        // pass a boolean to PostgreSQL. To do that, you'll have to call
         // bindParam() with explicit types for *each* parameter in the query.
-        // Annoying much? This sucks more than you can imagine.            
-        
-        if  ($this->db_driver == 'pgsql') {                 
+        // Annoying much? This sucks more than you can imagine.
+
+        if  ($this->db_driver == 'pgsql') {
             $st->bindParam(':users_id', $clean['users_id'], PDO::PARAM_INT);
             $st->bindParam(':title', $clean['title'], PDO::PARAM_STR);
             if (isset($clean['image'])) $st->bindParam(':image', $clean['image'], PDO::PARAM_STR);
@@ -258,18 +258,18 @@ class suxThreadedMessages {
             $st->bindParam(':forum', $clean['forum'], PDO::PARAM_BOOL);
             $st->bindParam(':blog', $clean['blog'], PDO::PARAM_BOOL);
             $st->bindParam(':wiki', $clean['wiki'], PDO::PARAM_BOOL);
-            $st->bindParam(':slideshow', $clean['slideshow'], PDO::PARAM_BOOL);            
-            $st->execute();      
-        }   
-        else {         
+            $st->bindParam(':slideshow', $clean['slideshow'], PDO::PARAM_BOOL);
+            $st->execute();
+        }
+        else {
             $st->execute($clean);
         }
-        
+
         // MySQL InnoDB with transaction reports the last insert id as 0 after
         // commit, the real ids are only reported before committing.
 
         if ($this->db_driver == 'pgsql') $insert_id = $this->db->lastInsertId("{$this->db_table}_id_seq"); // PgSql
-        else $insert_id = $this->db->lastInsertId();        
+        else $insert_id = $this->db->lastInsertId();
 
         // Commit
         suxDB::commitTransaction($tid);
@@ -408,14 +408,14 @@ class suxThreadedMessages {
         // Update the message
         $query = suxDB::prepareUpdateQuery($this->db_table, $clean);
         $st = $this->db->prepare($query);
-        
-        // http://bugs.php.net/bug.php?id=44597 
-        // As of 5.2.6 you still can't use this function's $input_parameters to 
-        // pass a boolean to PostgreSQL. To do that, you'll have to call 
+
+        // http://bugs.php.net/bug.php?id=44597
+        // As of 5.2.6 you still can't use this function's $input_parameters to
+        // pass a boolean to PostgreSQL. To do that, you'll have to call
         // bindParam() with explicit types for *each* parameter in the query.
-        // Annoying much? This sucks more than you can imagine.            
-        
-        if  ($this->db_driver == 'pgsql') {                 
+        // Annoying much? This sucks more than you can imagine.
+
+        if  ($this->db_driver == 'pgsql') {
             $st->bindParam(':id', $clean['id'], PDO::PARAM_INT);
             $st->bindParam(':title', $clean['title'], PDO::PARAM_STR);
             if (isset($clean['image'])) $st->bindParam(':image', $clean['image'], PDO::PARAM_STR);
@@ -426,12 +426,12 @@ class suxThreadedMessages {
             if (isset($clean['forum'])) $st->bindParam(':forum', $clean['forum'], PDO::PARAM_BOOL);
             if (isset($clean['blog'])) $st->bindParam(':blog', $clean['blog'], PDO::PARAM_BOOL);
             if (isset($clean['wiki'])) $st->bindParam(':wiki', $clean['wiki'], PDO::PARAM_BOOL);
-            if (isset($clean['slideshow'])) $st->bindParam(':slideshow', $clean['slideshow'], PDO::PARAM_BOOL);            
-            $st->execute();      
-        }   
-        else {         
+            if (isset($clean['slideshow'])) $st->bindParam(':slideshow', $clean['slideshow'], PDO::PARAM_BOOL);
+            $st->execute();
+        }
+        else {
             $st->execute($clean);
-        }        
+        }
 
         // Commit
         suxDB::commitTransaction($tid);
@@ -548,7 +548,7 @@ class suxThreadedMessages {
 
 
     }
-    
+
 
     /**
     * Get a thread
@@ -581,7 +581,7 @@ class suxThreadedMessages {
 
         // Type
         if ($type) $query .= "AND {$type} = true ";
-                
+
         $query .= "ORDER BY thread_id, thread_pos "; // Order
         // Limit
         if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
@@ -648,19 +648,19 @@ class suxThreadedMessages {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
-                
+
         // Mysql / PgSql
         $query = "SELECT COUNT(*) AS count, users_id FROM {$this->db_table} ";
-        
+
         if (!$unpub) {
             // Only show published items
             $query .= "AND draft = false ";
             $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
-        } 
-        
+        }
+
         // Type
-        if ($type) $query .= "AND {$type} = true "; 
-        
+        if ($type) $query .= "AND {$type} = true ";
+
         // Group by, order
         $query .= "GROUP BY users_id ORDER BY count DESC ";
 
@@ -698,17 +698,17 @@ class suxThreadedMessages {
         $query = "SELECT * FROM {$this->db_table} WHERE users_id = ? ";
 
         // Publish date / draft
-        if (!$unpub) {            
+        if (!$unpub) {
             // MySql / PgSql
             $query .= "AND draft = false ";
             $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Type
-        if ($type) $query .= "AND {$type} = true "; 
-        
+        if ($type) $query .= "AND {$type} = true ";
+
         $query .= "ORDER BY published_on DESC "; // Order
-        
+
         // Limit
         if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
@@ -780,8 +780,8 @@ class suxThreadedMessages {
         }
 
         // Type
-        if ($type) $query .= "AND {$type} = true ";  
-            
+        if ($type) $query .= "AND {$type} = true ";
+
         $query .= "ORDER BY published_on DESC "; // Order
         // Limit
         if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
@@ -816,14 +816,14 @@ class suxThreadedMessages {
         $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE users_id = ? AND thread_pos = 0 ";
 
         // Publish date / draft
-        if (!$unpub) {            
+        if (!$unpub) {
             // MySql / PgSql
             $query .= "AND draft = false ";
             $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Type
-        if ($type) $query .= "AND {$type} = true "; 
+        if ($type) $query .= "AND {$type} = true ";
 
         // Execute
         $st = $this->db->prepare($query);
@@ -846,22 +846,22 @@ class suxThreadedMessages {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
-        
+
         // MySql / PgSql
         $query = "SELECT COUNT(*) AS count, users_id
         FROM {$this->db_table} WHERE thread_pos = 0 ";
-        
+
         if (!$unpub) {
             // Only show published items
             $query .= "AND draft = false ";
             $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
-        }            
-        
+        }
+
         // Type
-        if ($type) $query .= "AND {$type} = true "; 
-        
+        if ($type) $query .= "AND {$type} = true ";
+
         // Order
-        $query .= "GROUP BY users_id ORDER BY count DESC ";        
+        $query .= "GROUP BY users_id ORDER BY count DESC ";
 
         // Limits
         if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
@@ -899,15 +899,15 @@ class suxThreadedMessages {
         // Publish date / draft
         if (!$unpub) {
             // MySql / PgSql
-            $query .= "AND draft = false ";                
+            $query .= "AND draft = false ";
             $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Type
-        if ($type) $query .= "AND {$type} = true "; 
-        
+        if ($type) $query .= "AND {$type} = true ";
+
         $query .= "ORDER BY published_on DESC "; // Order
-        
+
         // Limit
         if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
@@ -944,27 +944,27 @@ class suxThreadedMessages {
 
         // Publish date / draft
         if (!$unpub) {
-            $date = "{$matches[1]}-{$matches[2]}-{$matches[3]} {$matches[4]}:{$matches[5]}:{$matches[6]}";   
-            $query .= "AND draft = false "; 
+            $date = "{$matches[1]}-{$matches[2]}-{$matches[3]} {$matches[4]}:{$matches[5]}:{$matches[6]}";
+            $query .= "AND draft = false ";
             if ($this->db_driver == 'mysql') {
                 // MySql
                 $query .= "AND MONTH(published_on) =  MONTH('{$date}') "; // Month
                 $query .= "AND YEAR(published_on) = YEAR('{$date}') "; // Year
                 $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
             }
-            elseif ($this->db_driver == 'pgsql') {                
-                // PgSQL                           
+            elseif ($this->db_driver == 'pgsql') {
+                // PgSQL
                 $query .= "AND EXTRACT(MONTH FROM published_on) =  EXTRACT(MONTH FROM timestamp '{$date}') "; // Month
                 $query .= "AND EXTRACT(YEAR FROM published_on) = EXTRACT(YEAR FROM timestamp '{$date}') "; // Year
                 $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
-            }            
+            }
             else {
                 throw new Exception('Unsupported database driver');
             }
         }
 
         // Type
-        if ($type) $query .= "AND {$type} = true "; 
+        if ($type) $query .= "AND {$type} = true ";
 
         // Execute
         $st = $this->db->query($query);
@@ -990,8 +990,8 @@ class suxThreadedMessages {
         // Query
         if ($this->db_driver == 'mysql') {
             // MySql
-            $query = "SELECT COUNT(*) AS count, 
-            YEAR(published_on) AS year, 
+            $query = "SELECT COUNT(*) AS count,
+            YEAR(published_on) AS year,
             MONTH(published_on) AS month
             FROM {$this->db_table} WHERE thread_pos = 0 ";
 
@@ -1000,41 +1000,39 @@ class suxThreadedMessages {
                 $query .= "AND draft = false ";
                 $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
             }
-            if ($type) $query .= "AND {$type} = true "; // Type
-
-            $query .= "GROUP BY YEAR(published_on), MONTH(published_on) ORDER BY published_on DESC ";
 
         }
         elseif ($this->db_driver == 'pgsql') {
             // PgSql
-            
-            $query = "SELECT DISTINCT COUNT(*) AS count, 
-            EXTRACT(YEAR FROM published_on) AS year, 
+
+            $query = "SELECT DISTINCT COUNT(*) AS count,
+            EXTRACT(YEAR FROM published_on) AS year,
             EXTRACT(MONTH FROM published_on) AS month
             FROM {$this->db_table} WHERE thread_pos = 0 ";
-            
+
             if (!$unpub) {
                 // Only show published items
                 $query .= "AND draft = false ";
                 $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
             }
-            if ($type) $query .= "AND {$type} = true "; // Type
-            
-            $query .= "GROUP BY year, month ORDER BY year DESC, month DESC ";
-            
+
         }
         else {
             throw new Exception('Unsupported database driver');
-        }       
-        
+        }
+
+        if ($type) $query .= "AND {$type} = true "; // Type
+
+        $query .= "GROUP BY year, month ORDER BY year DESC, month DESC "; // Group
+
         // Limits
         if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
-        
+
         // Execute
         $st = $this->db->query($query);
         return $st->fetchAll(PDO::FETCH_ASSOC);
-        
+
 
     }
 
@@ -1078,7 +1076,7 @@ class suxThreadedMessages {
                 $query .= "AND EXTRACT(MONTH FROM published_on) =  EXTRACT(MONTH FROM timestamp '{$date}')  "; // Month
                 $query .= "AND EXTRACT(YEAR FROM published_on) =  EXTRACT(YEAR FROM timestamp '{$date}') "; // Year
                 $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
-            }            
+            }
             else {
                 throw new Exception('Unsupported database driver');
             }
@@ -1086,7 +1084,7 @@ class suxThreadedMessages {
 
         // Type
         if ($type) $query .= "AND {$type} = true ";
-        
+
         $query .= "ORDER BY published_on DESC "; // Order
         // Limit
         if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
@@ -1174,7 +1172,7 @@ class suxThreadedMessages {
 
         // Type
         if ($type) $query .= "AND {$type} = true ";
-        
+
         $query .= "ORDER BY published_on DESC ";
         if ($limit) $query .= "LIMIT {$limit} ";
 
@@ -1203,7 +1201,7 @@ class suxThreadedMessages {
         $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE thread_id = ? AND thread_pos != 0 ";
 
         // Publish date / draft
-        if (!$unpub) {         
+        if (!$unpub) {
             // MySql / PgSql
             $query .= "AND draft = false ";
             $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";

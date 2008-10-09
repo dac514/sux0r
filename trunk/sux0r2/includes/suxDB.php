@@ -88,7 +88,7 @@ class suxDB {
 
                 // Throw exceptions every time an error is encountered
                 self::$db[$key]->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                
+
                 // Check if we support this database
                 if (!in_array(self::$db[$key]->getAttribute(PDO::ATTR_DRIVER_NAME), self::$supported)) {
                     throw new Exception('Unsupported database driver');
