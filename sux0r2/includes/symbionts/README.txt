@@ -114,6 +114,6 @@ Stopwords
 
 TinyMCE
 * Path: ./tinymce/
-* Version: 3.2.0.1 (+ language files)
+* Version: 3.2.0.2 (+ language files)
 * Licence: LGPL 2.1
 * Website: http://tinymce.moxiecode.com/

@@ -3,8 +3,8 @@
 
 var tinymce = {
 	majorVersion : '3',
-	minorVersion : '2.0.1',
-	releaseDate : '2008-09-17',
+	minorVersion : '2.0.2',
+	releaseDate : '2008-10-02',
 
 	_init : function() {
 		var t = this, d = document, w = window, na = navigator, ua = na.userAgent, i, nl, n, base, p, v;
@@ -5462,7 +5462,7 @@ tinymce.create('tinymce.ui.Separator:tinymce.ui.Control', {
 			var t = this, fv, f;
 
 			if (va == undefined)
-				return;
+				return t.selectByIndex(-1);
 
 			// Is string or number make function selector
 			if (va && va.call)
@@ -5718,7 +5718,7 @@ tinymce.create('tinymce.ui.Separator:tinymce.ui.Control', {
 			var t = this, fv, f;
 
 			if (va == undefined)
-				return;
+				return t.selectByIndex(-1);
 
 			// Is string or number make function selector
 			if (va && va.call)
@@ -6940,10 +6940,12 @@ var tinyMCE = window.tinyMCE = tinymce.EditorManager;
 			});
 
 			// Setup popup CSS path(s)
-			if (s.popup_css)
-				s.popup_css = t.documentBaseURI.toAbsolute(s.popup_css);
-			else
-				s.popup_css = t.baseURI.toAbsolute("themes/" + s.theme + "/skins/" + s.skin + "/dialog.css");
+			if (s.popup_css !== false) {
+				if (s.popup_css)
+					s.popup_css = t.documentBaseURI.toAbsolute(s.popup_css);
+				else
+					s.popup_css = t.baseURI.toAbsolute("themes/" + s.theme + "/skins/" + s.skin + "/dialog.css");
+			}
 
 			if (s.popup_css_add)
 				s.popup_css += ',' + t.documentBaseURI.toAbsolute(s.popup_css_add);
@@ -9727,11 +9729,26 @@ var tinyMCE = window.tinyMCE = tinymce.EditorManager;
 
 			if (kh = t._applyInlineStyle.keyhandler) {
 				ed.onKeyUp.remove(kh);
+				ed.onKeyPress.remove(kh);
 				ed.onKeyDown.remove(kh);
+				ed.onSetContent.remove(t._applyInlineStyle.chandler);
 			}
 
 			if (ed.selection.isCollapsed()) {
+				// Start collecting styles
+				t._pendingStyles = tinymce.extend(t._pendingStyles || {}, at.style);
+
+				t._applyInlineStyle.chandler = ed.onSetContent.add(function() {
+					delete t._pendingStyles;
+				});
+
 				t._applyInlineStyle.keyhandler = kh = function(e) {
+					// Use pending styles
+					if (t._pendingStyles) {
+						at.style = t._pendingStyles;
+						delete t._pendingStyles;
+					}
+
 					if (replaceFonts()) {
 						ed.onKeyDown.remove(t._applyInlineStyle.keyhandler);
 						ed.onKeyPress.remove(t._applyInlineStyle.keyhandler);
@@ -9744,7 +9761,8 @@ var tinyMCE = window.tinyMCE = tinymce.EditorManager;
 				ed.onKeyDown.add(kh);
 				ed.onKeyPress.add(kh);
 				ed.onKeyUp.add(kh);
-			}
+			} else
+				t._pendingStyles = 0;
 		},
 
 /*
