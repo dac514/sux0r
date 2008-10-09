@@ -58,7 +58,7 @@
             {capture name='welcome' assign='welcome'}
 
             <p>
-            2008-10-02: <a href="http://sourceforge.net/people/viewjob.php?group_id=131752&amp;job_id=31512">Translations Wanted</a>.
+            2008-10-09: <a href="http://sourceforge.net/people/viewjob.php?group_id=131752&amp;job_id=31512">Translations Wanted</a>.
             </p>
 
             <p>
