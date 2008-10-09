@@ -1,4 +1,4 @@
-ï»¿sux0r 2.0 _Beta1
+ï»¿sux0r 2.0 _Beta2
 http://www.sux0r.org/
 åæ¬æ¼åéè¯¯é½å°ä½ä¸ºæç»ç»æä¿çï¼å¹¶ä¸å¯æ´æ¹ã
 
@@ -27,13 +27,14 @@ http://www.fsf.org/licensing/licenses/agpl-3.0.html
 ### ç³»ç»éæ± ###
 
 * PHP 5.2.3 ææ´é«çæ¬ï¼å¹¶å¸¦æmb_åPDOæ©å±æ¯æ
-* MySQL 5, UTF enabled
+* MySQL 5+ æ PostgreSQL 8+, UTF enabled
 * Apacheæå¡å¨
 
 
 ### å®è£ ###
 
 1. å°./supplemental/db-mysql.sql å¯¼å¥ MySQLæ°æ®åº
+   (æ) å°./supplemental/db-pgsql.sql å¯¼å¥ PostgreSQLæ°æ®åº
 
 2. æ´æ¹./dataè¯»åæéä¸º777
 
@@ -47,8 +48,9 @@ http://www.fsf.org/licensing/licenses/agpl-3.0.html
 6. ä»æå¡å¨ä¸­å é¤./supplementalç®å½
 
 7. è·åå¹¶çæèååå®¹ï¼è¯·æ¯é15åéå·¦å³ä½¿ç¨æµè§å¨è®¿é®
-   'http://YOURSITE/modules/feeds/cron.php' 
-   
+   'http://YOURSITE/modules/feeds/cron.php'
+   (ä¾å¦: /bin/nice /usr/bin/wget -q -O /dev/null "http://YOURSITE/modules/feeds/cron.php")
+
 
 ### èæ³¨ ###
 
@@ -57,10 +59,7 @@ http://www.fsf.org/licensing/licenses/agpl-3.0.html
 - æµè¯è¿è¡ç¯å¢: (OS X) Firefox 2.0.0.17, (OS X) Safari 3.1.2, Opera 9.2 (OS X)
   (Win XP) Internet Explorer 6, (Win XP) Firefox 3.0.1
 
-- å¶ä»ç¯å¢æ¯å¦å¯ä»¥è¿è¡å¹¶æªéªè¯ï¼æçæ¬ä¿çä¸ºbetal
-
-- é¤äºMySQLï¼æä»¬è¿ä¼æ¯æ Postgresqlå SQLiteï¼å¹¶æ­£å¨å¼åä¸­ã
-  å¦ææäººæ¿æåéç»æéå¯¹ä¸¤èè½¬æ¢åçdb-mysql.sqlæä»¶ï¼å°ååæè°¢ã
+- å¶ä»ç¯å¢æ¯å¦å¯ä»¥è¿è¡å¹¶æªéªè¯ï¼æçæ¬ä¿çä¸ºbeta
 
 
 ### è´è°¢ ###

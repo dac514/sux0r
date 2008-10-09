@@ -1,11 +1,6 @@
-sux0r 2.0 _Beta1
+sux0r 2.0 _Beta2
 http://www.sux0r.org/
 All spelling mistakes are final and will not be refunded
-
-### SPONSOR ###
-
-sux0r is hosted by Network Redux: http://www.networkredux.com/
-
 
 ### LICENSE ###
 
@@ -34,13 +29,14 @@ and, as such, should be dealt with according to their own licenses.
 ### REQUIREMENTS ###
 
 * PHP 5.2.3 or higher with mb_ and PDO extensions
-* MySQL 5, UTF enabled
+* MySQL 5+ or PostgreSQL 8+, UTF enabled
 * Apache webserver
 
 
 ### INSTALL ###
 
 1. Import ./supplemental/db-mysql.sql into MySQL
+   (or) Import ./supplemental/db-pgsql.sql into PostgreSQL
 
 2. chmod 777 ./data
 
@@ -66,11 +62,6 @@ and, as such, should be dealt with according to their own licenses.
   (Win XP) Internet Explorer 6, (Win XP) Firefox 3.0.1
 
 - Maybe it works with other configurations? I don't know yet, hence why this
-  is  Beta1
-
-- In addition to MySQL, I will support PostgreSQL and SQLite. It's a work in
-  progress. Again, Beta1. If someone wants to send me a translated version
-  of the db-mysql.sql file for either it would save me a lot of grief.
-
+  is  Beta
 
 ### THANKS! ###
