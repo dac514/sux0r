@@ -303,6 +303,7 @@ class bookmarksEdit {
 
         // clear all caches with "nickname" as the first cache_id group
         $this->tpl->clear_cache(null, "{$_SESSION['nickname']}");
+        $this->tpl->clear_cache('cloud.tpl', 'tagcloud');
 
         suxFunct::redirect(suxFunct::getPreviousURL($this->prev_skip));
 

@@ -1,3 +1,7 @@
+SET client_encoding = 'UTF8';
+
+
+-- --------------------------------------------------------
 
 
 CREATE TABLE bayes_auth (
