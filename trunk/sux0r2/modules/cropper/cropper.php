@@ -160,7 +160,7 @@ class cropper {
             $this->tpl->display('cropper.tpl');
 
         }
-
+        else throw new Exception('$image not found');
 
     }
 
