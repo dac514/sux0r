@@ -175,6 +175,7 @@ class suxUser {
             $order = mb_strtoupper($order);
             if (in_array($sort, array('users_id', 'nickname', 'email', 'root', 'banned', 'ts'))) {
 
+                if ($sort == 'ts') $sort = 'last_active';
                 if ($order != 'DESC') $order = 'ASC';
                 $tmp = "ORDER BY $sort $order ";
 
@@ -184,7 +185,7 @@ class suxUser {
 
         // Limit
         if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
-        elseif ($limit) $query .= "LIMIT {$limit} ";        
+        elseif ($limit) $query .= "LIMIT {$limit} ";
 
         $st = $this->db->query($query);
         return $st->fetchAll(PDO::FETCH_ASSOC);
@@ -260,7 +261,7 @@ class suxUser {
             if ($key == 'url') $info[$key] = filter_var($val, FILTER_SANITIZE_URL);
             else $info[$key] = strip_tags($val);
         }
-        
+
         // Date of birth
         if (empty($info['dob'])) $info['dob'] = null;
 
@@ -297,12 +298,12 @@ class suxUser {
             $query = suxDB::prepareInsertQuery($this->db_table, $user);
             $st = $this->db->prepare($query);
             $st->execute($user);
-            
+
             if ($this->db_driver == 'pgsql') $users_id = $this->db->lastInsertId("{$this->db_table}_id_seq"); // PgSql
-            else $users_id = $this->db->lastInsertId();              
-            
+            else $users_id = $this->db->lastInsertId();
+
             $info['users_id'] = $users_id;
-         
+
             $query = suxDB::prepareInsertQuery($this->db_table_info, $info);
             $st = $this->db->prepare($query);
             $st->execute($info);
@@ -607,7 +608,7 @@ class suxUser {
 
         $query = "DELETE FROM {$this->db_table_access} WHERE users_id = ? AND module = ? ";
         $st = $this->db->prepare($query);
-        
+
         $st->execute(array($clean['users_id'], $clean['module']));
 
     }
@@ -694,9 +695,9 @@ class suxUser {
         // Any user
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
             throw new Exception('Invalid user id');
-        
+
         $private = $private ? true : false;
-                
+
         $clean['users_id'] = $users_id;
         $clean['private'] = $private;
         $clean['body_html'] = suxFunct::sanitizeHtml($body_html, -1);
@@ -708,25 +709,25 @@ class suxUser {
 
         // Timestamp
         $clean['ts'] = date('c');
-        
+
         // INSERT
-        $query = suxDB::prepareInsertQuery($this->db_table_log, $clean); 
+        $query = suxDB::prepareInsertQuery($this->db_table_log, $clean);
         $st = $this->db->prepare($query);
-        
-        // http://bugs.php.net/bug.php?id=44597    
-        // As of 5.2.6 you still can't use this function's $input_parameters to 
-        // pass a boolean to PostgreSQL. To do that, you'll have to call 
+
+        // http://bugs.php.net/bug.php?id=44597
+        // As of 5.2.6 you still can't use this function's $input_parameters to
+        // pass a boolean to PostgreSQL. To do that, you'll have to call
         // bindParam() with explicit types for *each* parameter in the query.
         // Annoying much? This sucks more than you can imagine.
-            
-        if  ($this->db_driver == 'pgsql') {        
+
+        if  ($this->db_driver == 'pgsql') {
             $st->bindParam(':users_id', $clean['users_id'], PDO::PARAM_INT);
             $st->bindParam(':private', $clean['private'], PDO::PARAM_BOOL);
-            $st->bindParam(':body_html', $clean['body_html'], PDO::PARAM_STR);            
-            $st->bindParam(':body_plaintext', $clean['body_plaintext'], PDO::PARAM_STR);  
-            $st->bindParam(':ts', $clean['ts'], PDO::PARAM_STR);  
-            $st->execute();      
-        }        
+            $st->bindParam(':body_html', $clean['body_html'], PDO::PARAM_STR);
+            $st->bindParam(':body_plaintext', $clean['body_plaintext'], PDO::PARAM_STR);
+            $st->bindParam(':ts', $clean['ts'], PDO::PARAM_STR);
+            $st->execute();
+        }
         else {
             $st->execute($clean);
         }
@@ -753,21 +754,21 @@ class suxUser {
 
         $query = "UPDATE {$this->db_table_log} SET private = ? WHERE id = ? ";
         $st = $this->db->prepare($query);
-        
-        // http://bugs.php.net/bug.php?id=44597    
-        // As of 5.2.6 you still can't use this function's $input_parameters to 
-        // pass a boolean to PostgreSQL. To do that, you'll have to call 
+
+        // http://bugs.php.net/bug.php?id=44597
+        // As of 5.2.6 you still can't use this function's $input_parameters to
+        // pass a boolean to PostgreSQL. To do that, you'll have to call
         // bindParam() with explicit types for *each* parameter in the query.
         // Annoying much? This sucks more than you can imagine.
-        
-        if  ($this->db_driver == 'pgsql') {        
+
+        if  ($this->db_driver == 'pgsql') {
             $st->bindParam(1, $flag, PDO::PARAM_BOOL);
             $st->bindParam(2, $id, PDO::PARAM_INT);
-            $st->execute();      
-        }        
+            $st->execute();
+        }
         else {
             $st->execute(array($flag, $id));
-        }       
+        }
 
         return $flag;
 
