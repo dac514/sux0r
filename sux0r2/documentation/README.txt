@@ -29,7 +29,7 @@ and, as such, should be dealt with according to their own licenses.
 ### REQUIREMENTS ###
 
 * PHP 5.2.3 or higher with mb_ and PDO extensions
-* MySQL 5+ or PostgreSQL 8+, UTF enabled
+* MySQL 5.0+ or PostgreSQL 8.3+, UTF enabled
 * Apache webserver
 
 
