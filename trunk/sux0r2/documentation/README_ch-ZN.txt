@@ -27,7 +27,7 @@ http://www.fsf.org/licensing/licenses/agpl-3.0.html
 ### ç³»ç»éæ± ###
 
 * PHP 5.2.3 ææ´é«çæ¬ï¼å¹¶å¸¦æmb_åPDOæ©å±æ¯æ
-* MySQL 5+ æ PostgreSQL 8+, UTF enabled
+* MySQL 5.0+ æ PostgreSQL 8.3+, UTF enabled
 * Apacheæå¡å¨
 
 
