@@ -5,7 +5,7 @@ sux0r is hosted by Network Redux: http://www.networkredux.com/
 
 ### TRANSLATIONS ###
 
-Chinese (zn) by wangzhenzhen [tp906 <at> live <dot> cn]
+Chinese (zn) by Wang Zhenzhen: http://blog.csdn.net/tp906
 
 
 ### THIRD PARTY VENDORS ###
