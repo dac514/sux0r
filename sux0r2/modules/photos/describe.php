@@ -53,6 +53,6 @@ catch (Exception $e) {
 
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 $tpl = new suxTemplate('photos');
-$tpl->clear_cache(null, "view|{$clean['id']}"); // clear all caches with "view|id"
+$tpl->clear_cache(null, $_SESSION['nickname']); // clear all user caches
 
 ?>

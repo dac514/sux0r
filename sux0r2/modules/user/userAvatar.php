@@ -200,9 +200,8 @@ class userAvatar  {
             $this->user->log("sux0r::userAvatar() users_id: {$user['users_id']}", $_SESSION['users_id'], 1); // Log, private
         }
 
-
-        // Clear approptiate template caches
-        $this->tpl->clear_cache('profile.tpl', $this->nickname);
+        // Clear caches, cheap and easy
+        $this->tpl->clear_cache(null, $_SESSION['nickname']);
 
     }
 

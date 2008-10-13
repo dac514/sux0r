@@ -242,9 +242,9 @@ class photoalbumsEdit {
         if(!isset($clean['id'])) {
             $tmp = $this->photo->getAlbum($id); // Is actually published?
             if ($tmp) {
-
+                
                 // Clear all caches, cheap and easy
-                $this->tpl->clear_all_cache();
+                $this->tpl->clear_all_cache();                
 
                 // Log message
                 $log = '';
@@ -257,12 +257,13 @@ class photoalbumsEdit {
                 // Log
                 $this->user->log($log);
 
-                // Clear cache
+                // Clear caches, cheap and easy
                 $tpl = new suxTemplate('user');
-                $tpl->clear_cache('profile.tpl', $_SESSION['nickname']);
+                $tpl->clear_cache(null, $_SESSION['nickname']);
+                
             }
         }
-
+        
     }
 
 
@@ -270,9 +271,6 @@ class photoalbumsEdit {
     * The form was successfuly processed
     */
     function formSuccess() {
-
-        // TODO?
-        // $this->tpl->clear_cache(null, $_SESSION['nickname']); // Clear cache
 
         // Template
         $this->r->text['back_url'] = suxFunct::getPreviousURL();

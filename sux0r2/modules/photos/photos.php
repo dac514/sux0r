@@ -76,12 +76,16 @@ class photos {
             if (!$user) suxFunct::redirect(suxFunct::makeUrl('/photos')); // Invalid user
             else $users_id = $user['users_id'];
         }
+        
+        // Get nickname
+        if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
+        else $nn = 'nobody';        
 
         // Start pager
         $this->pager->setStart();
 
         // "Cache Groups" using a vertical bar |
-        $cache_id = "listing|$nickname|" . $this->pager->start;
+        $cache_id = "$nn|listing|$nickname|" . $this->pager->start;
         $this->tpl->caching = 1;
 
         if (!$this->tpl->is_cached('list.tpl', $cache_id)) {
@@ -112,14 +116,18 @@ class photos {
     * List photos in an album
     */
     function album($id) {
+        
+        // Get nickname
+        if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
+        else $nn = 'nobody';           
 
-        $this->pager->limit = $this->per_page;
+        $this->pager->limit = $this->per_page;       
 
         // Start pager
         $this->pager->setStart();
 
         // "Cache Groups" using a vertical bar |
-        $cache_id = "album|{$id}|" . $this->pager->start;
+        $cache_id = "$nn|album|{$id}|" . $this->pager->start;
         $this->tpl->caching = 1;
 
         if (!$this->tpl->is_cached('album.tpl', $cache_id)) {
@@ -148,9 +156,13 @@ class photos {
     * View photo
     */
     function view($id) {
+        
+        // Get nickname
+        if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
+        else $nn = 'nobody';           
 
         // "Cache Groups" using a vertical bar |
-        $cache_id = "view|{$id}";
+        $cache_id = "$nn|view|{$id}";
         $this->tpl->caching = 1;
 
         if (!$this->tpl->is_cached('view.tpl', $cache_id)) {

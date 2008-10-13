@@ -206,7 +206,10 @@ class feedsEdit {
 
         $this->user->log("sux0r::feedsEdit() feeds_id: {$id}", $_SESSION['users_id'], 1); // Private
 
-
+        // clear all caches, cheap and easy
+        $this->tpl->clear_all_cache();
+        
+        
     }
 
 
@@ -214,9 +217,6 @@ class feedsEdit {
     * The form was successfuly processed
     */
     function formSuccess() {
-
-        // clear all caches with "nickname" as the first cache_id group
-        $this->tpl->clear_cache(null, "{$_SESSION['nickname']}");
 
         // Redirect
         suxFunct::redirect(suxFunct::getPreviousURL($this->prev_skip));

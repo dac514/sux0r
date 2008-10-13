@@ -120,9 +120,9 @@ class feedsApprove  {
     * @param array $clean reference to validated $_POST
     */
     function formProcess(&$clean) {
-
+        
         if (isset($clean['feeds'])) foreach ($clean['feeds'] as $key => $val) {
-
+            
             if ($val == 1) {
                 $this->rss->approveFeed($key);
                 $this->user->log("sux0r::feedsApprove() feeds_id: {$key}", $_SESSION['users_id'], 1); // Private
@@ -131,9 +131,12 @@ class feedsApprove  {
                 $this->rss->deleteFeed($key);
                 $this->user->log("sux0r::feedsApprove() deleted feeds_id: {$key}", $_SESSION['users_id'], 1); // Private
             }
-
+            
         }
-
+        
+        // clear all caches,cheap and easy
+        $this->tpl->clear_all_cache();       
+        
     }
 
 
@@ -141,9 +144,6 @@ class feedsApprove  {
     * The form was successfuly processed
     */
     function formSuccess() {
-
-        // clear all caches with "nickname" as the first cache_id group
-        $this->tpl->clear_cache(null, "{$_SESSION['nickname']}");
 
         // Redirect
         suxFunct::redirect(suxFunct::getPreviousURL());
