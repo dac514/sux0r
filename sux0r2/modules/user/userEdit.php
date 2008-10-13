@@ -29,6 +29,8 @@ require_once('userRenderer.php');
 class userEdit {
 
     // Variables
+
+    public $caches = array('home', 'blog', 'feeds', 'bookmarks', 'photos'); // Caches to clear if language changes
     public $gtext = array(); // Language
     private $mode = 'register';
     private $users_id = null;
@@ -356,13 +358,21 @@ class userEdit {
 
         unset($_SESSION['openid_url_registration'], $_SESSION['openid_url_integrity']);
 
-        // TODO: Clear all caches from all modules if language changes
         // Clear caches, cheap and easy
         $this->tpl->clear_all_cache();
 
         // Reset session
         if ($this->mode == 'edit' && $clean['nickname'] == $_SESSION['nickname']) {
+
+            foreach ($this->caches as $module) {
+                // clear all caches with "nickname" as the first cache_id group
+                $tpl = new suxTemplate($module);
+                $tpl->clear_cache(null, "{$_SESSION['nickname']}");
+            }
+
+            // Reset session
             $this->user->setSession($id);
+
         }
 
     }

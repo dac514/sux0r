@@ -4,11 +4,11 @@
 /* Error reporting and debugging */
 /* ------------------------------------------------------------------------- */
 
-// error_reporting(E_ALL | E_STRICT); // Development
-error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING); // Hosting
+error_reporting(E_ALL | E_STRICT); // Development
+// error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING); // Hosting
 
 // Debug
-// include_once(dirname(__FILE__)  . '/includes/symbionts/dBug.php');
+include_once(dirname(__FILE__)  . '/includes/symbionts/dBug.php');
 
 /* ------------------------------------------------------------------------- */
 /* Configuration variables */
@@ -16,8 +16,8 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING); // Hosting
 
 // Database parameters, PDO compatible, NB: first key is default
 $CONFIG['DSN'] =  array(
-    // 'sux0r' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
-    'sux0r' => array('pgsql:host=localhost;dbname=sux0r', 'postgres', 'root'),
+    'sux0r' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
+    // 'sux0r' => array('pgsql:host=localhost;dbname=sux0r', 'postgres', 'root'),
     );
 
 // Site title
