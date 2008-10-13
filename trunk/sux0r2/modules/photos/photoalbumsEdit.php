@@ -217,7 +217,7 @@ class photoalbumsEdit {
 
         // Draft
         $clean['draft'] = (isset($clean['draft']) && $clean['draft']) ? true : false;
-        
+
         // --------------------------------------------------------------------
         // Create $album array
         // --------------------------------------------------------------------
@@ -239,31 +239,30 @@ class photoalbumsEdit {
 
         $this->user->log("sux0r::photoalbumsEdit() photoalbums_id: $id", $_SESSION['users_id'], 1); // Private
 
-        if(!isset($clean['id'])) {
-            $tmp = $this->photo->getAlbum($id); // Is actually published?
-            if ($tmp) {
-                
-                // Clear all caches, cheap and easy
-                $this->tpl->clear_all_cache();                
+        $tmp = $this->photo->getAlbum($id); // Is actually published?
+        if ($tmp) {
 
-                // Log message
+            // Clear all caches, cheap and easy
+            $this->tpl->clear_all_cache();
+
+            if (!isset($clean['id'])) {
+                // New album log message
                 $log = '';
                 $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
                 $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
                 $log .= mb_strtolower($this->r->text['created_album']);
                 $url = suxFunct::makeUrl("/photos/album/{$tmp['id']}", null, true);
                 $log .= " <a href='$url'>{$tmp['title']}</a>";
-
-                // Log
                 $this->user->log($log);
-
-                // Clear caches, cheap and easy
-                $tpl = new suxTemplate('user');
-                $tpl->clear_cache(null, $_SESSION['nickname']);
-                
             }
+
+            // Clear caches, cheap and easy
+            $tpl = new suxTemplate('user');
+            $tpl->clear_cache(null, $_SESSION['nickname']);
+
         }
-        
+
+
     }
 
 
