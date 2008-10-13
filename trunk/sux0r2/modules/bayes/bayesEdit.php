@@ -261,12 +261,14 @@ class bayesEdit {
                 $clean['owner'] = (isset($clean['owner']) && $clean['owner']) ? true : false;
                 $this->nb->shareVector($clean['users_id'], $clean['vector_id'], $clean['trainer'], $clean['owner']);
 
-                // clear caches for $clean['users_id'] (TODO: we need to get their partition, too)
-                $u = $this->user->getUser($clean['users_id']);
+                $u = $this->user->getUser($clean['users_id']);                
+                
+                // clear caches
                 foreach ($this->caches as $module) {
                     $tpl = new suxTemplate($module);
-                    $tpl->clear_cache(null, "{$u['nickname']}");
-                }
+                    $tpl->clear_cache(null, $_SESSION['nickname']);
+                    $tpl->clear_cache(null, $u['nickname']);
+                }               
 
                 // Log message
                 $log = '';
@@ -282,25 +284,25 @@ class bayesEdit {
 
                 // Clear caches
                 $tpl = new suxTemplate('user');
-                $tpl->clear_cache('profile.tpl', $_SESSION['nickname']);
-                $tpl->clear_cache('profile.tpl', $u['nickname']);
+                $tpl->clear_cache(null, $_SESSION['nickname']);
+                $tpl->clear_cache(null, $u['nickname']);
 
             }
             break;
 
         case 'unsharevec' :
 
-            $tpl = new suxTemplate('user');
             foreach ($clean['unshare'] as $val) {
                 foreach ($val as $vectors_id => $users_id) {
                     $this->nb->unshareVector($users_id, $vectors_id);
 
                     $u = $this->user->getUser($users_id);
 
-                    // clear caches for $clean['users_id'] (TODO: we need to get their partition, too)
+                    // Clear caches
                     foreach ($this->caches as $module) {
                         $tpl = new suxTemplate($module);
-                        $tpl->clear_cache(null, "{$u['nickname']}");
+                        $tpl->clear_cache(null, $_SESSION['nickname']);
+                        $tpl->clear_cache(null, $u['nickname']);
                     }
 
                     // Log message
@@ -315,8 +317,10 @@ class bayesEdit {
                     $this->user->log($log);
                     $this->user->log($log, $u['users_id']);
 
-                    $tpl->clear_cache('profile.tpl', $_SESSION['nickname']);
-                    $tpl->clear_cache('profile.tpl', $u['nickname']);
+                    // Clear caches
+                    $tpl = new suxTemplate('user');
+                    $tpl->clear_cache(null, $_SESSION['nickname']);
+                    $tpl->clear_cache(null, $u['nickname']);
 
                 }
             }

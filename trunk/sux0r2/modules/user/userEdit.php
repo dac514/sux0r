@@ -356,8 +356,9 @@ class userEdit {
 
         unset($_SESSION['openid_url_registration'], $_SESSION['openid_url_integrity']);
 
-        // Clear approptiate template caches
-        $this->tpl->clear_cache('profile.tpl', $clean['nickname']);
+        // TODO: Clear all caches from all modules if language changes
+        // Clear caches, cheap and easy
+        $this->tpl->clear_all_cache();
 
         // Reset session
         if ($this->mode == 'edit' && $clean['nickname'] == $_SESSION['nickname']) {

@@ -67,8 +67,12 @@ class userProfile {
     * Display user profile
     */
     function displayProfile() {
+        
+        // Get nickname
+        if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
+        else $nn = 'nobody';                  
 
-        $cache_id = $this->profile['nickname'];
+        $cache_id = "$nn|{$this->profile['nickname']}";
         $this->tpl->caching = 1;
 
         if(!$this->tpl->is_cached('profile.tpl', $cache_id)) {

@@ -471,7 +471,6 @@ class blogEdit {
     function formSuccess() {
 
         $this->tpl->clear_cache(null, $_SESSION['nickname']); // Clear cache
-        $this->tpl->clear_cache('cloud.tpl', 'tagcloud');
 
         suxFunct::redirect(suxFunct::makeUrl('/blog/bookmarks/' . $this->id)); // Pass this on to bookmarks for scanning
 

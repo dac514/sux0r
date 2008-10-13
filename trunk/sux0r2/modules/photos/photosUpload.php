@@ -255,9 +255,9 @@ class photosUpload  {
             // Log
             $this->user->log($log);
 
-            // Clear cache
+            // Clear caches, cheap and easy
             $tpl = new suxTemplate('user');
-            $tpl->clear_cache('profile.tpl', $_SESSION['nickname']);
+            $tpl->clear_cache(null, $_SESSION['nickname']);
         }
 
     }

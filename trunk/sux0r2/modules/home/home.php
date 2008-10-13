@@ -57,9 +57,15 @@ class home {
     * Display home
     */
     function display() {
-
+        
+        // Get nickname
+        if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
+        else $nn = 'nobody';       
+        
+        $cache_id = "$nn|home";       
         $this->tpl->caching = 1;
-        $this->tpl->display('home.tpl');
+        
+        $this->tpl->display('home.tpl', $cache_id);
 
     }
 

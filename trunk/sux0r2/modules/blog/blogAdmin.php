@@ -155,6 +155,7 @@ class blogAdmin {
             }
         }
 
+        // clear all caches,cheap and easy
         $this->tpl->clear_all_cache();
 
     }

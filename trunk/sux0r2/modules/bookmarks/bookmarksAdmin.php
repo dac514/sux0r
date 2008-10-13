@@ -152,8 +152,9 @@ class bookmarksAdmin {
             $this->user->log("sux0r::bookmarksAdmin() deleted bookmarks_id: {$id}", $_SESSION['users_id'], 1); // Private
         }
 
+        // clear all caches,cheap and easy
         $this->tpl->clear_all_cache();
-
+        
     }
 
 

@@ -207,10 +207,9 @@ class societyEdit {
         $this->user->log($log);
         $this->user->log($log, $u['users_id']);
 
-        // Clear caches
+        // Clear caches, cheap and easy
         $tpl = new suxTemplate('user');
-        $tpl->clear_cache('profile.tpl', $_SESSION['nickname']);
-        $tpl->clear_cache('profile.tpl', $u['nickname']);
+        $tpl->clear_cache(null, $_SESSION['nickname']);
 
     }
 

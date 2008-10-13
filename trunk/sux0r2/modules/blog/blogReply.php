@@ -146,8 +146,8 @@ class blogReply {
         $tmp = $this->msg->getMessage($clean['parent_id']); // Is actually published?
         if ($tmp) {
 
-            // Clear all caches, cheap and easy
-            $this->tpl->clear_all_cache();
+            // Clear caches
+            $this->tpl->clear_cache(null, $_SESSION['nickname']);
 
             // Log message
             $log = '';

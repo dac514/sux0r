@@ -152,6 +152,7 @@ class photosAdmin {
             $this->user->log("sux0r::photosAdmin() deleted photoalbums_id: $id", $_SESSION['users_id'], 1); // Private
         }
 
+        // Clear caches, cheap and easy
         $this->tpl->clear_all_cache();
 
     }

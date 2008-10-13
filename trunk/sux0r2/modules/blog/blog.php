@@ -241,8 +241,12 @@ class blog extends bayesShared {
         // ---------------------------------------------------------------
         // Tagcloud, cached
         // ---------------------------------------------------------------
-
-        $cache_id = 'tagcloud';
+        
+        // Get nickname
+        if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
+        else $nn = 'nobody';       
+        
+        $cache_id = "$nn|tagcloud";
         $this->tpl->caching = 1;
 
         if (!$this->tpl->is_cached('cloud.tpl', $cache_id)) {
