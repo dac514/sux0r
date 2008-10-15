@@ -10,7 +10,7 @@ Chinese (zn) by Wang Zhenzhen: http://blog.csdn.net/tp906
 
 ### THIRD PARTY VENDORS ###
 
-Please read: ./includes/symbionts/README.txt
+Please read: ../includes/symbionts/README.txt
 
 
 ### THANKS ###
