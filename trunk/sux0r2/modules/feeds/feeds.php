@@ -61,6 +61,8 @@ class feeds extends bayesShared {
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
+        $this->r->bool['analytics'] = true; // Turn on analytics
+
         $this->user = new suxUser();
         $this->rss = new suxRSS();
         $this->link = new suxLink();

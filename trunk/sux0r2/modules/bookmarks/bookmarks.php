@@ -63,6 +63,8 @@ class bookmarks extends bayesShared {
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
+        $this->r->bool['analytics'] = true; // Turn on analytics
+
         $this->user = new suxUser();
         $this->link = new suxLink();
         $this->nb = new bayesUser();
@@ -249,8 +251,8 @@ class bookmarks extends bayesShared {
 
         // Get nickname
         if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
-        else $nn = 'nobody';       
-        
+        else $nn = 'nobody';
+
         $cache_id = "$nn|tagcloud";
         $this->tpl->caching = 1;
 

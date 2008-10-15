@@ -53,6 +53,7 @@ class userProfile {
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
+        $this->r->bool['analytics'] = true; // Turn on analytics
 
         // Profile
         $this->profile = $this->user->getUserByNickname($nickname, true);
@@ -67,10 +68,10 @@ class userProfile {
     * Display user profile
     */
     function displayProfile() {
-        
+
         // Get nickname
         if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
-        else $nn = 'nobody';                  
+        else $nn = 'nobody';
 
         $cache_id = "$nn|{$this->profile['nickname']}";
         $this->tpl->caching = 1;

@@ -628,8 +628,6 @@ class openid {
         $this->r->text['yes_url'] = $yes;
         $this->r->text['no_url'] = $no;
 
-        $this->r->bool['analytics'] = false;
-
         $this->tpl->display('accept.tpl');
 
     }
@@ -1086,10 +1084,10 @@ class openid {
         $shared_secret = $this->newSecret();
         $st = $this->db->prepare("INSERT INTO {$this->db_table_sec} (expiration, shared_secret) VALUES (?, ?) ");
         $st->execute(array($expiration, base64_encode($shared_secret)));
-               
+
         if ($this->db_driver == 'pgsql') $id = $this->db->lastInsertId("{$this->db_table_sec}_id_seq"); // PgSql
         else $id = $this->db->lastInsertId();
-        
+
         $this->debug('Started new assoc session: ' . $id);
 
         return array($id, $shared_secret);
@@ -1398,7 +1396,6 @@ class openid {
     private function wrapHtml($message) {
 
         $this->r->text['message'] = $message;
-        $this->r->bool['analytics'] = false;
 
         $this->tpl->display('wrap_html.tpl');
         exit;
