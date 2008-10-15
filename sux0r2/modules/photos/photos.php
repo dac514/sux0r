@@ -54,6 +54,8 @@ class photos {
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
+        $this->r->bool['analytics'] = true; // Turn on analytics
+
         $this->user = new suxUser();
         $this->photo = new suxPhoto();
         $this->pager = new suxPager();
@@ -76,10 +78,10 @@ class photos {
             if (!$user) suxFunct::redirect(suxFunct::makeUrl('/photos')); // Invalid user
             else $users_id = $user['users_id'];
         }
-        
+
         // Get nickname
         if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
-        else $nn = 'nobody';        
+        else $nn = 'nobody';
 
         // Start pager
         $this->pager->setStart();
@@ -116,12 +118,12 @@ class photos {
     * List photos in an album
     */
     function album($id) {
-        
+
         // Get nickname
         if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
-        else $nn = 'nobody';           
+        else $nn = 'nobody';
 
-        $this->pager->limit = $this->per_page;       
+        $this->pager->limit = $this->per_page;
 
         // Start pager
         $this->pager->setStart();
@@ -156,10 +158,10 @@ class photos {
     * View photo
     */
     function view($id) {
-        
+
         // Get nickname
         if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
-        else $nn = 'nobody';           
+        else $nn = 'nobody';
 
         // "Cache Groups" using a vertical bar |
         $cache_id = "$nn|view|{$id}";

@@ -49,6 +49,7 @@ class home {
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->user = new suxUser();
         $this->r->text =& $this->gtext;
+        $this->r->bool['analytics'] = true; // Turn on analytics
 
     }
 
@@ -57,14 +58,14 @@ class home {
     * Display home
     */
     function display() {
-        
+
         // Get nickname
         if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
-        else $nn = 'nobody';       
-        
-        $cache_id = "$nn|home";       
+        else $nn = 'nobody';
+
+        $cache_id = "$nn|home";
         $this->tpl->caching = 1;
-        
+
         $this->tpl->display('home.tpl', $cache_id);
 
     }

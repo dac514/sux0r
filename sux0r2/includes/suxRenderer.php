@@ -77,7 +77,7 @@ class suxRenderer {
         $this->url = $GLOBALS['CONFIG']['URL'];
         $this->title = $GLOBALS['CONFIG']['TITLE'];
         $this->sitename = $GLOBALS['CONFIG']['TITLE'];
-        $this->bool['analytics'] = true;
+        $this->bool['analytics'] = false;
 
         // Stylesheets
         $this->stylesheets = "<link rel='stylesheet' type='text/css' href='{$this->url}/media/{$this->partition}/css/base.css' />\n";
