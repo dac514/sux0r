@@ -6,6 +6,7 @@ sux0r is hosted by Network Redux: http://www.networkredux.com/
 ### TRANSLATIONS ###
 
 Chinese (zn) by Wang Zhenzhen: http://blog.csdn.net/tp906
+German (de) by Niklas Pluem
 
 
 ### THIRD PARTY VENDORS ###
