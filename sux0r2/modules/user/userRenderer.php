@@ -119,6 +119,7 @@ class userRenderer extends suxRenderer {
 
         $lang = mb_strtolower(trim($lang));
         $return = suxFunct::getLanguages();
+        if (isset($this->text[$lang])) $return[$lang] = $this->text[$lang];
         return $return[$lang];
 
     }
@@ -146,13 +147,15 @@ class userRenderer extends suxRenderer {
     /**
     * Get the country
     *
-    * @param string $lang two letter language code
+    * @param string $c two letter country code
     * @return string
     */
     function getCountry($c) {
 
         $c = mb_strtolower(trim($c));
         $return = suxFunct::getCountries();
+        // Using key2 because key has several duplicates in 2-letter language codes
+        if (isset($this->text["{$c}2"])) $return[$c] = $this->text["{$c}2"];
         return $return[$c];
 
     }
