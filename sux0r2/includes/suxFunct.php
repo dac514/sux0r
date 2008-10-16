@@ -511,7 +511,7 @@ class suxFunct {
             // Add generic internet cruft for good measure
             self::$stopwords = array_merge(self::$stopwords, array('http', 'https', 'mailto', 'www', 'com', 'net', 'org', 'biz', 'info'));
 
-            // array_clip removes duplicates and increase speed by using isset() instead of in_array()
+            // array_flip removes duplicates and increase speed by using isset() instead of in_array()
             self::$stopwords = array_flip(self::$stopwords);
 
         }
