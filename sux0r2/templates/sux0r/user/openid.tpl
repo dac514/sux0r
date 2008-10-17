@@ -50,6 +50,7 @@
 </p>
 
 
+{* Accounts *}
 <p>{$r->text.openid_msg_1} :</p>
 
 <ul class="openidManage">
@@ -59,6 +60,18 @@
 <li>{$r->text.openid_none}</li>
 {/foreach}
 <li><a href="{$r->makeUrl('/user/register/openid')}">{$r->text.openid_register} &raquo;</a></li>
+</ul>
+
+
+{* Trusted Consumers *}
+<p>{$r->text.openid_msg_2} :</p>
+
+<ul class="openidManage">
+{foreach from=$r->trusted item=foo}
+<li><input type="checkbox" name="detach2[{$foo.id}]" value="{$foo.auth_url}" style="width: auto;" /> {$foo.auth_url}</li>
+{foreachelse}
+<li>{$r->text.openid_none_2}</li>
+{/foreach}
 </ul>
 
 <p>

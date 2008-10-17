@@ -24,6 +24,7 @@
 
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
+require_once(dirname(__FILE__) . '/../../modules/openid/openid.php');
 require_once('userRenderer.php');
 
 class userOpenID  {
@@ -39,6 +40,7 @@ class userOpenID  {
     public $tpl;
     public $r;
     private $user;
+    private $openid;
 
     /**
     * Constructor
@@ -70,6 +72,9 @@ class userOpenID  {
         // Pre assign variables
         $this->nickname = $nickname;
         $this->users_id = $tmp['users_id'];
+
+        // Openid object
+        $this->openid = new openid();
 
     }
 
@@ -121,6 +126,7 @@ class userOpenID  {
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         $this->r->openids = $this->user->getOpenIDs($this->users_id);
+        $this->r->trusted = $this->openid->getTrusted($this->users_id);
         $this->r->title .= " | {$this->r->text['edit_openid']}";
 
         // Display template
@@ -144,6 +150,7 @@ class userOpenID  {
             }
         }
 
+        // Accounts
         if (isset($clean['detach'])) foreach ($clean['detach'] as $url) {
 
             if (!$this->user->isRoot()) {
@@ -153,6 +160,19 @@ class userOpenID  {
             }
 
             $this->user->detachOpenID($url);
+
+        }
+
+        // Trusted consumers
+        if (isset($clean['detach2'])) foreach ($clean['detach2'] as $id => $url) {
+
+            if (!$this->user->isRoot()) {
+                $tmp = $this->openid->checkTrusted($_SESSION['users_id'], $url);
+                if (!$tmp)
+                    continue; // Skip
+            }
+
+            $this->openid->untrustUrl($id);
 
         }
 
