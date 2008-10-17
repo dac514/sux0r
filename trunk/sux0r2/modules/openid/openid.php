@@ -960,6 +960,60 @@ class openid {
 
 
     // ----------------------------------------------------------------------------
+    // Public Trust functions
+    // ----------------------------------------------------------------------------
+
+    /**
+    * Get URLS trusted by a user_id
+    * @param int $users_id user id
+    * @return array
+    */
+    function getTrusted($users_id) {
+
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) return false;
+
+        $st = $this->db->prepare("SELECT id, auth_url FROM {$this->db_table_trust} WHERE users_id = ? ");
+        $st->execute(array($users_id));
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+    /**
+    * Untrust an OpenID consumer
+    * @param int $id openid_trusted id
+    * @return bool
+    */
+     function untrustUrl($id) {
+
+        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
+
+        // Delete trust
+        $st = $this->db->prepare("DELETE FROM {$this->db_table_trust} WHERE id = ? ");
+        return $st->execute(array($id));
+
+    }
+
+
+    /**
+    * Check if a url is trusted by user
+    * @param int $users_id user id
+    * @param string $url url
+    * @return bool
+    */
+    function checkTrusted($users_id, $url) {
+
+        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) return false;
+
+        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_trust} WHERE users_id = ? AND auth_url = ? ");
+        $st->execute(array($users_id, $url));
+
+        if ($st->fetchColumn() > 0) return true;
+        else return false;
+
+    }
+
+
+    // ----------------------------------------------------------------------------
     // Support functions
     // ----------------------------------------------------------------------------
 
@@ -980,23 +1034,6 @@ class openid {
     }
 
 
-    /**
-    * Check if a url is trusted by user
-    * @param int $id user id
-    * @param string $id url
-    * @return bool
-    */
-    private function checkTrusted($id, $url) {
-
-        if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
-
-        $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_trust} WHERE users_id = ? AND auth_url = ? ");
-        $st->execute(array($id, $url));
-
-        if ($st->fetchColumn() > 0) return true;
-        else return false;
-
-    }
 
 
     /**
@@ -1026,6 +1063,9 @@ class openid {
         }
 
     }
+
+
+
 
 
     /**
