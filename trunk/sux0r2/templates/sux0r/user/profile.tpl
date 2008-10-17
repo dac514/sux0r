@@ -55,7 +55,7 @@
 
                 <p>
                 {$r->text.nickname} : {$r->profile.nickname} <br />
-                {$r->text.email} : {mailto address=$r->profile.email  encode='javascript'} <br />
+                {$r->text.email} : {mailto address=$r->profile.email  encode='javascript_charcode'} <br />
 
                 {if $r->profile.given_name || $r->profile.family_name}
                 {$r->text.name} : {$r->profile.given_name} {$r->profile.family_name}<br />
@@ -86,7 +86,7 @@
                 {/if}
 
                 {if $r->profile.url}
-                {$r->text.url} : {$r->profile.url} <br />
+                {$r->text.url} : <a href="{$r->profile.url}">{$r->profile.url}</a> <br />
                 {/if}
 
                 {if $r->profile.dob}
@@ -106,6 +106,17 @@
                 {/if}
 
                 </p>
+
+
+                {* OpenIDs *}
+                <p>
+                <img src="{$r->url}/media/{$r->partition}/assets/openid_icon.gif" alt="OpenID" class="openidIcon" /> <a href="{$r->makeUrl('/user/profile', null, true)}/{$r->profile.nickname}">{$r->makeUrl('/user/profile', null, true)}/{$r->profile.nickname}</a><br />
+                {foreach from= $r->getOpenIDs($r->profile.users_id) item=foo}
+                <img src="{$r->url}/media/{$r->partition}/assets/openid_icon.gif" alt="OpenID" class="openidIcon" /> <a href="{$foo.openid_url}">{$foo.openid_url}</a><br />
+                {/foreach}
+                </p>
+
+
             {/capture}
 
             {* Image *}
