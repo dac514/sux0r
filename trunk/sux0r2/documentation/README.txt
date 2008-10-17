@@ -42,7 +42,7 @@ and, as such, should be dealt with according to their own licenses.
 
 3. chmod 777 ./temporary
 
-4. Edit ./config.php appropriately
+4. Edit ./config.php and ./.htaccess appropriately
 
 5. Point your web browser to 'http://YOURSITE/supplemental/root.php' and make
    yourself a root user
