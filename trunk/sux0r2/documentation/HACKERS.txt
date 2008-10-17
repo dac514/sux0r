@@ -30,7 +30,7 @@ be duplicated when creating a new partition.
 
 ### FUTURE ###
 
-I believe that Threaded messages can represent several content paradigms,
+I believe that threaded messages can represent several content paradigms,
 for example:
 
 Forum - the natural state of the threaded message.
