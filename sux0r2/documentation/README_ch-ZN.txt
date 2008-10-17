@@ -40,7 +40,7 @@ http://www.fsf.org/licensing/licenses/agpl-3.0.html
 
 3. æ´æ¹./temporaryè¯»åæéä¸º777
 
-4. ç¼è¾éç½® ./config.php
+4. ç¼è¾éç½® ./config.php ./.htaccess
 
 5. ä½¿ç¨æµè§å¨è®¿é®'http://YOURSITE/supplemental/root.php'ï¼çæroot
    ç®¡çåå¸å·
