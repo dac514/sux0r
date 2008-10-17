@@ -38,6 +38,11 @@ input.openidInput {
     padding-top: .2em !important;
 }
 
+img.openidIcon {
+    border: 0;
+    vertical-align: middle;
+}
+
 ul.miniFeed, ul.miniFeed li {
     margin: 0;
     padding: 0;

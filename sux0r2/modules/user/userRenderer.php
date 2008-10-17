@@ -34,6 +34,9 @@ class userRenderer extends suxRenderer {
     public $minifeed = array();
     public $openids = array();
 
+    // Objects
+    protected $user;
+
 
     /**
     * Constructor
@@ -42,6 +45,7 @@ class userRenderer extends suxRenderer {
     */
     function __construct($module) {
         parent::__construct($module); // Call parent
+        $this->user = new suxUser();
     }
 
 
@@ -162,6 +166,22 @@ class userRenderer extends suxRenderer {
 
 
     /**
+    *
+    */
+    function getOpenIDs($users_id) {
+
+        // Cache
+        static $oids = null;
+        if ($oids != null) return $oids;
+        $oids = array();
+
+        $oids = $this->user->getOpenIDs($users_id);
+        return $oids;
+
+    }
+
+
+    /**
     * Get the acquaintances
     *
     * @param int $users_id
@@ -181,7 +201,6 @@ class userRenderer extends suxRenderer {
         $rel = $soc->getRelationships($users_id);
         if (!$rel) return $html;
 
-        $user = new suxUser();
         $tpl = new suxTemplate('user');
         $tpl->config_load('my.conf', 'user');
 
@@ -190,7 +209,7 @@ class userRenderer extends suxRenderer {
 
         foreach ($rel as $val) {
 
-            $u = $user->getUser($val['friend_users_id'], true);
+            $u = $this->user->getUser($val['friend_users_id'], true);
             if (!$u) continue; // Skip
 
             $url = suxFunct::makeUrl('/user/profile/' . $u['nickname']);
@@ -234,7 +253,6 @@ class userRenderer extends suxRenderer {
         $rel = $soc->getStalkers($users_id);
         if (!$rel) return $html;
 
-        $user = new suxUser();
         $tpl = new suxTemplate('user');
         $tpl->config_load('my.conf', 'user');
 
@@ -243,7 +261,7 @@ class userRenderer extends suxRenderer {
 
         foreach ($rel as $val) {
 
-            $u = $user->getUser($val['users_id'], true);
+            $u = $this->user->getUser($val['users_id'], true);
             if (!$u) continue; // Skip
 
             $url = suxFunct::makeUrl('/user/profile/' . $u['nickname']);
