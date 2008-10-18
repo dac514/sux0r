@@ -1003,6 +1003,7 @@ class openid {
     function checkTrusted($users_id, $url) {
 
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) return false;
+        $url = suxFunct::canonicalizeUrl($url);
 
         $st = $this->db->prepare("SELECT COUNT(*) FROM {$this->db_table_trust} WHERE users_id = ? AND auth_url = ? ");
         $st->execute(array($users_id, $url));
@@ -1045,7 +1046,7 @@ class openid {
     private function trustUrl($id, $url) {
 
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
-        $url = filter_var($url, FILTER_SANITIZE_URL);
+        $url = suxFunct::canonicalizeUrl($url);
 
         $trusted = array(
             'users_id' => $id,
