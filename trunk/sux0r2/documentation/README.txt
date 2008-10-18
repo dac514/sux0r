@@ -1,4 +1,4 @@
-sux0r 2.0 _Beta2
+sux0r 2.0 _Beta3
 http://www.sux0r.org/
 All spelling mistakes are final and will not be refunded
 

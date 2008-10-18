@@ -4,7 +4,7 @@ All spelling mistakes are final and will not be refunded
 ### HACKER ###
 
 http://en.wikipedia.org/wiki/Hacker_ethic
-http://sourceforge.net/forum/forum.php?thread_id=2372082&forum_id=447217
+
 
 ### CONVENTIONS ###
 
@@ -26,8 +26,9 @@ template and it should be moved into a language file.
 Skins are called partitions in sux0r. Partitioning falls back on the default
 sux0r partition when what is being accessed can't be found . This allows for
 the omission of template files you don't care about. Default sux0r templates
-will be used instead. Conversely, every file in the sux0r media partition must
+will be used instead. Conversely, every file in the sux0r media directory must
 be duplicated when creating a new partition.
+
 
 ### FUTURE ###
 
@@ -45,4 +46,37 @@ and a plain text version. Each edited suxThreadedMessage() saves a backup of
 itself into a history table. The beginnings of a wiki would merely require a
 clever implementation of a diff algorithm between the plaintext revisions,
 which are already automatically generated on every edit.
+
+
+### JOBS ###
+
+@see: http://sourceforge.net/forum/forum.php?thread_id=2372082&forum_id=447217
+
+Improvement to phpDocumentor style code comments. My code comments are crap, I
+doubt they parse. There are probably comments thats don't make any sense
+because I cut from one module and paste into another, then changed everything
+except the comments. This is also good way to learn the codebase. You read the
+code, you describe what it does, you generate coherent phpdoc pages, you help
+others.
+
+Regarding Naive Bayesian tokens, splitting on space/non-word characters works
+for a lot of languages. But how do you identify tokens in UTF-8 languages
+without spaces, like Japanese and Chinese?
+
+UTF-8 translations. Your languages, I need them.
+
+"Skins" known as "partitions", I need them.
+
+Javascript improvements using Prototype/Scriptaculous. Talented
+Protoype/Scriptaculous coders with cool AJAX ideas are more than welcome
+to contribute.
+
+Modules. You got ideas? We got a lack of implemented ideas! Go for it!
+
+Optimizations. Patches welcome.
+
+Stats and graphs. Currently we use JpGraph to generate captchas. This is
+overkill. JpGraph is foresight combined with laziness. Statistical
+representation of sux0r data using JpGraph is something I encourage coders to
+explore.
 
