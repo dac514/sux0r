@@ -216,7 +216,7 @@ class suxBookmarks {
             if (!preg_match($regex, $url['published_on'])) throw new Exception('Invalid date');
             $clean['published_on'] = $url['published_on'];
         }
-        else $clean['published_on'] = date('c');
+        else $clean['published_on'] = date('Y-m-d h:i:s');
 
         // Draft, boolean / tinyint
         $clean['draft'] = false;
