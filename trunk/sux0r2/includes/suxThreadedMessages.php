@@ -148,7 +148,7 @@ class suxThreadedMessages {
             if (!preg_match($regex, $msg['published_on'])) throw new Exception('Invalid date');
             $clean['published_on'] = $msg['published_on'];
         }
-        else $clean['published_on'] = date('c');
+        else $clean['published_on'] = date('Y-m-d h:i:s');
 
         // Draft, boolean / tinyint
         $clean['draft'] = false;
@@ -398,7 +398,7 @@ class suxThreadedMessages {
 
         $edit['messages_id'] = $clean['id'];
         $edit['users_id'] = $clean['users_id'];
-        $edit['edited_on'] = date('c');
+        $edit['edited_on'] = date('Y-m-d h:i:s');
         $query = suxDB::prepareInsertQuery($this->db_table_hist, $edit);
         $st = $this->db->prepare($query);
         $st->execute($edit);

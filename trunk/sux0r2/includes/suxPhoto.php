@@ -83,7 +83,7 @@ class suxPhoto {
             throw new Exception('Invalid album id');
 
         $query = "SELECT * FROM {$this->db_albums} WHERE id = ? ";
-        
+
         // Publish / Draft
         if (!$unpub) {
             // PgSql / MySql
@@ -227,7 +227,7 @@ class suxPhoto {
             if (!preg_match($regex, $album['published_on'])) throw new Exception('Invalid date');
             $clean['published_on'] = $album['published_on'];
         }
-        else $clean['published_on'] = date('c');
+        else $clean['published_on'] = date('Y-m-d h:i:s');
 
 
         // We now have the $clean[] array
@@ -235,61 +235,61 @@ class suxPhoto {
         // --------------------------------------------------------------------
         // Go!
         // --------------------------------------------------------------------
-        
-        // http://bugs.php.net/bug.php?id=44597    
-        // As of 5.2.6 you still can't use this function's $input_parameters to 
-        // pass a boolean to PostgreSQL. To do that, you'll have to call 
+
+        // http://bugs.php.net/bug.php?id=44597
+        // As of 5.2.6 you still can't use this function's $input_parameters to
+        // pass a boolean to PostgreSQL. To do that, you'll have to call
         // bindParam() with explicit types for *each* parameter in the query.
         // Annoying much? This sucks more than you can imagine.
-        
+
         if (isset($clean['id'])) {
-            
+
             // UPDATE
             unset($clean['users_id']); // Don't override the original submitter
             $query = suxDB::prepareUpdateQuery($this->db_albums, $clean);
             $st = $this->db->prepare($query);
-            
-            if  ($this->db_driver == 'pgsql') {        
+
+            if  ($this->db_driver == 'pgsql') {
                 $st->bindParam(':id', $clean['id'], PDO::PARAM_INT);
                 $st->bindParam(':title', $clean['title'], PDO::PARAM_STR);
-                $st->bindParam(':body_html', $clean['body_html'], PDO::PARAM_STR);            
-                $st->bindParam(':body_plaintext', $clean['body_plaintext'], PDO::PARAM_STR);  
-                $st->bindParam(':draft', $clean['draft'], PDO::PARAM_BOOL);                  
-                $st->bindParam(':published_on', $clean['published_on'], PDO::PARAM_STR);  
-                $st->execute();      
-            }        
+                $st->bindParam(':body_html', $clean['body_html'], PDO::PARAM_STR);
+                $st->bindParam(':body_plaintext', $clean['body_plaintext'], PDO::PARAM_STR);
+                $st->bindParam(':draft', $clean['draft'], PDO::PARAM_BOOL);
+                $st->bindParam(':published_on', $clean['published_on'], PDO::PARAM_STR);
+                $st->execute();
+            }
             else {
                 $st->execute($clean);
-            } 
-            
-            
+            }
+
+
         }
         else {
-            
+
             // INSERT
             $query = suxDB::prepareInsertQuery($this->db_albums, $clean);
             $st = $this->db->prepare($query);
-            
-            if  ($this->db_driver == 'pgsql') {        
+
+            if  ($this->db_driver == 'pgsql') {
                 $st->bindParam(':users_id', $clean['users_id'], PDO::PARAM_INT);
                 $st->bindParam(':title', $clean['title'], PDO::PARAM_STR);
-                $st->bindParam(':body_html', $clean['body_html'], PDO::PARAM_STR);            
-                $st->bindParam(':body_plaintext', $clean['body_plaintext'], PDO::PARAM_STR);  
-                $st->bindParam(':draft', $clean['draft'], PDO::PARAM_BOOL);                  
-                $st->bindParam(':published_on', $clean['published_on'], PDO::PARAM_STR);  
-                $st->execute();         
-            }        
+                $st->bindParam(':body_html', $clean['body_html'], PDO::PARAM_STR);
+                $st->bindParam(':body_plaintext', $clean['body_plaintext'], PDO::PARAM_STR);
+                $st->bindParam(':draft', $clean['draft'], PDO::PARAM_BOOL);
+                $st->bindParam(':published_on', $clean['published_on'], PDO::PARAM_STR);
+                $st->execute();
+            }
             else {
                 $st->execute($clean);
-            } 
-            
+            }
+
             if ($this->db_driver == 'pgsql') $clean['id'] = $this->db->lastInsertId("{$this->db_albums}_id_seq"); // PgSql
-            else $clean['id'] = $this->db->lastInsertId();            
-            
+            else $clean['id'] = $this->db->lastInsertId();
+
         }
-        
+
         return $clean['id'];
-        
+
     }
 
 
@@ -613,7 +613,7 @@ class suxPhoto {
             $st->execute($clean);
 
             if ($this->db_driver == 'pgsql') $clean['id'] = $this->db->lastInsertId("{$this->db_photos}_id_seq"); // PgSql
-            else $clean['id'] = $this->db->lastInsertId();            
+            else $clean['id'] = $this->db->lastInsertId();
 
         }
 
