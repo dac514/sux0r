@@ -76,7 +76,7 @@ fieldset {
 }
 
 #bStats {
-    border: 1px dashed black;
+    border: 1px dashed #666;
     padding: 8px;
 }
 
