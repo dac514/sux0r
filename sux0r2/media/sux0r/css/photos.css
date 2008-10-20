@@ -45,7 +45,7 @@ a.next {
 
 
 .description {
-    border: 1px dashed #cccccc;
+    border: 1px dashed #666;
     padding: 10px;
     margin-left: auto;
     margin-right: auto;
@@ -80,7 +80,7 @@ input.imageFile {
 }
 
 .annotateItem {
-    border: 1px dashed #ccc;
+    border: 1px dashed #666;
     padding: 10px;
     margin: 10px;
     height: 1%; /* IE6, Holly Hack */
@@ -99,8 +99,10 @@ input.imageFile {
 #leftside .editLinks, #rightside .editLinks  {
     float: none;
     padding: 8px;
-    border: 1px dashed #cccccc;
+    border: 1px dashed #ccc;
     height: 1%; /* IE6, Holly Hack */
+    font-size: 11px;
+    line-height: 100%;
 }
 
 

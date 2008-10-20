@@ -7,7 +7,7 @@ body {
 }
 
 body, tr, td {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Helvetica, Arial, sans-serif;
     font-size: 11px;
     text-align: left;
 }
@@ -381,6 +381,8 @@ input.button {
     margin-left: 10px;
     margin-right: 10px;
     height: 1%; /* IE6, Holly Hack */
+    font-size: 12px;
+    line-height: 130%;
 }
 
 .widget .widgetContent h2 {

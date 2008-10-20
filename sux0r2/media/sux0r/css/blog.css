@@ -18,7 +18,7 @@
 }
 
 .recent {
-    border: 1px dashed black;
+    border: 1px dashed #666;
     padding-left: 4px;
     padding-right: 4px;
 }
@@ -51,12 +51,12 @@ label {
 }
 
 .categoryContainer {
-    border: 1px dashed #cccccc;
+    border: 1px dashed #ccc;
     padding: 10px;
 }
 
 .comment {
-    border: 1px dashed #cccccc;
+    border: 1px dashed #ccc;
     padding: 10px;
     margin-top: 10px;
 }

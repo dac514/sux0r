@@ -7,7 +7,6 @@
 
 #leftside p {
     font-size: 12px;
-
 }
 
 #rightside {
@@ -16,4 +15,9 @@
 
 .hl {
     background-color: pink;
+}
+
+.widget .widgetContent {
+    font-size: 11px;
+    line-height: 130%;
 }
