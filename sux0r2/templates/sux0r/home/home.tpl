@@ -54,34 +54,30 @@
             {* Capture content *}
 
             {capture name='title' assign='title'}CODENAME: Vorpal CMS{/capture}
-
             {capture name='welcome' assign='welcome'}
+
+
+            <p>
+            2008-10-20: You must be logged in to use Naive Bayesian
+            categorization. Once logged in, click on your nickname in the upper right,
+            then click <a href="{$r->makeUrl('/bayes')}">Edit Bayesian</a>. After you have created your
+            categories, navigate to <a href="{$r->makeUrl('/blog')}">Blog</a>, <a href="{$r->makeUrl('/feeds')}">Feeds</a>,
+            or <a href="{$r->makeUrl('/bookmarks')}">Bookmarks</a> and the AJAX interface for
+            Naive Bayesian categorization will be revealed. There isn't enough text to justify
+            categorization in the <a href="{$r->makeUrl('/photos')}">Photos</a> module. So for now,
+            it's omitted.
+            </p>
 
             <p>
             2008-10-09: <a href="http://sourceforge.net/people/viewjob.php?group_id=131752&amp;job_id=31512">Translations Wanted</a>.
             </p>
-
-            <p>
-            2008-09-29: In many a drunken rant alone in front of a terminal, I dropped
-            buzzwords like "distributed blogging", "content refactoring" and "harnessing
-            the power of selfishness" which quite frankly sounds a lot like me
-            talking out of my ass. With that said, hopefully sux0r 2.0 is the starting point
-            for something good.
-            </p>
-
-            <p><em>Last year's technology, today...</em></p>
-
-            <p>
-            <a href="http://www.sux0r.org/user/profile/conner_bw">Dac / Conner_Bw</a>
-            </p>
-
 
             {/capture}
             {capture name='img' assign='img'}{$r->makeUrl('/', null, true)}/media/sux0r/assets/nullwhore.png{/capture}
             {capture name='caption' assign='caption'}Nullwhore Lives{/capture}
 
             {* Render widget *}
-            {$r->widget($title, $welcome, null, $img, $caption)}
+            {$r->widget($title, $welcome, 'http://www.sux0r.org/user/profile/conner_bw', $img, $caption)}
 
 			</div>
 		</td>
