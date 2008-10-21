@@ -47,7 +47,7 @@
             </p>
 
             <p>
-            <img src="{$r->makeUrl('/', null, true)}/media/sux0r/assets/sux0r_logo.gif" alt="sux0r logo" width="300" height="232" class="sux0rLogo" />
+            <img src="{$r->makeUrl('/', null, true)}/media/sux0r/assets/sux0r_logo.gif" alt="sux0r logo" width="300" height="232" border="0" class="sux0rLogo" />
             </p>
 
 			</div>
@@ -90,6 +90,12 @@
             Got ideas to discuss? Post in the <a href="http://sourceforge.net/forum/forum.php?forum_id=447217">Developers forum</a> or submit
             <a href="http://sourceforge.net/tracker2/?group_id=131752&amp;atid=722157">patches</a>.
             All that and more at the <a href="http://sourceforge.net/projects/sux0r/">sux0r SF.net project page</a>.
+            </p>
+
+            <p>
+
+            <img src="{$r->makeUrl('/', null, true)}/media/sux0r/flair/php5_logo.gif" alt="PHP5" border="0" style="vertical-align: top;"  />
+            <img src="{$r->makeUrl('/', null, true)}/media/sux0r/flair/agplv3-88x31.png" alt="AGPL" border="0" style="vertical-align: top;" />
             </p>
 
 			</div>
