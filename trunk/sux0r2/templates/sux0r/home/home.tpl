@@ -89,7 +89,7 @@
             Need help? <a href="http://sourceforge.net/forum/forum.php?forum_id=447216">Ask in the Support forum</a>.
             Got ideas to discuss? Post in the <a href="http://sourceforge.net/forum/forum.php?forum_id=447217">Developers forum</a> or submit
             <a href="http://sourceforge.net/tracker2/?group_id=131752&amp;atid=722157">patches</a>.
-            All that and more on the <a href="http://sourceforge.net/projects/sux0r/">sux0r SF.net project page</a>.
+            All that and more at the <a href="http://sourceforge.net/projects/sux0r/">sux0r SF.net project page</a>.
             </p>
 
 			</div>
