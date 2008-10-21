@@ -46,6 +46,10 @@
             the <a href="http://www.fsf.org/licensing/licenses/agpl-3.0.html">GNU Affero General Public License</a>.
             </p>
 
+            <p>
+            <img src="{$r->makeUrl('/', null, true)}/media/sux0r/assets/sux0r_logo.gif" alt="sux0r logo" width="300" height="232" class="sux0rLogo" />
+            </p>
+
 			</div>
 		</td>
 		<td style="vertical-align:top;">
@@ -55,7 +59,6 @@
 
             {capture name='title' assign='title'}CODENAME: Vorpal CMS{/capture}
             {capture name='welcome' assign='welcome'}
-
 
             <p>
             2008-10-20: You must be logged in to use Naive Bayesian
