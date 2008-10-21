@@ -60,6 +60,7 @@
             {capture name='title' assign='title'}CODENAME: Vorpal CMS{/capture}
             {capture name='welcome' assign='welcome'}
 
+
             <p>
             2008-10-20: You must be logged in to use Naive Bayesian
             categorization. Once logged in, click on your nickname in the upper right,
@@ -71,6 +72,7 @@
             it's omitted.
             </p>
 
+
             <p>
             2008-10-09: <a href="http://sourceforge.net/people/viewjob.php?group_id=131752&amp;job_id=31512">Translations Wanted</a>.
             </p>
@@ -81,6 +83,14 @@
 
             {* Render widget *}
             {$r->widget($title, $welcome, 'http://www.sux0r.org/user/profile/conner_bw', $img, $caption)}
+
+            <p id="sfLinks">
+            Found a bug? <a href="http://sourceforge.net/tracker2/?atid=722155&amp;group_id=131752">Report it</a>.
+            Need help? <a href="http://sourceforge.net/forum/forum.php?forum_id=447216">Ask in the Support forum</a>.
+            Got ideas to discuss? Post in the <a href="http://sourceforge.net/forum/forum.php?forum_id=447217">Developers forum</a> or submit
+            <a href="http://sourceforge.net/tracker2/?group_id=131752&amp;atid=722157">patches</a>.
+            All that and more on the <a href="http://sourceforge.net/projects/sux0r/">sux0r SF.net project page</a>.
+            </p>
 
 			</div>
 		</td>
