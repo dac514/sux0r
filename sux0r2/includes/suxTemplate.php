@@ -201,4 +201,16 @@ class suxTemplate extends Smarty {
 
 }
 
+// -------------------------------------------------------------------------
+// Smarty capitalize modifier doesn't work well with UTF-8, substitute it
+// -------------------------------------------------------------------------
+
+if (!function_exists('mb_ucfirst')) {
+    function mb_ucfirst($string) {
+        $string = mb_strtoupper(mb_substr($string, 0, 1)) . mb_substr($string, 1);
+        return $string;
+    }
+}
+
+
 ?>
