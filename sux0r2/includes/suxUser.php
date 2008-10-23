@@ -708,7 +708,7 @@ class suxUser {
         $clean['body_plaintext']  = $converter->getText();
 
         // Timestamp
-        $clean['ts'] = date('Y-m-d h:i:s');
+        $clean['ts'] = date('Y-m-d H:i:s');
 
         // INSERT
         $query = suxDB::prepareInsertQuery($this->db_table_log, $clean);

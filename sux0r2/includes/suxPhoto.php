@@ -227,7 +227,7 @@ class suxPhoto {
             if (!preg_match($regex, $album['published_on'])) throw new Exception('Invalid date');
             $clean['published_on'] = $album['published_on'];
         }
-        else $clean['published_on'] = date('Y-m-d h:i:s');
+        else $clean['published_on'] = date('Y-m-d H:i:s');
 
 
         // We now have the $clean[] array
