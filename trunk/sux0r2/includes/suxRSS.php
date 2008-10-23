@@ -132,7 +132,7 @@ class suxRSS extends DOMDocument {
                         $converter = new suxHtml2UTF8($clean['body_html']);
                         $clean['body_plaintext']  = $converter->getText();
                         if (!empty($item['pubDate'])) $clean['published_on'] = $item['pubDate'];
-                        else $clean['published_on'] = date('Y-m-d h:i:s');
+                        else $clean['published_on'] = date('Y-m-d H:i:s');
 
                         // Insert
                         $q3 = suxDB::prepareInsertQuery($this->db_items, $clean);
