@@ -32,7 +32,7 @@ $user->log($lament);
 
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 $tpl = new suxTemplate('user');
-$tpl->clear_cache('profile.tpl', "{$_SESSION['nickname']}");
+$tpl->clear_cache('profile.tpl', "{$_SESSION['nickname']}|{$_SESSION['nickname']}");
 
 echo $lament;
 
