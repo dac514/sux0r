@@ -50,7 +50,7 @@
 </p>
 
 {foreach from=$myOptions key=k item=v}
-   <p><label>{$k|mb_ucfirst} :</label> {html_options name=$k options=$v selected=$mySelect.$k}</p>
+   <p><label>{$k|mb_ucwords} :</label> {html_options name=$k options=$v selected=$mySelect.$k}</p>
 {/foreach}
 
 <p>
