@@ -205,9 +205,10 @@ class suxTemplate extends Smarty {
 // Smarty capitalize modifier doesn't work well with UTF-8, substitute it
 // -------------------------------------------------------------------------
 
-if (!function_exists('mb_ucfirst')) {
-    function mb_ucfirst($string) {
-        $string = mb_strtoupper(mb_substr($string, 0, 1)) . mb_substr($string, 1);
+if (!function_exists('mb_ucwords')) {
+    function mb_ucwords($string) {
+        $string = mb_convert_case($string, MB_CASE_TITLE);
+        $string = mb_ereg_replace('Sux0R', 'Sux0r', $string); // Exception
         return $string;
     }
 }
