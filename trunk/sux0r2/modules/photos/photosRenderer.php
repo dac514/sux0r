@@ -71,7 +71,7 @@ class photosRenderer extends suxRenderer {
         height: 100,
         theme_advanced_toolbar_location : "top",
         theme_advanced_toolbar_align : "left",
-        theme_advanced_buttons1 : "undo,redo,|,bold,italic,underline,strikethrough,|,cleanup,code",
+        theme_advanced_buttons1 : "undo,redo,|,bold,italic,underline,strikethrough,|,link,unlink,|,cleanup,code",
         theme_advanced_buttons2 : "",
         theme_advanced_buttons3 : "",
         theme_advanced_statusbar_location : "bottom",
