@@ -1,6 +1,7 @@
-sux0r 2.0 _Beta3
+sux0r 2.0
 http://www.sux0r.org/
 All spelling mistakes are final and will not be refunded
+
 
 ### LICENSE ###
 
@@ -54,6 +55,11 @@ and, as such, should be dealt with according to their own licenses.
    (example: /bin/nice /usr/bin/wget -q -O /dev/null "http://YOURSITE/modules/feeds/cron.php")
 
 
+### SUPPORT ###
+
+@see: https://sourceforge.net/forum/forum.php?forum_id=447216
+
+
 ### FOOTNOTES ###
 
 - Pages pass W3C Validation (as best I can test)
@@ -61,7 +67,5 @@ and, as such, should be dealt with according to their own licenses.
 - Tested with: (OS X) Firefox 2.0.0.17, (OS X) Safari 3.1.2, Opera 9.2 (OS X)
   (Win XP) Internet Explorer 6, (Win XP) Firefox 3.0.1
 
-- Maybe it works with other configurations? I don't know yet, hence why this
-  is  Beta
 
 ### THANKS! ###

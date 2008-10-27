@@ -1,4 +1,4 @@
-ï»¿sux0r 2.0 _Beta3
+ï»¿sux0r 2.0
 http://www.sux0r.org/
 åæ¬æ¼åéè¯¯é½å°ä½ä¸ºæç»ç»æä¿çï¼å¹¶ä¸å¯æ´æ¹ã
 
@@ -52,14 +52,17 @@ http://www.fsf.org/licensing/licenses/agpl-3.0.html
    (ä¾å¦: /bin/nice /usr/bin/wget -q -O /dev/null "http://YOURSITE/modules/feeds/cron.php")
 
 
+### æ¯æ/å¸®å© (è±è¯­è¯­è¨) ###
+
+@see: https://sourceforge.net/forum/forum.php?forum_id=447216
+
+
 ### èæ³¨ ###
 
 - é¡µé¢å·²éè¿W3Céªè¯
 
 - æµè¯è¿è¡ç¯å¢: (OS X) Firefox 2.0.0.17, (OS X) Safari 3.1.2, Opera 9.2 (OS X)
   (Win XP) Internet Explorer 6, (Win XP) Firefox 3.0.1
-
-- å¶ä»ç¯å¢æ¯å¦å¯ä»¥è¿è¡å¹¶æªéªè¯ï¼æçæ¬ä¿çä¸ºbeta
 
 
 ### è´è°¢ ###
