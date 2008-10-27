@@ -1,6 +1,7 @@
 http://www.sux0r.org/
 All spelling mistakes are final and will not be refunded
 
+
 ### HACKER ###
 
 http://en.wikipedia.org/wiki/Hacker_ethic
@@ -23,11 +24,11 @@ lazy translations. If you see English on your non-English site, your language
 files are probably incomplete. Optionally, hard-coded English has crept into a
 template and it should be moved into a language file.
 
-Skins are called partitions in sux0r. Partitioning falls back on the default
-sux0r partition when what is being accessed can't be found . This allows for
-the omission of template files you don't care about. Default sux0r templates
-will be used instead. Conversely, every file in the sux0r media directory must
-be duplicated when creating a new partition.
+In sux0r, Skins are called partitions. Partitioning falls back on the default
+when what is being accessed can't be found . This allows for the omission of
+template files you don't care about. Default sux0r templates will be used
+instead. Conversely, every file in the sux0r media directory must be duplicated
+when creating a new partition.
 
 
 ### FUTURE ###
@@ -80,3 +81,17 @@ overkill. JpGraph is foresight combined with laziness. Statistical
 representation of sux0r data using JpGraph is something I encourage coders to
 explore.
 
+
+### IDEAS? ###
+
+Please discuss your ideas in the sux0r Developement forum, I monitor the forum
+so your ideas will be read:
+
+@see: https://sourceforge.net/forum/forum.php?forum_id=447217
+
+Better yet, patches welcome:
+
+@seeL https://sourceforge.net/tracker2/?group_id=131752&atid=722157
+
+
+### THANKS! ###
