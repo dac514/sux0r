@@ -109,7 +109,7 @@ $CONFIG['ACCESS'] = array(
     );
 
 $CONFIG['PREV_SKIP'] = array(
-    '/admin/access',
+    'admin/access',
     'bayes',
     'blog/bookmarks',
     'blog/edit',
