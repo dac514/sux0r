@@ -91,7 +91,7 @@ so your ideas will be read:
 
 Better yet, patches welcome:
 
-@seeL https://sourceforge.net/tracker2/?group_id=131752&atid=722157
+@see: https://sourceforge.net/tracker2/?group_id=131752&atid=722157
 
 
 ### THANKS! ###

@@ -55,7 +55,7 @@ and, as such, should be dealt with according to their own licenses.
    (example: /bin/nice /usr/bin/wget -q -O /dev/null "http://YOURSITE/modules/feeds/cron.php")
 
 
-### SUPPORT ###
+### SUPPORT/HELP ###
 
 @see: https://sourceforge.net/forum/forum.php?forum_id=447216
 
