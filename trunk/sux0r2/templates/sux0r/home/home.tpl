@@ -60,6 +60,11 @@
             {capture name='title' assign='title'}CODENAME: Vorpal CMS{/capture}
             {capture name='welcome' assign='welcome'}
 
+            <p>
+            2008-10-29: <a href="http://www.youtube.com/watch?v=ppATTkbTIhg">A short YouTube tutorial</a>
+            on how to start classifying documents using Naive Baysian Categorization with Sux0r CMS.
+            </p>
+
 
             <p>
             2008-10-20: You must be logged in to use Naive Bayesian
