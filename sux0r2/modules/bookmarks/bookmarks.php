@@ -113,6 +113,7 @@ class bookmarks extends bayesShared {
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
                 else $params = array('filter' => $cat_id);
+                $params['search'] = $search;
                 if ($this->alphasort)  $params['sort'] = 'alpha';
                 $url = suxFunct::makeUrl("/bookmarks/user/$nickname", $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
@@ -197,6 +198,7 @@ class bookmarks extends bayesShared {
             if ($start < $count) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
                 else $params = array('filter' => $cat_id);
+                $params['search'] = $search;
                 if ($this->alphasort)  $params['sort'] = 'alpha';
                 $url = suxFunct::makeUrl('/bookmarks/tag/'. $this->tag_id, $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
@@ -314,8 +316,8 @@ class bookmarks extends bayesShared {
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
                 else $params = array('filter' => $cat_id);
+                $params['search'] = $search;
                 if ($alphasort) $params['sort'] = 'alpha'; // Sort
-
                 $url = suxFunct::makeUrl('/bookmarks/', $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }

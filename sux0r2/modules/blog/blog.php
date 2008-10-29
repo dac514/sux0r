@@ -105,6 +105,7 @@ class blog extends bayesShared {
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
                 else $params = array('filter' => $cat_id);
+                $params['search'] = $search;
                 $url = suxFunct::makeUrl('/blog/author/'. $author, $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
@@ -184,6 +185,7 @@ class blog extends bayesShared {
             if ($start < $count) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
                 else $params = array('filter' => $cat_id);
+                $params['search'] = $search;
                 $url = suxFunct::makeUrl('/blog/tag/'. $this->tag_id, $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
@@ -300,6 +302,7 @@ class blog extends bayesShared {
             if ($start < $count) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id2);
                 else $params = array('filter' => $cat_id2);
+                $params['search'] = $search;
                 $url = suxFunct::makeUrl('/blog/category/'. $this->cat_id, $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
@@ -381,6 +384,7 @@ class blog extends bayesShared {
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
                 else $params = array('filter' => $cat_id);
+                $params['search'] = $search;
                 $url = suxFunct::makeUrl('/blog/month/'. $date, $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
@@ -455,6 +459,7 @@ class blog extends bayesShared {
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
                 else $params = array('filter' => $cat_id);
+                $params['search'] = $search;
                 $url = suxFunct::makeUrl('/blog/', $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
