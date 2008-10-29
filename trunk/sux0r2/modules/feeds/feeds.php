@@ -103,6 +103,7 @@ class feeds extends bayesShared {
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
                 else $params = array('filter' => $cat_id);
+                $params['search'] = $search;
                 $url = suxFunct::makeUrl("/feeds/user/$nickname", $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
@@ -197,6 +198,7 @@ class feeds extends bayesShared {
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
                 else $params = array('filter' => $cat_id);
+                $params['search'] = $search;
                 $url = suxFunct::makeUrl("/feeds/$feeds_id", $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
