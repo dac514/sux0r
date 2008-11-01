@@ -7,7 +7,7 @@ All spelling mistakes are final and will not be refunded
 
 sux0r is licensed under the GNU AGPL. This means that if you run a sux0r
 website you are obligated to tell your users that they can have access to the
-source code. Furthermore, you are obligated it to give access to the source
+source code. Furthermore, you are obligated to give access to the source
 code if they ask for it.
 
 The easiest way to comply is to link to http://www.sux0r.org and hope no one
@@ -64,7 +64,7 @@ and, as such, should be dealt with according to their own licenses.
 
 - Pages pass W3C Validation (as best I can test)
 
-- Tested with: (OS X) Firefox 2.0.0.17, (OS X) Safari 3.1.2, Opera 9.2 (OS X)
+- Tested with: (OS X) Firefox 2.0.0.17, (OS X) Safari 3.1.2, (OS X) Opera 9.2
   (Win XP) Internet Explorer 6, (Win XP) Firefox 3.0.1
 
 
