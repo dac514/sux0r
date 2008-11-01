@@ -52,11 +52,26 @@ class suxRSS extends DOMDocument {
     // date/time format. The format is fully compatible with PHP function date()
 	public $date_format = 'Y-m-d H:i:s';
 
-    // fetchRSS Tags
+    // RSS 2.0 Tags
     protected $channeltags = array('title', 'link', 'description', 'language', 'copyright', 'managingEditor', 'webMaster', 'lastBuildDate', 'rating', 'docs');
 	protected $itemtags = array('title', 'link', 'description', 'author', 'category', 'comments', 'enclosure', 'guid', 'pubDate', 'source');
 	protected $imagetags = array('title', 'url', 'link', 'width', 'height');
 	protected $textinputtags = array('title', 'description', 'name', 'link');
+
+    // Atom 1.0 Tags
+    // Map RSS elements to equivilant Atom elements
+    // @see: http://www.intertwingly.net/wiki/pie/Rss20AndAtom10Compared
+    protected $channeltags_atom = array(
+        'copyright' => 'rights',
+        'description' => 'subtitle',
+        'lastBuildDate' => 'updated',
+        'managingEditor' => array('author', 'contributor'),
+        );
+    protected $itemtags_atom = array(
+        'description' => array('content', 'summary'),
+        'guid' => 'id',
+        'pubDate' => 'published',
+        );
 
     // RSS Code Page / Encoding
     private $rsscp;
@@ -756,13 +771,43 @@ class suxRSS extends DOMDocument {
                 $this->rsscp = 'UTF-8';
             }
 
-			// Parse CHANNEL info
+            // Init some variables
+            $is_atom = false;
             $out_channel = array();
+
+            // ---------------------------------------------------------------
+            // Parse CHANNEL info
+            // ---------------------------------------------------------------
+
 			preg_match("'<channel.*?>(.*?)</channel>'si", $rss_content, $out_channel);
+            if (!count($out_channel)) {
+                // Maybe this is an Atom feed? Parse FEED info
+                preg_match("'<feed.*?>(.*?)</feed>'si", $rss_content, $out_channel);
+                if (count($out_channel)) $is_atom = true;
+            }
+
 			foreach($this->channeltags as $channeltag) {
-				$temp = $this->myPregMatch("'<$channeltag.*?>(.*?)</$channeltag>'si", @$out_channel[1]);
-				if ($temp != '') $result[$channeltag] = $temp; // Set only if not empty
+
+                if ($is_atom && isset($this->channeltags_atom[$channeltag])) {
+                    // Atom specific tag
+                    if (is_array($this->channeltags_atom[$channeltag])) {
+                        foreach ($this->channeltags_atom[$channeltag] as $tmp_tag) {
+                            $temp = $this->myPregMatch("'<$tmp_tag.*?>(.*?)</$tmp_tag>'si", @$out_channel[1]);
+                            if (!empty($temp)) break;
+                        }
+                    }
+                    else {
+                        $temp = $this->myPregMatch("'<{$this->channeltags_atom[$channeltag]}.*?>(.*?)</{$this->channeltags_atom[$channeltag]}>'si", @$out_channel[1]);
+                    }
+                }
+				else {
+                    // RSS compatible channel tag
+                    $temp = $this->myPregMatch("'<$channeltag.*?>(.*?)</$channeltag>'si", @$out_channel[1]);
+                }
+
+				if (!empty($temp)) $result[$channeltag] = $temp; // Set only if not empty
 			}
+
 
 			// If date_format is specified and lastBuildDate is valid
 			if ($this->date_format != '' && isset($result['lastBuildDate']) && ($timestamp = strtotime($result['lastBuildDate'])) !== -1) {
@@ -770,7 +815,10 @@ class suxRSS extends DOMDocument {
                 $result['lastBuildDate'] = date($this->date_format, $timestamp);
 			}
 
+            // ---------------------------------------------------------------
 			// Parse TEXTINPUT info
+            // ---------------------------------------------------------------
+
             $out_textinfo = array();
 			preg_match("'<textinput(|[^>]*[^/])>(.*?)</textinput>'si", $rss_content, $out_textinfo);
 
@@ -783,7 +831,10 @@ class suxRSS extends DOMDocument {
 				}
 			}
 
+            // ---------------------------------------------------------------
 			// Parse IMAGE info
+            // ---------------------------------------------------------------
+
             $out_imageinfo = array();
 			preg_match("'<image.*?>(.*?)</image>'si", $rss_content, $out_imageinfo);
 			if (isset($out_imageinfo[1])) {
@@ -793,25 +844,48 @@ class suxRSS extends DOMDocument {
 				}
 			}
 
+            // ---------------------------------------------------------------
 			// Parse ITEMS
+            // ---------------------------------------------------------------
+
             $items = array();
-			preg_match_all("'<item(| .*?)>(.*?)</item>'si", $rss_content, $items);
-			$rss_items = $items[2];
+            if ($is_atom) preg_match_all("'<entry(| .*?)>(.*?)</entry>'si", $rss_content, $items); // Atom
+            else preg_match_all("'<item(| .*?)>(.*?)</item>'si", $rss_content, $items); // RSS
+            $rss_items = $items[2];
 			$i = 0;
 			$result['items'] = array(); // create array even if there are no items
-			foreach($rss_items as $rss_item) {
 
+			foreach($rss_items as $rss_item) {
 				// If number of items is lower then limit: Parse one item
 				if ($i < $this->items_limit || $this->items_limit == 0) {
 
                     foreach($this->itemtags as $itemtag) {
 
-                        $pattern = "'<$itemtag.*?>(.*?)</$itemtag>'si";
-                        if ($itemtag == 'category') {
-                            // Concatenate for category
-                            $temp = $this->myPregMatchAll($pattern, $rss_item);
+                        $tmp_funct = 'myPregMatch';
+                        if ($itemtag == 'category') $tmp_funct = 'myPregMatchAll'; // Concatenate
+
+                        if ($is_atom && isset($this->itemtags_atom[$itemtag])) {
+                            // Atom specific tag
+                            if (is_array($this->itemtags_atom[$itemtag])) {
+                                foreach ($this->itemtags_atom[$itemtag] as $tmp_tag) {
+                                    $temp = $this->$tmp_funct("'<$tmp_tag.*?>(.*?)</$tmp_tag>'si", $rss_item);
+                                    if (!empty($temp)) break;
+                                }
+                            }
+                            else {
+                                $temp = $this->$tmp_funct("'<{$this->itemtags_atom[$itemtag]}.*?>(.*?)</{$this->itemtags_atom[$itemtag]}>'si", $rss_item);
+                            }
                         }
-                        else $temp = $this->myPregMatch($pattern, $rss_item);
+                        else {
+                            if ($is_atom && $itemtag == 'link') {
+                                // Yet more Atom tom-fuckery
+                                $temp = $this->$tmp_funct('/<link [^>]*href="([^"]+)"[^>]*\/>/si', $rss_item);
+                            }
+                            else {
+                                // RSS compatible item tag
+                                $temp = $this->$tmp_funct("'<$itemtag.*?>(.*?)</$itemtag>'si", $rss_item);
+                            }
+                        }
 
                         if (!empty($temp)) $result['items'][$i][$itemtag] = $temp; // Stack
 
@@ -836,6 +910,7 @@ class suxRSS extends DOMDocument {
 
 			$result['items_count'] = $i;
 			return $result;
+
 		}
 		else {
             // Error in opening return False
