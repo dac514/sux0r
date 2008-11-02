@@ -156,7 +156,7 @@ class suxRSS extends DOMDocument {
                             $st3->execute($clean);
                         }
                         catch (Exception $e) {
-                            if ($st->errorCode() == 23000) continue; // SQLSTATE 23000: Constraint violation, we don't care, carry on
+                            if ($st3->errorCode() == 23000) continue; // SQLSTATE 23000: Constraint violation, we don't care, carry on
                             else throw ($e); // Hot potato
                         }
 
