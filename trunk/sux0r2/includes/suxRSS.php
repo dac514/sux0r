@@ -150,9 +150,15 @@ class suxRSS extends DOMDocument {
                         else $clean['published_on'] = date('Y-m-d H:i:s');
 
                         // Insert
-                        $q3 = suxDB::prepareInsertQuery($this->db_items, $clean);
-                        $st3 = $this->db->prepare($q3);
-                        $st3->execute($clean);
+                        try {
+                            $q3 = suxDB::prepareInsertQuery($this->db_items, $clean);
+                            $st3 = $this->db->prepare($q3);
+                            $st3->execute($clean);
+                        }
+                        catch (Exception $e) {
+                            if ($st->errorCode() == 23000) continue; // SQLSTATE 23000: Constraint violation, we don't care, carry on
+                            else throw ($e); // Hot potato
+                        }
 
                     }
                 }
@@ -909,6 +915,8 @@ class suxRSS extends DOMDocument {
             array_walk_recursive($result, array($this, 'sanitizeByReference'));
 
 			$result['items_count'] = $i;
+            // new dBug($result);
+            // exit;
 			return $result;
 
 		}
