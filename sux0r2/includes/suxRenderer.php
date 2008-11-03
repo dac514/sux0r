@@ -199,8 +199,8 @@ class suxRenderer {
             $alt = str_replace("'", "", strip_tags($title)); // Escape
 
             $tmp = '';
-            if ($url) $tmp .= "<a href='{$url}'>";
-            if ($url2) $tmp = "<a href='{$url2}'>"; // Overwrite
+            if ($url) $tmp .= "<a href='{$url}' class='noBg'>";
+            if ($url2) $tmp = "<a href='{$url2}' class='noBg'>"; // Overwrite
             $tmp .= "<img src='$image' alt='{$alt}' {$size[3]} />";
             if ($url || $url2) $tmp .= '</a>';
 
