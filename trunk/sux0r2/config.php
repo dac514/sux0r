@@ -83,13 +83,14 @@ $CONFIG['CACHE_LIFETIME'] = 900;
 
 $CONFIG['TIMEZONE'] = 'America/Montreal';
 
-// A list of webpages to to skip when a user presses a "cancel" button
-// used in tandem with the suxFunct::getPreviousURL() function
-
 /* ------------------------------------------------------------------------- */
 /* Advanced configuration variables */
 /* Don't modify these unless you know what you are doing */
 /* ------------------------------------------------------------------------- */
+
+// Access levels for modules arbitrarily defined here
+// It is the responsibility of the individual module and it's author(s)
+// to implement appropriate access levels.
 
 $CONFIG['ACCESS'] = array(
     'blog' => array(
@@ -107,6 +108,9 @@ $CONFIG['ACCESS'] = array(
         'admin' => 999,
         ),
     );
+
+// A list of webpages to to skip when a user presses a "cancel" button
+// used in tandem with the suxFunct::getPreviousURL() function
 
 $CONFIG['PREV_SKIP'] = array(
     'admin/access',
