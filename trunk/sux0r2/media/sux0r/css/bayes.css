@@ -101,4 +101,9 @@ fieldset {
     font-weight: normal;
 }
 
+#bStats .bStatsProb {
+    margin-left: 30px;
+    font-weight: normal;
+}
+
 /* }}} */
