@@ -474,9 +474,9 @@ class suxNaiveBayesian {
 
         // MySQL InnoDB with transaction reports the last insert id as 0 after
         // commit, the real ids are only reported before committing.
-        
+
         if ($this->db_driver == 'pgsql') $insert_id = $this->db->lastInsertId("{$this->db_table_doc}_id_seq"); // PgSql
-        else $insert_id = $this->db->lastInsertId();        
+        else $insert_id = $this->db->lastInsertId();
 
         $this->updateProbabilities();
 
@@ -673,8 +673,8 @@ class suxNaiveBayesian {
     function updateProbabilities() {
 
         // A vector is an array of categories. Probabilities must be
-        // contrained to vector and not the entire tokens table. We need to
-        // join tokens to categories, which containes vector_ids.
+        // constrained to vector and not the entire tokens table. We need to
+        // join tokens to categories, which contains vector_ids.
 
         $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
@@ -786,23 +786,29 @@ class suxNaiveBayesian {
         // speeds things up significantly, hence false
         $tokens = $this->parseTokens($document, false);
 
-        // Needs optimizing, help?
+        // Needs optimizing, needs peer review, help?
         // $debug1 = microtime(true);
         foreach($categories as $category_id => $data) {
             $scores[$category_id] = $data['probability'];
             foreach($tokens as $token => $count) {
                 if ($this->tokenExists($token, $vector_id)) {
-                    $prob = 0;
+
                     $token_count = $this->getTokenCount($token, $category_id);
+
+                    // Avoid calculating 0/x which is always 0, also avoid divide by zero errors
                     if ($token_count && $data['token_count']) $prob = (float) $token_count/$data['token_count']; // Probability
-                    else if ($data['token_count']) $prob = (float) 1/(2*$data['token_count']); // Fake probability, like a very infrequent word
-                    $scores[$category_id] *= pow($prob, $count)*pow($total_tokens/$ncat, $count); // pow($total_tokens/$ncat, $count) is here to avoid underflow.
+                    elseif ($data['token_count']) $prob = (float) 1/(2*$data['token_count']); // Fake probability, like a very infrequent word
+                    else $prob = 0; // Set this to zero, last resort, shouldn't happen?
+
+                    // pow($total_tokens/$ncat, $count) is here to avoid underflow.
+                    $scores[$category_id] *= pow($prob, $count)*pow($total_tokens/$ncat, $count);
+
                 }
             }
             // Remember and use in reorganization of array
             $categorized[$category_id] = $data['category'];
         }
-        // new dBug('Elapsed time in seconds: ' . (microtime(true) - $debug1));;
+        // new dBug('Elapsed time in seconds: ' . (microtime(true) - $debug1));
 
         $scores = $this->rescale($scores); // Rescale
         arsort($scores); // Sort
@@ -914,7 +920,7 @@ class suxNaiveBayesian {
             $q = "
             SELECT COUNT(*) FROM {$this->db_table_tok}
             INNER JOIN {$this->db_table_cat} ON {$this->db_table_tok}.bayes_categories_id = {$this->db_table_cat}.id
-            WHERE {$this->db_table_tok}.token = ? AND {$this->db_table_cat}.bayes_vectors_id = ? 
+            WHERE {$this->db_table_tok}.token = ? AND {$this->db_table_cat}.bayes_vectors_id = ?
             ";
             $st = $this->db->prepare($q);
         }

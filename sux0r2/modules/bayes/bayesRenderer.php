@@ -459,7 +459,8 @@ class bayesRenderer extends suxRenderer {
                 $doc_count = $this->nb->getDocumentCountByCategory($key2);
                 $html .= "<li class='bStatsCat'>{$val2['category']}:";
                 $html .= "<ul>\n";
-                $html .= "<li class='bStatsDoc'>{$this->text['documents']}: $doc_count</li><li class='bStatsTok'>{$this->text['tokens']}: {$val2['token_count']}</li>\n";
+                $html .= "<li class='bStatsDoc'>{$this->text['documents']}: $doc_count</li><li class='bStatsTok'>{$this->text['tokens']}: {$val2['token_count']}</li>";
+                $html .= "<li class='bStatsProb'>P: " . round($val2['probability'] * 100, 2) . " %</li>\n";
                 $html .= "</ul></li>\n";
                 ++$cat;
             }
