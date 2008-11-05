@@ -48,22 +48,24 @@ class bayesEdit {
     *
     */
     function __construct() {
-
+        
+        // Feature is turned off, redirect   
+        if ($GLOBALS['CONFIG']['FEATURE']['bayes'] == false) suxFunct::redirect(suxFunct::getPreviousURL());         
+        
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new bayesRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
-
+        
         $this->user = new suxuser();
         $this->nb = new bayesUser();
         $this->link = new suxLink();
-
+        
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
-
-
+        
     }
 
 

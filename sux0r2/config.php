@@ -88,9 +88,16 @@ $CONFIG['TIMEZONE'] = 'America/Montreal';
 /* Don't modify these unless you know what you are doing */
 /* ------------------------------------------------------------------------- */
 
-// Access levels for modules arbitrarily defined here
+/// Ability to disable features defined here, false = disabled
+
+$CONFIG['FEATURE'] = array(
+    'auto_bookmark' => true,
+    'bayes' => true,
+    );
+
+// Access levels for modules defined here
 // It is the responsibility of the individual module and it's author(s)
-// to implement appropriate access levels.
+// to implement their own access levels.
 
 $CONFIG['ACCESS'] = array(
     'blog' => array(

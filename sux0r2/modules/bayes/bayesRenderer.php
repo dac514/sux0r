@@ -55,8 +55,9 @@ class bayesRenderer extends suxRenderer {
     */
     function genericBayesInterfaceInit($init = true) {
 
+        if ($GLOBALS['CONFIG']['FEATURE']['bayes'] == false) return null; // Feature is turned off
         if (!isset($_SESSION['users_id'])) return null; // Skip anonymous users
-
+        
         $js = '';
 
         if ($init) {
@@ -110,6 +111,8 @@ class bayesRenderer extends suxRenderer {
     */
     function genericBayesInterface($id, $link, $module, $document) {
 
+        if ($GLOBALS['CONFIG']['FEATURE']['bayes'] == false) return null; // Feature is turned off        
+        
         /* Get a list of all the vectors/categories the user has access to */
 
         // Cache
@@ -632,6 +635,7 @@ class bayesRenderer extends suxRenderer {
 */
 function insert_bayesFilters($params) {
 
+    if ($GLOBALS['CONFIG']['FEATURE']['bayes'] == false) return null; // Feature is turned off   
     if (!isset($_SESSION['users_id'])) return null; // Anonymous user, skip
 
     $r = new bayesRenderer('bayes'); // Renderer
@@ -659,6 +663,7 @@ function insert_bayesFilters($params) {
 */
 function insert_bayesFilterScript() {
 
+    if ($GLOBALS['CONFIG']['FEATURE']['bayes'] == false) return null; // Feature is turned off       
     if (!isset($_SESSION['users_id'])) return null; // Anonymous user, skip
 
     $r = new bayesRenderer('bayes'); // Renderer

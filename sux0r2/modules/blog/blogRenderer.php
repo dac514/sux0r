@@ -420,6 +420,7 @@ class blogRenderer extends suxRenderer {
         if (is_array($vectors)) return $vectors;
         $vectors = array();
 
+        if ($GLOBALS['CONFIG']['FEATURE']['bayes'] == false) return $vectors; // Feature is turned off   
         if (!isset($_SESSION['users_id'])) return $vectors ; // Anonymous user, skip
 
         foreach ($this->nb->getVectorsByTrainer($_SESSION['users_id']) as $key => $val) {
