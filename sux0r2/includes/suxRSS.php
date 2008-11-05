@@ -790,6 +790,7 @@ class suxRSS extends DOMDocument {
                 // Maybe this is an Atom feed? Parse FEED info
                 preg_match("'<feed.*?>(.*?)</feed>'si", $rss_content, $out_channel);
                 if (count($out_channel)) $is_atom = true;
+                else return array(); // This isn't an RSS/Atom feed, abort
             }
 
 			foreach($this->channeltags as $channeltag) {
@@ -807,8 +808,14 @@ class suxRSS extends DOMDocument {
                     }
                 }
 				else {
-                    // RSS compatible channel tag
-                    $temp = $this->myPregMatch("'<$channeltag.*?>(.*?)</$channeltag>'si", @$out_channel[1]);
+                    if ($is_atom && $channeltag == 'link') {
+                        // Yet more Atom tom-fuckery
+                        $temp = $this->myPregMatch('#<link[\s]+[^>]*?href[\s]?=[\s"\']+(.*?)["\']+.*?/>#si', @$out_channel[1]);
+                    }
+                    else {
+                        // RSS compatible channel tag
+                        $temp = $this->myPregMatch("'<$channeltag.*?>(.*?)</$channeltag>'si", @$out_channel[1]);
+                    }
                 }
 
 				if (!empty($temp)) $result[$channeltag] = $temp; // Set only if not empty
@@ -833,7 +840,7 @@ class suxRSS extends DOMDocument {
 			if (isset($out_textinfo[2])) {
 				foreach($this->textinputtags as $textinputtag) {
 					$temp = $this->myPregMatch("'<$textinputtag.*?>(.*?)</$textinputtag>'si", $out_textinfo[2]);
-					if ($temp != '') $result['textinput_'.$textinputtag] = $temp; // Set only if not empty
+					if (!empty($temp)) $result['textinput_'.$textinputtag] = $temp; // Set only if not empty
 				}
 			}
 
@@ -846,7 +853,7 @@ class suxRSS extends DOMDocument {
 			if (isset($out_imageinfo[1])) {
 				foreach($this->imagetags as $imagetag) {
 					$temp = $this->myPregMatch("'<$imagetag.*?>(.*?)</$imagetag>'si", $out_imageinfo[1]);
-					if ($temp != '') $result['image_'.$imagetag] = $temp; // Set only if not empty
+					if (!empty($temp)) $result['image_'.$imagetag] = $temp; // Set only if not empty
 				}
 			}
 
@@ -861,54 +868,99 @@ class suxRSS extends DOMDocument {
 			$i = 0;
 			$result['items'] = array(); // create array even if there are no items
 
-			foreach($rss_items as $rss_item) {
-				// If number of items is lower then limit: Parse one item
-				if ($i < $this->items_limit || $this->items_limit == 0) {
+			foreach($rss_items as $rss_item) if ($i < $this->items_limit || $this->items_limit == 0) {
 
-                    foreach($this->itemtags as $itemtag) {
+                // ---------------------------------------------------------------
+                // Go through each $itemtags and collect the data
+                // ---------------------------------------------------------------
 
-                        $tmp_funct = 'myPregMatch';
-                        if ($itemtag == 'category') $tmp_funct = 'myPregMatchAll'; // Concatenate
+                foreach($this->itemtags as $itemtag) {
 
-                        if ($is_atom && isset($this->itemtags_atom[$itemtag])) {
-                            // Atom specific tag
-                            if (is_array($this->itemtags_atom[$itemtag])) {
-                                foreach ($this->itemtags_atom[$itemtag] as $tmp_tag) {
-                                    $temp = $this->$tmp_funct("'<$tmp_tag.*?>(.*?)</$tmp_tag>'si", $rss_item);
-                                    if (!empty($temp)) break;
-                                }
-                            }
-                            else {
-                                $temp = $this->$tmp_funct("'<{$this->itemtags_atom[$itemtag]}.*?>(.*?)</{$this->itemtags_atom[$itemtag]}>'si", $rss_item);
+                    if ($itemtag == 'category') $tmp_funct = 'myPregMatchAll'; // Concatenate
+                    else $tmp_funct = 'myPregMatch';
+
+                    if ($is_atom && isset($this->itemtags_atom[$itemtag])) {
+                        // Atom specific tag
+                        if (is_array($this->itemtags_atom[$itemtag])) {
+                            foreach ($this->itemtags_atom[$itemtag] as $tmp_tag) {
+                                $temp = $this->$tmp_funct("'<$tmp_tag.*?>(.*?)</$tmp_tag>'si", $rss_item);
+                                if (!empty($temp)) break;
                             }
                         }
                         else {
-                            if ($is_atom && $itemtag == 'link') {
-                                // Yet more Atom tom-fuckery
-                                $temp = $this->$tmp_funct('/<link [^>]*href="([^"]+)"[^>]*\/>/si', $rss_item);
-                            }
-                            else {
-                                // RSS compatible item tag
-                                $temp = $this->$tmp_funct("'<$itemtag.*?>(.*?)</$itemtag>'si", $rss_item);
+                            $temp = $this->$tmp_funct("'<{$this->itemtags_atom[$itemtag]}.*?>(.*?)</{$this->itemtags_atom[$itemtag]}>'si", $rss_item);
+                        }
+                    }
+                    else {
+                        if ($is_atom && $itemtag == 'link') {
+                            // Yet more Atom tom-fuckery
+                            $temp = $this->$tmp_funct('#<link[\s]+[^>]*?href[\s]?=[\s"\']+(.*?)["\']+.*?/>#si', $rss_item);
+                        }
+                        else {
+                            // RSS compatible item tag
+                            $temp = $this->$tmp_funct("'<$itemtag.*?>(.*?)</$itemtag>'si", $rss_item);
+                        }
+                    }
+
+
+                    if ($itemtag == 'link' && !suxFunct::canonicalizeUrl($temp)) {
+
+                        // Seriously? An invalid URL? And I'm supposed to care?
+                        // Why do I feel like this is some sort abusive dad pushing
+                        // their kids to play hockey against their wishes thing?
+
+                        $pattern = '#xml:base[\s]?=[\s"\']+(.*?)["\']+#i';
+                        $out_baseurl = array();
+                        // Attempt 1) Look for xml:base in this node
+                        preg_match($pattern, $rss_item, $out_baseurl);
+                        if (!isset($out_baseurl[1]) || !suxFunct::canonicalizeUrl($out_baseurl[1])) {
+                            // Attempt 2) Look for xml:base anywhere, starting from the begining of the document
+                            preg_match($pattern, $rss_content, $out_baseurl);
+                            if (!isset($out_baseurl[1]) || !suxFunct::canonicalizeUrl($out_baseurl[1])) {
+                                // Attempt 3) Look for the channel <link> and see if that's a real url
+                                if (isset($result['link']) && suxFunct::canonicalizeUrl($result['link'])) {
+                                    $out_baseurl[1] = $result['link'];
+                                }
                             }
                         }
 
-                        if (!empty($temp)) $result['items'][$i][$itemtag] = $temp; // Stack
+                        if (isset($out_baseurl[1])) {
 
-					}
+                            $temp = trim($temp);
+                            $temp = trim($temp, '/');
 
-                    // If date_format is specified and pubDate is valid
-					if ($this->date_format != '' && isset($result['items'][$i]['pubDate']) && ($timestamp = strtotime($result['items'][$i]['pubDate'])) !== -1) {
-						// convert pubDate to specified date format
-						$result['items'][$i]['pubDate'] = date($this->date_format, $timestamp);
-					}
-                    else {
-                        unset($result['items'][$i]['pubDate']);
+                            $temp2 = parse_url($out_baseurl[1]);
+                            if (isset($temp2['port'])) $temp2 = "{$temp2['scheme']}://{$temp['host']}:{$temp2['port']}";
+                            else $temp2 = "{$temp2['scheme']}://{$temp2['host']}";
+
+                            $temp = "{$temp2}/{$temp}";
+                            $temp = suxFunct::canonicalizeUrl($temp);
+
+                        }
+
                     }
 
-					// Item counter
-					$i++;
-				}
+                    // Stack it
+                    if (!empty($temp)) $result['items'][$i][$itemtag] = $temp;
+
+                }
+
+                // ---------------------------------------------------------------
+                // Make some adjustments
+                // ---------------------------------------------------------------
+
+                // If date_format is specified and pubDate is valid
+                if ($this->date_format != '' && isset($result['items'][$i]['pubDate']) && ($timestamp = strtotime($result['items'][$i]['pubDate'])) !== -1) {
+                    // convert pubDate to specified date format
+                    $result['items'][$i]['pubDate'] = date($this->date_format, $timestamp);
+                }
+                else {
+                    unset($result['items'][$i]['pubDate']);
+                }
+
+                // Item counter
+                $i++;
+
 			}
 
             // Don't trust data from external website, sanitize everything
@@ -916,7 +968,6 @@ class suxRSS extends DOMDocument {
 
 			$result['items_count'] = $i;
             // new dBug($result);
-            // exit;
 			return $result;
 
 		}
