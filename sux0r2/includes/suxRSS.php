@@ -790,7 +790,7 @@ class suxRSS extends DOMDocument {
                 // Maybe this is an Atom feed? Parse FEED info
                 preg_match("'<feed.*?>(.*?)</feed>'si", $rss_content, $out_channel);
                 if (count($out_channel)) $is_atom = true;
-                else return array(); // This isn't an RSS/Atom feed, abort
+                else return false; // This isn't an RSS/Atom feed, abort
             }
 
 			foreach($this->channeltags as $channeltag) {
@@ -902,7 +902,7 @@ class suxRSS extends DOMDocument {
                         }
                     }
 
-
+                    // Check if link is valid
                     if ($itemtag == 'link' && !suxFunct::canonicalizeUrl($temp)) {
 
                         // Seriously? An invalid URL? And I'm supposed to care?
@@ -923,7 +923,6 @@ class suxRSS extends DOMDocument {
                                 }
                             }
                         }
-
                         if (isset($out_baseurl[1])) {
 
                             $temp = trim($temp);
