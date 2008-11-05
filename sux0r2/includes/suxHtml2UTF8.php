@@ -68,26 +68,26 @@ class suxHtml2UTF8 {
         "/\r/",                                  // Non-legal carriage return
         "/[\n\t]+/",                             // Newlines and tabs
         '/[ ]{2,}/',                             // Runs of spaces, pre-handling
-        '/<script[^>]*>.*?<\/script>/i',         // <script>s -- which strip_tags supposedly has problems with
-        '/<style[^>]*>.*?<\/style>/i',           // <style>s -- which strip_tags supposedly has problems with
-        '/<h[123][^>]*>(.*?)<\/h[123]>/ie',      // H1 - H3
-        '/<h[456][^>]*>(.*?)<\/h[456]>/ie',      // H4 - H6
+        '/<script[^>]*>.*?<\/script>/si',        // <script>s -- which strip_tags supposedly has problems with
+        '/<style[^>]*>.*?<\/style>/si',          // <style>s -- which strip_tags supposedly has problems with
+        '/<h[123][^>]*>(.*?)<\/h[123]>/sie',     // H1 - H3
+        '/<h[456][^>]*>(.*?)<\/h[456]>/sie',     // H4 - H6
         '/<p[^>]*>/i',                           // <P>
         '/<br[^>]*>/i',                          // <br>
-        '/<b[^>]*>(.*?)<\/b>/ie',                // <b>
-        '/<strong[^>]*>(.*?)<\/strong>/ie',      // <strong>
-        '/<i[^>]*>(.*?)<\/i>/i',                 // <i>
-        '/<em[^>]*>(.*?)<\/em>/i',               // <em>
+        '/<b[^>]*>(.*?)<\/b>/sie',               // <b>
+        '/<strong[^>]*>(.*?)<\/strong>/sie',     // <strong>
+        '/<i[^>]*>(.*?)<\/i>/si',                // <i>
+        '/<em[^>]*>(.*?)<\/em>/si',              // <em>
         '/(<ul[^>]*>|<\/ul>)/i',                 // <ul> and </ul>
         '/(<ol[^>]*>|<\/ol>)/i',                 // <ol> and </ol>
-        '/<li[^>]*>(.*?)<\/li>/i',               // <li> and </li>
+        '/<li[^>]*>(.*?)<\/li>/si',              // <li> and </li>
         '/<li[^>]*>/i',                          // <li>
-        '/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/ie', // <a href="">
+        '#<a[\s]+[^>]*?href[\s]?=[\s"\']+(.*?)["\']+.*?>([^<]+|.*?)?</a>#sie', // <a href="">, <a href=''>, and other mutations
         '/<hr[^>]*>/i',                          // <hr>
         '/(<table[^>]*>|<\/table>)/i',           // <table> and </table>
         '/(<tr[^>]*>|<\/tr>)/i',                 // <tr> and </tr>
-        '/<td[^>]*>(.*?)<\/td>/i',               // <td> and </td>
-        '/<th[^>]*>(.*?)<\/th>/ie',              // <th> and </th>
+        '/<td[^>]*>(.*?)<\/td>/si',              // <td> and </td>
+        '/<th[^>]*>(.*?)<\/th>/sie',             // <th> and </th>
         '/&(nbsp|#160);/i',                      // Non-breaking space
         '/[ ]{2,}/'                              // Runs of spaces, post-handling
         );

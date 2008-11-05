@@ -54,9 +54,9 @@ class blogBookmarks {
     * @param string $key PDO dsn key
     */
     function __construct($msg_id) {
-        
-        // Feature is turned off, redirect   
-        if ($GLOBALS['CONFIG']['FEATURE']['auto_bookmark'] == false) suxFunct::redirect(suxFunct::getPreviousURL());              
+
+        // Feature is turned off, redirect
+        if ($GLOBALS['CONFIG']['FEATURE']['auto_bookmark'] == false) suxFunct::redirect(suxFunct::getPreviousURL());
 
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new blogRenderer($this->module); // Renderer
@@ -89,7 +89,7 @@ class blogBookmarks {
             suxFunct::redirect(suxFunct::getPreviousURL()); // Not the user's message, skip
 
         $matches = array();
-        $pattern = '/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/i'; // href pattern
+        $pattern = '#<a[\s]+[^>]*?href[\s]?=[\s"\']+(.*?)["\']+.*?>([^<]+|.*?)?</a>#si'; // href pattern
         preg_match_all($pattern, $msg['body_html'], $matches);
 
         $count = count($matches[1]);
