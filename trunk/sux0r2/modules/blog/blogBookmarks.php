@@ -22,8 +22,6 @@
 *
 */
 
-// Work in progress...
-
 require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
 require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
@@ -56,6 +54,9 @@ class blogBookmarks {
     * @param string $key PDO dsn key
     */
     function __construct($msg_id) {
+        
+        // Feature is turned off, redirect   
+        if ($GLOBALS['CONFIG']['FEATURE']['auto_bookmark'] == false) suxFunct::redirect(suxFunct::getPreviousURL());              
 
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new blogRenderer($this->module); // Renderer
