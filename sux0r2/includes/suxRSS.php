@@ -137,6 +137,7 @@ class suxRSS extends DOMDocument {
 
                         // Check if this already exists
                         $clean['url'] = suxFunct::canonicalizeUrl($item['link']);
+                        if (!$clean['url']) continue; // Garbage, skip this
                         $st2->execute(array($clean['url']));
                         if ($st2->fetchColumn() > 0) continue; // Already in DB, skip
 
