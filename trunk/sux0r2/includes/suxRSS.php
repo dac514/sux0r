@@ -909,7 +909,7 @@ class suxRSS extends DOMDocument {
                         // Why do I feel like this is some sort abusive dad pushing
                         // their kids to play hockey against their wishes thing?
 
-                        $pattern = '#xml:base[\s]?=[\s"\']+(.*?)["\']+#i';
+                        $pattern = '#<.*?xml:base[\s]?=[\s"\']+(.*?)["\']+#i';
                         $out_baseurl = array();
                         // Attempt 1) Look for xml:base in this node
                         preg_match($pattern, $rss_item, $out_baseurl);
