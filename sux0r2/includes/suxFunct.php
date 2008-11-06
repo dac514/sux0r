@@ -101,7 +101,7 @@ class suxFunct {
             // Safe
             $config = array(
                 'safe' => 1,
-                'deny_attribute' => 'style',
+                'deny_attribute' => 'style,class',
                 );
         }
 
