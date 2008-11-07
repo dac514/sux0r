@@ -20,6 +20,11 @@ if (!extension_loaded('mbstring')) {
     $prob .= "Error: sux0r requires the mbstring extension, see: http://php.net/mbstring \n";
 }
 
+// Check for PDO
+if (!extension_loaded('pdo_mysql') && !extension_loaded('pdo_pgsql')) {
+    $prob .= "Error: sux0r requires the PDO extension for either MySQL or PostgreSQL, see: http://php.net/pdo \n";
+}
+
 // Problems?
 if (!$prob) {
     $prob = 'Ok!';
