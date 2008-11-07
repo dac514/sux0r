@@ -60,7 +60,10 @@
 
             {/if}
             {/foreach}
+            {else}
+                <p>{$r->text.no_photos}</p>
             {/if}
+
 
 			</div>
 		</td>
