@@ -4,20 +4,26 @@ require_once(dirname(__FILE__)  . '/../config.php');
 require_once(dirname(__FILE__)  . '/../initialize.php');
 require_once(dirname(__FILE__)  . '/../includes/suxFunct.php');
 require_once(dirname(__FILE__)  . '/../includes/suxLink.php');
-
+require_once(dirname(__FILE__)  . '/../includes/suxPhoto.php');
 set_time_limit(900); // Set the timeout to 15 minutes.
-$db = suxDB::get();
 
+// ----------------------------------------------------------------------------
+// Set debug mode, if true nothing actually gets deleted
+// ----------------------------------------------------------------------------
+
+$debug = true;
 
 // ----------------------------------------------------------------------------
 // Purge orphaned link tables
 // ----------------------------------------------------------------------------
 
-// Scan for missing links, push them in $not_found
+$db = suxDB::get();
+
+// Scan for missing links, push them in $not_found array
 $link = new suxLink();
 $link_tables = $link->getLinkTables();
-$not_found = array();
 
+$not_found = array();
 foreach ($link_tables as $val) {
 
     $parts = explode('_', $val);
@@ -54,21 +60,70 @@ foreach ($link_tables as $val) {
 // Delete dead links
 $count = 0;
 $tid = suxDB::requestTransaction();
+
 foreach ($not_found as $val) {
 
+    // $val[0] -> link_table_name
+    // $val[1] -> column_name_1
+    // $val[2] -> column_id_1
+    // $val[3] -> column_name_2
+    // $val[4] -> column_id_2
+
     $query = "DELETE FROM {$val[0]} WHERE {$val[1]} = {$val[2]} AND {$val[3]} = {$val[4]} ";
-    $count += $db->exec($query);
-    echo $query . "; <br />";
+    if (!$debug) $count += $db->exec($query);
+    echo $query . "; <br /> \n";
 
 }
+
 suxDB::commitTransaction($tid);
-echo "$count links deleted <br />";
+echo "> $count links deleted <br /> \n";
+
 
 // ----------------------------------------------------------------------------
-// Purge orphaned photos
+// Purge orphaned images
 // ----------------------------------------------------------------------------
 
-// TODO
+// image dir => db table
+$image_dirs = array(
+    'blog' => 'messages',
+    'photos' => 'photos',
+    'user' => 'users_info',
+    );
 
+$not_found = array();
+foreach($image_dirs as $dir => $table) {
+    $path = $CONFIG['PATH'] . "/data/$dir";
+    foreach (new DirectoryIterator($path) as $file) {
+
+        $pattern = '/[^_fullsize](\.jpe?g|\.gif|\.png)$/i';
+        if ($file->isFile() && preg_match($pattern, $file)) {
+            // Query
+            $query = "SELECT id FROM {$table} WHERE image = " . $db->quote("$file");
+            $st = $db->query($query);
+            if ($st->fetchColumn() <= 0) {
+                $not_found[] = "$path/$file";
+            }
+        }
+
+    }
+
+}
+
+
+// Purge
+$count = 0;
+foreach ($not_found as $file) {
+
+    if (!$debug) {
+        if (is_file($file)) unlink($file);
+        if (is_file(suxPhoto::t2fImage($file))) unlink(suxPhoto::t2fImage($file));
+        ++$count;
+    }
+
+    echo "unlink() $file <br />\n";
+
+}
+
+echo "> $count images deleted <br /> \n";
 
 ?>
