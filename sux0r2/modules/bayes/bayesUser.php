@@ -732,6 +732,7 @@ abstract class bayesShared {
         // Start filtering
         $i = 0;
         $limit = $this->pager->limit;
+        $ok = array();
         while ($i < $limit) {
 
             $tmp = array();
@@ -739,9 +740,10 @@ abstract class bayesShared {
             $results = array_merge($results, $tmp);
 
             foreach ($results as $key => $val) {
+                if (isset($ok[$key])) continue; // Don't recalculate
                 if (!$this->nb->passesThreshold($threshold, $vec_id, $cat_id, "{$val['title']} {$val['body_plaintext']}")) {
                     unset($results[$key]);
-                    continue;
+                    continue; // No good, skip it
                 }
                 if ($search) {
                     $found = 0;
@@ -749,8 +751,12 @@ abstract class bayesShared {
                         if (mb_stripos("{$val['title']} {$val['body_plaintext']}", $token) !== false)
                             ++$found;
                     }
-                    if ($found != $rawtoken_count) unset($results[$key]);
+                    if ($found != $rawtoken_count) {
+                        unset($results[$key]);
+                        continue; // No good, skip it
+                    }
                 }
+                $ok[$key] = true; // It's good, remember it
             }
 
             $i = count($results);
