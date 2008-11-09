@@ -30,8 +30,8 @@
             algorithm can categorize anything so long as there are coherent reference
             texts to work from. For example, categorizing documents in relation to a vector
             of political manifestos, or religious holy books, makes for a neat trick.
-            More subjective magic 8-ball categories could be  "good vs. bad" or
-            company press releases in relation to stock market prices.
+            More subjective magic 8-ball categories could be  "good vs. bad", risk assessment,
+            insurance claim fraud, the list goes on.
             </p>
 
             <p>
@@ -61,6 +61,12 @@
             {capture name='welcome' assign='welcome'}
 
             <p>
+            2008-11-08: <a href="http://sourceforge.net/people/viewjob.php?group_id=131752&amp;job_id=31512">Translations still wanted</a>.
+            Currently we have Chinese (zh), English (en), Dutch (nl) and German (de).
+            </p>
+
+
+            <p>
             2008-10-29: <a href="http://www.youtube.com/watch?v=ppATTkbTIhg">A short YouTube tutorial</a>
             on how to start classifying documents using Naive Baysian Categorization with Sux0r CMS.
             </p>
@@ -77,10 +83,6 @@
             it's omitted.
             </p>
 
-
-            <p>
-            2008-10-09: <a href="http://sourceforge.net/people/viewjob.php?group_id=131752&amp;job_id=31512">Translations Wanted</a>.
-            </p>
 
             {/capture}
             {capture name='img' assign='img'}{$r->makeUrl('/', null, true)}/media/sux0r/assets/nullwhore.png{/capture}
