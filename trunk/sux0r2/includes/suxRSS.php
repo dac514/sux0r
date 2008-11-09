@@ -759,6 +759,12 @@ class suxRSS extends DOMDocument {
         $ctx = stream_context_create($opts);
 
         // --------------------------------------------------------------------
+        // backtrack_limit is too restrictive for complex feeds, boost it
+        // --------------------------------------------------------------------
+
+        ini_set('pcre.backtrack_limit', 250000);
+
+        // --------------------------------------------------------------------
         // Parse
         // --------------------------------------------------------------------
 
@@ -778,13 +784,14 @@ class suxRSS extends DOMDocument {
                 $this->rsscp = 'UTF-8';
             }
 
-            // Init some variables
-            $is_atom = false;
-            $out_channel = array();
 
             // ---------------------------------------------------------------
             // Parse CHANNEL info
             // ---------------------------------------------------------------
+
+            // Init some variables
+            $is_atom = false;
+            $out_channel = array();
 
 			preg_match("'<channel.*?>(.*?)</channel>'si", $rss_content, $out_channel);
             if (!count($out_channel)) {
@@ -968,6 +975,7 @@ class suxRSS extends DOMDocument {
 
 			$result['items_count'] = $i;
             // new dBug($result);
+            // exit;
 			return $result;
 
 		}
