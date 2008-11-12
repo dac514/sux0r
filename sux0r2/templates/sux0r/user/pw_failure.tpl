@@ -9,6 +9,8 @@
 <h1>{$r->text.pw_failure}</h1>
 <p>{$r->text.pw_failure_2}</p>
 
+<p><a href="{$r->makeUrl('/user/reset')}">{$r->text.pw_failure_3} &raquo;</a>
+
 </div></div>
 
 {include file=$r->xhtml_footer}

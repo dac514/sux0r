@@ -3,6 +3,17 @@
 // Always UTF-8
 // Always uppercase the first word
 
+// TODO
+$gtext['form_error_16'] = 'Nickname/email cannot be empty';
+$gtext['form_error_17'] = 'User does not exist';
+$gtext['nickname_or_email'] = 'Nickname or email';
+$gtext['pw_failure_3'] = 'Forgot your password? Have a new password emailed to you';
+$gtext['reset'] = 'Reset password';
+$gtext['reset_2'] = 'A new password will be emailed.';
+$gtext['reset_mail_1'] = 'New password for';
+$gtext['reset_mail_2'] = 'Your new password is';
+$gtext['reset_mail_3'] = 'Once logged in, make sure you CHANGE YOUR PASSWORD! If you have received this message without asking for it, then someone requested a new password on your behalf. The IP used to do this was';
+
 $gtext['acquaintances'] = 'Acquaintances';
 $gtext['alert_detach'] = 'Are you sure you want to remove these OpenIDs from your account?';
 $gtext['avatar'] = 'Avatar';
