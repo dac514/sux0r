@@ -106,7 +106,13 @@ class feedsApprove  {
 
         // Feeds
         $this->r->fp = $this->rss->getUnpublishedFeeds();
-
+        
+        // Additional variables
+        foreach ($this->r->fp as $key => $val) {
+            $u = $this->user->getUser($val['users_id']);
+            $this->r->fp[$key]['nickname'] = $u['nickname'];
+        } 
+        
         $this->r->title .= " | {$this->r->text['approve']}";
 
         $this->tpl->display('approve.tpl');

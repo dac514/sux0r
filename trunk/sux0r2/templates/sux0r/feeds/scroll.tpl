@@ -99,7 +99,7 @@
                 <p>{$r->text.actions}</p>
                 <ul>
                     {if $r->isLoggedIn()}
-                    {insert name="approveLi"}
+                    {insert name="feedsApproveLi"}
                     <li><a href="{$r->makeUrl('/feeds/manage')}">{$r->text.manage}</a></li>
                     {/if}
                     <li><em><a href="{$r->makeUrl('/feeds/suggest')}">{$r->text.suggest} &raquo;</a></em></li>
