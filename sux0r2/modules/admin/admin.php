@@ -24,8 +24,10 @@
 
 require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once('adminRenderer.php');
 
+require_once('adminRenderer.php');
+require_once(dirname(__FILE__) . '/../feeds/feedsRenderer.php');
+require_once(dirname(__FILE__) . '/../bookmarks/bookmarksRenderer.php');
 
 class admin {
 
@@ -46,10 +48,14 @@ class admin {
     function __construct() {
 
         $this->tpl = new suxTemplate($this->module); // Template
-        $this->r = new adminRenderer($this->module); // Renderer
+        
+        $this->r = new adminRenderer($this->module); // Renderer        
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->gtext = suxFunct::gtext($this->module); // Language
         $this->r->text =& $this->gtext;
+        
+        // TODO New Renderers
+        
         $this->user = new suxUser();
         $this->pager = new suxPager();
 

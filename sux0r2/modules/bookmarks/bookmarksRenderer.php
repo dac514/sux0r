@@ -236,7 +236,7 @@ function insert_myBookmarksLink($params) {
 * Render approve link between <li> tags
 *
 */
-function insert_approveLi($params) {
+function insert_bookmarksApproveLi($params) {
 
     if (!isset($_SESSION['users_id'])) return null;
 
@@ -270,7 +270,7 @@ function insert_approveLi($params) {
 * Render edit div
 *
 */
-function insert_edit($params) {
+function insert_bookmarksEdit($params) {
 
     if (!isset($_SESSION['users_id'])) return null;
     if (!isset($params['id'])) return null;

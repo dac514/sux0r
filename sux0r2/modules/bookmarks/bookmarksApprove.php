@@ -106,6 +106,12 @@ class bookmarksApprove  {
 
         // bookmarks
         $this->r->fp = $this->bm->getUnpublishedBookmarks();
+        
+        // Additional variables
+        foreach ($this->r->fp as $key => $val) {
+            $u = $this->user->getUser($val['users_id']);
+            $this->r->fp[$key]['nickname'] = $u['nickname'];
+        }         
 
         $this->r->title .= " | {$this->r->text['approve']}";
 

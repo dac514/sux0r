@@ -212,11 +212,11 @@ class feedsRenderer extends suxRenderer {
 * Render approve link between <li> tags
 *
 */
-function insert_approveLi($params) {
+function insert_feedsApproveLi($params) {
 
     if (!isset($_SESSION['users_id'])) return null;
 
-    // Check that the user is allowed to edit this album
+    // Check access
     $u = new suxUser();
     if (!$u->isRoot()) {
         $access = $u->getAccess('feeds');

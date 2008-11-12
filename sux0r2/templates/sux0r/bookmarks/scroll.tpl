@@ -94,7 +94,7 @@
                         {$r->genericBayesInterface($foo.id, 'bookmarks', 'bookmarks', $smarty.capture.document)}
                     </div>
 
-                    {if $r->isLoggedIn()}{insert name="edit" id=$foo.id}{/if}
+                    {if $r->isLoggedIn()}{insert name="bookmarksEdit" id=$foo.id}{/if}
 
                 </div>
 
@@ -125,7 +125,7 @@
 
             <ul>
                 {if $r->isLoggedIn()}
-                {insert name="approveLi"}
+                {insert name="bookmarksApproveLi"}
                 <li><a href="{insert name="myBookmarksLink"}">{$r->text.my_bookmarks}</a></li>
                 {/if}
                 <li><a href="{$r->makeUrl('/bookmarks/tag/cloud')}">{$r->text.tag_cloud}</a></li>
