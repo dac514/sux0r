@@ -27,6 +27,23 @@ function sux($action, $params = null) {
     switch($action)
     {
 
+    case 'reset' :
+
+        // --------------------------------------------------------------------
+        // Reset password
+        // --------------------------------------------------------------------
+
+        include_once('userReset.php');
+        $reset = new userReset();
+
+        if ($reset->formValidate($_POST)) {
+            $reset->formProcess($_POST);
+            $reset->formSuccess();
+        }
+        else $reset->formBuild($_POST);
+
+        break;
+
     case 'login' :
 
         // --------------------------------------------------------------------

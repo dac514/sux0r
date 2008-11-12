@@ -143,6 +143,7 @@ $CONFIG['PREV_SKIP'] = array(
     'user/logout',
     'user/openid',
     'user/register',
+    'user/reset',
     );
 
 ?>
