@@ -21,10 +21,12 @@ http://www.fsf.org/licensing/licenses/agpl-3.0.html
 ### EXCEPTIONS ###
 
 A subdirectory named 'symbionts' contains files from 3rd party open source
-vendors that may or may not be licensed under the GNU AGPL.
+vendors that may or may not be licensed under the GNU AGPL. These additional
+open source libraries have their own licensing requirements and, as such, should
+be dealt with according to their own licenses.
 
-These additional open source libraries have their own licensing requirements
-and, as such, should be dealt with according to their own licenses.
+Files in the 'templates' and 'media' directories can be licensed under simple
+permissive terms i.e. your pick of any LGPL compatible license.
 
 
 ### REQUIREMENTS ###
