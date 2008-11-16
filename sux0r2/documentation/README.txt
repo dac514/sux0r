@@ -26,7 +26,9 @@ open source libraries have their own licensing requirements and, as such, should
 be dealt with according to their own licenses.
 
 Files in the 'templates' and 'media' directories can be licensed under simple
-permissive terms i.e. your pick of any LGPL compatible license.
+permissive terms i.e. your pick of any LGPL compatible license. To be clear, 
+this means that you can create templates / HTML / CSS and not share them. 
+We, the sux0r development group, distribute our templates under the AGPL.
 
 
 ### REQUIREMENTS ###
