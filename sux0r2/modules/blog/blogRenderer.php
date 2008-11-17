@@ -420,7 +420,7 @@ class blogRenderer extends suxRenderer {
         if (is_array($vectors)) return $vectors;
         $vectors = array();
 
-        if ($GLOBALS['CONFIG']['FEATURE']['bayes'] == false) return $vectors; // Feature is turned off   
+        if ($GLOBALS['CONFIG']['FEATURE']['bayes'] == false) return $vectors; // Feature is turned off
         if (!isset($_SESSION['users_id'])) return $vectors ; // Anonymous user, skip
 
         foreach ($this->nb->getVectorsByTrainer($_SESSION['users_id']) as $key => $val) {
@@ -463,9 +463,10 @@ function insert_edit($params) {
     if (!isset($params['id'])) return null;
 
     // Cache
-    static $allowed = null;
-    $allowed2 = true;
+    static $allowed = null; // Admin permissions
+    $allowed2 = true; // Publisher permissions
     if ($allowed == null) {
+        // Check if a user is an administrator
         $u = new suxUser();
         $allowed = true;
         if (!$u->isRoot()) {
@@ -474,6 +475,7 @@ function insert_edit($params) {
         }
     }
     if (!$allowed) {
+        // Check if a user is the publisher of the message
         $m = new suxThreadedMessages();
         if ($access < $GLOBALS['CONFIG']['ACCESS']['blog']['publisher']) {
             $allowed = false;
