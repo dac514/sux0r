@@ -23,7 +23,6 @@
 */
 
 // Work in progress, not finished.
-// Do not include in initial sux0r 2.0 release.
 // Based on the micformats hCard specification
 // See: http://microformats.org/wiki/hcard
 
@@ -78,19 +77,19 @@ class suxRolodex {
 
         try {
             if ($id) {
-                
+
                 // UPDATE
                 $query = suxDB::prepareUpdateQuery($this->db_table, $info);
                 $st = $this->db->prepare($query);
-                return $st->execute($info);                
+                return $st->execute($info);
 
             }
             else {
-                
+
                 // INSERT
                 $query = suxDB::prepareInsertQuery($this->db_table, $info);
                 $st = $this->db->prepare($query);
-                return $st->execute($info);                
+                return $st->execute($info);
 
             }
 

@@ -23,7 +23,6 @@
 */
 
 // Work in progress, not finished.
-// Do not include in initial sux0r 2.0 release.
 // Based on the micformats hCalendar specification
 // See: http://microformats.org/wiki/hcalendar
 
