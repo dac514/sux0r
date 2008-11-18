@@ -122,7 +122,7 @@ class bookmarksEdit {
             $bookmark['id'] = $tmp['id'];
             $bookmark['title'] = $tmp['title'];
             $bookmark['url'] = $tmp['url'];
-            $bookmark['body'] = $tmp['body_html'];
+            $bookmark['body'] = htmlentities($tmp['body_html'], ENT_QUOTES, 'UTF-8'); // Textarea fix
             $bookmark['draft'] = $tmp['draft'];
 
             // Get publish date
@@ -242,7 +242,7 @@ class bookmarksEdit {
 
         // Draft
         $clean['draft'] = (isset($clean['draft']) && $clean['draft']) ? true : false;
-        
+
         // --------------------------------------------------------------------
         // Create $bookmark array
         // --------------------------------------------------------------------

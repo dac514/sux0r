@@ -110,7 +110,7 @@ class photoalbumsEdit {
 
             $photoalbum['id'] = $tmp['id'];
             $photoalbum['title'] = $tmp['title'];
-            $photoalbum['body'] = $tmp['body_html'];
+            $photoalbum['body'] = htmlentities($tmp['body_html'], ENT_QUOTES, 'UTF-8'); // Textarea fix
             $photoalbum['draft'] = $tmp['draft'];
 
             // Get publish date
