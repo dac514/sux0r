@@ -118,7 +118,7 @@ class feedsEdit {
             $feed['id'] = $tmp['id'];
             $feed['title'] = $tmp['title'];
             $feed['url'] = $tmp['url'];
-            $feed['body'] = $tmp['body_html'];
+            $feed['body'] = htmlentities($tmp['body_html'], ENT_QUOTES, 'UTF-8'); // Textarea fix
             $feed['draft'] = $tmp['draft'];
 
         }
@@ -175,7 +175,7 @@ class feedsEdit {
     * @param array $clean reference to validated $_POST
     */
     function formProcess(&$clean) {
-        
+
         // Draft
         $clean['draft'] = isset($clean['draft']) ? true: false;
 
@@ -208,8 +208,8 @@ class feedsEdit {
 
         // clear all caches, cheap and easy
         $this->tpl->clear_all_cache();
-        
-        
+
+
     }
 
 

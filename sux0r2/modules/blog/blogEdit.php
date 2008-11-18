@@ -58,7 +58,7 @@ class blogEdit {
 
         if ($id) {
             if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
-                suxFunct::redirect(suxFunct::makeURL('/bookmarks')); // Invalid id
+                suxFunct::redirect(suxFunct::makeURL('/blog')); // Invalid id
         }
 
         $this->tpl = new suxTemplate($this->module); // Template
@@ -136,7 +136,7 @@ class blogEdit {
             $blog['id'] = $tmp['id'];
             $blog['title'] = $tmp['title'];
             $blog['image'] = $tmp['image'];
-            $blog['body'] = $tmp['body_html'];
+            $blog['body'] = htmlentities($tmp['body_html'], ENT_QUOTES, 'UTF-8'); // Textarea fix
             $blog['draft'] = $tmp['draft'];
             $blog['thread_pos'] = $tmp['thread_pos'];
 
