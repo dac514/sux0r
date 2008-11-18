@@ -365,8 +365,8 @@ ul#adminMenu {
     list-style-type: none;
 }
 
-#adminMenu a { 
-    padding: 3px 10px; 
+#adminMenu a {
+    padding: 3px 10px;
 }
 
 #adminMenu a:link, #adminMenu a:visited {
