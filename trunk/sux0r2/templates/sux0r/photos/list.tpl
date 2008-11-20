@@ -3,7 +3,41 @@
     {* RSS Feed *}
     <link rel="alternate" type="application/rss+xml" title="{$r->sitename} | {$r->text.photos}" href="{$r->makeUrl('/photos/rss', null, true)}" />
 
+    <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
+
     {literal}
+    <script type="text/javascript">
+    // <![CDATA[
+    function trunc(truncateMe) {
+        var len = 80;
+        var p = $(truncateMe);
+        if (p) {
+            var trunc = p.innerHTML.stripTags();
+            if (trunc.length > len) {
+
+                // Truncate the content of the P, then go back to the end of the
+                // previous word to ensure that we don't truncate in the middle of
+                // a word
+
+                trunc = trunc.substring(0, len);
+                trunc = trunc.replace(/\w+$/, '');
+
+                // Add an ellipses to the end and make it a link that expands
+                // the paragraph back to its original size
+
+                trunc += ' <a href="#" ' +
+                'onclick="this.parentNode.innerHTML=' +
+                'unescape(\''+escape(p.innerHTML)+'\');return false;">' +
+                '...<\/a>';
+
+                p.innerHTML = trunc;
+
+            }
+        }
+    }
+    // ]]>
+    </script>
+
     <style type="text/css">
         #leftside { width: 468px; margin-left: 2px; margin-top: 0px; }
         #rightside { width: 468px; margin-top: 0px; }
@@ -43,7 +77,7 @@
                     {$r->text.publisher}: <a href="{$r->makeURL('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a><br />
                     {$r->countPhotos($foo.id)} {$r->text.photos}
                     </p>
-                    {$foo.body_html}
+                    <div id="truncId{$foo.id}">{$foo.body_html}</div>
                     <div class="clearboth"></div>
                     {insert name="editLinks2" album_id=$foo.id div=true}
                 {/capture}
@@ -57,6 +91,14 @@
                 {/capture}
 
                 {$r->widget($foo.title, $smarty.capture.album, $smarty.capture.album_url, $smarty.capture.thumbnail, null, null, 'floatleft')}
+
+                {literal}
+                <script type="text/javascript">
+                // <![CDATA[
+                trunc('truncId{/literal}{$foo.id}{literal}');
+                // ]]>
+                </script>
+                {/literal}
 
             {/if}
             {/foreach}
@@ -80,7 +122,7 @@
                     {$r->text.publisher}: <a href="{$r->makeURL('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a><br />
                     {$r->countPhotos($foo.id)} {$r->text.photos}
                     </p>
-                    {$foo.body_html}
+                    <div id="truncId{$foo.id}">{$foo.body_html}</div>
                     <div class="clearboth"></div>
                     {insert name="editLinks2" album_id=$foo.id div=true}
                 {/capture}
@@ -94,6 +136,14 @@
                 {/capture}
 
                 {$r->widget($foo.title, $smarty.capture.album, $smarty.capture.album_url, $smarty.capture.thumbnail, null, null, 'floatleft')}
+
+                {literal}
+                <script type="text/javascript">
+                // <![CDATA[
+                trunc('truncId{/literal}{$foo.id}{literal}');
+                // ]]>
+                </script>
+                {/literal}
 
             {/if}
             {/foreach}
