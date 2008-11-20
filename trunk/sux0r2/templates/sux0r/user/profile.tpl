@@ -50,47 +50,60 @@
 		<td style="vertical-align:top;">
 			<div id="middle2">
 
-            {* Profile info *}
+            {* Image *}
+            {capture name=image}{strip}
+
+                {if $r->profile.image}
+                {$r->makeUrl('/', null, true)}/data/user/{$r->profile.image|escape:'url'}
+                {/if}
+
+            {/strip}{/capture}
+
+            {* Profile info, hcard microformat compatible - http://microformats.org/wiki/hcard *}
             {capture name=profile}
 
-                <p>
-                {$r->text.nickname} : {$r->profile.nickname} <br />
-                {$r->text.email} : {mailto address=$r->profile.email  encode='javascript_charcode'} <br />
+                <p class="vcard">
+                {if $smarty.capture.image}<img class="photo" style="display:none;" src="{$smarty.capture.image}" alt="" />{/if}{* Hidden photo for hcard *}
+
+                {$r->text.nickname} : {if $r->profile.given_name || $r->profile.family_name}<span class="nickname">{else}<span class="fn nickname">{/if}{$r->profile.nickname}</span><br />
+                {$r->text.email} : {mailto address=$r->profile.email  encode='javascript_charcode'}<br />
 
                 {if $r->profile.given_name || $r->profile.family_name}
-                {$r->text.name} : {$r->profile.given_name} {$r->profile.family_name}<br />
+                {$r->text.name} : <span class="fn">{$r->profile.given_name} {$r->profile.family_name}</span><br />
                 {/if}
 
-                {if $r->profile.street_address}
-                {$r->text.street_address} : {$r->profile.street_address} <br />
-                {/if}
+                <span class="adr">
+                    {if $r->profile.street_address}
+                    {$r->text.street_address} : <span class="street-address">{$r->profile.street_address}</span><br />
+                    {/if}
 
-                {if $r->profile.locality}
-                {$r->text.locality} : {$r->profile.locality} <br />
-                {/if}
+                    {if $r->profile.locality}
+                    {$r->text.locality} : <span class="locality">{$r->profile.locality}</span><br />
+                    {/if}
 
-                {if $r->profile.region}
-                {$r->text.region} : {$r->profile.region} <br />
-                {/if}
+                    {if $r->profile.region}
+                    {$r->text.region} : <span class="region">{$r->profile.region}</span><br />
+                    {/if}
 
-                {if $r->profile.postcode}
-                {$r->text.postcode} : {$r->profile.postcode} <br />
-                {/if}
+                    {if $r->profile.postcode}
+                    {$r->text.postcode} : <span class="postal-code">{$r->profile.postcode}</span> <br />
+                    {/if}
 
-                {if $r->profile.country}
-                {$r->text.country} : {$r->getCountry($r->profile.country)}<br />
-                {/if}
+                    {if $r->profile.country}
+                    {$r->text.country} : <span class="country-name">{$r->getCountry($r->profile.country)}</span><br />
+                    {/if}
+                </span>
 
                 {if $r->profile.tel}
-                {$r->text.tel} : {$r->profile.tel} <br />
+                {$r->text.tel} : <span class="tel">{$r->profile.tel}</span><br />
                 {/if}
 
                 {if $r->profile.url}
-                {$r->text.url} : <a href="{$r->profile.url}">{$r->profile.url}</a> <br />
+                {$r->text.url} : <a href="{$r->profile.url}" class="url">{$r->profile.url}</a> <br />
                 {/if}
 
                 {if $r->profile.dob}
-                {$r->text.dob} : {$r->profile.dob} <br />
+                {$r->text.dob} : <span class="bday">{$r->profile.dob}</span><br />
                 {/if}
 
                 {if $r->profile.gender}
@@ -104,9 +117,7 @@
                 {if $r->profile.timezone}
                 {$r->text.timezone} : {$r->profile.timezone} <br />
                 {/if}
-
                 </p>
-
 
                 {* OpenIDs *}
                 <p>
@@ -116,17 +127,7 @@
                 {/foreach}
                 </p>
 
-
             {/capture}
-
-            {* Image *}
-            {capture name=image}{strip}
-
-                {if $r->profile.image}
-                {$r->makeUrl('/', null, true)}/data/user/{$r->profile.image|escape:'url'}
-                {/if}
-
-            {/strip}{/capture}
 
 
             {$r->widget($r->text.profile, $smarty.capture.profile, null, $smarty.capture.image)}
