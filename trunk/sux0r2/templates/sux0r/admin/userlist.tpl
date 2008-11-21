@@ -16,13 +16,13 @@
 
     <fieldset>
     <legend>{$r->text.admin}</legend>
-    
+
     <ul id="adminMenu">
         <li><a href="{$r->makeURL('/blog/admin')}">{$r->text.admin_blog}</a></li>
         <li><a href="{$r->makeURL('/photos/admin')}">{$r->text.admin_photos}</a></li>
         {insert name="feedsApproveLi"}
-        {insert name="bookmarksApproveLi"}    
-    </ul>     
+        {insert name="bookmarksApproveLi"}
+    </ul>
 
     <table class="adminTable">
     <thead>
