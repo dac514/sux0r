@@ -1,0 +1,33 @@
+------------------------------------------------------------------------------
+sux0r 2.0.1
+------------------------------------------------------------------------------
+
+Support for microformats hcard specification in user profile page
+
+AGPL exception for templates (html/css/graphics), simple permissive terms
+
+Template tweaks: changed admin menus, sprinkled some javascript in photos, etc
+
+purge_orphans script in supplemental directory to clean up deleted images and
+corrupted link tables
+
+Ability for user to reset their lost password (TODO: translate)
+
+Support for Atom 1.0 in suxRss()
+
+Regex improvements in suxHtml2UTF8()
+
+Fixed a problem where Naive Bayesian filtering was redununtantly re-scanning
+items when limit was not yet reached
+
+New option in config file allows you to turn off Naive Bayesian categorization
+and automatic bookmark scanning, in case you want to use sux0r as a vanila
+blog. (update your config.php files accordingly)
+
+Updated symbionts: Scriptaculous 1.8.2, TinyMCE 3.2.1
+
+------------------------------------------------------------------------------
+sux0r 2.0
+------------------------------------------------------------------------------
+
+Initial incarnation
