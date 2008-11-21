@@ -17,6 +17,8 @@ $debug = true;
 // Purge orphaned link tables
 // ----------------------------------------------------------------------------
 
+if ($debug) echo "> Debug mode = true, nothing will be deleted. <br />\n";
+
 $db = suxDB::get();
 
 // Scan for missing links, push them in $not_found array
