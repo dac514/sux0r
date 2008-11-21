@@ -1,4 +1,4 @@
-sux0r 2.0
+sux0r 2.0.1
 http://www.sux0r.org/
 All spelling mistakes are final and will not be refunded
 
