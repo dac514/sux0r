@@ -95,7 +95,7 @@ $image_dirs = array(
 $not_found = array();
 foreach($image_dirs as $dir => $table) {
     $path = $CONFIG['PATH'] . "/data/$dir";
-    foreach (new DirectoryIterator($path) as $file) {
+    if (is_dir($path)) foreach (new DirectoryIterator($path) as $file) {
 
         $pattern = '/[^_fullsize](\.jpe?g|\.gif|\.png)$/i';
         if ($file->isFile() && preg_match($pattern, $file)) {
