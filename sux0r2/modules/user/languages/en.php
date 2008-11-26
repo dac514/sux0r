@@ -103,7 +103,7 @@ $gtext['success_register'] = 'Thank you for completing the registration form. Yo
 $gtext['tel'] = 'Telephone';
 $gtext['thanks'] = 'Thank you for registering';
 $gtext['timezone'] = 'Timezone';
-$gtext['unset_image'] = 'Unsert current image';
+$gtext['unset_image'] = 'Unset current image';
 $gtext['url'] = 'URL';
 
 
