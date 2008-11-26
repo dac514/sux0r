@@ -180,7 +180,7 @@
         {/capture}
     {/strip}
     <label {if $smarty.capture.error}class="error"{/if} >* {$r->text.captcha} :</label>
-    <img src="{$r->url}/modules/captcha/getImage.php" alt="Captcha" />
+    <img src="{$r->url}/modules/captcha/getImage.php" alt="Captcha" style="margin-bottom: 0.5em;" />
     <br />
     <label>&nbsp;</label>
     <input type="text" name="captcha" class="captcha"/>
