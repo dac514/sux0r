@@ -22,6 +22,7 @@
         <li><a href="{$r->makeURL('/photos/admin')}">{$r->text.admin_photos}</a></li>
         {insert name="feedsApproveLi"}
         {insert name="bookmarksApproveLi"}
+        <li><a href="{$r->makeURL('/admin/purge')}">{$r->text.admin_purge}</a></li>
     </ul>
 
     <table class="adminTable">

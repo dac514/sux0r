@@ -68,6 +68,28 @@ function sux($action, $params = null) {
         break;
 
 
+    case 'purge' :
+
+        // --------------------------------------------------------------------
+        // Purge logs
+        // --------------------------------------------------------------------
+
+
+        include_once('adminPurge.php');
+        $edit = new adminPurge();
+
+        if ($edit->formValidate($_POST)) {
+            $edit->formProcess($_POST);
+            $edit->formSuccess();
+        }
+        else {
+            $edit->formBuild($_POST);
+        }
+
+
+        break;
+
+
     default:
 
         // --------------------------------------------------------------------

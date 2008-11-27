@@ -3,6 +3,15 @@
 // Always UTF-8
 // Always uppercase the first word
 
+// TODO: Translate
+$gtext['admin_purge'] = 'Purge Logs';
+$gtext['date'] = 'Date';
+$gtext['error_1'] = 'Invalid date';
+$gtext['alert_purge'] = 'Are you sure you want to purge the logs?';
+$gtext['success'] = 'Success!';
+$gtext['success2'] = 'Eveyrthing seems fine.';
+
+// Already translated
 $gtext['access'] = 'Access';
 $gtext['activity_log'] = 'Activity Log';
 $gtext['admin'] = 'Administration';

@@ -40,8 +40,9 @@
 
     <ul id="adminMenu">
     <li><a href="{$r->makeUrl('/feeds/edit')}">{$r->text.new}</a></li>
+    <li><a href="{$r->makeURL('/feeds/purge')}">{$r->text.purge}</a></li>
     </ul>
-    
+
     <table class="adminTable">
     <thead>
         <tr>

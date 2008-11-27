@@ -50,6 +50,7 @@ $CONFIG['PREV_SKIP'] = array(
     'feeds/approve',
     'feeds/edit',
     'feeds/manage',
+    'feeds/purge',
     'feeds/suggest',
     'photos/album/annotate',
     'photos/album/edit',

@@ -147,6 +147,27 @@ function sux($action, $params = null) {
         break;
 
 
+    case 'purge' :
+
+        // --------------------------------------------------------------------
+        // Purge feeds
+        // --------------------------------------------------------------------
+
+        include_once('feedsPurge.php');
+        $edit = new feedsPurge();
+
+        if ($edit->formValidate($_POST)) {
+            $edit->formProcess($_POST);
+            $edit->formSuccess();
+        }
+        else {
+            $edit->formBuild($_POST);
+        }
+
+
+        break;
+
+
     default:
 
         // --------------------------------------------------------------------
