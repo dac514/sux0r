@@ -457,6 +457,30 @@ class suxRSS extends DOMDocument {
 
 
     /**
+    * Purge feeds
+    *
+    * @param string $date YYYY-MM-DD
+    * @param int $feed_id optional feed id
+    */
+    function purgeFeeds($date, $feed_id = null) {
+
+        if (filter_var($feed_id, FILTER_VALIDATE_INT) && $feed_id > 0) {
+            // With feed_id
+            $query = "DELETE FROM {$this->db_items} WHERE published_on < ? AND rss_feeds_id = ? ";
+            $st = $this->db->prepare($query);
+            $st->execute(array($date, $feed_id));
+        }
+        else {
+            // Without
+            $query = "DELETE FROM {$this->db_items} WHERE published_on < ? ";
+            $st = $this->db->prepare($query);
+            $st->execute(array($date));
+        }
+
+    }
+
+
+    /**
     * Get a item by id
     *
     * @param int $id messages_id

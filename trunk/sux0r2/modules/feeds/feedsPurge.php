@@ -1,7 +1,7 @@
 <?php
 
 /**
-* feedsAdmin
+* feedsPurge
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
@@ -22,26 +22,22 @@
 *
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
+require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
 require_once('feedsRenderer.php');
 
-
-class feedsAdmin {
+class feedsPurge  {
 
     // Variables
-    public $per_page = 50;
+    public $gtext = array();
     private $module = 'feeds';
 
     // Objects
-    public $r;
     public $tpl;
+    public $r;
     private $user;
     private $rss;
-    private $pager;
-
 
     /**
     * Constructor
@@ -56,7 +52,6 @@ class feedsAdmin {
         $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
         $this->user = new suxUser();
-        $this->pager = new suxPager();
         $this->rss = new suxRSS();
 
         // Redirect if not logged in
@@ -83,11 +78,12 @@ class feedsAdmin {
     }
 
 
-    function formBuild() {
-
-        // --------------------------------------------------------------------
-        // Form logic
-        // --------------------------------------------------------------------
+    /**
+    * Build the form and show the template
+    *
+    * @param array $dirty reference to unverified $_POST
+    */
+    function formBuild(&$dirty) {
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
         else suxValidate::disconnect();
@@ -97,37 +93,27 @@ class feedsAdmin {
             suxValidate::connect($this->tpl, true); // Reset connection
 
             // Register our validators
-            suxValidate::register_validator('integrity', 'integrity:users_id:nickname', 'hasIntegrity');
+            // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
+
+            suxValidate::register_validator('date', 'Date:Date_Year:Date_Month:Date_Day', 'isDate', false, false, 'makeDate');
 
         }
 
-        // --------------------------------------------------------------------
+        if (!$this->tpl->get_template_vars('Date_Year')) {
+            // Today's Date
+            $this->tpl->assign('Date_Year', date('Y'));
+            $this->tpl->assign('Date_Month', date('m'));
+            $this->tpl->assign('Date_Day', date('j'));
+        }
+
+        // Urls
+        $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/purge');
+        $this->r->text['back_url'] = suxFunct::getPreviousURL();
+
+        $this->r->title .= " | {$this->r->text['purge']}";
+
         // Template
-        // --------------------------------------------------------------------
-
-        $this->tpl->assign('nickname', $_SESSION['nickname']);
-        $this->tpl->assign('users_id', $_SESSION['users_id']);
-        $this->r->text['form_url'] = suxFunct::makeUrl("/{$this->module}/admin");
-
-        // Pager
-        $this->pager->limit = $this->per_page;
-        $this->pager->setStart();
-
-        $this->pager->setPages($this->rss->countFeeds(true));
-        $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/{$this->module}/admin"));
-        $this->r->fp = $this->rss->getFeeds($this->pager->limit, $this->pager->start, true);
-
-        // Additional variables
-        foreach ($this->r->fp as $key => $val) {
-            $u = $this->user->getUser($val['users_id']);
-            $this->r->fp[$key]['nickname'] = $u['nickname'];
-            $this->r->fp[$key]['feeds_count'] = $this->rss->countItems($val['id']);
-        }
-
-        $this->r->title .= " | {$this->r->text['feeds']} | {$this->r->text['admin']}";
-
-        // Display
-        $this->tpl->display('admin.tpl');
+        $this->tpl->display('purge.tpl');
 
     }
 
@@ -139,20 +125,14 @@ class feedsAdmin {
     */
     function formProcess(&$clean) {
 
-        // Check that the user is allowed to be here
-        if (!$this->user->isRoot()) {
-            $access = $this->user->getAccess($this->module);
-            if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin'])
-                suxFunct::redirect(suxFunct::makeUrl('/home'));
-        }
-
-        if (isset($clean['delete'])) foreach($clean['delete'] as $id => $val) {
-                $this->rss->deleteFeed($id);
-                $this->user->log("sux0r::feedsAdmin() deleted feeds_id: {$id}", $_SESSION['users_id'], 1); // Private
-        }
+        // Purge
+        $this->rss->purgeFeeds($clean['Date']);
 
         // clear all caches, cheap and easy
         $this->tpl->clear_all_cache();
+
+        // Log, private
+        $this->user->log("sux0r::feedsPurge() ", $_SESSION['users_id'], 1);
 
     }
 
@@ -162,7 +142,14 @@ class feedsAdmin {
     */
     function formSuccess() {
 
-        suxFunct::redirect(suxFunct::makeUrl("/{$this->module}/admin/"));
+        // Template
+        $this->r->text['back_url'] = suxFunct::getPreviousURL();
+
+        $this->r->title .= " | {$this->r->text['success']}";
+        $this->r->text['success2'] = $this->r->text['success3']; // Overwrite
+
+        $this->tpl->display('success.tpl');
+
     }
 
 

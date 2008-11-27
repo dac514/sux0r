@@ -615,6 +615,23 @@ class suxUser {
 
 
     /**
+    * Too many password failures?
+    *
+    * @return bool
+    */
+    function maxPasswordFailures() {
+
+        if (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->max_failures) return true;
+        else return false;
+
+    }
+
+
+    // -----------------------------------------------------------------------
+    // Logs
+    // -----------------------------------------------------------------------
+
+    /**
     * Count log
     *
     * @param int $users_id
@@ -776,14 +793,27 @@ class suxUser {
 
 
     /**
-    * Too many password failures?
+    * Purge logs
     *
-    * @return bool
+    * @param string $date YYYY-MM-DD
+    * @param int $users_id optional users id
     */
-    function maxPasswordFailures() {
+    function purgeLogs($date, $users_id = null) {
 
-        if (isset($_SESSION['failures']) && $_SESSION['failures'] > $this->max_failures) return true;
-        else return false;
+        // This will purge private logs, It will not purge public logs
+
+        if (filter_var($users_id, FILTER_VALIDATE_INT) && $users_id > 0) {
+            // With users_id
+            $query = "DELETE FROM {$this->db_table_log} WHERE private = true AND ts < ? AND users_id = ? ";
+            $st = $this->db->prepare($query);
+            $st->execute(array($date, $users_id));
+        }
+        else {
+            // Without
+            $query = "DELETE FROM {$this->db_table_log} WHERE private = true AND ts < ? ";
+            $st = $this->db->prepare($query);
+            $st->execute(array($date));
+        }
 
     }
 
@@ -889,7 +919,6 @@ class suxUser {
     * Detach an openid from system
     *
     * @param string $openid_url url
-    * @param int $users_id users_id
     */
     function detachOpenID($openid_url) {
 

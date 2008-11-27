@@ -3,6 +3,14 @@
 // Always UTF-8
 // Always uppercase the first word
 
+// TODO: Translate
+$gtext['purge'] = 'Purge Feeds';
+$gtext['date'] = 'Date';
+$gtext['error_5'] = 'Invalid date';
+$gtext['alert_purge'] = 'Are you sure you want to purge the feeds?';
+$gtext['success3'] = 'Eveyrthing seems fine.';
+
+// Already translated
 $gtext['actions'] = 'Actions';
 $gtext['admin'] = 'Feeds Administration';
 $gtext['alert_delete'] = 'Are you sure you want to delete these feeds? Items will also be deleted.';
