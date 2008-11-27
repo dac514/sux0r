@@ -38,6 +38,7 @@ class adminLog {
     // Objects
     public $r;
     public $tpl;
+    protected $user;
     private $pager;
 
 
