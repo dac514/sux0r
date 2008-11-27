@@ -91,7 +91,6 @@ class adminAccess {
     * Build the form and show the template
     *
     * @param array $dirty reference to unverified $_POST
-    * @param array $filthy reference to unverified $_GET
     */
     function formBuild(&$dirty) {
 
