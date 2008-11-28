@@ -27,11 +27,11 @@ This logic, as far as we care, can be extended to any Free Software license. A
 list of Free Software licenses is located at:
 
 http://www.gnu.org/philosophy/license-list.html
-
+,
 Sux0r is far removed from the world of compiled languages that many of these
 licenses are meant for. Since everything sux0r deals with are human readable
 scripts, we hope everyone can agree that we are being respectful and allowing
-for exceptions where necessary. If you disgree, please contact us so we can
+for exceptions where necessary. If you disgree please contact us so we can
 resolve the issue.
 
 ------------------------------------------------------------------------------
