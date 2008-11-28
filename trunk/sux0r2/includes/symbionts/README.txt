@@ -23,10 +23,16 @@ single project.
 Additionally, most software released under GPLv2 allows you to use the terms
 of later versions of the GPL.
 
-This logic, evidently, can be extended to any GPL compatible license. A list
-of compatible licenses is located at:
+This logic, as far as we care, can be extended to any Free Software license. A
+list of Free Software licenses is located at:
 
 http://www.gnu.org/philosophy/license-list.html
+
+Sux0r is far removed from the world of compiled languages that many of these
+licenses are meant for. Since everything sux0r does or deals with are human
+readable scripts, we hope everyone can agree that this is fine. If need be,
+consider this a special exception from our end. If you have a problem with your
+software being distributed along these lines, please contact us.
 
 ------------------------------------------------------------------------------
 Pro-tip
