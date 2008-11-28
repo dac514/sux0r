@@ -29,10 +29,10 @@ list of Free Software licenses is located at:
 http://www.gnu.org/philosophy/license-list.html
 
 Sux0r is far removed from the world of compiled languages that many of these
-licenses are meant for. Since everything sux0r does or deals with are human
-readable scripts, we hope everyone can agree that this is fine. If need be
-consider this a special exception from our end. If you have a problem with your
-software being distributed along these lines, please contact us.
+licenses are meant for. Since everything sux0r deals with are human readable
+scripts, we hope everyone can agree that we are being respectful and allowing
+for exceptions where necessary. If you disgree, please contact us so we can
+resolve the issue.
 
 ------------------------------------------------------------------------------
 Pro-tip
