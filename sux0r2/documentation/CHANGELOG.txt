@@ -1,4 +1,16 @@
 ------------------------------------------------------------------------------
+sux0r 2.0.x (CVS)
+------------------------------------------------------------------------------
+
+Changes to photo templates, go to next when user clicks on an image
+
+Added ability to purge user logs and RSS feeds
+
+Moved some esoteric config options to config.advanced.php
+
+Moved LICENSE.txt to the documentation directory, updated README files
+
+------------------------------------------------------------------------------
 sux0r 2.0.1
 ------------------------------------------------------------------------------
 
@@ -17,11 +29,11 @@ Support for Atom 1.0 in suxRss()
 
 Regex improvements in suxHtml2UTF8()
 
-Fixed a problem where Naive Bayesian filtering was redununtantly re-scanning
+Fixed a problem where Naive Bayesian filtering was redundantly re-scanning
 items when limit was not yet reached
 
 New option in config file allows you to turn off Naive Bayesian categorization
-and automatic bookmark scanning, in case you want to use sux0r as a vanila
+and automatic bookmark scanning, in case you want to use sux0r as a vanilla
 blog. (update your config.php files accordingly)
 
 Updated symbionts: Scriptaculous 1.8.2, TinyMCE 3.2.1
