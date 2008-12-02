@@ -2,8 +2,8 @@
 sux0r 2.0.x (CVS)
 ------------------------------------------------------------------------------
 
-Work in progress: In an effort to improved results on skewed training data, I
-am trying to adjust the value of the fake probability to that of the median of
+Work in progress: In an effort to improve results on skewed training data, I
+am trying to adjust the value of the fake probability to that of the average of
 the token count for the vector.
 
 Bugfix: array_merge() re-numbers keys which was causing problems with the
