@@ -2,6 +2,9 @@
 sux0r 2.0.x (CVS)
 ------------------------------------------------------------------------------
 
+Bugfix: array_merge() re-numbers keys which was causing problems with the
+redunancy checking in Naive Bayesian filtering
+
 Changes to photo templates, go to next when user clicks on an image
 
 Added ability to purge user logs and RSS feeds

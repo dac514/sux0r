@@ -737,7 +737,10 @@ abstract class bayesShared {
 
             $tmp = array();
             eval('$tmp = ' . $eval . ';'); // results is transformed here, by $eval
-            $results = array_merge($results, $tmp);
+            foreach ($tmp as $val) {
+                // array_merge renumbers, avoid this by appending in a foreach loop
+                $results[] = $val;
+            }
 
             foreach ($results as $key => $val) {
                 if (isset($ok[$key])) continue; // Don't recalculate
