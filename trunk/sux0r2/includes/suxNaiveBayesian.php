@@ -783,7 +783,8 @@ class suxNaiveBayesian {
             $ncat++;
         }
 
-        // Fake probability based on average
+        // Fake probability based on average, this seems to improve
+        // results when training data is skewed
         sort($fake_prob);
         $n = count($fake_prob);
         $fake_prob = ($fake_prob[0] + $fake_prob[$n-1]) / 2;
