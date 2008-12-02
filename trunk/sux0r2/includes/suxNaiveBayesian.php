@@ -789,7 +789,7 @@ class suxNaiveBayesian {
         $h = intval($n / 2);
         if ($n % 2 == 0) $median = ($fake_prob[$h] + $fake_prob[$h-1]) / 2;
         else $median = $fake_prob[$h];
-        if ($median) $fake_prob = (float) 1/2*$median; // Override array, change to a number
+        if ($median) $fake_prob = (float) 1/(2*$median); // Override array, change to a number
         else $fake_prob = 0; // Shouldn't happen
 
         // Checking against stopwords is a big performance hog and
@@ -820,6 +820,8 @@ class suxNaiveBayesian {
             $categorized[$category_id] = $data['category'];
         }
         // new dBug('Elapsed time in seconds: ' . (microtime(true) - $debug1));
+
+        new dBug($scores);
 
         $scores = $this->rescale($scores); // Rescale
         arsort($scores); // Sort
