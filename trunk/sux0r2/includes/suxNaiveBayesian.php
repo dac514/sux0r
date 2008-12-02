@@ -770,6 +770,7 @@ class suxNaiveBayesian {
 
         $scores = array();
         $categorized = array();
+        $fake_prob = array(); // TODO: Work in progress
         $total_tokens = 0;
         $ncat = 0;
 
@@ -777,9 +778,19 @@ class suxNaiveBayesian {
         if (count($categories) <= 1) return array(); // Less than two categories, skip
 
         foreach ($categories as $data) {
+            $fake_prob[] = $data['token_count']; // Used to calculate median
             $total_tokens += $data['token_count'];
             $ncat++;
         }
+
+        // Establish fake probability with token_count median
+        sort($fake_prob);
+        $n = count($fake_prob);
+        $h = intval($n / 2);
+        if ($n % 2 == 0) $median = ($fake_prob[$h] + $fake_prob[$h-1]) / 2;
+        else $median = $fake_prob[$h];
+        if ($median) $fake_prob = (float) 1/2*$median; // Override array, change to a number
+        else $fake_prob = 0; // Shouldn't happen
 
         // Checking against stopwords is a big performance hog and
         // they don't affect the results here, so not using them
@@ -797,7 +808,7 @@ class suxNaiveBayesian {
 
                     // Avoid calculating 0/x which is always 0, also avoid divide by zero errors
                     if ($token_count && $data['token_count']) $prob = (float) $token_count/$data['token_count']; // Probability
-                    elseif ($data['token_count']) $prob = (float) 1/(2*$data['token_count']); // Fake probability, like a very infrequent word
+                    elseif ($data['token_count']) $prob = (float) $fake_prob; // Fake probability, like a very infrequent word
                     else $prob = 0; // Set this to zero, last resort, shouldn't happen?
 
                     // pow($total_tokens/$ncat, $count) is here to avoid underflow.
