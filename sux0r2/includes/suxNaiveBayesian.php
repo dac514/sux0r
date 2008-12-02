@@ -787,8 +787,8 @@ class suxNaiveBayesian {
         // results when training data is skewed
         sort($fake_prob);
         $n = count($fake_prob);
-        $fake_prob = ($fake_prob[0] + $fake_prob[$n-1]) / 2;
-        if ($fake_prob) $fake_prob = (float) 1/(2*$fake_prob); // Override array, change to a number
+        $fake_prob = ($fake_prob[0] + $fake_prob[$n-1]) / 2; // Override array, change to a number
+        if ($fake_prob) $fake_prob = (float) 1/$fake_prob;
         else $fake_prob = 0; // Shouldn't happen
 
         // Checking against stopwords is a big performance hog and
