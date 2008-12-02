@@ -821,8 +821,6 @@ class suxNaiveBayesian {
         }
         // new dBug('Elapsed time in seconds: ' . (microtime(true) - $debug1));
 
-        new dBug($scores);
-
         $scores = $this->rescale($scores); // Rescale
         arsort($scores); // Sort
 
