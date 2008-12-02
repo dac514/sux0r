@@ -778,18 +778,16 @@ class suxNaiveBayesian {
         if (count($categories) <= 1) return array(); // Less than two categories, skip
 
         foreach ($categories as $data) {
-            $fake_prob[] = $data['token_count']; // Used to calculate median
+            $fake_prob[] = $data['token_count'];
             $total_tokens += $data['token_count'];
             $ncat++;
         }
 
-        // Establish fake probability with token_count median
+        // Fake probability based on average
         sort($fake_prob);
         $n = count($fake_prob);
-        $h = intval($n / 2);
-        if ($n % 2 == 0) $median = ($fake_prob[$h] + $fake_prob[$h-1]) / 2;
-        else $median = $fake_prob[$h];
-        if ($median) $fake_prob = (float) 1/(2*$median); // Override array, change to a number
+        $fake_prob = ($fake_prob[0] + $fake_prob[$n-1]) / 2;
+        if ($fake_prob) $fake_prob = (float) 1/(2*$fake_prob); // Override array, change to a number
         else $fake_prob = 0; // Shouldn't happen
 
         // Checking against stopwords is a big performance hog and
