@@ -114,7 +114,7 @@ class blogAdmin {
 
         $this->pager->setPages($this->msg->countFirstPosts('blog', true));
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/{$this->module}/admin"));
-        $this->r->fp = $this->msg->getFirstPosts('blog', $this->pager->limit, $this->pager->start, true);
+        $this->r->fp = $this->msg->getFirstPosts('blog', $this->pager->limit, $this->pager->start, false);
 
         // Additional variables
         foreach ($this->r->fp as $key => $val) {
@@ -148,7 +148,7 @@ class blogAdmin {
 
         if (isset($clean['delete'])) foreach($clean['delete'] as $thread_id => $val) {
             // Validate that this is something we're allowed to delete
-            $tmp = $this->msg->getFirstPost($thread_id, true);
+            $tmp = $this->msg->getFirstPost($thread_id, false);
             if ($tmp && $tmp['blog'] && $tmp['thread_pos'] == 0) {
                 $this->msg->deleteThread($thread_id);
                 $this->user->log("sux0r::blogAdmin() deleted thread_id: {$thread_id}", $_SESSION['users_id'], 1); // Private

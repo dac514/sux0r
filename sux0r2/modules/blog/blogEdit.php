@@ -90,7 +90,7 @@ class blogEdit {
 
                 // Verfiy that we are allowed to edit this
                 if (filter_var($id, FILTER_VALIDATE_INT)) {
-                    $tmp = $this->msg->getMessage($id, true);
+                    $tmp = $this->msg->getMessage($id, false);
                     if ($tmp['users_id'] != $_SESSION['users_id']) suxFunct::redirect(suxFunct::makeUrl('/blog'));
                 }
 
@@ -131,7 +131,7 @@ class blogEdit {
 
             // Editing a blog post
 
-            $tmp = $this->msg->getMessage($this->id, true);
+            $tmp = $this->msg->getMessage($this->id, false);
 
             $blog['id'] = $tmp['id'];
             $blog['title'] = $tmp['title'];
@@ -270,7 +270,7 @@ class blogEdit {
 
                 if (isset($clean['id']) && filter_var($clean['id'], FILTER_VALIDATE_INT)) {
                     // Verfiy that we are allowed to edit this
-                    $tmp = $this->msg->getMessage($clean['id'], true);
+                    $tmp = $this->msg->getMessage($clean['id'], false);
                     if ($tmp['users_id'] != $_SESSION['users_id']) suxFunct::redirect(suxFunct::makeUrl('/blog'));
                 }
             }

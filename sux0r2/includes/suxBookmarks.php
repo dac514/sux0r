@@ -49,19 +49,19 @@ class suxBookmarks {
     /**
     * Count bookmarks
     *
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return int
     */
-    function countBookmarks($unpub = false) {
+    function countBookmarks($published = true) {
 
         // SQL Query
         $query = "SELECT COUNT(*) FROM {$this->db_table} ";
 
         // Publish / Draft
-        if (!$unpub) {
+        if ($published) {
             // PgSql / MySql
             $query .= "WHERE draft = false ";
-            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Execute
@@ -80,19 +80,19 @@ class suxBookmarks {
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
     * @param bool $alphasort sort alphabetically?
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return array
     */
-    function getBookmarks($limit = null, $start = 0, $alphasort = false, $unpub = false) {
+    function getBookmarks($limit = null, $start = 0, $alphasort = false, $published = true) {
 
         // SQL Query
         $query = "SELECT * FROM {$this->db_table} ";
 
         // Publish / Draft
-        if (!$unpub) {
+        if ($published) {
             // PgSql / MySql
             $query .= "WHERE draft = false ";
-            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Order
@@ -129,10 +129,10 @@ class suxBookmarks {
     * Get a bookmark by id or URL
     *
     * @param int|string $id bookmard id or url
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return array|false
     */
-    function getBookmark($id, $unpub = false) {
+    function getBookmark($id, $published = true) {
 
         $col = 'id';
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) {
@@ -143,10 +143,10 @@ class suxBookmarks {
         $query = "SELECT * FROM {$this->db_table} WHERE {$col} = ? ";
 
         // Publish / Draft
-        if (!$unpub) {
+        if ($published) {
             // PgSql / MySql
             $query .= "AND draft = false ";
-            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
         }
 
         $st = $this->db->prepare($query);

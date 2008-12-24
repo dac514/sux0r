@@ -106,7 +106,7 @@ class photoalbumsEdit {
         if ($this->id) {
 
             // Editing a photoalbum
-            $tmp = $this->photo->getAlbum($this->id, true);
+            $tmp = $this->photo->getAlbum($this->id, false);
 
             $photoalbum['id'] = $tmp['id'];
             $photoalbum['title'] = $tmp['title'];

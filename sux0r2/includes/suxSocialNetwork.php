@@ -76,7 +76,7 @@ class suxSocialNetwork {
     /**
     * Count relationships
     *
-    * @param bool $unpub select un-published?
+    * @param int $uid users_id
     * @return int
     */
     function countRelationships($uid) {
@@ -123,7 +123,7 @@ class suxSocialNetwork {
     /**
     * Count relationships
     *
-    * @param bool $unpub select un-published?
+    * @param int $uid users_id
     * @return int
     */
     function countStalkers($uid) {

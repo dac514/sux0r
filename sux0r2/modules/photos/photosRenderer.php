@@ -105,7 +105,7 @@ class photosRenderer extends suxRenderer {
         }
 
         // Get albums
-        $albums = $this->photo->getAlbums($users_id, null, 0, true);
+        $albums = $this->photo->getAlbums($users_id, null, 0, false);
 
         $tmp[''] = '---';
         if (is_array($albums)) foreach ($albums as $album) {

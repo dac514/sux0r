@@ -107,7 +107,7 @@ class photosEdit {
         $photoalbum = array();
 
         // Editing a photoalbum
-        $tmp = $this->photo->getAlbum($this->id, true);
+        $tmp = $this->photo->getAlbum($this->id, false);
         if (!$tmp) suxFunct::redirect(suxFunct::makeURL('/photos')); // Invalid id
 
         $photoalbum['id'] = $tmp['id'];

@@ -482,7 +482,7 @@ function insert_edit($params) {
             $allowed2 = false;
         }
         else {
-            $tmp = $m->getMessage($params['id'], true);
+            $tmp = $m->getMessage($params['id'], false);
             if ($tmp['users_id'] != $_SESSION['users_id']) $allowed2 = false;
         }
         if (!$allowed2) return null;

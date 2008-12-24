@@ -67,10 +67,10 @@ class suxThreadedMessages {
     * Get a message by id
     *
     * @param int $id messages_id
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return array|false
     */
-    function getMessage($id, $unpub = false) {
+    function getMessage($id, $published = true) {
 
         // Sanity check
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
@@ -79,10 +79,10 @@ class suxThreadedMessages {
         $query = "SELECT * FROM {$this->db_table} WHERE id = ? ";
 
         // Publish date / draft
-        if (!$unpub) {
+        if ($published) {
             // MySql / PgSql
             $query .= "AND draft = false ";
-            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
         }
 
         $st = $this->db->prepare($query);
@@ -477,10 +477,10 @@ class suxThreadedMessages {
     * Get first post
     *
     * @param int $thread_id thread_id
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return array
     */
-    function getFirstPost($thread_id, $unpub = false) {
+    function getFirstPost($thread_id, $published = true) {
 
         // Sanity check
         if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id < 1)
@@ -490,10 +490,10 @@ class suxThreadedMessages {
         $query = "SELECT * FROM {$this->db_table} WHERE thread_id = ? AND thread_pos = 0 ";
 
         // Publish date / draft
-        if (!$unpub) {
+        if ($published) {
             // MySql / PgSql
             $query .= "AND draft = false ";
-            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
         }
 
         $query .= "ORDER BY published_on DESC ";
@@ -516,10 +516,10 @@ class suxThreadedMessages {
     *
     * @param int $thread_id thread id
     * @param string $type forum, blog, wiki, or slideshow
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return int
     */
-    function countThread($thread_id, $type = null, $unpub = false) {
+    function countThread($thread_id, $type = null, $published = true) {
 
         // Sanity check
         if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id < 1)
@@ -532,10 +532,10 @@ class suxThreadedMessages {
         else $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE thread_id = ? ";
 
         // Publish date / draft
-        if (!$unpub) {
+        if ($published) {
             // MySql / PgSql
             $query .= "AND draft = false ";
-            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Type
@@ -557,10 +557,10 @@ class suxThreadedMessages {
     * @param string $type forum, blog, wiki, or slideshow
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return array
     */
-    function getThread($thread_id, $type = null, $limit = null, $start = 0, $unpub = false) {
+    function getThread($thread_id, $type = null, $limit = null, $start = 0, $published = true) {
 
         // Sanity check
         if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id < 1)
@@ -573,10 +573,10 @@ class suxThreadedMessages {
         $query = "SELECT * FROM {$this->db_table} WHERE thread_id = ? ";
 
         // Publish date / draft
-        if (!$unpub) {
+        if ($published) {
             // MySql / PgSql
             $query .= "AND draft = false ";
-            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Type
@@ -601,10 +601,10 @@ class suxThreadedMessages {
     *
     * @param int $users_id users id
     * @param string $type forum, blog, wiki, or slideshow
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return int
     */
-    function countMessagesByUser($users_id, $type = null, $unpub = false) {
+    function countMessagesByUser($users_id, $type = null, $published = true) {
 
         // Sanity check
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
@@ -617,10 +617,10 @@ class suxThreadedMessages {
         $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE users_id = ? ";
 
         // Publish date / draft
-        if (!$unpub) {
+        if ($published) {
             // MySql / PgSql
             $query .= "AND draft = false ";
-            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Type
@@ -641,10 +641,10 @@ class suxThreadedMessages {
     * @param string $type forum, blog, wiki, or slideshow
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return array
     */
-    function groupMessagesByUser($type = null, $limit = null, $start = 0, $unpub = false) {
+    function groupMessagesByUser($type = null, $limit = null, $start = 0, $published = true) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
@@ -652,10 +652,10 @@ class suxThreadedMessages {
         // Mysql / PgSql
         $query = "SELECT COUNT(*) AS count, users_id FROM {$this->db_table} ";
 
-        if (!$unpub) {
+        if ($published) {
             // Only show published items
             $query .= "AND draft = false ";
-            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
+            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
         }
 
         // Type
@@ -682,10 +682,10 @@ class suxThreadedMessages {
     * @param string $type forum, blog, wiki, or slideshow
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return array
     */
-    function getMessagesByUser($users_id, $type = null, $limit = null, $start = 0, $unpub = false) {
+    function getMessagesByUser($users_id, $type = null, $limit = null, $start = 0, $published = true) {
 
         // Sanity check
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
@@ -698,10 +698,10 @@ class suxThreadedMessages {
         $query = "SELECT * FROM {$this->db_table} WHERE users_id = ? ";
 
         // Publish date / draft
-        if (!$unpub) {
+        if ($published) {
             // MySql / PgSql
             $query .= "AND draft = false ";
-            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Type
@@ -725,10 +725,10 @@ class suxThreadedMessages {
     * Count first posts
     *
     * @param string $type forum, blog, wiki, or slideshow
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return int
     */
-    function countFirstPosts($type = null, $unpub = false) {
+    function countFirstPosts($type = null, $published = true) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
@@ -737,10 +737,10 @@ class suxThreadedMessages {
         $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE thread_pos = 0 ";
 
         // Publish date / Draft
-        if (!$unpub) {
+        if ($published) {
             // PgSql / MySql
             $query .= "AND draft = false ";
-            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Type
@@ -761,10 +761,10 @@ class suxThreadedMessages {
     * @param string $type forum, blog, wiki, or slideshow
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return array
     */
-    function getFirstPosts($type = null, $limit = null, $start = 0, $unpub = false) {
+    function getFirstPosts($type = null, $limit = null, $start = 0, $published = true) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
@@ -773,10 +773,10 @@ class suxThreadedMessages {
         $query = "SELECT * FROM {$this->db_table} WHERE thread_pos = 0 ";
 
         // Publish date / Draft
-        if (!$unpub) {
+        if ($published) {
             // MySql / PgSql
             $query .= "AND draft = false ";
-            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Type
@@ -800,10 +800,10 @@ class suxThreadedMessages {
     *
     * @param int $users_id users id
     * @param string $type forum, blog, wiki, or slideshow
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return int
     */
-    function countFirstPostsByUser($users_id, $type = null, $unpub = false) {
+    function countFirstPostsByUser($users_id, $type = null, $published = true) {
 
         // Sanity check
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
@@ -816,10 +816,10 @@ class suxThreadedMessages {
         $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE users_id = ? AND thread_pos = 0 ";
 
         // Publish date / draft
-        if (!$unpub) {
+        if ($published) {
             // MySql / PgSql
             $query .= "AND draft = false ";
-            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Type
@@ -839,10 +839,10 @@ class suxThreadedMessages {
     * @param string $type forum, blog, wiki, or slideshow
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return array
     */
-    function groupFirstPostsByUser($type = null, $limit = null, $start = 0, $unpub = false) {
+    function groupFirstPostsByUser($type = null, $limit = null, $start = 0, $published = true) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
@@ -851,10 +851,10 @@ class suxThreadedMessages {
         $query = "SELECT COUNT(*) AS count, users_id
         FROM {$this->db_table} WHERE thread_pos = 0 ";
 
-        if (!$unpub) {
+        if ($published) {
             // Only show published items
             $query .= "AND draft = false ";
-            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
+            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
         }
 
         // Type
@@ -881,10 +881,10 @@ class suxThreadedMessages {
     * @param string $type forum, blog, wiki, or slideshow
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return array
     */
-    function getFirstPostsByUser($users_id, $type = null, $limit = null, $start = 0, $unpub = false) {
+    function getFirstPostsByUser($users_id, $type = null, $limit = null, $start = 0, $published = false) {
 
         // Sanity check
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
@@ -897,10 +897,10 @@ class suxThreadedMessages {
         $query = "SELECT * FROM {$this->db_table} WHERE users_id = ? AND thread_pos = 0 ";
 
         // Publish date / draft
-        if (!$unpub) {
+        if ($published) {
             // MySql / PgSql
             $query .= "AND draft = false ";
-            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Type
@@ -925,10 +925,10 @@ class suxThreadedMessages {
     *
     * @param int $date date
     * @param string $type forum, blog, wiki, or slideshow
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return int
     */
-    function countFirstPostsByMonth($date, $type = null, $unpub = false) {
+    function countFirstPostsByMonth($date, $type = null, $published = false) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
@@ -943,20 +943,20 @@ class suxThreadedMessages {
         $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE thread_pos = 0 ";
 
         // Publish date / draft
-        if (!$unpub) {
+        if ($published) {
             $date = "{$matches[1]}-{$matches[2]}-{$matches[3]} {$matches[4]}:{$matches[5]}:{$matches[6]}";
             $query .= "AND draft = false ";
             if ($this->db_driver == 'mysql') {
                 // MySql
                 $query .= "AND MONTH(published_on) =  MONTH('{$date}') "; // Month
                 $query .= "AND YEAR(published_on) = YEAR('{$date}') "; // Year
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
+                $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
             }
             elseif ($this->db_driver == 'pgsql') {
                 // PgSQL
                 $query .= "AND EXTRACT(MONTH FROM published_on) =  EXTRACT(MONTH FROM timestamp '{$date}') "; // Month
                 $query .= "AND EXTRACT(YEAR FROM published_on) = EXTRACT(YEAR FROM timestamp '{$date}') "; // Year
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
+                $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
             }
             else {
                 throw new Exception('Unsupported database driver');
@@ -979,10 +979,10 @@ class suxThreadedMessages {
     * @param string $type forum, blog, wiki, or slideshow
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return array
     */
-    function groupFirstPostsByMonths($type = null, $limit = null, $start = 0, $unpub = false) {
+    function groupFirstPostsByMonths($type = null, $limit = null, $start = 0, $published = true) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
@@ -995,10 +995,10 @@ class suxThreadedMessages {
             MONTH(published_on) AS month
             FROM {$this->db_table} WHERE thread_pos = 0 ";
 
-            if (!$unpub) {
+            if ($published) {
                 // Only show published items
                 $query .= "AND draft = false ";
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
+                $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
             }
 
         }
@@ -1010,10 +1010,10 @@ class suxThreadedMessages {
             EXTRACT(MONTH FROM published_on) AS month
             FROM {$this->db_table} WHERE thread_pos = 0 ";
 
-            if (!$unpub) {
+            if ($published) {
                 // Only show published items
                 $query .= "AND draft = false ";
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
+                $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
             }
 
         }
@@ -1044,10 +1044,10 @@ class suxThreadedMessages {
     * @param string $type forum, blog, wiki, or slideshow
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return array
     */
-    function getFirstPostsByMonth($date, $type = null, $limit = null, $start = 0, $unpub = false) {
+    function getFirstPostsByMonth($date, $type = null, $limit = null, $start = 0, $published = true) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
@@ -1061,7 +1061,7 @@ class suxThreadedMessages {
         // SQL Query
         $query = "SELECT * FROM {$this->db_table} WHERE thread_pos = 0 ";
 
-        if (!$unpub) {
+        if ($published) {
             // Only show published items
             $date = "{$matches[1]}-{$matches[2]}-{$matches[3]} {$matches[4]}:{$matches[5]}:{$matches[6]}";
             $query .= "AND draft = false ";
@@ -1069,13 +1069,13 @@ class suxThreadedMessages {
                 // MySql
                 $query .= "AND MONTH(published_on) =  MONTH('{$date}') "; // Month
                 $query .= "AND YEAR(published_on) = YEAR('{$date}') "; // Year
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
+                $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
             }
             elseif ($this->db_driver == 'pgsql') {
                 // PgSql
                 $query .= "AND EXTRACT(MONTH FROM published_on) =  EXTRACT(MONTH FROM timestamp '{$date}')  "; // Month
                 $query .= "AND EXTRACT(YEAR FROM published_on) =  EXTRACT(YEAR FROM timestamp '{$date}') "; // Year
-                $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
+                $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
             }
             else {
                 throw new Exception('Unsupported database driver');
@@ -1152,10 +1152,10 @@ class suxThreadedMessages {
     *
     * @param string $type forum, blog, wiki, or slideshow
     * @param int $limit maximum latest replies
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return array
     */
-    function getRececentComments($type = null, $limit = 10, $unpub = false) {
+    function getRececentComments($type = null, $limit = 10, $published = true) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
@@ -1164,10 +1164,10 @@ class suxThreadedMessages {
         $query = "SELECT * FROM {$this->db_table} WHERE thread_pos != 0 ";
 
         // Publish date / Draft
-        if (!$unpub) {
+        if ($published) {
             // MySql / PgSql
             $query .= "AND draft = false ";
-            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Type
@@ -1188,10 +1188,10 @@ class suxThreadedMessages {
     * Get reply count
     *
     * @param int $thread_id thread_id
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return int
     */
-    function getCommentsCount($thread_id, $unpub = false) {
+    function getCommentsCount($thread_id, $published = true) {
 
         // Sanity check
         if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id < 1)
@@ -1201,10 +1201,10 @@ class suxThreadedMessages {
         $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE thread_id = ? AND thread_pos != 0 ";
 
         // Publish date / draft
-        if (!$unpub) {
+        if ($published) {
             // MySql / PgSql
             $query .= "AND draft = false ";
-            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
         }
 
         // Execute

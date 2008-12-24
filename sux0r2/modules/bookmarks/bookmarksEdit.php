@@ -117,7 +117,7 @@ class bookmarksEdit {
         if ($this->id) {
 
             // Editing a bookmark post
-            $tmp = $this->bm->getBookmark($this->id, true);
+            $tmp = $this->bm->getBookmark($this->id, false);
 
             $bookmark['id'] = $tmp['id'];
             $bookmark['title'] = $tmp['title'];
