@@ -770,7 +770,7 @@ class suxNaiveBayesian {
 
         $scores = array();
         $categorized = array();
-        $fake_prob = array(); // TODO: Work in progress
+        $fake_prob = array(); // TODO: Improve this?
         $total_tokens = 0;
         $ncat = 0;
 

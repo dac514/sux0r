@@ -173,13 +173,13 @@ class suxRSS extends DOMDocument {
     *
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return array|false
     */
-    function getFeeds($limit = null, $start = 0, $unpub = false) {
+    function getFeeds($limit = null, $start = 0, $published = true) {
 
         $query = "SELECT * FROM {$this->db_feeds} ";
-        if (!$unpub) $query .= 'WHERE draft = false ';
+        if ($published) $query .= 'WHERE draft = false ';
         $query .= 'ORDER BY title ASC ';
 
         // Limit
@@ -195,13 +195,13 @@ class suxRSS extends DOMDocument {
     /**
     * Count albums
     *
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return array|false
     */
-    function countFeeds($unpub = false) {
+    function countFeeds($published = true) {
 
         $query = "SELECT COUNT(*) FROM {$this->db_feeds} ";
-        if (!$unpub) $query .= 'WHERE draft = false ';
+        if ($published) $query .= 'WHERE draft = false ';
 
         $st = $this->db->prepare($query);
         $st->execute();
@@ -229,7 +229,6 @@ class suxRSS extends DOMDocument {
     * Get a feed by id or url
     *
     * @param int|string $id feed id or url
-    * @param bool $unpub select un-published?
     * @return array|false
     */
     function getFeed($id) {

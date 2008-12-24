@@ -80,7 +80,7 @@ class blogBookmarks {
         // Scan post for href links
         // --------------------------------------------------------------------
 
-        $msg = $this->msg->getMessage($msg_id, true);
+        $msg = $this->msg->getMessage($msg_id, false);
 
         if (!$msg)
             suxFunct::redirect(suxFunct::getPreviousURL()); // No message, skip
@@ -103,7 +103,7 @@ class blogBookmarks {
                 // Basic info
                 $url = suxFunct::canonicalizeUrl($matches[1][$i]);
 
-                if (!filter_var($url, FILTER_VALIDATE_URL) || $this->bookmarks->getBookmark($url, true))
+                if (!filter_var($url, FILTER_VALIDATE_URL) || $this->bookmarks->getBookmark($url, false))
                     continue; // skip it
 
                 $title = strip_tags($matches[2][$i]);
@@ -214,7 +214,7 @@ class blogBookmarks {
             $count = count($clean['url']);
             for ($i = 0; $i < $count; ++$i) {
                 $bookmark = array();
-                if (!$this->bookmarks->getBookmark($clean['url'][$i],  true)) {
+                if (!$this->bookmarks->getBookmark($clean['url'][$i],  false)) {
                     $bookmark['url'] = $clean['url'][$i];
                     $bookmark['title'] = $clean['title'][$i];
                     $bookmark['body'] = $clean['body'][$i];

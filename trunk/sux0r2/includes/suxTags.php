@@ -48,7 +48,6 @@ class suxTags {
     * Get a bookmark by id or URL
     *
     * @param int|string $id bookmard id or url
-    * @param bool $unpub select un-published?
     * @return array|false
     */
     function getTag($id) {
@@ -113,9 +112,9 @@ class suxTags {
             $query = suxDB::prepareInsertQuery($this->db_table, $clean);
             $st = $this->db->prepare($query);
             $st->execute($clean);
-            
+
             if ($this->db_driver == 'pgsql') $id = $this->db->lastInsertId("{$this->db_table}_id_seq"); // PgSql
-            else $id = $this->db->lastInsertId();            
+            else $id = $this->db->lastInsertId();
 
         }
 

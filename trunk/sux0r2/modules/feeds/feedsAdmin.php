@@ -115,7 +115,7 @@ class feedsAdmin {
 
         $this->pager->setPages($this->rss->countFeeds(true));
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/{$this->module}/admin"));
-        $this->r->fp = $this->rss->getFeeds($this->pager->limit, $this->pager->start, true);
+        $this->r->fp = $this->rss->getFeeds($this->pager->limit, $this->pager->start, false);
 
         // Additional variables
         foreach ($this->r->fp as $key => $val) {

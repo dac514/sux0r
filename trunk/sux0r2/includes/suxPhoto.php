@@ -73,10 +73,10 @@ class suxPhoto {
     * Get an album by id
     *
     * @param int $id photoalbums id
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return array|false
     */
-    function getAlbum($id, $unpub = false) {
+    function getAlbum($id, $published = true) {
 
         // Sanity check
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
@@ -85,10 +85,10 @@ class suxPhoto {
         $query = "SELECT * FROM {$this->db_albums} WHERE id = ? ";
 
         // Publish / Draft
-        if (!$unpub) {
+        if ($published) {
             // PgSql / MySql
             $query .= "AND draft = false ";
-            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
         }
 
         $st = $this->db->prepare($query);
@@ -108,10 +108,10 @@ class suxPhoto {
     * @param int $id photoalbums id
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return array|false
     */
-    function getAlbums($users_id = null, $limit = null, $start = 0, $unpub = false) {
+    function getAlbums($users_id = null, $limit = null, $start = 0, $published = true) {
 
         // Sanity check
         if ($users_id && (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1))
@@ -121,11 +121,11 @@ class suxPhoto {
         if ($users_id) $query .= 'WHERE users_id = ? ';
 
         // Publish / Draft
-        if (!$unpub) {
+        if ($published) {
             $query .= $users_id ? 'AND ' : 'WHERE ';
             // PgSql / MySql
             $query .= 'draft = false ';
-            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
         }
         $query .= 'ORDER BY published_on DESC ';
 
@@ -148,10 +148,10 @@ class suxPhoto {
     * Count albums
     *
     * @param int $id photoalbums id
-    * @param bool $unpub select un-published?
+    * @param bool $published select un-published?
     * @return array|false
     */
-    function countAlbums($users_id = null, $unpub = false) {
+    function countAlbums($users_id = null, $published = true) {
 
         // Sanity check
         if ($users_id && (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1))
@@ -161,11 +161,11 @@ class suxPhoto {
         if ($users_id) $query .= 'WHERE users_id = ? ';
 
         // Publish / Draft
-        if (!$unpub) {
+        if ($published) {
             $query .= $users_id ? 'AND ' : 'WHERE ';
             // PgSql / MySql
             $query .= 'draft = false ';
-            $query .= "AND NOT published_on > '" . date('Y-m-d H:i:s') . "' ";
+            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
         }
 
         $st = $this->db->prepare($query);

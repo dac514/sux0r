@@ -114,7 +114,7 @@ class photosAdmin {
 
         $this->pager->setPages($this->photos->countAlbums(null, true));
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/{$this->module}/admin"));
-        $this->r->fp = $this->photos->getAlbums(null, $this->pager->limit, $this->pager->start, true);
+        $this->r->fp = $this->photos->getAlbums(null, $this->pager->limit, $this->pager->start, false);
 
         // Additional variables
         if (!$this->r->fp) unset($this->r->fp);
