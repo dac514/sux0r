@@ -98,6 +98,8 @@ class suxDB {
                 if (self::$db[$key]->getAttribute(PDO::ATTR_DRIVER_NAME) == 'mysql') {
                     self::$db[$key]->query("SET NAMES 'utf8' "); // Force UTF-8
                     self::$db[$key]->query("SET SESSION sql_mode='' "); // Clear SQL Modes to avoid problems with boolean values in transactions
+                    if (defined('PDO::ATTR_EMULATE_PREPARES'))
+                        self::$db[$key]->setAttribute(PDO::ATTR_EMULATE_PREPARES, true); // Let PDO handle MySql's (lack of) caching
                 }
 
             }
