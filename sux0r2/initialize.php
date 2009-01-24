@@ -58,7 +58,7 @@ date_default_timezone_set($GLOBALS['CONFIG']['TIMEZONE']);
 
 // Get rid of magic quotes
 if (get_magic_quotes_gpc() && (!ini_get('magic_quotes_sybase'))) {
-    $in = array(&$_GET, &$_POST, &$_REQUEST, &$_COOKIE);
+    $in = array(&$_GET, &$_POST, &$_REQUEST, &$_COOKIE, &$_FILES);
     while (list($k,$v) = each($in)) {
         foreach ($v as $key => $val) {
             if (!is_array($val)) {
