@@ -70,7 +70,6 @@ class openid {
         $this->r = new suxRenderer($this->module); // Renderer
         $this->tpl = new suxTemplate($this->module); // Template
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
 
 
         // Defined by OpenID spec
@@ -622,7 +621,6 @@ class openid {
         $yes = $this->profile['req_url'] . $q . 'accepted=yes';
         $no  = $this->profile['req_url'] . $q . 'accepted=no';
 
-        $this->r->text =& $this->gtext;
         $this->r->text['unaccepted_url'] = $_SESSION['openid_unaccepted_url'];
         $this->r->text['always_url'] = $always;
         $this->r->text['yes_url'] = $yes;
@@ -707,7 +705,6 @@ class openid {
 
         // Template
 
-        $this->r->text =& $this->gtext;
         $this->r->text['server_url'] = $this->profile['my_url'];
         $this->r->text['realm_id'] = $GLOBALS['CONFIG']['REALM'];
         $this->r->text['test_url'] = $this->profile['my_url'] . $q . 'openid.mode=test';
@@ -1452,7 +1449,7 @@ class openid {
     private function wrapRefresh($url) {
 
         // Template
-        $this->r->text =& $this->gtext;
+
         $this->r->text['url'] = $url;
 
         $this->tpl->display('refresh.tpl');
