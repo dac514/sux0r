@@ -51,8 +51,6 @@ class photosAdmin {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new photosRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
         $this->user = new suxUser();
         $this->pager = new suxPager();
@@ -114,18 +112,18 @@ class photosAdmin {
 
         $this->pager->setPages($this->photos->countAlbums(null, true));
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/{$this->module}/admin"));
-        $this->r->fp = $this->photos->getAlbums(null, $this->pager->limit, $this->pager->start, false);
+        $this->r->arr['photos'] = $this->photos->getAlbums(null, $this->pager->limit, $this->pager->start, false);
 
         // Additional variables
-        if (!$this->r->fp) unset($this->r->fp);
-        else foreach ($this->r->fp as $key => $val) {
+        if (!$this->r->arr['photos']) unset($this->r->arr['photos']);
+        else foreach ($this->r->arr['photos'] as $key => $val) {
             $u = $this->user->getUser($val['users_id']);
-            $this->r->fp[$key]['nickname'] = $u['nickname'];
-            $this->r->fp[$key]['photos_count'] = $this->photos->countPhotos($val['id']);
+            $this->r->arr['photos'][$key]['nickname'] = $u['nickname'];
+            $this->r->arr['photos'][$key]['photos_count'] = $this->photos->countPhotos($val['id']);
         }
 
 
-        $this->r->title .= " | {$this->r->text['photos']} | {$this->r->text['admin']}";
+        $this->r->title .= " | {$this->r->gtext['photos']} | {$this->r->gtext['admin']}";
 
         // Display
         $this->tpl->display('admin.tpl');

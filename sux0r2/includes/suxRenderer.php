@@ -87,6 +87,9 @@ class suxRenderer {
             $this->stylesheets .= "<link rel='stylesheet' type='text/css' href='{$this->url}/media/{$this->partition}/css/{$this->module}.css' />\n";
         }
 
+        // Gtext
+        $this->gtext = suxFunct::gtext($module);
+
     }
 
 

@@ -28,7 +28,7 @@
     <div id="middle">
 
     <fieldset>
-    <legend>{$r->text.admin}</legend>
+    <legend>{$r->gtext.admin}</legend>
 
     <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
     <input type="hidden" name="token" value="{$token}" />
@@ -39,24 +39,23 @@
     {validate id="integrity" message="integrity failure"}
 
     <ul id="adminMenu">
-    <li><a href="{$r->makeUrl('/photos/album/edit')}">{$r->text.new}</a></li>
-    <li><a href="{$r->makeUrl('/photos/upload')}">{$r->text.upload}</a></li>
+    <li><a href="{$r->makeUrl('/photos/album/edit')}">{$r->gtext.new}</a></li>
+    <li><a href="{$r->makeUrl('/photos/upload')}">{$r->gtext.upload}</a></li>
     </ul>
-    
+
     <table class="adminTable">
     <thead>
         <tr>
-            <td>{$r->text.title|lower}</td>
-            <td>{$r->text.published|lower}</td>
-            <td>{$r->text.photos|lower}</td>
-            <td>{$r->text.draft|lower}</td>
-            <td>{$r->text.publisher|lower}</td>
-            <td>{$r->text.delete|lower}</td>
+            <td>{$r->gtext.title|lower}</td>
+            <td>{$r->gtext.published|lower}</td>
+            <td>{$r->gtext.photos|lower}</td>
+            <td>{$r->gtext.draft|lower}</td>
+            <td>{$r->gtext.publisher|lower}</td>
+            <td>{$r->gtext.delete|lower}</td>
         </tr>
     </thead>
     <tbody>
-
-    {foreach from=$r->fp item=foo}
+    {foreach from=$r->arr.photos item=foo}
 
         <tr style="background-color:{cycle values="#ffffff,#eeeeee"}">
             <td style="text-align: left;"><a href="{$r->makeUrl('/photos/album/edit')}/{$foo.id}">{$foo.title}</a></td>
@@ -75,14 +74,14 @@
     {$r->text.pager}
 
     <p>
-    <input type="button" class="button" value="{$r->text.delete}" onclick="rm('default', '{$r->text.alert_delete}');" />
+    <input type="button" class="button" value="{$r->gtext.delete}" onclick="rm('default', '{$r->gtext.alert_delete}');" />
     </p>
 
     </form>
 
     </fieldset>
 
-    <p><a href="{$r->makeUrl('/photos')}">{$r->text.back_2} &raquo;</a></p>
+    <p><a href="{$r->makeUrl('/photos')}">{$r->gtext.back_2} &raquo;</a></p>
 
     </div>
 

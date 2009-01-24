@@ -29,7 +29,7 @@
 <div id="middle">
 
 <fieldset>
-<legend>{$r->text.openid}: {$nickname}</legend>
+<legend>{$r->gtext.openid}: {$nickname}</legend>
 
 <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />
@@ -40,9 +40,9 @@
 {validate id="integrity" message="integrity failure"}
 
 {if $validate.default.is_error !== false}
-<p class="errorWarning">{$r->text.form_error} :</p>
+<p class="errorWarning">{$r->gtext.form_error} :</p>
 {elseif $r->detectPOST()}
-<p class="errorWarning">{$r->text.form_problem} :</p>
+<p class="errorWarning">{$r->gtext.form_problem} :</p>
 {/if}
 
 <p>
@@ -51,33 +51,33 @@
 
 
 {* Accounts *}
-<p>{$r->text.openid_msg_1} :</p>
+<p>{$r->gtext.openid_msg_1} :</p>
 
 <ul class="openidManage">
-{foreach from=$r->openids item=foo}
+{foreach from=$r->arr.openids item=foo}
 <li><input type="checkbox" name="detach[]" value="{$foo.openid_url}" style="width: auto;" /> {$foo.openid_url}</li>
 {foreachelse}
-<li>{$r->text.openid_none}</li>
+<li>{$r->gtext.openid_none}</li>
 {/foreach}
-<li><a href="{$r->makeUrl('/user/register/openid')}">{$r->text.openid_register} &raquo;</a></li>
+<li><a href="{$r->makeUrl('/user/register/openid')}">{$r->gtext.openid_register} &raquo;</a></li>
 </ul>
 
 
 {* Trusted Consumers *}
-<p>{$r->text.openid_msg_2} :</p>
+<p>{$r->gtext.openid_msg_2} :</p>
 
 <ul class="openidManage">
-{foreach from=$r->trusted item=foo}
+{foreach from=$r->arr.trusted item=foo}
 <li><input type="checkbox" name="detach2[{$foo.id}]" value="{$foo.auth_url}" style="width: auto;" /> {$foo.auth_url}</li>
 {foreachelse}
-<li>{$r->text.openid_none_2}</li>
+<li>{$r->gtext.openid_none_2}</li>
 {/foreach}
 </ul>
 
 <p>
 <label>&nbsp;</label>
-<input type="button" class="button" value="{$r->text.cancel}" onclick="document.location='{$r->text.back_url}';" />
-<input type="button" class="button" value="{$r->text.detach}" onclick="rm('default', '{$r->text.alert_detach}');" />
+<input type="button" class="button" value="{$r->gtext.cancel}" onclick="document.location='{$r->text.back_url}';" />
+<input type="button" class="button" value="{$r->gtext.detach}" onclick="rm('default', '{$r->gtext.alert_detach}');" />
 </p>
 
 </form>

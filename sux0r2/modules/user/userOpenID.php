@@ -52,8 +52,6 @@ class userOpenID  {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new userRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
         // Redirect if not logged in
@@ -125,9 +123,9 @@ class userOpenID  {
         $this->r->text['form_url'] = suxFunct::makeUrl("/user/openid/{$this->nickname}");
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
-        $this->r->openids = $this->user->getOpenIDs($this->users_id);
-        $this->r->trusted = $this->openid->getTrusted($this->users_id);
-        $this->r->title .= " | {$this->r->text['edit_openid']}";
+        $this->r->arr['openids'] = $this->user->getOpenIDs($this->users_id);
+        $this->r->arr['trusted'] = $this->openid->getTrusted($this->users_id);
+        $this->r->title .= " | {$this->r->gtext['edit_openid']}";
 
         // Display template
         $this->tpl->display('openid.tpl');

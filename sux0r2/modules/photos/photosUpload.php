@@ -57,8 +57,6 @@ class photosUpload  {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new photosRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
         // Redirect if not logged in
@@ -126,7 +124,7 @@ class photosUpload  {
         $this->r->text['form_url'] = suxFunct::makeUrl('/photos/upload');
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
-        $this->r->title .= " | {$this->r->text['upload']}";
+        $this->r->title .= " | {$this->r->gtext['upload']}";
 
         // Template
         $this->tpl->display('upload.tpl');
@@ -248,7 +246,7 @@ class photosUpload  {
             $log = '';
             $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
             $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
-            $log .= mb_strtolower($this->r->text['uploaded_images']);
+            $log .= mb_strtolower($this->r->gtext['uploaded_images']);
             $url = suxFunct::makeUrl("/photos/album/{$tmp['id']}", null, true);
             $log .= " <a href='$url'>{$tmp['title']}</a>";
 
@@ -270,7 +268,7 @@ class photosUpload  {
 
         // Template
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
-        $this->r->title .= " | {$this->r->text['success']}";
+        $this->r->title .= " | {$this->r->gtext['success']}";
 
         $this->tpl->display('success.tpl');
 

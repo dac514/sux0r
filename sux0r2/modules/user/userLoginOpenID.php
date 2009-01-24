@@ -52,7 +52,7 @@ class userLoginOpenID extends userRegisterOpenID {
         else{
             // Too many password failures?
             if ($this->user->maxPasswordFailures()) {
-                $this->r->title .= " | {$this->r->text['pw_failure']}";
+                $this->r->title .= " | {$this->r->gtext['pw_failure']}";
                 $this->tpl->display('pw_failure.tpl');
                 die();
             }
@@ -89,7 +89,7 @@ class userLoginOpenID extends userRegisterOpenID {
         $this->r->text['form_url'] = suxFunct::makeUrl('/user/login/openid');
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
-        $this->r->title .= " | {$this->r->text['openid_login']}";
+        $this->r->title .= " | {$this->r->gtext['openid_login']}";
 
         // Template
         $this->tpl->display('login_openid.tpl');

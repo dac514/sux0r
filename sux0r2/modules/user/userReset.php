@@ -47,8 +47,6 @@ class userReset {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new suxRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
     }
@@ -95,7 +93,7 @@ class userReset {
         $this->r->text['form_url'] = suxFunct::makeUrl('/user/reset');
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
-        $this->r->title .= " | {$this->r->text['reset']}";
+        $this->r->title .= " | {$this->r->gtext['reset']}";
 
         // Template
         $this->tpl->display('reset.tpl');
@@ -129,9 +127,9 @@ class userReset {
         $reset_user_id = $user['users_id'];
 
         // Email
-        $subject = "{$GLOBALS['CONFIG']['TITLE']}: {$this->r->text['reset_mail_1']} {$reset_user['nickname']}";
-        $message = "{$this->r->text['reset_mail_2']}:\n\n{$reset_user['password']}\n\n";
-        $message .= "{$this->r->text['reset_mail_3']}: {$_SERVER['REMOTE_ADDR']}\n\n";
+        $subject = "{$GLOBALS['CONFIG']['TITLE']}: {$this->r->gtext['reset_mail_1']} {$reset_user['nickname']}";
+        $message = "{$this->r->gtext['reset_mail_2']}:\n\n{$reset_user['password']}\n\n";
+        $message .= "{$this->r->gtext['reset_mail_3']}: {$_SERVER['REMOTE_ADDR']}\n\n";
         $message .= "---\n" . suxFunct::makeUrl('/', null, true) . "\n\n";
 
         // Do the dirty
@@ -148,7 +146,7 @@ class userReset {
 
         // Template
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
-        $this->r->title .= " | {$this->r->text['success']}";
+        $this->r->title .= " | {$this->r->gtext['success']}";
         $this->r->bool['edit'] = true; // Generic message
 
         $this->tpl->display('success.tpl');

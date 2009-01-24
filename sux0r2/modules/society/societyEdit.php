@@ -57,8 +57,6 @@ class societyEdit {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->r = new societyRenderer($this->module); // Renderer
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
         // Redirect if not logged in
@@ -141,7 +139,7 @@ class societyEdit {
         $this->tpl->assign('users_id', $this->users_id);
         $this->r->text['form_url'] = suxFunct::makeUrl("/society/relationship/{$this->nickname}");
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
-        $this->r->title .= " | {$this->r->text['edit_relationship']}";
+        $this->r->title .= " | {$this->r->gtext['edit_relationship']}";
 
         // Display template
         $this->tpl->display('relationship.tpl');
@@ -186,7 +184,7 @@ class societyEdit {
             // Log message
             $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
             $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
-            $log .= mb_strtolower($this->r->text['end_relation']);
+            $log .= mb_strtolower($this->r->gtext['end_relation']);
             $url = suxFunct::makeUrl("/user/profile/{$u['nickname']}", null, true);
             $log .= " <a href='$url'>{$u['nickname']}</a>";
 
@@ -197,7 +195,7 @@ class societyEdit {
             // Log message
             $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
             $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
-            $log .= mb_strtolower($this->r->text['change_relation']);
+            $log .= mb_strtolower($this->r->gtext['change_relation']);
             $url = suxFunct::makeUrl("/user/profile/{$u['nickname']}", null, true);
             $log .= " <a href='$url'>{$u['nickname']}</a>";
 

@@ -35,7 +35,7 @@
 		<td colspan="2" style="vertical-align:top;">
 			<div id="header">
 
-                <h1>{$r->text.header|lower}</h1>
+                <h1>{$r->gtext.header|lower}</h1>
                 {insert name="userInfo"}
                 {$r->navlist()}
 
@@ -48,12 +48,12 @@
 			<div id="leftside">
 
             <div class="editLinks">
-            <p>{$r->text.publisher}: <a href="{$r->makeURL('/user/profile')}/{$r->album.nickname}">{$r->album.nickname}</a></p>
+            <p>{$r->gtext.publisher}: <a href="{$r->makeURL('/user/profile')}/{$r->arr.album.nickname}">{$r->arr.album.nickname}</a></p>
             {insert name="editLinks" br=true}
-            {insert name="editLinks2" album_id=$r->album.id br=true}
+            {insert name="editLinks2" album_id=$r->arr.album.id br=true}
             </div>
 
-            {$r->album.body_html}
+            {$r->arr.album.body_html}
 
 			</div>
 		</td>
@@ -62,21 +62,21 @@
 
 
                 <div class="widget">
-                    <h2><a href="{$r->text.back_url}">{$r->album.title}</a></h2>
+                    <h2><a href="{$r->text.back_url}">{$r->arr.album.title}</a></h2>
 
                     <div class="prevNext" style="width:{#maxPhotoWidth#}px;">
-                        {if $r->text.prev_id}<a href="{$r->makeUrl('photos/view')}/{$r->text.prev_id}" class="previous">&laquo; {$r->text.prev}</a>{/if}
-                        {if $r->text.next_id}<a href="{$r->makeUrl('photos/view')}/{$r->text.next_id}" class="next">{$r->text.next} &raquo;</a>{/if}
+                        {if $r->text.prev_id}<a href="{$r->makeUrl('photos/view')}/{$r->text.prev_id}" class="previous">&laquo; {$r->gtext.prev}</a>{/if}
+                        {if $r->text.next_id}<a href="{$r->makeUrl('photos/view')}/{$r->text.next_id}" class="next">{$r->gtext.next} &raquo;</a>{/if}
                     </div>
 
                     <p id="suxPhoto">
                     {strip}{if $r->text.next_id}<a href="{$r->makeUrl('photos/view')}/{$r->text.next_id}">{else}<a href="{$r->text.back_url}">{/if}
-                    {/strip}<img class="photo" src="{$r->url}/data/photos/{$r->pho.image|escape:'url'}" alt="" /></a>
+                    {/strip}<img class="photo" src="{$r->url}/data/photos/{$r->arr.photos.image|escape:'url'}" alt="" /></a>
                     </p>
 
-                    {if $r->pho.description}
+                    {if $r->arr.photos.description}
                     <div class="description" style="width:{#maxPhotoWidth#}px;">
-                    {$r->pho.description}
+                    {$r->arr.photos.description}
                     </div>
                     {/if}
 

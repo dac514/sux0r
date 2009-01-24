@@ -10,17 +10,17 @@
 
     {* Edit Mode *}
 
-    <p><strong>{$r->text.success}</strong>
-    <p>{$r->text.success_edit}</p>
-    <p style="text-align:center;">[ <a href="{$r->text.back_url}">{$r->text.back}</a> ]</p>
+    <p><strong>{$r->gtext.success}</strong>
+    <p>{$r->gtext.success_edit}</p>
+    <p style="text-align:center;">[ <a href="{$r->text.back_url}">{$r->gtext.back}</a> ]</p>
 
 {else}
 
     {* Register Mode *}
 
-    <h1>{$r->text.thanks}</h1>
-    <p>{$r->text.success_register}</p>
-    <p style="text-align:center;">[ <a href="{$r->makeUrl('/home')}">{$r->text.homepage}</a> ]</p>
+    <h1>{$r->gtext.thanks}</h1>
+    <p>{$r->gtext.success_register}</p>
+    <p style="text-align:center;">[ <a href="{$r->makeUrl('/home')}">{$r->gtext.homepage}</a> ]</p>
 
 {/if}
 

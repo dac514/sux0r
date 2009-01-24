@@ -30,9 +30,6 @@ class userRenderer extends suxRenderer {
 
     // Variables
     public $profile = array(); // User profile
-    public $ulist = array(); // User list
-    public $minifeed = array();
-    public $openids = array();
 
     // Objects
     protected $user;
@@ -74,8 +71,8 @@ class userRenderer extends suxRenderer {
     function getGenders() {
 
         return array(
-            'm' => $this->text['male'],
-            'f' => $this->text['female'],
+            'm' => $this->gtext['male'],
+            'f' => $this->gtext['female'],
             );
 
     }
@@ -90,8 +87,8 @@ class userRenderer extends suxRenderer {
     function getGender($gender) {
 
         $gender = mb_strtolower(trim($gender));
-        if ($gender == 'm') return $this->text['male'];
-        else return $this->text['female'];
+        if ($gender == 'm') return $this->gtext['male'];
+        else return $this->gtext['female'];
 
     }
 
@@ -105,7 +102,7 @@ class userRenderer extends suxRenderer {
 
         $lang = suxFunct::getLanguages();
         foreach ($lang as $key => $val) {
-            if (isset($this->text[$key])) $lang[$key] = $this->text[$key];
+            if (isset($this->gtext[$key])) $lang[$key] = $this->gtext[$key];
         }
         asort($lang);
         return $lang;
@@ -123,7 +120,7 @@ class userRenderer extends suxRenderer {
 
         $lang = mb_strtolower(trim($lang));
         $return = suxFunct::getLanguages();
-        if (isset($this->text[$lang])) $return[$lang] = $this->text[$lang];
+        if (isset($this->gtext[$lang])) $return[$lang] = $this->gtext[$lang];
         return $return[$lang];
 
     }
@@ -140,7 +137,7 @@ class userRenderer extends suxRenderer {
         $c = suxFunct::getCountries();
         foreach ($c as $key => $val) {
             // Using key2 because key has several duplicates in 2-letter language codes
-            if (isset($this->text["{$key}2"])) $c[$key] = $this->text["{$key}2"];
+            if (isset($this->gtext["{$key}2"])) $c[$key] = $this->gtext["{$key}2"];
         }
         asort($c);
         return $c;
@@ -159,7 +156,7 @@ class userRenderer extends suxRenderer {
         $c = mb_strtolower(trim($c));
         $return = suxFunct::getCountries();
         // Using key2 because key has several duplicates in 2-letter language codes
-        if (isset($this->text["{$c}2"])) $return[$c] = $this->text["{$c}2"];
+        if (isset($this->gtext["{$c}2"])) $return[$c] = $this->gtext["{$c}2"];
         return $return[$c];
 
     }
@@ -310,11 +307,11 @@ function insert_editMenu($params) {
         $tmp .= '<li><a href="' . suxFunct::makeUrl("/society/relationship/{$params['nickname']}") . '">' . $text['edit_relationship'] . '</a></li>' . "\n";
     }
     else {
-        
+
         // Is feature turned off?
-        if ($GLOBALS['CONFIG']['FEATURE']['bayes'] != false)    
+        if ($GLOBALS['CONFIG']['FEATURE']['bayes'] != false)
             $tmp .= '<li><a href="' . suxFunct::makeUrl("/bayes") . '">' . $text['edit_bayes'] . '</a></li>' . "\n";
-        
+
         $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/edit/{$params['nickname']}") . '">' . $text['edit_profile'] . '</a></li>' . "\n";
         $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/avatar/{$params['nickname']}") . '">' . $text['edit_avatar'] . '</a></li>' . "\n";
         $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/openid/{$params['nickname']}") . '">' . $text['edit_openid'] . '</a></li>' . "\n";
@@ -337,7 +334,7 @@ function insert_lament($params) {
     if ($_SESSION['users_id'] != $params['users_id']) return null;
 
     $text = suxFunct::gtext('user');
-    $url = suxFunct::makeUrl('/') . '/modules/user/lament.php';
+    $url = $GLOBALS['CONFIG']['URL'] . '/modules/user/lament.php';
 
     $html = "
         <div id='lament'>{$text['lament']}</div>

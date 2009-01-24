@@ -59,8 +59,6 @@ class photosEdit {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new photosRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
         $this->pager = new suxPager();
 
@@ -144,12 +142,12 @@ class photosEdit {
 
         $this->pager->setPages($this->photo->countPhotos($this->id));
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/photos/album/annotate/{$this->id}"));
-        $this->r->pho = $this->photo->getPhotos($this->id, $this->pager->limit, $this->pager->start);
+        $this->r->arr['photos'] = $this->photo->getPhotos($this->id, $this->pager->limit, $this->pager->start);
 
         $this->r->text['form_url'] = suxFunct::makeUrl('/photos/album/annotate/' . $this->id, array('page' => $_GET['page']));
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
-        $this->r->title .= " | {$this->r->text['annotate_2']}";
+        $this->r->title .= " | {$this->r->gtext['annotate_2']}";
 
         $this->tpl->display('annotate.tpl');
 
@@ -196,7 +194,7 @@ class photosEdit {
 
         // Template
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
-        $this->r->title .= " | {$this->r->text['success']}";
+        $this->r->title .= " | {$this->r->gtext['success']}";
 
         $this->tpl->display('success.tpl');
 

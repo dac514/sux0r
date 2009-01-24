@@ -1,7 +1,7 @@
 {capture name=header}
 
     {* RSS Feed *}
-    <link rel="alternate" type="application/rss+xml" title="{$r->sitename} | {$r->text.photos}" href="{$r->makeUrl('/photos/rss', null, true)}" />
+    <link rel="alternate" type="application/rss+xml" title="{$r->sitename} | {$r->gtext.photos}" href="{$r->makeUrl('/photos/rss', null, true)}" />
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
@@ -12,7 +12,7 @@
 		<td colspan="2" style="vertical-align:top;">
 			<div id="header">
 
-                <h1>{$r->text.header|lower}</h1>
+                <h1>{$r->gtext.header|lower}</h1>
                 {insert name="userInfo"}
                 {$r->navlist()}
 
@@ -25,12 +25,12 @@
 			<div id="leftside">
 
             <div class="editLinks">
-            <p>{$r->text.publisher}: <a href="{$r->makeURL('/user/profile')}/{$r->album.nickname}">{$r->album.nickname}</a></p>  
+            <p>{$r->gtext.publisher}: <a href="{$r->makeURL('/user/profile')}/{$r->arr.album.nickname}">{$r->arr.album.nickname}</a></p>
             {insert name="editLinks" br=true}
-            {insert name="editLinks2" album_id=$r->album.id br=true}
+            {insert name="editLinks2" album_id=$r->arr.album.id br=true}
             </div>
-            
-            {$r->album.body_html}
+
+            {$r->arr.album.body_html}
 
 			</div>
 		</td>
@@ -38,13 +38,13 @@
 			<div id="rightside">
 
                 <div class="widget">
-                    <h2><a href="{$r->makeUrl('/photos/album')}/{$r->album.id}">{$r->album.title}</a></h2>
+                    <h2><a href="{$r->makeUrl('/photos/album')}/{$r->arr.album.id}">{$r->arr.album.title}</a></h2>
 
                     <div class="photoAlbumItem">
 
-                    {if $r->pho}
+                    {if $r->arr.photos}
                     <div class="thumbnailLinks">
-                    {foreach from=$r->pho item=foo name=bar}
+                    {foreach from=$r->arr.photos item=foo name=bar}
 
                        {strip}
                        <a href="{$r->makeUrl('/photos/view')}/{$foo.id}">
@@ -55,7 +55,7 @@
                     {/foreach}
                     </div>
                     {else}
-                        {$r->text.no_photos}...
+                        {$r->gtext.no_photos}...
                     {/if}
 
                     <div class="clearboth"></div>

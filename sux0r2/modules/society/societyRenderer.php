@@ -54,7 +54,7 @@ class societyRenderer extends suxRenderer {
     function getIdentity() {
 
         return array(
-            'me' => $this->text['me'],
+            'me' => $this->gtext['me'],
             );
 
     }
@@ -68,10 +68,10 @@ class societyRenderer extends suxRenderer {
     function getFriendship() {
 
         return array(
-            'contact' => $this->text['contact'],
-            'acquaintance' => $this->text['acquaintance'],
-            'friend' => $this->text['friend'],
-            '' => $this->text['none'],
+            'contact' => $this->gtext['contact'],
+            'acquaintance' => $this->gtext['acquaintance'],
+            'friend' => $this->gtext['friend'],
+            '' => $this->gtext['none'],
             );
 
     }
@@ -85,7 +85,7 @@ class societyRenderer extends suxRenderer {
     function getPhysical() {
 
         return array(
-            'met' => $this->text['met'],
+            'met' => $this->gtext['met'],
             );
 
     }
@@ -99,8 +99,8 @@ class societyRenderer extends suxRenderer {
     function getProfessional() {
 
         return array(
-            'co-worker' => $this->text['co_worker'],
-            'colleague' => $this->text['colleague'],
+            'co-worker' => $this->gtext['co_worker'],
+            'colleague' => $this->gtext['colleague'],
             );
 
     }
@@ -114,9 +114,9 @@ class societyRenderer extends suxRenderer {
     function getGeographical() {
 
         return array(
-            'co-resident' => $this->text['co_resident'],
-            'neighbor' => $this->text['neighbor'],
-            '' => $this->text['none'],
+            'co-resident' => $this->gtext['co_resident'],
+            'neighbor' => $this->gtext['neighbor'],
+            '' => $this->gtext['none'],
             );
 
     }
@@ -130,12 +130,12 @@ class societyRenderer extends suxRenderer {
     function getFamily() {
 
         return array(
-            'child' => $this->text['child'],
-            'parent' => $this->text['parent'],
-            'sibling' => $this->text['sibling'],
-            'spouse' => $this->text['spouse'],
-            'kin' => $this->text['kin'],
-            '' => $this->text['none'],
+            'child' => $this->gtext['child'],
+            'parent' => $this->gtext['parent'],
+            'sibling' => $this->gtext['sibling'],
+            'spouse' => $this->gtext['spouse'],
+            'kin' => $this->gtext['kin'],
+            '' => $this->gtext['none'],
             );
 
     }
@@ -149,10 +149,10 @@ class societyRenderer extends suxRenderer {
     function getRomantic() {
 
         return array(
-            'muse' => $this->text['muse'],
-            'crush' => $this->text['crush'],
-            'date' => $this->text['date'],
-            'sweetheart' => $this->text['sweetheart'],
+            'muse' => $this->gtext['muse'],
+            'crush' => $this->gtext['crush'],
+            'date' => $this->gtext['date'],
+            'sweetheart' => $this->gtext['sweetheart'],
             );
 
     }

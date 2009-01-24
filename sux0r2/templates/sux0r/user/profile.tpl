@@ -17,7 +17,7 @@
 		<td colspan="3" style="vertical-align:top;">
 			<div id="header">
 
-                <h1>{$r->text.profile_of} : {$r->profile.nickname}</h1>
+                <h1>{$r->gtext.profile_of} : {$r->arr.profile.nickname}</h1>
                 {insert name="userInfo"}
                 {$r->navlist()}
 
@@ -29,17 +29,17 @@
         <td style="vertical-align:top;">
 			<div id="leftside">
 
-            <p>{$r->text.profile_intro}</p>
+            <p>{$r->gtext.profile_intro}</p>
 
             <!-- menu -->
             <div class='menucontainer'>
             <ul class='menulist'>
-            <li><a href='{$r->makeUrl('/blog/author')}/{$r->profile.nickname}'>{$r->text.blog}</a></li>
-            <li><a href='{$r->makeUrl('/feeds/user')}/{$r->profile.nickname}'>{$r->text.feeds}</a></li>
-            <li><a href='{$r->makeUrl('/bookmarks/user')}/{$r->profile.nickname}'>{$r->text.bookmarks}</a></li>
-            <li><a href='{$r->makeUrl('/photos/user')}/{$r->profile.nickname}'>{$r->text.photoalbums}</a></li>
+            <li><a href='{$r->makeUrl('/blog/author')}/{$r->arr.profile.nickname}'>{$r->gtext.blog}</a></li>
+            <li><a href='{$r->makeUrl('/feeds/user')}/{$r->arr.profile.nickname}'>{$r->gtext.feeds}</a></li>
+            <li><a href='{$r->makeUrl('/bookmarks/user')}/{$r->arr.profile.nickname}'>{$r->gtext.bookmarks}</a></li>
+            <li><a href='{$r->makeUrl('/photos/user')}/{$r->arr.profile.nickname}'>{$r->gtext.photoalbums}</a></li>
             <li><div style="padding-bottom: 1em"></div></li>
-            {insert name="editMenu" nickname=$r->profile.nickname}
+            {insert name="editMenu" nickname=$r->arr.profile.nickname}
             </ul>
             </div>
             <div class='clearboth'></div>
@@ -53,8 +53,8 @@
             {* Image *}
             {capture name=image}{strip}
 
-                {if $r->profile.image}
-                {$r->makeUrl('/', null, true)}/data/user/{$r->profile.image|escape:'url'}
+                {if $r->arr.profile.image}
+                {$r->makeUrl('/', null, true)}/data/user/{$r->arr.profile.image|escape:'url'}
                 {/if}
 
             {/strip}{/capture}
@@ -65,64 +65,64 @@
                 <p class="vcard">
                 {if $smarty.capture.image}<img class="photo" style="display:none;" src="{$smarty.capture.image}" alt="" />{/if}{* Hidden photo for hcard *}
 
-                {$r->text.nickname} : {if $r->profile.given_name || $r->profile.family_name}<span class="nickname">{else}<span class="fn nickname">{/if}{$r->profile.nickname}</span><br />
-                {$r->text.email} : {mailto address=$r->profile.email  encode='javascript_charcode'}<br />
+                {$r->gtext.nickname} : {if $r->arr.profile.given_name || $r->arr.profile.family_name}<span class="nickname">{else}<span class="fn nickname">{/if}{$r->arr.profile.nickname}</span><br />
+                {$r->gtext.email} : {mailto address=$r->arr.profile.email  encode='javascript_charcode'}<br />
 
-                {if $r->profile.given_name || $r->profile.family_name}
-                {$r->text.name} : <span class="fn">{$r->profile.given_name} {$r->profile.family_name}</span><br />
+                {if $r->arr.profile.given_name || $r->arr.profile.family_name}
+                {$r->gtext.name} : <span class="fn">{$r->arr.profile.given_name} {$r->arr.profile.family_name}</span><br />
                 {/if}
 
                 <span class="adr">
-                    {if $r->profile.street_address}
-                    {$r->text.street_address} : <span class="street-address">{$r->profile.street_address}</span><br />
+                    {if $r->arr.profile.street_address}
+                    {$r->gtext.street_address} : <span class="street-address">{$r->arr.profile.street_address}</span><br />
                     {/if}
 
-                    {if $r->profile.locality}
-                    {$r->text.locality} : <span class="locality">{$r->profile.locality}</span><br />
+                    {if $r->arr.profile.locality}
+                    {$r->gtext.locality} : <span class="locality">{$r->arr.profile.locality}</span><br />
                     {/if}
 
-                    {if $r->profile.region}
-                    {$r->text.region} : <span class="region">{$r->profile.region}</span><br />
+                    {if $r->arr.profile.region}
+                    {$r->gtext.region} : <span class="region">{$r->arr.profile.region}</span><br />
                     {/if}
 
-                    {if $r->profile.postcode}
-                    {$r->text.postcode} : <span class="postal-code">{$r->profile.postcode}</span> <br />
+                    {if $r->arr.profile.postcode}
+                    {$r->gtext.postcode} : <span class="postal-code">{$r->arr.profile.postcode}</span> <br />
                     {/if}
 
-                    {if $r->profile.country}
-                    {$r->text.country} : <span class="country-name">{$r->getCountry($r->profile.country)}</span><br />
+                    {if $r->arr.profile.country}
+                    {$r->gtext.country} : <span class="country-name">{$r->getCountry($r->arr.profile.country)}</span><br />
                     {/if}
                 </span>
 
-                {if $r->profile.tel}
-                {$r->text.tel} : <span class="tel">{$r->profile.tel}</span><br />
+                {if $r->arr.profile.tel}
+                {$r->gtext.tel} : <span class="tel">{$r->arr.profile.tel}</span><br />
                 {/if}
 
-                {if $r->profile.url}
-                {$r->text.url} : <a href="{$r->profile.url}" class="url">{$r->profile.url}</a> <br />
+                {if $r->arr.profile.url}
+                {$r->gtext.url} : <a href="{$r->arr.profile.url}" class="url">{$r->arr.profile.url}</a> <br />
                 {/if}
 
-                {if $r->profile.dob}
-                {$r->text.dob} : <span class="bday">{$r->profile.dob}</span><br />
+                {if $r->arr.profile.dob}
+                {$r->gtext.dob} : <span class="bday">{$r->arr.profile.dob}</span><br />
                 {/if}
 
-                {if $r->profile.gender}
-                {$r->text.gender} : {$r->getGender($r->profile.gender)} <br />
+                {if $r->arr.profile.gender}
+                {$r->gtext.gender} : {$r->getGender($r->arr.profile.gender)} <br />
                 {/if}
 
-                {if $r->profile.language}
-                {$r->text.language} : {$r->getLanguage($r->profile.language)} <br />
+                {if $r->arr.profile.language}
+                {$r->gtext.language} : {$r->getLanguage($r->arr.profile.language)} <br />
                 {/if}
 
-                {if $r->profile.timezone}
-                {$r->text.timezone} : {$r->profile.timezone} <br />
+                {if $r->arr.profile.timezone}
+                {$r->gtext.timezone} : {$r->arr.profile.timezone} <br />
                 {/if}
                 </p>
 
                 {* OpenIDs *}
                 <p>
-                <img src="{$r->url}/media/{$r->partition}/assets/openid_icon.gif" alt="OpenID" class="openidIcon" /> <a href="{$r->makeUrl('/user/profile', null, true)}/{$r->profile.nickname}">{$r->makeUrl('/user/profile', null, true)}/{$r->profile.nickname}</a><br />
-                {foreach from= $r->getOpenIDs($r->profile.users_id) item=foo}
+                <img src="{$r->url}/media/{$r->partition}/assets/openid_icon.gif" alt="OpenID" class="openidIcon" /> <a href="{$r->makeUrl('/user/profile', null, true)}/{$r->arr.profile.nickname}">{$r->makeUrl('/user/profile', null, true)}/{$r->arr.profile.nickname}</a><br />
+                {foreach from= $r->getOpenIDs($r->arr.profile.users_id) item=foo}
                 <img src="{$r->url}/media/{$r->partition}/assets/openid_icon.gif" alt="OpenID" class="openidIcon" /> <a href="{$foo.openid_url}">{$foo.openid_url}</a><br />
                 {/foreach}
                 </p>
@@ -130,24 +130,24 @@
             {/capture}
 
 
-            {$r->widget($r->text.profile, $smarty.capture.profile, null, $smarty.capture.image)}
+            {$r->widget($r->gtext.profile, $smarty.capture.profile, null, $smarty.capture.image)}
 
 
             {* Acquaintances *}
-            {if $r->acquaintances($r->profile.users_id)}
+            {if $r->acquaintances($r->arr.profile.users_id)}
             {capture name=acquaintances}{strip}
-                {$r->acquaintances($r->profile.users_id)}
+                {$r->acquaintances($r->arr.profile.users_id)}
             {/strip}{/capture}
-            {$r->widget($r->text.acquaintances, $smarty.capture.acquaintances)}
+            {$r->widget($r->gtext.acquaintances, $smarty.capture.acquaintances)}
             {/if}
 
 
             {* Stalkers *}
-            {if $r->stalkers($r->profile.users_id)}
+            {if $r->stalkers($r->arr.profile.users_id)}
             {capture name=stalkers}{strip}
-                {$r->stalkers($r->profile.users_id)}
+                {$r->stalkers($r->arr.profile.users_id)}
             {/strip}{/capture}
-            {$r->widget($r->text.stalkers, $smarty.capture.stalkers)}
+            {$r->widget($r->gtext.stalkers, $smarty.capture.stalkers)}
             {/if}
 
 
@@ -155,15 +155,15 @@
 		</td>
 		<td style="vertical-align:top;">
 			<div id="rightside">
-            <h2><a href="{$r->makeURL('/user/profile', null, true)}/{$r->profile.nickname}/rss" class="noBg"><img class="rssIcon" src="{$r->url}/media/{$r->partition}/assets/rss_icon.png" alt="RSS Feed" /></a> {$r->text.minifeed}</h2>
+            <h2><a href="{$r->makeURL('/user/profile', null, true)}/{$r->arr.profile.nickname}/rss" class="noBg"><img class="rssIcon" src="{$r->url}/media/{$r->partition}/assets/rss_icon.png" alt="RSS Feed" /></a> {$r->gtext.minifeed}</h2>
 
-            {insert name="lament" users_id=$r->profile.users_id}
+            {insert name="lament" users_id=$r->arr.profile.users_id}
 
             <ul class="miniFeed">
-            {foreach from=$r->minifeed item=foo}
+            {foreach from=$r->arr.minifeed item=foo}
             <li><em><strong>{$foo.ts}</strong></em> <br />{$foo.body_html}</li>
             {foreachelse}
-            <li>{$r->text.nothing}</li>
+            <li>{$r->gtext.nothing}</li>
             {/foreach}
             </ul>
 

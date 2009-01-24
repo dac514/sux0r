@@ -51,8 +51,6 @@ class userProfile {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new userRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         $this->r->bool['analytics'] = true; // Turn on analytics
 
         // Profile
@@ -81,9 +79,9 @@ class userProfile {
 
             if (!isset($this->profile['dob']) || $this->profile['dob'] == '0000-00-00') unset($this->profile['dob']); // NULL date
 
-            $this->r->profile =& $this->profile; // Assign
+            $this->r->arr['profile'] =& $this->profile; // Assign
             $this->r->title .= " | {$this->profile['nickname']}";
-            $this->r->minifeed = $this->user->getLog($this->minifeed_limit, 0, $this->profile['users_id']); // Minifeed array
+            $this->r->arr['minifeed'] = $this->user->getLog($this->minifeed_limit, 0, $this->profile['users_id']); // Minifeed array
 
         }
 
