@@ -108,6 +108,9 @@ class userAuthenticate {
             suxFunct::killSession();
         }
 
+        // Ask browser to clear authentication
+        header('HTTP/1.0 401 Unauthorized');
+
         $this->r->title .= " | {$this->r->text['logout']}";
 
         // Template
