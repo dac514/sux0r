@@ -24,15 +24,15 @@
 </p>
 
 <p>
-{$r->text.no_mode}<br />
-{$r->text.server}: <b>{$r->text.server_url}</b><br />
-{$r->text.realm}: <b>{$r->text.realm_id}</b><br />
+{$r->gtext.no_mode}<br />
+{$r->gtext.server}: <b>{$r->text.server_url}</b><br />
+{$r->gtext.realm}: <b>{$r->text.realm_id}</b><br />
 </p>
 
 <p>
-<a href="{$r->makeUrl('/user/login/openid')}">{$r->text.login}</a>
-{if $r->bool.debug} | <a href="{$r->text.test_url}">{$r->text.test}</a>{/if}
- | <a href="{$r->makeUrl('/home')}">{$r->text.homepage}</a>
+<a href="{$r->makeUrl('/user/login/openid')}">{$r->gtext.login}</a>
+{if $r->bool.debug} | <a href="{$r->text.test_url}">{$r->gtext.test}</a>{/if}
+ | <a href="{$r->makeUrl('/home')}">{$r->gtext.homepage}</a>
 </p>
 
 </fieldset>

@@ -12,7 +12,7 @@
     unecessary style sheets and whatnot, so the entire XHTML document is
     represented and displayed as opposed to assembled from shared templates *}
 
-    <p>{$r->text.redirect} <a href="{$r->text.url}">{$r->text.url}</a></p>
+    <p>{$r->gtext.redirect} <a href="{$r->text.url}">{$r->text.url}</a></p>
 
 </body>
 </html>
