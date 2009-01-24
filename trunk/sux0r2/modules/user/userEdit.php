@@ -52,8 +52,6 @@ class userEdit {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new userRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
         // -------------------------------------------------------------------
@@ -251,8 +249,8 @@ class userEdit {
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
 
-        if ($this->mode == 'edit') $this->r->title .= " | {$this->r->text['edit_profile']}";
-        else $this->r->title .= " | {$this->r->text['reg']}";
+        if ($this->mode == 'edit') $this->r->title .= " | {$this->r->gtext['edit_profile']}";
+        else $this->r->title .= " | {$this->r->gtext['reg']}";
 
         // Template
         $this->tpl->display('edit.tpl');
@@ -336,7 +334,7 @@ class userEdit {
                 $log = '';
                 $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
                 $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
-                $log .= mb_strtolower($this->r->text['changed_profile']);
+                $log .= mb_strtolower($this->r->gtext['changed_profile']);
                 $this->user->log($log);
             }
             else {
@@ -391,7 +389,7 @@ class userEdit {
 
         }
 
-        $this->r->title .= " | {$this->r->text['success']}";
+        $this->r->title .= " | {$this->r->gtext['success']}";
 
         // Template
         $this->tpl->display('success.tpl');

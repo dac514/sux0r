@@ -19,7 +19,7 @@
 <div id="middle">
 
 <fieldset>
-<legend>{$r->text.annotate_2}</legend>
+<legend>{$r->gtext.annotate_2}</legend>
 
 <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />
@@ -30,8 +30,8 @@
 {validate id="integrity" message="integrity failure"}
 {/if}
 
-{if $r->pho}
-{foreach from=$r->pho item=foo}
+{if $r->arr.photos}
+{foreach from=$r->arr.photos item=foo}
 
     <div class="annotateItem" style="">
 
@@ -40,12 +40,12 @@
     </div>
 
     <div class="annotateItemDesc" style="float:left;">
-        <div id="editme{$foo.id}">{if $foo.description}{$foo.description}{else}{$r->text.clickme}{/if}</div>
+        <div id="editme{$foo.id}">{if $foo.description}{$foo.description}{else}{$r->gtext.clickme}{/if}</div>
     </div>
 
     <div class="annotateItemOptions" style="float:right;">
-        <input type="radio" name="cover" id="cover{$foo.id}" value="{$foo.id}" {if $cover == $foo.id}checked="checked"{/if} /><label for="cover{$foo.id}">{$r->text.cover}</label> |
-        <input type="checkbox" name="delete[]" id="delete{$foo.id}" value="{$foo.id}" /><label for="delete{$foo.id}">{$r->text.delete}</label>
+        <input type="radio" name="cover" id="cover{$foo.id}" value="{$foo.id}" {if $cover == $foo.id}checked="checked"{/if} /><label for="cover{$foo.id}">{$r->gtext.cover}</label> |
+        <input type="checkbox" name="delete[]" id="delete{$foo.id}" value="{$foo.id}" /><label for="delete{$foo.id}">{$r->gtext.delete}</label>
     </div>
 
 
@@ -54,15 +54,15 @@
     // <![CDATA[
     new Ajax.InPlaceEditor(
         'editme{/literal}{$foo.id}{literal}',
-        '{/literal}{$r->makeURL('/')}{literal}/modules/photos/describe.php', {
+        '{/literal}{$r->url}{literal}/modules/photos/describe.php', {
             rows: 5,
             cols: 80,
-            clickToEditText: '{/literal}{$r->text.clickme}{literal}',
-            savingText: '{/literal}{$r->text.saving}{literal}...',
+            clickToEditText: '{/literal}{$r->gtext.clickme}{literal}',
+            savingText: '{/literal}{$r->gtext.saving}{literal}...',
             okControl: 'button',
-            okText: '{/literal}{$r->text.ok}{literal}',
+            okText: '{/literal}{$r->gtext.ok}{literal}',
             cancelControl: 'button',
-            cancelText: '{/literal}{$r->text.cancel}{literal}',
+            cancelText: '{/literal}{$r->gtext.cancel}{literal}',
             callback: function(form, value) {
                 return 'id={/literal}{$foo.id}{literal}&description='+encodeURIComponent(value)
             }
@@ -80,12 +80,12 @@
 
 {$r->text.pager}
 {else}
-    <p>{$r->text.no_photos}...</p>
+    <p>{$r->gtext.no_photos}...</p>
 {/if}
 
 <p>
-<input type="button" class="button" value="{$r->text.cancel}" onclick="document.location='{$r->text.back_url}';" />
-<input type="submit" class="button" value="{$r->text.submit}" />
+<input type="button" class="button" value="{$r->gtext.cancel}" onclick="document.location='{$r->text.back_url}';" />
+<input type="submit" class="button" value="{$r->gtext.submit}" />
 </p>
 
 

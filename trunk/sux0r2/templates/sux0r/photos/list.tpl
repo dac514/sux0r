@@ -1,7 +1,7 @@
 {capture name=header}
 
     {* RSS Feed *}
-    <link rel="alternate" type="application/rss+xml" title="{$r->sitename} | {$r->text.photos}" href="{$r->makeUrl('/photos/rss', null, true)}" />
+    <link rel="alternate" type="application/rss+xml" title="{$r->sitename} | {$r->gtext.photos}" href="{$r->makeUrl('/photos/rss', null, true)}" />
 
     <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
 
@@ -53,7 +53,7 @@
 		<td colspan="2" style="vertical-align:top;">
 			<div id="header">
 
-                <h1>{$r->text.header|lower}</h1>
+                <h1>{$r->gtext.header|lower}</h1>
                 {insert name="userInfo"}
                 {$r->navlist()}
                 <div class="clearboth"></div>
@@ -67,15 +67,15 @@
 
 			<div id="leftside">
 
-            {if $r->pho}
-            {foreach from=$r->pho item=foo name=bar}
+            {if $r->arr.photos}
+            {foreach from=$r->arr.photos item=foo name=bar}
             {if $smarty.foreach.bar.iteration % 2 != 0}
 
                 {capture name=album}
                     <p>
                     {$foo.published_on}<br />
-                    {$r->text.publisher}: <a href="{$r->makeURL('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a><br />
-                    {$r->countPhotos($foo.id)} {$r->text.photos}
+                    {$r->gtext.publisher}: <a href="{$r->makeURL('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a><br />
+                    {$r->countPhotos($foo.id)} {$r->gtext.photos}
                     </p>
                     <div id="truncId{$foo.id}">{$foo.body_html}</div>
                     <div class="clearboth"></div>
@@ -103,24 +103,23 @@
             {/if}
             {/foreach}
             {else}
-                <p>{$r->text.no_photos}</p>
+                <p>{$r->gtext.no_photos}</p>
             {/if}
-
 
 			</div>
 		</td>
 		<td style="vertical-align:top;">
 			<div id="rightside">
 
-            {if $r->pho}
-            {foreach from=$r->pho item=foo name=bar}
+            {if $r->arr.photos}
+            {foreach from=$r->arr.photos item=foo name=bar}
             {if $smarty.foreach.bar.iteration % 2 == 0}
 
                 {capture name=album}
                     <p>
                     {$foo.published_on}<br />
-                    {$r->text.publisher}: <a href="{$r->makeURL('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a><br />
-                    {$r->countPhotos($foo.id)} {$r->text.photos}
+                    {$r->gtext.publisher}: <a href="{$r->makeURL('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a><br />
+                    {$r->countPhotos($foo.id)} {$r->gtext.photos}
                     </p>
                     <div id="truncId{$foo.id}">{$foo.body_html}</div>
                     <div class="clearboth"></div>

@@ -27,11 +27,6 @@ require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
 class photosRenderer extends suxRenderer {
 
-    // Variables
-    public $pho = array(); // Array of photo(s)
-    public $fp = array(); // Alternater array
-    public $album = array(); // Array of album(s)
-
     // Objects
     private $photo;
     private $user;
@@ -140,7 +135,7 @@ class photosRenderer extends suxRenderer {
 
         $image = null;
         $tmp = $this->photo->getThumbnail($photoalbums_id);
-        if ($tmp) $image = suxFunct::makeUrl('/data/photos/' . rawurlencode($tmp['image']), null, true);
+        if ($tmp) $image = suxFunct::myHttpServer() . $GLOBALS['CONFIG']['URL'] . '/data/photos/' . rawurlencode($tmp['image']);
 
         return $image;
 

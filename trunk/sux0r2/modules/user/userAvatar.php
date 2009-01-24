@@ -53,8 +53,6 @@ class userAvatar  {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new userRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
         // Redirect if not logged in
@@ -134,7 +132,7 @@ class userAvatar  {
         $this->r->text['supported'] =  $this->extensions;
         $this->r->text['form_url'] = suxFunct::makeUrl("/user/avatar/{$this->nickname}");
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
-        $this->r->title .= " | {$this->r->text['edit_avatar']}";
+        $this->r->title .= " | {$this->r->gtext['edit_avatar']}";
 
         // Display template
         $this->tpl->display('avatar.tpl');
@@ -192,7 +190,7 @@ class userAvatar  {
             $log = '';
             $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
             $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
-            $log .= mb_strtolower($this->r->text['changed_avatar']);
+            $log .= mb_strtolower($this->r->gtext['changed_avatar']);
             $this->user->log($log);
         }
         else {
@@ -213,7 +211,7 @@ class userAvatar  {
 
         $this->r->bool['edit'] = true;
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
-        $this->r->title .= " | {$this->r->text['success']}";
+        $this->r->title .= " | {$this->r->gtext['success']}";
 
         // Template
         $this->tpl->display('success.tpl');

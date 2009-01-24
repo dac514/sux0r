@@ -16,7 +16,7 @@
 <div id="middle">
 
 <fieldset>
-<legend>{$r->text.avatar}: {$nickname}</legend>
+<legend>{$r->gtext.avatar}: {$nickname}</legend>
 
 <form action="{$r->text.form_url}" name="default" method="post" enctype="multipart/form-data" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />
@@ -27,9 +27,9 @@
 {validate id="integrity" message="integrity failure"}
 
 {if $validate.default.is_error !== false}
-<p class="errorWarning">{$r->text.form_error} :</p>
+<p class="errorWarning">{$r->gtext.form_error} :</p>
 {elseif $r->detectPOST()}
-<p class="errorWarning">{$r->text.form_problem} :</p>
+<p class="errorWarning">{$r->gtext.form_problem} :</p>
 {/if}
 
 
@@ -40,7 +40,7 @@
 </p>
 
 <p>
-<label>{$r->text.unset_image} :</label>
+<label>{$r->gtext.unset_image} :</label>
 <input type="checkbox" name="unset_image" value="1" {if $unset_image}checked="checked"{/if} /><br />
 </p>
 {/if}
@@ -48,25 +48,25 @@
 <p>
 {strip}
     {capture name=error}
-    {validate id="image" message=$r->text.form_error_14}
+    {validate id="image" message=$r->gtext.form_error_14}
     {validate id="image2" message=$r->text.form_error_15}
     {/capture}
 {/strip}
-<label {if $smarty.capture.error}class="error"{/if} >{$r->text.image} : </label>
+<label {if $smarty.capture.error}class="error"{/if} >{$r->gtext.image} : </label>
 <input type="file" name="image" class="imageFile" />
 {$smarty.capture.error}
 </p>
 
 <p>
-{$r->text.max_filesize}: {$r->text.upload_max_filesize}<br />
-{$r->text.extensions}: {$r->text.supported}
+{$r->gtext.max_filesize}: {$r->text.upload_max_filesize}<br />
+{$r->gtext.extensions}: {$r->text.supported}
 </p>
 
 
 <p>
 <label>&nbsp;</label>
-<input type="button" class="button" value="{$r->text.cancel}" onclick="document.location='{$r->text.back_url}';" />
-<input type="submit" class="button" value="{$r->text.submit}" />
+<input type="button" class="button" value="{$r->gtext.cancel}" onclick="document.location='{$r->text.back_url}';" />
+<input type="submit" class="button" value="{$r->gtext.submit}" />
 </p>
 
 </form>

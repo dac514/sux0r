@@ -58,8 +58,6 @@ class photoalbumsEdit {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->r = new photosRenderer($this->module); // Renderer
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
 
@@ -175,8 +173,8 @@ class photoalbumsEdit {
             $this->tpl->assign('Time_Second', date('s'));
         }
 
-        if ($this->id) $this->r->title .= " | {$this->r->text['edit_2']}";
-        else $this->r->title .= " | {$this->r->text['new']}";
+        if ($this->id) $this->r->title .= " | {$this->r->gtext['edit_2']}";
+        else $this->r->title .= " | {$this->r->gtext['new']}";
 
         // Template
         $this->tpl->display('edit.tpl');
@@ -250,7 +248,7 @@ class photoalbumsEdit {
                 $log = '';
                 $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
                 $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
-                $log .= mb_strtolower($this->r->text['created_album']);
+                $log .= mb_strtolower($this->r->gtext['created_album']);
                 $url = suxFunct::makeUrl("/photos/album/{$tmp['id']}", null, true);
                 $log .= " <a href='$url'>{$tmp['title']}</a>";
                 $this->user->log($log);
@@ -273,7 +271,7 @@ class photoalbumsEdit {
 
         // Template
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
-        $this->r->title .= " | {$this->r->text['success']}";
+        $this->r->title .= " | {$this->r->gtext['success']}";
 
         $this->tpl->display('success.tpl');
 

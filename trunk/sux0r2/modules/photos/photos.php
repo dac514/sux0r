@@ -52,8 +52,6 @@ class photos {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new photosRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         $this->r->bool['analytics'] = true; // Turn on analytics
 
         $this->user = new suxUser();
@@ -94,20 +92,21 @@ class photos {
 
             $this->pager->setPages($this->photo->countAlbums());
             $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/photos'));
-            $this->r->pho = $this->photo->getAlbums($users_id, $this->pager->limit, $this->pager->start);
+            $this->r->arr['photos'] = $this->photo->getAlbums($users_id, $this->pager->limit, $this->pager->start);
 
-            if ($this->r->pho) foreach ($this->r->pho as $key => $val) {
+            if ($this->r->arr['photos']) foreach ($this->r->arr['photos'] as $key => $val) {
                 $tmp = $this->user->getUser($val['users_id']);
-                $this->r->pho[$key]['nickname'] = $tmp['nickname'];
+                $this->r->arr['photos'][$key]['nickname'] = $tmp['nickname'];
             }
 
 
-            if ($this->r->pho == false || !count($this->r->pho))
+            if ($this->r->arr['photos'] == false || !count($this->r->arr['photos']))
                 $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
-            $this->r->title .= " | {$this->r->text['photos']}";
+            $this->r->title .= " | {$this->r->gtext['photos']}";
 
         }
+
 
         $this->tpl->display('list.tpl', $cache_id);
 
@@ -136,15 +135,15 @@ class photos {
 
             $this->pager->setPages($this->photo->countPhotos($id));
             $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/photos/album/{$id}"));
-            $this->r->pho = $this->photo->getPhotos($id, $this->pager->limit, $this->pager->start);
+            $this->r->arr['photos'] = $this->photo->getPhotos($id, $this->pager->limit, $this->pager->start);
 
-            $this->r->album = $this->photo->getAlbum($id);
-            $tmp = $this->user->getUser($this->r->album['users_id']);
-            $this->r->album['nickname'] = $tmp['nickname'];
+            $this->r->arr['album'] = $this->photo->getAlbum($id);
+            $tmp = $this->user->getUser($this->r->arr['album']['users_id']);
+            $this->r->arr['album']['nickname'] = $tmp['nickname'];
 
-            $this->r->title .= " | {$this->r->text['photos']} | {$this->r->album['title']}";
+            $this->r->title .= " | {$this->r->gtext['photos']} | {$this->r->arr['album']['title']}";
 
-            if ($this->r->pho == false || !count($this->r->pho))
+            if ($this->r->arr['photos'] == false || !count($this->r->arr['photos']))
                 $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
         }
@@ -169,17 +168,17 @@ class photos {
 
         if (!$this->tpl->is_cached('view.tpl', $cache_id)) {
 
-            $this->r->pho = $this->photo->getPhoto($id);
-            if ($this->r->pho == false || !count($this->r->pho))
+            $this->r->arr['photos'] = $this->photo->getPhoto($id);
+            if ($this->r->arr['photos'] == false || !count($this->r->arr['photos']))
                 suxFunct::redirect(suxFunct::getPreviousURL()); // Redirect
             else {
 
-                $this->r->pho['image'] = suxPhoto::t2fImage($this->r->pho['image']); // Fullsize
+                $this->r->arr['photos']['image'] = suxPhoto::t2fImage($this->r->arr['photos']['image']); // Fullsize
 
                 // Album info
-                $this->r->album = $this->photo->getAlbum($this->r->pho['photoalbums_id']);
-                $tmp = $this->user->getUser($this->r->album['users_id']);
-                $this->r->album['nickname'] = $tmp['nickname'];
+                $this->r->arr['album'] = $this->photo->getAlbum($this->r->arr['photos']['photoalbums_id']);
+                $tmp = $this->user->getUser($this->r->arr['album']['users_id']);
+                $this->r->arr['album']['nickname'] = $tmp['nickname'];
 
                 // Previous, next, and page number
                 $prev_id = null;
@@ -189,7 +188,7 @@ class photos {
 
                 $db = suxDB::get();
                 $st = $db->prepare($query);
-                $st->execute(array($this->r->pho['photoalbums_id']));
+                $st->execute(array($this->r->arr['photos']['photoalbums_id']));
 
                 $i = 0;
                 while ($prev_next = $st->fetch(PDO::FETCH_ASSOC)) {
@@ -206,9 +205,9 @@ class photos {
 
                 $this->r->text['prev_id'] = $prev_id;
                 $this->r->text['next_id'] = $next_id;
-                $this->r->text['back_url'] = suxFunct::makeUrl('photos/album/' . $this->r->pho['photoalbums_id'], array('page' => $page));
+                $this->r->text['back_url'] = suxFunct::makeUrl('photos/album/' . $this->r->arr['photos']['photoalbums_id'], array('page' => $page));
 
-                $this->r->title .= " | {$this->r->text['photos']} | {$this->r->album['title']}";
+                $this->r->title .= " | {$this->r->gtext['photos']} | {$this->r->arr['album']['title']}";
 
             }
 
@@ -235,7 +234,7 @@ class photos {
 
                 require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
                 $rss = new suxRSS();
-                $title = "{$this->r->title} | {$this->r->text['photos']}";
+                $title = "{$this->r->title} | {$this->r->gtext['photos']}";
                 $url = suxFunct::makeUrl('/photos', null, true);
                 $rss->outputRSS($title, $url, null);
 

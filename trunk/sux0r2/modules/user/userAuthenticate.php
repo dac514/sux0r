@@ -47,8 +47,6 @@ class userAuthenticate {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new suxRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
 
     }
 
@@ -79,7 +77,7 @@ class userAuthenticate {
 
             // Too many password failures?
             if ($this->user->maxPasswordFailures()) {
-                $this->r->title .= " | {$this->r->text['pw_failure']}";
+                $this->r->title .= " | {$this->r->gtext['pw_failure']}";
                 $this->tpl->display('pw_failure.tpl');
                 die();
             }
@@ -111,7 +109,7 @@ class userAuthenticate {
         // Ask browser to clear authentication
         header('HTTP/1.0 401 Unauthorized');
 
-        $this->r->title .= " | {$this->r->text['logout']}";
+        $this->r->title .= " | {$this->r->gtext['logout']}";
 
         // Template
         $this->tpl->display('logout.tpl');
