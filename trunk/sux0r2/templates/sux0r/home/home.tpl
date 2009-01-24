@@ -85,7 +85,7 @@
 
 
             {/capture}
-            {capture name='img' assign='img'}{$r->makeUrl('/', null, true)}/media/sux0r/assets/nullwhore.png{/capture}
+            {capture name='img' assign='img'}{$r->myHttpServer()}{$r->url}/media/sux0r/assets/nullwhore.png{/capture}
             {capture name='caption' assign='caption'}Nullwhore Lives{/capture}
 
             {* Render widget *}

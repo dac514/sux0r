@@ -122,7 +122,7 @@
                 {/capture}
 
                 {capture name=blog_img}
-                    {if $foo.image}{$r->makeUrl('/', null, true)}/data/blog/{$foo.image|escape:'url'}{/if}
+                    {if $foo.image}{$r->myHttpServer()}{$r->url}/data/blog/{$foo.image|escape:'url'}{/if}
                 {/capture}
 
                 {capture name=blog}
