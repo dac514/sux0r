@@ -340,7 +340,8 @@ class suxRenderer {
     */
     function makeUrl($path, $query = null, $full = false) {
 
-        return suxFunct::makeUrl($path, $query, $full);
+        $url = suxFunct::makeUrl($path, $query, $full);
+        return htmlspecialchars($url); // Rendering HTML, fix it
 
     }
 
