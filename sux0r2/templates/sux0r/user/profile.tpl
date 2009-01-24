@@ -54,7 +54,7 @@
             {capture name=image}{strip}
 
                 {if $r->arr.profile.image}
-                {$r->makeUrl('/', null, true)}/data/user/{$r->arr.profile.image|escape:'url'}
+                {$r->myHttpServer()}{$r->url}/data/user/{$r->arr.profile.image|escape:'url'}
                 {/if}
 
             {/strip}{/capture}

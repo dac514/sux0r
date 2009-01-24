@@ -352,6 +352,18 @@ class suxRenderer {
 
 
     /**
+    * myHttpServer Wrapper
+    *
+    * @return string url
+    */
+    function myHttpServer() {
+
+        return suxFunct::myHttpServer();
+
+    }
+
+
+    /**
     * TinyMCE Initialization
     *
     * @see http://tinymce.moxiecode.com/
