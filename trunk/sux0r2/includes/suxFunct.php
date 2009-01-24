@@ -448,9 +448,11 @@ class suxFunct {
     *
     * @global string $CONFIG['PATH']
     * @global string $CONFIG['LANGUAGE']
+    * @param string $module
+    * @param string $partition
     * @return array $gtext
     */
-    static function gtext($module = null) {
+    static function gtext($module = null, $partition = 'sux0r') {
 
         $gtext = array();
 
@@ -458,12 +460,12 @@ class suxFunct {
         else $lang = $GLOBALS['CONFIG']['LANGUAGE'];
 
         if ($module) {
-            $default = $GLOBALS['CONFIG']['PATH'] . "/modules/{$module}/languages/en.php";
-            $requested = $GLOBALS['CONFIG']['PATH'] . "/modules/{$module}/languages/$lang.php";
+            $default = $GLOBALS['CONFIG']['PATH'] . "/templates/sux0r/{$module}/languages/en.php";
+            $requested = $GLOBALS['CONFIG']['PATH'] . "/templates/{$partition}/{$module}/languages/{$lang}.php";
         }
         else {
-            $default = dirname(__FILE__) . "/languages/en.php";
-            $requested = dirname(__FILE__) . "/languages/$lang.php";
+            $default = $GLOBALS['CONFIG']['PATH'] . "/templates/sux0r/globals/languages/en.php";
+            $requested = $GLOBALS['CONFIG']['PATH'] . "/templates/{$partition}/globals/languages/{$lang}.php";
         }
 
         if (!is_readable($default)) return false; // no default, something is wrong
@@ -700,7 +702,7 @@ class suxFunct {
 
         return array(
             'af' => 'Afghanistan',
-            'ax' => 'Ãland Islands',
+            'ax' => 'ÃÂland Islands',
             'al' => 'Albania',
             'dz' => 'Algeria',
             'as' => 'American Samoa',
@@ -752,7 +754,7 @@ class suxFunct {
             'cd' => 'Congo, the Democratic Republic of the',
             'ck' => 'Cook Islands',
             'cr' => 'Costa Rica',
-            'ci' => 'CÃ´te d\'Ivoire',
+            'ci' => 'CÃÂ´te d\'Ivoire',
             'hr' => 'Croatia',
             'cu' => 'Cuba',
             'cy' => 'Cyprus',
@@ -882,7 +884,7 @@ class suxFunct {
             'ro' => 'Romania',
             'ru' => 'Russian Federation',
             'rw' => 'Rwanda',
-            'bl' => 'Saint BarthÃ©lemy',
+            'bl' => 'Saint BarthÃÂ©lemy',
             'sh' => 'Saint Helena',
             'kn' => 'Saint Kitts and Nevis',
             'lc' => 'Saint Lucia',

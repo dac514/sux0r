@@ -44,7 +44,9 @@ class suxRenderer {
 
     // Arrays
     public $nav = array(); // Variable to keep navlist
-    public $text  = array(); // Variable to keep body/text
+    public $gtext = array(); // Variable to store gtext in
+    public $text  = array(); // Variable to store dynamic text in
+    public $arr = array(); // Variable to keep arrays
     public $bool = array(); // Variable to keep bool values
 
 
@@ -68,10 +70,10 @@ class suxRenderer {
         else $this->partition  = $GLOBALS['CONFIG']['PARTITION'];
 
         // Path to XTHML header & footer templates
-        $this->xhtml_header = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $this->partition  . '/xhtml_header.tpl';
-        if (!file_exists($this->xhtml_header)) $this->xhtml_header = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r/xhtml_header.tpl';
-        $this->xhtml_footer = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $this->partition  . '/xhtml_footer.tpl';
-        if (!file_exists($this->xhtml_footer)) $this->xhtml_footer = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r/xhtml_footer.tpl';
+        $this->xhtml_header = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $this->partition  . '/globals/xhtml_header.tpl';
+        if (!file_exists($this->xhtml_header)) $this->xhtml_header = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r/globals/xhtml_header.tpl';
+        $this->xhtml_footer = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $this->partition  . '/globals/xhtml_footer.tpl';
+        if (!file_exists($this->xhtml_footer)) $this->xhtml_footer = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r/globals/xhtml_footer.tpl';
 
         // Defaults
         $this->url = $GLOBALS['CONFIG']['URL'];
@@ -223,8 +225,8 @@ class suxRenderer {
         $tpl->assign('content', $content);
         $tpl->assign('floater', $floater);
 
-        $path = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $this->partition ;
-        if (!file_exists("$path/widget.tpl")) $path = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r';
+        $path = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $this->partition . '/globals/';
+        if (!file_exists("$path/widget.tpl")) $path = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r/globals/';
         return $tpl->fetch("file:$path/widget.tpl");
 
     }
