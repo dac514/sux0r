@@ -100,8 +100,8 @@ class suxTemplate extends Smarty {
         // Config dir
         // --------------------------------------------------------------------
 
-        $config_dir = $GLOBALS['CONFIG']['PATH'] . "/templates/$partition/";
-        $config_dir_fallback = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r/';
+        $config_dir = $GLOBALS['CONFIG']['PATH'] . "/templates/$partition/globals/";
+        $config_dir_fallback = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r/globals/';
 
         if($partition != 'sux0r' && !is_file($config_dir . 'my.conf')) {
             // We didn't find anything, but the partition wasn't default, let's try with default
@@ -124,20 +124,8 @@ class suxTemplate extends Smarty {
         }
 
         if(!is_dir($template_dir)) {
-
-            //  Still nothing, maybe they are in the module's directory
-            $template_dir = $GLOBALS['CONFIG']['PATH'] . "/modules/$module/templates/$partition/";
-            $template_dir_fallback = $GLOBALS['CONFIG']['PATH'] . "/modules/$module/templates/sux0r/";
-
-            if($partition != 'sux0r' && !is_dir($template_dir)) {
-                // Still nothing, but the partition wasn't default, let's try with default
-                $template_dir = $template_dir_fallback;
-            }
-
-            if(!is_dir($template_dir)) {
-                // No templates
-                throw new Exception('Missing template dir ' . $template_dir);
-            }
+            // No templates
+            throw new Exception('Missing template dir ' . $template_dir);
         }
 
         $this->module = $module;
@@ -211,6 +199,24 @@ if (!function_exists('mb_ucwords')) {
         $string = mb_ereg_replace('Sux0R', 'Sux0r', $string); // Exception
         return $string;
     }
+}
+
+
+function flash_encode($string) {
+
+    $string = rawurlencode(utf8_encode($string));
+
+    $string = str_replace("%C2%96", "-", $string);
+    $string = str_replace("%C2%91", "%27", $string);
+    $string = str_replace("%C2%92", "%27", $string);
+    $string = str_replace("%C2%82", "%27", $string);
+    $string = str_replace("%C2%93", "%22", $string);
+    $string = str_replace("%C2%94", "%22", $string);
+    $string = str_replace("%C2%84", "%22", $string);
+    $string = str_replace("%C2%8B", "%C2%AB", $string);
+    $string = str_replace("%C2%9B", "%C2%BB", $string);
+
+    return $string;
 }
 
 
