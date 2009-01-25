@@ -51,8 +51,6 @@ class blogAdmin {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new blogRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
         $this->user = new suxUser();
         $this->pager = new suxPager();
@@ -114,17 +112,17 @@ class blogAdmin {
 
         $this->pager->setPages($this->msg->countFirstPosts('blog', true));
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/{$this->module}/admin"));
-        $this->r->fp = $this->msg->getFirstPosts('blog', $this->pager->limit, $this->pager->start, false);
+        $this->r->arr['fp'] = $this->msg->getFirstPosts('blog', $this->pager->limit, $this->pager->start, false);
 
         // Additional variables
-        foreach ($this->r->fp as $key => $val) {
+        foreach ($this->r->arr['fp'] as $key => $val) {
             $u = $this->user->getUser($val['users_id']);
-            $this->r->fp[$key]['nickname'] = $u['nickname'];
-            $this->r->fp[$key]['comment_count'] = $this->msg->getCommentsCount($val['thread_id'], true);
+            $this->r->arr['fp'][$key]['nickname'] = $u['nickname'];
+            $this->r->arr['fp'][$key]['comment_count'] = $this->msg->getCommentsCount($val['thread_id'], true);
         }
 
 
-        $this->r->title .= " | {$this->r->text['blog']} | {$this->r->text['admin']}";
+        $this->r->title .= " | {$this->r->gtext['blog']} | {$this->r->gtext['admin']}";
 
         // Display
         $this->tpl->display('admin.tpl');

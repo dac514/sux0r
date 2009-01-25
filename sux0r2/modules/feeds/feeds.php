@@ -59,8 +59,7 @@ class feeds extends bayesShared {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new feedsRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
+
         $this->r->bool['analytics'] = true; // Turn on analytics
 
         $this->user = new suxUser();
@@ -87,7 +86,7 @@ class feeds extends bayesShared {
         $this->r->text['form_url'] = suxFunct::makeUrl("/feeds/user/$nickname"); // Forum Url
         $cache_id = false;
 
-        $this->r->title .= " | {$this->r->text['feeds']} | $nickname";
+        $this->r->title .= " | {$this->r->gtext['feeds']} | $nickname";
 
         if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
@@ -98,7 +97,7 @@ class feeds extends bayesShared {
             // User has subscriptions, we need special JOIN queries
             $max = $this->countUserItems($this->users_id);
             $eval = '$this->getUserItems($this->users_id, $this->pager->limit, $start)';
-            $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search); // Important: $start is a reference
+            $this->r->arr['feeds']  = $this->filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search); // Important: $start is a reference
 
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
@@ -130,10 +129,10 @@ class feeds extends bayesShared {
 
                 // User has subscriptions, we need special JOIN queries
                 $this->pager->setPages($this->countUserItems($this->users_id));
-                $this->r->fp = $this->getUserItems($this->users_id, $this->pager->limit, $this->pager->start);
+                $this->r->arr['feeds'] = $this->getUserItems($this->users_id, $this->pager->limit, $this->pager->start);
 
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/feeds/user/$nickname"));
-                if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+                if (!count($this->r->arr['feeds'])) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
             }
 
@@ -168,12 +167,12 @@ class feeds extends bayesShared {
 
         // Title
         if ($feeds_id) {
-            $this->r->title .= " | {$this->r->text['feed']}";
+            $this->r->title .= " | {$this->r->gtext['feed']}";
             $tmp = $this->rss->getFeed($feeds_id);
             if ($tmp) $this->r->title .= " | {$tmp['title']}";
         }
         else {
-            $this->r->title .= " | {$this->r->text['feeds']}";
+            $this->r->title .= " | {$this->r->gtext['feeds']}";
         }
 
         if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
@@ -193,7 +192,7 @@ class feeds extends bayesShared {
                 $eval = '$this->getUserItems($_SESSION[\'users_id\'], $this->pager->limit, $start)';
             }
 
-            $this->r->fp  = $this->filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search);  // Important: $start is a reference
+            $this->r->arr['feeds']  = $this->filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search);  // Important: $start is a reference
 
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
@@ -226,16 +225,16 @@ class feeds extends bayesShared {
                 if ($feeds_id || !count($subscriptions)) {
                     // Regular queries
                     $this->pager->setPages($this->rss->countItems($feeds_id));
-                    $this->r->fp = $this->rss->getItems($feeds_id, $this->pager->limit, $this->pager->start);
+                    $this->r->arr['feeds'] = $this->rss->getItems($feeds_id, $this->pager->limit, $this->pager->start);
                 }
                 else {
                     // User has subscriptions, we need special JOIN queries
                     $this->pager->setPages($this->countUserItems($_SESSION['users_id']));
-                    $this->r->fp = $this->getUserItems($_SESSION['users_id'], $this->pager->limit, $this->pager->start);
+                    $this->r->arr['feeds'] = $this->getUserItems($_SESSION['users_id'], $this->pager->limit, $this->pager->start);
                 }
 
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/feeds/$feeds_id"));
-                if (!count($this->r->fp)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+                if (!count($this->r->arr['feeds'])) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
             }
 

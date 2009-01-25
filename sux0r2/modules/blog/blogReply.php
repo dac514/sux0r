@@ -55,8 +55,6 @@ class blogReply {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new blogRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
         // Objects
@@ -120,7 +118,7 @@ class blogReply {
         $this->tpl->assign('parent_id', $this->parent['id']);
         $this->tpl->assign('parent', "{$this->parent['title']} \n\n {$this->parent['body_plaintext']}");
 
-        $this->r->title .= " | {$this->r->text['blog']} | {$this->r->text['reply']}";
+        $this->r->title .= " | {$this->r->gtext['blog']} | {$this->r->gtext['reply']}";
 
         // Template
         $this->tpl->display('reply.tpl');
@@ -153,7 +151,7 @@ class blogReply {
             $log = '';
             $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
             $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
-            $log .= mb_strtolower($this->r->text['replied_blog']);
+            $log .= mb_strtolower($this->r->gtext['replied_blog']);
             $url = suxFunct::makeUrl("/blog/view/{$tmp['thread_id']}", null, true);
             $log .= " <a href='$url'>{$tmp['title']}</a>";
 

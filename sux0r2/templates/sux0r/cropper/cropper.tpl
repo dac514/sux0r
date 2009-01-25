@@ -11,9 +11,9 @@
 <div id="middle">
 
     {if $validate.default.is_error !== false}
-    <p class="errorWarning">{$r->text.form_error} :</p>
+    <p class="errorWarning">{$r->gtext.form_error} :</p>
     {elseif $r->detectPOST()}
-    <p class="errorWarning">{$r->text.form_problem} :</p>
+    <p class="errorWarning">{$r->gtext.form_problem} :</p>
     {/if}
 
     {validate id="integrity" message="integrity failure"}
@@ -30,11 +30,11 @@
 
     <label for="x1">x1:</label><input type="text" name="x1" id="x1" size="4" />
     <label for="y1">y1:</label><input type="text" name="y1" id="y1" size="4" />
-    <label for="width">{$r->text.width}:</label><input type="text" name="width" id="width" size="4" />
-    <label for="height">{$r->text.height}:</label><input type="text" name="height" id="height" size="4" />
+    <label for="width">{$r->gtext.width}:</label><input type="text" name="width" id="width" size="4" />
+    <label for="height">{$r->gtext.height}:</label><input type="text" name="height" id="height" size="4" />
 
-    <input class="button" onclick="alert('{$r->text.cancelled}'); document.location='{$prev_url}';" value="{$r->text.cancel}" type="button" />
-    <input class="button" type="submit" value="{$r->text.submit}" />
+    <input class="button" onclick="alert('{$r->gtext.cancelled}'); document.location='{$prev_url}';" value="{$r->gtext.cancel}" type="button" />
+    <input class="button" type="submit" value="{$r->gtext.submit}" />
 
     </form>
 

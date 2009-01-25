@@ -52,8 +52,6 @@ class feedsAdmin {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new feedsRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
         $this->user = new suxUser();
         $this->pager = new suxPager();
@@ -115,16 +113,16 @@ class feedsAdmin {
 
         $this->pager->setPages($this->rss->countFeeds(true));
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/{$this->module}/admin"));
-        $this->r->fp = $this->rss->getFeeds($this->pager->limit, $this->pager->start, false);
+        $this->r->arr['feeds'] = $this->rss->getFeeds($this->pager->limit, $this->pager->start, false);
 
         // Additional variables
-        foreach ($this->r->fp as $key => $val) {
+        foreach ($this->r->arr['feeds'] as $key => $val) {
             $u = $this->user->getUser($val['users_id']);
-            $this->r->fp[$key]['nickname'] = $u['nickname'];
-            $this->r->fp[$key]['feeds_count'] = $this->rss->countItems($val['id']);
+            $this->r->arr['feeds'][$key]['nickname'] = $u['nickname'];
+            $this->r->arr['feeds'][$key]['feeds_count'] = $this->rss->countItems($val['id']);
         }
 
-        $this->r->title .= " | {$this->r->text['feeds']} | {$this->r->text['admin']}";
+        $this->r->title .= " | {$this->r->gtext['feeds']} | {$this->r->gtext['admin']}";
 
         // Display
         $this->tpl->display('admin.tpl');

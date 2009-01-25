@@ -50,8 +50,6 @@ class feedsSuggest  {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new suxRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
         // Redirect if not logged in
@@ -103,7 +101,7 @@ class feedsSuggest  {
         $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/suggest');
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
-        $this->r->title .= " | {$this->r->text['suggest']}";
+        $this->r->title .= " | {$this->r->gtext['suggest']}";
 
         // Template
         $this->tpl->display('suggest.tpl');
@@ -139,7 +137,7 @@ class feedsSuggest  {
 
         // Template
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
-        $this->r->title .= " | {$this->r->text['success']}";
+        $this->r->title .= " | {$this->r->gtext['success']}";
 
         $this->tpl->display('success.tpl');
 

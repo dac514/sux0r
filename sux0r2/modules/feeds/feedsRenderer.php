@@ -29,11 +29,6 @@ require_once(dirname(__FILE__) . '/../bayes/bayesRenderer.php');
 
 class feedsRenderer extends suxRenderer {
 
-    // Arrays
-    public $fp = array(); // Array of feeds
-    public $subscriptions = array(); // Array of subscription
-    public $sidelist = array(); // Array of threads in sidebar
-
     // Objects
     private $bayesRenderer;
     private $rss;

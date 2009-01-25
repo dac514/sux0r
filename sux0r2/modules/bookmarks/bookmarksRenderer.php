@@ -28,13 +28,9 @@ require_once(dirname(__FILE__) . '/../bayes/bayesRenderer.php');
 
 class bookmarksRenderer extends suxRenderer {
 
-    // Arrays
-    public $fp = array(); // Array of first posts
-    public $sidelist = array(); // Array of threads in sidebar
-    public $tc = array(); // Tagcloud
-    private $bayesRenderer;
 
     // Objects
+    private $bayesRenderer;
     private $user;
 
 
@@ -90,10 +86,10 @@ class bookmarksRenderer extends suxRenderer {
             $html .= "<a href='{$url}'>{$val['tag']}</a>, ";
         }
 
-        if (!$html) $html = $this->text['none'];
+        if (!$html) $html = $this->gtext['none'];
         else $html = rtrim($html, ', ');
 
-        $html = "<div class='tags'>{$this->text['tags']}: " . $html . '</div>';
+        $html = "<div class='tags'>{$this->gtext['tags']}: " . $html . '</div>';
 
         return $html;
 

@@ -50,8 +50,6 @@ class bookmarksApprove  {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new bookmarksRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
         // Redirect if not logged in
@@ -105,15 +103,15 @@ class bookmarksApprove  {
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         // bookmarks
-        $this->r->fp = $this->bm->getUnpublishedBookmarks();
-        
-        // Additional variables
-        foreach ($this->r->fp as $key => $val) {
-            $u = $this->user->getUser($val['users_id']);
-            $this->r->fp[$key]['nickname'] = $u['nickname'];
-        }         
+        $this->r->arr['bookmarks'] = $this->bm->getUnpublishedBookmarks();
 
-        $this->r->title .= " | {$this->r->text['approve']}";
+        // Additional variables
+        foreach ($this->r->arr['bookmarks'] as $key => $val) {
+            $u = $this->user->getUser($val['users_id']);
+            $this->r->arr['bookmarks'][$key]['nickname'] = $u['nickname'];
+        }
+
+        $this->r->title .= " | {$this->r->gtext['approve']}";
 
         $this->tpl->display('approve.tpl');
 
@@ -126,9 +124,9 @@ class bookmarksApprove  {
     * @param array $clean reference to validated $_POST
     */
     function formProcess(&$clean) {
-        
+
         if (isset($clean['bookmarks'])) foreach ($clean['bookmarks'] as $key => $val) {
-            
+
             if ($val == 1) {
                 $this->bm->approveBookmark($key);
                 $this->user->log("sux0r::bookmarksApprove() bookmarks_id: {$key}", $_SESSION['users_id'], 1); // Private
@@ -137,12 +135,12 @@ class bookmarksApprove  {
                 $this->bm->deleteBookmark($key);
                 $this->user->log("sux0r::bookmarksApprove() deleted bookmarks_id: {$key}", $_SESSION['users_id'], 1); // Private
             }
-            
+
         }
-        
+
         // clear all caches, cheap and easy
         $this->tpl->clear_all_cache();
-        
+
     }
 
 

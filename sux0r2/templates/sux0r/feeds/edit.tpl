@@ -18,7 +18,7 @@
 <div id="middle">
 
 <fieldset>
-<legend>{if $id}{$r->text.edit_2}{else}{$r->text.new}{/if}</legend>
+<legend>{if $id}{$r->gtext.edit_2}{else}{$r->gtext.new}{/if}</legend>
 
 <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />
@@ -30,21 +30,21 @@
 {/if}
 
 {if $validate.default.is_error !== false}
-<p class="errorWarning">{$r->text.form_error} :</p>
+<p class="errorWarning">{$r->gtext.form_error} :</p>
 {elseif $r->detectPOST()}
-<p class="errorWarning">{$r->text.form_problem} :</p>
+<p class="errorWarning">{$r->gtext.form_problem} :</p>
 {/if}
 
 <p>
 {strip}
     {capture name=error}
-    {validate id="url" message=$r->text.form_error_1}
-    {validate id="url2" message=$r->text.form_error_2}
-    {validate id="url3" message=$r->text.form_error_3}
-    {validate id="url4" message=$r->text.form_error_4}
+    {validate id="url" message=$r->gtext.form_error_1}
+    {validate id="url2" message=$r->gtext.form_error_2}
+    {validate id="url3" message=$r->gtext.form_error_3}
+    {validate id="url4" message=$r->gtext.form_error_4}
     {/capture}
 {/strip}
-<label {if $smarty.capture.error}class="error"{/if} >{$r->text.url} :</label>
+<label {if $smarty.capture.error}class="error"{/if} >{$r->gtext.url} :</label>
 <input type="text" name="url" value="{if $url}{$url}{else}http://{/if}" class="widerInput" />
 {$smarty.capture.error}
 </p>
@@ -55,7 +55,7 @@
     {validate id="title" message="title cannot be empty"}
     {/capture}
 {/strip}
-<label {if $smarty.capture.error}class="error"{/if} >{$r->text.title} :</label>
+<label {if $smarty.capture.error}class="error"{/if} >{$r->gtext.title} :</label>
 <input type="text" name="title" value="{$title}" class="widerInput" />
 {$smarty.capture.error}
 </p>
@@ -67,7 +67,7 @@
     {validate id="body" message="Body cannot be empty"}
     {/capture}
 {/strip}
-<span {if $smarty.capture.error}class="error"{/if}>{$r->text.body} : </span> {$smarty.capture.error}
+<span {if $smarty.capture.error}class="error"{/if}>{$r->gtext.body} : </span> {$smarty.capture.error}
 </p>
 
 <p>
@@ -75,15 +75,15 @@
 </p>
 
 <p>
-<label >{$r->text.save_draft} :</label>
+<label >{$r->gtext.save_draft} :</label>
 <input type="checkbox" name="draft" value="1" {if $draft}checked="checked"{/if} />
 </p>
 
 
 <p>
 <label>&nbsp;</label>
-<input type="button" class="button" value="{$r->text.cancel}" onclick="document.location='{$r->text.back_url}';" />
-<input type="submit" class="button" value="{$r->text.submit}" />
+<input type="button" class="button" value="{$r->gtext.cancel}" onclick="document.location='{$r->text.back_url}';" />
+<input type="submit" class="button" value="{$r->gtext.submit}" />
 </p>
 
 </form>

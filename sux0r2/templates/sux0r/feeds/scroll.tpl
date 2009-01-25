@@ -66,7 +66,7 @@
 		<td colspan="2" style="vertical-align:top;">
 			<div id="header">
 
-                <h1>{$r->text.header|lower}</h1>
+                <h1>{$r->gtext.header|lower}</h1>
                 {insert name="userInfo"}
                 {$r->navlist()}
 
@@ -77,7 +77,7 @@
         <td style="vertical-align:top;">
 			<div id="leftside">
 
-                <p>{$r->text.feeds}</p>
+                <p>{$r->gtext.feeds}</p>
 
                 {if $r->feeds(true, $users_id)}
                 <ul>
@@ -96,13 +96,13 @@
                 {/if}
 
 
-                <p>{$r->text.actions}</p>
+                <p>{$r->gtext.actions}</p>
                 <ul>
                     {if $r->isLoggedIn()}
                     {insert name="feedsApproveLi"}
-                    <li><a href="{$r->makeUrl('/feeds/manage')}">{$r->text.manage}</a></li>
+                    <li><a href="{$r->makeUrl('/feeds/manage')}">{$r->gtext.manage}</a></li>
                     {/if}
-                    <li><em><a href="{$r->makeUrl('/feeds/suggest')}">{$r->text.suggest} &raquo;</a></em></li>
+                    <li><em><a href="{$r->makeUrl('/feeds/suggest')}">{$r->gtext.suggest} &raquo;</a></em></li>
                 </ul>
 
 
@@ -115,8 +115,8 @@
             {insert name="bayesFilters" form_url=$r->text.form_url}
 
             {* Feeds *}
-            {if $r->fp}
-            {foreach from=$r->fp item=foo}
+            {if $r->arr.feeds}
+            {foreach from=$r->arr.feeds item=foo}
 
                 {capture name=feed}
 
@@ -125,15 +125,15 @@
                     {$r->isSubscribed($foo.rss_feeds_id)}
                     </div>
                     <div style="float:left; margin-bottom: 1em;">
-                    {$r->text.feed} : {$r->feedLink($foo.rss_feeds_id)}<br />
-                    <em>{$r->text.published_on} : {$foo.published_on}</em>
+                    {$r->gtext.feed} : {$r->feedLink($foo.rss_feeds_id)}<br />
+                    <em>{$r->gtext.published_on} : {$foo.published_on}</em>
                     </div>
                     <div class="clearboth"></div>
 
                     <div class="rssItem">{insert name="highlight" html=$foo.body_html}</div>
 
                     <!-- Read more -->
-                    <p class="readMore"><a href="{$foo.url}">{$r->text.read_more} &raquo;</a></p>
+                    <p class="readMore"><a href="{$foo.url}">{$r->gtext.read_more} &raquo;</a></p>
 
                     {capture name=nbc}{strip}
                         {capture name=document}{$foo.title} {$foo.body_plaintext}{/capture}
@@ -155,7 +155,7 @@
 
             {/foreach}
             {else}
-                <p>{$r->text.not_found}</p>
+                <p>{$r->gtext.not_found}</p>
             {/if}
 
             {$r->text.pager}

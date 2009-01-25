@@ -29,7 +29,7 @@
     <div id="middle">
 
     <fieldset>
-    <legend>{$r->text.admin}</legend>
+    <legend>{$r->gtext.admin}</legend>
 
     <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
     <input type="hidden" name="token" value="{$token}" />
@@ -40,24 +40,24 @@
     {validate id="integrity" message="integrity failure"}
 
     <ul id="adminMenu">
-    <li><a href="{$r->makeUrl('/blog/edit')}">{$r->text.new}</a></li>
+    <li><a href="{$r->makeUrl('/blog/edit')}">{$r->gtext.new}</a></li>
     </ul>
-    
+
     <table class="adminTable">
     <thead>
         <tr>
-            <td>{$r->text.title|lower}</td>
-            <td>{$r->text.published|lower}</td>
-            <td>{$r->text.thread|lower}</td>
-            <td>{$r->text.comments|lower}</td>
-            <td>{$r->text.draft|lower}</td>
-            <td>{$r->text.author|lower}</td>
-            <td>{$r->text.delete|lower}</td>
+            <td>{$r->gtext.title|lower}</td>
+            <td>{$r->gtext.published|lower}</td>
+            <td>{$r->gtext.thread|lower}</td>
+            <td>{$r->gtext.comments|lower}</td>
+            <td>{$r->gtext.draft|lower}</td>
+            <td>{$r->gtext.author|lower}</td>
+            <td>{$r->gtext.delete|lower}</td>
         </tr>
     </thead>
     <tbody>
 
-    {foreach from=$r->fp item=foo}
+    {foreach from=$r->arr.fp item=foo}
 
     <tr style="background-color:{cycle values="#ffffff,#eeeeee"}">
         <td style="text-align: left;"><a href="{$r->makeUrl('/blog/edit')}/{$foo.id}">{$foo.title}</a></td>
@@ -77,14 +77,14 @@
     {$r->text.pager}
 
     <p>
-    <input type="button" class="button" value="{$r->text.delete}" onclick="rm('default', '{$r->text.alert_delete}');" />
+    <input type="button" class="button" value="{$r->gtext.delete}" onclick="rm('default', '{$r->gtext.alert_delete}');" />
     </p>
 
     </form>
 
     </fieldset>
 
-    <p><a href="{$r->makeUrl('/blog')}">{$r->text.back} &raquo;</a></p>
+    <p><a href="{$r->makeUrl('/blog')}">{$r->gtext.back} &raquo;</a></p>
 
     </div>
 

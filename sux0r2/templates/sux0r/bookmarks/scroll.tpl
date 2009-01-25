@@ -1,7 +1,7 @@
 {capture name=header}
 
     {* RSS Feed *}
-    <link rel="alternate" type="application/rss+xml" title="{$r->sitename} | {$r->text.bookmarks}" href="{$r->makeUrl('/bookmarks/rss', null, true)}" />
+    <link rel="alternate" type="application/rss+xml" title="{$r->sitename} | {$r->gtext.bookmarks}" href="{$r->makeUrl('/bookmarks/rss', null, true)}" />
 
     {if $r->isLoggedIn()}
         {$r->genericBayesInterfaceInit()}
@@ -54,7 +54,7 @@
 		<td colspan="2" style="vertical-align:top;">
 			<div id="header">
 
-                <h1>{$r->text.header|lower}</h1>
+                <h1>{$r->gtext.header|lower}</h1>
                 {insert name="userInfo"}
                 {$r->navlist()}
 
@@ -69,8 +69,8 @@
             {insert name="bayesFilters" form_url=$r->text.form_url hidden=$sort}
 
             {* Bookmarks *}
-            {if $r->fp}
-            {foreach from=$r->fp item=foo}
+            {if $r->arr.bookmarks}
+            {foreach from=$r->arr.bookmarks item=foo}
 
                 <div class="bookmarkItem">
 
@@ -80,7 +80,7 @@
 
                     <div style="float:left;">
                         <a href="{$foo.url}">{insert name="highlight" html=$foo.title}</a><br />
-                        <em>{$r->text.published_on} : {$foo.published_on}</em>
+                        <em>{$r->gtext.published_on} : {$foo.published_on}</em>
                     </div>
                     <div class="clearboth"></div>
 
@@ -102,7 +102,7 @@
             {/foreach}
             {else}
                 <div class="bookmarkItem">
-                {$r->text.not_found}
+                {$r->gtext.not_found}
                 </div>
             {/if}
 
@@ -116,20 +116,20 @@
 
             {if $sidetitle}<div class="sideListTitle">{$sidetitle}</div>{/if}
 
-            {if $r->fp}
+            {if $r->arr.bookmarks}
             <ul>
-                <li><a href="{$datesort_url}">{$r->text.sort_date}</a></li>
-                <li><a href="{$alphasort_url}">{$r->text.sort_alpha}</a></li>
+                <li><a href="{$datesort_url}">{$r->gtext.sort_date}</a></li>
+                <li><a href="{$alphasort_url}">{$r->gtext.sort_alpha}</a></li>
             </ul>
             {/if}
 
             <ul>
                 {if $r->isLoggedIn()}
                 {insert name="bookmarksApproveLi"}
-                <li><a href="{insert name="myBookmarksLink"}">{$r->text.my_bookmarks}</a></li>
+                <li><a href="{insert name="myBookmarksLink"}">{$r->gtext.my_bookmarks}</a></li>
                 {/if}
-                <li><a href="{$r->makeUrl('/bookmarks/tag/cloud')}">{$r->text.tag_cloud}</a></li>
-                <li><em><a href="{$r->makeUrl('/bookmarks/suggest')}">{$r->text.suggest} &raquo;</a></em></li>
+                <li><a href="{$r->makeUrl('/bookmarks/tag/cloud')}">{$r->gtext.tag_cloud}</a></li>
+                <li><em><a href="{$r->makeUrl('/bookmarks/suggest')}">{$r->gtext.suggest} &raquo;</a></em></li>
             </ul>
 
 			</div>

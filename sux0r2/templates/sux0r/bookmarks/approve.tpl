@@ -16,19 +16,19 @@
 <div id="middle">
 
 <fieldset>
-<legend>{$r->text.approve}</legend>
+<legend>{$r->gtext.approve}</legend>
 <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8">
 <input type="hidden" name="token" value="{$token}" />
 
     {if $validate.default.is_error !== false}
-    <p class="errorWarning">{$r->text.form_error} :</p>
+    <p class="errorWarning">{$r->gtext.form_error} :</p>
     {elseif $r->detectPOST()}
-    <p class="errorWarning">{$r->text.form_problem} :</p>
+    <p class="errorWarning">{$r->gtext.form_problem} :</p>
     {/if}
 
-    {validate id="bookmarks" message=$r->text.form_problem}
-    {if $r->fp}
-        {foreach from=$r->fp item=foo}
+    {validate id="bookmarks" message=$r->gtext.form_problem}
+    {if $r->arr.bookmarks}
+        {foreach from=$r->arr.bookmarks item=foo}
             <div class="approveItem">
 
             <div>
@@ -37,10 +37,10 @@
             </div>
 
             <div class="approveItemOptions" >
-                <a href="{$r->makeUrl('/bookmarks/edit')}/{$foo.id}">{$r->text.edit}</a> | <a href="{$foo.url}" target="_blank">{$r->text.url}</a> |
-                <input type="radio" name="bookmarks[{$foo.id}]" id="f_k_{$foo.id}" value="1" /><label for="f_k_{$foo.id}" >{$r->text.approve_2}</label> |
-                <input type="radio" name="bookmarks[{$foo.id}]" id="f_d_{$foo.id}" value="0" /><label for="f_d_{$foo.id}" >{$r->text.delete}</label> |
-                <em>{$r->text.suggested} <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a></em>
+                <a href="{$r->makeUrl('/bookmarks/edit')}/{$foo.id}">{$r->gtext.edit}</a> | <a href="{$foo.url}" target="_blank">{$r->gtext.url}</a> |
+                <input type="radio" name="bookmarks[{$foo.id}]" id="f_k_{$foo.id}" value="1" /><label for="f_k_{$foo.id}" >{$r->gtext.approve_2}</label> |
+                <input type="radio" name="bookmarks[{$foo.id}]" id="f_d_{$foo.id}" value="0" /><label for="f_d_{$foo.id}" >{$r->gtext.delete}</label> |
+                <em>{$r->gtext.suggested} <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a></em>
             </div>
 
             <div class="clearboth"></div>
@@ -50,13 +50,13 @@
 
         {/foreach}
     {else}
-        {$r->text.nothing}
+        {$r->gtext.nothing}
     {/if}
 
 
     <p>
-    <input type="button" class="button" value="{$r->text.cancel}" onclick="document.location='{$r->text.back_url}';" />
-    <input type="submit" value="{$r->text.submit}" class="button" />
+    <input type="button" class="button" value="{$r->gtext.cancel}" onclick="document.location='{$r->text.back_url}';" />
+    <input type="submit" value="{$r->gtext.submit}" class="button" />
     </p>
 
 </form>

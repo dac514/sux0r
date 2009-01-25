@@ -53,8 +53,6 @@ class feedsManage  {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new feedsRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
         // Redirect if not logged in
@@ -105,14 +103,14 @@ class feedsManage  {
         foreach ($this->rss->getFeeds() as $feed) {
             $feeds[$feed['id']] = $feed['title'];
         }
-        $this->r->fp = $feeds;
+        $this->r->arr['feeds'] = $feeds;
 
         // Subscriptions
         if (!isset($_POST['subscriptions'])) {
-            $this->r->subscriptions = $this->link->getLinks('link_rss_users', 'users', $_SESSION['users_id']);
+            $this->r->arr['subscriptions'] = $this->link->getLinks('link_rss_users', 'users', $_SESSION['users_id']);
         }
 
-        $this->r->title .= " | {$this->r->text['manage']}";
+        $this->r->title .= " | {$this->r->gtext['manage']}";
 
         $this->tpl->display('manage.tpl');
 

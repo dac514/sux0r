@@ -64,8 +64,6 @@ class blogEdit {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new blogRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
         // Objects
@@ -240,8 +238,8 @@ class blogEdit {
             $this->tpl->assign('Time_Second', date('s'));
         }
 
-        if ($this->id) $this->r->title .= " | {$this->r->text['edit_2']}";
-        else $this->r->title .= " | {$this->r->text['new']}";
+        if ($this->id) $this->r->title .= " | {$this->r->gtext['edit_2']}";
+        else $this->r->title .= " | {$this->r->gtext['new']}";
 
         // Template
         $this->tpl->display('edit.tpl');
@@ -347,7 +345,7 @@ class blogEdit {
                 $log = '';
                 $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
                 $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
-                $log .= mb_strtolower($this->r->text['posted_blog']);
+                $log .= mb_strtolower($this->r->gtext['posted_blog']);
                 $url = suxFunct::makeUrl("/blog/view/{$tmp['thread_id']}", null, true);
                 $log .= " <a href='$url'>{$tmp['title']}</a>";
 

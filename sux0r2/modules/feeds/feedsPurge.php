@@ -48,8 +48,6 @@ class feedsPurge  {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new feedsRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
         $this->user = new suxUser();
         $this->rss = new suxRSS();
@@ -110,7 +108,7 @@ class feedsPurge  {
         $this->r->text['form_url'] = suxFunct::makeUrl('/feeds/purge');
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
-        $this->r->title .= " | {$this->r->text['purge']}";
+        $this->r->title .= " | {$this->r->gtext['purge']}";
 
         // Template
         $this->tpl->display('purge.tpl');
@@ -145,8 +143,8 @@ class feedsPurge  {
         // Template
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
-        $this->r->title .= " | {$this->r->text['success']}";
-        $this->r->text['success2'] = $this->r->text['success3']; // Overwrite
+        $this->r->title .= " | {$this->r->gtext['success']}";
+        $this->r->text['success2'] = $this->r->gtext['success3']; // Overwrite
 
         $this->tpl->display('success.tpl');
 

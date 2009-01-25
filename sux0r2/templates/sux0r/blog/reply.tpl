@@ -18,7 +18,7 @@
 <div id="middle">
 
 <fieldset>
-<legend>{$r->text.reply}</legend>
+<legend>{$r->gtext.reply}</legend>
 
 <div class="parentContainer">
 <pre>{$parent|trim}</pre>
@@ -33,19 +33,19 @@
 
 
 {if $validate.default.is_error !== false}
-<p class="errorWarning">{$r->text.form_error} :</p>
+<p class="errorWarning">{$r->gtext.form_error} :</p>
 {elseif $r->detectPOST()}
-<p class="errorWarning">{$r->text.form_problem} :</p>
+<p class="errorWarning">{$r->gtext.form_problem} :</p>
 {/if}
 
 
 <p>
 {strip}
     {capture name=error}
-    {validate id="title" message=$r->text.error_1}
+    {validate id="title" message=$r->gtext.error_1}
     {/capture}
 {/strip}
-<label {if $smarty.capture.error}class="error"{/if} >{$r->text.title} :</label>
+<label {if $smarty.capture.error}class="error"{/if} >{$r->gtext.title} :</label>
 <input type="text" name="title" value="{$title}" class="widerInput" />
 {$smarty.capture.error}
 </p>
@@ -53,18 +53,18 @@
 <p>
 {strip}
     {capture name=error}
-    {validate id="body" message=$r->text.error_2}
+    {validate id="body" message=$r->gtext.error_2}
     {/capture}
 {/strip}
-<span {if $smarty.capture.error}class="error"{/if}>{$r->text.body} : </span> {$smarty.capture.error}
+<span {if $smarty.capture.error}class="error"{/if}>{$r->gtext.body} : </span> {$smarty.capture.error}
 </p>
 
 <p><textarea name="body" class="mceEditor" rows="10" cols="80" >{$body}</textarea></p>
 
 <p>
 <label>&nbsp;</label>
-<input type="button" class="button" value="{$r->text.cancel}" onclick="document.location='{$r->text.back_url}';" />
-<input type="submit" class="button" value="{$r->text.submit}" />
+<input type="button" class="button" value="{$r->gtext.cancel}" onclick="document.location='{$r->text.back_url}';" />
+<input type="submit" class="button" value="{$r->gtext.submit}" />
 </p>
 
 </form>
