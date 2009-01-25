@@ -1,8 +1,8 @@
 <?php
 
 /*
-htmLawedTest.php, 27 September 2008
-htmLawed 1.1.1, 27 September 2008
+htmLawedTest.php, 12 October 2008
+htmLawed 1.1.2, 22 January 2009
 Copyright Santosh Patnaik
 GPL v3 license
 A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -143,6 +143,9 @@ button, input{font-size: 85%;}
 div.help{border-top: 1px dotted gray; margin-top: 15px; padding-top: 15px; color:#999999;}
 #inputC, #inputD, #inputF, #inputR, #outputD, #outputF, #outputH, #outputR{display:block;}
 #inputC{background-color:white; border:1px gray solid; padding:3px;}
+#inputC li{margin: 0; padding: 0;}
+#inputC ul{margin: 0; padding: 0; margin-left: 14px;}
+#inputC input{margin: 0; margin-left: 2px; margin-right: 2px; padding: 1px; vertical-align: middle;}
 #inputD{overflow:auto; background-color:#ffff99; border:1px #cc9966 solid; padding:3px;}
 #inputR{overflow:auto; background-color:#ffffcc; border:1px #ffcc99 solid; padding:3px;}
 #inputC, #inputD, #inputR, #outputD, #outputR, textarea{font-size:100%; font-family:'Bitstream vera sans mono', 'courier new', 'courier', monospace;}
@@ -435,13 +438,13 @@ if($limit_exceeded){
 <table summary="none">
 <tr>
 <td><span class="help" title="$config argument">Config:</span></td>
-<td>
+<td><ul>
  
 <?php
 $cfg = array(
 'abs_url'=>array('3', '0', 'absolute/relative URL conversion', '-1'),
 'and_mark'=>array('2', '0', 'mark original <em>&amp;</em> chars', '0', 'd'=>1), // 'd' to disable
-'anti_link_spam'=>array('1', '0', 'modify <em>a href</em> (link) values as an anti-link spam measure', '0', array(array('30', '1', '', 'regex for extra <em>rel</em>'), array('30', '2', '', 'regex for no <em>href</em>'))),
+'anti_link_spam'=>array('1', '0', 'modify <em>href</em> values as an anti-link spam measure', '0', array(array('30', '1', '', 'regex for extra <em>rel</em>'), array('30', '2', '', 'regex for no <em>href</em>'))),
 'anti_mail_spam'=>array('1', '0', 'replace <em>@</em> in <em>mailto:</em> URLs', '0', '8', 'NO@SPAM', 'replacement'),
 'balance'=>array('2', '1', 'fix nestings and balance tags', '0'),
 'base_url'=>array('', '', 'base URL', '25'),
@@ -451,25 +454,25 @@ $cfg = array(
 'css_expression'=>array('2', '0', 'allow dynamic expressions in CSS style properties', '0'),
 'deny_attribute'=>array('1', '0', 'denied attributes', '0', '50', '', 'these'),
 'elements'=>array('', '', 'allowed elements', '50'),
-'hexdec_entity'=>array('3', '1', 'convert hexadecimal numeric entities to decimal ones, or vice-versa', '0'),
+'hexdec_entity'=>array('3', '1', 'convert hexadecimal numeric entities to decimal ones, or vice versa', '0'),
 'hook'=>array('', '', 'name of hook function', '25'),
 'hook_tag'=>array('', '', 'name of custom function to further check attribute values', '25'),
-'keep_bad'=>array('7', '6', 'keep or remove <em>bad</em> tag content', '0'),
+'keep_bad'=>array('7', '6', 'keep, or remove <em>bad</em> tag content', '0'),
 'lc_std_val'=>array('2', '1', 'lower-case std. attribute values like <em>radio</em>', '0'),
 'make_tag_strict'=>array('3', 'nil', 'transform deprecated elements', '0'),
-'named_entity'=>array('2', '1', 'allow named entities or convert numeric ones', '0'),
-'no_deprecated_attr'=>array('3', '1', 'allow deprecated attributes or transform them', '0'),
+'named_entity'=>array('2', '1', 'allow named entities, or convert numeric ones', '0'),
+'no_deprecated_attr'=>array('3', '1', 'allow deprecated attributes, or transform them', '0'),
 'parent'=>array('', 'div', 'name of parent element', '25'),
-'safe'=>array('2', '0', 'for <em>safe</em> HTML', '0'),
+'safe'=>array('2', '0', 'for most <em>safe</em> HTML', '0'),
 'schemes'=>array('', 'href: aim, feed, file, ftp, gopher, http, https, irc, mailto, news, nntp, sftp, ssh, telnet; *:file, http, https', 'allowed URL protocols', '50'),
 'show_setting'=>array('', 'htmLawed_setting', 'variable name to record <em>finalized</em> htmLawed settings', '25', 'd'=>1),
 'tidy'=>array('3', '0', 'beautify/compact', '-1', '8', '1t1', 'format'),
-'unique_ids'=>array('2', '1', 'unique <em>idD</em> values', '0', '8', 'my_', 'prefix'),
+'unique_ids'=>array('2', '1', 'unique <em>id</em> values', '0', '8', 'my_', 'prefix'),
 'valid_xhtml'=>array('2', '0', 'auto-set various parameters for most valid XHTML', '0'),
 'xml:lang'=>array('3', 'nil', 'auto-add <em>xml:lang</em> attribute', '0'),
 );
 foreach($cfg as $k=>$v){
- echo '&bull; ', $k, ': ';
+ echo '<li>', $k, ': ';
  if(!empty($v[0])){ // input radio
   $j = $v[3];
   for($i = $j-1; ++$i < $v[0]+$v[3];++$j){
@@ -494,9 +497,9 @@ foreach($cfg as $k=>$v){
   echo '<input type="text" size="', $v[3], '" name="h', $k, '" value="', htmlspecialchars(isset($_POST['h'. $k][0]) ? $_POST['h'. $k] : $v[1]), '"', (isset($v['d']) ? ' disabled="disabled"' : ''), ' />';  
  }
  else{} // text-area
- echo ' <span class="help">', $v[2], '</span><br />';
+ echo ' <span class="help">', $v[2], '</span></li>';
 }
-echo '</td></tr><tr><td><span style="vertical-align: top;" class="help" title="$spec argument: element-specific attribute rules">Spec:</span></td><td><textarea name="spec" id="spec" cols="70" rows="3" style="width:80%;">', htmlspecialchars((isset($_POST['spec']) ? $_POST['spec'] : '')), '</textarea></td></tr></table>';
+echo '</ul></td></tr><tr><td><span style="vertical-align: top;" class="help" title="$spec argument: element-specific attribute rules">Spec:</span></td><td><textarea name="spec" id="spec" cols="70" rows="3" style="width:80%;">', htmlspecialchars((isset($_POST['spec']) ? $_POST['spec'] : '')), '</textarea></td></tr></table>';
 ?>
 
 </div>
