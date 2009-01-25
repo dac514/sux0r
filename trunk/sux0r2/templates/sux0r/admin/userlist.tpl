@@ -15,30 +15,30 @@
     <div id="middle">
 
     <fieldset>
-    <legend>{$r->text.admin}</legend>
+    <legend>{$r->gtext.admin}</legend>
 
     <ul id="adminMenu">
-        <li><a href="{$r->makeURL('/blog/admin')}">{$r->text.admin_blog}</a></li>
-        <li><a href="{$r->makeURL('/photos/admin')}">{$r->text.admin_photos}</a></li>
+        <li><a href="{$r->makeURL('/blog/admin')}">{$r->gtext.admin_blog}</a></li>
+        <li><a href="{$r->makeURL('/photos/admin')}">{$r->gtext.admin_photos}</a></li>
         {insert name="feedsApproveLi"}
         {insert name="bookmarksApproveLi"}
-        <li><a href="{$r->makeURL('/admin/purge')}">{$r->text.admin_purge}</a></li>
+        <li><a href="{$r->makeURL('/admin/purge')}">{$r->gtext.admin_purge}</a></li>
     </ul>
 
     <table class="adminTable">
     <thead>
         <tr>
-            <td {if $sort == 'nickname'}class="selected"{/if}><a href="{$nickname_sort_url|escape:'html'}">{$r->text.nickname|lower}</a></td>
-            <td {if $sort == 'banned'}class="selected"{/if}><a href="{$banned_sort_url|escape:'html'}">{$r->text.banned|lower}</a></td>
-            <td {if $sort == 'root'}class="selected"{/if}><a href="{$root_sort_url|escape:'html'}">{$r->text.root|lower}</a></td>
-            <td>{$r->text.access|lower}</td>
-            <td>{$r->text.edit|lower}</td>
-            <td {if $sort == 'ts'}class="selected"{/if}><a href="{$ts_sort_url|escape:'html'}">{$r->text.last_active|lower}</a></td>
+            <td {if $sort == 'nickname'}class="selected"{/if}><a href="{$nickname_sort_url|escape:'html'}">{$r->gtext.nickname|lower}</a></td>
+            <td {if $sort == 'banned'}class="selected"{/if}><a href="{$banned_sort_url|escape:'html'}">{$r->gtext.banned|lower}</a></td>
+            <td {if $sort == 'root'}class="selected"{/if}><a href="{$root_sort_url|escape:'html'}">{$r->gtext.root|lower}</a></td>
+            <td>{$r->gtext.access|lower}</td>
+            <td>{$r->gtext.edit|lower}</td>
+            <td {if $sort == 'ts'}class="selected"{/if}><a href="{$ts_sort_url|escape:'html'}">{$r->gtext.last_active|lower}</a></td>
         </tr>
     </thead>
     <tbody>
 
-    {foreach from=$r->ulist item=foo}
+    {foreach from=$r->arr.ulist item=foo}
 
     <tr style="background-color:{cycle values="#ffffff,#eeeeee"}">
         <td style="text-align:left;"><a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a></td>
@@ -46,8 +46,8 @@
         <td>{if $foo.root}x{/if}</td>
         <td style="text-align:left;">{$r->getAccessLevels($foo.users_id)}</td>
         <td>
-            <a href="{$r->makeUrl('/user/edit')}/{$foo.nickname}">{$r->text.profile|lower}</a> |
-            <a href="{$r->makeUrl('/admin/access')}/{$foo.nickname}">{$r->text.access|lower}</a>
+            <a href="{$r->makeUrl('/user/edit')}/{$foo.nickname}">{$r->gtext.profile|lower}</a> |
+            <a href="{$r->makeUrl('/admin/access')}/{$foo.nickname}">{$r->gtext.access|lower}</a>
         </td>
         <td><a href="{$r->makeUrl('/admin/log')}/{$foo.nickname}">{$foo.last_active}</a></td>
 
@@ -62,7 +62,7 @@
 
     </fieldset>
 
-    <p><a href="{$r->makeUrl('/home')}">{$r->text.back_2} &raquo;</a></p>
+    <p><a href="{$r->makeUrl('/home')}">{$r->gtext.back_2} &raquo;</a></p>
 
     </div>
 

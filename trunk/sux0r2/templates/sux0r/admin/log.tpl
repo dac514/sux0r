@@ -48,20 +48,20 @@
     <div id="middle">
 
     <fieldset>
-    <legend>{$r->text.log}{if $nickname}: {$nickname}{/if}</legend>
+    <legend>{$r->gtext.log}{if $nickname}: {$nickname}{/if}</legend>
 
     <table class="adminTable">
     <thead>
         <tr>
-            <td>{$r->text.nickname|lower}</td>
-            <td>{$r->text.log|lower}</td>
-            <td {if $sort == 'ts'}class="selected"{/if}><a href="{$ts_sort_url|escape:'html'}">{$r->text.timestamp|lower}</a></td>
-            <td>{$r->text.private|lower}</td>
+            <td>{$r->gtext.nickname|lower}</td>
+            <td>{$r->gtext.log|lower}</td>
+            <td {if $sort == 'ts'}class="selected"{/if}><a href="{$ts_sort_url|escape:'html'}">{$r->gtext.timestamp|lower}</a></td>
+            <td>{$r->gtext.private|lower}</td>
         </tr>
     </thead>
     <tbody>
 
-    {foreach from=$r->ulog item=foo}
+    {foreach from=$r->arr.ulog item=foo}
 
         <tr style="background-color:{cycle values="#ffffff,#eeeeee"}">
             <td style="text-align:left;"><a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a></td>
@@ -86,7 +86,7 @@
 
     </fieldset>
 
-        <p><a href="{$r->makeUrl('/admin')}">{$r->text.back} &raquo;</a></p>
+        <p><a href="{$r->makeUrl('/admin')}">{$r->gtext.back} &raquo;</a></p>
 
     </div>
 

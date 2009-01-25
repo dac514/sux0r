@@ -6,9 +6,9 @@
 
 <div id="proselytizer"><div id="middle">
 
-    <p><strong>{$r->text.success}</strong>
-    <p>{$r->text.success2}</p>
-    <p style="text-align:center;">[ <a href="{$r->text.back_url}">{$r->text.back}</a> ]</p>
+    <p><strong>{$r->gtext.success}</strong>
+    <p>{$r->gtext.success2}</p>
+    <p style="text-align:center;">[ <a href="{$r->text.back_url}">{$r->gtext.back}</a> ]</p>
 
 </div></div>
 

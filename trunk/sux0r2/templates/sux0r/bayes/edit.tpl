@@ -83,11 +83,11 @@
 
 
         {if $validate.default.is_error !== false}
-        <p class="errorWarning">{$r->text.form_error} :</p>
+        <p class="errorWarning">{$r->gtext.form_error} :</p>
         {/if}
 
         <fieldset>
-        <legend>{$r->text.vectors}</legend>
+        <legend>{$r->gtext.vectors}</legend>
 
         {* Add a vector  ---------------------------------------------------- *}
 
@@ -98,14 +98,14 @@
         <p>
         {strip}
             {capture name=error}
-            {validate id="addvec1" form="addvec" message=$r->text.form_error_1}
-            {validate id="addvec2" form="addvec" message=$r->text.form_error_5}
+            {validate id="addvec1" form="addvec" message=$r->gtext.form_error_1}
+            {validate id="addvec2" form="addvec" message=$r->gtext.form_error_5}
             {/capture}
         {/strip}
 
-        <label {if $smarty.capture.error}class="error"{/if} >{$r->text.new_vec} :</label>
+        <label {if $smarty.capture.error}class="error"{/if} >{$r->gtext.new_vec} :</label>
         <input type="text" name="vector" value="{$vector}" />
-        <input type="submit" class="button" value="{$r->text.add}" />
+        <input type="submit" class="button" value="{$r->gtext.add}" />
         {$smarty.capture.error}
         </p>
 
@@ -121,13 +121,13 @@
         <p>
         {strip}
             {capture name=error}
-            {validate id="remvec1" form="remvec" message=$r->text.form_error_3}
+            {validate id="remvec1" form="remvec" message=$r->gtext.form_error_3}
             {/capture}
         {/strip}
 
-        <label {if $smarty.capture.error}class="error"{/if} >{$r->text.remove_vec} :</label>
+        <label {if $smarty.capture.error}class="error"{/if} >{$r->gtext.remove_vec} :</label>
         {html_options name='vector_id' options=$r->getUserOwnedVectors() selected=$vector_id}
-        <input type="button" class="button" value="{$r->text.delete}" onclick="rm('remvec', '{$r->text.alert_vec}');" />
+        <input type="button" class="button" value="{$r->gtext.delete}" onclick="rm('remvec', '{$r->gtext.alert_vec}');" />
         {$smarty.capture.error}
         </p>
 
@@ -139,7 +139,7 @@
 
 
         <fieldset>
-        <legend>{$r->text.categories}</legend>
+        <legend>{$r->gtext.categories}</legend>
 
         {* Add a category --------------------------------------------------- *}
 
@@ -150,16 +150,16 @@
         <p>
         {strip}
             {capture name=error}
-            {validate id="addcat1" form="addcat" message=$r->text.form_error_2}
-            {validate id="addcat2" form="addcat" message=$r->text.form_error_1}
-            {validate id="addcat3" form="addcat" message=$r->text.form_error_6}
+            {validate id="addcat1" form="addcat" message=$r->gtext.form_error_2}
+            {validate id="addcat2" form="addcat" message=$r->gtext.form_error_1}
+            {validate id="addcat3" form="addcat" message=$r->gtext.form_error_6}
             {/capture}
         {/strip}
 
-        <label {if $smarty.capture.error}class="error"{/if} >{$r->text.new_cat} :</label>
+        <label {if $smarty.capture.error}class="error"{/if} >{$r->gtext.new_cat} :</label>
         <input type="text" name="category" value="{$category}" />
         {html_options name='vector_id' options=$r->getUserOwnedVectors() selected=$vector_id}
-        <input type="submit" class="button" value="{$r->text.add}" />
+        <input type="submit" class="button" value="{$r->gtext.add}" />
         {$smarty.capture.error}
         </p>
 
@@ -175,13 +175,13 @@
         <p>
         {strip}
             {capture name=error}
-            {validate id="remcat1" form="remcat" message=$r->text.form_error_4}
+            {validate id="remcat1" form="remcat" message=$r->gtext.form_error_4}
             {/capture}
         {/strip}
 
-        <label {if $smarty.capture.error}class="error"{/if} >{$r->text.remove_cat} :</label>
+        <label {if $smarty.capture.error}class="error"{/if} >{$r->gtext.remove_cat} :</label>
         {html_options name='category_id' options=$r->getUserOwnedCategories() selected=$category_id}
-        <input type="button" class="button" value="{$r->text.delete}" onclick="rm('remcat', '{$r->text.alert_cat}');" />
+        <input type="button" class="button" value="{$r->gtext.delete}" onclick="rm('remcat', '{$r->gtext.alert_cat}');" />
         {$smarty.capture.error}
         </p>
 
@@ -194,7 +194,7 @@
 
 
         <fieldset>
-        <legend>{$r->text.documents}</legend>
+        <legend>{$r->gtext.documents}</legend>
 
 
         {* Train a document -------------------------------------------------- *}
@@ -206,15 +206,15 @@
         <p>
         {strip}
             {capture name=error}
-            {validate id="adddoc1" form="adddoc" message=$r->text.form_error_7}
-            {validate id="adddoc2" form="adddoc" message=$r->text.form_error_4}
+            {validate id="adddoc1" form="adddoc" message=$r->gtext.form_error_7}
+            {validate id="adddoc2" form="adddoc" message=$r->gtext.form_error_4}
             {/capture}
         {/strip}
 
-        <label {if $smarty.capture.error}class="error"{/if} >{$r->text.add_doc} :</label>
+        <label {if $smarty.capture.error}class="error"{/if} >{$r->gtext.add_doc} :</label>
         <textarea name="document" cols='50' rows='10'>{$document}</textarea><br />
         <label>&nbsp;</label>{html_options name='category_id' options=$r->getUserTrainableCategories() selected=$category_id}
-        <input type="submit" class="button" value="{$r->text.train}" />
+        <input type="submit" class="button" value="{$r->gtext.train}" />
         {$smarty.capture.error}
         </p>
 
@@ -230,16 +230,16 @@
         <p>
         {strip}
             {capture name=error}
-            {validate id="remdoc1" form="remdoc" message=$r->text.form_error_7}
+            {validate id="remdoc1" form="remdoc" message=$r->gtext.form_error_7}
             {/capture}
         {/strip}
 
-        <label {if $smarty.capture.error}class="error"{/if} >{$r->text.remove_doc} :</label>
+        <label {if $smarty.capture.error}class="error"{/if} >{$r->gtext.remove_doc} :</label>
         <select name="document_id" onchange="getDoc(this.value);">
         <option value="">---</option>
         {html_options options=$r->getUserOwnedDocuments() selected=$document_id}
         </select>
-        <input type="button" class="button" value="{$r->text.delete}" onclick="rm('remdoc', '{$r->text.alert_doc}');"/>
+        <input type="button" class="button" value="{$r->gtext.delete}" onclick="rm('remdoc', '{$r->gtext.alert_doc}');"/>
         {$smarty.capture.error}
         </p>
 
@@ -254,7 +254,7 @@
 
 
         <fieldset>
-        <legend>{$r->text.categorize}</legend>
+        <legend>{$r->gtext.categorize}</legend>
 
         {* Categorize document ---------------------------------------------- *}
 
@@ -262,10 +262,10 @@
         {* This is Ajax, no token or action is needed *}
 
         <p>
-        <label >{$r->text.cat_doc} :</label>
+        <label >{$r->gtext.cat_doc} :</label>
         <textarea name="cat_document" cols='50' rows='10'>{$cat_document}</textarea><br />
         <label>&nbsp;</label>{html_options name='vector_id' options=$r->getUserSharedVectors() selected=$vector_id}
-        <input type="button" class="button" value="{$r->text.categorize}" onclick="getCat(this.form.cat_document.value, this.form.vector_id.value);" />
+        <input type="button" class="button" value="{$r->gtext.categorize}" onclick="getCat(this.form.cat_document.value, this.form.vector_id.value);" />
         {$smarty.capture.error}
         </p>
 
@@ -280,7 +280,7 @@
 
 
         <fieldset>
-        <legend>{$r->text.share}</legend>
+        <legend>{$r->gtext.share}</legend>
 
         {* Share vector ----------------------------------------------------- *}
 
@@ -290,20 +290,20 @@
 
         <p>
 
-        {validate id="sharevec1" form="sharevec" assign="sharevec_error1" message=$r->text.form_error_3}
-        {validate id="sharevec2" form="sharevec" assign="sharevec_error2" message=$r->text.form_error_8}
-        {validate id="sharevec3" form="sharevec" assign="sharevec_error3" message=$r->text.form_error_9}
-        {validate id="sharevec4" form="sharevec" assign="sharevec_error4" message=$r->text.form_error_9}
-        {validate id="sharevec5" form="sharevec" assign="sharevec_error5" message=$r->text.form_error_10}
-        {validate id="sharevec6" form="sharevec" assign="sharevec_error6" message=$r->text.form_error_11}
+        {validate id="sharevec1" form="sharevec" assign="sharevec_error1" message=$r->gtext.form_error_3}
+        {validate id="sharevec2" form="sharevec" assign="sharevec_error2" message=$r->gtext.form_error_8}
+        {validate id="sharevec3" form="sharevec" assign="sharevec_error3" message=$r->gtext.form_error_9}
+        {validate id="sharevec4" form="sharevec" assign="sharevec_error4" message=$r->gtext.form_error_9}
+        {validate id="sharevec5" form="sharevec" assign="sharevec_error5" message=$r->gtext.form_error_10}
+        {validate id="sharevec6" form="sharevec" assign="sharevec_error6" message=$r->gtext.form_error_11}
 
-        <label {if $sharevec_error1}class="error"{/if} >{$r->text.share_vec} :</label>
+        <label {if $sharevec_error1}class="error"{/if} >{$r->gtext.share_vec} :</label>
             {html_options name='vector_id' options=$r->getUserOwnedVectors() selected=$vector_id}
             {$sharevec_error1}
         </p>
 
         <p>
-        <label {if $sharevec_error2 || $sharevec_error5 || $sharevec_error6}class="error"{/if} >{$r->text.with} :</label>
+        <label {if $sharevec_error2 || $sharevec_error5 || $sharevec_error6}class="error"{/if} >{$r->gtext.with} :</label>
             {html_options name='users_id' options=$r->getFriends() selected=$users_id}
             {$sharevec_error2}
             {$sharevec_error5}
@@ -312,18 +312,18 @@
 
         <p>
         <label>&nbsp;</label>
-            <input type="checkbox" name="trainer" value="1" /> <span {if $sharevec_error3}class="error"{/if}>{$r->text.trainer}</span>
+            <input type="checkbox" name="trainer" value="1" /> <span {if $sharevec_error3}class="error"{/if}>{$r->gtext.trainer}</span>
             {$sharevec_error3}
         </p>
         <p>
         <label>&nbsp;</label>
-            <input type="checkbox" name="owner" value="1" /> <span {if $sharevec_error4}class="error"{/if}>{$r->text.owner2}</span>
+            <input type="checkbox" name="owner" value="1" /> <span {if $sharevec_error4}class="error"{/if}>{$r->gtext.owner2}</span>
             {$sharevec_error4}
         </p>
 
         <p>
         <label>&nbsp;</label>
-            <input type="submit" class="button" value="{$r->text.share}" />
+            <input type="submit" class="button" value="{$r->gtext.share}" />
         </p>
 
         </form>
@@ -335,7 +335,7 @@
         </fieldset>
 
         <fieldset>
-        <legend>{$r->text.unshare}</legend>
+        <legend>{$r->gtext.unshare}</legend>
 
         {* Unhare vector ---------------------------------------------------- *}
 
@@ -343,13 +343,13 @@
         <input type="hidden" name="token" value="{$token}" />
         <input type="hidden" name="action" value="unsharevec" />
 
-        {validate id="unsharevec1" form="unsharevec" assign="unsharevec_error1" message=$r->text.form_error_12}
+        {validate id="unsharevec1" form="unsharevec" assign="unsharevec_error1" message=$r->gtext.form_error_12}
 
         {if $unsharevec_error1}<p class="error">{$unsharevec_error1}</p>{/if}
 
         {$r->getShareTable()}
         <center>
-        <input type="button" class="button" value="{$r->text.unshare}" onclick="rm('unsharevec', '{$r->text.alert_unshare}');"/>
+        <input type="button" class="button" value="{$r->gtext.unshare}" onclick="rm('unsharevec', '{$r->gtext.alert_unshare}');"/>
         </center>
 
         </form>
@@ -359,7 +359,7 @@
 
         </fieldset>
 
-        <p><a href="{$r->makeUrl('/user/profile')}">{$r->text.back_2} &raquo;</a></p>
+        <p><a href="{$r->makeUrl('/user/profile')}">{$r->gtext.back_2} &raquo;</a></p>
 
         </div></div>
 
@@ -369,15 +369,15 @@
 
             {capture name=stats}{$r->getCategoryStats()}{/capture}
             {if $smarty.capture.stats}
-            <p>{$r->text.stats}:</p>
+            <p>{$r->gtext.stats}:</p>
             {$smarty.capture.stats}
             {/if}
 
-            <p>{$r->text.synopsis}:</p>
-            <p>{$r->text.synopsis_1}</p>
-            <p>{$r->text.synopsis_2}</p>
-            <p>{$r->text.synopsis_3}</p>
-            <p>{$r->text.synopsis_4}</p>
+            <p>{$r->gtext.synopsis}:</p>
+            <p>{$r->gtext.synopsis_1}</p>
+            <p>{$r->gtext.synopsis_2}</p>
+            <p>{$r->gtext.synopsis_3}</p>
+            <p>{$r->gtext.synopsis_4}</p>
 
 			</div>
 		</td>
