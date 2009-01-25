@@ -61,7 +61,7 @@
             {capture name='welcome' assign='welcome'}
 
             <p>
-            2008-11-08: <a href="http://sourceforge.net/people/viewjob.php?group_id=131752&amp;job_id=31512">Translations still wanted</a>.
+            {$smarty.now|date_format:'%Y-%m-%d'}: <a href="http://sourceforge.net/people/viewjob.php?group_id=131752&amp;job_id=31512">Translations still wanted</a>.
             Currently we have Chinese (zh), English (en), Dutch (nl) and German (de).
             </p>
 
