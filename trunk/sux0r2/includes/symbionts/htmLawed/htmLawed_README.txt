@@ -1,6 +1,6 @@
 /*
-htmLawed_README.txt, 27 September 2008
-htmLawed 1.1.1, 27 September 2008
+htmLawed_README.txt, 22 January 2009
+htmLawed 1.1.2, 22 January 2009
 Copyright Santosh Patnaik
 GPL v3 license
 A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -1150,13 +1150,11 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 
   htmLawed allows an admin to use '$config["safe"]' to auto-adjust multiple '$config' parameters (such as 'elements' which declares the allowed element-set), which otherwise would have to be manually set. The relevant parameters are indicated by '"' in section:- #2.2). Thus, one can pass the '$config' argument with a simpler value.
 
-  With the value of '1', htmLawed considers 'CDATA' sections and HTML comments as plain text, and prohibits the 'applet', 'embed', 'iframe', 'object' and 'script' elements, and the 'on*' attributes like 'onclick'. Further, URLs with schemes (see section:- #3.4.3) are neutralized so that, e.g., 'style="moz-binding:url(http://danger)"' becomes 'style="moz-binding:url(denied:http://danger)"' while 'style="moz-binding:url(ok)"' remains intact.
+  With the value of '1', htmLawed considers 'CDATA' sections and HTML comments as plain text, and prohibits the 'applet', 'embed', 'iframe', 'object' and 'script' elements, and the 'on*' attributes like 'onclick'. ( There are '$config' parameters like 'css_expression' that are not affected by the value set for 'safe' but whose default values still contribute towards a more `safe` output.) Further, URLs with schemes (see section:- #3.4.3) are neutralized so that, e.g., 'style="moz-binding:url(http://danger)"' becomes 'style="moz-binding:url(denied:http://danger)"' while 'style="moz-binding:url(ok)"' remains intact.
 
   Admins, however, may still want to completely deny the 'style' attribute, e.g., with code like
 
-    $processed = htmLawed($text, array('safe'=>1, 'deny_attribute'=>'on*, style'));
-
-  There are '$config' parameters like 'css_expression' that are not affected by the value set for 'safe' but whose default values still contribute towards a more `safe` output.
+    $processed = htmLawed($text, array('safe'=>1, 'deny_attribute'=>'style'));
 
   If a value for a parameter auto-set through 'safe' is still manually provided, then that value can over-ride the auto-set value. E.g., with '$config["safe"] = 1' and '$config["elements"] = "*+script"', 'script', but not 'applet', is allowed.
 
@@ -1227,6 +1225,8 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 
   `Version number - Release date. Notes`
 
+  1.1.2 - 22 January 2009. Fixed bug in parsing of 'font' attributes during tag transformation
+  
   1.1.1 - 27 September 2008. Better nesting correction when omitable closing tags are absent
 
   1.1 - 29 June 2008. '$config["hook_tag"]' and '$config["format"]' introduced for custom tag/attribute check/modification/injection and output compaction/beautification; fixed a regex-in-$spec parsing bug
