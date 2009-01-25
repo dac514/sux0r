@@ -1,31 +1,31 @@
-Ã¯Â»Â¿<?php
+ï»¿<?php
 
 // Always UTF-8
 // Always uppercase the first word
 
-$gtext['access'] = 'Ã¦ÂÂÃ©ÂÂ';
-$gtext['activity_log'] = 'Ã¦Â´Â»Ã¥ÂÂ¨Ã¨Â®Â°Ã¥Â½Â';
-$gtext['admin'] = 'Ã§Â®Â¡Ã§ÂÂ';
-$gtext['admin_blog'] = 'Ã¦ÂÂ¥Ã¥Â¿ÂÃ§Â®Â¡Ã§ÂÂ';
-$gtext['admin_bookmarks'] = 'Ã¤Â¹Â¦Ã§Â­Â¾Ã§Â®Â¡Ã§ÂÂ';
-$gtext['admin_feeds'] = 'FeedsÃ§Â®Â¡Ã§ÂÂ';
-$gtext['admin_photos'] = 'Ã¥ÂÂ¾Ã§ÂÂÃ§Â®Â¡Ã§ÂÂ';
-$gtext['back'] = 'Ã¨Â¿ÂÃ¥ÂÂÃ§Â®Â¡Ã§ÂÂÃ©Â¡ÂµÃ©ÂÂ¢';
-$gtext['back_2'] = 'Ã¨Â¿ÂÃ¥ÂÂÃ¥ÂÂ°Ã©Â¦ÂÃ©Â¡Âµ';
-$gtext['banned'] = 'Ã§Â¦ÂÃ§ÂÂ¨';
-$gtext['cancel'] = 'Ã¥ÂÂÃ¦Â¶Â';
-$gtext['edit'] = 'Ã§Â¼ÂÃ¨Â¾Â';
-$gtext['edit_access'] = 'Ã§Â¼ÂÃ¨Â¾ÂÃ¦ÂÂÃ©ÂÂ';
-$gtext['form_error'] = 'Ã¨Â¡Â¨Ã¥ÂÂÃ¦ÂÂªÃ¨Â¢Â«Ã¦ÂÂÃ¤ÂºÂ¤Ã¯Â¼ÂÃ¦Â³Â¨Ã¦ÂÂÃ¥ÂÂºÃ©ÂÂÃ©Â¡Â¹Ã§ÂÂ®';
-$gtext['form_problem'] = 'Ã¨Â¡Â¨Ã¥ÂÂÃ¦ÂÂªÃ¨Â¢Â«Ã¦ÂÂÃ¤ÂºÂ¤Ã¯Â¼ÂÃ¨Â¯Â·Ã©ÂÂÃ¨Â¯Â';
-$gtext['last_active'] = 'Ã¦ÂÂÃ¨Â¿ÂÃ¦Â´Â»Ã¥ÂÂ¨';
-$gtext['log'] = 'Ã¨Â®Â°Ã¥Â½Â';
-$gtext['nickname'] = 'Ã¦ÂÂµÃ§Â§Â°';
-$gtext['private'] = 'Ã§Â§ÂÃ¦ÂÂ';
-$gtext['profile'] = 'Ã¦Â¡Â£Ã¦Â¡Â';
-$gtext['root'] = 'Ã§Â®Â¡Ã§ÂÂÃ¥ÂÂ';
-$gtext['submit'] = 'Ã¦ÂÂÃ¤ÂºÂ¤';
-$gtext['timestamp'] = 'Ã¦ÂÂ¶Ã©ÂÂ´Ã¦ÂÂ³';
-$gtext['yourself'] = 'Ã¦ÂÂ¨Ã¥ÂÂ¨Ã§Â¼ÂÃ¨Â¾ÂÃ¨ÂÂªÃ¨ÂºÂ«Ã¯Â¼ÂÃ§ÂÂ±Ã¤ÂºÂÃ¥Â®ÂÃ¥ÂÂ¨Ã¥ÂÂ Ã§Â´Â Ã¯Â¼ÂÃ¤Â¸ÂÃ¤ÂºÂÃ¥ÂÂÃ¨ÂÂ½Ã¤Â¸ÂÃ¥ÂÂ¯Ã§ÂÂ¨Ã£ÂÂ';
+$gtext['access'] = 'æé';
+$gtext['activity_log'] = 'æ´»å¨è®°å½';
+$gtext['admin'] = 'ç®¡ç';
+$gtext['admin_blog'] = 'æ¥å¿ç®¡ç';
+$gtext['admin_bookmarks'] = 'ä¹¦ç­¾ç®¡ç';
+$gtext['admin_feeds'] = 'Feedsç®¡ç';
+$gtext['admin_photos'] = 'å¾çç®¡ç';
+$gtext['back'] = 'è¿åç®¡çé¡µé¢';
+$gtext['back_2'] = 'è¿åå°é¦é¡µ';
+$gtext['banned'] = 'ç¦ç¨';
+$gtext['cancel'] = 'åæ¶';
+$gtext['edit'] = 'ç¼è¾';
+$gtext['edit_access'] = 'ç¼è¾æé';
+$gtext['form_error'] = 'è¡¨åæªè¢«æäº¤ï¼æ³¨æåºéé¡¹ç®';
+$gtext['form_problem'] = 'è¡¨åæªè¢«æäº¤ï¼è¯·éè¯';
+$gtext['last_active'] = 'æè¿æ´»å¨';
+$gtext['log'] = 'è®°å½';
+$gtext['nickname'] = 'æµç§°';
+$gtext['private'] = 'ç§æ';
+$gtext['profile'] = 'æ¡£æ¡';
+$gtext['root'] = 'ç®¡çå';
+$gtext['submit'] = 'æäº¤';
+$gtext['timestamp'] = 'æ¶é´æ³';
+$gtext['yourself'] = 'æ¨å¨ç¼è¾èªèº«ï¼ç±äºå®å¨å ç´ ï¼ä¸äºåè½ä¸å¯ç¨ã';
 
 ?>

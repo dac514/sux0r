@@ -1,4 +1,4 @@
-Ã¯Â»Â¿<?php
+ï»¿<?php
 
 /* Navigation menu */
 
@@ -29,11 +29,11 @@ Contributors should be attributed by full name or nickname.';
 
 $gtext['404_continue'] = 'Hier klicken, um fortzufahren';
 $gtext['404_h1'] = 'Hoppla, Seite nicht gefunden (Fehler 404)';
-$gtext['404_p1'] = 'Aus irgendeinem Grund (falsch geschriebene URL, fehlerhafte Umleitung von einer anderen Seite, nicht mehr aktuelle Suchmaschienen-Auflistung oder wir haben einfach eine Datei gelÃÂ¶scht) war die Seite, die Sie gesucht haben, nicht hier.';
+$gtext['404_p1'] = 'Aus irgendeinem Grund (falsch geschriebene URL, fehlerhafte Umleitung von einer anderen Seite, nicht mehr aktuelle Suchmaschienen-Auflistung oder wir haben einfach eine Datei gelÃ¶scht) war die Seite, die Sie gesucht haben, nicht hier.';
 $gtext['admin'] = 'Administration';
 $gtext['banned_continue'] = 'Hier klicken, um fortzufahren';
 $gtext['banned_h1'] = 'Gesperrt';
-$gtext['banned_p1'] = 'Sie sind eine sehr bÃÂ¶se, eine sehr sehr bÃÂ¶se Person gewesen.';
+$gtext['banned_p1'] = 'Sie sind eine sehr bÃ¶se, eine sehr sehr bÃ¶se Person gewesen.';
 $gtext['continue'] = 'Fortfahren';
 $gtext['login'] = 'Einloggen';
 $gtext['logout'] = 'Ausloggen';
