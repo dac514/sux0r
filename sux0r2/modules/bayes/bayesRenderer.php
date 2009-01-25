@@ -57,7 +57,7 @@ class bayesRenderer extends suxRenderer {
 
         if ($GLOBALS['CONFIG']['FEATURE']['bayes'] == false) return null; // Feature is turned off
         if (!isset($_SESSION['users_id'])) return null; // Skip anonymous users
-        
+
         $js = '';
 
         if ($init) {
@@ -111,8 +111,8 @@ class bayesRenderer extends suxRenderer {
     */
     function genericBayesInterface($id, $link, $module, $document) {
 
-        if ($GLOBALS['CONFIG']['FEATURE']['bayes'] == false) return null; // Feature is turned off        
-        
+        if ($GLOBALS['CONFIG']['FEATURE']['bayes'] == false) return null; // Feature is turned off
+
         /* Get a list of all the vectors/categories the user has access to */
 
         // Cache
@@ -456,13 +456,13 @@ class bayesRenderer extends suxRenderer {
         $html = "<ul id='bStats'>\n";
         foreach ($this->getSharedVectorsArray() as $key => $val) {
             $html .= "<li class='bStatsVec'>{$val['vector']}";
-            if (!$this->nb->isVectorOwner($key, $_SESSION['users_id'])) $html .= ' <em>(' . $this->text['shared'] . ')</em>';
+            if (!$this->nb->isVectorOwner($key, $_SESSION['users_id'])) $html .= ' <em>(' . $this->gtext['shared'] . ')</em>';
             $html .= ":\n<ul>\n";
             foreach ($this->nb->getCategoriesByVector($key) as $key2 => $val2) {
                 $doc_count = $this->nb->getDocumentCountByCategory($key2);
                 $html .= "<li class='bStatsCat'>{$val2['category']}:";
                 $html .= "<ul>\n";
-                $html .= "<li class='bStatsDoc'>{$this->text['documents']}: $doc_count</li><li class='bStatsTok'>{$this->text['tokens']}: {$val2['token_count']}</li>";
+                $html .= "<li class='bStatsDoc'>{$this->gtext['documents']}: $doc_count</li><li class='bStatsTok'>{$this->gtext['tokens']}: {$val2['token_count']}</li>";
                 $html .= "<li class='bStatsProb'>P: " . round($val2['probability'] * 100, 2) . " %</li>\n";
                 $html .= "</ul></li>\n";
                 ++$cat;
@@ -485,11 +485,11 @@ class bayesRenderer extends suxRenderer {
         if ($html) return $html; // Cache
 
         $html .= "<table class='shared'><thead><tr>
-        <th>{$this->text['vector']}</th>
-        <th>{$this->text['user']}</th>
-        <th>{$this->text['trainer']}</th>
-        <th>{$this->text['owner']}</th>
-        <th>{$this->text['unshare']}</th>
+        <th>{$this->gtext['vector']}</th>
+        <th>{$this->gtext['user']}</th>
+        <th>{$this->gtext['trainer']}</th>
+        <th>{$this->gtext['owner']}</th>
+        <th>{$this->gtext['unshare']}</th>
         </tr></thead><tbody>\n";
 
         $user = new suxUser();
@@ -635,20 +635,22 @@ class bayesRenderer extends suxRenderer {
 */
 function insert_bayesFilters($params) {
 
-    if ($GLOBALS['CONFIG']['FEATURE']['bayes'] == false) return null; // Feature is turned off   
+    if ($GLOBALS['CONFIG']['FEATURE']['bayes'] == false) return null; // Feature is turned off
     if (!isset($_SESSION['users_id'])) return null; // Anonymous user, skip
 
     $r = new bayesRenderer('bayes'); // Renderer
     if (!$r->getUserCategories()) return null; // No categories, skip
 
     $tpl = new suxTemplate('bayes'); // Template
-    $r->text = suxFunct::gtext('bayes'); // Language
+    $r->gtext = suxFunct::gtext('bayes'); // Language
 
     if (isset($_GET['filter'])) $tpl->assign('filter', $_GET['filter']);
     if (isset($_GET['threshold']) && $_GET['threshold'] !== false) $tpl->assign('threshold', $_GET['threshold']);
     if (isset($_GET['search'])) $tpl->assign('search', strip_tags($_GET['search']));
     if (isset($params['form_url'])) $r->text['form_url'] = $params['form_url'];
-    if (isset($params['hidden']) && is_array($params['hidden'])) $r->text['hidden'] = $params['hidden'];
+    if (isset($params['hidden']) && is_array($params['hidden'])) $r->arr['hidden'] = $params['hidden'];
+
+    if (!$GLOBALS['CONFIG']['CLEAN_URL']) $r->text['c'] = @$_GET['c']; // We need this if CLEAN_URL = false
 
     $tpl->assign_by_ref('r', $r);
     return $tpl->fetch('filters.tpl');
@@ -663,7 +665,7 @@ function insert_bayesFilters($params) {
 */
 function insert_bayesFilterScript() {
 
-    if ($GLOBALS['CONFIG']['FEATURE']['bayes'] == false) return null; // Feature is turned off       
+    if ($GLOBALS['CONFIG']['FEATURE']['bayes'] == false) return null; // Feature is turned off
     if (!isset($_SESSION['users_id'])) return null; // Anonymous user, skip
 
     $r = new bayesRenderer('bayes'); // Renderer

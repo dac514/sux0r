@@ -52,8 +52,6 @@ class adminAccess {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new adminRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
         // Redirect if not logged in
@@ -154,7 +152,7 @@ class adminAccess {
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
         if ($this->users_id == $_SESSION['users_id']) $this->tpl->assign('disabled', 'disabled="disabled"');
 
-        $this->r->title .= " | {$this->r->text['edit_access']}";
+        $this->r->title .= " | {$this->r->gtext['edit_access']}";
 
         // Display template
         $this->tpl->display('access.tpl');

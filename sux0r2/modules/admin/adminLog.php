@@ -52,8 +52,6 @@ class adminLog {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new adminRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         $this->user = new suxUser();
         $this->pager = new suxPager();
 
@@ -91,14 +89,14 @@ class adminLog {
 
         $this->pager->setPages($this->user->countLog($this->users_id));
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/admin/log/{$this->nickname}", $params));
-        $this->r->ulog = $this->user->getLog($this->pager->limit, $this->pager->start, $this->users_id, $order, true);
+        $this->r->arr['ulog'] = $this->user->getLog($this->pager->limit, $this->pager->start, $this->users_id, $order, true);
 
         // Template
         $inverse = ($order != 'desc') ? 'desc' : 'asc';
         $this->tpl->assign('ts_sort_url', suxFunct::makeUrl("/admin/log/{$this->nickname}", array('order' => $inverse)));
         $this->tpl->assign('nickname', $this->nickname);
 
-        $this->r->title .= " | {$this->r->text['activity_log']}";
+        $this->r->title .= " | {$this->r->gtext['activity_log']}";
 
         $this->tpl->display('log.tpl');
 

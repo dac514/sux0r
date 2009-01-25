@@ -48,14 +48,10 @@ class admin {
     function __construct() {
 
         $this->tpl = new suxTemplate($this->module); // Template
-        
-        $this->r = new adminRenderer($this->module); // Renderer        
+
+        $this->r = new adminRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
-        
-        // TODO New Renderers
-        
+
         $this->user = new suxUser();
         $this->pager = new suxPager();
 
@@ -86,7 +82,7 @@ class admin {
 
         $this->pager->setPages($this->user->countUsers());
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/admin', $params));
-        $this->r->ulist = $this->user->getUsers($this->pager->limit, $this->pager->start, $sort, $order);
+        $this->r->arr['ulist'] = $this->user->getUsers($this->pager->limit, $this->pager->start, $sort, $order);
 
         // Template
         $this->tpl->assign('sort', $sort);
@@ -100,7 +96,7 @@ class admin {
         $inverse = ($sort == 'ts' && $order != 'desc') ? 'desc' : 'asc';
         $this->tpl->assign('ts_sort_url', suxFunct::makeUrl('/admin', array('sort' => 'ts', 'order' => $inverse)));
 
-        $this->r->title .= " | {$this->r->text['admin']}";
+        $this->r->title .= " | {$this->r->gtext['admin']}";
 
         $this->tpl->display('userlist.tpl');
 

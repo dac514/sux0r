@@ -26,7 +26,7 @@
 <div id="middle">
 
 <fieldset>
-<legend>{$r->text.access}: {$nickname}</legend>
+<legend>{$r->gtext.access}: {$nickname}</legend>
 
 <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />
@@ -37,15 +37,15 @@
 {validate id="integrity" message="integrity failure"}
 
 {if $validate.default.is_error !== false}
-<p class="errorWarning">{$r->text.form_error} :</p>
+<p class="errorWarning">{$r->gtext.form_error} :</p>
 {elseif $r->detectPOST()}
-<p class="errorWarning">{$r->text.form_problem} :</p>
+<p class="errorWarning">{$r->gtext.form_problem} :</p>
 {/if}
 
-{if $disabled}<p><label>&nbsp;</label>{$r->text.yourself}</p>{/if}
+{if $disabled}<p><label>&nbsp;</label>{$r->gtext.yourself}</p>{/if}
 
 <p>
-<label>{$r->text.root} :</label>
+<label>{$r->gtext.root} :</label>
 <input type="checkbox" name="root" value="1" {if $root}checked="checked"{/if} {$disabled} /><br />
 </p>
 
@@ -54,15 +54,15 @@
 {/foreach}
 
 <p>
-<label>{$r->text.banned} :</label>
+<label>{$r->gtext.banned} :</label>
 <input type="checkbox" name="banned" value="1" {if $banned}checked="checked"{/if} {$disabled} /><br />
 </p>
 
 
 <p>
 <label>&nbsp;</label>
-<input type="button" class="button" value="{$r->text.cancel}" onclick="document.location='{$r->text.back_url}';" />
-<input type="submit" class="button" value="{$r->text.submit}" />
+<input type="button" class="button" value="{$r->gtext.cancel}" onclick="document.location='{$r->text.back_url}';" />
+<input type="submit" class="button" value="{$r->gtext.submit}" />
 </p>
 
 </form>
