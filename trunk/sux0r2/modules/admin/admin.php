@@ -66,35 +66,37 @@ class admin {
 
     function userlist() {
 
+        // -------------------------------------------------------------------
         // Sort / Order
+        // -------------------------------------------------------------------
+
         $sort = null;
         if (isset($_GET['sort'])) $sort = $_GET['sort'];
-        $order = null;
-        if (isset($_GET['order'])) $order = $_GET['order'];
 
-        // Extra params for pager
-        $params = array();
+        $order = 'DESC';
+        if (!empty($_GET['order'])) $order = $_GET['order'];
+
+
+        // -------------------------------------------------------------------
+        // Pager
+        // -------------------------------------------------------------------
+
+        $params = array(); // Extra params
         if ($sort) $params = array('sort' => $sort, 'order' => $order);
 
-        // Pager
         $this->pager->limit = $this->per_page;
         $this->pager->setStart();
-
         $this->pager->setPages($this->user->countUsers());
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/admin', $params));
+
+        // -------------------------------------------------------------------
+        // Template
+        // -------------------------------------------------------------------
+
         $this->r->arr['ulist'] = $this->user->getUsers($this->pager->limit, $this->pager->start, $sort, $order);
 
-        // Template
         $this->tpl->assign('sort', $sort);
-
-        $inverse = ($sort == 'nickname' && $order != 'desc') ? 'desc' : 'asc';
-        $this->tpl->assign('nickname_sort_url', suxFunct::makeUrl('/admin', array('sort' => 'nickname', 'order' => $inverse)));
-        $inverse = ($sort == 'banned' && $order != 'desc') ? 'desc' : 'asc';
-        $this->tpl->assign('banned_sort_url', suxFunct::makeUrl('/admin', array('sort' => 'banned', 'order' => $inverse)));
-        $inverse = ($sort == 'root' && $order != 'desc') ? 'desc' : 'asc';
-        $this->tpl->assign('root_sort_url', suxFunct::makeUrl('/admin', array('sort' => 'root', 'order' => $inverse)));
-        $inverse = ($sort == 'ts' && $order != 'desc') ? 'desc' : 'asc';
-        $this->tpl->assign('ts_sort_url', suxFunct::makeUrl('/admin', array('sort' => 'ts', 'order' => $inverse)));
+        $this->r->text['sort_url'] = suxFunct::makeUrl('/admin', array('order' => (mb_strtolower($order) == 'desc' ? 'ASC' : 'DESC')));
 
         $this->r->title .= " | {$this->r->gtext['admin']}";
 

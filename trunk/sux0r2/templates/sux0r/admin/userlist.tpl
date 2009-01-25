@@ -28,12 +28,12 @@
     <table class="adminTable">
     <thead>
         <tr>
-            <td {if $sort == 'nickname'}class="selected"{/if}><a href="{$nickname_sort_url|escape:'html'}">{$r->gtext.nickname|lower}</a></td>
-            <td {if $sort == 'banned'}class="selected"{/if}><a href="{$banned_sort_url|escape:'html'}">{$r->gtext.banned|lower}</a></td>
-            <td {if $sort == 'root'}class="selected"{/if}><a href="{$root_sort_url|escape:'html'}">{$r->gtext.root|lower}</a></td>
+            <td {if $sort == 'nickname'}class="selected"{/if}><a href="{$r->text.sort_url|escape:'html'}&amp;sort=nickname">{$r->gtext.nickname|lower}</a></td>
+            <td {if $sort == 'banned'}class="selected"{/if}><a href="{$r->text.sort_url|escape:'html'}&amp;sort=banned">{$r->gtext.banned|lower}</a></td>
+            <td {if $sort == 'root'}class="selected"{/if}><a href="{$r->text.sort_url|escape:'html'}&amp;sort=root">{$r->gtext.root|lower}</a></td>
             <td>{$r->gtext.access|lower}</td>
             <td>{$r->gtext.edit|lower}</td>
-            <td {if $sort == 'ts'}class="selected"{/if}><a href="{$ts_sort_url|escape:'html'}">{$r->gtext.last_active|lower}</a></td>
+            <td {if $sort == 'ts'}class="selected"{/if}><a href="{$r->text.sort_url|escape:'html'}&amp;sort=ts">{$r->gtext.last_active|lower}</a></td>
         </tr>
     </thead>
     <tbody>
