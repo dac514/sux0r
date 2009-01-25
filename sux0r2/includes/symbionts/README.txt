@@ -63,7 +63,7 @@ dBug
 
 htmLawed
 * Path: ./htmLawed/
-* Version: 1.1.1
+* Version: 1.1.2
 * Licence: GPL 3
 * Website: http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/index.php
 
@@ -90,7 +90,7 @@ Scriptaculous
 
 Smarty
 * Path: ./Smarty/
-* Version: 2.6.20
+* Version: 2.6.22
 * Licence: LGPL 2.1
 * Website: http://www.smarty.net/
 
@@ -120,6 +120,6 @@ Stopwords
 
 TinyMCE
 * Path: ./tinymce/
-* Version: 3.2.1 (+ language files)
+* Version: 3.2.1.1 (+ language files)
 * Licence: LGPL 2.1
 * Website: http://tinymce.moxiecode.com/
