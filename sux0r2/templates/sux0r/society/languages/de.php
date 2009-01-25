@@ -1,4 +1,4 @@
-Ã¯Â»Â¿<?php
+ï»¿<?php
 
 // Always UTF-8
 // Always uppercase the first word
@@ -6,7 +6,7 @@
 $gtext['acquaintance'] = 'Bekanntschaft';
 $gtext['cancel'] = 'Abbrechen';
 $gtext['child'] = 'Kind';
-$gtext['change_relation'] = 'hat die Beziehung geÃÂ¤ndert mit';
+$gtext['change_relation'] = 'hat die Beziehung geÃ¤ndert mit';
 $gtext['co_resident'] = 'Gleichzeitig vorhanden';
 $gtext['co_worker'] = 'Kollege';
 $gtext['colleague'] = 'Kollege';
@@ -16,8 +16,8 @@ $gtext['date'] = 'Datum';
 $gtext['edit_relationship'] = 'Beziehung bearbeiten';
 $gtext['end_relation'] = 'hat die Beziehung beendet mit';
 $gtext['family'] = 'Familie';
-$gtext['form_error'] = 'Das Formular wurde nicht ÃÂ¼bertragen, siehe Fehler unten';
-$gtext['form_problem'] = 'Das Formular wurde nicht ÃÂ¼bertragen, bitte versuchen Sie es erneut';
+$gtext['form_error'] = 'Das Formular wurde nicht Ã¼bertragen, siehe Fehler unten';
+$gtext['form_problem'] = 'Das Formular wurde nicht Ã¼bertragen, bitte versuchen Sie es erneut';
 $gtext['friend'] = 'Freund';
 $gtext['friendship'] = 'Freundschaft';
 $gtext['geographical'] = 'Geografisch';

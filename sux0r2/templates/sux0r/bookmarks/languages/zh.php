@@ -1,54 +1,54 @@
-Ã¯Â»Â¿<?php
+ï»¿<?php
 
 // Always UTF-8
 // Always uppercase the first word
 
-$gtext['admin'] = 'Ã¤Â¹Â¦Ã§Â­Â¾Ã§Â®Â¡Ã§ÂÂ';
-$gtext['alert_delete'] = 'Ã§Â¡Â®Ã¨Â®Â¤Ã¥ÂÂ Ã©ÂÂ¤Ã¨Â¿ÂÃ¤ÂºÂÃ¤Â¹Â¦Ã§Â­Â¾Ã¯Â¼Â';
-$gtext['approve'] = 'Ã¥Â®Â¡Ã¦Â Â¸Ã¤Â¹Â¦Ã§Â­Â¾';
-$gtext['approve_2'] = 'Ã¥Â®Â¡Ã¦Â Â¸';
-$gtext['back'] = 'Ã¨Â¿ÂÃ¥ÂÂ';
-$gtext['back_2'] = 'Ã¨Â¿ÂÃ¥ÂÂÃ¥ÂÂ°Ã¤Â¹Â¦Ã§Â­Â¾';
-$gtext['bayes_categories'] = 'Ã¨Â´ÂÃ¥ÂÂ¶Ã¦ÂÂ¯Ã¥ÂÂÃ§Â±Â»';
-$gtext['body'] = 'Ã¦Â­Â£Ã¦ÂÂ';
-$gtext['bookmarks'] = 'Ã¤Â¹Â¦Ã§Â­Â¾';
-$gtext['cancel'] = 'Ã¥ÂÂÃ¦Â¶Â';
-$gtext['date'] = 'Ã¦ÂÂ¥Ã¦ÂÂ';
-$gtext['delete'] = 'Ã¥ÂÂ Ã©ÂÂ¤';
-$gtext['draft'] = 'Ã¨ÂÂÃ§Â¨Â¿';
-$gtext['edit'] = 'Ã§Â¼ÂÃ¨Â¾Â';
-$gtext['edit_2'] = 'Ã§Â¼ÂÃ¨Â¾ÂÃ¤Â¹Â¦Ã§Â­Â¾';
-$gtext['form_error'] = 'Ã¨Â¡Â¨Ã¥ÂÂÃ¦ÂÂªÃ¨Â¢Â«Ã¦ÂÂÃ¤ÂºÂ¤Ã¯Â¼ÂÃ¦Â³Â¨Ã¦ÂÂÃ¥ÂÂºÃ©ÂÂÃ©Â¡Â¹Ã§ÂÂ®';
-$gtext['form_error_1'] = 'URLÃ¤Â¸ÂÃ¨ÂÂ½Ã¤Â¸ÂºÃ§Â©Âº';
-$gtext['form_error_2'] = 'Ã¦ÂÂ Ã¦ÂÂÃ§ÂÂURL';
-$gtext['form_error_3'] = 'Ã©ÂÂÃ¥Â¤ÂÃ§ÂÂURLÃ¯Â¼ÂÃ¥Â·Â²Ã¨Â¢Â«Ã¦Â·Â»Ã¥ÂÂ Ã§ÂÂÃ¯Â¼Â';
-$gtext['form_error_4'] = 'URLÃ§ÂÂÃ¨ÂµÂ·Ã¦ÂÂ¥Ã¤Â¸ÂÃ¦Â­Â£Ã§Â¡Â®';
-$gtext['form_error_5'] = 'Ã¦Â ÂÃ©Â¢ÂÃ¤Â¸ÂÃ¨ÂÂ½Ã¤Â¸ÂºÃ§Â©Âº';
-$gtext['form_error_6'] = 'Ã¦Â­Â£Ã¦ÂÂÃ¤Â¸ÂÃ¨ÂÂ½Ã¤Â¸ÂºÃ§Â©Âº';
-$gtext['form_error_7'] = 'Ã¦ÂÂ Ã¦ÂÂÃ§ÂÂÃ¦ÂÂ¥Ã¦ÂÂ';
-$gtext['form_error_8'] = 'Ã¦ÂÂ Ã¦ÂÂÃ§ÂÂÃ¦ÂÂ¶Ã©ÂÂ´';
-$gtext['form_problem'] = 'Ã¨Â¡Â¨Ã¥ÂÂÃ¦ÂÂªÃ¨Â¢Â«Ã¦ÂÂÃ¤ÂºÂ¤Ã¯Â¼ÂÃ¨Â¯Â·Ã©ÂÂÃ¨Â¯Â';
+$gtext['admin'] = 'ä¹¦ç­¾ç®¡ç';
+$gtext['alert_delete'] = 'ç¡®è®¤å é¤è¿äºä¹¦ç­¾ï¼';
+$gtext['approve'] = 'å®¡æ ¸ä¹¦ç­¾';
+$gtext['approve_2'] = 'å®¡æ ¸';
+$gtext['back'] = 'è¿å';
+$gtext['back_2'] = 'è¿åå°ä¹¦ç­¾';
+$gtext['bayes_categories'] = 'è´å¶æ¯åç±»';
+$gtext['body'] = 'æ­£æ';
+$gtext['bookmarks'] = 'ä¹¦ç­¾';
+$gtext['cancel'] = 'åæ¶';
+$gtext['date'] = 'æ¥æ';
+$gtext['delete'] = 'å é¤';
+$gtext['draft'] = 'èç¨¿';
+$gtext['edit'] = 'ç¼è¾';
+$gtext['edit_2'] = 'ç¼è¾ä¹¦ç­¾';
+$gtext['form_error'] = 'è¡¨åæªè¢«æäº¤ï¼æ³¨æåºéé¡¹ç®';
+$gtext['form_error_1'] = 'URLä¸è½ä¸ºç©º';
+$gtext['form_error_2'] = 'æ æçURL';
+$gtext['form_error_3'] = 'éå¤çURLï¼å·²è¢«æ·»å çï¼';
+$gtext['form_error_4'] = 'URLçèµ·æ¥ä¸æ­£ç¡®';
+$gtext['form_error_5'] = 'æ é¢ä¸è½ä¸ºç©º';
+$gtext['form_error_6'] = 'æ­£æä¸è½ä¸ºç©º';
+$gtext['form_error_7'] = 'æ æçæ¥æ';
+$gtext['form_error_8'] = 'æ æçæ¶é´';
+$gtext['form_problem'] = 'è¡¨åæªè¢«æäº¤ï¼è¯·éè¯';
 $gtext['header'] = 'Shamelessness thinly veiled as reciprocity';
-$gtext['my_bookmarks'] = 'Ã¦ÂÂÃ§ÂÂÃ¤Â¹Â¦Ã§Â­Â¾';
-$gtext['new'] = 'Ã¦ÂÂ°Ã¤Â¹Â¦Ã§Â­Â¾';
-$gtext['none'] = 'Ã¦ÂÂ ';
-$gtext['not_found'] = 'Ã¦Â²Â¡Ã¦ÂÂÃ¦ÂÂ¾Ã¥ÂÂ°';
-$gtext['nothing'] = 'Ã¦Â²Â¡Ã¦ÂÂÃ¤Â¸ÂÃ¨Â¥Â¿Ã©ÂÂÃ¨Â¦ÂÃ¥Â®Â¡Ã¦Â Â¸';
-$gtext['published_on'] = 'Ã¥ÂÂÃ¥Â¸ÂÃ¤ÂºÂ';
-$gtext['save_draft'] = 'Ã¥Â­ÂÃ¤Â¸ÂºÃ¨ÂÂÃ§Â¨Â¿';
-$gtext['sort_alpha'] = 'Ã¦ÂÂÃ¥Â­ÂÃ¥ÂÂ¸Ã¦ÂÂÃ¥ÂºÂ';
-$gtext['sort_date'] = 'Ã¦ÂÂÃ¦ÂÂ¥Ã¦ÂÂÃ¦ÂÂÃ¥ÂºÂ';
-$gtext['submit'] = 'Ã¦ÂÂÃ¤ÂºÂ¤';
-$gtext['success'] = 'Ã¦ÂÂÃ¥ÂÂ';
-$gtext['success2'] = 'Ã¤Â¸ÂÃ¤Â¹ÂÃ¥Â°ÂÃ¨Â¢Â«Ã§Â®Â¡Ã§ÂÂÃ¥ÂÂÃ¥Â®Â¡Ã¦Â Â¸Ã£ÂÂ';
-$gtext['suggest'] = 'Ã¦ÂÂÃ¤ÂºÂ¤Ã¤Â¹Â¦Ã§Â­Â¾';
-$gtext['suggested'] = 'Ã¦ÂÂÃ¤Â¾ÂÃ¨ÂÂ';
-$gtext['tag_cloud'] = 'TagÃ©ÂÂ';
+$gtext['my_bookmarks'] = 'æçä¹¦ç­¾';
+$gtext['new'] = 'æ°ä¹¦ç­¾';
+$gtext['none'] = 'æ ';
+$gtext['not_found'] = 'æ²¡ææ¾å°';
+$gtext['nothing'] = 'æ²¡æä¸è¥¿éè¦å®¡æ ¸';
+$gtext['published_on'] = 'åå¸äº';
+$gtext['save_draft'] = 'å­ä¸ºèç¨¿';
+$gtext['sort_alpha'] = 'æå­å¸æåº';
+$gtext['sort_date'] = 'ææ¥ææåº';
+$gtext['submit'] = 'æäº¤';
+$gtext['success'] = 'æå';
+$gtext['success2'] = 'ä¸ä¹å°è¢«ç®¡çåå®¡æ ¸ã';
+$gtext['suggest'] = 'æäº¤ä¹¦ç­¾';
+$gtext['suggested'] = 'æä¾è';
+$gtext['tag_cloud'] = 'Tagé';
 $gtext['tag'] = 'Tag';
 $gtext['tags'] = 'Tags';
-$gtext['tags_2'] = 'Tags,Ã¥ÂÂÃ©ÂÂÃ¥ÂÂ½Ã¤Â»Â¤';
-$gtext['time'] = 'Ã¦ÂÂ¶Ã©ÂÂ´';
-$gtext['title'] = 'Ã¦Â ÂÃ©Â¢Â';
+$gtext['tags_2'] = 'Tags,åéå½ä»¤';
+$gtext['time'] = 'æ¶é´';
+$gtext['title'] = 'æ é¢';
 $gtext['url'] = 'URL';
 
 ?>
