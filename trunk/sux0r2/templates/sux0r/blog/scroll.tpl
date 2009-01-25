@@ -1,7 +1,7 @@
 {capture name=header}
 
     {* RSS Feed *}
-    <link rel="alternate" type="application/rss+xml" title="{$r->sitename} | {$r->text.blog}" href="{$r->makeUrl('/blog/rss', null, true)}" />
+    <link rel="alternate" type="application/rss+xml" title="{$r->sitename} | {$r->gtext.blog}" href="{$r->makeUrl('/blog/rss', null, true)}" />
 
     {if $r->isLoggedIn()}
         {$r->genericBayesInterfaceInit()}
@@ -41,7 +41,7 @@
 		<td colspan="2" style="vertical-align:top;">
 			<div id="header">
 
-                <h1>{$r->text.header|lower}</h1>
+                <h1>{$r->gtext.header|lower}</h1>
                 {insert name="userInfo"}
                 {$r->navlist()}
 
@@ -52,11 +52,11 @@
         <td style="vertical-align:top;">
 			<div id="leftside">
 
-                {if $r->sidelist}
+                {if $r->arr.sidelist}
                 <div class="sidelist">
                 <p class="sideListTitle">{$r->text.sidelist}</p>
                 <ul>
-                    {foreach from=$r->sidelist item=foo}
+                    {foreach from=$r->arr.sidelist item=foo}
                         <li><a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">{$foo.title}</a></li>
                     {/foreach}
                 </ul>
@@ -66,7 +66,7 @@
 
                 {if $r->archives()}
                 <div class="archives">
-                <p>{$r->text.archives}</p>
+                <p>{$r->gtext.archives}</p>
                 <ul>
                 {foreach from=$r->archives() item=foo}
                     {capture name=date assign=date}{$foo.year}-{$foo.month}-01{/capture}
@@ -78,7 +78,7 @@
 
                 {if $r->authors()}
                 <div class="authors">
-                <p>{$r->text.authors}</p>
+                <p>{$r->gtext.authors}</p>
                 <ul>
                 {foreach from=$r->authors() item=foo}
                     <li><a href="{$r->makeUrl('/blog/author')}/{$foo.nickname}">{$foo.nickname}</a> ({$foo.count})</li>
@@ -88,18 +88,18 @@
                 {/if}
 
                 <ul>
-                <li><a href="{$r->makeUrl('/blog/tag/cloud')}">{$r->text.tag_cloud}</a></li>
+                <li><a href="{$r->makeUrl('/blog/tag/cloud')}">{$r->gtext.tag_cloud}</a></li>
                 {insert name="adminLi"}
                 </ul>
 
-                {if $r->recent() && !$r->sidelist}
+                {if $r->recent() && !$r->arr.sidelist}
                 <div class="recent">
-                <p>{$r->text.recent_comments} :</p>
+                <p>{$r->gtext.recent_comments} :</p>
                 {foreach from=$r->recent() item=foo}
                     <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}#comment-{$foo.id}">{$foo.title}</a>
-                    {$r->text.by|lower} <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a>
-                    {$r->text.in|lower} <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">{$foo.title_fp}</a>
-                    {$r->text.on|lower} {$foo.published_on}<br /><br />
+                    {$r->gtext.by|lower} <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a>
+                    {$r->gtext.in|lower} <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">{$foo.title_fp}</a>
+                    {$r->gtext.on|lower} {$foo.published_on}<br /><br />
                 {/foreach}
                 </div>
                 {/if}
@@ -114,8 +114,8 @@
             {insert name="bayesFilters" form_url=$r->text.form_url}
 
             {* Blogs *}
-            {if $r->fp}
-            {foreach from=$r->fp item=foo}
+            {if $r->arr.fp}
+            {foreach from=$r->arr.fp item=foo}
 
                 {capture name=blog_url}
                     {$r->makeUrl('/blog/view', null, true)}/{$foo.thread_id}
@@ -128,14 +128,14 @@
                 {capture name=blog}
 
                     <!-- Content -->
-                    <p>{$r->text.by} <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a> <em>{$r->text.on|lower} {$foo.published_on}</em></p>
+                    <p>{$r->gtext.by} <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a> <em>{$r->gtext.on|lower} {$foo.published_on}</em></p>
                     <div class="blogItem">{insert name="highlight" html=$foo.body_html}</div>
 
 
                     <!-- Permanlink, Comments -->
                     <p>
-                    <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">{$r->text.p_link}</a>,
-                    <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}#comments">{$r->text.comments} ({$foo.comments})</a>
+                    <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}">{$r->gtext.p_link}</a>,
+                    <a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}#comments">{$r->gtext.comments} ({$foo.comments})</a>
                     {$r->tags($foo.id)}
                     </p>
 
@@ -173,7 +173,7 @@
 
             {/foreach}
             {else}
-                <p>{$r->text.not_found}</p>
+                <p>{$r->gtext.not_found}</p>
             {/if}
 
             {$r->text.pager}

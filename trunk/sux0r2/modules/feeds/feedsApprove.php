@@ -50,8 +50,6 @@ class feedsApprove  {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new feedsRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
         // Redirect if not logged in
@@ -105,15 +103,15 @@ class feedsApprove  {
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         // Feeds
-        $this->r->fp = $this->rss->getUnpublishedFeeds();
-        
+        $this->r->arr['feeds'] = $this->rss->getUnpublishedFeeds();
+
         // Additional variables
-        foreach ($this->r->fp as $key => $val) {
+        foreach ($this->r->arr['feeds'] as $key => $val) {
             $u = $this->user->getUser($val['users_id']);
-            $this->r->fp[$key]['nickname'] = $u['nickname'];
-        } 
-        
-        $this->r->title .= " | {$this->r->text['approve']}";
+            $this->r->arr['feeds'][$key]['nickname'] = $u['nickname'];
+        }
+
+        $this->r->title .= " | {$this->r->gtext['approve']}";
 
         $this->tpl->display('approve.tpl');
 
@@ -126,9 +124,9 @@ class feedsApprove  {
     * @param array $clean reference to validated $_POST
     */
     function formProcess(&$clean) {
-        
+
         if (isset($clean['feeds'])) foreach ($clean['feeds'] as $key => $val) {
-            
+
             if ($val == 1) {
                 $this->rss->approveFeed($key);
                 $this->user->log("sux0r::feedsApprove() feeds_id: {$key}", $_SESSION['users_id'], 1); // Private
@@ -137,12 +135,12 @@ class feedsApprove  {
                 $this->rss->deleteFeed($key);
                 $this->user->log("sux0r::feedsApprove() deleted feeds_id: {$key}", $_SESSION['users_id'], 1); // Private
             }
-            
+
         }
-        
+
         // clear all caches,cheap and easy
-        $this->tpl->clear_all_cache();       
-        
+        $this->tpl->clear_all_cache();
+
     }
 
 

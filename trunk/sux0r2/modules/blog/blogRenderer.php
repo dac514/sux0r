@@ -30,10 +30,6 @@ require_once(dirname(__FILE__) . '/../bayes/bayesRenderer.php');
 
 class blogRenderer extends suxRenderer {
 
-    // Arrays
-    public $fp = array(); // Array of first posts
-    public $sidelist = array(); // Array of threads in sidebar
-
     // Objects
     private $user;
     private $msg;
@@ -100,7 +96,7 @@ class blogRenderer extends suxRenderer {
         if (!$html) return null; // No categories by trainer
 
         $html = rtrim($html, ', ');
-        $html = "{$this->text['tags']}: " . $html . '';
+        $html = "{$this->gtext['tags']}: " . $html . '';
 
         return $html;
 
@@ -170,7 +166,7 @@ class blogRenderer extends suxRenderer {
         if (!$html) return null; // No categories by trainer
 
         $html = rtrim($html, ', ');
-        $html = "<p>{$this->text['bayes_categories']}: " . $html . '</p>';
+        $html = "<p>{$this->gtext['bayes_categories']}: " . $html . '</p>';
 
         return $html;
 

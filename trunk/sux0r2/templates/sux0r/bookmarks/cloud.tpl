@@ -1,7 +1,7 @@
 {capture name=header}
 
     {* RSS Feed *}
-    <link rel="alternate" type="application/rss+xml" title="{$r->sitename} | {$r->text.bookmarks}" href="{$r->makeUrl('/bookmarks/rss', null, true)}" />
+    <link rel="alternate" type="application/rss+xml" title="{$r->sitename} | {$r->gtext.bookmarks}" href="{$r->makeUrl('/bookmarks/rss', null, true)}" />
 
     {literal}
     <style type="text/css">
@@ -17,7 +17,7 @@
 
 {* Header *}
 <div id="header">
-    <h1>{$r->text.header|lower}</h1>
+    <h1>{$r->gtext.header|lower}</h1>
     {insert name="userInfo"}
     {$r->navlist()}
 </div>
@@ -25,7 +25,7 @@
 
 <div id="middle" class="tagcloud" >
     {* Tagcloud *}
-    {$r->tagcloud($r->tc)}
+    {$r->tagcloud($r->arr.tc)}
 </div>
 
 <div id="footer">

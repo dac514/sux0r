@@ -35,7 +35,6 @@ class blogBookmarks {
     // Variables
     public $gtext = array();
     private $msg_id;
-    private $found_links = array();
     private $module = 'blog';
 
     // Objects
@@ -61,8 +60,6 @@ class blogBookmarks {
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new blogRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->r->text =& $this->gtext;
         suxValidate::register_object('this', $this); // Register self to validator
 
         // Objects
@@ -118,12 +115,12 @@ class blogBookmarks {
                 }
 
                 // Add to array for use in template
-                $this->found_links[$url] = array('title' => $title, 'body' => $body);
+                $this->arr['found_links'][$url] = array('title' => $title, 'body' => $body);
 
             }
         }
 
-        $count = count($this->found_links);
+        $count = count($this->arr['found_links']);
         if (!$count) suxFunct::redirect(suxFunct::getPreviousURL()); //  No links, skip
 
     }
@@ -153,16 +150,16 @@ class blogBookmarks {
 
         $count = 0;
         if (isset($dirty['url']) && is_array($dirty['url'])) {
-            $count = count($this->found_links); // Original count
-            $this->found_links = array(); // Clear array
+            $count = count($this->arr['found_links']); // Original count
+            $this->arr['found_links'] = array(); // Clear array
             for ($i = 0; $i < $count; ++$i) {
-                if (!empty($dirty['url'][$i]) && !isset($this->found_links[$dirty['url'][$i]])) {
-                    $this->found_links[$dirty['url'][$i]] = array('title' => $dirty['title'][$i], 'body' => $dirty['body'][$i]);
+                if (!empty($dirty['url'][$i]) && !isset($this->arr['found_links'][$dirty['url'][$i]])) {
+                    $this->arr['found_links'][$dirty['url'][$i]] = array('title' => $dirty['title'][$i], 'body' => $dirty['body'][$i]);
                 }
                 else {
                     $title = isset($dirty['title'][$i]) ? $dirty['title'][$i] : null;
                     $body = isset($dirty['body'][$i]) ? $dirty['body'][$i] : null;
-                    $this->found_links[] = array('title' => $title, 'body' => $body);
+                    $this->arr['found_links'][] = array('title' => $title, 'body' => $body);
                 }
             }
         }
@@ -179,7 +176,7 @@ class blogBookmarks {
             suxValidate::connect($this->tpl, true); // Reset connection
 
             // Register our validators
-            $count = count($this->found_links);
+            $count = count($this->arr['found_links']);
             for ($i = 0; $i < $count; ++$i) {
                 suxValidate::register_validator("url[$i]", "url[$i]", 'notEmpty', false, false, 'trim');
                 suxValidate::register_validator("url2[$i]", "url[$i]", 'isURL');
@@ -193,10 +190,10 @@ class blogBookmarks {
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog/bookmarks/' . $this->msg_id);
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
-        $this->r->title .= " | {$this->r->text['suggest_bookmarks']}  ";
+        $this->r->title .= " | {$this->r->gtext['suggest_bookmarks']}  ";
 
         // Template
-        $this->r->found_links = $this->found_links;
+        $this->r->arr['found_links'] = $this->arr['found_links'];
         $this->tpl->display('bookmarks.tpl');
 
     }
