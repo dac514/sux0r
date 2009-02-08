@@ -702,7 +702,7 @@ class suxFunct {
 
         return array(
             'af' => 'Afghanistan',
-            'ax' => 'ÃÂland Islands',
+            'ax' => 'Ãland Islands',
             'al' => 'Albania',
             'dz' => 'Algeria',
             'as' => 'American Samoa',
