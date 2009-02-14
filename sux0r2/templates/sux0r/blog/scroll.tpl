@@ -143,12 +143,12 @@
                     <!-- Flair -->
                     {capture name=url assign=url}{$r->makeUrl('/blog/view', null, true)}/{$foo.thread_id}{/capture}
                     <div class="flair"><p>
-                    <a href='http://slashdot.org/slashdot-it.pl?op=basic&amp;url={$url|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/slashdot.gif' alt='Slashdot' width='16' height='16' /></a>
-                    <a href='http://digg.com/submit?url={$url|escape:'url, UTF-8'}&amp;title={$foo.title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/digg.gif' alt='Digg' width='16' height='16' /></a>
-                    <a href='http://www.facebook.com/share.php?u={$url|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/facebook.gif' alt='Facebook' width='16' height='16' /></a>
-                    <a href='http://www.myspace.com/index.cfm?fuseaction=postto&amp;t={$foo.title|escape:'url, UTF-8'}&amp;c=&amp;u={$url|escape:'url, UTF-8'}&amp;l=' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/myspace.gif' alt='Myspace' width='16' height='16' /></a>
-                    <a href='http://www.stumbleupon.com/submit?url={$url|escape:'url, UTF-8'}&amp;title={$foo.title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/stumbleupon.gif' alt='StumbleUpon' width='16' height='16' /></a>
-                    <a href='http://del.icio.us/login/?url={$url|escape:'url, UTF-8'}&amp;title={$foo.title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/flair/delicious.gif' alt='Del.icio.us' width='16' height='16' /></a>
+                    <a href='http://slashdot.org/slashdot-it.pl?op=basic&amp;url={$url|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/assets/slashdot.gif' alt='Slashdot' width='16' height='16' /></a>
+                    <a href='http://digg.com/submit?url={$url|escape:'url, UTF-8'}&amp;title={$foo.title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/assets/digg.gif' alt='Digg' width='16' height='16' /></a>
+                    <a href='http://www.facebook.com/share.php?u={$url|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/assets/facebook.gif' alt='Facebook' width='16' height='16' /></a>
+                    <a href='http://www.myspace.com/index.cfm?fuseaction=postto&amp;t={$foo.title|escape:'url, UTF-8'}&amp;c=&amp;u={$url|escape:'url, UTF-8'}&amp;l=' target='_blank' ><img src='{$r->url}/media/{$r->partition}/assets/myspace.gif' alt='Myspace' width='16' height='16' /></a>
+                    <a href='http://www.stumbleupon.com/submit?url={$url|escape:'url, UTF-8'}&amp;title={$foo.title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/assets/stumbleupon.gif' alt='StumbleUpon' width='16' height='16' /></a>
+                    <a href='http://del.icio.us/login/?url={$url|escape:'url, UTF-8'}&amp;title={$foo.title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/assets/delicious.gif' alt='Del.icio.us' width='16' height='16' /></a>
                     </p></div>
 
                     {capture name=nbc}{strip}
