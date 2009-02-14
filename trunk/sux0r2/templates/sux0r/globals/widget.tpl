@@ -1,16 +1,11 @@
-{*
-   Shared component called from suxRenderer.
-   Because of this, it does not use the $r-> convention.
-*}
-
 <div class="widget">
-<h2>{$title}</h2>
+<h2>{$r->text.title}</h2>
 <div class="widgetContent">
-{if $image}<div class="{$floater}">
-{$image}
-{if $caption && $width}<div style="width:{$width}px;">{$caption}</div>{/if}
+{if $r->text.image}<div class="{$r->text.floater}">
+{$r->text.image}
+{if $r->text.caption && $r->text.width}<div style="width:{$width}px;">{$r->text.caption}</div>{/if}
 </div>{/if}
-{$content}
+{$r->text.content}
 </div>
 <div class="clearboth"></div>
 <b class="bb"><b></b></b>
