@@ -100,8 +100,8 @@
             </p>
 
             <p>
-            <a href="http://www.php.net/" class="noBg"><img src="{$r->url}/media/sux0r/flair/php5_logo.gif" alt="PHP5" border="0" class="flair" /></a>
-            <a href="http://www.fsf.org/licensing/licenses/agpl-3.0.html" class="noBg"> <img src="{$r->url}/media/sux0r/flair/agplv3-88x31.png" alt="AGPL" border="0" class="flair" /></a>
+            <a href="http://www.php.net/" class="noBg"><img src="{$r->url}/media/sux0r/assets/php5_logo.gif" alt="PHP5" border="0" class="flair" /></a>
+            <a href="http://www.fsf.org/licensing/licenses/agpl-3.0.html" class="noBg"> <img src="{$r->url}/media/sux0r/assets/agplv3-88x31.png" alt="AGPL" border="0" class="flair" /></a>
             <a href="http://sourceforge.net" class="noBg"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=131752&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" class="flair" /></a>
             </p>
 
