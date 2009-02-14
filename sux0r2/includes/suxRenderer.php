@@ -40,7 +40,6 @@ class suxRenderer {
     public $sitename; // Alternate title variable
     public $stylesheets; // Variable to put stylesheets/text
     public $header; // Variable to put header/text
-    public $nav_selected; // Selected key for $nav array
 
     // Arrays
     public $nav = array(); // Variable to keep navlist
@@ -422,7 +421,7 @@ class suxRenderer {
     }
 
     /**
-    * Copyright
+    * Data License
     *
     * @return string html
     */
