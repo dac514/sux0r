@@ -42,7 +42,6 @@ class suxRenderer {
     public $header; // Variable to put header/text
 
     // Arrays
-    public $nav = array(); // Variable to keep navlist
     public $gtext = array(); // Variable to store gtext in
     public $text  = array(); // Variable to store dynamic text in
     public $arr = array(); // Variable to keep arrays
@@ -216,16 +215,18 @@ class suxRenderer {
         // Title manipulation
         if ($url) $title = "<a href='{$url}'>{$title}</a>";
 
+        // Makeshift renderer object
+        $r['text']['title'] = $title;
+        $r['text']['image'] = $image;
+        $r['text']['caption'] = $caption;
+        $r['text']['width'] = $width;
+        $r['text']['content'] = $content;
+        $r['text']['floater'] = $floater;
+        $r = (object) $r;
 
         // Template
         $tpl = new suxTemplate($this->module);
-
-        $tpl->assign('title', $title);
-        $tpl->assign('image', $image);
-        $tpl->assign('caption', $caption);
-        $tpl->assign('width', $width);
-        $tpl->assign('content', $content);
-        $tpl->assign('floater', $floater);
+        $tpl->assign_by_ref('r', $r);
 
         $path = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $this->partition . '/globals/';
         if (!file_exists("$path/widget.tpl")) $path = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r/globals/';
@@ -291,12 +292,10 @@ class suxRenderer {
     */
     function navlist($list = null) {
 
-        $html = "<div id='navcontainer'>\n";
-        $html .= "<ul id='navlist'>\n";
 
         if (!is_array($list)) {
-            $text = suxFunct::gtext();
-            if (isset($text['navcontainer'])) $list = $text['navcontainer'];
+            $gtext = suxFunct::gtext();
+            if (isset($gtext['navcontainer'])) $list = $gtext['navcontainer'];
         }
 
 
@@ -312,24 +311,29 @@ class suxRenderer {
             if (!$GLOBALS['CONFIG']['CLEAN_URL']) $compare = "?c=$compare";
             else $compare = ltrim($GLOBALS['CONFIG']['URL'] . "/$compare", '/');
 
-            // new dBug($compare);
+            $selected = null;
             foreach ($list as $key => $val) {
-                //new dBug($val);
                 if ($compare && mb_strpos($val, $compare)) {
-                    $html .= "<li><a href='{$val}' class='selected'>{$key}</a></li>\n";
-                }
-                else {
-                    $html .= "<li><a href='{$val}'>{$key}</a></li>\n";
+                    $selected = $key;
+                    break;
                 }
             }
 
         }
 
-        $html .= "</ul>\n";
-        $html .= "</div>\n";
-        $html .= "<div class='clearboth'></div>\n";
+        // Makeshift renderer object
+        $r['arr']['list'] = $list;
+        $r['text']['selected'] = $selected;
+        $r = (object) $r;
 
-        return $html;
+        // Template
+        $tpl = new suxTemplate($this->module);
+        $tpl->assign_by_ref('r', $r);
+
+        $path = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $this->partition . '/globals/';
+        if (!file_exists("$path/navlist.tpl")) $path = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r/globals/';
+        return $tpl->fetch("file:$path/navlist.tpl");
+
 
     }
 
