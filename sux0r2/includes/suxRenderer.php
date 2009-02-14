@@ -193,44 +193,32 @@ class suxRenderer {
             if (!filter_var($url2, FILTER_VALIDATE_URL)) $url2 = null;
         }
 
-
         // Image manipulation
         $size = ($image) ? @getimagesize($image) : null;
         if ($size) {
-
-            $width = $size[0]; // Keep width for template variable
             $alt = str_replace("'", "", strip_tags($title)); // Escape
-
-            $tmp = '';
-            if ($url) $tmp .= "<a href='{$url}' class='noBg'>";
-            if ($url2) $tmp = "<a href='{$url2}' class='noBg'>"; // Overwrite
-            $tmp .= "<img src='$image' alt='{$alt}' {$size[3]} />";
-            if ($url || $url2) $tmp .= '</a>';
-
-            $image = $tmp;
+            $image = "<img src='$image' alt='{$alt}' {$size[3]} />";
 
         }
         else $image = null;
 
-        // Title manipulation
-        if ($url) $title = "<a href='{$url}'>{$title}</a>";
-
         // Makeshift renderer object
+        $r['arr']['size'] = $size;
         $r['text']['title'] = $title;
         $r['text']['image'] = $image;
         $r['text']['caption'] = $caption;
-        $r['text']['width'] = $width;
         $r['text']['content'] = $content;
         $r['text']['floater'] = $floater;
+        $r['text']['url_title'] = $url;
+        $r['text']['url_image'] = $url;
+        if ($url2) $r['text']['url_image'] = $url2;
         $r = (object) $r;
 
         // Template
-        $tpl = new suxTemplate($this->module);
+        $tpl = new suxTemplate('globals');
         $tpl->assign_by_ref('r', $r);
 
-        $path = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $this->partition . '/globals/';
-        if (!file_exists("$path/widget.tpl")) $path = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r/globals/';
-        return $tpl->fetch("file:$path/widget.tpl");
+        return $tpl->fetch('widget.tpl');
 
     }
 
@@ -327,12 +315,10 @@ class suxRenderer {
         $r = (object) $r;
 
         // Template
-        $tpl = new suxTemplate($this->module);
+        $tpl = new suxTemplate('globals');
         $tpl->assign_by_ref('r', $r);
 
-        $path = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $this->partition . '/globals/';
-        if (!file_exists("$path/navlist.tpl")) $path = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r/globals/';
-        return $tpl->fetch("file:$path/navlist.tpl");
+        return $tpl->fetch('navlist.tpl');
 
 
     }
@@ -419,8 +405,8 @@ class suxRenderer {
     */
     function copyright() {
 
-        $text = suxFunct::gtext();
-        return $text['copyright'];
+        $gtext = suxFunct::gtext();
+        return $gtext['copyright'];
 
     }
 
@@ -431,8 +417,8 @@ class suxRenderer {
     */
     function dataLicense() {
 
-        $text = suxFunct::gtext();
-        return $text['data_license'];
+        $gtext = suxFunct::gtext();
+        return $gtext['data_license'];
 
     }
 
@@ -456,47 +442,25 @@ function insert_userInfo($params) {
 
     unset($params); // Not used
 
-    $text = suxFunct::gtext(); // Text
+    $tpl = new suxTemplate('globals');
+    $r = new suxRenderer('globals'); // Renderer
+    $tpl->assign_by_ref('r', $r); // Renderer referenced in template
 
-    $url = $GLOBALS['CONFIG']['URL'];
-    $url_logout = suxFunct::makeUrl('/user/logout');
-
-    if (!empty($_SESSION['partition'])) $partition = $_SESSION['partition'];
-    else $partition = $GLOBALS['CONFIG']['PARTITION'];
-
-    $tmp = '';
-    $tmp .= '<div class="userinfo">' . "\n";
 
     if (!empty($_SESSION['nickname'])) {
 
         $u = new suxUser();
-        if ($u->isRoot()) {
-            $url_admin = suxFunct::makeUrl('/admin');
-            $tmp .= "<span id='adminLink'>[ <a href='{$url_admin}'>{$text['admin']}</a> ]</span> ";
-        }
+        if ($u->isRoot()) $r->bool['root'] = true;
+        $r->text['nickname'] = $_SESSION['nickname'];
 
-        $url_profile = suxFunct::makeUrl('/user/profile/' . $_SESSION['nickname']);
-        $tmp .= "<strong>{$text['welcome']}:</strong> <a href='{$url_profile}'>{$_SESSION['nickname']}</a> | ";
-        $tmp .= "<a href='{$url_logout}'>{$text['logout']}</a> \n";
+        return $tpl->fetch('userinfo.tpl');
 
     }
     else {
 
-        $url_login = suxFunct::makeUrl('/user/login');
-        $url_login_openid = suxFunct::makeUrl('/user/login/openid');
-        $url_register = suxFunct::makeUrl('/user/register');
-        $url_register_openid = suxFunct::makeUrl('/user/register/openid');
-
-        $tmp .= "<a href='{$url_login}'>{$text['login']}</a> ";
-        $tmp .= "<a class='noBg' href='{$url_login_openid}'><img src='{$url}/media/{$partition}/assets/openid_icon.gif' alt='OpenID Login' class='openidLogin' /></a> | ";
-        $tmp .= "<a href='{$url_register}'>{$text['register']}</a> ";
-        $tmp .= "<a class='noBg' href='{$url_register_openid}'><img src='{$url}/media/{$partition}/assets/openid_icon.gif' alt='OpenID Login' class='openidLogin' /></a> \n";
+        return $tpl->fetch('userlogin.tpl');
 
     }
-
-    $tmp .= '</div>' . "\n";
-
-    return $tmp;
 
 }
 
