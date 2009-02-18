@@ -2,6 +2,10 @@
 sux0r 2.0.x
 ------------------------------------------------------------------------------
 
+Fallback to cURL if allow_url_fopen is disabled.
+
+HTTP Authorization fix when using PHP in CGI mode
+
 Moved inline HTML in suxRenderer() to various templates
 
 ------------------------------------------------------------------------------
