@@ -1007,6 +1007,9 @@ class suxUser {
             $hdr = null;
         }
 
+        // Double check
+        if (!$hdr) $hdr = null;
+
         $digest = (mb_substr($hdr,0,7) == 'Digest ') ? mb_substr($hdr, mb_strpos($hdr, ' ') + 1) : $hdr;
         $stale = false;
         $ok = '';
