@@ -63,14 +63,14 @@ dBug
 
 htmLawed
 * Path: ./htmLawed/
-* Version: 1.1.2
+* Version: 1.1.6
 * Licence: GPL 3
 * Website: http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/index.php
 
 
 JpGraph
 * Path: ./jpgraph/
-* Version: 2.3.3
+* Version: 2.3.4
 * Licence: QPL 1.0
 * Website: http://www.aditus.nu/jpgraph/
 
