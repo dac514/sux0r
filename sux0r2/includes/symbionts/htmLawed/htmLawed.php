@@ -1,7 +1,7 @@
 <?php
 
 /*
-htmLawed 1.1.2, 22 January 2009
+htmLawed 1.1.6, 4 February 2009
 Copyright Santosh Patnaik
 GPL v3 license
 A PHP Labware internal utility; www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -502,9 +502,7 @@ foreach($aA as $k=>$v){
   }
   if($k == 'style'){
    $v = preg_replace_callback('`((?:u|&#(?:x75|117);)(?:r|&#(?:x72|114);)(?:l|&#(?:x6c|108);)(?:\(|&#(?:x28|40);)(?: |&#(?:x20|32);)*(?:\'|"|&(?:quot|apos|34|39|x22|x27);)?)(.+)((?:\'|"|&(?:quot|apos|34|39|x22|x27);)?(?: |&#(?:x20|32);)*(?:\)|&#(?:x29|41);))`iS', 'hl_prot', $v);
-   if(!$C['css_expression']){
-    $v = preg_replace('`(?::|&#(?:x3a|58);)(?: |&#(?:x20|32);)*e.+?n(?: |&#(?:x20|32);)*(?:\(|&#(?:x28|40);).*(?:\)|&#(?:x29|41);)`iS', '', $v);
-   }
+   $v = !$C['css_expression'] ? (preg_match('`(/|(&#(2f|47);)|(%2f))(\*|(&#(2a|42);)|(%2a))`i', $v) ? ' ' : preg_replace('`expression`i', ' ', $v)) : $v;
   }elseif(isset($aNP[$k]) or strpos($k, 'src') !== false or $k[0] == 'o'){
    $v = hl_prot($v, $k);
    if($k == 'href'){ // Anti-spam
@@ -690,7 +688,7 @@ return str_replace(array("\x01", "\x02", "\x03", "\x04", "\x05", "\x07"), array(
 
 function hl_version(){
 // version
-return '1.1.2';
+return '1.1.6';
 // eof
 }
 
