@@ -3,7 +3,7 @@
 // File: 	EN.INC.PHP
 // Description: English language file for error messages
 // Created: 	2006-01-25
-// Ver:		$Id: en.inc.php 993 2008-03-30 21:17:41Z ljp $
+// Ver:		$Id: en.inc.php 1017 2008-07-08 06:09:28Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -44,6 +44,7 @@ HTTP headers have already been sent.<br>Caused by output from file <b>%s</b> at 
 2012 => array('One of the objects submitted to AccBar is not a BarPlot. Make sure that you create the AccBar plot from an array of BarPlot objects. (Class=%s)',1),
 2013 => array('You have specified an empty array for shadow colors in the bar plot.',0),
 2014 => array('Number of datapoints for each data set in accbarplot must be the same',0),
+2015 => array('Individual bar plots in an AccBarPlot or GroupBarPlot can not have specified X-coordinates',0),
 
 
 /*

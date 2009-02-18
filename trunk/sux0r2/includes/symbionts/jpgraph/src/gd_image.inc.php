@@ -23,13 +23,13 @@ class Image {
     public $current_color,$current_color_name;
     public $line_weight=1, $line_style=LINESTYLE_SOLID;	
     public $img_format;
+    public $ttf=null;
     protected $expired=true;
     protected $lastx=0, $lasty=0;
     protected $obs_list=array();
     protected $font_size=12,$font_family=FF_FONT1, $font_style=FS_NORMAL;
     protected $font_file='';
     protected $text_halign="left",$text_valign="bottom";
-    protected $ttf=null;
     protected $use_anti_aliasing=false;
     protected $quality=null;
     protected $colorstack=array(),$colorstackidx=0;
