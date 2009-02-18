@@ -1,6 +1,6 @@
 /*
-htmLawed_TESTCASE.txt, 27 September 2008
-htmLawed 1.1.2, 22 January 2009
+htmLawed_TESTCASE.txt, 31 January 2009
+htmLawed 1.1.6, 4 February 2009
 Copyright Santosh Patnaik
 GPL v3 license
 A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -339,6 +339,20 @@ src=&#106;&#97;&#118;&#97;&#115;&#99;&#114;&#105;&#112;&#116;&#58;&#97;&#108;&#1
 <div style="background-image: &#117;r&#x6C;('js&#58;xss'&#x29;"></div><br />
 <img style=color:expr/*comment*/ession(alert(document.domain))><br />
 <a style=";-moz-binding:url(http://lukasz.pilorz.net/xss/xss.xml#xss)" href="http://example.com">test</a><br />
+<strong>Bad IE7:</strong> <a href="xxx" style="background:/**/expression(alert('xss'));">xxx</a><br />
+<strong>Bad IE7:</strong> <a href="xxx" style="background:/**/&#69;xpression(alert('xss'));">xxx</a><br />
+<strong>Bad IE7:</strong> <a href="xxx" style="background:/**/Exp&#x72;ession(alert('xss'));">xxx</a><br />
+<strong>Bad IE7:</strong> <a href="xxx" style="background: expr%45ssion(alert('xss'));">xxx</a><br />
+<strong>Bad IE7:</strong> <a href="xxx" style="background: exp/* */ression(alert('xss'));">xxx</a><br />
+<strong>Bad IE7:</strong> <a href="xxx" style="background: exp /* */ression(alert('xss'));">xxx</a><br />
+<strong>Bad IE7:</strong> <a href="xxx" style="background: exp/ * * /ression(alert('xss'));">xxx</a><br />
+<strong>Bad IE7:</strong> <a href="xxx" style="background:/* x */expression(alert('xss'));">xxx</a><br />
+<strong>Bad IE7:</strong> <a href="xxx" style="background:/* */ */expression(alert('xss'));">xxx</a><br />
+<strong>Bad IE7:</strong> <a href="x" style="width: /****/**;;;;;;*/expression/**/(alert('xss'));">x</a><br />
+<strong>Bad IE7:</strong> <a href="x" style="padding:10px; background:/**/expression(alert('xss'));">x</a><br />
+<strong>Bad IE7:</strong> <a href="x" style="background: huh /* */ */expression(alert('xss'));">x</a><br />
+<strong>Bad IE7:</strong> <a href="x" style="background:/**/expression(alert('xss'));background:/**/expression(alert('xss'));">x</a><br />
+<strong>Bad IE7:</strong> exp/*<a style='no\xss:noxss("*//*");xss:&#101;x&#x2F;*XSS*//*/*/pression(alert("XSS"))'>x</a><br />
 
 <h6>Other</h6>
 

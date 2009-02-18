@@ -1,6 +1,6 @@
 /*
-htmLawed_README.txt, 22 January 2009
-htmLawed 1.1.2, 22 January 2009
+htmLawed_README.txt, 4 February 2009
+htmLawed 1.1.6, 4 February 2009
 Copyright Santosh Patnaik
 GPL v3 license
 A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -294,7 +294,7 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
   '3' - allow  *
 
   *css_expression*
-  Allow dynamic CSS expression by not removing the expression from CSS property values in 'style' attributes; see section:- #3.4.7
+  Allow dynamic CSS expression by not removing the expression from CSS property values in 'style' attributes; see section:- #3.4.8
 
   '0' - remove  *
   '1' - allow
@@ -485,13 +485,15 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 -- 2.5  Some security risks to keep in mind ------------------------o
 
 
-  When setting the parameters/arguments (like those to allow certain HTML elements) for use with htmLawed, potentially `dangerous` code may get through. (This may not be a problem if the authors are trusted.)
+  When setting the parameters/arguments (like those to allow certain HTML elements) for use with htmLawed, one should bear in mind that the setting may let through potentially `dangerous` HTML code. (This may not be a problem if the authors are trusted.)
 
   For example, following increase security risks:
 
   *  Allowing 'script', 'applet', 'embed', 'iframe' or 'object' elements, or certain of their attributes like 'allowscriptaccess'
 
   *  Allowing HTML comments (some Internet Explorer versions are vulnerable with, e.g., '<!--[if gte IE 4]><script>alert("xss");</script><![endif]-->'
+  
+  *  Allowing dynamic CSS expressions (a feature of the IE browser)
 
   `Unsafe` HTML can be removed by setting '$config' appropriately. E.g., '$config["elements"] = "* -script"' (section:- #3.3), '$config["safe"] = 1' (section:- #3.6), etc.
 
@@ -601,8 +603,10 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 
   *  htmLawed does not check the number of nested elements. E.g., it will allow two 'caption' elements in a 'table' element, illegal as per the specs. Admins may be able to use a custom hook function to enforce such checks ('hook_tag' parameter; see section:- #3.4.9).
 
-  *  htmLawed does not correct certain possible attribute-based security vulnerabilities (e.g., '<a href="http://x%22+style=%22background-image:xss">x</a>'). Theses arise when browsers mis-identify markup in `escaped` text, defeating the very purpose of escaping text (a bad browser will read the given example as '<a href="http://x" style="background-image:xss">x</a>').
+  *  When dynamic CSS expressions in 'style' aren't being permitted, htmLawed will empty the entire attribute value if it detects maliciously crafted expression declarations like 'exp/**/ression...' aimed at exploiting browser bugs. If this is too harsh, admins should allow CSS expressions through htmLawed core but then use a custom function through the 'hook_tag' parameter (section:- #3.4.9) to more specifically identify CSS expressions in the 'style' attribute values.
 
+  *  htmLawed does not correct certain possible attribute-based security vulnerabilities (e.g., '<a href="http://x%22+style=%22background-image:xss">x</a>'). Theses arise when browsers mis-identify markup in `escaped` text, defeating the very purpose of escaping text (a bad browser will read the given example as '<a href="http://x" style="background-image:xss">x</a>').
+  
   *  Because of poor Unicode support in PHP, htmLawed does not remove the `high value` HTML-invalid characters with multi-byte code-points. Such characters however are extremely unlikely to be in the input. (see section:- #3.1).
 
   *  Like any script using PHP's PCRE regex functions, PHP setup-specific low PCRE limit values can cause htmLawed to at least partially fail with very long input texts.
@@ -1090,7 +1094,7 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 
   htmLawed can check URL schemes and dynamic expressions (to guard against Javascript, etc., script-based insecurities) in inline CSS style property values in the 'style' attributes. (CSS properties like 'background-image' that accept URLs in their values are noted in section:- #5.3.) Dynamic CSS expressions that allow scripting in browsers, and can be a vulnerability, can be removed from property values by setting '$config["css_expression"]' to '1'.
 
-  *Note*: Because of the various ways of representing characters in attribute values (percent coding, entities, etc.), htmLawed might falsely identify dynamic expressions and URL schemes in 'style' values. If this is an important issue, checking of URLs and dynamic expressions can be turned off ('$config["schemes"] = "...style:*..."', see section:- #3.4.3, and '$config["css_expression"] = 0').
+  *Note*: Because of the various ways of representing characters in attribute values (URL-escapement, entitification, etc.), htmLawed might falsely identify dynamic CSS expressions and URL schemes in 'style' values and thus alter the values of the 'style' attributes. If this is an important issue, checking of URLs and dynamic expressions can be turned off ('$config["schemes"] = "...style:*..."', see section:- #3.4.3, and '$config["css_expression"] = 0'). Alternately, admins can use their own custom function for finer handling of 'style' values through the 'hook_tag' parameter (see section:- #3.4.9).
 
   As such, it is better to set up a CSS file with class declarations, disallow the 'style' attribute, set a '$spec' rule (see section:- #2.3) for 'class' for the 'oneof' or 'match' parameter, and ask writers to make use of the 'class' attribute.
 
@@ -1224,6 +1228,8 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
   (The release date for the downloadable package of files containing documentation, demo script, test-cases, etc., besides the 'htmLawed.php' file may be updated independently if the secondary files are revised.)
 
   `Version number - Release date. Notes`
+  
+  1.1.3-6 - 28-31 January - 4 February 2009. Altered logic to catch certain types of dynamic crafted CSS expressions
 
   1.1.2 - 22 January 2009. Fixed bug in parsing of 'font' attributes during tag transformation
   
@@ -1309,7 +1315,7 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 -- 4.10  Acknowledgements ------------------------------------------o
 
 
-  Ulf Harnhammer, Lukasz Pilorz, Shelley Powers, Edward Yang, and many anonymous users.
+  Bryan Blakey, Ulf Harnhammer, Lukasz Pilorz, Shelley Powers, Edward Yang, and many anonymous users.
 
   Thank you!
 
