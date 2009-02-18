@@ -884,7 +884,7 @@ class suxThreadedMessages {
     * @param bool $published select un-published?
     * @return array
     */
-    function getFirstPostsByUser($users_id, $type = null, $limit = null, $start = 0, $published = false) {
+    function getFirstPostsByUser($users_id, $type = null, $limit = null, $start = 0, $published = true) {
 
         // Sanity check
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
@@ -928,7 +928,7 @@ class suxThreadedMessages {
     * @param bool $published select un-published?
     * @return int
     */
-    function countFirstPostsByMonth($date, $type = null, $published = false) {
+    function countFirstPostsByMonth($date, $type = null, $published = true) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
