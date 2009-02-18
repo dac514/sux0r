@@ -335,8 +335,28 @@ class suxBookmarks {
 	*/
 	function fetchBookmark($url) {
 
+        // Sanity check
+        if (!filter_var($url, FILTER_VALIDATE_URL)) return false;
+
+
         // Search the webpage for info we can use
-        $webpage = @file_get_contents($url, null, null, 0, 8192); // Quit after 8 kilobytes
+        if (ini_get('allow_url_fopen')) {
+            // file_get_contents
+            $webpage = @file_get_contents($url, null, null, 0, 8192); // Quit after 8 kilobytes
+        }
+        elseif(function_exists('curl_init')) {
+            // cURL
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            // There is no CURLOPT_MAXFILESIZE...
+            $webpage = curl_exec($ch);
+            curl_close($ch);
+        }
+        else {
+            throw new Exception('No way to retrieve bookmark');
+        }
+
 
         $title = null;
         $description = null;
