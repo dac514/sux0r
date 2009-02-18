@@ -8,6 +8,8 @@ HTTP Authorization fix when using PHP in CGI mode
 
 Moved inline HTML in suxRenderer() to various templates
 
+Updated symbionts: htmLawed 1.1.6, JpGraph 2.3.4
+
 ------------------------------------------------------------------------------
 sux0r 2.0.2
 ------------------------------------------------------------------------------
