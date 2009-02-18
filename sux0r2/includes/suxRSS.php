@@ -770,7 +770,7 @@ class suxRSS extends DOMDocument {
         }
 
         if ($modified) {
-            // Headers for Conditional GET
+            // file_get_contents() compatible headers for Conditional GET
             $opts = array(
                 'http'=> array(
                     'header' => "If-Modified-Since: $modified\r\n",
@@ -778,11 +778,8 @@ class suxRSS extends DOMDocument {
                 );
         }
 
-        ini_set('default_socket_timeout', 30);
-        $ctx = stream_context_create($opts);
-
         // --------------------------------------------------------------------
-        // backtrack_limit is too restrictive for complex feeds, boost it
+        // Backtrack_limit is too restrictive for complex feeds, boost it
         // --------------------------------------------------------------------
 
         ini_set('pcre.backtrack_limit', 250000);
@@ -791,7 +788,28 @@ class suxRSS extends DOMDocument {
         // Parse
         // --------------------------------------------------------------------
 
-        if ($rss_content = @file_get_contents($rss_url, null, $ctx)) {
+        if (ini_get('allow_url_fopen')) {
+            // file_get_contents
+            ini_set('default_socket_timeout', 30);
+            $ctx = stream_context_create($opts);
+            $rss_content = @file_get_contents($rss_url, null, $ctx);
+        }
+        elseif(function_exists('curl_init')) {
+            // cURL
+            $ch = curl_init();
+            if ($modified) curl_setopt($ch, CURLOPT_HTTPHEADER, $opts['http']['header']);
+            curl_setopt($ch, CURLOPT_URL, $rss_url);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $rss_content = curl_exec($ch);
+            curl_close($ch);
+        }
+        else {
+            throw new Exception('No way to retrieve RSS feeds');
+        }
+
+
+        if ($rss_content) {
 
 			// Parse document encoding
 			$result['encoding'] = $this->myPregMatch("'encoding=[\'\"](.*?)[\'\"]'si", $rss_content);

@@ -909,15 +909,33 @@ class openid {
         $this->debug($keys, "Return signed keys:");
 
         $body = http_build_query($this->appendOpenID($keys));
-        $opts = array(
-            'http'=> array(
-                'method' => 'POST',
-                'header' => 'Content-Type: application/x-www-form-urlencoded',
-                'content' => $body,
-                )
-            );
-        $ctx = stream_context_create($opts);
-        $resp = @file_get_contents($url, null, $ctx);
+
+        if (ini_get('allow_url_fopen')) {
+            // file_get_contents
+            $opts = array(
+                'http'=> array(
+                    'method' => 'POST',
+                    'header' => 'Content-Type: application/x-www-form-urlencoded',
+                    'content' => $body,
+                    )
+                );
+            $ctx = stream_context_create($opts);
+            $resp = @file_get_contents($url, null, $ctx);
+        }
+        elseif(function_exists('curl_init')) {
+            // cURL
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $resp = curl_exec($ch);
+            curl_close($ch);
+        }
+        else {
+            throw new Exception('No way to POST to url');
+        }
+
 
         if (preg_match( '/is_valid:true/', $resp)) $auth = true;
 
@@ -939,9 +957,26 @@ class openid {
         // TODO: Improve this
 
         // Check for server/delegate,
-        $url = $openid_url;
-        $tmp = @file_get_contents($openid_url, null, null, 0, 16384); // Quit after 16 kilobytes;
         $found = array();
+        $url = $openid_url;
+
+        if (ini_get('allow_url_fopen')) {
+            // file_get_contents
+            $tmp = @file_get_contents($url, null, null, 0, 16384); // Quit after 16 kilobytes
+        }
+        elseif(function_exists('curl_init')) {
+            // cURL
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            // There is no CURLOPT_MAXFILESIZE...
+            $tmp = curl_exec($ch);
+            curl_close($ch);
+        }
+        else {
+            throw new Exception('No way to retrieve url');
+        }
+
         // Try
         preg_match('/<link[^>]*rel=(["\'])openid.server\\1[^>]*href=(["\'])([^"\']+)\\2[^>]*\/?>/i', $tmp, $found);
         if (!empty($found[3])) $url = filter_var($found[3], FILTER_SANITIZE_URL);
