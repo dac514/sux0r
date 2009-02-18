@@ -4,7 +4,7 @@
 // Description: German language file for error messages
 // Created: 	2006-03-06
 // Author:	Timo Leopold (timo@leopold-hh.de)
-// Ver:		$Id: de.inc.php 993 2008-03-30 21:17:41Z ljp $
+// Ver:		$Id: de.inc.php 1017 2008-07-08 06:09:28Z ljp $
 //
 // Copyright (c)
 //========================================================================
@@ -44,6 +44,7 @@ HTTP header wurden bereits gesendet.<br>Fehler in der Datei <b>%s</b> in der Zei
 2012 => array('Eins der Objekte, das an AccBar weitergegeben wurde ist kein Balkendiagramm (barplot). Versichere Dich, dass Du den AccBar-Plot aus einem Vektor von Balkendiagrammen (barplot) erzeugst. (Class=%s)',1),
 2013 => array('Du hast einen leeren Vektor für die Schattierungsfarben im Balkendiagramm (barplot) angegeben.',0),
 2014 => array('Die Anzahl der Datenpunkte jeder Datenreihe in AccBarPlot muss gleich sein.',0),
+2015 => array('Individual bar plots in an AccBarPlot or GroupBarPlot can not have specified X-coordinates',0),
 
 
 /*

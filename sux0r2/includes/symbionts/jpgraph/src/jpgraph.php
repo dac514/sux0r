@@ -3,7 +3,7 @@
 // File:	JPGRAPH.PHP
 // Description:	PHP Graph Plotting library. Base module.
 // Created: 	2001-01-08
-// Ver:		$Id: jpgraph.php 1002 2008-06-09 20:24:37Z ljp $
+// Ver:		$Id: jpgraph.php 1091 2009-01-18 22:57:40Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -12,15 +12,18 @@ require_once('jpg-config.inc.php');
 require_once('jpgraph_gradient.php');
 require_once('jpgraph_errhandler.inc.php');
 require_once('jpgraph_ttf.inc.php');
+require_once('jpgraph_rgb.inc.php');
+require_once('jpgraph_text.inc.php');
+require_once('jpgraph_legend.inc.php');
 
 // Version info
-DEFINE('JPG_VERSION','2.3.3');
+define('JPG_VERSION','2.3.5-dev');
 
 // Minimum required PHP version
-DEFINE('MIN_PHPVERSION','5.1.0');
+define('MIN_PHPVERSION','5.1.0');
 
 // Should the image be a truecolor image? 
-DEFINE('USE_TRUECOLOR',true);
+define('USE_TRUECOLOR',true);
 
 //------------------------------------------------------------------------
 // Automatic settings of path for cache and font directory
@@ -35,15 +38,15 @@ if(USE_CACHE) {
 		die($msg);
 	    }
 	    else {
-		DEFINE('CACHE_DIR', $_SERVER['TEMP'] . '/');
+		define('CACHE_DIR', $_SERVER['TEMP'] . '/');
 	    }
 	} else {
-	    DEFINE('CACHE_DIR','/tmp/jpgraph_cache/');
+	    define('CACHE_DIR','/tmp/jpgraph_cache/');
 	}
     }
 }
 elseif( !defined('CACHE_DIR') ) {
-    DEFINE('CACHE_DIR', '');
+    define('CACHE_DIR', '');
 }
 
 if (!defined('TTF_DIR')) {
@@ -55,15 +58,27 @@ if (!defined('TTF_DIR')) {
 	    die($msg);
         }
 	else {
-	  DEFINE('TTF_DIR', $sroot.'/fonts/');
+	  define('TTF_DIR', $sroot.'/fonts/');
         }
     } else {
-	DEFINE('TTF_DIR','/usr/X11R6/lib/X11/fonts/truetype/');
+	define('TTF_DIR','/usr/share/fonts/truetype/');
     }
 }
 
 if (!defined('MBTTF_DIR')) {
-    DEFINE('MBTTF_DIR','/usr/share/fonts/ja/TrueType/');
+    if (strstr( PHP_OS, 'WIN') ) {
+	$sroot = getenv('SystemRoot');
+        if( empty($sroot) ) {
+	    $t = new ErrMsgText();
+	    $msg = $t->Get(12,$file,$lineno);
+	    die($msg);
+        }
+	else {
+	  define('TTF_DIR', $sroot.'/fonts/');
+        }
+    } else {
+	define('MBTTF_DIR','/usr/share/fonts/ja/TrueType/');
+    }
 }
 
 //------------------------------------------------------------------
@@ -72,118 +87,119 @@ if (!defined('MBTTF_DIR')) {
 
 
 // Tick density
-DEFINE("TICKD_DENSE",1);
-DEFINE("TICKD_NORMAL",2);
-DEFINE("TICKD_SPARSE",3);
-DEFINE("TICKD_VERYSPARSE",4);
+define("TICKD_DENSE",1);
+define("TICKD_NORMAL",2);
+define("TICKD_SPARSE",3);
+define("TICKD_VERYSPARSE",4);
 
 // Side for ticks and labels. 
-DEFINE("SIDE_LEFT",-1);
-DEFINE("SIDE_RIGHT",1);
-DEFINE("SIDE_DOWN",-1);
-DEFINE("SIDE_BOTTOM",-1);
-DEFINE("SIDE_UP",1);
-DEFINE("SIDE_TOP",1);
+define("SIDE_LEFT",-1);
+define("SIDE_RIGHT",1);
+define("SIDE_DOWN",-1);
+define("SIDE_BOTTOM",-1);
+define("SIDE_UP",1);
+define("SIDE_TOP",1);
 
 // Legend type stacked vertical or horizontal
-DEFINE("LEGEND_VERT",0);
-DEFINE("LEGEND_HOR",1);
+define("LEGEND_VERT",0);
+define("LEGEND_HOR",1);
 
 // Mark types for plot marks
-DEFINE("MARK_SQUARE",1);
-DEFINE("MARK_UTRIANGLE",2);
-DEFINE("MARK_DTRIANGLE",3);
-DEFINE("MARK_DIAMOND",4);
-DEFINE("MARK_CIRCLE",5);
-DEFINE("MARK_FILLEDCIRCLE",6);
-DEFINE("MARK_CROSS",7);
-DEFINE("MARK_STAR",8);
-DEFINE("MARK_X",9);
-DEFINE("MARK_LEFTTRIANGLE",10);
-DEFINE("MARK_RIGHTTRIANGLE",11);
-DEFINE("MARK_FLASH",12);
-DEFINE("MARK_IMG",13);
-DEFINE("MARK_FLAG1",14);
-DEFINE("MARK_FLAG2",15);
-DEFINE("MARK_FLAG3",16);
-DEFINE("MARK_FLAG4",17);
+define("MARK_SQUARE",1);
+define("MARK_UTRIANGLE",2);
+define("MARK_DTRIANGLE",3);
+define("MARK_DIAMOND",4);
+define("MARK_CIRCLE",5);
+define("MARK_FILLEDCIRCLE",6);
+define("MARK_CROSS",7);
+define("MARK_STAR",8);
+define("MARK_X",9);
+define("MARK_LEFTTRIANGLE",10);
+define("MARK_RIGHTTRIANGLE",11);
+define("MARK_FLASH",12);
+define("MARK_IMG",13);
+define("MARK_FLAG1",14);
+define("MARK_FLAG2",15);
+define("MARK_FLAG3",16);
+define("MARK_FLAG4",17);
 
 // Builtin images
-DEFINE("MARK_IMG_PUSHPIN",50);
-DEFINE("MARK_IMG_SPUSHPIN",50);
-DEFINE("MARK_IMG_LPUSHPIN",51);
-DEFINE("MARK_IMG_DIAMOND",52);
-DEFINE("MARK_IMG_SQUARE",53);
-DEFINE("MARK_IMG_STAR",54);
-DEFINE("MARK_IMG_BALL",55);
-DEFINE("MARK_IMG_SBALL",55);
-DEFINE("MARK_IMG_MBALL",56);
-DEFINE("MARK_IMG_LBALL",57);
-DEFINE("MARK_IMG_BEVEL",58);
+define("MARK_IMG_PUSHPIN",50);
+define("MARK_IMG_SPUSHPIN",50);
+define("MARK_IMG_LPUSHPIN",51);
+define("MARK_IMG_DIAMOND",52);
+define("MARK_IMG_SQUARE",53);
+define("MARK_IMG_STAR",54);
+define("MARK_IMG_BALL",55);
+define("MARK_IMG_SBALL",55);
+define("MARK_IMG_MBALL",56);
+define("MARK_IMG_LBALL",57);
+define("MARK_IMG_BEVEL",58);
 
 // Inline defines
-DEFINE("INLINE_YES",1);
-DEFINE("INLINE_NO",0);
+define("INLINE_YES",1);
+define("INLINE_NO",0);
 
 // Format for background images
-DEFINE("BGIMG_FILLPLOT",1);
-DEFINE("BGIMG_FILLFRAME",2);
-DEFINE("BGIMG_COPY",3);
-DEFINE("BGIMG_CENTER",4);
+define("BGIMG_FILLPLOT",1);
+define("BGIMG_FILLFRAME",2);
+define("BGIMG_COPY",3);
+define("BGIMG_CENTER",4);
+define("BGIMG_FREE",5);
 
 // Depth of objects
-DEFINE("DEPTH_BACK",0);
-DEFINE("DEPTH_FRONT",1);
+define("DEPTH_BACK",0);
+define("DEPTH_FRONT",1);
 
 // Direction
-DEFINE("VERTICAL",1);
-DEFINE("HORIZONTAL",0);
+define("VERTICAL",1);
+define("HORIZONTAL",0);
 
 
 // Axis styles for scientific style axis
-DEFINE('AXSTYLE_SIMPLE',1);
-DEFINE('AXSTYLE_BOXIN',2);
-DEFINE('AXSTYLE_BOXOUT',3);
-DEFINE('AXSTYLE_YBOXIN',4);
-DEFINE('AXSTYLE_YBOXOUT',5);
+define('AXSTYLE_SIMPLE',1);
+define('AXSTYLE_BOXIN',2);
+define('AXSTYLE_BOXOUT',3);
+define('AXSTYLE_YBOXIN',4);
+define('AXSTYLE_YBOXOUT',5);
 
 // Style for title backgrounds
-DEFINE('TITLEBKG_STYLE1',1);
-DEFINE('TITLEBKG_STYLE2',2);
-DEFINE('TITLEBKG_STYLE3',3);
-DEFINE('TITLEBKG_FRAME_NONE',0);
-DEFINE('TITLEBKG_FRAME_FULL',1);
-DEFINE('TITLEBKG_FRAME_BOTTOM',2);
-DEFINE('TITLEBKG_FRAME_BEVEL',3);
-DEFINE('TITLEBKG_FILLSTYLE_HSTRIPED',1);
-DEFINE('TITLEBKG_FILLSTYLE_VSTRIPED',2);
-DEFINE('TITLEBKG_FILLSTYLE_SOLID',3);
+define('TITLEBKG_STYLE1',1);
+define('TITLEBKG_STYLE2',2);
+define('TITLEBKG_STYLE3',3);
+define('TITLEBKG_FRAME_NONE',0);
+define('TITLEBKG_FRAME_FULL',1);
+define('TITLEBKG_FRAME_BOTTOM',2);
+define('TITLEBKG_FRAME_BEVEL',3);
+define('TITLEBKG_FILLSTYLE_HSTRIPED',1);
+define('TITLEBKG_FILLSTYLE_VSTRIPED',2);
+define('TITLEBKG_FILLSTYLE_SOLID',3);
 
 // Style for background gradient fills
-DEFINE('BGRAD_FRAME',1);
-DEFINE('BGRAD_MARGIN',2);
-DEFINE('BGRAD_PLOT',3);
+define('BGRAD_FRAME',1);
+define('BGRAD_MARGIN',2);
+define('BGRAD_PLOT',3);
 
 // Width of tab titles
-DEFINE('TABTITLE_WIDTHFIT',0);
-DEFINE('TABTITLE_WIDTHFULL',-1);
+define('TABTITLE_WIDTHFIT',0);
+define('TABTITLE_WIDTHFULL',-1);
 
 // Defines for 3D skew directions
-DEFINE('SKEW3D_UP',0);
-DEFINE('SKEW3D_DOWN',1);
-DEFINE('SKEW3D_LEFT',2);
-DEFINE('SKEW3D_RIGHT',3);
+define('SKEW3D_UP',0);
+define('SKEW3D_DOWN',1);
+define('SKEW3D_LEFT',2);
+define('SKEW3D_RIGHT',3);
 
 // Line styles
-DEFINE('LINESTYLE_SOLID',1);
-DEFINE('LINESTYLE_DOTTED',2);
-DEFINE('LINESTYLE_DASHED',3);
-DEFINE('LINESTYLE_LONGDASH',4);
+define('LINESTYLE_SOLID',1);
+define('LINESTYLE_DOTTED',2);
+define('LINESTYLE_DASHED',3);
+define('LINESTYLE_LONGDASH',4);
 
 // For internal use only
-DEFINE("_JPG_DEBUG",false);
-DEFINE("_FORCE_IMGTOFILE",false);
-DEFINE("_FORCE_IMGDIR",'/tmp/jpgimg/');
+define("_JPG_DEBUG",false);
+define("_FORCE_IMGTOFILE",false);
+define("_FORCE_IMGDIR",'/tmp/jpgimg/');
 
 require_once('gd_image.inc.php');
 
@@ -453,36 +469,37 @@ class Footer {
 // Description: Main class to handle graphs
 //===================================================
 class Graph {
-    public $cache=null;		// Cache object (singleton)
+    public $cache=null;			// Cache object (singleton)
     public $img=null;			// Img object (singleton)
-    public $plots=array();	// Array of all plot object in the graph (for Y 1 axis)
-    public $y2plots=array();// Array of all plot object in the graph (for Y 2 axis)
+    public $plots=array();		// Array of all plot object in the graph (for Y 1 axis)
+    public $y2plots=array();		// Array of all plot object in the graph (for Y 2 axis)
     public $ynplots=array();
     public $xscale=null;		// X Scale object (could be instance of LinearScale or LogScale
     public $yscale=null,$y2scale=null, $ynscale=array();
-    public $iIcons = array();      // Array of Icons to add to 
-    public $cache_name;		// File name to be used for the current graph in the cache directory
-    public $xgrid=null;		// X Grid object (linear or logarithmic)
-    public $ygrid=null,$y2grid=null; //dito for Y
+    public $iIcons = array();		// Array of Icons to add to 
+    public $cache_name;			// File name to be used for the current graph in the cache directory
+    public $xgrid=null;			// X Grid object (linear or logarithmic)
+    public $ygrid=null,$y2grid=null;	//dito for Y
     public $doframe=true,$frame_color=array(0,0,0), $frame_weight=1;	// Frame around graph
     public $boxed=false, $box_color=array(0,0,0), $box_weight=1;		// Box around plot area
     public $doshadow=false,$shadow_width=4,$shadow_color=array(102,102,102);	// Shadow for graph
-    public $xaxis=null;		// X-axis (instane of Axis class)
+    public $xaxis=null;			// X-axis (instane of Axis class)
     public $yaxis=null, $y2axis=null, $ynaxis=array();	// Y axis (instance of Axis class)
     public $margin_color=array(200,200,200);	// Margin color of graph
     public $plotarea_color=array(255,255,255);	// Plot area color
     public $title,$subtitle,$subsubtitle; 	// Title and subtitle(s) text object
-    public $axtype="linlin";	// Type of axis
+    public $axtype="linlin";		// Type of axis
     public $xtick_factor,$ytick_factor;	// Factor to determine the maximum number of ticks depending on the plot width
-    public $texts=null, $y2texts=null;		// Text object to ge shown in the graph
+    public $texts=null, $y2texts=null;	// Text object to ge shown in the graph
     public $lines=null, $y2lines=null;
     public $bands=null, $y2bands=null;
     public $text_scale_off=0, $text_scale_abscenteroff=-1;	// Text scale in fractions and for centering bars
     public $background_image="",$background_image_type=-1,$background_image_format="png";
     public $background_image_bright=0,$background_image_contr=0,$background_image_sat=0;
+    public $background_image_xpos=0,$background_image_ypos=0;
     public $image_bright=0, $image_contr=0, $image_sat=0;
     public $inline;
-    public $showcsim=0,$csimcolor="red"; //debug stuff, draw the csim boundaris on the image if <>0
+    public $showcsim=0,$csimcolor="red";//debug stuff, draw the csim boundaris on the image if <>0
     public $grid_depth=DEPTH_BACK;	// Draw grid under all plots as default
     public $iAxisStyle = AXSTYLE_SIMPLE;
     public $iCSIMdisplay=false,$iHasStroked = false;
@@ -605,6 +622,22 @@ class Graph {
 	$this->iImgTransHighQ=$aQuality;
 	$this->iImgTransBorder=$aBorder;
 	$this->iImgTransHorizonPos=$aHorizonPos;
+    }
+
+    function SetUserFont($aNormal,$aBold='',$aItalic='',$aBoldIt='') {
+	$this->img->ttf->SetUserFont($aNormal,$aBold,$aItalic,$aBoldIt);
+    }
+
+    function SetUserFont1($aNormal,$aBold='',$aItalic='',$aBoldIt='') {
+	$this->img->ttf->SetUserFont1($aNormal,$aBold,$aItalic,$aBoldIt);
+    }
+
+    function SetUserFont2($aNormal,$aBold='',$aItalic='',$aBoldIt='') {
+	$this->img->ttf->SetUserFont2($aNormal,$aBold,$aItalic,$aBoldIt);
+    }
+
+    function SetUserFont3($aNormal,$aBold='',$aItalic='',$aBoldIt='') {
+	$this->img->ttf->SetUserFont3($aNormal,$aBold,$aItalic,$aBoldIt);
     }
 
     // Set Image format and optional quality
@@ -864,6 +897,12 @@ class Graph {
 
     function SetBackgroundImageMix($aMix) {
 	$this->background_image_mix = $aMix ;
+    }
+	
+    // Adjust background image position
+    function SetBackgroundImagePos($aXpos,$aYpos) {
+	$this->background_image_xpos = $aXpos ;
+	$this->background_image_ypos = $aYpos ;
     }
 	
     // Specify axis style (boxed or single)
@@ -2046,6 +2085,8 @@ class Graph {
 
 	    // Check if we should add the vertical lines at left and right edge
 	    if( $this->iXAxisLblBgColor !== '' ) {
+		// Hardcode to one pixel wide
+		$this->img->SetLineWeight(1); 
 		$this->img->PushColor($this->iXAxisLblBgColor);
 		if( $t == 1 || $t == 6 ) {
 		    $this->img->Line($xl,$yu,$xl,$yl);
@@ -2347,6 +2388,12 @@ class Graph {
 		$this->img->CopyMerge($bkgimg,$centerx,$centery,0,0,$bw,$bh,
 				      $bw,$bh,$this->background_image_mix);
 		$this->StrokeFrame();
+		break;
+	    case BGIMG_FREE: // Just copy the image to the specified location
+		$this->img->CopyMerge($bkgimg,
+				      $this->background_image_xpos,$this->background_image_ypos,
+				      0,0,$bw,$bh,$bw,$bh,$this->background_image_mix);
+		$this->StrokeFrame(); // New
 		break;
 	    default:
 		JpGraphError::RaiseL(25042);//(" Unknown background image layout");
@@ -2829,264 +2876,6 @@ class LineProperty {
 	}
     }
 }
-
-
-//===================================================
-// CLASS Text
-// Description: Arbitrary text object that can be added to the graph
-//===================================================
-class Text {
-    public $t,$margin=0;
-    public $x=0,$y=0,$halign="left",$valign="top",$color=array(0,0,0);
-    public $hide=false, $dir=0;
-    public $iScalePosY=null,$iScalePosX=null;
-    public $iWordwrap=0;
-    public $font_family=FF_FONT1,$font_style=FS_NORMAL,$font_size=12;
-    protected $boxed=false;	// Should the text be boxed
-    protected $paragraph_align="left";
-    protected $icornerradius=0,$ishadowwidth=3;
-    protected $fcolor='white',$bcolor='black',$shadow=false;
-    protected $iCSIMarea='',$iCSIMalt='',$iCSIMtarget='',$iCSIMWinTarget='';
-
-//---------------
-// CONSTRUCTOR
-
-    // Create new text at absolute pixel coordinates
-    function Text($aTxt="",$aXAbsPos=0,$aYAbsPos=0) {
-	if( ! is_string($aTxt) ) {
-	    JpGraphError::RaiseL(25050);//('First argument to Text::Text() must be s atring.');
-	}
-	$this->t = $aTxt;
-	$this->x = round($aXAbsPos);
-	$this->y = round($aYAbsPos);
-	$this->margin = 0;
-    }
-//---------------
-// PUBLIC METHODS	
-    // Set the string in the text object
-    function Set($aTxt) {
-	$this->t = $aTxt;
-    }
-	
-    // Alias for Pos()
-    function SetPos($aXAbsPos=0,$aYAbsPos=0,$aHAlign="left",$aVAlign="top") {
-	//$this->Pos($aXAbsPos,$aYAbsPos,$aHAlign,$aVAlign);
-	$this->x = $aXAbsPos;
-	$this->y = $aYAbsPos;
-	$this->halign = $aHAlign;
-	$this->valign = $aVAlign;
-    }
-
-    function SetScalePos($aX,$aY) {
-	$this->iScalePosX = $aX;
-	$this->iScalePosY = $aY;
-    }
-	
-    // Specify alignment for the text
-    function Align($aHAlign,$aVAlign="top",$aParagraphAlign="") {
-	$this->halign = $aHAlign;
-	$this->valign = $aVAlign;
-	if( $aParagraphAlign != "" )
-	    $this->paragraph_align = $aParagraphAlign;
-    }		
-    
-    // Alias
-    function SetAlign($aHAlign,$aVAlign="top",$aParagraphAlign="") {
-	$this->Align($aHAlign,$aVAlign,$aParagraphAlign);
-    }
-
-    // Specifies the alignment for a multi line text
-    function ParagraphAlign($aAlign) {
-	$this->paragraph_align = $aAlign;
-    }
-
-    // Specifies the alignment for a multi line text
-    function SetParagraphAlign($aAlign) {
-	$this->paragraph_align = $aAlign;
-    }
-
-    function SetShadow($aShadowColor='gray',$aShadowWidth=3) {
-	$this->ishadowwidth=$aShadowWidth;
-	$this->shadow=$aShadowColor;
-	$this->boxed=true;
-    }
-
-    function SetWordWrap($aCol) {
-	$this->iWordwrap = $aCol ;
-    }
-	
-    // Specify that the text should be boxed. fcolor=frame color, bcolor=border color,
-    // $shadow=drop shadow should be added around the text.
-    function SetBox($aFrameColor=array(255,255,255),$aBorderColor=array(0,0,0),$aShadowColor=false,$aCornerRadius=4,$aShadowWidth=3) {
-	if( $aFrameColor==false )
-	    $this->boxed=false;
-	else
-	    $this->boxed=true;
-	$this->fcolor=$aFrameColor;
-	$this->bcolor=$aBorderColor;
-	// For backwards compatibility when shadow was just true or false
-	if( $aShadowColor === true )
-	    $aShadowColor = 'gray';
-	$this->shadow=$aShadowColor;
-	$this->icornerradius=$aCornerRadius;
-	$this->ishadowwidth=$aShadowWidth;
-    }
-	
-    // Hide the text
-    function Hide($aHide=true) {
-	$this->hide=$aHide;
-    }
-	
-    // This looks ugly since it's not a very orthogonal design 
-    // but I added this "inverse" of Hide() to harmonize
-    // with some classes which I designed more recently (especially) 
-    // jpgraph_gantt
-    function Show($aShow=true) {
-	$this->hide=!$aShow;
-    }
-	
-    // Specify font
-    function SetFont($aFamily,$aStyle=FS_NORMAL,$aSize=10) {
-	$this->font_family=$aFamily;
-	$this->font_style=$aStyle;
-	$this->font_size=$aSize;
-    }
-			
-    // Center the text between $left and $right coordinates
-    function Center($aLeft,$aRight,$aYAbsPos=false) {
-	$this->x = $aLeft + ($aRight-$aLeft	)/2;
-	$this->halign = "center";
-	if( is_numeric($aYAbsPos) )
-	    $this->y = $aYAbsPos;		
-    }
-	
-    // Set text color
-    function SetColor($aColor) {
-	$this->color = $aColor;
-    }
-	
-    function SetAngle($aAngle) {
-	$this->SetOrientation($aAngle);
-    }
-	
-    // Orientation of text. Note only TTF fonts can have an arbitrary angle
-    function SetOrientation($aDirection=0) {
-	if( is_numeric($aDirection) )
-	    $this->dir=$aDirection;	
-	elseif( $aDirection=="h" )
-	    $this->dir = 0;
-	elseif( $aDirection=="v" )
-	    $this->dir = 90;
-	else JpGraphError::RaiseL(25051);//(" Invalid direction specified for text.");
-    }
-	
-    // Total width of text
-    function GetWidth($aImg) {
-	$aImg->SetFont($this->font_family,$this->font_style,$this->font_size);
-	$w = $aImg->GetTextWidth($this->t,$this->dir);
-	return $w;	
-    }
-	
-    // Hight of font
-    function GetFontHeight($aImg) {
-	$aImg->SetFont($this->font_family,$this->font_style,$this->font_size);
-	$h = $aImg->GetFontHeight();
-	return $h;
-
-    }
-
-    function GetTextHeight($aImg) {
-	$aImg->SetFont($this->font_family,$this->font_style,$this->font_size);	
-	$h = $aImg->GetTextHeight($this->t,$this->dir);
-	return $h;
-    }
-
-    function GetHeight($aImg) {
-	// Synonym for GetTextHeight()
-	$aImg->SetFont($this->font_family,$this->font_style,$this->font_size);	
-	$h = $aImg->GetTextHeight($this->t,$this->dir);
-	return $h;
-    }
-
-    // Set the margin which will be interpretated differently depending
-    // on the context.
-    function SetMargin($aMarg) {
-	$this->margin = $aMarg;
-    }
-
-    function StrokeWithScale($aImg,$axscale,$ayscale) {
-	if( $this->iScalePosX === null ||
-	    $this->iScalePosY === null ) {
-	    $this->Stroke($aImg);
-	}
-	else {
-	    $this->Stroke($aImg,
-			  round($axscale->Translate($this->iScalePosX)),
-			  round($ayscale->Translate($this->iScalePosY)));
-	}
-    }
-
-    function SetCSIMTarget($aURITarget,$aAlt='',$aWinTarget='') {
-	$this->iCSIMtarget = $aURITarget;
-	$this->iCSIMalt = $aAlt;
-	$this->iCSIMWinTarget = $aWinTarget;
-    }
-
-    function GetCSIMareas() {
-	if( $this->iCSIMtarget !== '' ) 
-	    return $this->iCSIMarea;
-	else
-	    return '';
-    }
-
-    // Display text in image
-    function Stroke($aImg,$x=null,$y=null) {
-
-	if( !empty($x) ) $this->x = round($x);
-	if( !empty($y) ) $this->y = round($y);
-
-	// Insert newlines
-	if( $this->iWordwrap > 0 ) {
-	    $this->t = wordwrap($this->t,$this->iWordwrap,"\n");
-	}
-
-	// If position been given as a fraction of the image size
-	// calculate the absolute position
-	if( $this->x < 1 && $this->x > 0 ) $this->x *= $aImg->width;
-	if( $this->y < 1 && $this->y > 0 ) $this->y *= $aImg->height;
-
-	$aImg->PushColor($this->color);	
-	$aImg->SetFont($this->font_family,$this->font_style,$this->font_size);
-	$aImg->SetTextAlign($this->halign,$this->valign);
-	if( $this->boxed ) {
-	    if( $this->fcolor=="nofill" ) 
-		$this->fcolor=false;		
-	    $aImg->SetLineWeight(1);
-	    $bbox = $aImg->StrokeBoxedText($this->x,$this->y,$this->t,
-				   $this->dir,$this->fcolor,$this->bcolor,$this->shadow,
-				   $this->paragraph_align,5,5,$this->icornerradius,
-				   $this->ishadowwidth);
-	}
-	else {
-	    $bbox = $aImg->StrokeText($this->x,$this->y,$this->t,$this->dir,$this->paragraph_align);
-	}
-
-	// Create CSIM targets
-	$coords = $bbox[0].','.$bbox[1].','.$bbox[2].','.$bbox[3].','.$bbox[4].','.$bbox[5].','.$bbox[6].','.$bbox[7];
-	$this->iCSIMarea = "<area shape=\"poly\" coords=\"$coords\" href=\"".htmlentities($this->iCSIMtarget)."\" ";
-	if( trim($this->iCSIMalt) != '' ) {
-	    $this->iCSIMarea .= " alt=\"".$this->iCSIMalt."\" "; 
-	    $this->iCSIMarea .= " title=\"".$this->iCSIMalt."\" ";
-	}
-	if( trim($this->iCSIMWinTarget) != '' ) {
-	    $this->iCSIMarea .= " target=\"".$this->iCSIMWinTarget."\" "; 
-	}
-	$this->iCSIMarea .= " />\n";
-
-	$aImg->PopColor($this->color);	
-
-    }
-} // Class
 
 class GraphTabTitle extends Text{
     private $corner = 6 , $posx = 7, $posy = 4;
@@ -5041,942 +4830,6 @@ class LinearScale {
     }
 } // Class
 
-//===================================================
-// CLASS RGB
-// Description: Color definitions as RGB triples
-//===================================================
-class RGB {
-    public $rgb_table; 
-    public $img;
-
-    function RGB($aImg=null) {
-	$this->img = $aImg;
-		
-	// Conversion array between color names and RGB
-	$this->rgb_table = array(
-	    "aqua"=> array(0,255,255),		
-	    "lime"=> array(0,255,0),		
-	    "teal"=> array(0,128,128),
-	    "whitesmoke"=>array(245,245,245),
-	    "gainsboro"=>array(220,220,220),
-	    "oldlace"=>array(253,245,230),
-	    "linen"=>array(250,240,230),
-	    "antiquewhite"=>array(250,235,215),
-	    "papayawhip"=>array(255,239,213),
-	    "blanchedalmond"=>array(255,235,205),
-	    "bisque"=>array(255,228,196),
-	    "peachpuff"=>array(255,218,185),
-	    "navajowhite"=>array(255,222,173),
-	    "moccasin"=>array(255,228,181),
-	    "cornsilk"=>array(255,248,220),
-	    "ivory"=>array(255,255,240),
-	    "lemonchiffon"=>array(255,250,205),
-	    "seashell"=>array(255,245,238),
-	    "mintcream"=>array(245,255,250),
-	    "azure"=>array(240,255,255),
-	    "aliceblue"=>array(240,248,255),
-	    "lavender"=>array(230,230,250),
-	    "lavenderblush"=>array(255,240,245),
-	    "mistyrose"=>array(255,228,225),
-	    "white"=>array(255,255,255),
-	    "black"=>array(0,0,0),
-	    "darkslategray"=>array(47,79,79),
-	    "dimgray"=>array(105,105,105),
-	    "slategray"=>array(112,128,144),
-	    "lightslategray"=>array(119,136,153),
-	    "gray"=>array(190,190,190),
-	    "lightgray"=>array(211,211,211),
-	    "midnightblue"=>array(25,25,112),
-	    "navy"=>array(0,0,128),
-	    "cornflowerblue"=>array(100,149,237),
-	    "darkslateblue"=>array(72,61,139),
-	    "slateblue"=>array(106,90,205),
-	    "mediumslateblue"=>array(123,104,238),
-	    "lightslateblue"=>array(132,112,255),
-	    "mediumblue"=>array(0,0,205),
-	    "royalblue"=>array(65,105,225),
-	    "blue"=>array(0,0,255),
-	    "dodgerblue"=>array(30,144,255),
-	    "deepskyblue"=>array(0,191,255),
-	    "skyblue"=>array(135,206,235),
-	    "lightskyblue"=>array(135,206,250),
-	    "steelblue"=>array(70,130,180),
-	    "lightred"=>array(211,167,168),
-	    "lightsteelblue"=>array(176,196,222),
-	    "lightblue"=>array(173,216,230),
-	    "powderblue"=>array(176,224,230),
-	    "paleturquoise"=>array(175,238,238),
-	    "darkturquoise"=>array(0,206,209),
-	    "mediumturquoise"=>array(72,209,204),
-	    "turquoise"=>array(64,224,208),
-	    "cyan"=>array(0,255,255),
-	    "lightcyan"=>array(224,255,255),
-	    "cadetblue"=>array(95,158,160),
-	    "mediumaquamarine"=>array(102,205,170),
-	    "aquamarine"=>array(127,255,212),
-	    "darkgreen"=>array(0,100,0),
-	    "darkolivegreen"=>array(85,107,47),
-	    "darkseagreen"=>array(143,188,143),
-	    "seagreen"=>array(46,139,87),
-	    "mediumseagreen"=>array(60,179,113),
-	    "lightseagreen"=>array(32,178,170),
-	    "palegreen"=>array(152,251,152),
-	    "springgreen"=>array(0,255,127),
-	    "lawngreen"=>array(124,252,0),
-	    "green"=>array(0,255,0),
-	    "chartreuse"=>array(127,255,0),
-	    "mediumspringgreen"=>array(0,250,154),
-	    "greenyellow"=>array(173,255,47),
-	    "limegreen"=>array(50,205,50),
-	    "yellowgreen"=>array(154,205,50),
-	    "forestgreen"=>array(34,139,34),
-	    "olivedrab"=>array(107,142,35),
-	    "darkkhaki"=>array(189,183,107),
-	    "khaki"=>array(240,230,140),
-	    "palegoldenrod"=>array(238,232,170),
-	    "lightgoldenrodyellow"=>array(250,250,210),
-	    "lightyellow"=>array(255,255,200),
-	    "yellow"=>array(255,255,0),
-	    "gold"=>array(255,215,0),
-	    "lightgoldenrod"=>array(238,221,130),
-	    "goldenrod"=>array(218,165,32),
-	    "darkgoldenrod"=>array(184,134,11),
-	    "rosybrown"=>array(188,143,143),
-	    "indianred"=>array(205,92,92),
-	    "saddlebrown"=>array(139,69,19),
-	    "sienna"=>array(160,82,45),
-	    "peru"=>array(205,133,63),
-	    "burlywood"=>array(222,184,135),
-	    "beige"=>array(245,245,220),
-	    "wheat"=>array(245,222,179),
-	    "sandybrown"=>array(244,164,96),
-	    "tan"=>array(210,180,140),
-	    "chocolate"=>array(210,105,30),
-	    "firebrick"=>array(178,34,34),
-	    "brown"=>array(165,42,42),
-	    "darksalmon"=>array(233,150,122),
-	    "salmon"=>array(250,128,114),
-	    "lightsalmon"=>array(255,160,122),
-	    "orange"=>array(255,165,0),
-	    "darkorange"=>array(255,140,0),
-	    "coral"=>array(255,127,80),
-	    "lightcoral"=>array(240,128,128),
-	    "tomato"=>array(255,99,71),
-	    "orangered"=>array(255,69,0),
-	    "red"=>array(255,0,0),
-	    "hotpink"=>array(255,105,180),
-	    "deeppink"=>array(255,20,147),
-	    "pink"=>array(255,192,203),
-	    "lightpink"=>array(255,182,193),
-	    "palevioletred"=>array(219,112,147),
-	    "maroon"=>array(176,48,96),
-	    "mediumvioletred"=>array(199,21,133),
-	    "violetred"=>array(208,32,144),
-	    "magenta"=>array(255,0,255),
-	    "violet"=>array(238,130,238),
-	    "plum"=>array(221,160,221),
-	    "orchid"=>array(218,112,214),
-	    "mediumorchid"=>array(186,85,211),
-	    "darkorchid"=>array(153,50,204),
-	    "darkviolet"=>array(148,0,211),
-	    "blueviolet"=>array(138,43,226),
-	    "purple"=>array(160,32,240),
-	    "mediumpurple"=>array(147,112,219),
-	    "thistle"=>array(216,191,216),
-	    "snow1"=>array(255,250,250),
-	    "snow2"=>array(238,233,233),
-	    "snow3"=>array(205,201,201),
-	    "snow4"=>array(139,137,137),
-	    "seashell1"=>array(255,245,238),
-	    "seashell2"=>array(238,229,222),
-	    "seashell3"=>array(205,197,191),
-	    "seashell4"=>array(139,134,130),
-	    "AntiqueWhite1"=>array(255,239,219),
-	    "AntiqueWhite2"=>array(238,223,204),
-	    "AntiqueWhite3"=>array(205,192,176),
-	    "AntiqueWhite4"=>array(139,131,120),
-	    "bisque1"=>array(255,228,196),
-	    "bisque2"=>array(238,213,183),
-	    "bisque3"=>array(205,183,158),
-	    "bisque4"=>array(139,125,107),
-	    "peachPuff1"=>array(255,218,185),
-	    "peachpuff2"=>array(238,203,173),
-	    "peachpuff3"=>array(205,175,149),
-	    "peachpuff4"=>array(139,119,101),
-	    "navajowhite1"=>array(255,222,173),
-	    "navajowhite2"=>array(238,207,161),
-	    "navajowhite3"=>array(205,179,139),
-	    "navajowhite4"=>array(139,121,94),
-	    "lemonchiffon1"=>array(255,250,205),
-	    "lemonchiffon2"=>array(238,233,191),
-	    "lemonchiffon3"=>array(205,201,165),
-	    "lemonchiffon4"=>array(139,137,112),
-	    "ivory1"=>array(255,255,240),
-	    "ivory2"=>array(238,238,224),
-	    "ivory3"=>array(205,205,193),
-	    "ivory4"=>array(139,139,131),
-	    "honeydew"=>array(193,205,193),
-	    "lavenderblush1"=>array(255,240,245),
-	    "lavenderblush2"=>array(238,224,229),
-	    "lavenderblush3"=>array(205,193,197),
-	    "lavenderblush4"=>array(139,131,134),
-	    "mistyrose1"=>array(255,228,225),
-	    "mistyrose2"=>array(238,213,210),
-	    "mistyrose3"=>array(205,183,181),
-	    "mistyrose4"=>array(139,125,123),
-	    "azure1"=>array(240,255,255),
-	    "azure2"=>array(224,238,238),
-	    "azure3"=>array(193,205,205),
-	    "azure4"=>array(131,139,139),
-	    "slateblue1"=>array(131,111,255),
-	    "slateblue2"=>array(122,103,238),
-	    "slateblue3"=>array(105,89,205),
-	    "slateblue4"=>array(71,60,139),
-	    "royalblue1"=>array(72,118,255),
-	    "royalblue2"=>array(67,110,238),
-	    "royalblue3"=>array(58,95,205),
-	    "royalblue4"=>array(39,64,139),
-	    "dodgerblue1"=>array(30,144,255),
-	    "dodgerblue2"=>array(28,134,238),
-	    "dodgerblue3"=>array(24,116,205),
-	    "dodgerblue4"=>array(16,78,139),
-	    "steelblue1"=>array(99,184,255),
-	    "steelblue2"=>array(92,172,238),
-	    "steelblue3"=>array(79,148,205),
-	    "steelblue4"=>array(54,100,139),
-	    "deepskyblue1"=>array(0,191,255),
-	    "deepskyblue2"=>array(0,178,238),
-	    "deepskyblue3"=>array(0,154,205),
-	    "deepskyblue4"=>array(0,104,139),
-	    "skyblue1"=>array(135,206,255),
-	    "skyblue2"=>array(126,192,238),
-	    "skyblue3"=>array(108,166,205),
-	    "skyblue4"=>array(74,112,139),
-	    "lightskyblue1"=>array(176,226,255),
-	    "lightskyblue2"=>array(164,211,238),
-	    "lightskyblue3"=>array(141,182,205),
-	    "lightskyblue4"=>array(96,123,139),
-	    "slategray1"=>array(198,226,255),
-	    "slategray2"=>array(185,211,238),
-	    "slategray3"=>array(159,182,205),
-	    "slategray4"=>array(108,123,139),
-	    "lightsteelblue1"=>array(202,225,255),
-	    "lightsteelblue2"=>array(188,210,238),
-	    "lightsteelblue3"=>array(162,181,205),
-	    "lightsteelblue4"=>array(110,123,139),
-	    "lightblue1"=>array(191,239,255),
-	    "lightblue2"=>array(178,223,238),
-	    "lightblue3"=>array(154,192,205),
-	    "lightblue4"=>array(104,131,139),
-	    "lightcyan1"=>array(224,255,255),
-	    "lightcyan2"=>array(209,238,238),
-	    "lightcyan3"=>array(180,205,205),
-	    "lightcyan4"=>array(122,139,139),
-	    "paleturquoise1"=>array(187,255,255),
-	    "paleturquoise2"=>array(174,238,238),
-	    "paleturquoise3"=>array(150,205,205),
-	    "paleturquoise4"=>array(102,139,139),
-	    "cadetblue1"=>array(152,245,255),
-	    "cadetblue2"=>array(142,229,238),
-	    "cadetblue3"=>array(122,197,205),
-	    "cadetblue4"=>array(83,134,139),
-	    "turquoise1"=>array(0,245,255),
-	    "turquoise2"=>array(0,229,238),
-	    "turquoise3"=>array(0,197,205),
-	    "turquoise4"=>array(0,134,139),
-	    "cyan1"=>array(0,255,255),
-	    "cyan2"=>array(0,238,238),
-	    "cyan3"=>array(0,205,205),
-	    "cyan4"=>array(0,139,139),
-	    "darkslategray1"=>array(151,255,255),
-	    "darkslategray2"=>array(141,238,238),
-	    "darkslategray3"=>array(121,205,205),
-	    "darkslategray4"=>array(82,139,139),
-	    "aquamarine1"=>array(127,255,212),
-	    "aquamarine2"=>array(118,238,198),
-	    "aquamarine3"=>array(102,205,170),
-	    "aquamarine4"=>array(69,139,116),
-	    "darkseagreen1"=>array(193,255,193),
-	    "darkseagreen2"=>array(180,238,180),
-	    "darkseagreen3"=>array(155,205,155),
-	    "darkseagreen4"=>array(105,139,105),
-	    "seagreen1"=>array(84,255,159),
-	    "seagreen2"=>array(78,238,148),
-	    "seagreen3"=>array(67,205,128),
-	    "seagreen4"=>array(46,139,87),
-	    "palegreen1"=>array(154,255,154),
-	    "palegreen2"=>array(144,238,144),
-	    "palegreen3"=>array(124,205,124),
-	    "palegreen4"=>array(84,139,84),
-	    "springgreen1"=>array(0,255,127),
-	    "springgreen2"=>array(0,238,118),
-	    "springgreen3"=>array(0,205,102),
-	    "springgreen4"=>array(0,139,69),
-	    "chartreuse1"=>array(127,255,0),
-	    "chartreuse2"=>array(118,238,0),
-	    "chartreuse3"=>array(102,205,0),
-	    "chartreuse4"=>array(69,139,0),
-	    "olivedrab1"=>array(192,255,62),
-	    "olivedrab2"=>array(179,238,58),
-	    "olivedrab3"=>array(154,205,50),
-	    "olivedrab4"=>array(105,139,34),
-	    "darkolivegreen1"=>array(202,255,112),
-	    "darkolivegreen2"=>array(188,238,104),
-	    "darkolivegreen3"=>array(162,205,90),
-	    "darkolivegreen4"=>array(110,139,61),
-	    "khaki1"=>array(255,246,143),
-	    "khaki2"=>array(238,230,133),
-	    "khaki3"=>array(205,198,115),
-	    "khaki4"=>array(139,134,78),
-	    "lightgoldenrod1"=>array(255,236,139),
-	    "lightgoldenrod2"=>array(238,220,130),
-	    "lightgoldenrod3"=>array(205,190,112),
-	    "lightgoldenrod4"=>array(139,129,76),
-	    "yellow1"=>array(255,255,0),
-	    "yellow2"=>array(238,238,0),
-	    "yellow3"=>array(205,205,0),
-	    "yellow4"=>array(139,139,0),
-	    "gold1"=>array(255,215,0),
-	    "gold2"=>array(238,201,0),
-	    "gold3"=>array(205,173,0),
-	    "gold4"=>array(139,117,0),
-	    "goldenrod1"=>array(255,193,37),
-	    "goldenrod2"=>array(238,180,34),
-	    "goldenrod3"=>array(205,155,29),
-	    "goldenrod4"=>array(139,105,20),
-	    "darkgoldenrod1"=>array(255,185,15),
-	    "darkgoldenrod2"=>array(238,173,14),
-	    "darkgoldenrod3"=>array(205,149,12),
-	    "darkgoldenrod4"=>array(139,101,8),
-	    "rosybrown1"=>array(255,193,193),
-	    "rosybrown2"=>array(238,180,180),
-	    "rosybrown3"=>array(205,155,155),
-	    "rosybrown4"=>array(139,105,105),
-	    "indianred1"=>array(255,106,106),
-	    "indianred2"=>array(238,99,99),
-	    "indianred3"=>array(205,85,85),
-	    "indianred4"=>array(139,58,58),
-	    "sienna1"=>array(255,130,71),
-	    "sienna2"=>array(238,121,66),
-	    "sienna3"=>array(205,104,57),
-	    "sienna4"=>array(139,71,38),
-	    "burlywood1"=>array(255,211,155),
-	    "burlywood2"=>array(238,197,145),
-	    "burlywood3"=>array(205,170,125),
-	    "burlywood4"=>array(139,115,85),
-	    "wheat1"=>array(255,231,186),
-	    "wheat2"=>array(238,216,174),
-	    "wheat3"=>array(205,186,150),
-	    "wheat4"=>array(139,126,102),
-	    "tan1"=>array(255,165,79),
-	    "tan2"=>array(238,154,73),
-	    "tan3"=>array(205,133,63),
-	    "tan4"=>array(139,90,43),
-	    "chocolate1"=>array(255,127,36),
-	    "chocolate2"=>array(238,118,33),
-	    "chocolate3"=>array(205,102,29),
-	    "chocolate4"=>array(139,69,19),
-	    "firebrick1"=>array(255,48,48),
-	    "firebrick2"=>array(238,44,44),
-	    "firebrick3"=>array(205,38,38),
-	    "firebrick4"=>array(139,26,26),
-	    "brown1"=>array(255,64,64),
-	    "brown2"=>array(238,59,59),
-	    "brown3"=>array(205,51,51),
-	    "brown4"=>array(139,35,35),
-	    "salmon1"=>array(255,140,105),
-	    "salmon2"=>array(238,130,98),
-	    "salmon3"=>array(205,112,84),
-	    "salmon4"=>array(139,76,57),
-	    "lightsalmon1"=>array(255,160,122),
-	    "lightsalmon2"=>array(238,149,114),
-	    "lightsalmon3"=>array(205,129,98),
-	    "lightsalmon4"=>array(139,87,66),
-	    "orange1"=>array(255,165,0),
-	    "orange2"=>array(238,154,0),
-	    "orange3"=>array(205,133,0),
-	    "orange4"=>array(139,90,0),
-	    "darkorange1"=>array(255,127,0),
-	    "darkorange2"=>array(238,118,0),
-	    "darkorange3"=>array(205,102,0),
-	    "darkorange4"=>array(139,69,0),
-	    "coral1"=>array(255,114,86),
-	    "coral2"=>array(238,106,80),
-	    "coral3"=>array(205,91,69),
-	    "coral4"=>array(139,62,47),
-	    "tomato1"=>array(255,99,71),
-	    "tomato2"=>array(238,92,66),
-	    "tomato3"=>array(205,79,57),
-	    "tomato4"=>array(139,54,38),
-	    "orangered1"=>array(255,69,0),
-	    "orangered2"=>array(238,64,0),
-	    "orangered3"=>array(205,55,0),
-	    "orangered4"=>array(139,37,0),
-	    "deeppink1"=>array(255,20,147),
-	    "deeppink2"=>array(238,18,137),
-	    "deeppink3"=>array(205,16,118),
-	    "deeppink4"=>array(139,10,80),
-	    "hotpink1"=>array(255,110,180),
-	    "hotpink2"=>array(238,106,167),
-	    "hotpink3"=>array(205,96,144),
-	    "hotpink4"=>array(139,58,98),
-	    "pink1"=>array(255,181,197),
-	    "pink2"=>array(238,169,184),
-	    "pink3"=>array(205,145,158),
-	    "pink4"=>array(139,99,108),
-	    "lightpink1"=>array(255,174,185),
-	    "lightpink2"=>array(238,162,173),
-	    "lightpink3"=>array(205,140,149),
-	    "lightpink4"=>array(139,95,101),
-	    "palevioletred1"=>array(255,130,171),
-	    "palevioletred2"=>array(238,121,159),
-	    "palevioletred3"=>array(205,104,137),
-	    "palevioletred4"=>array(139,71,93),
-	    "maroon1"=>array(255,52,179),
-	    "maroon2"=>array(238,48,167),
-	    "maroon3"=>array(205,41,144),
-	    "maroon4"=>array(139,28,98),
-	    "violetred1"=>array(255,62,150),
-	    "violetred2"=>array(238,58,140),
-	    "violetred3"=>array(205,50,120),
-	    "violetred4"=>array(139,34,82),
-	    "magenta1"=>array(255,0,255),
-	    "magenta2"=>array(238,0,238),
-	    "magenta3"=>array(205,0,205),
-	    "magenta4"=>array(139,0,139),
-	    "mediumred"=>array(140,34,34),         
-	    "orchid1"=>array(255,131,250),
-	    "orchid2"=>array(238,122,233),
-	    "orchid3"=>array(205,105,201),
-	    "orchid4"=>array(139,71,137),
-	    "plum1"=>array(255,187,255),
-	    "plum2"=>array(238,174,238),
-	    "plum3"=>array(205,150,205),
-	    "plum4"=>array(139,102,139),
-	    "mediumorchid1"=>array(224,102,255),
-	    "mediumorchid2"=>array(209,95,238),
-	    "mediumorchid3"=>array(180,82,205),
-	    "mediumorchid4"=>array(122,55,139),
-	    "darkorchid1"=>array(191,62,255),
-	    "darkorchid2"=>array(178,58,238),
-	    "darkorchid3"=>array(154,50,205),
-	    "darkorchid4"=>array(104,34,139),
-	    "purple1"=>array(155,48,255),
-	    "purple2"=>array(145,44,238),
-	    "purple3"=>array(125,38,205),
-	    "purple4"=>array(85,26,139),
-	    "mediumpurple1"=>array(171,130,255),
-	    "mediumpurple2"=>array(159,121,238),
-	    "mediumpurple3"=>array(137,104,205),
-	    "mediumpurple4"=>array(93,71,139),
-	    "thistle1"=>array(255,225,255),
-	    "thistle2"=>array(238,210,238),
-	    "thistle3"=>array(205,181,205),
-	    "thistle4"=>array(139,123,139),
-	    "gray1"=>array(10,10,10),
-	    "gray2"=>array(40,40,30),
-	    "gray3"=>array(70,70,70),
-	    "gray4"=>array(100,100,100),
-	    "gray5"=>array(130,130,130),
-	    "gray6"=>array(160,160,160),
-	    "gray7"=>array(190,190,190),
-	    "gray8"=>array(210,210,210),
-	    "gray9"=>array(240,240,240),
-	    "darkgray"=>array(100,100,100),
-	    "darkblue"=>array(0,0,139),
-	    "darkcyan"=>array(0,139,139),
-	    "darkmagenta"=>array(139,0,139),
-	    "darkred"=>array(139,0,0),
-	    "silver"=>array(192, 192, 192),
-	    "eggplant"=>array(144,176,168),
-	    "lightgreen"=>array(144,238,144));		
-    }
-//----------------
-// PUBLIC METHODS
-    // Colors can be specified as either
-    // 1. #xxxxxx			HTML style
-    // 2. "colorname" 	as a named color
-    // 3. array(r,g,b)	RGB triple
-    // This function translates this to a native RGB format and returns an 
-    // RGB triple.
-    function Color($aColor) {
-	if (is_string($aColor)) {
-	    // Strip of any alpha factor
-	    $pos = strpos($aColor,'@');
-	    if( $pos === false ) {
-		$alpha = 0;
-	    }
-	    else {
-		$pos2 = strpos($aColor,':');
-		if( $pos2===false ) 
-		    $pos2 = $pos-1; // Sentinel
-		if( $pos > $pos2 ) {
-		    $alpha = str_replace(',','.',substr($aColor,$pos+1));
-		    $aColor = substr($aColor,0,$pos);
-		}
-		else {
-		    $alpha = substr($aColor,$pos+1,$pos2-$pos-1);
-		    $aColor = substr($aColor,0,$pos).substr($aColor,$pos2);
-		}
-	    }
-
-	    // Extract potential adjustment figure at end of color
-	    // specification
-	    $pos = strpos($aColor,":");
-	    if( $pos === false ) {
-		$adj = 1.0;
-	    }
-	    else {
-		$adj = 0.0 + str_replace(',','.',substr($aColor,$pos+1));
-		$aColor = substr($aColor,0,$pos);
-	    }
-	    if( $adj < 0 )
-		JpGraphError::RaiseL(25077);//('Adjustment factor for color must be > 0');
-
-	    if (substr($aColor, 0, 1) == "#") {
-		$r = hexdec(substr($aColor, 1, 2));
-		$g = hexdec(substr($aColor, 3, 2));
-		$b = hexdec(substr($aColor, 5, 2));
-	    } else {
-      		if(!isset($this->rgb_table[$aColor]) )
-		    JpGraphError::RaiseL(25078,$aColor);//(" Unknown color: $aColor");
-		$tmp=$this->rgb_table[$aColor];
-		$r = $tmp[0];
-		$g = $tmp[1];
-		$b = $tmp[2];
-	    }
-	    // Scale adj so that an adj=2 always
-	    // makes the color 100% white (i.e. 255,255,255. 
-	    // and adj=1 neutral and adj=0 black.
-	    if( $adj > 1 ) {
-		$m = ($adj-1.0)*(255-min(255,min($r,min($g,$b))));
-		return array(min(255,$r+$m), min(255,$g+$m), min(255,$b+$m),$alpha);
-	    }
-	    elseif( $adj < 1 ) {
-		$m = ($adj-1.0)*max(255,max($r,max($g,$b)));
-		return array(max(0,$r+$m), max(0,$g+$m), max(0,$b+$m),$alpha);
-	    }
-	    else {
-		return array($r,$g,$b,$alpha);
-	    }
-
-	} elseif( is_array($aColor) ) {
-	    if( count($aColor)==3 ) {
-		$aColor[3]=0;
-		return $aColor;
-	    }
-	    else
-		return $aColor;
-	}
-	else
-	    JpGraphError::RaiseL(25079,$aColor,count($aColor));//(" Unknown color specification: $aColor , size=".count($aColor));
-    }
-	
-    // Compare two colors
-    // return true if equal
-    function Equal($aCol1,$aCol2) {
-	$c1 = $this->Color($aCol1);
-	$c2 = $this->Color($aCol2);
-	if( $c1[0]==$c2[0] && $c1[1]==$c2[1] && $c1[2]==$c2[2] )
-	    return true;
-	else
-	    return false;
-    }
-	
-    // Allocate a new color in the current image
-    // Return new color index, -1 if no more colors could be allocated
-    function Allocate($aColor,$aAlpha=0.0) {
-	list ($r, $g, $b, $a) = $this->color($aColor);
-	// If alpha is specified in the color string then this
-	// takes precedence over the second argument
-	if( $a > 0 )
-	    $aAlpha = $a;
-	if( $aAlpha < 0 || $aAlpha > 1 ) {
-	    JpGraphError::RaiseL(25080);//('Alpha parameter for color must be between 0.0 and 1.0');
-	}
-	return imagecolorresolvealpha($this->img, $r, $g, $b, round($aAlpha * 127));
-    }
-} // Class
-
-	
-//===================================================
-// CLASS Legend
-// Description: Responsible for drawing the box containing
-// all the legend text for the graph
-//===================================================
-DEFINE('_DEFAULT_LPM_SIZE',8);
-class Legend {
-    public $txtcol=array();
-    private $color=array(0,0,0); // Default fram color
-    private $fill_color=array(235,235,235); // Default fill color
-    private $shadow=true; // Shadow around legend "box"
-    private $shadow_color='darkgray@0.5';
-    private $mark_abs_hsize=_DEFAULT_LPM_SIZE,$mark_abs_vsize=_DEFAULT_LPM_SIZE;
-    private $xmargin=10,$ymargin=3,$shadow_width=2;
-    private $xlmargin=2, $ylmargin='';
-    private $xpos=0.05, $ypos=0.15, $xabspos=-1, $yabspos=-1;
-    private $halign="right", $valign="top";
-    private $font_family=FF_FONT1,$font_style=FS_NORMAL,$font_size=12;
-    private $font_color='black';
-    private $hide=false,$layout_n=1;
-    private $weight=1,$frameweight=1;
-    private $csimareas='';
-    private $reverse = false ;
-//---------------
-// CONSTRUCTOR
-    function Legend() {
-	// Empty
-    }
-//---------------
-// PUBLIC METHODS	
-    function Hide($aHide=true) {
-	$this->hide=$aHide;
-    }
-	
-    function SetHColMargin($aXMarg) {
-	$this->xmargin = $aXMarg;
-    }
-
-    function SetVColMargin($aSpacing) {
-	$this->ymargin = $aSpacing ;
-    }
-
-    function SetLeftMargin($aXMarg) {
-	$this->xlmargin = $aXMarg;
-    }
-
-
-    // Synonym
-    function SetLineSpacing($aSpacing) {
-	$this->ymargin = $aSpacing ;
-    }
-
-    function SetShadow($aShow='gray',$aWidth=2) {
-	if( is_string($aShow) ) {
-	    $this->shadow_color = $aShow;
-	    $this->shadow=true;
-	}
-	else
-	    $this->shadow=$aShow;
-	$this->shadow_width=$aWidth;
-    }
-
-    function SetMarkAbsSize($aSize) {
-	$this->mark_abs_vsize = $aSize ;
-	$this->mark_abs_hsize = $aSize ;
-    }
-
-    function SetMarkAbsVSize($aSize) {
-	$this->mark_abs_vsize = $aSize ;
-    }
-
-    function SetMarkAbsHSize($aSize) {
-	$this->mark_abs_hsize = $aSize ;
-    }
-
-    function SetLineWeight($aWeight) {
-	$this->weight = $aWeight;
-    }
-
-    function SetFrameWeight($aWeight) {
-	$this->frameweight = $aWeight;
-    }
-	
-    function SetLayout($aDirection=LEGEND_VERT) {
-	$this->layout_n = $aDirection==LEGEND_VERT ? 1 : 99 ;
-    }
-	
-    function SetColumns($aCols) {
-	$this->layout_n = $aCols ;
-    }
-
-    function SetReverse($f=true) {
-	$this->reverse = $f ;
-    }
-
-    // Set color on frame around box
-    function SetColor($aFontColor,$aColor='black') {
-	$this->font_color=$aFontColor;
-	$this->color=$aColor;
-    }
-	
-    function SetFont($aFamily,$aStyle=FS_NORMAL,$aSize=10) {
-	$this->font_family = $aFamily;
-	$this->font_style = $aStyle;
-	$this->font_size = $aSize;
-    }
-	
-    function SetPos($aX,$aY,$aHAlign="right",$aVAlign="top") {
-	$this->Pos($aX,$aY,$aHAlign,$aVAlign);
-    }
-
-    function SetAbsPos($aX,$aY,$aHAlign="right",$aVAlign="top") {
-	$this->xabspos=$aX;
-	$this->yabspos=$aY;
-	$this->halign=$aHAlign;
-	$this->valign=$aVAlign;
-    }
-
-
-    function Pos($aX,$aY,$aHAlign="right",$aVAlign="top") {
-	if( !($aX<1 && $aY<1) )
-	    JpGraphError::RaiseL(25120);//(" Position for legend must be given as percentage in range 0-1");
-	$this->xpos=$aX;
-	$this->ypos=$aY;
-	$this->halign=$aHAlign;
-	$this->valign=$aVAlign;
-    }
-
-    function SetFillColor($aColor) {
-	$this->fill_color=$aColor;
-    }
-	
-    function Add($aTxt,$aColor,$aPlotmark='',$aLinestyle=0,$csimtarget='',$csimalt='',$csimwintarget='') {
-	$this->txtcol[]=array($aTxt,$aColor,$aPlotmark,$aLinestyle,$csimtarget,$csimalt,$csimwintarget);
-    }
-
-    function GetCSIMAreas() {
-	return $this->csimareas;
-    }
-	
-    function Stroke(&$aImg) {
-	// Constant
-	$fillBoxFrameWeight=1;
-
-	if( $this->hide ) return;
-
-	$aImg->SetFont($this->font_family,$this->font_style,$this->font_size);		
-
-	if( $this->reverse ) {
-	    $this->txtcol = array_reverse($this->txtcol);
-	}
-
-	$n=count($this->txtcol);
-	if( $n == 0 ) return;
-
-	// Find out the max width and height of each column to be able
-        // to size the legend box.
-	$numcolumns = ($n > $this->layout_n ? $this->layout_n : $n);
-	for( $i=0; $i < $numcolumns; ++$i ) {
-	    $colwidth[$i] = $aImg->GetTextWidth($this->txtcol[$i][0]) +
-		            2*$this->xmargin + 2*$this->mark_abs_hsize;
-	    $colheight[$i] = 0;
-	}
-
-	// Find our maximum height in each row
-	$rows = 0 ; $rowheight[0] = 0;
-	for( $i=0; $i < $n; ++$i ) {
-	    $h = max($this->mark_abs_vsize,$aImg->GetTextHeight($this->txtcol[$i][0]))+$this->ymargin;
-	    if( $i % $numcolumns == 0 ) {
-		$rows++;
-		$rowheight[$rows-1] = 0;
-	    }
-	    $rowheight[$rows-1] = max($rowheight[$rows-1],$h);
-	}
-
-	$abs_height = 0;
-	for( $i=0; $i < $rows; ++$i ) {
-	    $abs_height += $rowheight[$i] ;
-	}
-
-	// Make sure that the height is at least as high as mark size + ymargin
-	$abs_height = max($abs_height,$this->mark_abs_vsize);
-
-	// We add 3 extra pixels height to compensate for the difficult in
-	// calculating font height
-	$abs_height += $this->ymargin+3; 
-						
-	// Find out the maximum width in each column
-	for( $i=$numcolumns; $i < $n; ++$i ) {
-	    $colwidth[$i % $numcolumns] = max(
-		$aImg->GetTextWidth($this->txtcol[$i][0])+2*$this->xmargin+2*$this->mark_abs_hsize,$colwidth[$i % $numcolumns]);
-	}
-
-	// Get the total width
-	$mtw = 0;
-	for( $i=0; $i < $numcolumns; ++$i ) {
-	    $mtw += $colwidth[$i] ;
-	}
-
-	// Find out maximum width we need for legend box
-	$abs_width = $mtw+$this->xlmargin;
-
-	if( $this->xabspos === -1  && $this->yabspos === -1 ) {
-	    $this->xabspos = $this->xpos*$aImg->width ;
-	    $this->yabspos = $this->ypos*$aImg->height ;
-	}
-
-	// Positioning of the legend box
-	if( $this->halign == 'left' )
-	    $xp = $this->xabspos; 
-	elseif( $this->halign == 'center' )
-	    $xp = $this->xabspos - $abs_width/2; 
-	else  
-	    $xp = $aImg->width - $this->xabspos - $abs_width;
-
-	$yp=$this->yabspos;
-	if( $this->valign == 'center' )
-	    $yp-=$abs_height/2;
-	elseif( $this->valign == 'bottom' )
-	    $yp-=$abs_height;
-			
-	// Stroke legend box
-	$aImg->SetColor($this->color);	
-	$aImg->SetLineWeight($this->frameweight);
-	$aImg->SetLineStyle('solid');
-
-	if( $this->shadow )
-	    $aImg->ShadowRectangle($xp,$yp,$xp+$abs_width+$this->shadow_width,
-				   $yp+$abs_height+$this->shadow_width,
-				   $this->fill_color,$this->shadow_width,$this->shadow_color);
-	else {
-	    $aImg->SetColor($this->fill_color);				
-	    $aImg->FilledRectangle($xp,$yp,$xp+$abs_width,$yp+$abs_height);
-	    $aImg->SetColor($this->color);							
-	    $aImg->Rectangle($xp,$yp,$xp+$abs_width,$yp+$abs_height);
-	}
-
-	// x1,y1 is the position for the legend mark
-	$x1=$xp+$this->mark_abs_hsize+$this->xlmargin;
-	$y1=$yp + $this->ymargin;		
-	
-	$f2 =  round($aImg->GetTextHeight('X')/2);
-
-	$grad = new Gradient($aImg);
-	$patternFactory = null;
-
-	// Now stroke each legend in turn
-	// Each plot has added the following information to  the legend
-	// p[0] = Legend text
-	// p[1] = Color, 
-	// p[2] = For markers a reference to the PlotMark object
-	// p[3] = For lines the line style, for gradient the negative gradient style
-	// p[4] = CSIM target
-	// p[5] = CSIM Alt text
-	$i = 1 ; $row = 0;
-	foreach($this->txtcol as $p) {
-	 
-	    // STROKE DEBUG BOX
-	    if( _JPG_DEBUG ) {
-	        $aImg->SetLineWeight(1);
-	        $aImg->SetColor('red');
-	        $aImg->SetLineStyle('solid');
-	        $aImg->Rectangle($xp,$y1,$xp+$abs_width,$y1+$rowheight[$row]);
-	    }
-
-	    $aImg->SetLineWeight($this->weight);
-	    $x1 = round($x1); $y1=round($y1);
-	    if ( !empty($p[2]) && $p[2]->GetType() > -1 ) {
-		// Make a plot mark legend
-		$aImg->SetColor($p[1]);
-		if( is_string($p[3]) || $p[3]>0 ) {
-		    $aImg->SetLineStyle($p[3]);
-		    $aImg->StyleLine($x1-$this->mark_abs_hsize,$y1+$f2,$x1+$this->mark_abs_hsize,$y1+$f2);
-		}
-		// Stroke a mark with the standard size
-		// (As long as it is not an image mark )
-		if( $p[2]->GetType() != MARK_IMG ) {
-
-		    // Clear any user callbacks since we ont want them called for
-		    // the legend marks
-		    $p[2]->iFormatCallback = '';
-		    $p[2]->iFormatCallback2 = '';
-
-		    // Since size for circles is specified as the radius
-		    // this means that we must half the size to make the total
-		    // width behave as the other marks
-		    if( $p[2]->GetType() == MARK_FILLEDCIRCLE || $p[2]->GetType() == MARK_CIRCLE ) {
-		        $p[2]->SetSize(min($this->mark_abs_vsize,$this->mark_abs_hsize)/2);
-			$p[2]->Stroke($aImg,$x1,$y1+$f2);
-		    }
-		    else {
-		        $p[2]->SetSize(min($this->mark_abs_vsize,$this->mark_abs_hsize));
-			$p[2]->Stroke($aImg,$x1,$y1+$f2);
-		    }
-		}
-	    } 
-	    elseif ( !empty($p[2]) && (is_string($p[3]) || $p[3]>0 ) ) {
-		// Draw a styled line
-		$aImg->SetColor($p[1]);
-		$aImg->SetLineStyle($p[3]);
-		$aImg->StyleLine($x1-1,$y1+$f2,$x1+$this->mark_abs_hsize,$y1+$f2);
-		$aImg->StyleLine($x1-1,$y1+$f2+1,$x1+$this->mark_abs_hsize,$y1+$f2+1);
-	    } 
-	    else {
-		// Draw a colored box
-		$color = $p[1] ;
-		// We make boxes slightly larger to better show
-		$boxsize = min($this->mark_abs_vsize,$this->mark_abs_hsize) + 2 ;
-		$ym =  round($y1 + $f2 - $boxsize/2);
-		// We either need to plot a gradient or a 
-		// pattern. To differentiate we use a kludge.
-		// Patterns have a p[3] value of < -100
-		if( $p[3] < -100 ) { 
-		    // p[1][0] == iPattern, p[1][1] == iPatternColor, p[1][2] == iPatternDensity
-		    if( $patternFactory == null ) {
-			$patternFactory = new RectPatternFactory();
-		    }		    
-		    $prect = $patternFactory->Create($p[1][0],$p[1][1],1);
-		    $prect->SetBackground($p[1][3]);
-		    $prect->SetDensity($p[1][2]+1);
-		    $prect->SetPos(new Rectangle($x1,$ym,$boxsize,$boxsize));
-		    $prect->Stroke($aImg);
-		    $prect=null;
-		}
-		else {
-		    if( is_array($color) && count($color)==2 ) {
-			// The client want a gradient color
-			$grad->FilledRectangle($x1,$ym,
-					       $x1+$boxsize,$ym+$boxsize,
-					       $color[0],$color[1],-$p[3]);
-		    }
-		    else {
-			$aImg->SetColor($p[1]);
-			$aImg->FilledRectangle($x1,$ym,$x1+$boxsize,$ym+$boxsize);
-		    }
-		    $aImg->SetColor($this->color);
-		    $aImg->SetLineWeight($fillBoxFrameWeight);
-		    $aImg->Rectangle($x1,$ym,$x1+$boxsize,$ym+$boxsize);
-		}
-	    }
-	    $aImg->SetColor($this->font_color);
-	    $aImg->SetFont($this->font_family,$this->font_style,$this->font_size);		
-	    $aImg->SetTextAlign("left","top");			
-	    $aImg->StrokeText(round($x1+$this->mark_abs_hsize+$this->xmargin),$y1,$p[0]);
-
-	    // Add CSIM for Legend if defined
-	    if( !empty($p[4]) ) {
-		
-		$xe = $x1 + $this->xmargin+$this->mark_abs_hsize+$aImg->GetTextWidth($p[0]);
-		$ye = $y1 + max($this->mark_abs_vsize,$aImg->GetTextHeight($p[0]));
-		$coords = "$x1,$y1,$xe,$y1,$xe,$ye,$x1,$ye";
-		if( ! empty($p[4]) ) {
-		    $this->csimareas .= "<area shape=\"poly\" coords=\"$coords\" href=\"".htmlentities($p[4])."\"";
-
-		    if( !empty($p[6]) ) {
-			$this->csimareas .= " target=\"".$p[6]."\"";
-		    }
-
-		    if( !empty($p[5]) ) {
-			$tmp=sprintf($p[5],$p[0]);
-			$this->csimareas .= " title=\"$tmp\" alt=\"$tmp\" ";
-		    }
-		    $this->csimareas .= " />\n";
-		}
-	    }
-	    if( $i >= $this->layout_n ) {
-		$x1 = $xp+$this->mark_abs_hsize+$this->xlmargin;
-		$y1 += $rowheight[$row++];
-		$i = 1;
-	    }
-	    else {
-		$x1 += $colwidth[($i-1) % $numcolumns] ;
-		++$i;
-	    }
-	}	
-    }
-} // Class
-	
 
 //===================================================
 // CLASS DisplayValue
