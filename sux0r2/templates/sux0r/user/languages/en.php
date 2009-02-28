@@ -253,7 +253,7 @@ $gtext['zu'] = 'Zulu';
 
 // Countries
 $gtext['af2'] = 'Afghanistan';
-$gtext['ax2'] = 'ÃÂland Islands';
+$gtext['ax2'] = 'Ãland Islands';
 $gtext['al2'] = 'Albania';
 $gtext['dz2'] = 'Algeria';
 $gtext['as2'] = 'American Samoa';
@@ -305,7 +305,7 @@ $gtext['cg2'] = 'Congo';
 $gtext['cd2'] = 'Congo; the Democratic Republic of the';
 $gtext['ck2'] = 'Cook Islands';
 $gtext['cr2'] = 'Costa Rica';
-$gtext['ci2'] = 'CÃÂ´te d\'Ivoire';
+$gtext['ci2'] = 'CÃ´te d\'Ivoire';
 $gtext['hr2'] = 'Croatia';
 $gtext['cu2'] = 'Cuba';
 $gtext['cy2'] = 'Cyprus';
@@ -435,7 +435,7 @@ $gtext['re2'] = 'Reunion';
 $gtext['ro2'] = 'Romania';
 $gtext['ru2'] = 'Russian Federation';
 $gtext['rw2'] = 'Rwanda';
-$gtext['bl2'] = 'Saint BarthÃÂ©lemy';
+$gtext['bl2'] = 'Saint BarthÃ©lemy';
 $gtext['sh2'] = 'Saint Helena';
 $gtext['kn2'] = 'Saint Kitts and Nevis';
 $gtext['lc2'] = 'Saint Lucia';

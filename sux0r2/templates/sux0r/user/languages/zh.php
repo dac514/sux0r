@@ -1,97 +1,97 @@
-ï»¿<?php
+﻿<?php
 
 // Always UTF-8
 // Always uppercase the first word
 
-$gtext['acquaintances'] = 'çäºº';
-$gtext['alert_detach'] = 'ç¡®è®¤ä»ä½ çå¸å·ä¸­å é¤è¿äºOpenIDsï¼';
-$gtext['avatar'] = 'å½¢è±¡';
-$gtext['back'] = 'è¿å';
-$gtext['blog'] = 'æ¥å¿';
-$gtext['bookmarks'] = 'ä¹¦ç­¾';
-$gtext['cancel'] = 'åæ¶';
-$gtext['captcha'] = 'ååå¾ä»£ç ';
-$gtext['changed_avatar'] = 'æ´æ¹äºä»ä»¬çå½¢è±¡';
-$gtext['changed_profile'] = 'æ´æ¹äºä»ä»¬çæ¡£æ¡';
-$gtext['country'] = 'å½å®¶';
-$gtext['detach'] = 'åç¦»';
-$gtext['dob'] = 'çæ¥';
-$gtext['edit_avatar'] = 'ç¼è¾å½¢è±¡';
-$gtext['edit_bayes'] = 'ç¼è¾è´å¶æ¯å½æ¡£';
-$gtext['edit_openid'] = 'ç¼è¾OpenID';
-$gtext['edit_profile'] = 'ç¼è¾æ¡£æ¡';
-$gtext['edit_relationship'] = 'ç¼è¾äººéå³ç³»';
-$gtext['editing'] = 'ç¼è¾ä¸­';
-$gtext['email'] = 'çµå­é®ä»¶';
-$gtext['extensions'] = 'æ¯æçæ©å±';
-$gtext['family_name'] = 'å§';
+$gtext['acquaintances'] = '熟人';
+$gtext['alert_detach'] = '确认从你的帐号中删除这些OpenIDs？';
+$gtext['avatar'] = '形象';
+$gtext['back'] = '返回';
+$gtext['blog'] = '日志';
+$gtext['bookmarks'] = '书签';
+$gtext['cancel'] = '取消';
+$gtext['captcha'] = '反垃圾代码';
+$gtext['changed_avatar'] = '更改了他们的形象';
+$gtext['changed_profile'] = '更改了他们的档案';
+$gtext['country'] = '国家';
+$gtext['detach'] = '分离';
+$gtext['dob'] = '生日';
+$gtext['edit_avatar'] = '编辑形象';
+$gtext['edit_bayes'] = '编辑贝叶斯归档';
+$gtext['edit_openid'] = '编辑OpenID';
+$gtext['edit_profile'] = '编辑档案';
+$gtext['edit_relationship'] = '编辑人际关系';
+$gtext['editing'] = '编辑中';
+$gtext['email'] = '电子邮件';
+$gtext['extensions'] = '支持的扩展';
+$gtext['family_name'] = '姓';
 $gtext['feeds'] = 'Feeds';
-$gtext['female'] = 'å¥³æ§';
-$gtext['form_error'] = 'è¡¨åæªè¢«æäº¤ï¼æ³¨æåºéé¡¹ç®';
-$gtext['form_error_1'] = 'æµç§°ä¸è½ä¸ºç©º';
-$gtext['form_error_2'] = 'æ æçå­ç¬¦';
-$gtext['form_error_3'] = 'éå¤çæµç§°ï¼å·²è¢«ä½¿ç¨ï¼';
-$gtext['form_error_4'] = 'æ æççµå­é®ä»¶';
-$gtext['form_error_5'] = 'éå¤ççµå­é®ä»¶ï¼å·²è¢«ä½¿ç¨ï¼';
-$gtext['form_error_6'] = 'ä¸è½å°äº6ä¸ªå­ç¬¦';
-$gtext['form_error_7'] = 'å¯ç ä¸å¹é';
-$gtext['form_error_8'] = 'URLä¸è½ä¸ºç©º';
-$gtext['form_error_9'] = 'æ æçURL';
-$gtext['form_error_10'] = 'éå¤çURL';
-$gtext['form_error_11'] = 'éªè¯ç æ æ';
-$gtext['form_error_12'] = 'æ¥æä¸å®å';
-$gtext['form_error_13'] = '"nobody"è¢«ä¿çï¼è¯·ä½¿ç¨å¶ä»æµç§°';
-$gtext['form_error_14'] = 'æ æçæä»¶ç±»å';
-$gtext['form_error_15'] = 'æä»¶å¤ªå¤§';
-$gtext['form_problem'] = 'è¡¨åæªè¢«æäº¤ï¼è¯·éè¯';
-$gtext['friends'] = 'å¥½å';
-$gtext['gender'] = 'æ§å«';
-$gtext['given_name'] = 'å';
-$gtext['homepage'] = 'è¿åå°é¦é¡µ';
-$gtext['image'] = 'å¾ç';
-$gtext['lament'] = 'ä½ ç°å¨å¨åä»ä¹ï¼';
-$gtext['language'] = 'è¯­è¨';
-$gtext['locality'] = 'å¸';
-$gtext['logout'] = 'éåºå®æ';
-$gtext['logout2'] = 'ç±äºæ¬ç«ä½¿ç¨<a href="http://en.wikipedia.org/wiki/Digest_access_authentication">HTTP Digest Authentication</a> ï¼æ¨åºè¯¥éå¯æµè§å¨ãè¿æ¯å ä¸ºæ¨çæµè§å¨å°ä¼èªå¨å¨å­åå«éªè¯è¯ä¹¦çç»å½ä¿¡æ¯ä»¥å¤ä¸æ¬¡ç»å½ãç±äºè¿ç§éææä½ï¼ä¸æ¬¡ç»å½æ¶æ¨å°ä¸ä¼åçå°ç»å½çªå£ãè¿ä½¿å¾çèµ·æ¥æ¨æ²¡æéåºï¼å®éä¸åªæ¯æ¨çç»å½æä½æ²¡ææ¾å¼çåºç°ã';
-$gtext['male'] = 'ç·æ§';
-$gtext['max_filesize'] = 'æ¯ææå¤§æä»¶å¤§å°';
-$gtext['minifeed'] = 'è¿·ä½ feed';
-$gtext['name'] = 'å§å';
-$gtext['nickname'] = 'æµç§°';
-$gtext['nothing'] = 'è¿éæ²¡ä»ä¹å¯çç';
-$gtext['ok'] = 'ç¡®è®¤';
+$gtext['female'] = '女性';
+$gtext['form_error'] = '表单未被提交，注意出错项目';
+$gtext['form_error_1'] = '昵称不能为空';
+$gtext['form_error_2'] = '无效的字符';
+$gtext['form_error_3'] = '重复的昵称（已被使用）';
+$gtext['form_error_4'] = '无效的电子邮件';
+$gtext['form_error_5'] = '重复的电子邮件（已被使用）';
+$gtext['form_error_6'] = '不能少于6个字符';
+$gtext['form_error_7'] = '密码不匹配';
+$gtext['form_error_8'] = 'URL不能为空';
+$gtext['form_error_9'] = '无效的URL';
+$gtext['form_error_10'] = '重复的URL';
+$gtext['form_error_11'] = '验证码无效';
+$gtext['form_error_12'] = '日期不完善';
+$gtext['form_error_13'] = '"nobody"被保留，请使用其他昵称';
+$gtext['form_error_14'] = '无效的文件类型';
+$gtext['form_error_15'] = '文件太大';
+$gtext['form_problem'] = '表单未被提交，请重试';
+$gtext['friends'] = '好友';
+$gtext['gender'] = '性别';
+$gtext['given_name'] = '名';
+$gtext['homepage'] = '返回到首页';
+$gtext['image'] = '图片';
+$gtext['lament'] = '你现在在做什么？';
+$gtext['language'] = '语言';
+$gtext['locality'] = '市';
+$gtext['logout'] = '退出完成';
+$gtext['logout2'] = '由于本站使用<a href="http://en.wikipedia.org/wiki/Digest_access_authentication">HTTP Digest Authentication</a> ，您应该重启浏览器。这是因为您的浏览器将会自动储存包含验证证书的登录信息以备下次登录。由于这种透明操作，下次登录时您将不会再看到登录窗口。这使得看起来您没有退出，实际上只是您的登录操作没有显式的出现。';
+$gtext['male'] = '男性';
+$gtext['max_filesize'] = '支持最大文件大小';
+$gtext['minifeed'] = '迷你feed';
+$gtext['name'] = '姓名';
+$gtext['nickname'] = '昵称';
+$gtext['nothing'] = '这里没什么可看的';
+$gtext['ok'] = '确认';
 $gtext['openid'] = 'OpenID';
-$gtext['openid_login'] = 'OpenIDç»å½';
-$gtext['openid_msg_1'] = 'ä¸é¢çOpenIDå½åç»å®äºæ¨çå¸å·ãæ¨å¯ä»¥ä½¿ç¨ä¹ä¸­ä»»ä½ä¸ä¸ªç»å½';
-$gtext['openid_msg_2'] = 'æ¨çè´¦å·æ»æ¯ä¿¡ä»»å¦ä¸çopenid:';
-$gtext['openid_none'] = 'å½åæ²¡æOpenIDç»å®æ­¤å¸å·ã';
-$gtext['openid_none_2'] = 'ä½ çè´¦å·å½åæ²¡æä¿¡ä»»çopenid.';
-$gtext['openid_reg'] = 'OpenIDæ³¨å';
-$gtext['openid_register'] = 'æ³¨åä¸ä¸ªæ°OpenID';
-$gtext['password'] = 'å¯ç ';
-$gtext['password_verify'] = 'ç¡®è®¤å¯ç ';
-$gtext['photoalbums'] = 'ç¸å';
-$gtext['postcode'] = 'é®æ¿ç¼ç ';
-$gtext['previous_page'] = 'è¿åä¸ä¸é¡µ';
-$gtext['profile'] = 'æ¡£æ¡';
-$gtext['profile_of'] = 'ä»/å¥¹çæ¡£æ¡';
-$gtext['profile_intro'] = 'æ­¤æ¡£æ¡/URLéè¦OpenIDèº«ä»½é¡µé¢';
-$gtext['pw_failure'] = 'å¯ç å°è¯æ¬¡æ°è¿å¤';
-$gtext['pw_failure_2'] = 'å¯ç å°è¯æ¬¡æ°è¿å¤ï¼ä½ å¿é¡»éå¯ä½ çæµè§å¨ä»¥ç»§ç»­ã';
-$gtext['reg'] = 'æ³¨å';
-$gtext['region'] = 'å·/ç';
-$gtext['saving'] = 'ä¿å­';
-$gtext['stalkers'] = 'å³æ³¨è';
-$gtext['street_address'] = 'å°å';
-$gtext['submit'] = 'æäº¤';
-$gtext['success'] = 'æåï¼';
-$gtext['success_edit'] = 'é¡ºå©å®æï¼5ç§éåå°è¢«è½¬åã';
-$gtext['success_register'] = 'æè°¢å®ææ³¨åè¡¨åï¼æ¨ç°å¨å¯ä»¥ç»å½äº';
-$gtext['tel'] = 'çµè¯';
-$gtext['thanks'] = 'æè°¢æ³¨å';
-$gtext['timezone'] = 'æ¶åº';
-$gtext['unset_image'] = 'å½åæ²¡æè®¾ç½®å¾ç';
+$gtext['openid_login'] = 'OpenID登录';
+$gtext['openid_msg_1'] = '下面的OpenID当前绑定于您的帐号。您可以使用之中任何一个登录';
+$gtext['openid_msg_2'] = '您的账号总是信任如下的openid:';
+$gtext['openid_none'] = '当前没有OpenID绑定此帐号。';
+$gtext['openid_none_2'] = '你的账号当前没有信任的openid.';
+$gtext['openid_reg'] = 'OpenID注册';
+$gtext['openid_register'] = '注册一个新OpenID';
+$gtext['password'] = '密码';
+$gtext['password_verify'] = '确认密码';
+$gtext['photoalbums'] = '相册';
+$gtext['postcode'] = '邮政编码';
+$gtext['previous_page'] = '返回上一页';
+$gtext['profile'] = '档案';
+$gtext['profile_of'] = '他/她的档案';
+$gtext['profile_intro'] = '此档案/URL需要OpenID身份页面';
+$gtext['pw_failure'] = '密码尝试次数过多';
+$gtext['pw_failure_2'] = '密码尝试次数过多，你必须重启你的浏览器以继续。';
+$gtext['reg'] = '注册';
+$gtext['region'] = '州/省';
+$gtext['saving'] = '保存';
+$gtext['stalkers'] = '关注者';
+$gtext['street_address'] = '地址';
+$gtext['submit'] = '提交';
+$gtext['success'] = '成功！';
+$gtext['success_edit'] = '顺利完成，5秒钟内将被转向。';
+$gtext['success_register'] = '感谢完成注册表单，您现在可以登录了';
+$gtext['tel'] = '电话';
+$gtext['thanks'] = '感谢注册';
+$gtext['timezone'] = '时区';
+$gtext['unset_image'] = '当前没有设置图片';
 $gtext['url'] = 'URL';
 
 // The defults for languages and countries are english.
@@ -99,9 +99,9 @@ $gtext['url'] = 'URL';
 // Uncomment these if you want to translate or change them.
 
 // Languages
-$gtext['zh'] = 'ç®ä½ä¸­æ';
+$gtext['zh'] = '简体中文';
 
 // Countries
-$gtext['cn2'] = 'ä¸­å½';
+$gtext['cn2'] = '中国';
 
 ?>
