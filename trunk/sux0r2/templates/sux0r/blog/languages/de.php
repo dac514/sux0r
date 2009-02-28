@@ -1,14 +1,14 @@
-ï»¿<?php
+﻿<?php
 
 // Always UTF-8
 // Always uppercase the first word
 
 $gtext['admin'] = 'Blog-Verwaltung';
-$gtext['alert_delete'] = 'Sind Sie sich sicher, dass Sie diesen Blog lÃ¶schen wollen? Kommentare werden ebenfalls gelÃ¶scht.';
+$gtext['alert_delete'] = 'Sind Sie sich sicher, dass Sie diesen Blog löschen wollen? Kommentare werden ebenfalls gelöscht.';
 $gtext['archives'] = 'Archive';
 $gtext['author'] = 'Autor';
 $gtext['authors'] = 'Autoren';
-$gtext['back'] = 'ZurÃ¼ck zum Blog';
+$gtext['back'] = 'Zurück zum Blog';
 $gtext['bayes_categories'] = 'Bayessche Kategorien des Autors';
 $gtext['blog'] = 'Blog';
 $gtext['body'] = 'Hauptteil';
@@ -18,34 +18,34 @@ $gtext['cancel'] = 'Abbrechen';
 $gtext['category'] = 'Kategorie';
 $gtext['comments'] = 'Kommentare';
 $gtext['date'] = 'Datum';
-$gtext['delete'] = 'LÃ¶schen';
+$gtext['delete'] = 'Löschen';
 $gtext['draft'] = 'Entwurf';
 $gtext['edit'] = 'Bearbeiten';
 $gtext['edit_2'] = 'Blog bearbeiten';
 $gtext['error_1'] = 'Titel kann nicht leer sein';
 $gtext['error_2'] = 'Hauptteil kann nicht leer sein';
-$gtext['error_3'] = 'UngÃ¼ltiger Dateityp';
-$gtext['error_4'] = 'Datei ist zu groÃ';
-$gtext['error_5'] = 'UngÃ¼ltiges Datum';
-$gtext['error_6'] = 'UngÃ¼ltige Zeit';
+$gtext['error_3'] = 'Ungültiger Dateityp';
+$gtext['error_4'] = 'Datei ist zu groß';
+$gtext['error_5'] = 'Ungültiges Datum';
+$gtext['error_6'] = 'Ungültige Zeit';
 $gtext['error_7'] = 'URL ist leer';
-$gtext['error_8'] = 'URL ist ungÃ¼ltig';
-$gtext['extensions'] = 'UnterstÃ¼tzte Erweiterungen';
-$gtext['form_error'] = 'Das Formular wurde nicht Ã¼bertragen, siehe Fehler unten';
-$gtext['form_problem'] = 'Das Formular wurde nicht Ã¼bertragen, bitte versuchen Sie es erneut';
-$gtext['header'] = 'Wir bÃ¼geln unsere Hosen in das Universum';
+$gtext['error_8'] = 'URL ist ungültig';
+$gtext['extensions'] = 'Unterstützte Erweiterungen';
+$gtext['form_error'] = 'Das Formular wurde nicht übertragen, siehe Fehler unten';
+$gtext['form_problem'] = 'Das Formular wurde nicht übertragen, bitte versuchen Sie es erneut';
+$gtext['header'] = 'Wir bügeln unsere Hosen in das Universum';
 $gtext['image'] = 'Bild';
 $gtext['in'] = 'In';
-$gtext['linked_to'] = 'VerknÃ¼pft mit den folgenden bayesschen Dokumenten';
-$gtext['max_filesize'] = 'Maximale DateigrÃ¶Ãen';
+$gtext['linked_to'] = 'Verknüpft mit den folgenden bayesschen Dokumenten';
+$gtext['max_filesize'] = 'Maximale Dateigrößen';
 $gtext['month'] = 'Monat';
 $gtext['new'] = 'Neuer Blog';
 $gtext['no_comments'] = 'Keine Kommentare';
 $gtext['not_found'] = 'Nicht(s) gefunden';
 $gtext['on'] = 'am';
-$gtext['p_link'] = 'Permanente VerknÃ¼pfung';
-$gtext['posted_blog'] = 'Neuen Blog verÃ¶ffentlicht mit Titel';
-$gtext['published'] = 'VerÃ¶ffentlicht';
+$gtext['p_link'] = 'Permanente Verknüpfung';
+$gtext['posted_blog'] = 'Neuen Blog veröffentlicht mit Titel';
+$gtext['published'] = 'Veröffentlicht';
 $gtext['recent_comments'] = 'Aktuelle Kommentare';
 $gtext['replied_blog'] = 'Auf einen Blog geantwortet mit Titel';
 $gtext['reply'] = 'Antworten';

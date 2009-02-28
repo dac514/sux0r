@@ -1,16 +1,16 @@
-ï»¿<?php
+﻿<?php
 
 /* Navigation menu */
 
 $gtext['navcontainer'] = array(
 
-    'é¦é¡µ' => suxFunct::makeUrl('/home'),
-    'æ¥å¿' => suxFunct::makeUrl('/blog'),
+    '首页' => suxFunct::makeUrl('/home'),
+    '日志' => suxFunct::makeUrl('/blog'),
     'Feeds' => suxFunct::makeUrl('/feeds'),
-    'ä¹¦ç­¾' => suxFunct::makeUrl('/bookmarks'),
-    'å¾ç' => suxFunct::makeUrl('/photos'),
-    'æºä»£ç ' => 'http://sourceforge.net/projects/sux0r/',
-    'æå©!' => 'http://sourceforge.net/project/project_donations.php?group_id=131752',
+    '书签' => suxFunct::makeUrl('/bookmarks'),
+    '图片' => suxFunct::makeUrl('/photos'),
+    '源代码' => 'http://sourceforge.net/projects/sux0r/',
+    '捐助!' => 'http://sourceforge.net/project/project_donations.php?group_id=131752',
 
     );
 
@@ -27,17 +27,17 @@ Contributors should be attributed by full name or nickname.';
 
 /* Now back our regular scheduled program */
 
-$gtext['404_continue'] = 'ç¹å»æ­¤å¤ç»§ç»­';
-$gtext['404_h1'] = 'é¢ï¼é¡µé¢æ²¡ææ¾å°ã(Error 404)';
-$gtext['404_p1'] = 'åºäºæäºåå  (éè¯¯ç±»åçURLï¼ä»å¶ä»ç½ç«è½¬å¥åºéï¼è¿æçæç´¢å¼æä¿¡æ¯æèæä»¬å äºä¸ªæä»¶)é¡µé¢ä¸å­å¨';
-$gtext['admin'] = 'ç®¡ç';
-$gtext['banned_continue'] = 'ç¹å»æ­¤å¤ç»§ç»­';
-$gtext['banned_h1'] = 'ç¦ç¨';
-$gtext['banned_p1'] = 'ä½ æ¯ä¸ªåèï¼éå¸¸éå¸¸åã';
-$gtext['continue'] = 'ç»§ç»­';
-$gtext['login'] = 'ç»å½';
-$gtext['logout'] = 'éåº';
-$gtext['register'] = 'æ³¨å';
-$gtext['welcome'] = 'æ¬¢è¿';
+$gtext['404_continue'] = '点击此处继续';
+$gtext['404_h1'] = '额，页面没有找到。(Error 404)';
+$gtext['404_p1'] = '出于某些原因 (错误类型的URL，从其他网站转入出错，过期的搜索引擎信息或者我们删了个文件)页面不存在';
+$gtext['admin'] = '管理';
+$gtext['banned_continue'] = '点击此处继续';
+$gtext['banned_h1'] = '禁用';
+$gtext['banned_p1'] = '你是个坏蛋，非常非常坏。';
+$gtext['continue'] = '继续';
+$gtext['login'] = '登录';
+$gtext['logout'] = '退出';
+$gtext['register'] = '注册';
+$gtext['welcome'] = '欢迎';
 
 ?>

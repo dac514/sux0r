@@ -1,31 +1,31 @@
-ï»¿<?php
+﻿<?php
 
 // Always UTF-8
 // Always uppercase the first word
 
-$gtext['access'] = 'æé';
-$gtext['activity_log'] = 'æ´»å¨è®°å½';
-$gtext['admin'] = 'ç®¡ç';
-$gtext['admin_blog'] = 'æ¥å¿ç®¡ç';
-$gtext['admin_bookmarks'] = 'ä¹¦ç­¾ç®¡ç';
-$gtext['admin_feeds'] = 'Feedsç®¡ç';
-$gtext['admin_photos'] = 'å¾çç®¡ç';
-$gtext['back'] = 'è¿åç®¡çé¡µé¢';
-$gtext['back_2'] = 'è¿åå°é¦é¡µ';
-$gtext['banned'] = 'ç¦ç¨';
-$gtext['cancel'] = 'åæ¶';
-$gtext['edit'] = 'ç¼è¾';
-$gtext['edit_access'] = 'ç¼è¾æé';
-$gtext['form_error'] = 'è¡¨åæªè¢«æäº¤ï¼æ³¨æåºéé¡¹ç®';
-$gtext['form_problem'] = 'è¡¨åæªè¢«æäº¤ï¼è¯·éè¯';
-$gtext['last_active'] = 'æè¿æ´»å¨';
-$gtext['log'] = 'è®°å½';
-$gtext['nickname'] = 'æµç§°';
-$gtext['private'] = 'ç§æ';
-$gtext['profile'] = 'æ¡£æ¡';
-$gtext['root'] = 'ç®¡çå';
-$gtext['submit'] = 'æäº¤';
-$gtext['timestamp'] = 'æ¶é´æ³';
-$gtext['yourself'] = 'æ¨å¨ç¼è¾èªèº«ï¼ç±äºå®å¨å ç´ ï¼ä¸äºåè½ä¸å¯ç¨ã';
+$gtext['access'] = '权限';
+$gtext['activity_log'] = '活动记录';
+$gtext['admin'] = '管理';
+$gtext['admin_blog'] = '日志管理';
+$gtext['admin_bookmarks'] = '书签管理';
+$gtext['admin_feeds'] = 'Feeds管理';
+$gtext['admin_photos'] = '图片管理';
+$gtext['back'] = '返回管理页面';
+$gtext['back_2'] = '返回到首页';
+$gtext['banned'] = '禁用';
+$gtext['cancel'] = '取消';
+$gtext['edit'] = '编辑';
+$gtext['edit_access'] = '编辑权限';
+$gtext['form_error'] = '表单未被提交，注意出错项目';
+$gtext['form_problem'] = '表单未被提交，请重试';
+$gtext['last_active'] = '最近活动';
+$gtext['log'] = '记录';
+$gtext['nickname'] = '昵称';
+$gtext['private'] = '私有';
+$gtext['profile'] = '档案';
+$gtext['root'] = '管理员';
+$gtext['submit'] = '提交';
+$gtext['timestamp'] = '时间戳';
+$gtext['yourself'] = '您在编辑自身，由于安全因素，一些功能不可用。';
 
 ?>

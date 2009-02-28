@@ -1,43 +1,43 @@
-ï»¿<?php
+﻿<?php
 
 // Always UTF-8
 // Always uppercase the first word
 
-$gtext['acquaintance'] = 'çè¯';
-$gtext['cancel'] = 'åæ¶';
-$gtext['child'] = 'å­å¥³';
-$gtext['change_relation'] = 'ç¼è¾äºä»ä»¬çäººéå³ç³»ï¼è·';
-$gtext['co_resident'] = 'åå±';
-$gtext['co_worker'] = 'åäº';
-$gtext['colleague'] = 'åç';
-$gtext['contact'] = 'å¸¸èç³»';
-$gtext['crush'] = 'ç­æ';
-$gtext['date'] = 'çº¦ä¼';
-$gtext['edit_relationship'] = 'ç¼è¾äººéå³ç³»';
-$gtext['end_relation'] = 'ç»æ­¢äºä»ä»¬çå³ç³»ï¼è·';
-$gtext['family'] = 'å®¶åº­';
-$gtext['form_error'] = 'è¡¨åæªè¢«æäº¤ï¼æ³¨æåºéé¡¹ç®';
-$gtext['form_problem'] = 'è¡¨åæªè¢«æäº¤ï¼è¯·éè¯';
-$gtext['friend'] = 'å¥½å';
-$gtext['friendship'] = 'äº¤é';
-$gtext['geographical'] = 'å°çç©ºé´';
-$gtext['kin'] = 'äº²æ';
-$gtext['me'] = 'æåæ';
-$gtext['met'] = 'æ¥è§¦';
-$gtext['muse'] = 'æ²é»';
-$gtext['myself'] = 'æèªå·±';
-$gtext['neighbor'] = 'é»å±';
-$gtext['none'] = 'æ ';
-$gtext['none'] = 'æ ';
-$gtext['none'] = 'æ ';
-$gtext['parent'] = 'ç¶æ¯';
-$gtext['physical'] = 'èº«ä½';
-$gtext['professional'] = 'èä¸';
-$gtext['relationship'] = 'å³ç³»è·';
-$gtext['romantic'] = 'æµªæ¼«ç±æ';
-$gtext['sibling'] = 'åæ';
-$gtext['spouse'] = 'éå¶';
-$gtext['submit'] = 'æäº¤';
-$gtext['sweetheart'] = 'æäºº';
+$gtext['acquaintance'] = '熟识';
+$gtext['cancel'] = '取消';
+$gtext['child'] = '子女';
+$gtext['change_relation'] = '编辑了他们的人际关系，跟';
+$gtext['co_resident'] = '同居';
+$gtext['co_worker'] = '同事';
+$gtext['colleague'] = '同盟';
+$gtext['contact'] = '常联系';
+$gtext['crush'] = '热恋';
+$gtext['date'] = '约会';
+$gtext['edit_relationship'] = '编辑人际关系';
+$gtext['end_relation'] = '终止了他们的关系，跟';
+$gtext['family'] = '家庭';
+$gtext['form_error'] = '表单未被提交，注意出错项目';
+$gtext['form_problem'] = '表单未被提交，请重试';
+$gtext['friend'] = '好友';
+$gtext['friendship'] = '交际';
+$gtext['geographical'] = '地理空间';
+$gtext['kin'] = '亲戚';
+$gtext['me'] = '我和我';
+$gtext['met'] = '接触';
+$gtext['muse'] = '沉默';
+$gtext['myself'] = '我自己';
+$gtext['neighbor'] = '邻居';
+$gtext['none'] = '无';
+$gtext['none'] = '无';
+$gtext['none'] = '无';
+$gtext['parent'] = '父母';
+$gtext['physical'] = '身体';
+$gtext['professional'] = '职业';
+$gtext['relationship'] = '关系跟';
+$gtext['romantic'] = '浪漫爱情';
+$gtext['sibling'] = '同族';
+$gtext['spouse'] = '配偶';
+$gtext['submit'] = '提交';
+$gtext['sweetheart'] = '恋人';
 
 ?>

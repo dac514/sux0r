@@ -1,72 +1,72 @@
-ï»¿<?php
+﻿<?php
 
 // Always UTF-8
 // Always uppercase the first word
 
-$gtext['add'] = 'æ·»å ';
-$gtext['add_doc'] = 'æä½ææ¡£';
-$gtext['alert_cat'] = 'ç¡®è®¤å é¤æ­¤åç±»ï¼';
-$gtext['alert_doc'] = 'ç¡®è®¤å é¤æ­¤ææ¡£ï¼';
-$gtext['alert_unshare'] = 'ç¡®è®¤åæ¶è¯¥å®¹å¨çå±äº«ï¼';
-$gtext['alert_vec'] = 'ç¡®è®¤å é¤è¯¥å®¹å¨ï¼';
-$gtext['back'] = 'è¿å';
-$gtext['back_2'] = 'è¿åå°æçæ¡£æ¡';
-$gtext['cat_doc'] = 'ææ¡£å½ç±»';
-$gtext['categories'] = 'åç±»';
-$gtext['categorize'] = 'å½ç±»';
-$gtext['categorized_on'] = 'å½ç±»äº';
-$gtext['delete'] = 'å é¤';
-$gtext['documents'] = 'ææ¡£';
-$gtext['edit_bayes'] = 'ç¼è¾è´å¶æ¯åç±»';
-$gtext['error'] = 'éè¯¯';
-$gtext['filter1'] = 'æå³°å¼ç­é';
-$gtext['filter2'] = 'æçå¼ç­é';
-$gtext['form_error'] = 'è¡¨åæªè¢«æäº¤ï¼æ³¨æåºéé¡¹ç®';
-$gtext['form_error_1'] = 'å®¹å¨åä¸è½ä¸ºç©º';
-$gtext['form_error_2'] = 'åç±»åä¸è½ä¸ºç©º';
-$gtext['form_error_3'] = 'å®¹å¨ä¸è½ä¸ºç©º';
-$gtext['form_error_4'] = 'åç±»ä¸è½ä¸ºç©º';
-$gtext['form_error_5'] = 'å®¹å¨åå¤ªé¿';
-$gtext['form_error_6'] = 'åç±»åå¤ªé¿';
-$gtext['form_error_7'] = 'ææ¡£ä¸è½ä¸ºç©º';
-$gtext['form_error_8'] = 'ç¨æ·ä¸è½ä¸ºç©º';
-$gtext['form_error_9'] = 'æ æ';
-$gtext['form_error_10'] = 'ä¸è½å±äº«å®¹å¨ç»èªå·±';
-$gtext['form_error_11'] = 'ç¨æ·ä¸å­å¨';
-$gtext['form_error_12'] = 'æ²¡æéæ©ä»»ä½ä¸è¥¿';
-$gtext['is_linked'] = 'è¿ç¯ææ¡£è¢«é¾æ¥: ';
-$gtext['is_not_linked'] = 'è¿ç¯ææ¡£æ²¡æè¢«é¾æ¥â¦â¦';
-$gtext['new_cat'] = 'æ°åç±»';
-$gtext['new_vec'] = 'æ°å®¹å¨';
-$gtext['owner'] = 'ææè';
-$gtext['owner2'] = 'ææè? (å¦æéæ©ï¼å¯¹æ¹å¯ä»¥å¯¹ææ¡£å½ç±»)';
-$gtext['remove_cat'] = 'ç§»é¤åç±»';
-$gtext['remove_doc'] = 'åæ¶å½ç±»';
-$gtext['remove_vec'] = 'ç§»é¤å®¹å¨';
-$gtext['scores'] = 'ææ°';
-$gtext['search'] = 'å³é®å­';
-$gtext['share'] = 'å±äº«';
-$gtext['share_category'] = 'å±äº«æ­¤åç±»ç»ï¼';
-$gtext['share_vec'] = 'å±äº«å®¹å¨';
-$gtext['shared'] = 'å·²å±äº«';
-$gtext['stats'] = 'ç»è®¡èµæ';
-$gtext['synopsis'] = 'æè¦';
-$gtext['synopsis_1'] = 'å®¹å¨æ¯ä¸ä¸ªåç±»çåè¡¨ãå¨ä¸ä¸ªå®¹å¨ä¸­ï¼ä½ è³å°è¦æä¸¤ä¸ªåç±»æè½è¿è¡<a href="http://baike.baidu.com/view/77778.htm">è´å¶æ¯å½ç±»</a>(<a href="http://en.wikipedia.org/wiki/Naive_Bayes_classifier">Bayesian classification</a>)ã';
-$gtext['synopsis_2'] = 'ä¾å¦ï¼ä¸ä¸ªå«å<strong>å¿æ</strong>çå®¹å¨åºè¯¥åå«åç±» <strong>é«å´</strong>ã<strong>æ²ä¼¤</strong>å<strong>æ°æ¤</strong>ãä¸ä¸ªå«å<strong>è¿æ»¤å¨</strong>çå®¹å¨åºè¯¥åå«åç±»<strong>åå¾é®ä»¶</strong>å<strong>æ­£å¸¸é®ä»¶</strong>ã';
-$gtext['synopsis_3'] = 'ç¸æ¯èè¨ï¼ä½ ä¸ä¼æåç±»<strong>åå¾é®ä»¶</strong>æ¾è¿<strong>å¿æ</strong>è¿ä¸ªå®¹å¨éé¢ï¼å ä¸ºå®ä¸å±äºè¿ä¸ªåè¡¨';
-$gtext['synopsis_4'] = 'è¯·æ³¨æï¼é¤éåç±»ä¸­æ <strong>æ°ä»¥ç¾è®¡çææ¡£</strong>è¿è¡å½æ¡£æ¨ç®ï¼å¦åç»æä¸ä¼å¾äºç¶ã';
-$gtext['threshold'] = 'æçé';
-$gtext['to'] = 'ç»';
-$gtext['tokens'] = 'æ å¿è¯';
-$gtext['top'] = 'æå³°å¼';
-$gtext['train'] = 'å¼å§æ¨ç®';
-$gtext['trainer'] = 'åè®¸ç¨æ·è¿è¡å½æ¡£æ¨ç®ï¼';
-$gtext['trainer'] = 'æ¨ç®å¨';
-$gtext['unshare'] = 'åæ¶å±äº«';
-$gtext['unshare_category'] = 'åæ¶å±äº«åç±»ç»ï¼';
-$gtext['user'] = 'ç¨æ·';
-$gtext['vector'] = 'å®¹å¨';
-$gtext['vectors'] = 'å®¹å¨';
-$gtext['with'] = 'ç»å¥½å';
+$gtext['add'] = '添加';
+$gtext['add_doc'] = '操作文档';
+$gtext['alert_cat'] = '确认删除此分类？';
+$gtext['alert_doc'] = '确认删除此文档？';
+$gtext['alert_unshare'] = '确认取消该容器的共享？';
+$gtext['alert_vec'] = '确认删除该容器？';
+$gtext['back'] = '返回';
+$gtext['back_2'] = '返回到我的档案';
+$gtext['cat_doc'] = '文档归类';
+$gtext['categories'] = '分类';
+$gtext['categorize'] = '归类';
+$gtext['categorized_on'] = '归类于';
+$gtext['delete'] = '删除';
+$gtext['documents'] = '文档';
+$gtext['edit_bayes'] = '编辑贝叶斯分类';
+$gtext['error'] = '错误';
+$gtext['filter1'] = '按峰值筛选';
+$gtext['filter2'] = '按界值筛选';
+$gtext['form_error'] = '表单未被提交，注意出错项目';
+$gtext['form_error_1'] = '容器名不能为空';
+$gtext['form_error_2'] = '分类名不能为空';
+$gtext['form_error_3'] = '容器不能为空';
+$gtext['form_error_4'] = '分类不能为空';
+$gtext['form_error_5'] = '容器名太长';
+$gtext['form_error_6'] = '分类名太长';
+$gtext['form_error_7'] = '文档不能为空';
+$gtext['form_error_8'] = '用户不能为空';
+$gtext['form_error_9'] = '无效';
+$gtext['form_error_10'] = '不能共享容器给自己';
+$gtext['form_error_11'] = '用户不存在';
+$gtext['form_error_12'] = '没有选择任何东西';
+$gtext['is_linked'] = '这篇文档被链接: ';
+$gtext['is_not_linked'] = '这篇文档没有被链接……';
+$gtext['new_cat'] = '新分类';
+$gtext['new_vec'] = '新容器';
+$gtext['owner'] = '所有者';
+$gtext['owner2'] = '所有者? (如果选择，对方可以对文档归类)';
+$gtext['remove_cat'] = '移除分类';
+$gtext['remove_doc'] = '取消归类';
+$gtext['remove_vec'] = '移除容器';
+$gtext['scores'] = '指数';
+$gtext['search'] = '关键字';
+$gtext['share'] = '共享';
+$gtext['share_category'] = '共享此分类给：';
+$gtext['share_vec'] = '共享容器';
+$gtext['shared'] = '已共享';
+$gtext['stats'] = '统计资料';
+$gtext['synopsis'] = '摘要';
+$gtext['synopsis_1'] = '容器是一个分类的列表。在一个容器中，你至少要有两个分类才能进行<a href="http://baike.baidu.com/view/77778.htm">贝叶斯归类</a>(<a href="http://en.wikipedia.org/wiki/Naive_Bayes_classifier">Bayesian classification</a>)。';
+$gtext['synopsis_2'] = '例如，一个叫做<strong>心情</strong>的容器应该包含分类 <strong>高兴</strong>、<strong>悲伤</strong>和<strong>气愤</strong>。一个叫做<strong>过滤器</strong>的容器应该包含分类<strong>垃圾邮件</strong>和<strong>正常邮件</strong>。';
+$gtext['synopsis_3'] = '相比而言，你不会把分类<strong>垃圾邮件</strong>放进<strong>心情</strong>这个容器里面，因为它不属于这个列表';
+$gtext['synopsis_4'] = '请注意，除非分类中有 <strong>数以百计的文档</strong>进行归档推算，否则结果不会很了然。';
+$gtext['threshold'] = '按界限';
+$gtext['to'] = '给';
+$gtext['tokens'] = '标志词';
+$gtext['top'] = '按峰值';
+$gtext['train'] = '开始推算';
+$gtext['trainer'] = '允许用户进行归档推算？';
+$gtext['trainer'] = '推算器';
+$gtext['unshare'] = '取消共享';
+$gtext['unshare_category'] = '取消共享分类给：';
+$gtext['user'] = '用户';
+$gtext['vector'] = '容器';
+$gtext['vectors'] = '容器';
+$gtext['with'] = '给好友';
 
 ?>

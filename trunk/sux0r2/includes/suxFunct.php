@@ -702,7 +702,7 @@ class suxFunct {
 
         return array(
             'af' => 'Afghanistan',
-            'ax' => 'Ãland Islands',
+            'ax' => 'Åland Islands',
             'al' => 'Albania',
             'dz' => 'Algeria',
             'as' => 'American Samoa',
@@ -754,7 +754,7 @@ class suxFunct {
             'cd' => 'Congo, the Democratic Republic of the',
             'ck' => 'Cook Islands',
             'cr' => 'Costa Rica',
-            'ci' => 'CÃÂ´te d\'Ivoire',
+            'ci' => 'Côte d\'Ivoire',
             'hr' => 'Croatia',
             'cu' => 'Cuba',
             'cy' => 'Cyprus',
@@ -884,7 +884,7 @@ class suxFunct {
             'ro' => 'Romania',
             'ru' => 'Russian Federation',
             'rw' => 'Rwanda',
-            'bl' => 'Saint BarthÃÂ©lemy',
+            'bl' => 'Saint Barthélemy',
             'sh' => 'Saint Helena',
             'kn' => 'Saint Kitts and Nevis',
             'lc' => 'Saint Lucia',

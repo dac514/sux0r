@@ -1,54 +1,54 @@
-ï»¿<?php
+﻿<?php
 
 // Always UTF-8
 // Always uppercase the first word
 
-$gtext['admin'] = 'ä¹¦ç­¾ç®¡ç';
-$gtext['alert_delete'] = 'ç¡®è®¤å é¤è¿äºä¹¦ç­¾ï¼';
-$gtext['approve'] = 'å®¡æ ¸ä¹¦ç­¾';
-$gtext['approve_2'] = 'å®¡æ ¸';
-$gtext['back'] = 'è¿å';
-$gtext['back_2'] = 'è¿åå°ä¹¦ç­¾';
-$gtext['bayes_categories'] = 'è´å¶æ¯åç±»';
-$gtext['body'] = 'æ­£æ';
-$gtext['bookmarks'] = 'ä¹¦ç­¾';
-$gtext['cancel'] = 'åæ¶';
-$gtext['date'] = 'æ¥æ';
-$gtext['delete'] = 'å é¤';
-$gtext['draft'] = 'èç¨¿';
-$gtext['edit'] = 'ç¼è¾';
-$gtext['edit_2'] = 'ç¼è¾ä¹¦ç­¾';
-$gtext['form_error'] = 'è¡¨åæªè¢«æäº¤ï¼æ³¨æåºéé¡¹ç®';
-$gtext['form_error_1'] = 'URLä¸è½ä¸ºç©º';
-$gtext['form_error_2'] = 'æ æçURL';
-$gtext['form_error_3'] = 'éå¤çURLï¼å·²è¢«æ·»å çï¼';
-$gtext['form_error_4'] = 'URLçèµ·æ¥ä¸æ­£ç¡®';
-$gtext['form_error_5'] = 'æ é¢ä¸è½ä¸ºç©º';
-$gtext['form_error_6'] = 'æ­£æä¸è½ä¸ºç©º';
-$gtext['form_error_7'] = 'æ æçæ¥æ';
-$gtext['form_error_8'] = 'æ æçæ¶é´';
-$gtext['form_problem'] = 'è¡¨åæªè¢«æäº¤ï¼è¯·éè¯';
+$gtext['admin'] = '书签管理';
+$gtext['alert_delete'] = '确认删除这些书签？';
+$gtext['approve'] = '审核书签';
+$gtext['approve_2'] = '审核';
+$gtext['back'] = '返回';
+$gtext['back_2'] = '返回到书签';
+$gtext['bayes_categories'] = '贝叶斯分类';
+$gtext['body'] = '正文';
+$gtext['bookmarks'] = '书签';
+$gtext['cancel'] = '取消';
+$gtext['date'] = '日期';
+$gtext['delete'] = '删除';
+$gtext['draft'] = '草稿';
+$gtext['edit'] = '编辑';
+$gtext['edit_2'] = '编辑书签';
+$gtext['form_error'] = '表单未被提交，注意出错项目';
+$gtext['form_error_1'] = 'URL不能为空';
+$gtext['form_error_2'] = '无效的URL';
+$gtext['form_error_3'] = '重复的URL（已被添加的）';
+$gtext['form_error_4'] = 'URL看起来不正确';
+$gtext['form_error_5'] = '标题不能为空';
+$gtext['form_error_6'] = '正文不能为空';
+$gtext['form_error_7'] = '无效的日期';
+$gtext['form_error_8'] = '无效的时间';
+$gtext['form_problem'] = '表单未被提交，请重试';
 $gtext['header'] = 'Shamelessness thinly veiled as reciprocity';
-$gtext['my_bookmarks'] = 'æçä¹¦ç­¾';
-$gtext['new'] = 'æ°ä¹¦ç­¾';
-$gtext['none'] = 'æ ';
-$gtext['not_found'] = 'æ²¡ææ¾å°';
-$gtext['nothing'] = 'æ²¡æä¸è¥¿éè¦å®¡æ ¸';
-$gtext['published_on'] = 'åå¸äº';
-$gtext['save_draft'] = 'å­ä¸ºèç¨¿';
-$gtext['sort_alpha'] = 'æå­å¸æåº';
-$gtext['sort_date'] = 'ææ¥ææåº';
-$gtext['submit'] = 'æäº¤';
-$gtext['success'] = 'æå';
-$gtext['success2'] = 'ä¸ä¹å°è¢«ç®¡çåå®¡æ ¸ã';
-$gtext['suggest'] = 'æäº¤ä¹¦ç­¾';
-$gtext['suggested'] = 'æä¾è';
-$gtext['tag_cloud'] = 'Tagé';
+$gtext['my_bookmarks'] = '我的书签';
+$gtext['new'] = '新书签';
+$gtext['none'] = '无';
+$gtext['not_found'] = '没有找到';
+$gtext['nothing'] = '没有东西需要审核';
+$gtext['published_on'] = '发布于';
+$gtext['save_draft'] = '存为草稿';
+$gtext['sort_alpha'] = '按字典排序';
+$gtext['sort_date'] = '按日期排序';
+$gtext['submit'] = '提交';
+$gtext['success'] = '成功';
+$gtext['success2'] = '不久将被管理员审核。';
+$gtext['suggest'] = '提交书签';
+$gtext['suggested'] = '提供者';
+$gtext['tag_cloud'] = 'Tag集';
 $gtext['tag'] = 'Tag';
 $gtext['tags'] = 'Tags';
-$gtext['tags_2'] = 'Tags,åéå½ä»¤';
-$gtext['time'] = 'æ¶é´';
-$gtext['title'] = 'æ é¢';
+$gtext['tags_2'] = 'Tags,分隔命令';
+$gtext['time'] = '时间';
+$gtext['title'] = '标题';
 $gtext['url'] = 'URL';
 
 ?>
