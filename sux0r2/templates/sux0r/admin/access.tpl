@@ -10,6 +10,20 @@
     {rdelim}
     </style>
 
+    {literal}
+    <script type='text/javascript'>
+    // <![CDATA[
+    function deleteWarning() {
+        if (document.forms[0].delete_user.checked) {
+            if (!confirm('{/literal}{$r->gtext.alert_delete|escape:'javascript'}{literal}')) {
+                document.forms[0].delete_user.checked = false;
+            }
+        }
+    }
+    // ]]>
+    </script>
+    {/literal}
+
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
 {include file=$r->xhtml_header}{/strip}
@@ -45,8 +59,8 @@
 {if $disabled}<p><label>&nbsp;</label>{$r->gtext.yourself}</p>{/if}
 
 <p>
-<label>{$r->gtext.root} :</label>
-<input type="checkbox" name="root" value="1" {if $root}checked="checked"{/if} {$disabled} /><br />
+<label for="root">{$r->gtext.root} :</label>
+<input type="checkbox" name="root" id="root" value="1" {if $root}checked="checked"{/if} {$disabled} /><br />
 </p>
 
 {foreach from=$myOptions key=k item=v}
@@ -54,8 +68,13 @@
 {/foreach}
 
 <p>
-<label>{$r->gtext.banned} :</label>
-<input type="checkbox" name="banned" value="1" {if $banned}checked="checked"{/if} {$disabled} /><br />
+<label for="banned">{$r->gtext.banned} :</label>
+<input type="checkbox" name="banned" id="banned" value="1" {if $banned}checked="checked"{/if} {$disabled} /><br />
+</p>
+
+<p>
+<label for="delete_user">{$r->gtext.delete} :</label>
+<input type="checkbox" name="delete_user" id="delete_user" value="1" {$disabled} onclick='deleteWarning()'  /><br />
 </p>
 
 

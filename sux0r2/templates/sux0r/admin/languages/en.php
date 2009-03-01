@@ -10,6 +10,8 @@ $gtext['error_1'] = 'Invalid date';
 $gtext['alert_purge'] = 'Are you sure you want to purge the logs?';
 $gtext['success'] = 'Success!';
 $gtext['success2'] = 'Eveyrthing seems fine.';
+$gtext['delete'] = 'Delete';
+$gtext['alert_delete'] = 'Are you sure you want to delete this user? All user contributedcontent will also be deleted.';
 
 // Already translated
 $gtext['access'] = 'Access';

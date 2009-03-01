@@ -172,6 +172,111 @@ class adminAccess {
         // Security check
         if (!$this->user->isRoot()) suxFunct::redirect(suxFunct::makeUrl('/home'));
 
+        // --------------------------------------------------------------------
+        // Delete !!!
+        // --------------------------------------------------------------------
+
+        if (isset($clean['delete_user']) && $clean['delete_user'] == 1) {
+
+            // Begin transaction
+            $db = suxDB::get();
+            $tid = suxDB::requestTransaction();
+
+            try {
+
+                $query = 'DELETE FROM bayes_auth WHERE users_id = ? ';
+                $st = $db->prepare($query);
+                $st->execute(array($this->users_id));
+
+                $query = 'DELETE FROM bookmarks WHERE users_id = ? ';
+                $st = $db->prepare($query);
+                $st->execute(array($this->users_id));
+
+                $query = 'DELETE FROM link_bookmarks_users WHERE users_id = ? ';
+                $st = $db->prepare($query);
+                $st->execute(array($this->users_id));
+
+                $query = 'DELETE FROM link_rss_users WHERE users_id = ? ';
+                $st = $db->prepare($query);
+                $st->execute(array($this->users_id));
+
+                $query = 'DELETE FROM messages WHERE users_id = ? ';
+                $st = $db->prepare($query);
+                $st->execute(array($this->users_id));
+
+                $query = 'DELETE FROM messages_history WHERE users_id = ? ';
+                $st = $db->prepare($query);
+                $st->execute(array($this->users_id));
+
+                $query = 'DELETE FROM openid_trusted WHERE users_id = ? ';
+                $st = $db->prepare($query);
+                $st->execute(array($this->users_id));
+
+                $query = 'DELETE FROM photoalbums WHERE users_id = ? ';
+                $st = $db->prepare($query);
+                $st->execute(array($this->users_id));
+
+                $query = 'DELETE FROM photos WHERE users_id = ? ';
+                $st = $db->prepare($query);
+                $st->execute(array($this->users_id));
+
+                $query = 'DELETE FROM rss_feeds WHERE users_id = ? ';
+                $st = $db->prepare($query);
+                $st->execute(array($this->users_id));
+
+                $query = 'DELETE FROM socialnetwork WHERE users_id = ? ';
+                $st = $db->prepare($query);
+                $st->execute(array($this->users_id));
+
+                $query = 'DELETE FROM socialnetwork WHERE users_id = ? ';
+                $st = $db->prepare($query);
+                $st->execute(array($this->users_id));
+
+                $query = 'DELETE FROM tags WHERE users_id = ? ';
+                $st = $db->prepare($query);
+                $st->execute(array($this->users_id));
+
+                $query = 'DELETE FROM users_access WHERE users_id = ? ';
+                $st = $db->prepare($query);
+                $st->execute(array($this->users_id));
+
+                $query = 'DELETE FROM users_info WHERE users_id = ? ';
+                $st = $db->prepare($query);
+                $st->execute(array($this->users_id));
+
+                $query = 'DELETE FROM users_log WHERE users_id = ? ';
+                $st = $db->prepare($query);
+                $st->execute(array($this->users_id));
+
+                $query = 'DELETE FROM users_openid WHERE users_id = ? ';
+                $st = $db->prepare($query);
+                $st->execute(array($this->users_id));
+
+                $query = 'DELETE FROM users WHERE id = ? ';
+                $st = $db->prepare($query);
+                $st->execute(array($this->users_id));
+
+                // Log, private
+                $this->user->log("sux0r::adminAccess() deleted users_id: {$this->users_id} ", $_SESSION['users_id'], 1);
+
+            }
+            catch (Exception $e) {
+
+                $db->rollback();
+                throw($e); // Hot potato!
+            }
+
+            suxDB::commitTransaction($tid); // Commit
+
+            return; // Drop out of this function
+
+        }
+
+
+        // --------------------------------------------------------------------
+        // Resume normal access control
+        // --------------------------------------------------------------------
+
         // Root
         if (isset($clean['root'])) $this->user->root($this->users_id);
         elseif ($this->users_id != $_SESSION['users_id']) {
