@@ -2,6 +2,12 @@
 sux0r 2.0.x
 ------------------------------------------------------------------------------
 
+Added the ability to permanently delete a user
+
+------------------------------------------------------------------------------
+sux0r 2.0.3
+------------------------------------------------------------------------------
+
 Fallback to cURL if allow_url_fopen is disabled.
 
 HTTP Authorization fix when using PHP in CGI mode
