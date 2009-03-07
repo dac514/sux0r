@@ -65,7 +65,7 @@ class photosEdit {
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
-        // Check that the user is allowed to edit this album
+        // Security check
         if (!$this->user->isRoot()) {
             $access = $this->user->getAccess($this->module);
             if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin']) {
@@ -160,15 +160,6 @@ class photosEdit {
     * @param array $clean reference to validated $_POST
     */
     function formProcess(&$clean) {
-
-        // Check that the user is allowed to edit this album
-        if (!$this->user->isRoot()) {
-            $access = $this->user->getAccess($this->module);
-            if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin']) {
-                if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['publisher']) suxFunct::redirect(suxFunct::makeURL('/photos'));
-                elseif (!$this->photo->isAlbumOwner($clean['id'], $_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeURL('/photos'));
-            }
-        }
 
         // Set cover
         if (isset($clean['cover'])) $this->photo->saveThumbnail($clean['id'], $clean['cover']);

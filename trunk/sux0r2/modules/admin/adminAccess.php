@@ -169,9 +169,6 @@ class adminAccess {
     */
     function formProcess(&$clean) {
 
-        // Security check
-        if (!$this->user->isRoot()) suxFunct::redirect(suxFunct::makeUrl('/home'));
-
         // --------------------------------------------------------------------
         // Delete !!!
         // --------------------------------------------------------------------
