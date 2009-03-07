@@ -60,7 +60,7 @@ class feedsAdmin {
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
-        // Check that the user is allowed to be here
+        // Security check
         if (!$this->user->isRoot()) {
             $access = $this->user->getAccess($this->module);
             if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin'])
@@ -136,13 +136,6 @@ class feedsAdmin {
     * @param array $clean reference to validated $_POST
     */
     function formProcess(&$clean) {
-
-        // Check that the user is allowed to be here
-        if (!$this->user->isRoot()) {
-            $access = $this->user->getAccess($this->module);
-            if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin'])
-                suxFunct::redirect(suxFunct::makeUrl('/home'));
-        }
 
         if (isset($clean['delete'])) foreach($clean['delete'] as $id => $val) {
                 $this->rss->deleteFeed($id);

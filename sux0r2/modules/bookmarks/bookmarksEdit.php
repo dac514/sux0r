@@ -221,16 +221,6 @@ class bookmarksEdit {
     function formProcess(&$clean) {
 
         // --------------------------------------------------------------------
-        // Security check
-        // --------------------------------------------------------------------
-
-        if (!$this->user->isRoot()) {
-            $access = $this->user->getAccess($this->module);
-            if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin'])
-                suxFunct::redirect(suxFunct::makeUrl('/bookmarks'));
-        }
-
-        // --------------------------------------------------------------------
         // Sanity check
         // --------------------------------------------------------------------
 

@@ -147,14 +147,6 @@ class userAvatar  {
     */
     function formProcess(&$clean) {
 
-        // Security check
-        if ($clean['users_id'] != $_SESSION['users_id']) {
-            // Check that the user is allowed to be here
-            if (!$this->user->isRoot()) {
-                suxFunct::redirect(suxFunct::getPreviousURL());
-            }
-        }
-
         // Commence $clean array
         $user['users_id'] = $clean['users_id'];
         $user['image']  = false;

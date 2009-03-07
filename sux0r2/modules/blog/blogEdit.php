@@ -79,7 +79,7 @@ class blogEdit {
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
-        // Check that the user is allowed to be here
+        // Security check
         if (!$this->user->isRoot()) {
             $access = $this->user->getAccess($this->module);
             if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin']) {
@@ -255,24 +255,6 @@ class blogEdit {
     */
     function formProcess(&$clean) {
 
-        // --------------------------------------------------------------------
-        // Security check
-        // --------------------------------------------------------------------
-
-        // Check that the user is allowed to be here
-        if (!$this->user->isRoot()) {
-            $access = $this->user->getAccess($this->module);
-            if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin']) {
-                if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['publisher'])
-                    suxFunct::redirect(suxFunct::makeUrl('/blog'));
-
-                if (isset($clean['id']) && filter_var($clean['id'], FILTER_VALIDATE_INT)) {
-                    // Verfiy that we are allowed to edit this
-                    $tmp = $this->msg->getMessage($clean['id'], false);
-                    if ($tmp['users_id'] != $_SESSION['users_id']) suxFunct::redirect(suxFunct::makeUrl('/blog'));
-                }
-            }
-        }
 
         // --------------------------------------------------------------------
         // Sanity check

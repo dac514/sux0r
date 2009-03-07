@@ -187,7 +187,7 @@ class cropper {
         if (!$image['image']) throw new Exception('$image not found');
 
         if ($image['users_id'] != $_SESSION['users_id']) {
-            // Check that the user is allowed to be here
+            // Security check
             if (!$this->user->isRoot()) {
                 $access = $this->user->getAccess($clean['module']);
                 if (!isset($GLOBALS['CONFIG']['ACCESS'][$module]['admin']))

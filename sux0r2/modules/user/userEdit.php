@@ -295,15 +295,6 @@ class userEdit {
 
         if ($this->mode == 'edit') {
 
-            if ($clean['nickname'] != $_SESSION['nickname']) {
-                // Security check
-                // Only a root user can modify other users
-                if (!$this->user->isRoot()) {
-                    suxFunct::redirect(suxFunct::makeUrl('/home'));
-                }
-
-            }
-
             // Get users_id
             $u = $this->user->getUserByNickname($clean['nickname']);
             if (!$u) throw new Exception('Invalid user');

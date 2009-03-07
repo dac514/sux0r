@@ -65,7 +65,7 @@ class photosUpload  {
         // This module has config variables, load them
         $this->tpl->config_load('my.conf', $this->module);
 
-        // Check that the user is allowed to upload photos
+        // Security check
         if (!$this->user->isRoot()) {
             $access = $this->user->getAccess($this->module);
             if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin']) {
@@ -142,7 +142,7 @@ class photosUpload  {
         if (!isset($_FILES['image']) || !is_uploaded_file($_FILES['image']['tmp_name']))
             throw new Exception('No file uploaded?');
 
-        // Check that the user is allowed to upload photos
+        // Check that the user is allowed to upload photos / Security check #2
         if (!$this->user->isRoot()) {
             $access = $this->user->getAccess($this->module);
             if ($access < $GLOBALS['CONFIG']['ACCESS'][$this->module]['admin']) {
