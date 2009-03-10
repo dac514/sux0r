@@ -2,6 +2,10 @@
 sux0r 2.0.x
 ------------------------------------------------------------------------------
 
+Changed license from AGPL to GPL
+
+Removed redundant security checks from several modules.
+
 Added the ability to permanently delete a user
 
 ------------------------------------------------------------------------------

@@ -7,7 +7,7 @@
 * Jon Abernathy <jon@chuggnutt.com>: http://www.chuggnutt.com/html2text.php
 *
 * @author     Dac Chartrand <dac.chartrand@gmail.com>
-* @license    http://www.gnu.org/licenses/agpl.html
+* @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
 class suxHtml2UTF8 {

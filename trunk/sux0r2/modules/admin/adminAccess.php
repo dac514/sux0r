@@ -4,7 +4,7 @@
 * adminAccess
 *
 * @author     Dac Chartrand <dac.chartrand@gmail.com>
-* @license    http://www.gnu.org/licenses/agpl.html
+* @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
 require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
