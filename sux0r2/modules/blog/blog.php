@@ -244,7 +244,7 @@ class blog extends bayesShared {
             SELECT tags.tag AS tag, tags.id AS id, COUNT(tags.id) AS quantity FROM tags
             INNER JOIN {$link} ON {$link}.tags_id = tags.id
             INNER JOIN messages ON {$link}.messages_id = messages.id
-            WHERE messages.blog = true AND messages.draft = false {$this->_dateSql()}
+            WHERE messages.blog = true AND messages.draft = false AND {$this->_dateSql()}
             GROUP BY tag, tags.id ORDER BY tag ASC
             ";
             $this->r->arr['tc'] = $this->tags->tagcloud($query);
@@ -619,7 +619,7 @@ class blog extends bayesShared {
         SELECT COUNT(*) FROM messages
         INNER JOIN link_messages_tags ON link_messages_tags.messages_id = messages.id
         WHERE messages.thread_pos = 0 AND messages.blog = true  AND messages.draft = false AND link_messages_tags.tags_id = ?
-        {$this->_dateSql()}
+        AND {$this->_dateSql()}
         ";
         $st = $db->prepare($count_query);
         $st->execute(array($id));
@@ -637,7 +637,7 @@ class blog extends bayesShared {
         SELECT messages.* FROM messages
         INNER JOIN link_messages_tags ON link_messages_tags.messages_id = messages.id
         WHERE messages.thread_pos = 0 AND messages.blog = true  AND messages.draft = false AND link_messages_tags.tags_id = ?
-        {$this->_dateSql()}
+        AND {$this->_dateSql()}
         ORDER BY messages.published_on DESC
         LIMIT {$limit} OFFSET {$start}
         ";
@@ -658,7 +658,7 @@ class blog extends bayesShared {
         SELECT messages.id, messages.thread_id, messages.title FROM messages
         INNER JOIN link_messages_tags ON link_messages_tags.messages_id = messages.id
         WHERE messages.thread_pos = 0 AND messages.blog = true  AND messages.draft = false AND link_messages_tags.tags_id = ?
-        {$this->_dateSql()}
+        AND {$this->_dateSql()}
         ORDER BY messages.published_on DESC
         ";
 
@@ -685,7 +685,7 @@ class blog extends bayesShared {
         INNER JOIN bayes_documents ON link_bayes_messages.bayes_documents_id = bayes_documents.id
         INNER JOIN bayes_categories ON bayes_documents.bayes_categories_id = bayes_categories.id
         WHERE messages.thread_pos = 0 AND messages.blog = true  AND messages.draft = false AND bayes_categories.id = ?
-        {$this->_dateSql()}
+        AND {$this->_dateSql()}
         ";
         $st = $db->prepare($count_query);
         $st->execute(array($id));
@@ -705,7 +705,7 @@ class blog extends bayesShared {
         INNER JOIN bayes_documents ON link_bayes_messages.bayes_documents_id = bayes_documents.id
         INNER JOIN bayes_categories ON bayes_documents.bayes_categories_id = bayes_categories.id
         WHERE messages.thread_pos = 0 AND messages.blog = true  AND messages.draft = false AND bayes_categories.id = ?
-        {$this->_dateSql()}
+        AND {$this->_dateSql()}
         ORDER BY messages.published_on DESC
         LIMIT {$limit} OFFSET {$start}
         ";
@@ -728,7 +728,7 @@ class blog extends bayesShared {
         INNER JOIN bayes_documents ON link_bayes_messages.bayes_documents_id = bayes_documents.id
         INNER JOIN bayes_categories ON bayes_documents.bayes_categories_id = bayes_categories.id
         WHERE messages.thread_pos = 0 AND messages.blog = true  AND messages.draft = false AND bayes_categories.id = ?
-        {$this->_dateSql()}
+        AND {$this->_dateSql()}
         ORDER BY messages.published_on DESC
         ";
 

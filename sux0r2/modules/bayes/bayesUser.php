@@ -778,7 +778,7 @@ abstract class bayesShared {
         static $date = null; // Cache
         if ($date != null) return $date;
 
-        $date = 'AND NOT published_on > \'' . date('Y-m-d H:i:s') . '\' ';
+        $date = "published_on <= '" . date('Y-m-d H:i:s') . "' ";
 
         return $date;
 
