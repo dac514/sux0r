@@ -10,7 +10,6 @@ $gtext['navcontainer'] = array(
     'Favorieten' => suxFunct::makeUrl('/bookmarks'),
     'Fotos' => suxFunct::makeUrl('/photos'),
     'Source Code' => 'http://sourceforge.net/projects/sux0r/',
-    'Doneer!' => 'http://sourceforge.net/project/project_donations.php?group_id=131752',
 
     );
 
