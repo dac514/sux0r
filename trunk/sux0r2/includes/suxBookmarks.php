@@ -18,12 +18,11 @@ class suxBookmarks {
     // MyISAM (faster, no rollback)
     protected $db_table = 'bookmarks';
 
-    // Object properties
+    // Object properties, with defaults
     protected $published = true;
-    protected $order = array();
+    protected $order = array('published_on', 'DESC');
 
-
-
+	
     /**
     * Constructor
     */
@@ -32,10 +31,6 @@ class suxBookmarks {
     	$this->db = suxDB::get();
         $this->db_driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
         set_exception_handler(array($this, 'exceptionHandler'));
-
-        // Defaults
-        $this->setPublished(true);
-        $this->setOrder('published_on', 'DESC');
 
     }
 
@@ -46,21 +41,23 @@ class suxBookmarks {
     * @param bool $published
     */
     public function setPublished($published) {
+		
         $this->published = $published;
     }
 
 
     /**
-    * Set published property of object
+    * Set order property of object
     *
-    * @param bool $published
+	* @param string $col
+    * @param string $way
     */
-    public function setOrder($column, $direction = 'ASC') {
+    public function setOrder($col, $way = 'ASC') {
 
-        // TODO: Sanitize column
-        $direction = (mb_strtolower($direction) == 'asc') ? 'ASC' : 'DESC';
+        // TODO: Sanitize $col
+        $way = (mb_strtolower($way) == 'asc') ? 'ASC' : 'DESC';
 
-        $arr = array($column, $direction);
+        $arr = array($col, $way);
         $this->order = $arr;
 
     }
@@ -72,6 +69,14 @@ class suxBookmarks {
     * @return string
     */
     public function sqlPublished() {
+		
+		// TODO: 3 states
+		// Published   : DRAFT = FALSE AND DATETIME < NOW
+		// Unpublished : DRAFT = TRUE OR DATEIME >= NOW
+		// Null = SELECT ALL, how do you represent that in a query? 
+		//
+		// Get rid of self::getUnpublishedBookmarks()		
+		
         // PgSql / MySql
         $query = "draft = false AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
         return $query;
