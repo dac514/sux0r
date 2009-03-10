@@ -18,6 +18,11 @@ class suxBookmarks {
     // MyISAM (faster, no rollback)
     protected $db_table = 'bookmarks';
 
+    // Object properties
+    protected $published = true;
+    protected $order = array();
+
+
 
     /**
     * Constructor
@@ -28,26 +33,75 @@ class suxBookmarks {
         $this->db_driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
         set_exception_handler(array($this, 'exceptionHandler'));
 
+        // Defaults
+        $this->setPublished(true);
+        $this->setOrder('published_on', 'DESC');
+
+    }
+
+
+    /**
+    * Set published property of object
+    *
+    * @param bool $published
+    */
+    public function setPublished($published) {
+        $this->published = $published;
+    }
+
+
+    /**
+    * Set published property of object
+    *
+    * @param bool $published
+    */
+    public function setOrder($column, $direction = 'ASC') {
+
+        // TODO: Sanitize column
+        $direction = (mb_strtolower($direction) == 'asc') ? 'ASC' : 'DESC';
+
+        $arr = array($column, $direction);
+        $this->order = $arr;
+
+    }
+
+
+    /**
+    * Return published SQL
+    *
+    * @return string
+    */
+    public function sqlPublished() {
+        // PgSql / MySql
+        $query = "draft = false AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
+        return $query;
+    }
+
+
+    /**
+    * Return order SQL
+    *
+    * @return string
+    */
+    public function sqlOrder() {
+        // PgSql / MySql
+        $query = "{$this->order[0]} {$this->order[1]} ";
+        return $query;
     }
 
 
     /**
     * Count bookmarks
     *
-    * @param bool $published select un-published?
     * @return int
     */
-    function countBookmarks($published = true) {
+    function countBookmarks() {
 
         // SQL Query
         $query = "SELECT COUNT(*) FROM {$this->db_table} ";
 
         // Publish / Draft
-        if ($published) {
-            // PgSql / MySql
-            $query .= "WHERE draft = false ";
-            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
-        }
+        if ($this->published) $query .= 'WHERE ' . $this->sqlPublished();
 
         // Execute
         $st = $this->db->prepare($query);
@@ -64,25 +118,18 @@ class suxBookmarks {
     *
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
-    * @param bool $alphasort sort alphabetically?
-    * @param bool $published select un-published?
     * @return array
     */
-    function getBookmarks($limit = null, $start = 0, $alphasort = false, $published = true) {
+    function getBookmarks($limit = null, $start = 0) {
 
         // SQL Query
         $query = "SELECT * FROM {$this->db_table} ";
 
         // Publish / Draft
-        if ($published) {
-            // PgSql / MySql
-            $query .= "WHERE draft = false ";
-            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
-        }
+        if ($this->published) $query .= 'WHERE ' . $this->sqlPublished();
 
         // Order
-        if ($alphasort) $query .= 'ORDER BY title ASC ';
-        else $query .= 'ORDER BY published_on DESC ';
+        $query .= 'ORDER BY ' . $this->sqlOrder();
 
         // Limit
         if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
@@ -103,7 +150,7 @@ class suxBookmarks {
     */
     function getUnpublishedBookmarks() {
 
-        $q = "SELECT * FROM {$this->db_table} WHERE draft = true ORDER BY title ASC ";
+        $q = "SELECT * FROM {$this->db_table} WHERE draft = true ORDER BY " . $this->sqlOrder();
         $st = $this->db->query($q);
         return $st->fetchAll(PDO::FETCH_ASSOC);
 
@@ -114,10 +161,9 @@ class suxBookmarks {
     * Get a bookmark by id or URL
     *
     * @param int|string $id bookmard id or url
-    * @param bool $published select un-published?
     * @return array|false
     */
-    function getBookmark($id, $published = true) {
+    function getBookmark($id) {
 
         $col = 'id';
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) {
@@ -128,11 +174,7 @@ class suxBookmarks {
         $query = "SELECT * FROM {$this->db_table} WHERE {$col} = ? ";
 
         // Publish / Draft
-        if ($published) {
-            // PgSql / MySql
-            $query .= "AND draft = false ";
-            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
-        }
+        if ($this->published) $query .= 'AND ' . $this->sqlPublished();
 
         $st = $this->db->prepare($query);
         $st->execute(array($id));

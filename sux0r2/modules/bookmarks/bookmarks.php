@@ -67,7 +67,6 @@ class bookmarks extends bayesShared {
 
         // Needs to be in externally accessible variable for filter()
         $this->users_id = $user['users_id'];
-        $this->alphasort = $alphasort;
         unset($user);
 
         // Assign stuff
@@ -78,7 +77,10 @@ class bookmarks extends bayesShared {
 
         // Sort, used in makeUrl() and passed as a hidden field to insert_bayesFilters()
         $sort = array();
-        if ($this->alphasort) $sort['sort'] = 'alpha';
+        if ($alphasort) {
+            $sort['sort'] = 'alpha';
+            $this->bm->setOrder('title', 'ASC');
+        }
         $this->tpl->assign('sort', $sort);
 
         $this->r->title .= " | {$this->r->gtext['bookmarks']} | $nickname";
@@ -91,14 +93,14 @@ class bookmarks extends bayesShared {
 
             // User has subscriptions, we need special JOIN queries
             $max = $this->countUserItems($this->users_id);
-            $eval = '$this->getUserItems($this->users_id, $this->alphasort, $this->pager->limit, $start)';
+            $eval = '$this->getUserItems($this->users_id, $this->pager->limit, $start)';
             $this->r->arr['bookmarks']  = $this->filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search); // Important: $start is a reference
 
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
                 else $params = array('filter' => $cat_id);
                 $params['search'] = $search;
-                if ($this->alphasort)  $params['sort'] = 'alpha';
+                if ($alphasort)  $params['sort'] = 'alpha';
                 $url = suxFunct::makeUrl("/bookmarks/user/$nickname", $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
@@ -125,7 +127,7 @@ class bookmarks extends bayesShared {
 
                 // User has subscriptions, we need special JOIN queries
                 $this->pager->setPages($this->countUserItems($this->users_id));
-                $this->r->arr['bookmarks'] = $this->getUserItems($this->users_id, $this->alphasort, $this->pager->limit, $this->pager->start);
+                $this->r->arr['bookmarks'] = $this->getUserItems($this->users_id, $this->pager->limit, $this->pager->start);
 
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/bookmarks/user/$nickname", $sort));
                 if (!count($this->r->arr['bookmarks'])) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
@@ -152,7 +154,6 @@ class bookmarks extends bayesShared {
         if (!$tag) suxFunct::redirect(suxFunct::makeUrl('/bookmarks'));
         // Needs to be in externally accessible variable for filter()
         $this->tag_id = $tag_id;
-        $this->alphasort = $alphasort;
 
         // Assign stuff
         $this->r->text['form_url'] = suxFunct::makeUrl('/bookmarks/tag/' . $tag_id); // Form Url
@@ -163,7 +164,12 @@ class bookmarks extends bayesShared {
 
         // Sort, used in makeUrl() and passed as a hidden field to insert_bayesFilters()
         $sort = array();
-        if ($this->alphasort) $sort['sort'] = 'alpha';
+        if ($alphasort) {
+            $sort['sort'] = 'alpha';
+            $this->bm->setOrder('title', 'ASC');
+        }
+
+
         $this->tpl->assign('sort', $sort);
 
         $count = $this->countTaggedItems($this->tag_id);
@@ -176,14 +182,14 @@ class bookmarks extends bayesShared {
             // Filtered results
             // ---------------------------------------------------------------
 
-            $eval = '$this->getTaggedItems($this->tag_id, $this->alphasort, $this->pager->limit, $start)';
+            $eval = '$this->getTaggedItems($this->tag_id, $this->pager->limit, $start)';
             $this->r->arr['bookmarks']  = $this->filter($count, $vec_id, $cat_id, $threshold, $start, $eval, $search); // Important: $start is a reference
 
             if ($start < $count) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
                 else $params = array('filter' => $cat_id);
                 $params['search'] = $search;
-                if ($this->alphasort)  $params['sort'] = 'alpha';
+                if ($alphasort)  $params['sort'] = 'alpha';
                 $url = suxFunct::makeUrl('/bookmarks/tag/'. $this->tag_id, $params);
                 $this->r->text['pager'] = $this->pager->continueLink($start, $url);
             }
@@ -211,7 +217,7 @@ class bookmarks extends bayesShared {
 
                 $this->pager->setPages($count);
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/bookmarks/tag/' . $this->tag_id, $sort));
-                $this->r->arr['bookmarks'] = $this->getTaggedItems($this->tag_id, $this->alphasort, $this->pager->limit, $this->pager->start);
+                $this->r->arr['bookmarks'] = $this->getTaggedItems($this->tag_id, $this->pager->limit, $this->pager->start);
 
                 if (!count($this->r->arr['bookmarks'])) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
@@ -251,7 +257,7 @@ class bookmarks extends bayesShared {
             SELECT tags.tag AS tag, tags.id AS id, COUNT(tags.id) AS quantity FROM tags
             INNER JOIN {$link} ON {$link}.tags_id = tags.id
             INNER JOIN bookmarks ON {$link}.bookmarks_id = bookmarks.id
-            WHERE bookmarks.draft = false {$this->_dateSql()}
+            WHERE {$this->bm->sqlPublished()}
             GROUP BY tag, tags.id ORDER BY tag ASC
             ";
 
@@ -277,12 +283,14 @@ class bookmarks extends bayesShared {
         $this->r->text['form_url'] = suxFunct::makeUrl('/bookmarks'); // Form Url
         $this->tpl->assign('datesort_url', suxFunct::makeUrl('/bookmarks'));
         $this->tpl->assign('alphasort_url', suxFunct::makeUrl('/bookmarks', array('sort' => 'alpha')));
-        $this->alphasort = $alphasort; // Needs to be in externally accessible variable for filter()
         $cache_id = false;
 
         // Sort, used in makeUrl() and passed as a hidden field to insert_bayesFilters()
         $sort = array();
-        if ($this->alphasort) $sort['sort'] = 'alpha';
+        if ($alphasort) {
+            $sort['sort'] = 'alpha';
+            $this->bm->setOrder('title', 'ASC');
+        }
         $this->tpl->assign('sort', $sort);
 
         $this->r->title .= " | {$this->r->gtext['bookmarks']}";
@@ -294,7 +302,7 @@ class bookmarks extends bayesShared {
             // ---------------------------------------------------------------
 
             $max = $this->bm->countBookmarks();
-            $eval = '$this->bm->getBookmarks($this->pager->limit, $start, $this->alphasort)';
+            $eval = '$this->bm->getBookmarks($this->pager->limit, $start)';
             $this->r->arr['bookmarks']  = $this->filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search); // Important: $start is a reference
 
             if ($start < $max) {
@@ -331,7 +339,7 @@ class bookmarks extends bayesShared {
                 $this->pager->setStart();
                 $this->pager->setPages($this->bm->countBookmarks());
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/bookmarks/", $sort));
-                $this->r->arr['bookmarks'] = $this->bm->getBookmarks($this->pager->limit, $this->pager->start, $alphasort);
+                $this->r->arr['bookmarks'] = $this->bm->getBookmarks($this->pager->limit, $this->pager->start);
 
                 if (!count($this->r->arr['bookmarks'])) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
@@ -393,8 +401,7 @@ class bookmarks extends bayesShared {
         $query = "
         SELECT COUNT(*) FROM bookmarks
         INNER JOIN link_bookmarks_users ON link_bookmarks_users.bookmarks_id = bookmarks.id
-        WHERE link_bookmarks_users.users_id = ?
-        {$this->_dateSql()}
+        WHERE link_bookmarks_users.users_id = ? AND {$this->bm->sqlPublished()}
         ";
         $st = $db->prepare($query);
         $st->execute(array($users_id));
@@ -403,7 +410,7 @@ class bookmarks extends bayesShared {
     }
 
 
-    protected function getUserItems($users_id, $alphasort, $limit, $start) {
+    protected function getUserItems($users_id, $limit, $start) {
 
         $db = suxDB::get();
 
@@ -411,12 +418,9 @@ class bookmarks extends bayesShared {
         $query = "
         SELECT bookmarks.* FROM bookmarks
         INNER JOIN link_bookmarks_users ON link_bookmarks_users.bookmarks_id = bookmarks.id
-        WHERE link_bookmarks_users.users_id = ?
-        {$this->_dateSql()}
-        ";
-        if ($alphasort) $query .= 'ORDER BY bookmarks.title ASC ';
-        else $query .= 'ORDER BY bookmarks.published_on DESC ';
-        $query .= "LIMIT {$limit} OFFSET {$start} ";
+        WHERE link_bookmarks_users.users_id = ? AND {$this->bm->sqlPublished()}
+        ORDER BY {$this->bm->sqlOrder()}
+        LIMIT {$limit} OFFSET {$start} ";
 
         $st = $db->prepare($query);
         $st->execute(array($users_id));
@@ -437,8 +441,7 @@ class bookmarks extends bayesShared {
         $count_query = "
         SELECT COUNT(*) FROM bookmarks
         INNER JOIN link_bookmarks_tags ON link_bookmarks_tags.bookmarks_id = bookmarks.id
-        WHERE bookmarks.draft = false AND link_bookmarks_tags.tags_id = ?
-        {$this->_dateSql()}
+        WHERE link_bookmarks_tags.tags_id = ? AND {$this->bm->sqlPublished()}
         ";
         $st = $db->prepare($count_query);
         $st->execute(array($id));
@@ -447,7 +450,7 @@ class bookmarks extends bayesShared {
     }
 
 
-    protected function getTaggedItems($id, $alphasort, $limit, $start) {
+    protected function getTaggedItems($id, $limit, $start) {
 
         $db = suxDB::get();
 
@@ -455,12 +458,9 @@ class bookmarks extends bayesShared {
         $query = "
         SELECT bookmarks.* FROM bookmarks
         INNER JOIN link_bookmarks_tags ON link_bookmarks_tags.bookmarks_id = bookmarks.id
-        WHERE bookmarks.draft = false AND link_bookmarks_tags.tags_id = ?
-        {$this->_dateSql()}
-        ";
-        if ($alphasort) $query .= 'ORDER BY title ASC ';
-        else $query .= 'ORDER BY published_on DESC ';
-        $query .= "LIMIT {$limit} OFFSET {$start} ";
+        WHERE link_bookmarks_tags.tags_id = ? AND {$this->bm->sqlPublished()}
+        ORDER BY {$this->bm->sqlOrder()}
+        LIMIT {$limit} OFFSET {$start} ";
 
         $st = $db->prepare($query);
         $st->execute(array($id));

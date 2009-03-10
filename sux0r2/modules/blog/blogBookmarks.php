@@ -53,7 +53,10 @@ class blogBookmarks {
         $this->nb = new bayesUser();
         $this->link = new suxLink();
         $this->bookmarks = new suxBookmarks();
+
+        // Object properties
         $this->msg_id = $msg_id;
+        $this->bookmarks->setPublished(false);
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -85,7 +88,7 @@ class blogBookmarks {
                 // Basic info
                 $url = suxFunct::canonicalizeUrl($matches[1][$i]);
 
-                if (!filter_var($url, FILTER_VALIDATE_URL) || $this->bookmarks->getBookmark($url, false))
+                if (!filter_var($url, FILTER_VALIDATE_URL) || $this->bookmarks->getBookmark($url))
                     continue; // skip it
 
                 $title = strip_tags($matches[2][$i]);
@@ -196,7 +199,7 @@ class blogBookmarks {
             $count = count($clean['url']);
             for ($i = 0; $i < $count; ++$i) {
                 $bookmark = array();
-                if (!$this->bookmarks->getBookmark($clean['url'][$i],  false)) {
+                if (!$this->bookmarks->getBookmark($clean['url'][$i])) {
                     $bookmark['url'] = $clean['url'][$i];
                     $bookmark['title'] = $clean['title'][$i];
                     $bookmark['body'] = $clean['body'][$i];
