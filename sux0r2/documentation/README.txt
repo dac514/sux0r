@@ -1,34 +1,29 @@
-sux0r 2.0.3
 http://www.sux0r.org/
 All spelling mistakes are final and will not be refunded
 
 
 ### LICENSE ###
 
-sux0r is licensed under the GNU AGPL. This means that if you run a sux0r
-website you are obligated to tell your users that they can have access to the
-source code. Furthermore, you are obligated to give access to the source
-code if they ask for it.
+Sux0r is free software: you can redistribute it and/or modify it under the terms
+of the GNU General Public License as published by the Free Software Foundation,
+either version 3 of the License, or (at your option) any later version.
 
-The easiest way to comply is to link to http://www.sux0r.org and hope no one
-asks you for any changes you aren't committing back to us. I leave it to your
-discretion to not be an asshole about this.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.
 
-More info:
-http://www.fsf.org/licensing/licenses/agpl-3.0.html
+@see: http://www.fsf.org/licensing/licenses/gpl-3.0.html
 
 
 ### EXCEPTIONS ###
 
+Files in the 'templates' and 'media' directories can be licensed under simple
+permissive terms i.e. your pick of any LGPL compatible license.
+
 A subdirectory named 'symbionts' contains files from 3rd party open source
-vendors that may or may not be licensed under the GNU AGPL. These additional
+vendors that may or may not be licensed under the GNU GPL. These additional
 open source libraries have their own licensing requirements and, as such, should
 be dealt with according to their own licenses.
-
-Files in the 'templates' and 'media' directories can be licensed under simple
-permissive terms i.e. your pick of any LGPL compatible license. To be clear
-this means that you can create templates / HTML / CSS and not share them.
-We, the sux0r development group, distribute our templates under the AGPL.
 
 
 ### REQUIREMENTS ###

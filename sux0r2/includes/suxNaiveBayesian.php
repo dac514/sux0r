@@ -8,7 +8,7 @@
 * Ken Williams: http://mathforum.org/~ken/bayes/bayes.html
 *
 * @author     Dac Chartrand <dac.chartrand@gmail.com>
-* @license    http://www.gnu.org/licenses/agpl.html
+* @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
 // User/link intergration is purposely left out of this class for reusability

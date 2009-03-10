@@ -18,7 +18,7 @@ $gtext['navcontainer'] = array(
 
 $gtext['copyright'] = '<a href="http://www.sux0r.org/">sux0r</a> is copyright &copy;
 <a href="http://www.trotch.com/">Trotch Inc</a> ' . date('Y') . ' en is uitgebracht onder
-de <a href="http://www.fsf.org/licensing/licenses/agpl-3.0.html">GNU Affero General Public License</a>.
+de <a href="http://www.fsf.org/licensing/licenses/gpl-3.0.html">GNU General Public License</a>.
 Hosting door <a href="http://www.networkredux.com/">Network Redux</a>.';
 
 $gtext['data_license'] = 'Tenzij anders vermeld, is alle inhoud op deze site is copyright bij de auteur en beschikbaar onder de  <br />

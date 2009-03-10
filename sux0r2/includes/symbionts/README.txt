@@ -3,7 +3,7 @@ About symbionts
 ------------------------------------------------------------------------------
 
 Symbionts are 3rd party open source vendors that may or may not be licensed
-under the GNU Affero General Public License (version 3)
+under the GNU General Public License (version 3)
 
 These additional open source libraries have their own licensing requirements
 and, as such, should not be directly modified by the sux0r development group.
@@ -12,24 +12,8 @@ and, as such, should not be directly modified by the sux0r development group.
 Rationale
 ------------------------------------------------------------------------------
 
-According to gnu.org, the GNU AGPL is not compatible with GPLv2. It is also
-technically not compatible with GPLv3 in a strict sense: you cannot take code
-released under the GNU AGPL and use it under the terms of GPLv3, or vice versa.
-
-However, according to section 13 of both licenses, you are allowed to combine
-separate modules or source files released under both of those licenses in a
-single project.
-
-Additionally, most software released under GPLv2 allows you to use the terms
-of later versions of the GPL.
-
-This logic, as far as we care, can be extended to any Free Software license. A
-list of Free Software licenses is located at:
-
-http://www.gnu.org/philosophy/license-list.html
-,
-Sux0r is far removed from the world of compiled languages that many of these
-licenses are meant for. Since everything sux0r deals with are human readable
+Sux0r is far removed from the world of compiled languages that many of the
+FSF licenses are meant for. Since everything sux0r deals with are human readable
 scripts, we hope everyone can agree that we are being respectful and allowing
 for exceptions where necessary. If you disgree please contact us so we can
 resolve the issue.
