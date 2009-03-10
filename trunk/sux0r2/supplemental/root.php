@@ -118,12 +118,12 @@ from the server when you are finished.
 
 <p>
 nickname:
-<input type="text" name="nickname" value="<? echo @$_POST['nickname']; ?>"  />
+<input type="text" name="nickname" value="<?php echo @$_POST['nickname']; ?>"  />
 </p>
 
 <p>
 email:
-<input type="text" name="email" value="<? echo @$_POST['email']; ?>" />
+<input type="text" name="email" value="<?php echo @$_POST['email']; ?>" />
 </p>
 
 <p>
