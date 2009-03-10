@@ -35,6 +35,9 @@ class suxNaiveBayesian {
     private $max_category_length = 64;
     private $max_vector_length = 64;
 
+	// Controlled destruction	 	
+	protected static $destroyed = false; 
+	
 
     /**
     * Constructor
@@ -52,8 +55,13 @@ class suxNaiveBayesian {
     * Destructor
     */
     function __destruct() {
-
-        $this->cleanCache();
+		
+		// Avoid clearing the cache multiple times
+		// Sort of like a singleton destroyer
+		if (self::$destroyed == true) return;
+		
+		$this->cleanCache();
+		self::$destroyed = true;
 
     }
 
