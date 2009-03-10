@@ -21,8 +21,11 @@
 		<td style="vertical-align:top;">
 			<div id="leftside">
 
-            <p><span class="hl">sux0r 2.0</span> is a blogging package, an RSS aggregator, a bookmark repository,
-            and a photo publishing platform with a focus on Naive Bayesian categorization and probabilistic content.</p>
+            <p>
+            <span class="hl">sux0r 2.0</span> is a blogging package, an RSS aggregator, a bookmark repository,
+            and a photo publishing platform with a focus on Naive Bayesian categorization and probabilistic content.
+            <a href="http://openid.net/">OpenID</a> enabled <em>(version 1.1);</em> as both a consumer and a provider.
+            </p>
 
             <p>
             <a href="http://en.wikipedia.org/wiki/Naive_Bayes_classifier">Naive Bayesian categorization</a>

@@ -10,7 +10,6 @@ $gtext['navcontainer'] = array(
     '书签' => suxFunct::makeUrl('/bookmarks'),
     '图片' => suxFunct::makeUrl('/photos'),
     '源代码' => 'http://sourceforge.net/projects/sux0r/',
-    '捐助!' => 'http://sourceforge.net/project/project_donations.php?group_id=131752',
 
     );
 
