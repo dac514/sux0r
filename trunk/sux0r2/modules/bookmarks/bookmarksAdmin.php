@@ -95,9 +95,10 @@ class bookmarksAdmin {
         $this->pager->limit = $this->per_page;
         $this->pager->setStart();
 
-        $this->pager->setPages($this->bm->countBookmarks(false));
+        $this->bm->setPublished(false);
+        $this->pager->setPages($this->bm->countBookmarks());
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/{$this->module}/admin"));
-        $this->r->arr['bookmarks'] = $this->bm->getBookmarks($this->pager->limit, $this->pager->start, true, false);
+        $this->r->arr['bookmarks'] = $this->bm->getBookmarks($this->pager->limit, $this->pager->start, true);
 
         // Additional variables
         foreach ($this->r->arr['bookmarks'] as $key => $val) {

@@ -37,6 +37,9 @@ class bookmarksSuggest  {
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         suxValidate::register_object('this', $this); // Register self to validator
 
+        // Object properties
+        $this->bm->setPublished(false);
+
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
@@ -137,7 +140,7 @@ class bookmarksSuggest  {
     function isDuplicateBookmark($value, $empty, &$params, &$formvars) {
 
         if (empty($formvars['url'])) return false;
-        if ($this->bm->getBookmark($formvars['url'], false)) return false;
+        if ($this->bm->getBookmark($formvars['url'])) return false;
         return true;
 
     }
