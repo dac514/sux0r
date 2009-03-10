@@ -61,29 +61,28 @@ class bookmarks extends bayesShared {
 
     function user($nickname, $alphasort) {
 
+        $cache_id = false;
+        $sort = array();
+
         // Get users_id based on nickname
         $user = $this->user->getUserByNickname($nickname);
         if (!$user) suxFunct::redirect(suxFunct::makeUrl('/bookmarks'));
-
         // Needs to be in externally accessible variable for filter()
         $this->users_id = $user['users_id'];
         unset($user);
 
-        // Assign stuff
-        $this->r->text['form_url'] = suxFunct::makeUrl("/bookmarks/user/$nickname"); // Forum Url
-        $this->tpl->assign('datesort_url', suxFunct::makeUrl("/bookmarks/user/$nickname"));
-        $this->tpl->assign('alphasort_url', suxFunct::makeUrl("/bookmarks/user/$nickname", array('sort' => 'alpha')));
-        $cache_id = false;
-
-        // Sort, used in makeUrl() and passed as a hidden field to insert_bayesFilters()
-        $sort = array();
+		// Establish order
         if ($alphasort) {
-            $sort['sort'] = 'alpha';
+            $sort['sort'] = 'alpha'; // Sort, used in makeUrl() and passed as a hidden field to insert_bayesFilters()
             $this->bm->setOrder('title', 'ASC');
         }
-        $this->tpl->assign('sort', $sort);
 
-        $this->r->title .= " | {$this->r->gtext['bookmarks']} | $nickname";
+        // Assign template variables
+		$this->r->title .= " | {$this->r->gtext['bookmarks']} | $nickname";
+		$this->r->text['form_url'] = suxFunct::makeUrl("/bookmarks/user/$nickname"); // Forum Url
+        $this->tpl->assign('datesort_url', suxFunct::makeUrl("/bookmarks/user/$nickname"));
+        $this->tpl->assign('alphasort_url', suxFunct::makeUrl("/bookmarks/user/$nickname", array('sort' => 'alpha')));
+        $this->tpl->assign('sort', $sort);
 
         if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
@@ -96,13 +95,15 @@ class bookmarks extends bayesShared {
             $eval = '$this->getUserItems($this->users_id, $this->pager->limit, $start)';
             $this->r->arr['bookmarks']  = $this->filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search); // Important: $start is a reference
 
+			// If $start is smaller than $max, then there are more results, we generate the approptiate pager link.
             if ($start < $max) {
+				// Params
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
                 else $params = array('filter' => $cat_id);
                 $params['search'] = $search;
                 if ($alphasort)  $params['sort'] = 'alpha';
-                $url = suxFunct::makeUrl("/bookmarks/user/$nickname", $params);
-                $this->r->text['pager'] = $this->pager->continueLink($start, $url);
+				// Pager link
+                $this->r->text['pager'] = $this->pager->continueLink($start, suxFunct::makeUrl("/bookmarks/user/$nickname", $params));
             }
 
 
@@ -117,7 +118,7 @@ class bookmarks extends bayesShared {
             if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
             else $nn = 'nobody';
 
-            $this->pager->setStart(); // Start pager
+            $this->pager->setStart(); // Start pager, variable used in cache_id
 
             // "Cache Groups" using a vertical bar |
             $cache_id = "$nn|user|$nickname|{$this->pager->start}";
@@ -150,31 +151,29 @@ class bookmarks extends bayesShared {
     */
     function tag($tag_id, $alphasort = false) {
 
+		$cache_id = false;
+        $sort = array();
+
         $tag = $this->tags->getTag($tag_id);
         if (!$tag) suxFunct::redirect(suxFunct::makeUrl('/bookmarks'));
         // Needs to be in externally accessible variable for filter()
         $this->tag_id = $tag_id;
 
-        // Assign stuff
+		// Establish order
+        if ($alphasort) {
+            $sort['sort'] = 'alpha'; // Sort, used in makeUrl() and passed as a hidden field to insert_bayesFilters()
+            $this->bm->setOrder('title', 'ASC');
+        }
+
+        // Assign template variables
+        $this->r->title .= " | {$this->r->gtext['bookmarks']} | {$this->r->gtext['tag']} | {$tag['tag']}";
         $this->r->text['form_url'] = suxFunct::makeUrl('/bookmarks/tag/' . $tag_id); // Form Url
         $this->tpl->assign('datesort_url', suxFunct::makeUrl("/bookmarks/tag/$tag_id"));
         $this->tpl->assign('alphasort_url', suxFunct::makeUrl("/bookmarks/tag/$tag_id", array('sort' => 'alpha')));
         $this->tpl->assign('sidetitle', $tag['tag']);
-        $cache_id = false;
-
-        // Sort, used in makeUrl() and passed as a hidden field to insert_bayesFilters()
-        $sort = array();
-        if ($alphasort) {
-            $sort['sort'] = 'alpha';
-            $this->bm->setOrder('title', 'ASC');
-        }
-
-
         $this->tpl->assign('sort', $sort);
 
         $count = $this->countTaggedItems($this->tag_id);
-
-        $this->r->title .= " | {$this->r->gtext['bookmarks']} | {$this->r->gtext['tag']} | {$tag['tag']}";
 
         if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
@@ -185,13 +184,15 @@ class bookmarks extends bayesShared {
             $eval = '$this->getTaggedItems($this->tag_id, $this->pager->limit, $start)';
             $this->r->arr['bookmarks']  = $this->filter($count, $vec_id, $cat_id, $threshold, $start, $eval, $search); // Important: $start is a reference
 
+			// If $start is smaller than $count, then there are more results, we generate the approptiate pager link.
             if ($start < $count) {
+				// Params
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
                 else $params = array('filter' => $cat_id);
                 $params['search'] = $search;
                 if ($alphasort)  $params['sort'] = 'alpha';
-                $url = suxFunct::makeUrl('/bookmarks/tag/'. $this->tag_id, $params);
-                $this->r->text['pager'] = $this->pager->continueLink($start, $url);
+				// Pager link
+                $this->r->text['pager'] = $this->pager->continueLink($start, suxFunct::makeUrl('/bookmarks/tag/'. $this->tag_id, $params));
             }
 
 
@@ -206,7 +207,7 @@ class bookmarks extends bayesShared {
             if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
             else $nn = 'nobody';
 
-            $this->pager->setStart(); // Start pager
+            $this->pager->setStart(); // Start pager, variable used in cache_id
 
             // "Cache Groups" using a vertical bar |
             if ($alphasort) $cache_id = "$nn|tags|{$this->tag_id}|alphasort|{$this->pager->start}";
@@ -279,21 +280,21 @@ class bookmarks extends bayesShared {
     */
     function listing($alphasort = false) {
 
-        // Assign stuff
-        $this->r->text['form_url'] = suxFunct::makeUrl('/bookmarks'); // Form Url
-        $this->tpl->assign('datesort_url', suxFunct::makeUrl('/bookmarks'));
-        $this->tpl->assign('alphasort_url', suxFunct::makeUrl('/bookmarks', array('sort' => 'alpha')));
-        $cache_id = false;
+		$cache_id = false;
+		$sort = array();
 
-        // Sort, used in makeUrl() and passed as a hidden field to insert_bayesFilters()
-        $sort = array();
+		// Establish order
         if ($alphasort) {
-            $sort['sort'] = 'alpha';
+            $sort['sort'] = 'alpha'; // Sort, used in makeUrl() and passed as a hidden field to insert_bayesFilters()
             $this->bm->setOrder('title', 'ASC');
         }
-        $this->tpl->assign('sort', $sort);
 
-        $this->r->title .= " | {$this->r->gtext['bookmarks']}";
+        // Assign template variables
+		$this->r->title .= " | {$this->r->gtext['bookmarks']}";
+		$this->r->text['form_url'] = suxFunct::makeUrl('/bookmarks');
+        $this->tpl->assign('datesort_url', suxFunct::makeUrl('/bookmarks'));
+        $this->tpl->assign('alphasort_url', suxFunct::makeUrl('/bookmarks', array('sort' => 'alpha')));
+        $this->tpl->assign('sort', $sort);
 
         if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
 
@@ -305,13 +306,15 @@ class bookmarks extends bayesShared {
             $eval = '$this->bm->getBookmarks($this->pager->limit, $start)';
             $this->r->arr['bookmarks']  = $this->filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search); // Important: $start is a reference
 
+			// If $start is smaller than $max, then there are more results, we generate the approptiate pager link.
             if ($start < $max) {
-                if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
+				// Params
+				if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
                 else $params = array('filter' => $cat_id);
-                $params['search'] = $search;
-                if ($alphasort) $params['sort'] = 'alpha'; // Sort
-                $url = suxFunct::makeUrl('/bookmarks/', $params);
-                $this->r->text['pager'] = $this->pager->continueLink($start, $url);
+				$params['search'] = $search;
+				if ($alphasort) $params['sort'] = 'alpha';
+				// Pager link
+                $this->r->text['pager'] = $this->pager->continueLink($start, suxFunct::makeUrl('/bookmarks/', $params));
             }
 
 
@@ -326,7 +329,7 @@ class bookmarks extends bayesShared {
             if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
             else $nn = 'nobody';
 
-            $this->pager->setStart(); // Start pager
+            $this->pager->setStart(); // Start pager, variable used in cache_id
 
             // "Cache Groups" using a vertical bar |
             if ($alphasort) $cache_id = "$nn|listing|alphasort|{$this->pager->start}";
@@ -335,8 +338,6 @@ class bookmarks extends bayesShared {
 
             if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
 
-                // Start pager
-                $this->pager->setStart();
                 $this->pager->setPages($this->bm->countBookmarks());
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/bookmarks/", $sort));
                 $this->r->arr['bookmarks'] = $this->bm->getBookmarks($this->pager->limit, $this->pager->start);
