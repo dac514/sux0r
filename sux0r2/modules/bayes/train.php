@@ -42,7 +42,7 @@ function getBody($link, $id) {
     elseif ($link == 'bookmarks') {
         require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
         $bm = new suxBookmarks();
-        $body = $bm->getBookmark($id);
+        $body = $bm->getByID($id);
         $body = "{$body['title']} \n\n {$body['body_plaintext']}";
     }
 

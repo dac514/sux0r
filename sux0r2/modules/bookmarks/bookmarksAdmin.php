@@ -95,10 +95,10 @@ class bookmarksAdmin {
         $this->pager->limit = $this->per_page;
         $this->pager->setStart();
 
-        $this->bm->setPublished(false);
-        $this->pager->setPages($this->bm->countBookmarks());
+        $this->bm->setPublished(null);
+        $this->pager->setPages($this->bm->count());
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/{$this->module}/admin"));
-        $this->r->arr['bookmarks'] = $this->bm->getBookmarks($this->pager->limit, $this->pager->start, true);
+        $this->r->arr['bookmarks'] = $this->bm->get($this->pager->limit, $this->pager->start, true);
 
         // Additional variables
         foreach ($this->r->arr['bookmarks'] as $key => $val) {
@@ -122,7 +122,7 @@ class bookmarksAdmin {
     function formProcess(&$clean) {
 
         if (isset($clean['delete'])) foreach($clean['delete'] as $id => $val) {
-            $this->bm->deleteBookmark($id);
+            $this->bm->delete($id);
             $this->user->log("sux0r::bookmarksAdmin() deleted bookmarks_id: {$id}", $_SESSION['users_id'], 1); // Private
         }
 

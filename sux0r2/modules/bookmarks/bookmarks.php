@@ -302,8 +302,8 @@ class bookmarks extends bayesShared {
             // Filtered results
             // ---------------------------------------------------------------
 
-            $max = $this->bm->countBookmarks();
-            $eval = '$this->bm->getBookmarks($this->pager->limit, $start)';
+            $max = $this->bm->count();
+            $eval = '$this->bm->get($this->pager->limit, $start)';
             $this->r->arr['bookmarks']  = $this->filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search); // Important: $start is a reference
 
 			// If $start is smaller than $max, then there are more results, we generate the approptiate pager link.
@@ -338,9 +338,9 @@ class bookmarks extends bayesShared {
 
             if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
 
-                $this->pager->setPages($this->bm->countBookmarks());
+                $this->pager->setPages($this->bm->count());
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/bookmarks/", $sort));
-                $this->r->arr['bookmarks'] = $this->bm->getBookmarks($this->pager->limit, $this->pager->start);
+                $this->r->arr['bookmarks'] = $this->bm->get($this->pager->limit, $this->pager->start);
 
                 if (!count($this->r->arr['bookmarks'])) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
@@ -365,7 +365,7 @@ class bookmarks extends bayesShared {
 
         if (!$this->tpl->is_cached('rss.tpl', $cache_id)) {
 
-            $fp = $this->bm->getBookmarks($this->pager->limit);
+            $fp = $this->bm->get($this->pager->limit);
             if ($fp) {
 
                 require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');

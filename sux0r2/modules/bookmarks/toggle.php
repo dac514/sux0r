@@ -32,7 +32,7 @@ $id = $_POST['id'];
 require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
 $bm = new suxBookmarks();
 
-if (!$bm->getBookmark($id)) failure('Invalid bookmark ' . $id);
+if (!$bm->getByID($id)) failure('Invalid bookmark ' . $id);
 
 // ---------------------------------------------------------------------------
 // Go

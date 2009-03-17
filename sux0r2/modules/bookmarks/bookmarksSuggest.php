@@ -38,7 +38,7 @@ class bookmarksSuggest  {
         suxValidate::register_object('this', $this); // Register self to validator
 
         // Object properties
-        $this->bm->setPublished(false);
+        $this->bm->setPublished(null);
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -103,14 +103,14 @@ class bookmarksSuggest  {
     */
     function formProcess(&$clean) {
 
-        $bm = $this->bm->fetchBookmark($clean['url']);
+        $bm = $this->bm->fetchUrlInfo($clean['url']);
 
         $bookmark['url'] = $clean['url'];
         $bookmark['title'] = isset($bm['title']) ? $bm['title'] : '---';
         $bookmark['body'] = isset($bm['description']) ? $bm['description'] : '';
         $bookmark['draft'] = true;
 
-        $id = $this->bm->saveBookmark($_SESSION['users_id'], $bookmark);
+        $id = $this->bm->save($_SESSION['users_id'], $bookmark);
 
         $this->user->log("sux0r::bookmarksSuggest() bookmarks_id: {$id}", $_SESSION['users_id'], 1); // Private
 
@@ -140,7 +140,7 @@ class bookmarksSuggest  {
     function isDuplicateBookmark($value, $empty, &$params, &$formvars) {
 
         if (empty($formvars['url'])) return false;
-        if ($this->bm->getBookmark($formvars['url'])) return false;
+        if ($this->bm->getByID($formvars['url'])) return false;
         return true;
 
     }
@@ -154,7 +154,7 @@ class bookmarksSuggest  {
     function isValidBookmark($value, $empty, &$params, &$formvars) {
 
         if (empty($formvars['url'])) return false;
-        $bm = $this->bm->fetchBookmark($formvars['url']);
+        $bm = $this->bm->fetchUrlInfo($formvars['url']);
         if (!$bm) return false;
         return true;
 

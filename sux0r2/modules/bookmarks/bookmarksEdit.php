@@ -55,7 +55,7 @@ class bookmarksEdit {
         $this->tags = new suxTags();
 
         // Object properties
-        $this->bm->setPublished(false);
+        $this->bm->setPublished(null);
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -103,7 +103,7 @@ class bookmarksEdit {
         if ($this->id) {
 
             // Editing a bookmark post
-            $tmp = $this->bm->getBookmark($this->id);
+            $tmp = $this->bm->getByID($this->id);
 
             $bookmark['id'] = $tmp['id'];
             $bookmark['title'] = $tmp['title'];
@@ -243,7 +243,7 @@ class bookmarksEdit {
         // Put $bookmark in database
         // --------------------------------------------------------------------
 
-        $clean['id'] = $this->bm->saveBookmark($_SESSION['users_id'], $bookmark);
+        $clean['id'] = $this->bm->save($_SESSION['users_id'], $bookmark);
 
         // --------------------------------------------------------------------
         // Tags procedure
@@ -294,7 +294,7 @@ class bookmarksEdit {
 
         if (empty($formvars['url'])) return false;
 
-        $tmp = $this->bm->getBookmark($formvars['url']);
+        $tmp = $this->bm->getByID($formvars['url']);
         if ($tmp === false ) return true; // No duplicate found
 
         if ($this->id) {
@@ -315,7 +315,7 @@ class bookmarksEdit {
     function isValidBookmark($value, $empty, &$params, &$formvars) {
 
         if (empty($formvars['url'])) return false;
-        $bm = $this->bm->fetchBookmark($formvars['url']);
+        $bm = $this->bm->fetchUrlInfo($formvars['url']);
         if (!$bm) return false;
         return true;
 

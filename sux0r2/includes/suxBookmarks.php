@@ -22,7 +22,7 @@ class suxBookmarks {
     protected $published = true;
     protected $order = array('published_on', 'DESC');
 
-	
+
     /**
     * Constructor
     */
@@ -41,7 +41,10 @@ class suxBookmarks {
     * @param bool $published
     */
     public function setPublished($published) {
-		
+
+        // Three options:
+        // True, False, or Null
+
         $this->published = $published;
     }
 
@@ -54,7 +57,7 @@ class suxBookmarks {
     */
     public function setOrder($col, $way = 'ASC') {
 
-        // TODO: Sanitize $col
+        if (!preg_match('/^[A-Za-z0-9_,\s]+$/', $col)) throw new Exception('Invalid column(s)');
         $way = (mb_strtolower($way) == 'asc') ? 'ASC' : 'DESC';
 
         $arr = array($col, $way);
@@ -69,16 +72,16 @@ class suxBookmarks {
     * @return string
     */
     public function sqlPublished() {
-		
-		// TODO: 3 states
-		// Published   : DRAFT = FALSE AND DATETIME < NOW
-		// Unpublished : DRAFT = TRUE OR DATEIME >= NOW
-		// Null = SELECT ALL, how do you represent that in a query? 
-		//
-		// Get rid of self::getUnpublishedBookmarks()		
-		
+
+		// Published   : draft = FALSE AND published_on < NOW
+		// Unpublished : draft = TRUE OR published_on >= NOW
+		// Null = SELECT ALL, not sure what the best way to represent this is, id = id?
+
         // PgSql / MySql
-        $query = "draft = false AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
+        if ($this->published === true) $query = "draft = false AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
+        elseif ($this->published === false) $query = $query = "draft = true OR published_on > '" . date('Y-m-d H:i:s') . "' ";
+        else $query = "id = id "; // select all
+
         return $query;
     }
 
@@ -100,19 +103,18 @@ class suxBookmarks {
     *
     * @return int
     */
-    function countBookmarks() {
+    function count() {
 
         // SQL Query
         $query = "SELECT COUNT(*) FROM {$this->db_table} ";
 
         // Publish / Draft
-        if ($this->published) $query .= 'WHERE ' . $this->sqlPublished();
+        if (is_bool($this->published)) $query .= 'WHERE ' . $this->sqlPublished();
 
         // Execute
         $st = $this->db->prepare($query);
         $st->execute();
         return $st->fetchColumn();
-
 
     }
 
@@ -125,13 +127,13 @@ class suxBookmarks {
     * @param int $start sql start of limit value
     * @return array
     */
-    function getBookmarks($limit = null, $start = 0) {
+    function get($limit = null, $start = 0) {
 
         // SQL Query
         $query = "SELECT * FROM {$this->db_table} ";
 
         // Publish / Draft
-        if ($this->published) $query .= 'WHERE ' . $this->sqlPublished();
+        if (is_bool($this->published)) $query .= 'WHERE ' . $this->sqlPublished();
 
         // Order
         $query .= 'ORDER BY ' . $this->sqlOrder();
@@ -148,19 +150,6 @@ class suxBookmarks {
     }
 
 
-    /**
-    * Get all published feeds
-    *
-    * @return array|false
-    */
-    function getUnpublishedBookmarks() {
-
-        $q = "SELECT * FROM {$this->db_table} WHERE draft = true ORDER BY " . $this->sqlOrder();
-        $st = $this->db->query($q);
-        return $st->fetchAll(PDO::FETCH_ASSOC);
-
-    }
-
 
     /**
     * Get a bookmark by id or URL
@@ -168,7 +157,7 @@ class suxBookmarks {
     * @param int|string $id bookmard id or url
     * @return array|false
     */
-    function getBookmark($id) {
+    function getByID($id) {
 
         $col = 'id';
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) {
@@ -179,7 +168,7 @@ class suxBookmarks {
         $query = "SELECT * FROM {$this->db_table} WHERE {$col} = ? ";
 
         // Publish / Draft
-        if ($this->published) $query .= 'AND ' . $this->sqlPublished();
+        if (is_bool($this->published)) $query .= 'AND ' . $this->sqlPublished();
 
         $st = $this->db->prepare($query);
         $st->execute(array($id));
@@ -200,7 +189,7 @@ class suxBookmarks {
     * @param int $trusted passed on to sanitizeHtml()
     * @return int insert id
     */
-    function saveBookmark($users_id, array $url, $trusted = -1) {
+    function save($users_id, array $url, $trusted = -1) {
 
         // -------------------------------------------------------------------
         // Sanitize
@@ -323,7 +312,7 @@ class suxBookmarks {
     *
     * @param int $id bookmarks_id
     */
-    function deleteBookmark($id) {
+    function delete($id) {
 
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
 
@@ -348,12 +337,16 @@ class suxBookmarks {
 
     /**
     * @param int $id bookmark id
+    * @param bool $bool
     */
-    function approveBookmark($id) {
+    function draft($id, $bool) {
 
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
 
-        $st = $this->db->prepare("UPDATE {$this->db_table} SET draft = false WHERE id = ? ");
+        if ($bool) $query = "UPDATE {$this->db_table} SET draft = true WHERE id = ? ";
+        else $query = "UPDATE {$this->db_table} SET draft = false WHERE id = ? ";
+
+        $st = $this->db->prepare($query);
         $st->execute(array($id));
 
     }
@@ -365,7 +358,7 @@ class suxBookmarks {
     * @param string $url a URL to an RSS Feed
     * @return array|false
 	*/
-	function fetchBookmark($url) {
+	function fetchUrlInfo($url) {
 
         // Sanity check
         if (!filter_var($url, FILTER_VALIDATE_URL)) return false;
