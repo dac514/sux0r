@@ -56,7 +56,7 @@ class blogBookmarks {
 
         // Object properties
         $this->msg_id = $msg_id;
-        $this->bookmarks->setPublished(false);
+        $this->bookmarks->setPublished(null);
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -88,14 +88,14 @@ class blogBookmarks {
                 // Basic info
                 $url = suxFunct::canonicalizeUrl($matches[1][$i]);
 
-                if (!filter_var($url, FILTER_VALIDATE_URL) || $this->bookmarks->getBookmark($url))
+                if (!filter_var($url, FILTER_VALIDATE_URL) || $this->bookmarks->getByID($url))
                     continue; // skip it
 
                 $title = strip_tags($matches[2][$i]);
                 $body = null;
 
                 if (!$this->r->detectPOST()) {
-                    $tmp = $this->bookmarks->fetchBookmark($url);
+                    $tmp = $this->bookmarks->fetchUrlInfo($url);
                     if ($tmp) {
                         $title = $tmp['title'];
                         $body = $tmp['description'];
@@ -199,12 +199,12 @@ class blogBookmarks {
             $count = count($clean['url']);
             for ($i = 0; $i < $count; ++$i) {
                 $bookmark = array();
-                if (!$this->bookmarks->getBookmark($clean['url'][$i])) {
+                if (!$this->bookmarks->getByID($clean['url'][$i])) {
                     $bookmark['url'] = $clean['url'][$i];
                     $bookmark['title'] = $clean['title'][$i];
                     $bookmark['body'] = $clean['body'][$i];
                     $bookmark['draft'] = true; // Admin approves bookmarks, like dmoz.org
-                    $this->bookmarks->saveBookmark($_SESSION['users_id'], $bookmark);
+                    $this->bookmarks->save($_SESSION['users_id'], $bookmark);
                 }
             }
         }

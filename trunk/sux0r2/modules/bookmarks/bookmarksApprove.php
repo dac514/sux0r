@@ -88,13 +88,21 @@ class bookmarksApprove  {
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         // bookmarks
-        $this->r->arr['bookmarks'] = $this->bm->getUnpublishedBookmarks();
+        $this->bm->setPublished(false);
+        $this->r->arr['bookmarks'] = $this->bm->get();
 
-        // Additional variables
+        // Adjust variables
         foreach ($this->r->arr['bookmarks'] as $key => $val) {
+            if (!$val['draft']) {
+                // This bookmark is not a draft, it's just in the future, ignore it.
+                unset($this->r->arr['bookmarks'][$key]);
+                continue;
+            }
+            // Append nickname
             $u = $this->user->getUser($val['users_id']);
             $this->r->arr['bookmarks'][$key]['nickname'] = $u['nickname'];
         }
+
 
         $this->r->title .= " | {$this->r->gtext['approve']}";
 
@@ -113,11 +121,11 @@ class bookmarksApprove  {
         if (isset($clean['bookmarks'])) foreach ($clean['bookmarks'] as $key => $val) {
 
             if ($val == 1) {
-                $this->bm->approveBookmark($key);
+                $this->bm->draft($key, false);
                 $this->user->log("sux0r::bookmarksApprove() bookmarks_id: {$key}", $_SESSION['users_id'], 1); // Private
             }
             else {
-                $this->bm->deleteBookmark($key);
+                $this->bm->delete($key);
                 $this->user->log("sux0r::bookmarksApprove() deleted bookmarks_id: {$key}", $_SESSION['users_id'], 1); // Private
             }
 
