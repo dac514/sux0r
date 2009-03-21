@@ -191,7 +191,7 @@ class userRenderer extends suxRenderer {
 
         foreach ($rel as $val) {
 
-            $u = $this->user->getUser($val['friend_users_id'], true);
+            $u = $this->user->getByID($val['friend_users_id'], true);
             if (!$u) continue; // Skip
 
             $url = suxFunct::makeUrl('/user/profile/' . $u['nickname']);
@@ -243,7 +243,7 @@ class userRenderer extends suxRenderer {
 
         foreach ($rel as $val) {
 
-            $u = $this->user->getUser($val['users_id'], true);
+            $u = $this->user->getByID($val['users_id'], true);
             if (!$u) continue; // Skip
 
             $url = suxFunct::makeUrl('/user/profile/' . $u['nickname']);

@@ -71,7 +71,7 @@ class blog extends bayesShared {
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog/author/' . $author); // Form Url
         $cache_id = false;
 
-        $u = $this->user->getUserByNickname($author);
+        $u = $this->user->getByNickname($author);
         if(!$u) suxFunct::redirect(suxFunct::makeUrl('/blog'));
 
         $this->r->title .= " | {$this->r->gtext['blog']} | $author";
@@ -91,7 +91,7 @@ class blog extends bayesShared {
                 else $params = array('filter' => $cat_id);
                 $params['search'] = $search;
                 $url = suxFunct::makeUrl('/blog/author/'. $author, $params);
-                $this->r->text['pager'] = $this->pager->continueLink($start, $url);
+                $this->r->text['pager'] = $this->pager->continueURL($start, $url);
             }
 
 
@@ -149,7 +149,7 @@ class blog extends bayesShared {
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog/tag/' . $tag_id); // Form Url
         $cache_id = false;
 
-        $tag = $this->tags->getTag($tag_id);
+        $tag = $this->tags->getByID($tag_id);
         if (!$tag) suxFunct::redirect(suxFunct::makeUrl('/blog'));
         $this->tag_id = $tag_id; // Needs to be in externally accessible variable for filter()
 
@@ -171,7 +171,7 @@ class blog extends bayesShared {
                 else $params = array('filter' => $cat_id);
                 $params['search'] = $search;
                 $url = suxFunct::makeUrl('/blog/tag/'. $this->tag_id, $params);
-                $this->r->text['pager'] = $this->pager->continueLink($start, $url);
+                $this->r->text['pager'] = $this->pager->continueURL($start, $url);
             }
 
 
@@ -239,7 +239,7 @@ class blog extends bayesShared {
 
         if (!$this->tpl->is_cached('cloud.tpl', $cache_id)) {
 
-            $link = $this->link->getLinkTableName('messages', 'tags');
+            $link = $this->link->buildTableName('messages', 'tags');
             $query = "
             SELECT tags.tag AS tag, tags.id AS id, COUNT(tags.id) AS quantity FROM tags
             INNER JOIN {$link} ON {$link}.tags_id = tags.id
@@ -247,7 +247,7 @@ class blog extends bayesShared {
             WHERE messages.blog = true AND messages.draft = false AND {$this->_dateSql()}
             GROUP BY tag, tags.id ORDER BY tag ASC
             ";
-            $this->r->arr['tc'] = $this->tags->tagcloud($query);
+            $this->r->arr['tc'] = $this->tags->cloud($query);
 
             $this->r->title .= " | {$this->r->gtext['blog']} | {$this->r->gtext['tag_cloud']} ";
 
@@ -288,7 +288,7 @@ class blog extends bayesShared {
                 else $params = array('filter' => $cat_id2);
                 $params['search'] = $search;
                 $url = suxFunct::makeUrl('/blog/category/'. $this->cat_id, $params);
-                $this->r->text['pager'] = $this->pager->continueLink($start, $url);
+                $this->r->text['pager'] = $this->pager->continueURL($start, $url);
             }
 
 
@@ -370,7 +370,7 @@ class blog extends bayesShared {
                 else $params = array('filter' => $cat_id);
                 $params['search'] = $search;
                 $url = suxFunct::makeUrl('/blog/month/'. $date, $params);
-                $this->r->text['pager'] = $this->pager->continueLink($start, $url);
+                $this->r->text['pager'] = $this->pager->continueURL($start, $url);
             }
 
 
@@ -445,7 +445,7 @@ class blog extends bayesShared {
                 else $params = array('filter' => $cat_id);
                 $params['search'] = $search;
                 $url = suxFunct::makeUrl('/blog/', $params);
-                $this->r->text['pager'] = $this->pager->continueLink($start, $url);
+                $this->r->text['pager'] = $this->pager->continueURL($start, $url);
             }
 
 
@@ -583,7 +583,7 @@ class blog extends bayesShared {
 
         foreach($msgs as &$val) {
             $val['comments'] = $this->msg->getCommentsCount($val['thread_id']);
-            $user = $this->user->getUser($val['users_id']);
+            $user = $this->user->getByID($val['users_id']);
             $val['nickname'] = $user['nickname'];
         }
         return $msgs;
@@ -598,7 +598,7 @@ class blog extends bayesShared {
     private function comments($msgs) {
 
         foreach($msgs as &$val) {
-            $user = $this->user->getUser($val['users_id']);
+            $user = $this->user->getByID($val['users_id']);
             $val['nickname'] = $user['nickname'];
         }
         return $msgs;

@@ -35,9 +35,9 @@ class suxNaiveBayesian {
     private $max_category_length = 64;
     private $max_vector_length = 64;
 
-	// Controlled destruction	 	
-	protected static $destroyed = false; 
-	
+	// Controlled destruction
+	protected static $destroyed = false;
+
 
     /**
     * Constructor
@@ -55,11 +55,9 @@ class suxNaiveBayesian {
     * Destructor
     */
     function __destruct() {
-		
-		// Avoid clearing the cache multiple times
-		// Sort of like a singleton destroyer
-		if (self::$destroyed == true) return;
-		
+
+		if (self::$destroyed == true) return; // Avoid cleaning the cache multiple times
+
 		$this->cleanCache();
 		self::$destroyed = true;
 
@@ -826,7 +824,7 @@ class suxNaiveBayesian {
         }
 
         // Cache results
-        $this->addCache($vector_id, $md5, $scores);
+        $this->cache($vector_id, $md5, $scores);
 
         return $scores;
 
@@ -1053,6 +1051,9 @@ class suxNaiveBayesian {
     }
 
 
+    /**
+    *
+    */
     private function cleanCache() {
 
         $st = $this->db->prepare("DELETE FROM {$this->db_table_cache} WHERE expiration < ? ");
@@ -1087,7 +1088,7 @@ class suxNaiveBayesian {
     * @param string $md5 a has of a vector id concatenated with a document
     * @param array $scores
     */
-    private function addCache($vector_id, $md5, $scores) {
+    private function cache($vector_id, $md5, $scores) {
 
         $clean = array(
             'bayes_vectors_id' => $vector_id,

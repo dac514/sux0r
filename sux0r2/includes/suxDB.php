@@ -33,6 +33,7 @@ class suxDB {
     private static $db = array();
     private static $transaction = array();
 
+
     // Static class, no cloning or instantiating allowed
     final private function __construct() { }
     final private function __clone() { }
@@ -42,7 +43,7 @@ class suxDB {
     // ------------------------------------------------------------------------
 
     /**
-    * Get a PDO database connection, singleton design
+    * Get a PDO database connection
     *
     * @param string $key PDO dsn key
     */
@@ -115,14 +116,6 @@ class suxDB {
     */
     static function requestTransaction($key = null) {
 
-        if (!$key) {
-            // Assume we want the first key from the DSN
-            $key = array_keys(self::$dsn);
-            $key = array_shift($key);
-        }
-
-        if (!isset(self::$dsn[$key])) throw new Exception("Unknown DSN: $key");
-
         $tid = uniqid();
         if (empty(self::$transaction[$key])) {
             self::$transaction[$key] = $tid;
@@ -143,14 +136,6 @@ class suxDB {
     */
     static function commitTransaction($tid, $key = null) {
 
-        if (!$key) {
-            // Assume we want the first key from the DSN
-            $key = array_keys(self::$dsn);
-            $key = array_shift($key);
-        }
-
-        if (!isset(self::$dsn[$key])) throw new Exception("Unknown DSN: $key");
-
         if (empty(self::$transaction[$key])) throw new Exception("Transaction was never initiated for: $key");
 
         if($tid == self::$transaction[$key]) {
@@ -160,6 +145,72 @@ class suxDB {
         }
 
     }
+
+
+    /**
+    * Show Tables SQL query
+    *
+    * @param string $key PDO dsn key
+    */
+    static function showTablesQuery($key = null) {
+
+        $db = self::get($key);
+        switch($db->getAttribute(PDO::ATTR_DRIVER_NAME))
+        {
+
+        case 'mysql':
+            $q = "SHOW TABLES ";
+            break;
+
+        case 'pgsql':
+            $q = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' and table_type = 'BASE TABLE' ";
+            break;
+
+        case 'sqlite':
+            $q = "SELECT name FROM sqlite_master WHERE type = 'table' ";
+            break;
+
+        default:
+            throw new Exception('Unsupported database driver');
+
+        }
+
+        return $q;
+
+    }
+
+
+    /**
+    * Show Columns SQL query
+    *
+    * @param string $key PDO dsn key
+    */
+    static function showColumnsQuery($table, $key = null) {
+
+        if (!preg_match('/^[A-Za-z0-9_]+$/', $table)) throw new Exception('Invalid table name');
+
+        $db = self::get($key);
+        switch($db->getAttribute(PDO::ATTR_DRIVER_NAME))
+
+        {
+
+        case 'mysql':
+            $q = "SHOW COLUMNS FROM {$table} ";
+            break;
+
+        case 'pgsql':
+            $q = "SELECT column_name FROM information_schema.columns WHERE table_name = '{$table}' ";
+            break;
+
+        default:
+            throw new Exception('Unsupported database driver');
+
+        }
+
+        return $q;
+
+    }
+
 
 
     /**
@@ -252,16 +303,17 @@ class suxDB {
     * @param string $table the name of a table to insert into
     * @param string $string search query
     * @param string $op SQL operator, AND/OR
+    * @param string $key PDO dsn key
     * @return string|false SQL query
     */
-    static function prepareSearchQuery($table, $string, $where = '', $op = 'AND') {
+    static function prepareSearchQuery($table, $string, $where = '', $op = 'AND', $key = null) {
 
         $tokens = suxFunct::parseTokens($string);
 
         $op = mb_strtoupper($op);
         if ($op != 'AND') $op = 'OR'; // Enforce OR/AND
 
-        $db = self::get();
+        $db = self::get($key);
         $q = "SELECT * FROM {$table} WHERE ( ";
         foreach ($tokens as $string) {
             //quote

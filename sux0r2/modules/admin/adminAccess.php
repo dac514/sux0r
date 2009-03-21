@@ -46,7 +46,7 @@ class adminAccess {
         if (!$this->user->isRoot()) suxFunct::redirect(suxFunct::makeUrl('/home'));
 
 
-        $tmp = $this->user->getUserByNickname($nickname);
+        $tmp = $this->user->getByNickname($nickname);
         if (!$tmp) suxFunct::redirect(suxFunct::getPreviousURL()); // Invalid user
 
         $this->nickname = $nickname;
@@ -275,7 +275,7 @@ class adminAccess {
 
         foreach($GLOBALS['CONFIG']['ACCESS'] as $key => $val) {
             if (isset($clean[$key])) {
-                if ($clean[$key]) $this->user->saveAccess($key, $clean[$key], $this->users_id);
+                if ($clean[$key]) $this->user->saveAccess($this->users_id, $key, $clean[$key]);
                 else $this->user->removeAccess($key, $this->users_id);
             }
         }

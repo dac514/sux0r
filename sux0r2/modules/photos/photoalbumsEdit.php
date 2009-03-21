@@ -45,6 +45,8 @@ class photoalbumsEdit {
         $this->r = new photosRenderer($this->module); // Renderer
         suxValidate::register_object('this', $this); // Register self to validator
 
+        // Object properties
+        $this->photo->setPublished(null);
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -89,7 +91,7 @@ class photoalbumsEdit {
         if ($this->id) {
 
             // Editing a photoalbum
-            $tmp = $this->photo->getAlbum($this->id, false);
+            $tmp = $this->photo->getAlbumByID($this->id);
 
             $photoalbum['id'] = $tmp['id'];
             $photoalbum['title'] = $tmp['title'];
@@ -207,7 +209,10 @@ class photoalbumsEdit {
 
         $this->user->log("sux0r::photoalbumsEdit() photoalbums_id: $id", $_SESSION['users_id'], 1); // Private
 
-        $tmp = $this->photo->getAlbum($id); // Is actually published?
+        $this->photo->setPublished(true);
+        $tmp = $this->photo->getAlbumByID($id); // Is actually published?
+        $this->photo->setPublished(null); // Revert
+
         if ($tmp) {
 
             // Clear all caches, cheap and easy
@@ -229,6 +234,7 @@ class photoalbumsEdit {
             $tpl->clear_cache(null, $_SESSION['nickname']);
 
         }
+
 
 
     }

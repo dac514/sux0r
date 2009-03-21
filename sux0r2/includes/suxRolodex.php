@@ -33,64 +33,6 @@ class suxRolodex {
     }
 
 
-    /**
-    * Set rolodex
-    *
-    * @param array $info
-    * @param int $id rolodex_id
-    * @return bool
-    */
-    function saveRolodex(array $info, $id = null) {
-
-        // --------------------------------------------------------------------
-        // Sanitize
-        // --------------------------------------------------------------------
-
-        if ($id != null && (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)) throw new Exception('Invalid rolodex id');
-
-        unset($info['id']); // Don't allow spoofing of the id in the array
-
-        foreach ($info as $key => $val) {
-            if ($key == 'url') $info[$key] = suxFunct::canonicalizeUrl($val);
-            elseif ($key == 'email') $info[$key] = filter_var($val, FILTER_SANITIZE_EMAIL);
-            else $info[$key] = strip_tags($val); // No Html allowed
-        }
-
-        // --------------------------------------------------------------------
-        // Go!
-        // --------------------------------------------------------------------
-
-        try {
-            if ($id) {
-
-                // UPDATE
-                $query = suxDB::prepareUpdateQuery($this->db_table, $info);
-                $st = $this->db->prepare($query);
-                return $st->execute($info);
-
-            }
-            else {
-
-                // INSERT
-                $query = suxDB::prepareInsertQuery($this->db_table, $info);
-                $st = $this->db->prepare($query);
-                return $st->execute($info);
-
-            }
-
-        }
-        catch (Exception $e) {
-            if ($st->errorCode() == 23000) {
-                // SQLSTATE 23000: Constraint violations
-                return false;
-            }
-            else throw ($e); // Hot potato
-        }
-
-
-    }
-
-
     // ----------------------------------------------------------------------------
     // Exception Handler
     // ----------------------------------------------------------------------------
@@ -117,6 +59,7 @@ class suxRolodex {
 
 CREATE TABLE `rolodex` (
   `id` int(11) NOT NULL auto_increment,
+  `users_id` int(11) NOT NULL,
   `organization_name` varchar(255) NOT NULL,
   `organization_unit` varchar(255) default NULL,
   `post_office_box` varchar(255) default NULL,

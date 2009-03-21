@@ -62,7 +62,7 @@ class feeds extends bayesShared {
     function user($nickname) {
 
         // Get users_id based on nickname
-        $user = $this->user->getUserByNickname($nickname);
+        $user = $this->user->getByNickname($nickname);
         if (!$user) suxFunct::redirect(suxFunct::makeUrl('/feeds'));
         $this->users_id = $user['users_id']; // Needs to be in externally accessible variable for filter()
         unset($user);
@@ -89,7 +89,7 @@ class feeds extends bayesShared {
                 else $params = array('filter' => $cat_id);
                 $params['search'] = $search;
                 $url = suxFunct::makeUrl("/feeds/user/$nickname", $params);
-                $this->r->text['pager'] = $this->pager->continueLink($start, $url);
+                $this->r->text['pager'] = $this->pager->continueURL($start, $url);
             }
 
 
@@ -153,7 +153,7 @@ class feeds extends bayesShared {
         // Title
         if ($feeds_id) {
             $this->r->title .= " | {$this->r->gtext['feed']}";
-            $tmp = $this->rss->getFeed($feeds_id);
+            $tmp = $this->rss->getFeedByID($feeds_id);
             if ($tmp) $this->r->title .= " | {$tmp['title']}";
         }
         else {
@@ -169,7 +169,7 @@ class feeds extends bayesShared {
             if ($feeds_id || !count($subscriptions)) {
                 // Regular queries
                 $max = $this->rss->countItems($feeds_id);
-                $eval = '$this->rss->getItems(' . ($feeds_id ? $feeds_id : 'null') . ', $this->pager->limit, $start)';
+                $eval = '$this->rss->getItems($this->pager->limit, $start, ' . ($feeds_id ? $feeds_id : 'null') . ')';
             }
             else {
                 // User has subscriptions, we need special JOIN queries
@@ -184,7 +184,7 @@ class feeds extends bayesShared {
                 else $params = array('filter' => $cat_id);
                 $params['search'] = $search;
                 $url = suxFunct::makeUrl("/feeds/$feeds_id", $params);
-                $this->r->text['pager'] = $this->pager->continueLink($start, $url);
+                $this->r->text['pager'] = $this->pager->continueURL($start, $url);
             }
 
 
@@ -210,7 +210,7 @@ class feeds extends bayesShared {
                 if ($feeds_id || !count($subscriptions)) {
                     // Regular queries
                     $this->pager->setPages($this->rss->countItems($feeds_id));
-                    $this->r->arr['feeds'] = $this->rss->getItems($feeds_id, $this->pager->limit, $this->pager->start);
+                    $this->r->arr['feeds'] = $this->rss->getItems($this->pager->limit, $this->pager->start, $feeds_id);
                 }
                 else {
                     // User has subscriptions, we need special JOIN queries

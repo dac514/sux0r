@@ -29,7 +29,7 @@ class suxPager {
     * @param string $url
     * @return string returns a contine link
     */
-	function continueLink($start, $url) {
+	function continueURL($start, $url) {
 
         if (!(filter_var($start, FILTER_VALIDATE_INT))) $start = 0;
 		if (trim($url) == '') return null;

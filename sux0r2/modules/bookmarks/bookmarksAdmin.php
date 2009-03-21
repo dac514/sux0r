@@ -41,6 +41,9 @@ class bookmarksAdmin {
         $this->pager = new suxPager();
         $this->bm = new suxBookmarks();
 
+        // Object properties
+        $this->bookmarks->setPublished(null);
+
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
@@ -95,14 +98,13 @@ class bookmarksAdmin {
         $this->pager->limit = $this->per_page;
         $this->pager->setStart();
 
-        $this->bm->setPublished(null);
         $this->pager->setPages($this->bm->count());
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/{$this->module}/admin"));
         $this->r->arr['bookmarks'] = $this->bm->get($this->pager->limit, $this->pager->start, true);
 
         // Additional variables
         foreach ($this->r->arr['bookmarks'] as $key => $val) {
-            $u = $this->user->getUser($val['users_id']);
+            $u = $this->user->getByID($val['users_id']);
             $this->r->arr['bookmarks'][$key]['nickname'] = $u['nickname'];
         }
 

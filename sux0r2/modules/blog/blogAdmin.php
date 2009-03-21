@@ -101,7 +101,7 @@ class blogAdmin {
 
         // Additional variables
         foreach ($this->r->arr['fp'] as $key => $val) {
-            $u = $this->user->getUser($val['users_id']);
+            $u = $this->user->getByID($val['users_id']);
             $this->r->arr['fp'][$key]['nickname'] = $u['nickname'];
             $this->r->arr['fp'][$key]['comment_count'] = $this->msg->getCommentsCount($val['thread_id'], true);
         }

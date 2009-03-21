@@ -43,7 +43,7 @@ class userOpenID  {
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
         // Security check. Is the user allowed to edit this?
-        $tmp = $this->user->getUserByNickname($nickname, true);
+        $tmp = $this->user->getByNickname($nickname, true);
         if (!$tmp) suxFunct::redirect(suxFunct::getPreviousURL()); // Invalid user
         elseif ($tmp['users_id'] != $_SESSION['users_id']) {
             // Check that the user is allowed to be here

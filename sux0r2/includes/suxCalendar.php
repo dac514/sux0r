@@ -33,6 +33,7 @@ class suxCalendar {
 
     }
 
+
     // ----------------------------------------------------------------------------
     // Exception Handler
     // ----------------------------------------------------------------------------
@@ -60,6 +61,7 @@ class suxCalendar {
 
 CREATE TABLE `calendar` (
   `id` int(11) NOT NULL auto_increment,
+  `users_id` int(11) NOT NULL,
   `summary` varchar(255) NOT NULL,
   `description_html` text,
   `description_plaintext` text,
@@ -68,6 +70,7 @@ CREATE TABLE `calendar` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+-- Dates are stored in a separate table in order to allow the same event the ability to reoccur.
 
 CREATE TABLE `calendar_dates` (
   `id` int(11) NOT NULL auto_increment,

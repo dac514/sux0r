@@ -36,7 +36,7 @@ function getBody($link, $id) {
     elseif ($link == 'rss') {
         require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
         $rss = new suxRSS();
-        $body = $rss->getItem($id);
+        $body = $rss->getItemByID($id);
         $body = "{$body['title']} \n\n {$body['body_plaintext']}";
     }
     elseif ($link == 'bookmarks') {
@@ -103,8 +103,8 @@ if ($body === false) failure('No $body, nothing to train.'); // Something is wro
 // Get all the bayes_documents linked to this message where user is trainer
 // Also get associated vectors
 
-$link_table = $suxLink->getLinkTableName($link, 'bayes');
-$link_table2 = $suxLink->getLinkColumnName($link_table, $link);
+$link_table = $suxLink->buildTableName($link, 'bayes');
+$link_table2 = $suxLink->buildColumnName($link_table, $link);
 $innerjoin = "
 INNER JOIN {$link_table} ON {$link_table}.bayes_documents_id = bayes_documents.id
 INNER JOIN {$link_table2} ON {$link_table}.{$link_table2}_id = {$link_table2}.id

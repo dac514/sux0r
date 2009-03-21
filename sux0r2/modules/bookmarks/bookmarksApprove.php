@@ -37,6 +37,9 @@ class bookmarksApprove  {
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         suxValidate::register_object('this', $this); // Register self to validator
 
+        // Object properties
+        $this->bookmarks->setPublished(false);
+
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
@@ -88,7 +91,6 @@ class bookmarksApprove  {
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         // bookmarks
-        $this->bm->setPublished(false);
         $this->r->arr['bookmarks'] = $this->bm->get();
 
         // Adjust variables
@@ -99,7 +101,7 @@ class bookmarksApprove  {
                 continue;
             }
             // Append nickname
-            $u = $this->user->getUser($val['users_id']);
+            $u = $this->user->getByID($val['users_id']);
             $this->r->arr['bookmarks'][$key]['nickname'] = $u['nickname'];
         }
 

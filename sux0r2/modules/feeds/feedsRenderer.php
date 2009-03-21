@@ -108,7 +108,7 @@ class feedsRenderer extends suxRenderer {
     */
     function feedLink($id) {
 
-        $tmp = $this->rss->getFeed($id);
+        $tmp = $this->rss->getFeedByID($id);
         if(!$tmp) return null;
 
         $url = suxFunct::makeUrl("/feeds/{$id}");

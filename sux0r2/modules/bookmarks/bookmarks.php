@@ -65,7 +65,7 @@ class bookmarks extends bayesShared {
         $sort = array();
 
         // Get users_id based on nickname
-        $user = $this->user->getUserByNickname($nickname);
+        $user = $this->user->getByNickname($nickname);
         if (!$user) suxFunct::redirect(suxFunct::makeUrl('/bookmarks'));
         // Needs to be in externally accessible variable for filter()
         $this->users_id = $user['users_id'];
@@ -103,7 +103,7 @@ class bookmarks extends bayesShared {
                 $params['search'] = $search;
                 if ($alphasort)  $params['sort'] = 'alpha';
 				// Pager link
-                $this->r->text['pager'] = $this->pager->continueLink($start, suxFunct::makeUrl("/bookmarks/user/$nickname", $params));
+                $this->r->text['pager'] = $this->pager->continueURL($start, suxFunct::makeUrl("/bookmarks/user/$nickname", $params));
             }
 
 
@@ -154,7 +154,7 @@ class bookmarks extends bayesShared {
 		$cache_id = false;
         $sort = array();
 
-        $tag = $this->tags->getTag($tag_id);
+        $tag = $this->tags->getByID($tag_id);
         if (!$tag) suxFunct::redirect(suxFunct::makeUrl('/bookmarks'));
         // Needs to be in externally accessible variable for filter()
         $this->tag_id = $tag_id;
@@ -192,7 +192,7 @@ class bookmarks extends bayesShared {
                 $params['search'] = $search;
                 if ($alphasort)  $params['sort'] = 'alpha';
 				// Pager link
-                $this->r->text['pager'] = $this->pager->continueLink($start, suxFunct::makeUrl('/bookmarks/tag/'. $this->tag_id, $params));
+                $this->r->text['pager'] = $this->pager->continueURL($start, suxFunct::makeUrl('/bookmarks/tag/'. $this->tag_id, $params));
             }
 
 
@@ -253,7 +253,7 @@ class bookmarks extends bayesShared {
 
             $db = suxDB::get();
 
-            $link = $this->link->getLinkTableName('bookmarks', 'tags');
+            $link = $this->link->buildTableName('bookmarks', 'tags');
             $query = "
             SELECT tags.tag AS tag, tags.id AS id, COUNT(tags.id) AS quantity FROM tags
             INNER JOIN {$link} ON {$link}.tags_id = tags.id
@@ -262,7 +262,7 @@ class bookmarks extends bayesShared {
             GROUP BY tag, tags.id ORDER BY tag ASC
             ";
 
-            $this->r->arr['tc'] = $this->tags->tagcloud($query);
+            $this->r->arr['tc'] = $this->tags->cloud($query);
 
             $this->r->title .= " | {$this->r->gtext['bookmarks']} | {$this->r->gtext['tag_cloud']}";
 
@@ -314,7 +314,7 @@ class bookmarks extends bayesShared {
 				$params['search'] = $search;
 				if ($alphasort) $params['sort'] = 'alpha';
 				// Pager link
-                $this->r->text['pager'] = $this->pager->continueLink($start, suxFunct::makeUrl('/bookmarks/', $params));
+                $this->r->text['pager'] = $this->pager->continueURL($start, suxFunct::makeUrl('/bookmarks/', $params));
             }
 
 

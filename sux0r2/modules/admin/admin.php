@@ -71,14 +71,20 @@ class admin {
 
         $this->pager->limit = $this->per_page;
         $this->pager->setStart();
-        $this->pager->setPages($this->user->countUsers());
+        $this->pager->setPages($this->user->count());
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/admin', $params));
 
         // -------------------------------------------------------------------
         // Template
         // -------------------------------------------------------------------
 
-        $this->r->arr['ulist'] = $this->user->getUsers($this->pager->limit, $this->pager->start, $sort, $order);
+        $valid = array('users_id', 'nickname', 'email', 'root', 'banned', 'ts');
+        if (in_array(mb_strtolower($sort), $valid)) {
+            if ($sort == 'ts') $this->user->setOrder('last_active', $order);
+           else $this->user->setOrder($sort, $order);
+        }
+
+        $this->r->arr['ulist'] = $this->user->get($this->pager->limit, $this->pager->start);
 
         $this->tpl->assign('sort', $sort);
         $this->r->text['sort_url'] = suxFunct::makeUrl('/admin', array('order' => (mb_strtolower($order) == 'desc' ? 'ASC' : 'DESC')));

@@ -48,7 +48,7 @@ class suxLink {
     * @param string $table name of a second table
     * @return string
     **/
-    function getLinkTableName($table1, $table2) {
+    function buildTableName($table1, $table2) {
 
         // Convention
         // Link tables should be named "link_table_table"
@@ -70,7 +70,7 @@ class suxLink {
     * @param string $link name of column in the link table
     * @return string
     **/
-    function getLinkColumnName($table, $link) {
+    function buildColumnName($table, $link) {
 
         if ($link == 'bayes')
             return 'bayes_documents';
@@ -96,27 +96,7 @@ class suxLink {
 
         $return = array();
 
-        switch($this->db_driver)
-        {
-
-        case 'mysql':
-            $q = "SHOW TABLES ";
-            break;
-
-        case 'sqlite':
-            $q = "SELECT name FROM sqlite_master WHERE type = 'table' ";
-            break;
-
-        case 'pgsql':
-            $q = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' and table_type = 'BASE TABLE' ";
-            break;
-
-        default:
-            throw new Exception('Unsupported database driver');
-
-        }
-
-        $st = $this->db->query($q);
+        $st = $this->db->query(suxDB::showTablesQuery());
         foreach ($st->fetchAll(PDO::FETCH_NUM) as $val) {
             if (preg_match('/^link_/', $val[0]) && (!$match || mb_strpos($val[0], "_{$match}")))
                 $return[] = $val[0];

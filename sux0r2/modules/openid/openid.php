@@ -373,7 +373,7 @@ class openid {
             // add sreg keys
             if ($this->user->loginCheck()) {
 
-                $u = $this->user->getUser($_SESSION['users_id'], true);
+                $u = $this->user->getByID($_SESSION['users_id'], true);
 
                 $sreg = @array (
                     'nickname' => $u['nickname'],

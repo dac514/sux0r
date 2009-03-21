@@ -128,7 +128,7 @@ class bookmarksEdit {
             $links = $this->link->getLinks('link_bookmarks_tags', 'bookmarks', $bookmark['id']);
             $bookmark['tags'] = '';
             foreach($links as $val) {
-                $tmp = $this->tags->getTag($val);
+                $tmp = $this->tags->getByID($val);
                 $bookmark['tags'] .=  $tmp['tag'] . ', ';
             }
             $bookmark['tags'] = rtrim($bookmark['tags'], ', ');
@@ -255,7 +255,7 @@ class bookmarksEdit {
         // Save tags into database
         $tag_ids = array();
         foreach($tags as $tag) {
-            $tag_ids[] = $this->tags->saveTag($_SESSION['users_id'], $tag);
+            $tag_ids[] = $this->tags->save($_SESSION['users_id'], $tag);
         }
 
         //Delete current links

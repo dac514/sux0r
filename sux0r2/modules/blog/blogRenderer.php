@@ -214,7 +214,7 @@ class blogRenderer extends suxRenderer {
         $tmp = $this->msg->getRececentComments('blog');
 
         foreach($tmp as &$val) {
-            $tmp2 = $this->user->getUser($val['users_id']);
+            $tmp2 = $this->user->getByID($val['users_id']);
             $val['nickname'] = $tmp2['nickname'];
             $tmp2 = $this->msg->getFirstPost($val['thread_id']);
             $val['title_fp'] = $tmp2['title'];
@@ -258,7 +258,7 @@ class blogRenderer extends suxRenderer {
 
         $tmp = $this->msg->groupFirstPostsByUser('blog', $limit);
         foreach($tmp as &$val) {
-            $u = $this->user->getUser($val['users_id']);
+            $u = $this->user->getByID($val['users_id']);
             $val['nickname'] = $u['nickname'];
         }
 

@@ -138,7 +138,7 @@ class feedsSuggest  {
     function isDuplicateFeed($value, $empty, &$params, &$formvars) {
 
         if (empty($formvars['url'])) return false;
-        if ($this->rss->getFeed($formvars['url'])) return false;
+        if ($this->rss->getFeedByID($formvars['url'])) return false;
         return true;
 
     }

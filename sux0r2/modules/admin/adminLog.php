@@ -46,7 +46,7 @@ class adminLog {
         // Security check
         if (!$this->user->isRoot()) suxFunct::redirect(suxFunct::makeUrl('/home'));
 
-        $tmp = $this->user->getUserByNickname($nickname);
+        $tmp = $this->user->getByNickname($nickname);
 
         if ($tmp) {
             $this->users_id = $tmp['users_id'];
