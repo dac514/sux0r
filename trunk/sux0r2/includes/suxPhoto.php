@@ -19,6 +19,10 @@ class suxPhoto {
     protected $db_photos = 'photos';
     protected $db_albums = 'photoalbums';
 
+    // Object properties, with defaults
+    protected $published = true;
+    protected $order = array('published_on', 'DESC');
+
 
     /**
     * Constructor
@@ -34,6 +38,76 @@ class suxPhoto {
     // ------------------------------------------------------------------------
     // Photoalbum functions
     // ------------------------------------------------------------------------
+
+
+    // -=-=-
+
+
+    /**
+    * Set published property of object
+    *
+    * @param bool $published
+    */
+    public function setPublished($published) {
+
+        // Three options:
+        // True, False, or Null
+
+        $this->published = $published;
+    }
+
+
+    /**
+    * Set order property of object
+    *
+	* @param string $col
+    * @param string $way
+    */
+    public function setOrder($col, $way = 'ASC') {
+
+        if (!preg_match('/^[A-Za-z0-9_,\s]+$/', $col)) throw new Exception('Invalid column(s)');
+        $way = (mb_strtolower($way) == 'asc') ? 'ASC' : 'DESC';
+
+        $arr = array($col, $way);
+        $this->order = $arr;
+
+    }
+
+
+    /**
+    * Return published SQL
+    *
+    * @return string
+    */
+    public function sqlPublished() {
+
+		// Published   : draft = FALSE AND published_on < NOW
+		// Unpublished : draft = TRUE OR published_on >= NOW
+		// Null = SELECT ALL, not sure what the best way to represent this is, id = id?
+
+        // PgSql / MySql
+        if ($this->published === true) $query = "draft = false AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
+        elseif ($this->published === false) $query = $query = "draft = true OR published_on > '" . date('Y-m-d H:i:s') . "' ";
+        else $query = "id = id "; // select all
+
+        return $query;
+    }
+
+
+    /**
+    * Return order SQL
+    *
+    * @return string
+    */
+    public function sqlOrder() {
+        // PgSql / MySql
+        $query = "{$this->order[0]} {$this->order[1]} ";
+        return $query;
+    }
+
+
+
+    // -=-=-
 
 
     /**
@@ -59,10 +133,9 @@ class suxPhoto {
     * Get an album by id
     *
     * @param int $id photoalbums id
-    * @param bool $published select un-published?
     * @return array|false
     */
-    function getAlbum($id, $published = true) {
+    function getAlbumByID($id) {
 
         // Sanity check
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
@@ -71,11 +144,7 @@ class suxPhoto {
         $query = "SELECT * FROM {$this->db_albums} WHERE id = ? ";
 
         // Publish / Draft
-        if ($published) {
-            // PgSql / MySql
-            $query .= "AND draft = false ";
-            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
-        }
+        if (is_bool($this->published)) $query .= 'AND ' . $this->sqlPublished();
 
         $st = $this->db->prepare($query);
         $st->execute(array($id));
@@ -89,15 +158,14 @@ class suxPhoto {
 
 
     /**
-    * Get an album by id
+    * Get albums
     *
-    * @param int $id photoalbums id
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
-    * @param bool $published select un-published?
+    * @param int $users_id users id
     * @return array|false
     */
-    function getAlbums($users_id = null, $limit = null, $start = 0, $published = true) {
+    function getAlbums($limit = null, $start = 0, $users_id = null) {
 
         // Sanity check
         if ($users_id && (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1))
@@ -107,13 +175,13 @@ class suxPhoto {
         if ($users_id) $query .= 'WHERE users_id = ? ';
 
         // Publish / Draft
-        if ($published) {
+        if (is_bool($this->published)) {
             $query .= $users_id ? 'AND ' : 'WHERE ';
-            // PgSql / MySql
-            $query .= 'draft = false ';
-            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
+            $query .= $this->sqlPublished();
         }
-        $query .= 'ORDER BY published_on DESC ';
+
+        // Order
+        $query .= 'ORDER BY ' . $this->sqlOrder();
 
         // Limit
         if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
@@ -134,10 +202,9 @@ class suxPhoto {
     * Count albums
     *
     * @param int $id photoalbums id
-    * @param bool $published select un-published?
     * @return array|false
     */
-    function countAlbums($users_id = null, $published = true) {
+    function countAlbums($users_id = null) {
 
         // Sanity check
         if ($users_id && (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1))
@@ -147,11 +214,9 @@ class suxPhoto {
         if ($users_id) $query .= 'WHERE users_id = ? ';
 
         // Publish / Draft
-        if ($published) {
+        if (is_bool($this->published)) {
             $query .= $users_id ? 'AND ' : 'WHERE ';
-            // PgSql / MySql
-            $query .= 'draft = false ';
-            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
+            $query .= $this->sqlPublished();
         }
 
         $st = $this->db->prepare($query);
@@ -365,12 +430,12 @@ class suxPhoto {
         $link = new suxLink();
         $links = $link->getLinkTables('photoalbums');
         foreach ($links as $table) {
-            $link->deleteLink($table, $link->getLinkColumnName($table, 'photoalbums'), $id);
+            $link->deleteLink($table, $link->buildColumnName($table, 'photoalbums'), $id);
         }
         $links = $link->getLinkTables('photos');
         foreach($result as $key => $val) {
             foreach ($links as $table) {
-                $link->deleteLink($table, $link->getLinkColumnName($table, 'photos'), $val['id']);
+                $link->deleteLink($table, $link->buildColumnName($table, 'photos'), $val['id']);
             }
         }
 
@@ -412,7 +477,7 @@ class suxPhoto {
     * @param int $id photoalbums id
     * @return array|false
     */
-    function getPhoto($id) {
+    function getPhotoByID($id) {
 
         // Sanity check
         if (!filter_var($id, FILTER_VALIDATE_INT)  || $id < 1)
@@ -432,30 +497,32 @@ class suxPhoto {
     /**
     * Get photos by photoalbums_id
     *
-    * @param int $photoalbums_id photoalbums id
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
+    * @param int $photoalbums_id photoalbums id
     * @return array|false
     */
-    function getPhotos($photoalbums_id, $limit = null, $start = 0) {
+    function getPhotos($limit = null, $start = 0, $photoalbums_id = null) {
 
         // Sanity check
-        if (!filter_var($photoalbums_id, FILTER_VALIDATE_INT) || $photoalbums_id < 1)
+        if ($photoalbums_id && (!filter_var($photoalbums_id, FILTER_VALIDATE_INT) || $photoalbums_id < 1))
             throw new Exception('Invalid photoalbums id');
 
-        $query = "SELECT * FROM {$this->db_photos} WHERE photoalbums_id = ? ORDER BY image ";
+        $query = "SELECT * FROM {$this->db_photos} ";
+        if ($photoalbums_id) $query .= "WHERE photoalbums_id = ? ";
+        $query .= "ORDER BY image ";
 
         // Limit
         if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
 
         $st = $this->db->prepare($query);
-        $st->execute(array($photoalbums_id));
+        if ($photoalbums_id) $st->execute(array($photoalbums_id));
+        else $st->execute();
 
         $album = $st->fetchAll(PDO::FETCH_ASSOC);
         if ($album) return $album;
         else return false;
-
 
     }
 
@@ -463,12 +530,12 @@ class suxPhoto {
     /**
     * Get photos by users_id
     *
-    * @param int $users_id photoalbums id
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
+    * @param int $users_id users id
     * @return array|false
     */
-    function getPhotosByUser($users_id, $limit = null, $start = 0) {
+    function getPhotosByUser($limit = null, $start = 0, $users_id) {
 
         // Sanity check
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
@@ -497,18 +564,20 @@ class suxPhoto {
     * @param int $photoalbums_id photoalbums id
     * @return int
     */
-    function countPhotos($photoalbums_id) {
+    function countPhotos($photoalbums_id = null) {
 
         // Sanity check
-        if (!filter_var($photoalbums_id, FILTER_VALIDATE_INT) || $photoalbums_id < 1)
+        if ($photoalbums_id && (!filter_var($photoalbums_id, FILTER_VALIDATE_INT) || $photoalbums_id < 1))
             throw new Exception('Invalid photoalbums id');
 
-        $query = "SELECT COUNT(*) FROM {$this->db_photos} WHERE photoalbums_id = ? ";
+        $query = "SELECT COUNT(*) FROM {$this->db_photos} ";
+        if ($photoalbums_id) $query .= "WHERE photoalbums_id = ? ";
 
         $st = $this->db->prepare($query);
-        $st->execute(array($photoalbums_id));
-        return $st->fetchColumn();
+        if ($photoalbums_id) $st->execute(array($photoalbums_id));
+        else $st->execute();
 
+        return $st->fetchColumn();
 
     }
 
@@ -627,7 +696,7 @@ class suxPhoto {
         $link = new suxLink();
         $links = $link->getLinkTables('photos');
         foreach ($links as $table) {
-            $link->deleteLink($table, $link->getLinkColumnName($table, 'photos'), $id);
+            $link->deleteLink($table, $link->buildColumnName($table, 'photos'), $id);
         }
 
         suxDB::commitTransaction($tid);

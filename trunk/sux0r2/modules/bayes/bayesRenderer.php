@@ -140,8 +140,8 @@ class bayesRenderer extends suxRenderer {
 
         /* Get all the bayes categories linked to the document id that the user has access to */
 
-        $link_table = $this->link->getLinkTableName($link, 'bayes');
-        $link_table2 = $this->link->getLinkColumnName($link_table, $link);
+        $link_table = $this->link->buildTableName($link, 'bayes');
+        $link_table2 = $this->link->buildColumnName($link_table, $link);
         $innerjoin = "
         INNER JOIN bayes_auth ON bayes_categories.bayes_vectors_id = bayes_auth.bayes_vectors_id
         INNER JOIN bayes_documents ON bayes_categories.id = bayes_documents.bayes_categories_id
@@ -392,7 +392,7 @@ class bayesRenderer extends suxRenderer {
         if (!$rel) return $tmp;
 
         foreach ($rel as $val) {
-            $u = $user->getUser($val['friend_users_id']);
+            $u = $user->getByID($val['friend_users_id']);
             if (!$u) continue; // Skip
             $tmp[$val['friend_users_id']] = $u['nickname'];
         }
@@ -497,7 +497,7 @@ class bayesRenderer extends suxRenderer {
 
                 if ($val2['users_id'] == $_SESSION['users_id']) continue;
 
-                $u = $user->getUser($val2['users_id']);
+                $u = $user->getByID($val2['users_id']);
 
                 $trainer = $val2['trainer'] ? 'x' : null;
 

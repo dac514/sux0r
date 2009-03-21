@@ -75,6 +75,9 @@ class suxRSS extends DOMDocument {
     protected $db_feeds = 'rss_feeds';
     protected $db_items = 'rss_items';
 
+    // Object properties, with defaults
+    protected $published = true;
+    protected $order = array('title', 'ASC');
 
 
     /**
@@ -93,6 +96,70 @@ class suxRSS extends DOMDocument {
         $this->db_driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
         set_exception_handler(array($this, 'exceptionHandler'));
 
+    }
+
+
+    /**
+    * Set published property of object
+    *
+    * @param bool $published
+    */
+    public function setPublished($published) {
+
+        // Three options:
+        // True, False, or Null
+
+        $this->published = $published;
+    }
+
+
+    /**
+    * Set order property of object
+    *
+	* @param string $col
+    * @param string $way
+    */
+    public function setOrder($col, $way = 'ASC') {
+
+        if (!preg_match('/^[A-Za-z0-9_,\s]+$/', $col)) throw new Exception('Invalid column(s)');
+        $way = (mb_strtolower($way) == 'asc') ? 'ASC' : 'DESC';
+
+        $arr = array($col, $way);
+        $this->order = $arr;
+
+    }
+
+
+    /**
+    * Return published SQL
+    *
+    * @return string
+    */
+    public function sqlPublished() {
+
+		// Published   : draft = FALSE
+		// Unpublished : draft = TRUE
+		// Null = SELECT ALL, not sure what the best way to represent this is, id = id?
+
+        // PgSql / MySql
+        if ($this->published === true) $query = "draft = false ";
+        elseif ($this->published === false) $query = $query = "draft = true ";
+        else $query = "id = id "; // select all
+
+        return $query;
+    }
+
+
+
+    /**
+    * Return order SQL
+    *
+    * @return string
+    */
+    public function sqlOrder() {
+        // PgSql / MySql
+        $query = "{$this->order[0]} {$this->order[1]} ";
+        return $query;
     }
 
 
@@ -158,14 +225,17 @@ class suxRSS extends DOMDocument {
     *
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
-    * @param bool $published select un-published?
     * @return array|false
     */
-    function getFeeds($limit = null, $start = 0, $published = true) {
+    function getFeeds($limit = null, $start = 0) {
 
         $query = "SELECT * FROM {$this->db_feeds} ";
-        if ($published) $query .= 'WHERE draft = false ';
-        $query .= 'ORDER BY title ASC ';
+
+        // Publish / Draft
+        if (is_bool($this->published)) $query .= 'WHERE ' . $this->sqlPublished();
+
+        // Order
+        $query .= 'ORDER BY ' . $this->sqlOrder();
 
         // Limit
         if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
@@ -183,10 +253,12 @@ class suxRSS extends DOMDocument {
     * @param bool $published select un-published?
     * @return array|false
     */
-    function countFeeds($published = true) {
+    function countFeeds() {
 
         $query = "SELECT COUNT(*) FROM {$this->db_feeds} ";
-        if ($published) $query .= 'WHERE draft = false ';
+
+        // Publish / Draft
+        if (is_bool($this->published)) $query .= 'WHERE ' . $this->sqlPublished();
 
         $st = $this->db->prepare($query);
         $st->execute();
@@ -194,19 +266,6 @@ class suxRSS extends DOMDocument {
 
     }
 
-
-    /**
-    * Get all published feeds
-    *
-    * @return array|false
-    */
-    function getUnpublishedFeeds() {
-
-        $q = "SELECT * FROM {$this->db_feeds} WHERE draft = true ORDER BY title ASC ";
-        $st = $this->db->query($q);
-        return $st->fetchAll(PDO::FETCH_ASSOC);
-
-    }
 
 
 
@@ -216,7 +275,7 @@ class suxRSS extends DOMDocument {
     * @param int|string $id feed id or url
     * @return array|false
     */
-    function getFeed($id) {
+    function getFeedByID($id) {
 
         // Pick a query
         if (filter_var($id, FILTER_VALIDATE_INT) && $id > 0) {
@@ -226,6 +285,9 @@ class suxRSS extends DOMDocument {
             $id = suxFunct::canonicalizeUrl($id);
             $query = "SELECT * FROM {$this->db_feeds} WHERE url = ? ";
         }
+
+        // Publish / Draft
+        if (is_bool($this->published)) $query .= 'AND ' . $this->sqlPublished();
 
         $st = $this->db->prepare($query);
         $st->execute(array($id));
@@ -407,10 +469,10 @@ class suxRSS extends DOMDocument {
         $links = $link->getLinkTables('rss');
         foreach ($links as $table) {
             if ($table == 'link_rss_users')
-                $link->deleteLink($table, $link->getLinkColumnName($table, 'rss'), $id);
+                $link->deleteLink($table, $link->buildColumnName($table, 'rss'), $id);
             else {
                 foreach($result as $key => $val) {
-                    $link->deleteLink($table, $link->getLinkColumnName($table, 'rss'), $val['id']);
+                    $link->deleteLink($table, $link->buildColumnName($table, 'rss'), $val['id']);
                 }
             }
         }
@@ -470,11 +532,11 @@ class suxRSS extends DOMDocument {
     * @param int $id messages_id
     * @return array|false
     */
-    function getItem($id) {
+    function getItemByID($id) {
 
         // Sanity check
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
-            throw new Exception('Invalid message id');
+            throw new Exception('Invalid item id');
 
         $query = "SELECT * FROM {$this->db_items} WHERE id = ? ";
         $st = $this->db->prepare($query);
@@ -490,12 +552,12 @@ class suxRSS extends DOMDocument {
     /**
     * Get RSS items
     *
-    * @param int $feed_id feed id
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
+    * @param int $feed_id feed id
     * @return array
     */
-    function getItems($feed_id = null, $limit = null, $start = 0) {
+    function getItems($limit = null, $start = 0, $feed_id = null) {
 
         $query = "SELECT * FROM {$this->db_items} ";
         if ($feed_id) {

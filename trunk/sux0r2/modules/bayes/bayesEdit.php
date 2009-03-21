@@ -246,7 +246,7 @@ class bayesEdit {
                 $clean['owner'] = (isset($clean['owner']) && $clean['owner']) ? true : false;
                 $this->nb->shareVector($clean['users_id'], $clean['vector_id'], $clean['trainer'], $clean['owner']);
 
-                $u = $this->user->getUser($clean['users_id']);
+                $u = $this->user->getByID($clean['users_id']);
 
                 // clear caches
                 foreach ($this->caches as $module) {
@@ -281,7 +281,7 @@ class bayesEdit {
                 foreach ($val as $vectors_id => $users_id) {
                     $this->nb->unshareVector($users_id, $vectors_id);
 
-                    $u = $this->user->getUser($users_id);
+                    $u = $this->user->getByID($users_id);
 
                     // Clear caches
                     foreach ($this->caches as $module) {
@@ -341,7 +341,7 @@ class bayesEdit {
     function userExists($value, $empty, &$params, &$formvars) {
 
         if (empty($formvars['users_id'])) return false;
-        if (!$this->user->getUser($formvars['users_id'])) return false;
+        if (!$this->user->getByID($formvars['users_id'])) return false;
 
         return true;
 

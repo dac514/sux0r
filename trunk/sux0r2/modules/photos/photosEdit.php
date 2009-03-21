@@ -47,6 +47,9 @@ class photosEdit {
         suxValidate::register_object('this', $this); // Register self to validator
         $this->pager = new suxPager();
 
+        // Object properties
+        $this->photo->setPublished(null);
+
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
@@ -90,7 +93,7 @@ class photosEdit {
         $photoalbum = array();
 
         // Editing a photoalbum
-        $tmp = $this->photo->getAlbum($this->id, false);
+        $tmp = $this->photo->getAlbumByID($this->id);
         if (!$tmp) suxFunct::redirect(suxFunct::makeURL('/photos')); // Invalid id
 
         $photoalbum['id'] = $tmp['id'];
@@ -127,7 +130,7 @@ class photosEdit {
 
         $this->pager->setPages($this->photo->countPhotos($this->id));
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/photos/album/annotate/{$this->id}"));
-        $this->r->arr['photos'] = $this->photo->getPhotos($this->id, $this->pager->limit, $this->pager->start);
+        $this->r->arr['photos'] = $this->photo->getPhotos($this->pager->limit, $this->pager->start, $this->id);
 
         $this->r->text['form_url'] = suxFunct::makeUrl('/photos/album/annotate/' . $this->id, array('page' => $_GET['page']));
         $this->r->text['back_url'] = suxFunct::getPreviousURL();

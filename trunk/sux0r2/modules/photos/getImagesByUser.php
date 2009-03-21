@@ -11,7 +11,7 @@ if (!isset($_SESSION['users_id'])) exit;
 
 require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
 $photo = new suxPhoto();
-$images = $photo->getPhotosByUser($_SESSION['users_id']);
+$images = $photo->getPhotosByUser(null, 0, $_SESSION['users_id']);
 
 $output = 'var tinyMCEImageList = new Array(';
 if ($images) foreach ($images as $image) {

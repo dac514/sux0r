@@ -32,7 +32,7 @@ $id = $_POST['id'];
 require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
 $feed = new suxRSS();
 
-if (!$feed->getFeed($id)) failure('Invalid feed');
+if (!$feed->getFeedByID($id)) failure('Invalid feed');
 
 // ---------------------------------------------------------------------------
 // Go

@@ -41,6 +41,9 @@ class photosAdmin {
         $this->pager = new suxPager();
         $this->photos = new suxPhoto();
 
+        // Object Properties
+        $this->photos->setPublished(null);
+
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
@@ -95,14 +98,14 @@ class photosAdmin {
         $this->pager->limit = $this->per_page;
         $this->pager->setStart();
 
-        $this->pager->setPages($this->photos->countAlbums(null, true));
+        $this->pager->setPages($this->photos->countAlbums());
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/{$this->module}/admin"));
-        $this->r->arr['photos'] = $this->photos->getAlbums(null, $this->pager->limit, $this->pager->start, false);
+        $this->r->arr['photos'] = $this->photos->getAlbums($this->pager->limit, $this->pager->start);
 
         // Additional variables
         if (!$this->r->arr['photos']) unset($this->r->arr['photos']);
         else foreach ($this->r->arr['photos'] as $key => $val) {
-            $u = $this->user->getUser($val['users_id']);
+            $u = $this->user->getByID($val['users_id']);
             $this->r->arr['photos'][$key]['nickname'] = $u['nickname'];
             $this->r->arr['photos'][$key]['photos_count'] = $this->photos->countPhotos($val['id']);
         }

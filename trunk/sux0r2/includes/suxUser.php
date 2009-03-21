@@ -27,6 +27,9 @@ class suxUser {
     private $max_access = 999;
     private $max_module_length = 32;
 
+    // Object properties, with defaults
+    protected $order = array('root DESC, nickname', 'ASC');
+
 
     /**
     * Constructor
@@ -40,6 +43,42 @@ class suxUser {
     }
 
 
+    // -=-=-
+
+
+    /**
+    * Set order property of object
+    *
+	* @param string $col
+    * @param string $way
+    */
+    public function setOrder($col, $way = 'ASC') {
+
+        if (!preg_match('/^[A-Za-z0-9_,\s]+$/', $col)) throw new Exception('Invalid column(s)');
+        $way = (mb_strtolower($way) == 'asc') ? 'ASC' : 'DESC';
+
+        $arr = array($col, $way);
+        $this->order = $arr;
+
+    }
+
+
+    /**
+    * Return order SQL
+    *
+    * @return string
+    */
+    public function sqlOrder() {
+        // PgSql / MySql
+        $query = "{$this->order[0]} {$this->order[1]} ";
+        return $query;
+    }
+
+
+
+    // -=-=-
+
+
     /**
     * Get user
     *
@@ -47,7 +86,7 @@ class suxUser {
     * @param bool $full_profile the entire profile?
     * @return array|false
     */
-    function getUser($users_id, $full_profile = false) {
+    function getByID($users_id, $full_profile = false) {
 
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) throw new Exception('Invalid user id');
 
@@ -83,13 +122,13 @@ class suxUser {
     * @param bool $full_profile the entire profile?
     * @return array|false
     */
-    function getUserByNickname($nickname, $full_profile = false) {
+    function getByNickname($nickname, $full_profile = false) {
 
         $st = $this->db->prepare("SELECT id FROM {$this->db_table} WHERE nickname = ? ");
         $st->execute(array($nickname));
         $id = $st->fetchColumn();
 
-        if (filter_var($id, FILTER_VALIDATE_INT)) return $this->getUser($id, $full_profile);
+        if (filter_var($id, FILTER_VALIDATE_INT)) return $this->getByID($id, $full_profile);
         else return false;
 
     }
@@ -102,13 +141,13 @@ class suxUser {
     * @param bool $full_profile the entire profile?
     * @return array|false
     */
-    function getUserByEmail($email, $full_profile = false) {
+    function getByEmail($email, $full_profile = false) {
 
         $st = $this->db->prepare("SELECT id FROM {$this->db_table} WHERE email = ? ");
         $st->execute(array($email));
         $id = $st->fetchColumn();
 
-        if (filter_var($id, FILTER_VALIDATE_INT)) return $this->getUser($id, $full_profile);
+        if (filter_var($id, FILTER_VALIDATE_INT)) return $this->getByID($id, $full_profile);
         else return false;
 
     }
@@ -119,7 +158,7 @@ class suxUser {
     *
     * @return int
     */
-    function countUsers() {
+    function count() {
 
         $query = "SELECT COUNT(*) FROM {$this->db_table} ";
 
@@ -134,11 +173,9 @@ class suxUser {
     *
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
-    * @param string $sort
-    * @param string $order
     * @return array|false
     */
-    function getUsers($limit = null, $start = 0, $sort = null, $order = 'DESC') {
+    function get($limit = null, $start = 0) {
 
         $query = "
         SELECT
@@ -153,20 +190,8 @@ class suxUser {
         GROUP BY {$this->db_table}.id, {$this->db_table}.nickname, {$this->db_table}.email, {$this->db_table}.root, {$this->db_table}.banned
         ";
 
-        // Sort / Order
-        $tmp = 'ORDER BY root DESC, nickname ASC ';
-        if ($sort) {
-            $sort = mb_strtolower($sort);
-            $order = mb_strtoupper($order);
-            if (in_array($sort, array('users_id', 'nickname', 'email', 'root', 'banned', 'ts'))) {
-
-                if ($sort == 'ts') $sort = 'last_active';
-                if ($order != 'DESC') $order = 'ASC';
-                $tmp = "ORDER BY $sort $order ";
-
-            }
-        }
-        $query .= $tmp;
+        // Order
+        $query .= 'ORDER BY ' . $this->sqlOrder();
 
         // Limit
         if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
@@ -182,11 +207,11 @@ class suxUser {
     /**
     * Save user
     *
-    * @param array $info keys match SQL table columns of users and users_info
     * @param int $users_id users_id
+    * @param array $info keys match SQL table columns of users and users_info
     * @return int users_id
     */
-    function saveUser(array $info, $users_id = null) {
+    function save($users_id, array $info) {
 
         /* If users_id is provided, saveUser() will update an existing user.
         Otherwise it will insert a new one */
@@ -199,12 +224,12 @@ class suxUser {
             throw new Exception('Invalid user id');
 
         if (!empty($info['nickname'])) {
-            $tmp = $this->getUserByNickname($info['nickname']);
+            $tmp = $this->getByNickname($info['nickname']);
             if ($tmp['users_id'] != $users_id) throw new Exception('Duplicate nickname');
         }
 
         if (!empty($info['email'])) {
-            $tmp = $this->getUserByEmail($info['email']);
+            $tmp = $this->getByEmail($info['email']);
             if ($tmp && $tmp['users_id'] != $users_id) throw new Exception('Duplicate email');
         }
 
@@ -334,18 +359,13 @@ class suxUser {
     /**
     * Save user image
     *
-    * @param string $image
     * @param int $users_id users_id
+    * @param string $image
     */
-    function saveImage($image, $users_id = null) {
+    function saveImage($users_id, $image) {
 
-        // This user
-        if (!$users_id) {
-            if (!empty($_SESSION['users_id'])) $users_id = $_SESSION['users_id'];
-            else return false;
-        }
+        if (!$users_id) return false;
 
-        // Any user
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
             throw new Exception('Invalid user id');
 
@@ -518,22 +538,17 @@ class suxUser {
     /**
     * Save a user's access level
     *
+    * @param int $users_id
     * @param string $module
     * @param int $access
-    * @param int $users_id
     */
-    function saveAccess($module, $access, $users_id = null) {
+    function saveAccess($users_id, $module, $access) {
 
         if (mb_strlen($module) > $this->max_module_length) throw new Exception('Module name too long');
         if (!filter_var($access, FILTER_VALIDATE_INT) || $access < 0 || $access > $this->max_access) throw new Exception('Invalid access integer');
 
-        // This user
-        if (!$users_id) {
-            if (!empty($_SESSION['users_id'])) $users_id = $_SESSION['users_id'];
-            else return false;
-        }
+        if (!$users_id) return false;
 
-        // Any user
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
             throw new Exception('Invalid user id');
 
@@ -614,6 +629,7 @@ class suxUser {
 
     // -----------------------------------------------------------------------
     // Logs
+    // TODO: Move logging to it's own object
     // -----------------------------------------------------------------------
 
     /**
@@ -824,7 +840,7 @@ class suxUser {
         $st->execute(array($openid_url));
         $id = $st->fetchColumn();
 
-        if (filter_var($id, FILTER_VALIDATE_INT)) return $this->getUser($id, $full_profile);
+        if (filter_var($id, FILTER_VALIDATE_INT)) return $this->getByID($id, $full_profile);
         else return false;
 
     }
@@ -933,7 +949,7 @@ class suxUser {
         $proceed = false;
 
         if (!empty($_SESSION['users_id']) && !empty($_SESSION['nickname']) && !empty($_SESSION['token'])) {
-            if ($this->tokenCheck($_SESSION['token'], $_SESSION['users_id'])) {
+            if ($this->tokenCheck($_SESSION['users_id'], $_SESSION['token'])) {
                 $proceed = true;
             }
         }
@@ -1019,7 +1035,7 @@ class suxUser {
 
             if (!isset($_SESSION['failures'])) $_SESSION['failures'] = 0;
 
-            $auth_user = $this->getUserByNickname($hdr['username']);
+            $auth_user = $this->getByNickname($hdr['username']);
             if ($auth_user && !empty($auth_user['password']) && !$stale) {
 
                 // the entity body should always be null in this case
@@ -1033,7 +1049,7 @@ class suxUser {
                 if ($hdr['response'] == $ok) {
                     // successful login!
                     unset($_SESSION['uniqid'], $_SESSION['failures']);
-                    $u = $this->getUserByNickname($hdr['username']);
+                    $u = $this->getByNickname($hdr['username']);
                     $this->setSession($u['users_id']);
                     return true;
                 }
@@ -1074,7 +1090,7 @@ class suxUser {
     */
     function setSession($users_id) {
 
-        $user = $this->getUser($users_id, true);
+        $user = $this->getByID($users_id, true);
 
         if (!$user) {
             suxFunct::killSession();
@@ -1129,11 +1145,11 @@ class suxUser {
     * Check if a token is valid
     *
     * @global string $CONFIG['SALT']
-    * @param string $token token
     * @param int $users_id user id
+    * @param string $token token
     * @return bool
     */
-    private function tokenCheck($token, $users_id) {
+    private function tokenCheck($users_id, $token) {
 
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) return false;
 

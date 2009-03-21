@@ -57,7 +57,7 @@ class photos {
 
         $users_id = null;
         if ($nickname) {
-            $user = $this->user->getUserByNickname($nickname);
+            $user = $this->user->getByNickname($nickname);
             if (!$user) suxFunct::redirect(suxFunct::makeUrl('/photos')); // Invalid user
             else $users_id = $user['users_id'];
         }
@@ -75,12 +75,12 @@ class photos {
 
         if (!$this->tpl->is_cached('list.tpl', $cache_id)) {
 
-            $this->pager->setPages($this->photo->countAlbums());
+            $this->pager->setPages($this->photo->countAlbums($users_id));
             $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/photos'));
-            $this->r->arr['photos'] = $this->photo->getAlbums($users_id, $this->pager->limit, $this->pager->start);
+            $this->r->arr['photos'] = $this->photo->getAlbums($this->pager->limit, $this->pager->start, $users_id);
 
             if ($this->r->arr['photos']) foreach ($this->r->arr['photos'] as $key => $val) {
-                $tmp = $this->user->getUser($val['users_id']);
+                $tmp = $this->user->getByID($val['users_id']);
                 $this->r->arr['photos'][$key]['nickname'] = $tmp['nickname'];
             }
 
@@ -120,10 +120,10 @@ class photos {
 
             $this->pager->setPages($this->photo->countPhotos($id));
             $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/photos/album/{$id}"));
-            $this->r->arr['photos'] = $this->photo->getPhotos($id, $this->pager->limit, $this->pager->start);
+            $this->r->arr['photos'] = $this->photo->getPhotos($this->pager->limit, $this->pager->start, $id);
 
-            $this->r->arr['album'] = $this->photo->getAlbum($id);
-            $tmp = $this->user->getUser($this->r->arr['album']['users_id']);
+            $this->r->arr['album'] = $this->photo->getAlbumByID($id);
+            $tmp = $this->user->getByID($this->r->arr['album']['users_id']);
             $this->r->arr['album']['nickname'] = $tmp['nickname'];
 
             $this->r->title .= " | {$this->r->gtext['photos']} | {$this->r->arr['album']['title']}";
@@ -153,7 +153,7 @@ class photos {
 
         if (!$this->tpl->is_cached('view.tpl', $cache_id)) {
 
-            $this->r->arr['photos'] = $this->photo->getPhoto($id);
+            $this->r->arr['photos'] = $this->photo->getPhotoByID($id);
             if ($this->r->arr['photos'] == false || !count($this->r->arr['photos']))
                 suxFunct::redirect(suxFunct::getPreviousURL()); // Redirect
             else {
@@ -161,8 +161,8 @@ class photos {
                 $this->r->arr['photos']['image'] = suxPhoto::t2fImage($this->r->arr['photos']['image']); // Fullsize
 
                 // Album info
-                $this->r->arr['album'] = $this->photo->getAlbum($this->r->arr['photos']['photoalbums_id']);
-                $tmp = $this->user->getUser($this->r->arr['album']['users_id']);
+                $this->r->arr['album'] = $this->photo->getAlbumByID($this->r->arr['photos']['photoalbums_id']);
+                $tmp = $this->user->getByID($this->r->arr['album']['users_id']);
                 $this->r->arr['album']['nickname'] = $tmp['nickname'];
 
                 // Previous, next, and page number
@@ -214,7 +214,7 @@ class photos {
 
         if (!$this->tpl->is_cached('rss.tpl', $cache_id)) {
 
-            $fp = $this->photo->getAlbums(null, $this->pager->limit);
+            $fp = $this->photo->getAlbums($this->pager->limit);
             if ($fp) {
 
                 require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');

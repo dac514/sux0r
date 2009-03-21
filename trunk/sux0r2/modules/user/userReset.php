@@ -97,7 +97,7 @@ class userReset {
         unset($_SESSION['captcha']);
         unset($clean['captcha']);
 
-        $user = $this->getUser($clean['user']);
+        $user = $this->getByID($clean['user']);
         if (!$user) throw new Exception('Invalid user?!');
         elseif (@$user['banned']) {
             // Banned user, abort
@@ -118,7 +118,7 @@ class userReset {
         $message .= "---\n" . suxFunct::makeUrl('/', null, true) . "\n\n";
 
         // Do the dirty
-        $this->user->saveUser($reset_user, $reset_user_id);
+        $this->user->save($reset_user_id, $reset_user);
         mb_send_mail($user['email'], $subject, $message);
 
     }
@@ -148,7 +148,7 @@ class userReset {
     function userExists($value, $empty, &$params, &$formvars) {
 
         if (empty($formvars['user'])) return false;
-        if (!$this->getUser($formvars['user'])) return false;
+        if (!$this->getByID($formvars['user'])) return false;
         return true;
 
     }
@@ -176,10 +176,10 @@ class userReset {
     private function getUser($user) {
 
         if (filter_var($user, FILTER_VALIDATE_EMAIL)) {
-            return $this->user->getUserByEmail($user);
+            return $this->user->getByEmail($user);
         }
         else {
-            return $this->user->getUserByNickname($user);
+            return $this->user->getByNickname($user);
         }
 
     }

@@ -36,7 +36,7 @@ $clean = array(
 
 try {
     $photo->savePhoto($_SESSION['users_id'], $clean);
-    $tmp = $photo->getPhoto($clean['id']);
+    $tmp = $photo->getPhotoByID($clean['id']);
     if ($tmp['description']) echo $tmp['description'];
     else echo $text['clickme'];
 

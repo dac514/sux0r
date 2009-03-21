@@ -35,7 +35,7 @@ class suxTags {
     * @param int|string $id bookmard id or url
     * @return array|false
     */
-    function getTag($id) {
+    function getByID($id) {
 
         $col = 'id';
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) $col = 'tag';
@@ -59,7 +59,7 @@ class suxTags {
     * @param string $tag
     * @return int insert id
     */
-    function saveTag($users_id, $tag) {
+    function save($users_id, $tag) {
 
         // -------------------------------------------------------------------
         // Sanitize
@@ -113,7 +113,7 @@ class suxTags {
     *
     * @param int $id tag id
     */
-    function deleteTag($id) {
+    function delete($id) {
 
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
 
@@ -127,7 +127,7 @@ class suxTags {
         $link = new suxLink();
         $links = $link->getLinkTables('tags');
         foreach ($links as $table) {
-            $link->deleteLink($table, $link->getLinkColumnName($table, 'tags'), $id);
+            $link->deleteLink($table, $link->buildColumnName($table, 'tags'), $id);
         }
 
         suxDB::commitTransaction($tid);
@@ -167,7 +167,7 @@ class suxTags {
     * @param string $query
     * @return array|false
     */
-    function tagcloud($query) {
+    function cloud($query) {
 
         // Expects something like:
         // SELECT tags.tag AS tag, tags.id AS id, COUNT(tags.id) AS quantity FROM tags

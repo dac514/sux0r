@@ -59,7 +59,7 @@ class userEdit {
             }
 
             // Get user
-            $u = $this->user->getUserByNickname($user);
+            $u = $this->user->getByNickname($user);
             if (!$u) suxFunct::redirect(suxFunct::getPreviousURL()); // Invalid user
 
             $this->users_id = $u['users_id'];
@@ -126,7 +126,7 @@ class userEdit {
         }
         elseif ($this->mode == 'edit') {
 
-            $u = $this->user->getUser($this->users_id, true);
+            $u = $this->user->getByID($this->users_id, true);
 
             // Unset
             unset($u['password']);
@@ -281,7 +281,7 @@ class userEdit {
         if ($this->mode == 'edit') {
 
             // Get users_id
-            $u = $this->user->getUserByNickname($clean['nickname']);
+            $u = $this->user->getByNickname($clean['nickname']);
             if (!$u) throw new Exception('Invalid user');
             $id = $u['users_id'];
 
@@ -302,7 +302,7 @@ class userEdit {
 
         if (isset($id) && filter_var($id, FILTER_VALIDATE_INT)) {
 
-            $this->user->saveUser($clean, $id);
+            $this->user->save($id, $clean);
 
             // Log
             if ($id == $_SESSION['users_id']) {
@@ -321,7 +321,7 @@ class userEdit {
         }
         else {
 
-            $id = $this->user->saveUser($clean);
+            $id = $this->user->save(null, $clean);
             $this->user->log("sux0r::userEdit() new users_id: {$id} ", $id, 1); // Log, private
 
         }
@@ -398,11 +398,11 @@ class userEdit {
 
         if (empty($formvars['nickname'])) return false;
 
-        $tmp = $this->user->getUserByNickname($formvars['nickname']);
+        $tmp = $this->user->getByNickname($formvars['nickname']);
         if ($tmp === false ) return true; // No duplicate found
 
         if($this->mode == 'edit') {
-            $u = $this->user->getUser($this->users_id);
+            $u = $this->user->getByID($this->users_id);
             if ($formvars['nickname'] == $u['nickname']) {
                 // This is a user editing themseleves, this is OK
                 return true;
@@ -437,11 +437,11 @@ class userEdit {
 
         if (empty($formvars['email'])) return false;
 
-        $tmp = $this->user->getUserByEmail($formvars['email']);
+        $tmp = $this->user->getByEmail($formvars['email']);
         if ($tmp === false ) return true; // No duplicate found
 
         if($this->mode == 'edit') {
-            $u = $this->user->getUser($this->users_id);
+            $u = $this->user->getByID($this->users_id);
             if ($formvars['email'] == $u['email']) {
                 // This is a user editing themseleves, this is OK
                 return true;

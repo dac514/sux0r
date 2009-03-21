@@ -140,7 +140,7 @@ class blogEdit {
             $links = $this->link->getLinks('link_messages_tags', 'messages', $blog['id']);
             $blog['tags'] = '';
             foreach($links as $val) {
-                $tmp = $this->tags->getTag($val);
+                $tmp = $this->tags->getByID($val);
                 $blog['tags'] .=  $tmp['tag'] . ', ';
             }
             $blog['tags'] = rtrim($blog['tags'], ', ');
@@ -339,7 +339,7 @@ class blogEdit {
         // Save tags into database
         $tag_ids = array();
         foreach($tags as $tag) {
-            $tag_ids[] = $this->tags->saveTag($_SESSION['users_id'], $tag);
+            $tag_ids[] = $this->tags->save($_SESSION['users_id'], $tag);
         }
 
         //Delete current links

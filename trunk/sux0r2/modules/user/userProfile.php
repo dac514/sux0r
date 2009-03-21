@@ -39,7 +39,7 @@ class userProfile {
         $this->r->bool['analytics'] = true; // Turn on analytics
 
         // Profile
-        $this->profile = $this->user->getUserByNickname($nickname, true);
+        $this->profile = $this->user->getByNickname($nickname, true);
         unset($this->profile['password']); // We don't need this
 
         if (!$this->profile) suxFunct::redirect(suxFunct::getPreviousURL()); // Redirect for invalid profiles

@@ -44,6 +44,9 @@ class photosUpload  {
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         suxValidate::register_object('this', $this); // Register self to validator
 
+        // Object properties
+        $this->photo->setPublished(null);
+
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
@@ -221,7 +224,10 @@ class photosUpload  {
 
         $this->user->log("sux0r::photosUpload() photoalbums_id: {$photo['photoalbums_id']}", $_SESSION['users_id'], 1); // Private
 
-        $tmp = $this->photo->getAlbum($photo['photoalbums_id']); // Is actually published?
+        $this->photo->setPublished(true);
+        $tmp = $this->photo->getAlbumByID($photo['photoalbums_id']); // Is actually published?
+        $this->photo->setPublished(null); // Revert
+
         if ($tmp) {
 
             // Clear all caches, cheap and easy

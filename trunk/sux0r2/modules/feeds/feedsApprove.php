@@ -37,6 +37,9 @@ class feedsApprove  {
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         suxValidate::register_object('this', $this); // Register self to validator
 
+        // Object Properties
+        $this->rss->setPublished(false);
+
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
@@ -88,11 +91,11 @@ class feedsApprove  {
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         // Feeds
-        $this->r->arr['feeds'] = $this->rss->getUnpublishedFeeds();
+        $this->r->arr['feeds'] = $this->rss->getFeeds();
 
         // Additional variables
         foreach ($this->r->arr['feeds'] as $key => $val) {
-            $u = $this->user->getUser($val['users_id']);
+            $u = $this->user->getByID($val['users_id']);
             $this->r->arr['feeds'][$key]['nickname'] = $u['nickname'];
         }
 

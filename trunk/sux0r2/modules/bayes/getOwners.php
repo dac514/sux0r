@@ -17,7 +17,7 @@ if (isset($_POST['id']) && filter_var($_POST['id'], FILTER_VALIDATE_INT)) {
 
     $users = null;
     foreach ($vectors as $val) {
-        $u = $user->getUser($val['users_id']);
+        $u = $user->getByID($val['users_id']);
         $users .= $u['nickname'] . ', ';
     }
 

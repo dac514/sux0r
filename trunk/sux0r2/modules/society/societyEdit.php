@@ -47,7 +47,7 @@ class societyEdit {
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
-        $tmp = $this->user->getUserByNickname($nickname);
+        $tmp = $this->user->getByNickname($nickname);
         if (!$tmp) suxFunct::redirect(suxFunct::getPreviousURL()); // Invalid user
 
         // Don't let the user establish a relationship with themselves
@@ -143,7 +143,7 @@ class societyEdit {
 
         $fid = $clean['users_id'];
         $rel = '';
-        $u = $this->user->getUser($clean['users_id']);
+        $u = $this->user->getByID($clean['users_id']);
         $log = '';
 
         // Don't let the user establish a relationship with themselves

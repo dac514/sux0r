@@ -326,7 +326,7 @@ class suxBookmarks {
         $link = new suxLink();
         $links = $link->getLinkTables('bookmarks');
         foreach ($links as $table) {
-            $link->deleteLink($table, $link->getLinkColumnName($table, 'bookmarks'), $id);
+            $link->deleteLink($table, $link->buildColumnName($table, 'bookmarks'), $id);
         }
 
         suxDB::commitTransaction($tid);

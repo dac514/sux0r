@@ -47,7 +47,7 @@ class userAvatar  {
         $this->tpl->config_load('my.conf', $this->module);
 
         // Security check. Is the user allowed to edit this?
-        $tmp = $this->user->getUserByNickname($nickname, true);
+        $tmp = $this->user->getByNickname($nickname, true);
         if (!$tmp) suxFunct::redirect(suxFunct::getPreviousURL()); // Invalid user
         elseif ($tmp['users_id'] != $_SESSION['users_id']) {
             // Check that the user is allowed to be here
@@ -159,7 +159,7 @@ class userAvatar  {
         }
 
         // Update $user into database
-        if ($user['image'] !== false) $this->user->saveImage($user['image'], $user['users_id']);
+        if ($user['image'] !== false) $this->user->saveImage($user['users_id'], $user['image']);
 
         // Log
         if ($user['users_id'] == $_SESSION['users_id']) {

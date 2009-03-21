@@ -42,6 +42,9 @@ class feedsAdmin {
         $this->pager = new suxPager();
         $this->rss = new suxRSS();
 
+        // Object Properties
+        $this->rss->setPublished(null);
+
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
@@ -96,13 +99,13 @@ class feedsAdmin {
         $this->pager->limit = $this->per_page;
         $this->pager->setStart();
 
-        $this->pager->setPages($this->rss->countFeeds(true));
+        $this->pager->setPages($this->rss->countFeeds());
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/{$this->module}/admin"));
-        $this->r->arr['feeds'] = $this->rss->getFeeds($this->pager->limit, $this->pager->start, false);
+        $this->r->arr['feeds'] = $this->rss->getFeeds($this->pager->limit, $this->pager->start);
 
         // Additional variables
         foreach ($this->r->arr['feeds'] as $key => $val) {
-            $u = $this->user->getUser($val['users_id']);
+            $u = $this->user->getByID($val['users_id']);
             $this->r->arr['feeds'][$key]['nickname'] = $u['nickname'];
             $this->r->arr['feeds'][$key]['feeds_count'] = $this->rss->countItems($val['id']);
         }

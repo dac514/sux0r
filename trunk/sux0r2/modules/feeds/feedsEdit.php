@@ -96,7 +96,7 @@ class feedsEdit {
 
             // Editing a feed
 
-            $tmp = $this->rss->getFeed($this->id, true);
+            $tmp = $this->rss->getFeedByID($this->id, true);
 
             $feed['id'] = $tmp['id'];
             $feed['title'] = $tmp['title'];
@@ -216,7 +216,7 @@ class feedsEdit {
 
         if (empty($formvars['url'])) return false;
 
-        $tmp = $this->rss->getFeed($formvars['url']);
+        $tmp = $this->rss->getFeedByID($formvars['url']);
         if ($tmp === false ) return true; // No duplicate found
 
         if ($this->id) {
