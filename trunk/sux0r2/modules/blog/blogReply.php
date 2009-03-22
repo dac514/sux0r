@@ -51,7 +51,7 @@ class blogReply {
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
-        $parent = $this->msg->getMessage($parent_id);
+        $parent = $this->msg->getByID($parent_id);
         if (!$parent) suxFunct::redirect(suxFunct::getPreviousURL()); // Invalid message, redirect
 
         $this->parent = $parent;
@@ -121,12 +121,13 @@ class blogReply {
         $msg['blog'] = true;
         $msg['title'] = $clean['title'];
         $msg['body'] = $clean['body'];
+        $msg['parent_id'] = $clean['parent_id'];
 
-        $id = $this->msg->saveMessage($_SESSION['users_id'], $msg, $clean['parent_id']);
+        $id = $this->msg->save($_SESSION['users_id'], $msg);
 
         $this->user->log("sux0r::blogReply()  messages_id: {$id}", $_SESSION['users_id'], 1); // Private
 
-        $tmp = $this->msg->getMessage($clean['parent_id']); // Is actually published?
+        $tmp = $this->msg->getByID($clean['parent_id']); // Is actually published?
         if ($tmp) {
 
             // Clear caches

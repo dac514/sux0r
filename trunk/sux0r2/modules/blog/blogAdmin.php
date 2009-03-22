@@ -41,6 +41,9 @@ class blogAdmin {
         $this->pager = new suxPager();
         $this->msg = new suxThreadedMessages();
 
+        // Object properties
+        $this->msg->setPublished(null);
+
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
@@ -95,15 +98,15 @@ class blogAdmin {
         $this->pager->limit = $this->per_page;
         $this->pager->setStart();
 
-        $this->pager->setPages($this->msg->countFirstPosts('blog', true));
+        $this->pager->setPages($this->msg->countFirstPosts('blog'));
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/{$this->module}/admin"));
-        $this->r->arr['fp'] = $this->msg->getFirstPosts('blog', $this->pager->limit, $this->pager->start, false);
+        $this->r->arr['fp'] = $this->msg->getFirstPosts($this->pager->limit, $this->pager->start, 'blog');
 
         // Additional variables
         foreach ($this->r->arr['fp'] as $key => $val) {
             $u = $this->user->getByID($val['users_id']);
             $this->r->arr['fp'][$key]['nickname'] = $u['nickname'];
-            $this->r->arr['fp'][$key]['comment_count'] = $this->msg->getCommentsCount($val['thread_id'], true);
+            $this->r->arr['fp'][$key]['comment_count'] = $this->msg->getCommentsCount($val['thread_id']);
         }
 
 
@@ -124,7 +127,7 @@ class blogAdmin {
 
         if (isset($clean['delete'])) foreach($clean['delete'] as $thread_id => $val) {
             // Validate that this is something we're allowed to delete
-            $tmp = $this->msg->getFirstPost($thread_id, false);
+            $tmp = $this->msg->getFirstPost($thread_id);
             if ($tmp && $tmp['blog'] && $tmp['thread_pos'] == 0) {
                 $this->msg->deleteThread($thread_id);
                 $this->user->log("sux0r::blogAdmin() deleted thread_id: {$thread_id}", $_SESSION['users_id'], 1); // Private

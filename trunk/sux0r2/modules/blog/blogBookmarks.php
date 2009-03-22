@@ -56,7 +56,9 @@ class blogBookmarks {
 
         // Object properties
         $this->msg_id = $msg_id;
+        $this->msg->setPublished(null);
         $this->bookmarks->setPublished(null);
+
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -65,7 +67,7 @@ class blogBookmarks {
         // Scan post for href links
         // --------------------------------------------------------------------
 
-        $msg = $this->msg->getMessage($msg_id, false);
+        $msg = $this->msg->getByID($msg_id);
 
         if (!$msg)
             suxFunct::redirect(suxFunct::getPreviousURL()); // No message, skip

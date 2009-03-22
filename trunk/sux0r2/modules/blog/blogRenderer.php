@@ -211,7 +211,7 @@ class blogRenderer extends suxRenderer {
         if (is_array($tmp)) return $tmp;
         $tmp = array();
 
-        $tmp = $this->msg->getRececentComments('blog');
+        $tmp = $this->msg->getRececentComments(10, 'blog');
 
         foreach($tmp as &$val) {
             $tmp2 = $this->user->getByID($val['users_id']);
@@ -237,7 +237,7 @@ class blogRenderer extends suxRenderer {
         if (is_array($tmp)) return $tmp;
         $tmp = array();
 
-        $tmp = $this->msg->groupFirstPostsByMonths('blog', $limit);
+        $tmp = $this->msg->groupFirstPostsByMonths($limit, 0, 'blog');
 
         return $tmp;
 
@@ -256,7 +256,7 @@ class blogRenderer extends suxRenderer {
         if (is_array($tmp)) return $tmp;
         $tmp = array();
 
-        $tmp = $this->msg->groupFirstPostsByUser('blog', $limit);
+        $tmp = $this->msg->groupFirstPostsByUser($limit, 0 , 'blog');
         foreach($tmp as &$val) {
             $u = $this->user->getByID($val['users_id']);
             $val['nickname'] = $u['nickname'];
@@ -458,12 +458,13 @@ function insert_edit($params) {
     if (!$allowed) {
         // Check if a user is the publisher of the message
         $m = new suxThreadedMessages();
+        $m->setPublished(null);
         if ($access < $GLOBALS['CONFIG']['ACCESS']['blog']['publisher']) {
             $allowed = false;
             $allowed2 = false;
         }
         else {
-            $tmp = $m->getMessage($params['id'], false);
+            $tmp = $m->getByID($params['id']);
             if ($tmp['users_id'] != $_SESSION['users_id']) $allowed2 = false;
         }
         if (!$allowed2) return null;

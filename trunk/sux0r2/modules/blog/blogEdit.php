@@ -58,6 +58,9 @@ class blogEdit {
         $this->link = new suxLink();
         $this->tags = new suxTags();
 
+        // Object properties
+        $this->msg->setPublished(null);
+
         // This module has config variables, load them
         $this->tpl->config_load('my.conf', $this->module);
 
@@ -73,7 +76,7 @@ class blogEdit {
 
                 // Verfiy that we are allowed to edit this
                 if (filter_var($id, FILTER_VALIDATE_INT)) {
-                    $tmp = $this->msg->getMessage($id, false);
+                    $tmp = $this->msg->getByID($id);
                     if ($tmp['users_id'] != $_SESSION['users_id']) suxFunct::redirect(suxFunct::makeUrl('/blog'));
                 }
 
@@ -114,7 +117,7 @@ class blogEdit {
 
             // Editing a blog post
 
-            $tmp = $this->msg->getMessage($this->id, false);
+            $tmp = $this->msg->getByID($this->id);
 
             $blog['id'] = $tmp['id'];
             $blog['title'] = $tmp['title'];
@@ -286,44 +289,38 @@ class blogEdit {
                 'draft' => $clean['draft'],
                 'blog' => true,
             );
+        if (isset($clean['id'])) $msg['id'] = $clean['id'];
 
         // --------------------------------------------------------------------
         // Put $msg in database
         // --------------------------------------------------------------------
 
+        // New
+        $clean['id'] = $this->msg->save($_SESSION['users_id'], $msg, true);
 
-        if (isset($clean['id'])) {
+        $this->msg->setPublished(true);
+        $tmp = $this->msg->getByID($clean['id']); // Is actually published?
+        $this->msg->setPublished(null); // Revert
 
-            // Edit
-            $this->msg->editMessage($clean['id'], $_SESSION['users_id'], $msg, true);
+        if ($tmp) {
 
-        }
-        else {
+            // Clear all caches, cheap and easy
+            $this->tpl->clear_all_cache();
 
-            // New
-            $clean['id'] = $this->msg->saveMessage($_SESSION['users_id'], $msg, null, true);
-            $tmp = $this->msg->getMessage($clean['id']); // Is actually published?
-            if ($tmp) {
+            // Log message
+            $log = '';
+            $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
+            $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
+            $log .= mb_strtolower($this->r->gtext['posted_blog']);
+            $url = suxFunct::makeUrl("/blog/view/{$tmp['thread_id']}", null, true);
+            $log .= " <a href='$url'>{$tmp['title']}</a>";
 
-                // Clear all caches, cheap and easy
-                $this->tpl->clear_all_cache();
+            // Log
+            $this->user->log($log);
 
-                // Log message
-                $log = '';
-                $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
-                $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
-                $log .= mb_strtolower($this->r->gtext['posted_blog']);
-                $url = suxFunct::makeUrl("/blog/view/{$tmp['thread_id']}", null, true);
-                $log .= " <a href='$url'>{$tmp['title']}</a>";
-
-                // Log
-                $this->user->log($log);
-
-                // Clear cache
-                $tpl = new suxTemplate('user');
-                $tpl->clear_cache('profile.tpl', $_SESSION['nickname']);
-            }
-
+            // Clear cache
+            $tpl = new suxTemplate('user');
+            $tpl->clear_cache('profile.tpl', $_SESSION['nickname']);
         }
 
         $this->user->log("sux0r::blogEdit()  messages_id: {$clean['id']}", $_SESSION['users_id'], 1); // Private
