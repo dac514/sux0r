@@ -30,7 +30,7 @@ function getBody($link, $id) {
     if ($link == 'messages') {
         require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
         $msg = new suxThreadedMessages();
-        $body = $msg->getMessage($id);
+        $body = $msg->getByID($id);
         $body = "{$body['title']} \n\n {$body['body_plaintext']}";
     }
     elseif ($link == 'rss') {

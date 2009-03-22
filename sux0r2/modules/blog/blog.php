@@ -83,7 +83,7 @@ class blog extends bayesShared {
             // ---------------------------------------------------------------
 
             $max = $this->msg->countFirstPostsByUser($u['users_id'], 'blog');
-            $eval = '$this->msg->getFirstPostsByUser(' .$u['users_id'] . ', \'blog\', $this->pager->limit, $start)';
+            $eval = '$this->msg->getFirstPostsByUser(' .$u['users_id'] . ', $this->pager->limit, $start, \'blog\')';
             $this->r->arr['fp']  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search)); // Important: $start is a reference
 
             if ($start < $max) {
@@ -116,7 +116,7 @@ class blog extends bayesShared {
 
                 $this->pager->setPages($this->msg->countFirstPostsByUser($u['users_id'], 'blog'));
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/author/' . $author));
-                $this->r->arr['fp'] = $this->blogs($this->msg->getFirstPostsByUser($u['users_id'], 'blog', $this->pager->limit, $this->pager->start));
+                $this->r->arr['fp'] = $this->blogs($this->msg->getFirstPostsByUser($u['users_id'], $this->pager->limit, $this->pager->start, 'blog'));
 
                 if (!count($this->r->arr['fp'])) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
@@ -130,7 +130,7 @@ class blog extends bayesShared {
 
         if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
 
-            $this->r->arr['sidelist'] = $this->msg->getFirstPostsByUser($u['users_id'], 'blog'); // TODO: Too many blogs?
+            $this->r->arr['sidelist'] = $this->msg->getFirstPostsByUser($u['users_id'], null, 0, 'blog'); // TODO: Too many blogs?
             $this->r->text['sidelist'] = ucwords($author);
 
         }
@@ -362,7 +362,7 @@ class blog extends bayesShared {
             // ---------------------------------------------------------------
 
             $max = $this->msg->countFirstPostsByMonth($datetime, 'blog');
-            $eval = '$this->msg->getFirstPostsByMonth(\'' . $datetime . '\', \'blog\', $this->pager->limit, $start)';
+            $eval = '$this->msg->getFirstPostsByMonth(\'' . $datetime . '\', $this->pager->limit, $start, \'blog\')';
             $this->r->arr['fp']  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search)); // Important: $start is a reference
 
             if ($start < $max) {
@@ -395,7 +395,7 @@ class blog extends bayesShared {
 
                 $this->pager->setPages($this->msg->countFirstPostsByMonth($datetime, 'blog'));
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/month/' . $date));
-                $this->r->arr['fp'] = $this->blogs($this->msg->getFirstPostsByMonth($datetime, 'blog', $this->pager->limit, $this->pager->start));
+                $this->r->arr['fp'] = $this->blogs($this->msg->getFirstPostsByMonth($datetime, $this->pager->limit, $this->pager->start, 'blog'));
 
                 if (!count($this->r->arr['fp'])) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
@@ -409,7 +409,7 @@ class blog extends bayesShared {
 
         if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
 
-            $this->r->arr['sidelist'] = $this->msg->getFirstPostsByMonth($datetime, 'blog');
+            $this->r->arr['sidelist'] = $this->msg->getFirstPostsByMonth($datetime, null, 0, 'blog');
             $this->r->text['sidelist'] = date('F Y', strtotime($date));
 
         }
@@ -437,7 +437,7 @@ class blog extends bayesShared {
             // ---------------------------------------------------------------
 
             $max = $this->msg->countFirstPosts('blog');
-            $eval = '$this->msg->getFirstPosts(\'blog\', $this->pager->limit, $start)';
+            $eval = '$this->msg->getFirstPosts($this->pager->limit, $start, \'blog\')';
             $this->r->arr['fp']  = $this->blogs($this->filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search)); // Important: $start is a reference
 
             if ($start < $max) {
@@ -470,7 +470,7 @@ class blog extends bayesShared {
 
                 $this->pager->setPages($this->msg->countFirstPosts('blog'));
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog'));
-                $this->r->arr['fp'] = $this->blogs($this->msg->getFirstPosts('blog', $this->pager->limit, $this->pager->start));
+                $this->r->arr['fp'] = $this->blogs($this->msg->getFirstPosts($this->pager->limit, $this->pager->start, 'blog'));
 
                 if (!count($this->r->arr['fp'])) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
@@ -517,12 +517,12 @@ class blog extends bayesShared {
             $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/view/' . $thread_id));
 
             if ($this->pager->start == 0) {
-                $thread = $this->msg->getThread($thread_id, 'blog', $this->pager->limit, $this->pager->start);
+                $thread = $this->msg->getThread($this->pager->limit, $this->pager->start, $thread_id, 'blog');
                 unset($fp);
                 $fp[] = array_shift($thread);
             }
             else {
-                $thread = $this->msg->getThread($thread_id, 'blog', $this->pager->limit, $this->pager->start);
+                $thread = $this->msg->getThread($this->pager->limit, $this->pager->start, $thread_id, 'blog');
             }
 
             // Assign
@@ -547,7 +547,7 @@ class blog extends bayesShared {
 
         if (!$this->tpl->is_cached('rss.tpl', $cache_id)) {
 
-            $fp = $this->blogs($this->msg->getFirstPosts('blog', $this->pager->limit));
+            $fp = $this->blogs($this->msg->getFirstPosts($this->pager->limit, 0, 'blog'));
             if ($fp) {
 
                 require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');

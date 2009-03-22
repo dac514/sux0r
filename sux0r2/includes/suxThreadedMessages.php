@@ -19,6 +19,10 @@ class suxThreadedMessages {
     protected $db_table = 'messages';
     protected $db_table_hist = 'messages_history';
 
+    // Object properties, with defaults
+    protected $published = true;
+    protected $order = array('published_on', 'DESC');
+
 
     /*
     Currently:
@@ -30,7 +34,7 @@ class suxThreadedMessages {
     slideshow -> Powerpoint style, sequence of messages defined by thread order,
     */
 
-    private $types = array('blog', 'forum', 'wiki', 'slideshow');
+    protected $types = array('blog', 'forum', 'wiki', 'slideshow');
 
 
     /**
@@ -44,6 +48,73 @@ class suxThreadedMessages {
 
     }
 
+    // -=-=-
+
+    /**
+    * Set published property of object
+    *
+    * @param bool $published
+    */
+    public function setPublished($published) {
+
+        // Three options:
+        // True, False, or Null
+
+        $this->published = $published;
+    }
+
+
+    /**
+    * Set order property of object
+    *
+	* @param string $col
+    * @param string $way
+    */
+    public function setOrder($col, $way = 'ASC') {
+
+        if (!preg_match('/^[A-Za-z0-9_,\s]+$/', $col)) throw new Exception('Invalid column(s)');
+        $way = (mb_strtolower($way) == 'asc') ? 'ASC' : 'DESC';
+
+        $arr = array($col, $way);
+        $this->order = $arr;
+
+    }
+
+
+    /**
+    * Return published SQL
+    *
+    * @return string
+    */
+    public function sqlPublished() {
+
+		// Published   : draft = FALSE AND published_on < NOW
+		// Unpublished : draft = TRUE OR published_on >= NOW
+		// Null = SELECT ALL, not sure what the best way to represent this is, id = id?
+
+        // PgSql / MySql
+        if ($this->published === true) $query = "draft = false AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
+        elseif ($this->published === false) $query = $query = "draft = true OR published_on > '" . date('Y-m-d H:i:s') . "' ";
+        else $query = "id = id "; // select all
+
+        return $query;
+    }
+
+
+    /**
+    * Return order SQL
+    *
+    * @return string
+    */
+    public function sqlOrder() {
+        // PgSql / MySql
+        $query = "{$this->order[0]} {$this->order[1]} ";
+        return $query;
+    }
+
+
+    // -=-=-
+
     // -------------------------------------------------------------------
     // Individual messages
     // -------------------------------------------------------------------
@@ -53,10 +124,9 @@ class suxThreadedMessages {
     * Get a message by id
     *
     * @param int $id messages_id
-    * @param bool $published select un-published?
     * @return array|false
     */
-    function getMessage($id, $published = true) {
+    function getByID($id) {
 
         // Sanity check
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
@@ -64,12 +134,8 @@ class suxThreadedMessages {
 
         $query = "SELECT * FROM {$this->db_table} WHERE id = ? ";
 
-        // Publish date / draft
-        if ($published) {
-            // MySql / PgSql
-            $query .= "AND draft = false ";
-            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
-        }
+        // Publish / Draft
+        if (is_bool($this->published)) $query .= 'AND ' . $this->sqlPublished();
 
         $st = $this->db->prepare($query);
         $st->execute(array($id));
@@ -87,11 +153,10 @@ class suxThreadedMessages {
     *
     * @param int $users_id users_id
     * @param array $msg required keys => (title, body, [forum|blog|wiki|slideshow]) optional keys => (published_on)
-    * @param int $parent_id messages_id of parent
     * @param int $trusted passed on to sanitizeHtml()
     * @return int insert id
     */
-    function saveMessage($users_id, array $msg, $parent_id = 0, $trusted = -1) {
+    function save($users_id, array $msg, $trusted = -1) {
 
         // -------------------------------------------------------------------
         // Sanitize
@@ -103,11 +168,17 @@ class suxThreadedMessages {
         if (!isset($msg['title']) || !isset($msg['body']))
             throw new Exception('Invalid $msg array');
 
+        // Message id
+        if (isset($msg['id'])) {
+            if (!filter_var($msg['id'], FILTER_VALIDATE_INT) || $msg['id'] < 1) throw new Exception('Invalid message id');
+            else $clean['id'] = $msg['id'];
+        }
+
         // Users id
         $clean['users_id'] = $users_id;
 
         // Parent_id
-        $clean['parent_id'] = filter_var($parent_id, FILTER_VALIDATE_INT);
+        $clean['parent_id'] = @filter_var($msg['parent_id'], FILTER_VALIDATE_INT);
         if ($clean['parent_id'] === false) $clean['parent_id'] = 0;
 
         // No HTML in title
@@ -159,68 +230,101 @@ class suxThreadedMessages {
         // Go!
         // -------------------------------------------------------------------
 
-        /*
-        The first message in a thread has thread_pos = 0.
-
-        For a new message N, if there are no messages in the thread with the same
-        parent as N, N's thread_pos is one greater than its parent's thread_pos.
-
-        For a new message N, if there are messages in the thread with the same
-        parent as N, N's thread_pos is one greater than the biggest thread_pos
-        of all the messages with the same parent as N, recursively.
-
-        After new message N's thread_pos is determined, all messages in the same
-        thread with a thread_pos value greater than or equal to N's have their
-        thread_pos value incremented by 1 (to make room for N).
-        */
-
         // Begin transaction
         $tid = suxDB::requestTransaction();
         $this->inTransaction = true;
 
-        if ($clean['parent_id']) {
+        if (isset($clean['id'])) {
 
-            // Get thread_id, level, and thread_pos from parent
-            $st = $this->db->prepare("SELECT thread_id, level, thread_pos FROM {$this->db_table} WHERE id = ? ");
-            $st->execute(array($clean['parent_id']));
-            $parent = $st->fetch(PDO::FETCH_ASSOC);
+            // UPDATE
 
-            // a reply's level is one greater than its parent's
-            $clean['level'] = $parent['level'] + 1;
+            // Get $edit[] array in order to keep a history
+            $query = "SELECT title, image, body_html, body_plaintext FROM {$this->db_table} WHERE id = ? ";
+            $st = $this->db->prepare($query);
+            $st->execute(array($clean['id']));
+            $edit = $st->fetch(PDO::FETCH_ASSOC);
 
-            // what is the biggest thread_pos in this thread among messages with the same parent, recursively?
-            $clean['thread_pos'] = $this->biggestThreadPos($parent['thread_id'], $clean['parent_id']);
+            if (!$edit) throw new Exception('No message to edit?');
 
-            if ($clean['thread_pos']) {
-                // this thread_pos goes after the biggest existing one
-                $clean['thread_pos']++;
-            }
-            else {
-                // this is the first reply, so put it right after the parent
-                $clean['thread_pos'] = $parent['thread_pos'] + 1;
-            }
+            $edit['messages_id'] = $clean['id'];
+            $edit['users_id'] = $clean['users_id'];
+            $edit['edited_on'] = date('Y-m-d H:i:s');
+            $query = suxDB::prepareInsertQuery($this->db_table_hist, $edit);
+            $st = $this->db->prepare($query);
+            $st->execute($edit);
 
-            // increment the thread_pos of all messages in the thread that come after this one
-            $st = $this->db->prepare("UPDATE {$this->db_table} SET thread_pos = thread_pos + 1 WHERE thread_id = ? AND thread_pos >= ? ");
-            $st->execute(array($parent['thread_id'], $clean['thread_pos']));
+            unset($clean['users_id']); // Don't override the original publisher
 
-            // the new message should be saved with the parent's thread_id
-            $clean['thread_id'] = $parent['thread_id'];
+            // Update the message
+            $query = suxDB::prepareUpdateQuery($this->db_table, $clean);
 
         }
         else {
 
-            // The message is not a reply, so it's the start of a new thread
-            $clean['level'] = 0;
-            $clean['thread_pos'] = 0;
-            $clean['thread_id'] = $this->db->query("SELECT MAX(thread_id) + 1 FROM {$this->db_table} ")->fetchColumn(0);
+            // INSERT
+
+            /*
+            The first message in a thread has thread_pos = 0.
+
+            For a new message N, if there are no messages in the thread with the same
+            parent as N, N's thread_pos is one greater than its parent's thread_pos.
+
+            For a new message N, if there are messages in the thread with the same
+            parent as N, N's thread_pos is one greater than the biggest thread_pos
+            of all the messages with the same parent as N, recursively.
+
+            After new message N's thread_pos is determined, all messages in the same
+            thread with a thread_pos value greater than or equal to N's have their
+            thread_pos value incremented by 1 (to make room for N).
+            */
+
+            if ($clean['parent_id']) {
+
+                // Get thread_id, level, and thread_pos from parent
+                $st = $this->db->prepare("SELECT thread_id, level, thread_pos FROM {$this->db_table} WHERE id = ? ");
+                $st->execute(array($clean['parent_id']));
+                $parent = $st->fetch(PDO::FETCH_ASSOC);
+
+                // a reply's level is one greater than its parent's
+                $clean['level'] = $parent['level'] + 1;
+
+                // what is the biggest thread_pos in this thread among messages with the same parent, recursively?
+                $clean['thread_pos'] = $this->biggestThreadPos($parent['thread_id'], $clean['parent_id']);
+
+                if ($clean['thread_pos']) {
+                    // this thread_pos goes after the biggest existing one
+                    $clean['thread_pos']++;
+                }
+                else {
+                    // this is the first reply, so put it right after the parent
+                    $clean['thread_pos'] = $parent['thread_pos'] + 1;
+                }
+
+                // increment the thread_pos of all messages in the thread that come after this one
+                $st = $this->db->prepare("UPDATE {$this->db_table} SET thread_pos = thread_pos + 1 WHERE thread_id = ? AND thread_pos >= ? ");
+                $st->execute(array($parent['thread_id'], $clean['thread_pos']));
+
+                // the new message should be saved with the parent's thread_id
+                $clean['thread_id'] = $parent['thread_id'];
+
+            }
+            else {
+
+                // The message is not a reply, so it's the start of a new thread
+                $clean['level'] = 0;
+                $clean['thread_pos'] = 0;
+                $clean['thread_id'] = $this->db->query("SELECT MAX(thread_id) + 1 FROM {$this->db_table} ")->fetchColumn(0);
+
+            }
+
+            // Sanity check
+            if(!$clean['thread_id']) $clean['thread_id'] = 1;
+
+            // Insert the message
+            $query = suxDB::prepareInsertQuery($this->db_table, $clean);
 
         }
 
-        // Sanity check
-        if(!$clean['thread_id']) $clean['thread_id'] = 1;
-
-        $query = suxDB::prepareInsertQuery($this->db_table, $clean);
         $st = $this->db->prepare($query);
 
         // http://bugs.php.net/bug.php?id=44597
@@ -230,17 +334,26 @@ class suxThreadedMessages {
         // Annoying much? This sucks more than you can imagine.
 
         if  ($this->db_driver == 'pgsql') {
-            $st->bindParam(':users_id', $clean['users_id'], PDO::PARAM_INT);
+
+            if (isset($clean['id'])) $st->bindParam(':id', $clean['id'], PDO::PARAM_INT);
+            if (isset($clean['users_id'])) $st->bindParam(':users_id', $clean['users_id'], PDO::PARAM_INT);
+
             $st->bindParam(':title', $clean['title'], PDO::PARAM_STR);
-            if (isset($clean['image'])) $st->bindParam(':image', $clean['image'], PDO::PARAM_STR);
             $st->bindParam(':body_html', $clean['body_html'], PDO::PARAM_STR);
             $st->bindParam(':body_plaintext', $clean['body_plaintext'], PDO::PARAM_STR);
-            $st->bindParam(':thread_id', $clean['thread_id'], PDO::PARAM_INT);
-            $st->bindParam(':parent_id', $clean['parent_id'], PDO::PARAM_INT);
-            $st->bindParam(':level', $clean['level'], PDO::PARAM_INT);
-            $st->bindParam(':thread_pos', $clean['thread_pos'], PDO::PARAM_INT);
             $st->bindParam(':draft', $clean['draft'], PDO::PARAM_BOOL);
-            $st->bindParam(':published_on', $clean['published_on'], PDO::PARAM_STR);
+
+            if (isset($clean['image'])) $st->bindParam(':image', $clean['image'], PDO::PARAM_STR);
+
+            if (!isset($clean['id'])) {
+                $st->bindParam(':thread_id', $clean['thread_id'], PDO::PARAM_INT);
+                $st->bindParam(':parent_id', $clean['parent_id'], PDO::PARAM_INT);
+                $st->bindParam(':level', $clean['level'], PDO::PARAM_INT);
+                $st->bindParam(':thread_pos', $clean['thread_pos'], PDO::PARAM_INT);
+            }
+
+            if (isset($clean['published_on'])) $st->bindParam(':published_on', $clean['published_on'], PDO::PARAM_STR);
+
             $st->bindParam(':forum', $clean['forum'], PDO::PARAM_BOOL);
             $st->bindParam(':blog', $clean['blog'], PDO::PARAM_BOOL);
             $st->bindParam(':wiki', $clean['wiki'], PDO::PARAM_BOOL);
@@ -254,7 +367,8 @@ class suxThreadedMessages {
         // MySQL InnoDB with transaction reports the last insert id as 0 after
         // commit, the real ids are only reported before committing.
 
-        if ($this->db_driver == 'pgsql') $insert_id = $this->db->lastInsertId("{$this->db_table}_id_seq"); // PgSql
+        if (isset($clean['id'])) $insert_id = $clean['id'];
+        elseif ($this->db_driver == 'pgsql') $insert_id = $this->db->lastInsertId("{$this->db_table}_id_seq"); // PgSql
         else $insert_id = $this->db->lastInsertId();
 
         // Commit
@@ -290,148 +404,11 @@ class suxThreadedMessages {
 
 
     /**
-    * Edit a message already in the database, backup changes in history table
-    *
-    * @param int $messages_id messages_id
-    * @param int $users_id users_id
-    * @param array $msg required keys => (title, body) optional keys => (published_on, image)
-    * @param int $trusted passed on to sanitizeHtml()
-    */
-    function editMessage($messages_id, $users_id, array $msg, $trusted = -1) {
-
-        // -------------------------------------------------------------------
-        // Sanitize
-        // -------------------------------------------------------------------
-
-        if (!filter_var($messages_id, FILTER_VALIDATE_INT) || $messages_id < 1)
-            throw new Exception('Invalid message id');
-
-        if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
-            throw new Exception('Invalid user id');
-
-        if (!isset($msg['title']) || !isset($msg['body']))
-            throw new Exception('Invalid $msg array');
-
-        // Users id
-        $clean['id'] = $messages_id;
-        $clean['users_id'] = $users_id;
-
-        // No HTML in title
-        $clean['title'] = strip_tags($msg['title']);
-
-        // Sanitize HTML in body
-        $clean['body_html']  = suxFunct::sanitizeHtml($msg['body'], $trusted);
-
-        // Convert and copy body to UTF-8 plaintext
-        require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
-        $converter = new suxHtml2UTF8($clean['body_html']);
-        $clean['body_plaintext'] = $converter->getText();
-
-        // Image
-        if (isset($msg['image'])) {
-            $clean['image'] = filter_var($msg['image'], FILTER_SANITIZE_STRING);
-        }
-
-        // Publish date
-        if (isset($msg['published_on'])) {
-            // ISO 8601 date format
-            // regex must match '2008-06-18 16:53:29' or '2008-06-18T16:53:29-04:00'
-            $regex = '/^(\d{4})-(0[0-9]|1[0,1,2])-([0,1,2][0-9]|3[0,1]).+(\d{2}):(\d{2}):(\d{2})/';
-            if (!preg_match($regex, $msg['published_on'])) throw new Exception('Invalid date');
-            $clean['published_on'] = $msg['published_on'];
-        }
-
-        // Draft, boolean / tinyint
-        $clean['draft'] = false;
-        if (isset($msg['draft']) && $msg['draft']) $clean['draft'] = true;
-
-        // Types of threaded messages
-        if (isset($msg['blog'])) {
-            if (!$msg['blog']) $clean['blog'] = false;
-            else $clean['blog'] = true;
-        }
-        if (isset($msg['forum'])) {
-            if (!$msg['forum']) $clean['forum'] = false;
-            else $clean['forum'] = true;
-        }
-        if (isset($msg['wiki'])) {
-            if (!$msg['wiki']) $clean['wiki'] = false;
-            else $clean['wiki'] = true;
-        }
-        if (isset($msg['slideshow'])) {
-            if (!$msg['slideshow']) $clean['slideshow'] = false;
-            else $clean['slideshow'] = true;
-        }
-
-
-        // We now have the $clean[] array
-
-        // -------------------------------------------------------------------
-        // Go!
-        // -------------------------------------------------------------------
-
-        // Get $edit[] array in order to keep a history
-        $query = "SELECT title, image, body_html, body_plaintext FROM {$this->db_table} WHERE id = ? ";
-        $st = $this->db->prepare($query);
-        $st->execute(array($clean['id']));
-        $edit = $st->fetch(PDO::FETCH_ASSOC);
-
-        if (!$edit) throw new Exception('No message to edit?');
-
-        // Begin transaction
-        $tid = suxDB::requestTransaction();
-        $this->inTransaction = true;
-
-        $edit['messages_id'] = $clean['id'];
-        $edit['users_id'] = $clean['users_id'];
-        $edit['edited_on'] = date('Y-m-d H:i:s');
-        $query = suxDB::prepareInsertQuery($this->db_table_hist, $edit);
-        $st = $this->db->prepare($query);
-        $st->execute($edit);
-
-        unset($clean['users_id']); // Don't override the original publisher
-
-        // Update the message
-        $query = suxDB::prepareUpdateQuery($this->db_table, $clean);
-        $st = $this->db->prepare($query);
-
-        // http://bugs.php.net/bug.php?id=44597
-        // As of 5.2.6 you still can't use this function's $input_parameters to
-        // pass a boolean to PostgreSQL. To do that, you'll have to call
-        // bindParam() with explicit types for *each* parameter in the query.
-        // Annoying much? This sucks more than you can imagine.
-
-        if  ($this->db_driver == 'pgsql') {
-            $st->bindParam(':id', $clean['id'], PDO::PARAM_INT);
-            $st->bindParam(':title', $clean['title'], PDO::PARAM_STR);
-            if (isset($clean['image'])) $st->bindParam(':image', $clean['image'], PDO::PARAM_STR);
-            $st->bindParam(':body_html', $clean['body_html'], PDO::PARAM_STR);
-            $st->bindParam(':body_plaintext', $clean['body_plaintext'], PDO::PARAM_STR);
-            $st->bindParam(':draft', $clean['draft'], PDO::PARAM_BOOL);
-            if (isset($clean['published_on'])) $st->bindParam(':published_on', $clean['published_on'], PDO::PARAM_STR);
-            if (isset($clean['forum'])) $st->bindParam(':forum', $clean['forum'], PDO::PARAM_BOOL);
-            if (isset($clean['blog'])) $st->bindParam(':blog', $clean['blog'], PDO::PARAM_BOOL);
-            if (isset($clean['wiki'])) $st->bindParam(':wiki', $clean['wiki'], PDO::PARAM_BOOL);
-            if (isset($clean['slideshow'])) $st->bindParam(':slideshow', $clean['slideshow'], PDO::PARAM_BOOL);
-            $st->execute();
-        }
-        else {
-            $st->execute($clean);
-        }
-
-        // Commit
-        suxDB::commitTransaction($tid);
-        $this->inTransaction = false;
-
-    }
-
-
-    /**
     * Delete message
     *
     * @param int $id messages id
     */
-    function deleteMessage($id) {
+    function delete($id) {
 
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1) return false;
 
@@ -463,10 +440,9 @@ class suxThreadedMessages {
     * Get first post
     *
     * @param int $thread_id thread_id
-    * @param bool $published select un-published?
     * @return array
     */
-    function getFirstPost($thread_id, $published = true) {
+    function getFirstPost($thread_id) {
 
         // Sanity check
         if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id < 1)
@@ -475,14 +451,11 @@ class suxThreadedMessages {
         // SQL Query
         $query = "SELECT * FROM {$this->db_table} WHERE thread_id = ? AND thread_pos = 0 ";
 
-        // Publish date / draft
-        if ($published) {
-            // MySql / PgSql
-            $query .= "AND draft = false ";
-            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
-        }
+        // Publish / Draft
+        if (is_bool($this->published)) $query .= 'AND ' . $this->sqlPublished();
 
-        $query .= "ORDER BY published_on DESC ";
+        // Order
+        $query .= 'ORDER BY ' . $this->sqlOrder();
 
         // Execute
         $st = $this->db->prepare($query);
@@ -505,7 +478,7 @@ class suxThreadedMessages {
     * @param bool $published select un-published?
     * @return int
     */
-    function countThread($thread_id, $type = null, $published = true) {
+    function countThread($thread_id, $type = null) {
 
         // Sanity check
         if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id < 1)
@@ -517,12 +490,8 @@ class suxThreadedMessages {
         // SQL Query
         else $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE thread_id = ? ";
 
-        // Publish date / draft
-        if ($published) {
-            // MySql / PgSql
-            $query .= "AND draft = false ";
-            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
-        }
+        // Publish / Draft
+        if (is_bool($this->published)) $query .= 'AND ' . $this->sqlPublished();
 
         // Type
         if ($type) $query .= "AND {$type} = true ";
@@ -539,43 +508,48 @@ class suxThreadedMessages {
     /**
     * Get a thread
     *
-    * @param int $thread_id thread id
-    * @param string $type forum, blog, wiki, or slideshow
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
+    * @param int $thread_id thread id
+    * @param string $type forum, blog, wiki, or slideshow
     * @param bool $published select un-published?
     * @return array
     */
-    function getThread($thread_id, $type = null, $limit = null, $start = 0, $published = true) {
+    function getThread($limit = null, $start = 0, $thread_id = null, $type = null) {
 
         // Sanity check
-        if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id < 1)
+        if ($thread_id && (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id < 1))
             throw new Exception('Invalid thread id');
 
         if ($type && !in_array($type, $this->types))
             throw new Exception('Invalid type');
 
         // SQL Query
-        $query = "SELECT * FROM {$this->db_table} WHERE thread_id = ? ";
+        $query = "SELECT * FROM {$this->db_table} ";
+        if ($thread_id) $query .= 'WHERE thread_id = ? ';
 
-        // Publish date / draft
-        if ($published) {
-            // MySql / PgSql
-            $query .= "AND draft = false ";
-            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
+        // Publish / Draft
+        if (is_bool($this->published)) {
+            $query .= ($thread_id) ? 'AND ' : 'WHERE ';
+            $query .= $this->sqlPublished();
         }
 
         // Type
         if ($type) $query .= "AND {$type} = true ";
 
-        $query .= "ORDER BY thread_id, thread_pos "; // Order
+        // Order
+        $query .= 'ORDER BY thread_id, thread_pos, ' . $this->sqlOrder();
+
         // Limit
         if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
 
+
         // Execute
         $st = $this->db->prepare($query);
-        $st->execute(array($thread_id));
+        if ($thread_id) $st->execute(array($thread_id));
+        else $st->execute();
+
         return $st->fetchAll(PDO::FETCH_ASSOC);
 
 
@@ -587,10 +561,9 @@ class suxThreadedMessages {
     *
     * @param int $users_id users id
     * @param string $type forum, blog, wiki, or slideshow
-    * @param bool $published select un-published?
     * @return int
     */
-    function countMessagesByUser($users_id, $type = null, $published = true) {
+    function countMessagesByUser($users_id, $type = null) {
 
         // Sanity check
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
@@ -602,12 +575,8 @@ class suxThreadedMessages {
         // SQL Query
         $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE users_id = ? ";
 
-        // Publish date / draft
-        if ($published) {
-            // MySql / PgSql
-            $query .= "AND draft = false ";
-            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
-        }
+        // Publish / Draft
+        if (is_bool($this->published)) $query .= 'AND ' . $this->sqlPublished();
 
         // Type
         if ($type) $query .= "AND {$type} = true ";
@@ -624,13 +593,12 @@ class suxThreadedMessages {
     /**
     * Group messages by user id
     *
-    * @param string $type forum, blog, wiki, or slideshow
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
-    * @param bool $published select un-published?
+    * @param string $type forum, blog, wiki, or slideshow
     * @return array
     */
-    function groupMessagesByUser($type = null, $limit = null, $start = 0, $published = true) {
+    function groupMessagesByUser($limit = null, $start = 0, $type = null) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
@@ -638,11 +606,8 @@ class suxThreadedMessages {
         // Mysql / PgSql
         $query = "SELECT COUNT(*) AS count, users_id FROM {$this->db_table} ";
 
-        if ($published) {
-            // Only show published items
-            $query .= "AND draft = false ";
-            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
-        }
+        // Publish / Draft
+        if (is_bool($this->published)) $query .= 'AND ' . $this->sqlPublished();
 
         // Type
         if ($type) $query .= "AND {$type} = true ";
@@ -665,13 +630,12 @@ class suxThreadedMessages {
     * Get messages by user id
     *
     * @param int $users_id users id
-    * @param string $type forum, blog, wiki, or slideshow
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
-    * @param bool $published select un-published?
+    * @param string $type forum, blog, wiki, or slideshow
     * @return array
     */
-    function getMessagesByUser($users_id, $type = null, $limit = null, $start = 0, $published = true) {
+    function getMessagesByUser($users_id, $limit = null, $start = 0, $type = null) {
 
         // Sanity check
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
@@ -683,17 +647,13 @@ class suxThreadedMessages {
         // SQL Query
         $query = "SELECT * FROM {$this->db_table} WHERE users_id = ? ";
 
-        // Publish date / draft
-        if ($published) {
-            // MySql / PgSql
-            $query .= "AND draft = false ";
-            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
-        }
+        // Publish / Draft
+        if (is_bool($this->published)) $query .= 'AND ' . $this->sqlPublished();
 
         // Type
         if ($type) $query .= "AND {$type} = true ";
 
-        $query .= "ORDER BY published_on DESC "; // Order
+        $query .= 'ORDER BY ' . $this->sqlOrder(); // Order
 
         // Limit
         if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
@@ -711,10 +671,9 @@ class suxThreadedMessages {
     * Count first posts
     *
     * @param string $type forum, blog, wiki, or slideshow
-    * @param bool $published select un-published?
     * @return int
     */
-    function countFirstPosts($type = null, $published = true) {
+    function countFirstPosts($type = null) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
@@ -722,12 +681,8 @@ class suxThreadedMessages {
         // SQL Query
         $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE thread_pos = 0 ";
 
-        // Publish date / Draft
-        if ($published) {
-            // PgSql / MySql
-            $query .= "AND draft = false ";
-            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
-        }
+        // Publish / Draft
+        if (is_bool($this->published)) $query .= 'AND ' . $this->sqlPublished();
 
         // Type
         if ($type) $query .= "AND {$type} = true ";
@@ -744,13 +699,12 @@ class suxThreadedMessages {
     /**
     * Get first posts
     *
-    * @param string $type forum, blog, wiki, or slideshow
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
-    * @param bool $published select un-published?
+    * @param string $type forum, blog, wiki, or slideshow
     * @return array
     */
-    function getFirstPosts($type = null, $limit = null, $start = 0, $published = true) {
+    function getFirstPosts($limit = null, $start = 0, $type = null) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
@@ -758,17 +712,14 @@ class suxThreadedMessages {
         // SQL Query
         $query = "SELECT * FROM {$this->db_table} WHERE thread_pos = 0 ";
 
-        // Publish date / Draft
-        if ($published) {
-            // MySql / PgSql
-            $query .= "AND draft = false ";
-            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
-        }
+        // Publish / Draft
+        if (is_bool($this->published)) $query .= 'AND ' . $this->sqlPublished();
 
         // Type
         if ($type) $query .= "AND {$type} = true ";
 
-        $query .= "ORDER BY published_on DESC "; // Order
+        $query .= 'ORDER BY ' . $this->sqlOrder(); // Order
+
         // Limit
         if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
@@ -786,10 +737,9 @@ class suxThreadedMessages {
     *
     * @param int $users_id users id
     * @param string $type forum, blog, wiki, or slideshow
-    * @param bool $published select un-published?
     * @return int
     */
-    function countFirstPostsByUser($users_id, $type = null, $published = true) {
+    function countFirstPostsByUser($users_id, $type = null) {
 
         // Sanity check
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
@@ -801,12 +751,8 @@ class suxThreadedMessages {
         // SQL Query
         $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE users_id = ? AND thread_pos = 0 ";
 
-        // Publish date / draft
-        if ($published) {
-            // MySql / PgSql
-            $query .= "AND draft = false ";
-            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
-        }
+        // Publish / Draft
+        if (is_bool($this->published)) $query .= 'AND ' . $this->sqlPublished();
 
         // Type
         if ($type) $query .= "AND {$type} = true ";
@@ -822,13 +768,12 @@ class suxThreadedMessages {
     /**
     * Group first posts by user id
     *
-    * @param string $type forum, blog, wiki, or slideshow
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
-    * @param bool $published select un-published?
+    * @param string $type forum, blog, wiki, or slideshow
     * @return array
     */
-    function groupFirstPostsByUser($type = null, $limit = null, $start = 0, $published = true) {
+    function groupFirstPostsByUser($limit = null, $start = 0, $type = null) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
@@ -837,11 +782,8 @@ class suxThreadedMessages {
         $query = "SELECT COUNT(*) AS count, users_id
         FROM {$this->db_table} WHERE thread_pos = 0 ";
 
-        if ($published) {
-            // Only show published items
-            $query .= "AND draft = false ";
-            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
-        }
+        // Publish / Draft
+        if (is_bool($this->published)) $query .= 'AND ' . $this->sqlPublished();
 
         // Type
         if ($type) $query .= "AND {$type} = true ";
@@ -864,13 +806,12 @@ class suxThreadedMessages {
     * Get first posts by user id
     *
     * @param int $users_id users id
-    * @param string $type forum, blog, wiki, or slideshow
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
-    * @param bool $published select un-published?
+    * @param string $type forum, blog, wiki, or slideshow
     * @return array
     */
-    function getFirstPostsByUser($users_id, $type = null, $limit = null, $start = 0, $published = true) {
+    function getFirstPostsByUser($users_id, $limit = null, $start = 0, $type = null) {
 
         // Sanity check
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
@@ -882,17 +823,13 @@ class suxThreadedMessages {
         // SQL Query
         $query = "SELECT * FROM {$this->db_table} WHERE users_id = ? AND thread_pos = 0 ";
 
-        // Publish date / draft
-        if ($published) {
-            // MySql / PgSql
-            $query .= "AND draft = false ";
-            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
-        }
+        // Publish / Draft
+        if (is_bool($this->published)) $query .= 'AND ' . $this->sqlPublished();
 
         // Type
         if ($type) $query .= "AND {$type} = true ";
 
-        $query .= "ORDER BY published_on DESC "; // Order
+        $query .= 'ORDER BY ' . $this->sqlOrder(); // Order
 
         // Limit
         if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
@@ -911,10 +848,9 @@ class suxThreadedMessages {
     *
     * @param int $date date
     * @param string $type forum, blog, wiki, or slideshow
-    * @param bool $published select un-published?
     * @return int
     */
-    function countFirstPostsByMonth($date, $type = null, $published = true) {
+    function countFirstPostsByMonth($date, $type = null) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
@@ -929,25 +865,24 @@ class suxThreadedMessages {
         $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE thread_pos = 0 ";
 
         // Publish date / draft
-        if ($published) {
-            $date = "{$matches[1]}-{$matches[2]}-{$matches[3]} {$matches[4]}:{$matches[5]}:{$matches[6]}";
-            $query .= "AND draft = false ";
-            if ($this->db_driver == 'mysql') {
-                // MySql
-                $query .= "AND MONTH(published_on) =  MONTH('{$date}') "; // Month
-                $query .= "AND YEAR(published_on) = YEAR('{$date}') "; // Year
-                $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
-            }
-            elseif ($this->db_driver == 'pgsql') {
-                // PgSQL
-                $query .= "AND EXTRACT(MONTH FROM published_on) =  EXTRACT(MONTH FROM timestamp '{$date}') "; // Month
-                $query .= "AND EXTRACT(YEAR FROM published_on) = EXTRACT(YEAR FROM timestamp '{$date}') "; // Year
-                $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
-            }
-            else {
-                throw new Exception('Unsupported database driver');
-            }
+        if (is_bool($this->published)) $query .= 'AND ' . $this->sqlPublished();
+
+        // Group
+        $date = "{$matches[1]}-{$matches[2]}-{$matches[3]} {$matches[4]}:{$matches[5]}:{$matches[6]}";
+        if ($this->db_driver == 'mysql') {
+            // MySql
+            $query .= "AND MONTH(published_on) =  MONTH('{$date}') "; // Month
+            $query .= "AND YEAR(published_on) = YEAR('{$date}') "; // Year
         }
+        elseif ($this->db_driver == 'pgsql') {
+            // PgSQL
+            $query .= "AND EXTRACT(MONTH FROM published_on) =  EXTRACT(MONTH FROM timestamp '{$date}') "; // Month
+            $query .= "AND EXTRACT(YEAR FROM published_on) = EXTRACT(YEAR FROM timestamp '{$date}') "; // Year
+        }
+        else {
+            throw new Exception('Unsupported database driver');
+        }
+
 
         // Type
         if ($type) $query .= "AND {$type} = true ";
@@ -962,18 +897,17 @@ class suxThreadedMessages {
     /**
     * Group first posts by month
     *
-    * @param string $type forum, blog, wiki, or slideshow
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
-    * @param bool $published select un-published?
+    * @param string $type forum, blog, wiki, or slideshow
     * @return array
     */
-    function groupFirstPostsByMonths($type = null, $limit = null, $start = 0, $published = true) {
+    function groupFirstPostsByMonths($limit = null, $start = 0, $type = null) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
 
-        // Query
+        // Group
         if ($this->db_driver == 'mysql') {
             // MySql
             $query = "SELECT COUNT(*) AS count,
@@ -981,31 +915,21 @@ class suxThreadedMessages {
             MONTH(published_on) AS month
             FROM {$this->db_table} WHERE thread_pos = 0 ";
 
-            if ($published) {
-                // Only show published items
-                $query .= "AND draft = false ";
-                $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
-            }
-
         }
         elseif ($this->db_driver == 'pgsql') {
             // PgSql
-
             $query = "SELECT DISTINCT COUNT(*) AS count,
             EXTRACT(YEAR FROM published_on) AS year,
             EXTRACT(MONTH FROM published_on) AS month
             FROM {$this->db_table} WHERE thread_pos = 0 ";
 
-            if ($published) {
-                // Only show published items
-                $query .= "AND draft = false ";
-                $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
-            }
-
         }
         else {
             throw new Exception('Unsupported database driver');
         }
+
+        // Publish date / draft
+        if (is_bool($this->published)) $query .= 'AND ' . $this->sqlPublished();
 
         if ($type) $query .= "AND {$type} = true "; // Type
 
@@ -1027,13 +951,12 @@ class suxThreadedMessages {
     * Get first posts by month
     *
     * @param string $date date
-    * @param string $type forum, blog, wiki, or slideshow
     * @param int $limit sql limit value
     * @param int $start sql start of limit value
-    * @param bool $published select un-published?
+    * @param string $type forum, blog, wiki, or slideshow
     * @return array
     */
-    function getFirstPostsByMonth($date, $type = null, $limit = null, $start = 0, $published = true) {
+    function getFirstPostsByMonth($date, $limit = null, $start = 0, $type = null ) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
@@ -1047,31 +970,30 @@ class suxThreadedMessages {
         // SQL Query
         $query = "SELECT * FROM {$this->db_table} WHERE thread_pos = 0 ";
 
-        if ($published) {
-            // Only show published items
-            $date = "{$matches[1]}-{$matches[2]}-{$matches[3]} {$matches[4]}:{$matches[5]}:{$matches[6]}";
-            $query .= "AND draft = false ";
-            if ($this->db_driver == 'mysql') {
-                // MySql
-                $query .= "AND MONTH(published_on) =  MONTH('{$date}') "; // Month
-                $query .= "AND YEAR(published_on) = YEAR('{$date}') "; // Year
-                $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
-            }
-            elseif ($this->db_driver == 'pgsql') {
-                // PgSql
-                $query .= "AND EXTRACT(MONTH FROM published_on) =  EXTRACT(MONTH FROM timestamp '{$date}')  "; // Month
-                $query .= "AND EXTRACT(YEAR FROM published_on) =  EXTRACT(YEAR FROM timestamp '{$date}') "; // Year
-                $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' "; // Don't give away the future
-            }
-            else {
-                throw new Exception('Unsupported database driver');
-            }
+        // Publish date / draft
+        if (is_bool($this->published)) $query .= 'AND ' . $this->sqlPublished();
+
+        // Group
+        $date = "{$matches[1]}-{$matches[2]}-{$matches[3]} {$matches[4]}:{$matches[5]}:{$matches[6]}";
+        if ($this->db_driver == 'mysql') {
+            // MySql
+            $query .= "AND MONTH(published_on) =  MONTH('{$date}') "; // Month
+            $query .= "AND YEAR(published_on) = YEAR('{$date}') "; // Year
+        }
+        elseif ($this->db_driver == 'pgsql') {
+            // PgSql
+            $query .= "AND EXTRACT(MONTH FROM published_on) =  EXTRACT(MONTH FROM timestamp '{$date}')  "; // Month
+            $query .= "AND EXTRACT(YEAR FROM published_on) =  EXTRACT(YEAR FROM timestamp '{$date}') "; // Year
+        }
+        else {
+            throw new Exception('Unsupported database driver');
         }
 
         // Type
         if ($type) $query .= "AND {$type} = true ";
 
-        $query .= "ORDER BY published_on DESC "; // Order
+        $query .= 'ORDER BY ' . $this->sqlOrder(); // Order
+
         // Limit
         if ($start && $limit) $query .= "LIMIT {$limit} OFFSET {$start} ";
         elseif ($limit) $query .= "LIMIT {$limit} ";
@@ -1136,12 +1058,11 @@ class suxThreadedMessages {
     /**
     * Get latest replies, i.e. thread_pos != 0
     *
-    * @param string $type forum, blog, wiki, or slideshow
     * @param int $limit maximum latest replies
-    * @param bool $published select un-published?
+    * @param string $type forum, blog, wiki, or slideshow
     * @return array
     */
-    function getRececentComments($type = null, $limit = 10, $published = true) {
+    function getRececentComments($limit = 10, $type = null) {
 
         // Sanity check
         if ($type && !in_array($type, $this->types)) throw new Exception('Invalid type');
@@ -1149,17 +1070,14 @@ class suxThreadedMessages {
         // SQL Query
         $query = "SELECT * FROM {$this->db_table} WHERE thread_pos != 0 ";
 
-        // Publish date / Draft
-        if ($published) {
-            // MySql / PgSql
-            $query .= "AND draft = false ";
-            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
-        }
+        // Publish date / draft
+        if (is_bool($this->published)) $query .= 'AND ' . $this->sqlPublished();
 
         // Type
         if ($type) $query .= "AND {$type} = true ";
 
-        $query .= "ORDER BY published_on DESC ";
+        $query .= 'ORDER BY ' . $this->sqlOrder(); // Order
+
         if ($limit) $query .= "LIMIT {$limit} ";
 
         // Execute
@@ -1174,10 +1092,9 @@ class suxThreadedMessages {
     * Get reply count
     *
     * @param int $thread_id thread_id
-    * @param bool $published select un-published?
     * @return int
     */
-    function getCommentsCount($thread_id, $published = true) {
+    function getCommentsCount($thread_id) {
 
         // Sanity check
         if (!filter_var($thread_id, FILTER_VALIDATE_INT) || $thread_id < 1)
@@ -1187,11 +1104,7 @@ class suxThreadedMessages {
         $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE thread_id = ? AND thread_pos != 0 ";
 
         // Publish date / draft
-        if ($published) {
-            // MySql / PgSql
-            $query .= "AND draft = false ";
-            $query .= "AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
-        }
+        if (is_bool($this->published)) $query .= 'AND ' . $this->sqlPublished();
 
         // Execute
         $st = $this->db->prepare($query);
