@@ -18,7 +18,7 @@ if (isset($_POST) && count($_POST)) {
     else {
         if (!preg_match('/^(\w|\-)+$/', $_POST['nickname'])) $errors[] = 'nickname has invalid characters';
         if (mb_strtolower($_POST['nickname']) == 'nobody') $errors[] = 'nickname cannot be reserved word nobody';
-        $tmp = $u->getUserByNickname($_POST['nickname']);
+        $tmp = $u->getByNickname($_POST['nickname']);
         if ($tmp !== false ) $errors[] = 'duplicate nickname found';
     }
 
@@ -26,7 +26,7 @@ if (isset($_POST) && count($_POST)) {
     if (empty($_POST['email'])) $errors[] = 'email cannot be empty';
     else {
         if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) $errors[] = 'invalid email';
-        $tmp = $u->getUserByEmail($_POST['email']);
+        $tmp = $u->getByEmail($_POST['email']);
         if ($tmp !== false ) $errors[] = 'duplicate email found';
     }
 
@@ -53,7 +53,7 @@ if (isset($_POST) && count($_POST)) {
         $clean['password'] = $_POST['password'];
 
         try {
-            $uid = $u->saveUser($clean);
+            $uid = $u->save(null, $clean);
             $u->root($uid);
             $rooted = true;
         }

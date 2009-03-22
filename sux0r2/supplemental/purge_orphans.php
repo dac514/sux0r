@@ -36,11 +36,11 @@ foreach ($link_tables as $val) {
 
     foreach ($tmp as $val2) {
 
-        $tmp2 = $link->getLinkColumnName($val, $parts[1]) . '_id';
-        $tmp3 = $link->getLinkColumnName($val, $parts[2]) . '_id';
+        $tmp2 = $link->buildColumnName($val, $parts[1]) . '_id';
+        $tmp3 = $link->buildColumnName($val, $parts[2]) . '_id';
 
         // Table 1
-        $query = 'SELECT id FROM ' . $link->getLinkColumnName($val, $parts[1]) . " WHERE id = {$val2[$tmp2]} ";
+        $query = 'SELECT id FROM ' . $link->buildColumnName($val, $parts[1]) . " WHERE id = {$val2[$tmp2]} ";
         $st = $db->query($query);
         if ($st->fetchColumn() <= 0) {
             $not_found[] = array($val, $tmp2, $val2[$tmp2], $tmp3, $val2[$tmp3]);
@@ -48,7 +48,7 @@ foreach ($link_tables as $val) {
         }
 
         // Table 2
-        $query = 'SELECT id FROM ' . $link->getLinkColumnName($val, $parts[2]) . " WHERE id = {$val2[$tmp3]} ";
+        $query = 'SELECT id FROM ' . $link->buildColumnName($val, $parts[2]) . " WHERE id = {$val2[$tmp3]} ";
         $st = $db->query($query);
         if ($st->fetchColumn() <= 0) {
             $not_found[] = array($val, $tmp3, $val2[$tmp3], $tmp2, $val2[$tmp2]);
