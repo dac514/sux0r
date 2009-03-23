@@ -14,9 +14,13 @@ require_once(dirname(__FILE__) . '/../bayes/bayesRenderer.php');
 
 class feedsRenderer extends suxRenderer {
 
-    // Objects
+    // Object: bayesRenderer()
     private $bayesRenderer;
+
+    // Object: suxRss()
     private $rss;
+
+    // Object: suxLink()
     private $link;
 
 

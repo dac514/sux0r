@@ -7,29 +7,30 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
-require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
-require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
-require_once(dirname(__FILE__) . '/../bayes/bayesUser.php');
 require_once('blogRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
+require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
+require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
+require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
+require_once(dirname(__FILE__) . '/../bayes/bayesUser.php');
 
-class blogBookmarks {
 
-    // Variables
-    public $gtext = array();
-    private $msg_id;
-    private $module = 'blog';
+class blogBookmarks extends component {
 
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
-    private $msg;
-    private $nb;
-    private $link;
-    private $bookmarks;
+    // Module name
+    protected $module = 'blog';
+
+    // Object: suxThreadedMessages()
+    protected $msg;
+
+    // Object: bayesUser()
+    protected $nb;
+
+    // Object: suxBookmarks()
+    protected $bookmarks;
+
+    // Var: message id
+    private $id;
 
 
     /**
@@ -37,28 +38,23 @@ class blogBookmarks {
     *
     * @param string $key PDO dsn key
     */
-    function __construct($msg_id) {
+    function __construct($id) {
 
-        // Feature is turned off, redirect
-        if ($GLOBALS['CONFIG']['FEATURE']['auto_bookmark'] == false) suxFunct::redirect(suxFunct::getPreviousURL());
-
-        $this->tpl = new suxTemplate($this->module); // Template
-        $this->r = new blogRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        suxValidate::register_object('this', $this); // Register self to validator
-
-        // Objects
-        $this->user = new suxuser();
-        $this->msg = new suxThreadedMessages();
+        // Declare objects
         $this->nb = new bayesUser();
-        $this->link = new suxLink();
+        $this->msg = new suxThreadedMessages();
         $this->bookmarks = new suxBookmarks();
+        $this->r = new blogRenderer($this->module); // Renderer
+        suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
 
-        // Object properties
-        $this->msg_id = $msg_id;
+        // Declare properties
+        $this->id = $id;
         $this->msg->setPublished(null);
         $this->bookmarks->setPublished(null);
 
+        // If feature is turned off, then redirect
+        if ($GLOBALS['CONFIG']['FEATURE']['auto_bookmark'] == false) suxFunct::redirect(suxFunct::getPreviousURL());
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -67,7 +63,7 @@ class blogBookmarks {
         // Scan post for href links
         // --------------------------------------------------------------------
 
-        $msg = $this->msg->getByID($msg_id);
+        $msg = $this->msg->getByID($id);
 
         if (!$msg)
             suxFunct::redirect(suxFunct::getPreviousURL()); // No message, skip
@@ -177,7 +173,7 @@ class blogBookmarks {
         }
 
         // Additional variables
-        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/bookmarks/' . $this->msg_id);
+        $this->r->text['form_url'] = suxFunct::makeUrl('/blog/bookmarks/' . $this->id);
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         $this->r->title .= " | {$this->r->gtext['suggest_bookmarks']}  ";
@@ -211,9 +207,7 @@ class blogBookmarks {
             }
         }
 
-
-        $this->user->log("sux0r::blogBookmarks()", $_SESSION['users_id'], 1); // Private
-
+        $this->log->write($_SESSION['users_id'], "sux0r::blogBookmarks()", 1); // Private
 
     }
 

@@ -7,25 +7,25 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
-require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('feedsRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
+require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
+require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
 
-class feedsEdit {
 
-    // Variables
-    public $gtext = array();
+class feedsEdit extends component {
+
+    // Module name
+    protected $module = 'feeds';
+
+    // Object: suxRss()
+    protected $rss;
+
+    // Var
     private $id;
-    private $prev_skip;
-    private $module = 'feeds';
 
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
-    private $rss;
+    // Var
+    private $prev_skip;
 
 
     /**
@@ -35,19 +35,17 @@ class feedsEdit {
     */
     function __construct($id = null) {
 
+        // Declare objects
+        $this->rss = new suxRSS();
+        $this->r = new feedsRenderer($this->module); // Renderer
+        suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
+
+
         if ($id) {
             if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
                 suxFunct::redirect(suxFunct::makeURL('/feeds')); // Invalid id
         }
-
-        $this->tpl = new suxTemplate($this->module); // Template
-        $this->r = new feedsRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        suxValidate::register_object('this', $this); // Register self to validator
-
-        // Objects
-        $this->user = new suxUser();
-        $this->rss = new suxRSS();
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -187,7 +185,7 @@ class feedsEdit {
 
         $id = $this->rss->saveFeed($_SESSION['users_id'], $feed);
 
-        $this->user->log("sux0r::feedsEdit() feeds_id: {$id}", $_SESSION['users_id'], 1); // Private
+        $this->log->write($_SESSION['users_id'], "sux0r::feedsEdit() feeds_id: {$id}", 1); // Private
 
         // clear all caches, cheap and easy
         $this->tpl->clear_all_cache();

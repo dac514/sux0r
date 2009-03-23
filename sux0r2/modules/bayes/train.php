@@ -11,6 +11,7 @@ Steps to add a new module to this trainer:
 
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/../../initialize.php');
+require_once(dirname(__FILE__) . '/../../includes/suxLog.php');
 
 // ---------------------------------------------------------------------------
 // Variables
@@ -86,6 +87,7 @@ require_once('bayesUser.php');
 $suxLink = new suxLink();
 $nb = new bayesUser();
 $user = new suxUser();
+$log = new suxLog();
 
 if (!$nb->isCategoryTrainer($cat_id, $_SESSION['users_id'])) failure('User is not authorized to train category.'); // Something is wrong, abort
 
@@ -140,7 +142,7 @@ $suxLink->saveLink($link_table, 'bayes_documents', $doc_id, $link_table2, $id);
 
 
 // Log
-$user->log("sux0r::bayes::train() doc_id: $doc_id, cat_id: $cat_id", $_SESSION['users_id'], 1); // Private
+$log->write($_SESSION['users_id'], "sux0r::bayes::train() doc_id: $doc_id, cat_id: $cat_id", 1); // Private
 
 // ---------------------------------------------------------------------------
 // Clear template caches

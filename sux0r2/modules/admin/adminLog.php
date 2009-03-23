@@ -7,24 +7,23 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once('adminRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
 
 
-class adminLog {
+class adminLog extends component {
 
-    // Variables
+    // Module name
+    protected $module = 'admin';
+
+    // Var:
     private $users_id;
-    private $nickname;
-    public $per_page = 100;
-    private $module = 'admin';
 
-    // Objects
-    public $r;
-    public $tpl;
-    protected $user;
-    private $pager;
+    // Var:
+    private $nickname;
+
+    // Var:
+    public $per_page = 100;
 
 
     /**
@@ -34,17 +33,18 @@ class adminLog {
     */
     function __construct($nickname = null) {
 
-        $this->tpl = new suxTemplate($this->module); // Template
+        // Declare objects
         $this->r = new adminRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->user = new suxUser();
-        $this->pager = new suxPager();
+        parent::__construct(); // Let the parent do the rest
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
 
         // Security check
         if (!$this->user->isRoot()) suxFunct::redirect(suxFunct::makeUrl('/home'));
+
+        // Declare properties
+        $this->log->setPublished(null);
 
         $tmp = $this->user->getByNickname($nickname);
 
@@ -72,9 +72,15 @@ class adminLog {
         $this->pager->limit = $this->per_page;
         $this->pager->setStart();
 
-        $this->pager->setPages($this->user->countLog($this->users_id));
+        $this->pager->setPages($this->log->count($this->users_id));
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/admin/log/{$this->nickname}", $params));
-        $this->r->arr['ulog'] = $this->user->getLog($this->pager->limit, $this->pager->start, $this->users_id, $order, true);
+
+        $this->log->setOrder('ts', $order);
+        $this->r->arr['ulog'] = $this->log->get($this->pager->limit, $this->pager->start, $this->users_id);
+        foreach ($this->r->arr['ulog'] as $key => $val) {
+            $tmp = $this->user->getByID($val['users_id']);
+            $this->r->arr['ulog'][$key]['nickname'] = $tmp['nickname'];
+        }
 
         // Template
         $inverse = ($order != 'desc') ? 'desc' : 'asc';

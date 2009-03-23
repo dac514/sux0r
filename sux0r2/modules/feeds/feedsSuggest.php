@@ -7,22 +7,20 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
+require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
+require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
 
-class feedsSuggest  {
 
-    // Variables
-    public $gtext = array();
-    private $module = 'feeds';
+class feedsSuggest extends component {
 
-    // Objects
-    public $tpl;
-    public $r;
-    protected $user;
+    // Module name
+    protected $module = 'feeds';
+
+    // Object: suxRss()
     protected $rss;
+
 
     /**
     * Constructor
@@ -30,12 +28,12 @@ class feedsSuggest  {
     */
     function __construct() {
 
+        // Declare objects
         $this->rss = new suxRSS();
-        $this->user = new suxUser(); // User
-        $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new suxRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
+
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -110,7 +108,7 @@ class feedsSuggest  {
 
         $id = $this->rss->saveFeed($_SESSION['users_id'], $rss);
 
-        $this->user->log("sux0r::feedsSuggest() feeds_id: {$id}", $_SESSION['users_id'], 1); // Private
+        $this->log->write($_SESSION['users_id'], "sux0r::feedsSuggest() feeds_id: {$id}", 1); // Private
 
     }
 

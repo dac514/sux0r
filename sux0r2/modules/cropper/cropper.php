@@ -7,21 +7,16 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
+require_once('cropperRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
 require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once('cropperRenderer.php');
 
-class cropper {
 
-    //Variables
-    public $gtext = array();
-    private $module = 'cropper';
+class cropper extends component {
 
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
+    // Module name
+    protected $module = 'cropper';
 
 
     /**
@@ -30,12 +25,10 @@ class cropper {
     */
     function __construct() {
 
-        $this->user = new suxUser(); // User
-
-        $this->tpl = new suxTemplate($this->module); // Template
+        // Declare objects
         $this->r = new cropperRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
 
     }
 
@@ -220,7 +213,7 @@ class cropper {
         imagedestroy($image);
         imagedestroy($thumb);
 
-        $this->user->log("sux0r::cropper()  $table, id: {$clean['id']}", $_SESSION['users_id'], 1); // Private
+        $this->log->write($_SESSION['users_id'], "sux0r::cropper()  $table, id: {$clean['id']}", 1); // Private
 
     }
 

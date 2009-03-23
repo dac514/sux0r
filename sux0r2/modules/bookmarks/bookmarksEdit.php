@@ -7,28 +7,25 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTags.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
-require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('bookmarksRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
+require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
+require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
 
-class bookmarksEdit {
 
-    // Variables
-    public $gtext = array();
+class bookmarksEdit extends component {
+
+    // Module name
+    protected $module = 'bookmarks';
+
+    // Object: suxBookmarks()
+    protected $bm;
+
+    // Var
     private $id;
-    private $prev_skip;
-    private $module = 'bookmarks';
 
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
-    private $bm;
-    private $link;
-    private $tags;
+    // Var
+    private $prev_skip;
 
 
     /**
@@ -38,24 +35,19 @@ class bookmarksEdit {
     */
     function __construct($id = null) {
 
+        // Declare objects
+        $this->bm = new suxBookmarks();
+        $this->r = new bookmarksRenderer($this->module); // Renderer
+        suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
+
+        // Declare properties
+        $this->bm->setPublished(null);
+
         if ($id) {
             if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
                 suxFunct::redirect(suxFunct::makeURL('/bookmarks')); // Invalid id
         }
-
-        $this->tpl = new suxTemplate($this->module); // Template
-        $this->r = new bookmarksRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        suxValidate::register_object('this', $this); // Register self to validator
-
-        // Objects
-        $this->user = new suxUser();
-        $this->bm = new suxBookmarks();
-        $this->link = new suxLink();
-        $this->tags = new suxTags();
-
-        // Object properties
-        $this->bm->setPublished(null);
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -266,7 +258,7 @@ class bookmarksEdit {
             $this->link->saveLink('link_bookmarks_tags', 'bookmarks', $clean['id'], 'tags', $id);
         }
 
-        $this->user->log("sux0r::bookmarksEdit() bookmarks_id: {$clean['id']}", $_SESSION['users_id'], 1); // Private
+        $this->log->write($_SESSION['users_id'], "sux0r::bookmarksEdit() bookmarks_id: {$clean['id']}", 1); // Private
 
 
     }

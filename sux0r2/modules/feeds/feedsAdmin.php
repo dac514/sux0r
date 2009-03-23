@@ -7,25 +7,22 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
+require_once('feedsRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
-require_once('feedsRenderer.php');
 
 
-class feedsAdmin {
+class feedsAdmin extends component {
 
-    // Variables
+    // Module name
+    protected $module = 'feeds';
+
+    // Object: suxRSS()
+    protected $rss;
+
+    // Var: for pager
     public $per_page = 50;
-    private $module = 'feeds';
-
-    // Objects
-    public $r;
-    public $tpl;
-    private $user;
-    private $rss;
-    private $pager;
 
 
     /**
@@ -34,15 +31,13 @@ class feedsAdmin {
     */
     function __construct() {
 
-        $this->tpl = new suxTemplate($this->module); // Template
-        $this->r = new feedsRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        suxValidate::register_object('this', $this); // Register self to validator
-        $this->user = new suxUser();
-        $this->pager = new suxPager();
+        // Declare objects
         $this->rss = new suxRSS();
+        $this->r = new feedsRenderer($this->module); // Renderer
+        suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
 
-        // Object Properties
+        // Declare Properties
         $this->rss->setPublished(null);
 
         // Redirect if not logged in
@@ -69,7 +64,7 @@ class feedsAdmin {
     }
 
 
-    function formBuild() {
+    function formBuild(&$dirty) {
 
         // --------------------------------------------------------------------
         // Form logic
@@ -127,7 +122,7 @@ class feedsAdmin {
 
         if (isset($clean['delete'])) foreach($clean['delete'] as $id => $val) {
                 $this->rss->deleteFeed($id);
-                $this->user->log("sux0r::feedsAdmin() deleted feeds_id: {$id}", $_SESSION['users_id'], 1); // Private
+                $this->log->write($_SESSION['users_id'], "sux0r::feedsAdmin() deleted feeds_id: {$id}", 1); // Private
         }
 
         // clear all caches, cheap and easy

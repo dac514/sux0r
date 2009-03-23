@@ -7,22 +7,20 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
+require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
+require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
 
-class bookmarksSuggest  {
 
-    // Variables
-    public $gtext = array();
-    private $module = 'bookmarks';
+class bookmarksSuggest extends component  {
 
-    // Objects
-    public $tpl;
-    public $r;
-    protected $user;
+    // Module name
+    protected $module = 'bookmarks';
+
+    // Object: suxBookmarks
     protected $bm;
+
 
     /**
     * Constructor
@@ -30,14 +28,13 @@ class bookmarksSuggest  {
     */
     function __construct() {
 
+        // Declare objects
         $this->bm = new suxBookmarks();
-        $this->user = new suxUser(); // User
-        $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new suxRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
 
-        // Object properties
+        // Declare properties
         $this->bm->setPublished(null);
 
         // Redirect if not logged in
@@ -112,7 +109,7 @@ class bookmarksSuggest  {
 
         $id = $this->bm->save($_SESSION['users_id'], $bookmark);
 
-        $this->user->log("sux0r::bookmarksSuggest() bookmarks_id: {$id}", $_SESSION['users_id'], 1); // Private
+        $this->log->write($_SESSION['users_id'], "sux0r::bookmarksSuggest() bookmarks_id: {$id}", 1); // Private
 
     }
 

@@ -7,20 +7,15 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once('adminRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
+require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 
-class adminPurge  {
 
-    // Variables
-    public $gtext = array();
-    private $module = 'admin';
+class adminPurge extends component {
 
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
+    // Module name
+    protected $module = 'admin';
 
     /**
     * Constructor
@@ -28,11 +23,10 @@ class adminPurge  {
     */
     function __construct() {
 
-        $this->user = new suxUser(); // User
-        $this->tpl = new suxTemplate($this->module); // Template
+        // Declare objects
         $this->r = new adminRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -102,10 +96,10 @@ class adminPurge  {
     function formProcess(&$clean) {
 
         // Purge
-        $this->user->purgeLogs($clean['Date']);
+        $this->log->purge($clean['Date']);
 
         // Log, private
-        $this->user->log("sux0r::adminPurge() ", $_SESSION['users_id'], 1);
+        $this->log->write($_SESSION['users_id'], "sux0r::adminPurge() ", 1);
 
     }
 

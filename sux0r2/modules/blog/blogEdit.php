@@ -7,31 +7,31 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTags.php');
-require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
-require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
-require_once(dirname(__FILE__) . '/../bayes/bayesUser.php');
 require_once('blogRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
+require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
+require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
+require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
+require_once(dirname(__FILE__) . '/../bayes/bayesUser.php');
 
-class blogEdit {
 
-    // Variables
-    public $gtext = array();
+class blogEdit extends component {
+
+    // Module name
+    protected $module = 'blog';
+
+    // Object: suxThreadedMessages()
+    protected $msg;
+
+    // Object: bayesUser()
+    protected $nb;
+
+    // Var: message id
     private $id;
-    private $extensions = 'jpg,jpeg,gif,png'; // Supported extensions
-    private $module = 'blog';
 
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
-    private $msg;
-    private $nb;
-    private $link;
-    private $tags;
+    // Var: supported image extensions
+    private $extensions = 'jpg,jpeg,gif,png';
+
 
 
     /**
@@ -41,28 +41,20 @@ class blogEdit {
     */
     function __construct($id = null) {
 
+        // Declare objects
+        $this->nb = new bayesUser();
+        $this->msg = new suxThreadedMessages();
+        $this->r = new blogRenderer($this->module); // Renderer
+        suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
+
+        // Declare properties
+        $this->msg->setPublished(null);
+
         if ($id) {
             if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
                 suxFunct::redirect(suxFunct::makeURL('/blog')); // Invalid id
         }
-
-        $this->tpl = new suxTemplate($this->module); // Template
-        $this->r = new blogRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        suxValidate::register_object('this', $this); // Register self to validator
-
-        // Objects
-        $this->user = new suxuser();
-        $this->msg = new suxThreadedMessages();
-        $this->nb = new bayesUser();
-        $this->link = new suxLink();
-        $this->tags = new suxTags();
-
-        // Object properties
-        $this->msg->setPublished(null);
-
-        // This module has config variables, load them
-        $this->tpl->config_load('my.conf', $this->module);
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -316,14 +308,14 @@ class blogEdit {
             $log .= " <a href='$url'>{$tmp['title']}</a>";
 
             // Log
-            $this->user->log($log);
+            $this->log->write($_SESSION['users_id'], $log);
 
             // Clear cache
             $tpl = new suxTemplate('user');
             $tpl->clear_cache('profile.tpl', $_SESSION['nickname']);
         }
 
-        $this->user->log("sux0r::blogEdit()  messages_id: {$clean['id']}", $_SESSION['users_id'], 1); // Private
+        $this->log->write($_SESSION['users_id'], "sux0r::blogEdit()  messages_id: {$clean['id']}", 1); // Private
 
 
         // --------------------------------------------------------------------

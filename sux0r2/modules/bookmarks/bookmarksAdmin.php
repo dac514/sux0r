@@ -7,24 +7,22 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
+require_once('bookmarksRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
-require_once('bookmarksRenderer.php');
 
 
-class bookmarksAdmin {
+class bookmarksAdmin extends component {
 
-    // Variables
+    // Module name
+    protected $module = 'bookmarks';
+
+    // Object: suxBookmarks()
+    protected $bm;
+
+    // Var: for pager
     public $per_page = 50;
-    private $module = 'bookmarks';
-
-    // Objects
-    public $r;
-    public $tpl;
-    private $pager;
-    private $bm;
 
 
     /**
@@ -33,16 +31,14 @@ class bookmarksAdmin {
     */
     function __construct() {
 
-        $this->tpl = new suxTemplate($this->module); // Template
-        $this->r = new bookmarksRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        suxValidate::register_object('this', $this); // Register self to validator
-        $this->user = new suxUser();
-        $this->pager = new suxPager();
+        // Declare objects
         $this->bm = new suxBookmarks();
+        $this->r = new bookmarksRenderer($this->module); // Renderer
+        suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
 
-        // Object properties
-        $this->bookmarks->setPublished(null);
+        // Declare properties
+        $this->bm->setPublished(null);
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -125,7 +121,7 @@ class bookmarksAdmin {
 
         if (isset($clean['delete'])) foreach($clean['delete'] as $id => $val) {
             $this->bm->delete($id);
-            $this->user->log("sux0r::bookmarksAdmin() deleted bookmarks_id: {$id}", $_SESSION['users_id'], 1); // Private
+            $this->log->write($_SESSION['users_id'], "sux0r::bookmarksAdmin() deleted bookmarks_id: {$id}", 1); // Private
         }
 
         // clear all caches,cheap and easy

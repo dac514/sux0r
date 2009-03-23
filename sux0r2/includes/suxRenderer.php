@@ -159,6 +159,7 @@ class suxRenderer {
     */
     function widget($title, $content, $url = null, $image = null, $caption = null, $url2 = null, $floater = 'floatright') {
 
+
         // Sanitize / Filter
         if ($url) {
             $url = suxFunct::canonicalizeUrl($url);
@@ -180,12 +181,9 @@ class suxRenderer {
 
         // Image manipulation
         $size = ($image) ? @getimagesize($image) : null;
-        if ($size) {
-            $alt = str_replace("'", "", strip_tags($title)); // Escape
-            $image = "<img src='$image' alt='{$alt}' {$size[3]} />";
-
-        }
+        if ($size) $image = "<img src='$image' alt='' {$size[3]} />";
         else $image = null;
+
 
         // Makeshift renderer object
         $r['arr']['size'] = $size;
@@ -202,6 +200,7 @@ class suxRenderer {
         // Template
         $tpl = new suxTemplate('globals');
         $tpl->assign_by_ref('r', $r);
+
 
         return $tpl->fetch('widget.tpl');
 
@@ -232,15 +231,19 @@ class suxRenderer {
             if (trim($v)) $words[] = $v;
         }
 
+        $ldelim = '&*(!@';
+        $rdelim = '$%^)~';
+
         $replacements = array();
         foreach($words as $word) {
-            $replacements[] = "<span class='highlight'>$word</span>";
+            $replacements[] = $ldelim . $word . $rdelim;
         }
 
         // Split up the content into chunks delimited by a reasonable aproximation
         // of what an HTML element looks like
 
         $parts = preg_split("{(<(?:\"[^\"]*\"|'[^']*'|[^'\">])*>)}", $html, -1, PREG_SPLIT_DELIM_CAPTURE); // Unlimited number of chunks
+
         foreach ($parts as $i => $part) {
             // Skip if this part is an HTML element
             if (isset($part[0]) && ($part[0] == '<')) { continue; }
@@ -249,6 +252,9 @@ class suxRenderer {
         }
 
         $html = implode('', $parts);
+
+        $html = str_replace($ldelim, "<span class='highlight'>", $html);
+        $html = str_replace($rdelim, '</span>', $html);
 
         return $html;
 

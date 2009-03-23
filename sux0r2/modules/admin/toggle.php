@@ -5,6 +5,7 @@
 
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/../../initialize.php');
+require_once(dirname(__FILE__) . '/../../includes/suxLog.php');
 
 // ---------------------------------------------------------------------------
 // Ajax Failure
@@ -29,26 +30,27 @@ $id = $_POST['id'];
 // Secondary error checking
 // ---------------------------------------------------------------------------
 
-$u = new suxUser();
-if (!$u->isRoot()) failure('Not admin');
+$user = new suxUser();
+$log = new suxLog();
+if (!$user->isRoot()) failure('Not admin');
 
 // ---------------------------------------------------------------------------
 // Go
 // ---------------------------------------------------------------------------
 
-try {    
+try {
     $image = 'lock2.gif';
-    $flag = $u->toggleLogPrivateFlag($id);
+    $flag = $log->toggleLogPrivateFlag($id);
     if ($flag) $image = 'lock1.gif';
-    
+
     // Log, private
-    $u->log("sux0r::admin::toggle() users_log_id: $id", $_SESSION['users_id'], 1);
+    $log->write($_SESSION['users_id'], "sux0r::admin::toggle() users_log_id: $id", 1);
 }
 catch (Exception $e) {
     $message = $e->getMessage();
     $message .= "File: " . $e->getFile() . "\n";
     $message .= "Line: " . $e->getLine() . "\n\n";
-    failure($message);   
+    failure($message);
 }
 
 echo trim($image);

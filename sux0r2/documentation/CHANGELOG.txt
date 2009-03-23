@@ -2,6 +2,10 @@
 sux0r 2.0.x
 ------------------------------------------------------------------------------
 
+Fixed a search highlighting bug
+
+Fixed a bug where Smarty would crash if an apostraphe was in $title of widget()
+
 Changed license from AGPL to GPL
 
 Removed redundant security checks from several modules.

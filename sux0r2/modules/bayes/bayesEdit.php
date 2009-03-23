@@ -7,25 +7,22 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('bayesRenderer.php');
 require_once('bayesUser.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
+require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 
-class bayesEdit {
 
-    // Variables
-    public $caches = array('blog', 'feeds', 'bookmarks'); // Modules that cache bayes interfaces
-    public $gtext = array();
-    private $module = 'bayes'; // Module
+class bayesEdit extends component {
 
-    // Objects
-    public $tpl;
-    public $r;
+    // Module name
+    protected $module = 'bayes';
+
+    // Object: bayesUser();
     public $nb;
-    private $user;
-    private $link;
+
+    // Array: Modules that cache bayes interfaces
+    public $caches = array('blog', 'feeds', 'bookmarks');
 
 
     /**
@@ -34,17 +31,15 @@ class bayesEdit {
     */
     function __construct() {
 
-        // Feature is turned off, redirect
-        if ($GLOBALS['CONFIG']['FEATURE']['bayes'] == false) suxFunct::redirect(suxFunct::getPreviousURL());
-
-        $this->tpl = new suxTemplate($this->module); // Template
-        $this->r = new bayesRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        suxValidate::register_object('this', $this); // Register self to validator
-
-        $this->user = new suxuser();
+        // Declare objects
         $this->nb = new bayesUser();
-        $this->link = new suxLink();
+        $this->r = new bayesRenderer($this->module); // Renderer
+        suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
+
+
+        // If feature is turned off, then redirect
+        if ($GLOBALS['CONFIG']['FEATURE']['bayes'] == false) suxFunct::redirect(suxFunct::getPreviousURL());
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -181,7 +176,7 @@ class bayesEdit {
 
             $this->nb->addVectorWithUser($clean['vector'], $_SESSION['users_id']);
             unset($clean['vector']);
-            $this->user->log("sux0r::bayesEdit() addvec", $_SESSION['users_id'], 1); // Private
+            $this->log->write($_SESSION['users_id'], "sux0r::bayesEdit() addvec", 1); // Private
             break;
 
         case 'remvec':
@@ -190,7 +185,7 @@ class bayesEdit {
             if ($this->nb->isVectorOwner($clean['vector_id'], $_SESSION['users_id'])) {
                 // Remove vector
                 $this->nb->removeVector($clean['vector_id']);
-                $this->user->log("sux0r::bayesEdit() remvec id: {$clean['vector_id']}", $_SESSION['users_id'], 1); // Private
+                $this->log->write($_SESSION['users_id'], "sux0r::bayesEdit() remvec id: {$clean['vector_id']}", 1); // Private
             }
             unset($clean['vector_id']);
             break;
@@ -200,7 +195,7 @@ class bayesEdit {
             // Security check
             if ($this->nb->isVectorOwner($clean['vector_id'], $_SESSION['users_id'])) {
                 $this->nb->addCategory($clean['category'], $clean['vector_id']);
-                $this->user->log("sux0r::bayesEdit() addcat", $_SESSION['users_id'], 1); // Private
+                $this->log->write($_SESSION['users_id'], "sux0r::bayesEdit() addcat", 1); // Private
             }
             unset($clean['category']);
             break;
@@ -211,7 +206,7 @@ class bayesEdit {
             if ($this->nb->isCategoryOwner($clean['category_id'], $_SESSION['users_id'])) {
                 // Remove category
                 $this->nb->removeCategory($clean['category_id']);
-                $this->user->log("sux0r::bayesEdit() remcat id: {$clean['category_id']}", $_SESSION['users_id'], 1); // Private
+                $this->log->write($_SESSION['users_id'], "sux0r::bayesEdit() remcat id: {$clean['category_id']}", 1); // Private
             }
             unset($clean['category_id']);
             break;
@@ -221,7 +216,7 @@ class bayesEdit {
             // Security check
             if ($this->nb->isCategoryTrainer($clean['category_id'], $_SESSION['users_id'])) {
                 $this->nb->trainDocument($clean['document'], $clean['category_id']);
-                $this->user->log("sux0r::bayesEdit() adddoc", $_SESSION['users_id'], 1); // Private
+                $this->log->write($_SESSION['users_id'], "sux0r::bayesEdit() adddoc", 1); // Private
             }
             unset($clean['document']);
             break;
@@ -232,7 +227,7 @@ class bayesEdit {
             if ($this->nb->isDocumentOwner($clean['document_id'], $_SESSION['users_id'])) {
                 // Remove document
                 $this->nb->untrainDocument($clean['document_id']);
-                $this->user->log("sux0r::bayesEdit() remdoc id: {$clean['document_id']}", $_SESSION['users_id'], 1); // Private
+                $this->log->write($_SESSION['users_id'], "sux0r::bayesEdit() remdoc id: {$clean['document_id']}", 1); // Private
             }
             unset($clean['document_id']);
             break;
@@ -264,8 +259,8 @@ class bayesEdit {
                 $log .= " <a href='$url'>{$u['nickname']}</a>";
 
                 // Log
-                $this->user->log($log);
-                $this->user->log($log, $u['users_id']);
+                $this->log->write($_SESSION['users_id'], $log);
+                $this->log->write($u['users_id'], $log);
 
                 // Clear caches
                 $tpl = new suxTemplate('user');
@@ -299,8 +294,8 @@ class bayesEdit {
                     $log .= " <a href='$url'>{$u['nickname']}</a>";
 
                     // Log
-                    $this->user->log($log);
-                    $this->user->log($log, $u['users_id']);
+                    $this->log->write($_SESSION['users_id'], $log);
+                    $this->log->write($u['users_id'], $log);
 
                     // Clear caches
                     $tpl = new suxTemplate('user');
