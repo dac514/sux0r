@@ -14,8 +14,10 @@ require_once('bayesUser.php');
 
 class bayesRenderer extends suxRenderer {
 
-    // Objects
+    // Object: bayesUser()
     private $nb;
+
+    // Object: suxLink();
     private $link;
 
 

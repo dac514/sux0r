@@ -7,19 +7,14 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once('homeRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
 
-class home {
 
-    // Variables
-    public $gtext = array();
-    private $module = 'home';
+class home extends component {
 
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
+    // Module name
+    protected $module = 'home';
 
 
     /**
@@ -28,12 +23,11 @@ class home {
     */
     function __construct() {
 
-        $this->tpl = new suxTemplate($this->module); // Template
+        // Declare objects
         $this->r = new homeRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->gtext = suxFunct::gtext($this->module); // Language
-        $this->user = new suxUser();
-        $this->r->text =& $this->gtext;
+        parent::__construct(); // Let the parent do the rest
+
+        // Declare properties
         $this->r->bool['analytics'] = true; // Turn on analytics
 
     }

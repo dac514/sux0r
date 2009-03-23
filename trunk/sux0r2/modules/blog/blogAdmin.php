@@ -7,24 +7,22 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
+require_once('blogRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
-require_once('blogRenderer.php');
 
 
-class blogAdmin {
+class blogAdmin extends component {
 
-    // Variables
+    // Module name
+    protected $module = 'blog';
+
+    // Object: suxThreadedMessages()
+    protected $msg;
+
+    // Int: items per page
     public $per_page = 50;
-    private $module = 'blog';
-
-    // Objects
-    public $r;
-    public $tpl;
-    private $pager;
-    private $msg;
 
 
     /**
@@ -33,15 +31,13 @@ class blogAdmin {
     */
     function __construct() {
 
-        $this->tpl = new suxTemplate($this->module); // Template
-        $this->r = new blogRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        suxValidate::register_object('this', $this); // Register self to validator
-        $this->user = new suxUser();
-        $this->pager = new suxPager();
+        // Declare objects
         $this->msg = new suxThreadedMessages();
+        $this->r = new blogRenderer($this->module); // Renderer
+        suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
 
-        // Object properties
+        // Declare properties
         $this->msg->setPublished(null);
 
         // Redirect if not logged in
@@ -130,7 +126,7 @@ class blogAdmin {
             $tmp = $this->msg->getFirstPost($thread_id);
             if ($tmp && $tmp['blog'] && $tmp['thread_pos'] == 0) {
                 $this->msg->deleteThread($thread_id);
-                $this->user->log("sux0r::blogAdmin() deleted thread_id: {$thread_id}", $_SESSION['users_id'], 1); // Private
+                $this->log->write($_SESSION['users_id'], "sux0r::blogAdmin() deleted thread_id: {$thread_id}", 1); // Private
             }
         }
 

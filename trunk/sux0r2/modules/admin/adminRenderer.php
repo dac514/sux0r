@@ -12,7 +12,7 @@ require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
 class adminRenderer extends suxRenderer {
 
-    // Objects
+    // Object: suxUser()
     private $user;
 
 

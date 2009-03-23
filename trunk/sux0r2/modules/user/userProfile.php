@@ -22,6 +22,7 @@ class userProfile {
     public $tpl;
     public $r;
     private $user;
+    private $log;
     private $minifeed_limit = 10;
 
 
@@ -33,6 +34,7 @@ class userProfile {
     function __construct($nickname) {
 
         $this->user = new suxUser(); // User
+        $this->log = new suxLog(); // User
         $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new userRenderer($this->module); // Renderer
         $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
@@ -66,7 +68,7 @@ class userProfile {
 
             $this->r->arr['profile'] =& $this->profile; // Assign
             $this->r->title .= " | {$this->profile['nickname']}";
-            $this->r->arr['minifeed'] = $this->user->getLog($this->minifeed_limit, 0, $this->profile['users_id']); // Minifeed array
+            $this->r->arr['minifeed'] = $this->log->get($this->minifeed_limit, 0, $this->profile['users_id']); // Minifeed array
 
         }
 
@@ -86,7 +88,7 @@ class userProfile {
 
         if (!$this->tpl->is_cached('rss.tpl', $cache_id)) {
 
-            $fp = $this->user->getLog(($this->minifeed_limit * 5), 0, $this->profile['users_id']);
+            $fp = $this->log->get(($this->minifeed_limit * 5), 0, $this->profile['users_id']);
             if ($fp) {
 
                 require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');

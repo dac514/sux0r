@@ -7,23 +7,19 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-
 require_once('adminRenderer.php');
-require_once(dirname(__FILE__) . '/../feeds/feedsRenderer.php');
-require_once(dirname(__FILE__) . '/../bookmarks/bookmarksRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
+require_once(dirname(__FILE__) . '/../feeds/feedsRenderer.php'); // TODO: Move this out of here
+require_once(dirname(__FILE__) . '/../bookmarks/bookmarksRenderer.php'); // TODO: Move this out of here, too
 
-class admin {
 
-    // Variables
+class admin extends component {
+
+    // Module name
+    protected $module = 'admin';
+
+    // Var: pager value
     public $per_page = 100;
-    private $module = 'admin';
-
-    // Objects
-    public $r;
-    public $tpl;
-    private $pager;
 
 
     /**
@@ -32,13 +28,9 @@ class admin {
     */
     function __construct() {
 
-        $this->tpl = new suxTemplate($this->module); // Template
-
+        // Declare objects
         $this->r = new adminRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-
-        $this->user = new suxUser();
-        $this->pager = new suxPager();
+        parent::__construct(); // Let the parent do the rest
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));

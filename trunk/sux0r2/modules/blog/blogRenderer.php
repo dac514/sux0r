@@ -13,13 +13,22 @@ require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 require_once(dirname(__FILE__) . '/../bayes/bayesUser.php');
 require_once(dirname(__FILE__) . '/../bayes/bayesRenderer.php');
 
+
 class blogRenderer extends suxRenderer {
 
-    // Objects
+    // Object: suxUser()
     private $user;
+
+    // Object: suxThreadedMessages()
     private $msg;
+
+    // Object: bayesUser()
     private $nb;
+
+    // Object: suxLink()
     private $link;
+
+    // Object: bayesRenderer()
     private $bayesRenderer;
 
 

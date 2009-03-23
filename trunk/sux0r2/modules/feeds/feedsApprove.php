@@ -7,22 +7,20 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('feedsRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
+require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
+require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
 
-class feedsApprove  {
 
-    // Variables
-    public $gtext = array();
-    private $module = 'feeds';
+class feedsApprove extends component  {
 
-    // Objects
-    public $tpl;
-    public $r;
-    protected $user;
+    // Module name
+    protected $module = 'feeds';
+
+    // Object: suxRss()
     protected $rss;
+
 
     /**
     * Constructor
@@ -30,14 +28,13 @@ class feedsApprove  {
     */
     function __construct() {
 
+        // Declare objects
         $this->rss = new suxRSS();
-        $this->user = new suxUser(); // User
-        $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new feedsRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
 
-        // Object Properties
+        // Declare Properties
         $this->rss->setPublished(false);
 
         // Redirect if not logged in
@@ -117,11 +114,11 @@ class feedsApprove  {
 
             if ($val == 1) {
                 $this->rss->approveFeed($key);
-                $this->user->log("sux0r::feedsApprove() feeds_id: {$key}", $_SESSION['users_id'], 1); // Private
+                $this->log->write($_SESSION['users_id'], "sux0r::feedsApprove() feeds_id: {$key}", 1); // Private
             }
             else {
                 $this->rss->deleteFeed($key);
-                $this->user->log("sux0r::feedsApprove() deleted feeds_id: {$key}", $_SESSION['users_id'], 1); // Private
+                $this->log->write($_SESSION['users_id'], "sux0r::feedsApprove() deleted feeds_id: {$key}", 1); // Private
             }
 
         }

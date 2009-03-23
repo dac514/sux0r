@@ -7,24 +7,27 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('adminRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
+require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 
-class adminAccess {
 
-    // Variables
+class adminAccess extends component {
+
+    // Module name
+    protected $module = 'admin';
+
+    // Var:
     private $nickname;
-    private $users_id;
-    private $root;
-    private $banned;
-    public $gtext = array(); // Language
-    private $module = 'admin';
 
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
+    // Var:
+    private $users_id;
+
+    // Var:
+    private $root;
+
+    // Var:
+    private $banned;
 
 
     /**
@@ -33,11 +36,10 @@ class adminAccess {
     */
     function __construct($nickname) {
 
-        $this->user = new suxUser(); // User
-        $this->tpl = new suxTemplate($this->module); // Template
+        // Declare objects
         $this->r = new adminRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -45,10 +47,10 @@ class adminAccess {
         // Security check
         if (!$this->user->isRoot()) suxFunct::redirect(suxFunct::makeUrl('/home'));
 
-
         $tmp = $this->user->getByNickname($nickname);
         if (!$tmp) suxFunct::redirect(suxFunct::getPreviousURL()); // Invalid user
 
+        // Declare properties
         $this->nickname = $nickname;
         $this->users_id = $tmp['users_id'];
         $this->root = $tmp['root'];
@@ -239,7 +241,7 @@ class adminAccess {
                 $st->execute(array($this->users_id));
 
                 // Log, private
-                $this->user->log("sux0r::adminAccess() deleted users_id: {$this->users_id} ", $_SESSION['users_id'], 1);
+                $this->log->write($_SESSION['users_id'], "sux0r::adminAccess() deleted users_id: {$this->users_id} ", 1);
 
             }
             catch (Exception $e) {
@@ -281,7 +283,7 @@ class adminAccess {
         }
 
         // Log, private
-        $this->user->log("sux0r::adminAccess() users_id: {$this->users_id} ", $_SESSION['users_id'], 1);
+        $this->log->write($_SESSION['users_id'], "sux0r::adminAccess() users_id: {$this->users_id} ", 1);
 
     }
 

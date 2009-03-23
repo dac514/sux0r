@@ -7,34 +7,25 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTags.php');
-require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
-require_once(dirname(__FILE__) . '/../bayes/bayesUser.php'); // includes bayesShared
 require_once('blogRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.bayesComponent.php');
+require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
 
 
-class blog extends bayesShared {
+class blog extends bayesComponent {
 
-    // Variables
-    public $tag_id; // For filter
-    public $cat_id; // For filter
-    public $gtext = array();
-    private $module = 'blog';
+    // Module name
+    protected $module = 'blog';
 
-    // Objects
-    public $r;
-    public $tpl;
-
+    // Object: suxThreadedMessages()
     protected $msg;
-    protected $nb;
-    protected $pager;
 
-    private $liuk;
-    private $user;
-    private $tags;
+    // Var: used by filter() method
+    public $tag_id;
+
+    // Var: used by filter() method
+    public $cat_id;
+
 
 
     /**
@@ -43,22 +34,14 @@ class blog extends bayesShared {
     */
     function __construct() {
 
-        $this->tpl = new suxTemplate($this->module); // Template
-        $this->r = new blogRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-
-        $this->r->bool['analytics'] = true; // Turn on analytics
-
-        $this->user = new suxUser();
-        $this->msg = new suxThreadedMessages();
-        $this->link = new suxLink();
+        // Declare objects
         $this->nb = new bayesUser();
-        $this->tags = new suxTags();
-        $this->pager = new suxPager();
+        $this->msg = new suxThreadedMessages();
+        $this->r = new blogRenderer($this->module); // Renderer
+        parent::__construct(); // Let the parent do the rest
 
-        // This module has config variables, load them
-        $this->tpl->config_load('my.conf', $this->module);
-
+        // Declare properties
+        $this->r->bool['analytics'] = true; // Turn on analytics
 
     }
 
@@ -244,7 +227,7 @@ class blog extends bayesShared {
             SELECT tags.tag AS tag, tags.id AS id, COUNT(tags.id) AS quantity FROM tags
             INNER JOIN {$link} ON {$link}.tags_id = tags.id
             INNER JOIN messages ON {$link}.messages_id = messages.id
-            WHERE messages.blog = true AND messages.draft = false AND {$this->_dateSql()}
+            WHERE messages.blog = true AND {$this->msg->sqlPublished()}
             GROUP BY tag, tags.id ORDER BY tag ASC
             ";
             $this->r->arr['tc'] = $this->tags->cloud($query);
@@ -618,9 +601,9 @@ class blog extends bayesShared {
         $count_query = "
         SELECT COUNT(*) FROM messages
         INNER JOIN link_messages_tags ON link_messages_tags.messages_id = messages.id
-        WHERE messages.thread_pos = 0 AND messages.blog = true  AND messages.draft = false AND link_messages_tags.tags_id = ?
-        AND {$this->_dateSql()}
+        WHERE link_messages_tags.tags_id = ? AND messages.thread_pos = 0 AND messages.blog = true AND {$this->msg->sqlPublished()}
         ";
+
         $st = $db->prepare($count_query);
         $st->execute(array($id));
         return $st->fetchColumn();
@@ -636,9 +619,8 @@ class blog extends bayesShared {
         $query = "
         SELECT messages.* FROM messages
         INNER JOIN link_messages_tags ON link_messages_tags.messages_id = messages.id
-        WHERE messages.thread_pos = 0 AND messages.blog = true  AND messages.draft = false AND link_messages_tags.tags_id = ?
-        AND {$this->_dateSql()}
-        ORDER BY messages.published_on DESC
+        WHERE link_messages_tags.tags_id = ? AND messages.thread_pos = 0 AND messages.blog = true AND {$this->msg->sqlPublished()}
+        ORDER BY {$this->msg->sqlOrder()}
         LIMIT {$limit} OFFSET {$start}
         ";
 
@@ -657,9 +639,8 @@ class blog extends bayesShared {
         $query = "
         SELECT messages.id, messages.thread_id, messages.title FROM messages
         INNER JOIN link_messages_tags ON link_messages_tags.messages_id = messages.id
-        WHERE messages.thread_pos = 0 AND messages.blog = true  AND messages.draft = false AND link_messages_tags.tags_id = ?
-        AND {$this->_dateSql()}
-        ORDER BY messages.published_on DESC
+        WHERE link_messages_tags.tags_id = ? AND messages.thread_pos = 0 AND messages.blog = true AND {$this->msg->sqlPublished()}
+        ORDER BY {$this->msg->sqlOrder()}
         ";
 
         $st = $db->prepare($query);
@@ -684,8 +665,7 @@ class blog extends bayesShared {
         INNER JOIN link_bayes_messages ON link_bayes_messages.messages_id = messages.id
         INNER JOIN bayes_documents ON link_bayes_messages.bayes_documents_id = bayes_documents.id
         INNER JOIN bayes_categories ON bayes_documents.bayes_categories_id = bayes_categories.id
-        WHERE messages.thread_pos = 0 AND messages.blog = true  AND messages.draft = false AND bayes_categories.id = ?
-        AND {$this->_dateSql()}
+        WHERE bayes_categories.id = ? AND messages.thread_pos = 0 AND messages.blog = true AND {$this->msg->sqlPublished()}
         ";
         $st = $db->prepare($count_query);
         $st->execute(array($id));
@@ -704,9 +684,8 @@ class blog extends bayesShared {
         INNER JOIN link_bayes_messages ON link_bayes_messages.messages_id = messages.id
         INNER JOIN bayes_documents ON link_bayes_messages.bayes_documents_id = bayes_documents.id
         INNER JOIN bayes_categories ON bayes_documents.bayes_categories_id = bayes_categories.id
-        WHERE messages.thread_pos = 0 AND messages.blog = true  AND messages.draft = false AND bayes_categories.id = ?
-        AND {$this->_dateSql()}
-        ORDER BY messages.published_on DESC
+        WHERE bayes_categories.id = ? AND messages.thread_pos = 0 AND messages.blog = true AND {$this->msg->sqlPublished()}
+        ORDER BY {$this->msg->sqlOrder()}
         LIMIT {$limit} OFFSET {$start}
         ";
 
@@ -727,9 +706,8 @@ class blog extends bayesShared {
         INNER JOIN link_bayes_messages ON link_bayes_messages.messages_id = messages.id
         INNER JOIN bayes_documents ON link_bayes_messages.bayes_documents_id = bayes_documents.id
         INNER JOIN bayes_categories ON bayes_documents.bayes_categories_id = bayes_categories.id
-        WHERE messages.thread_pos = 0 AND messages.blog = true  AND messages.draft = false AND bayes_categories.id = ?
-        AND {$this->_dateSql()}
-        ORDER BY messages.published_on DESC
+        WHERE bayes_categories.id = ? AND messages.thread_pos = 0 AND messages.blog = true AND {$this->msg->sqlPublished()}
+        ORDER BY {$this->msg->sqlOrder()}
         ";
 
         $st = $db->prepare($query);

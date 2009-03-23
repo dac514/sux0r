@@ -14,8 +14,10 @@ require_once(dirname(__FILE__) . '/../bayes/bayesRenderer.php');
 class bookmarksRenderer extends suxRenderer {
 
 
-    // Objects
+    // Object: bayesRenderer()
     private $bayesRenderer;
+
+    // Object: suxUser();
     private $user;
 
 

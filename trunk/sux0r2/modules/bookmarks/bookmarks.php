@@ -7,34 +7,27 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
-require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTags.php');
-require_once(dirname(__FILE__) . '/../bayes/bayesUser.php'); // includes bayesShared
 require_once('bookmarksRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.bayesComponent.php');
+require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
 
-class bookmarks extends bayesShared {
 
-    // Variables
-    public $alphasort; // For filter
-    public $users_id; // For filter
-    public $tag_id; // For filter
-    public $gtext = array();
-    private $module = 'bookmarks';
+class bookmarks extends bayesComponent {
 
-    // Objects
-    public $r;
-    public $tpl;
+    // Module name
+    protected $module = 'bookmarks';
 
-    protected $pager;
+    // Object: bayesUser()
     protected $nb;
+
+    // Object: suxBookmarks()
     protected $bm;
 
-    private $liuk;
-    private $tags;
-    private $user;
+    // Var: used by filter() method
+    public $users_id;
+
+    // Var: used by filter() method
+    public $tag_id;
 
 
     /**
@@ -43,18 +36,14 @@ class bookmarks extends bayesShared {
     */
     function __construct() {
 
-        $this->tpl = new suxTemplate($this->module); // Template
-        $this->r = new bookmarksRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-
-        $this->r->bool['analytics'] = true; // Turn on analytics
-
-        $this->user = new suxUser();
-        $this->link = new suxLink();
+        // Declare objects
         $this->nb = new bayesUser();
-        $this->tags = new suxTags();
         $this->bm = new suxBookmarks();
-        $this->pager = new suxPager();
+        $this->r = new bookmarksRenderer($this->module); // Rend
+        parent::__construct(); // Let the parent do the rest
+
+        // Declare properties
+        $this->r->bool['analytics'] = true; // Turn on analytics
 
     }
 

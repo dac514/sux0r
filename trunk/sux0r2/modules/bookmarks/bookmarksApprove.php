@@ -7,21 +7,17 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('bookmarksRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
+require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
+require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
 
-class bookmarksApprove  {
+class bookmarksApprove extends component {
 
-    // Variables
-    public $gtext = array();
-    private $module = 'bookmarks';
+    // Module name
+    protected $module = 'bookmarks';
 
-    // Objects
-    public $tpl;
-    public $r;
-    protected $user;
+    // Object: suxBookmarks()
     protected $bm;
 
     /**
@@ -30,15 +26,14 @@ class bookmarksApprove  {
     */
     function __construct() {
 
+        // Declare objects
         $this->bm = new suxBookmarks();
-        $this->user = new suxUser(); // User
-        $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new bookmarksRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
 
-        // Object properties
-        $this->bookmarks->setPublished(false);
+        // Declare properties
+        $this->bm->setPublished(false);
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -124,11 +119,11 @@ class bookmarksApprove  {
 
             if ($val == 1) {
                 $this->bm->draft($key, false);
-                $this->user->log("sux0r::bookmarksApprove() bookmarks_id: {$key}", $_SESSION['users_id'], 1); // Private
+                $this->log->write($_SESSION['users_id'], "sux0r::bookmarksApprove() bookmarks_id: {$key}", 1); // Private
             }
             else {
                 $this->bm->delete($key);
-                $this->user->log("sux0r::bookmarksApprove() deleted bookmarks_id: {$key}", $_SESSION['users_id'], 1); // Private
+                $this->log->write($_SESSION['users_id'], "sux0r::bookmarksApprove() deleted bookmarks_id: {$key}", 1); // Private
             }
 
         }

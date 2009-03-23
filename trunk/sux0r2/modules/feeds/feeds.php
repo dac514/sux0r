@@ -7,32 +7,24 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
-require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
-require_once(dirname(__FILE__) . '/../bayes/bayesUser.php'); // includes bayesShared
 require_once('feedsRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.bayesComponent.php');
+require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
 
 
-class feeds extends bayesShared {
+class feeds extends bayesComponent {
 
-    // Variables
-    public $users_id; // For filter
-    public $gtext = array();
-    private $module = 'feeds';
+    // Module name
+    protected $module = 'feeds';
 
-    // Objects
-    public $r;
-    public $tpl;
-
+    // Object: suxRSS()
     protected $rss;
+
+    // Object: bayesUser()
     protected $nb;
-    protected $pager;
 
-    private $liuk;
-    private $user;
-
+    // Var: used by filter() method
+    public $users_id;
 
 
     /**
@@ -41,20 +33,14 @@ class feeds extends bayesShared {
     */
     function __construct() {
 
-        $this->tpl = new suxTemplate($this->module); // Template
-        $this->r = new feedsRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-
-        $this->r->bool['analytics'] = true; // Turn on analytics
-
-        $this->user = new suxUser();
-        $this->rss = new suxRSS();
-        $this->link = new suxLink();
+        // Declare objects
         $this->nb = new bayesUser();
-        $this->pager = new suxPager();
+        $this->rss = new suxRSS();
+        $this->r = new feedsRenderer($this->module); // Renderer
+        parent::__construct(); // Let the parent do the rest
 
-        // This module has config variables, load them
-        $this->tpl->config_load('my.conf', $this->module);
+        // Declare properties
+        $this->r->bool['analytics'] = true; // Turn on analytics
 
     }
 

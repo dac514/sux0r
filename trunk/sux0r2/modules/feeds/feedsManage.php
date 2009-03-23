@@ -7,24 +7,19 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
-require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('feedsRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
+require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
+require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
 
-class feedsManage  {
+class feedsManage extends component  {
 
-    // Variables
-    public $gtext = array();
-    private $module = 'feeds';
+    // Module name
+    protected $module = 'feeds';
 
-    // Objects
-    public $tpl;
-    public $r;
-    protected $user;
+    // Object: suxRss()
     protected $rss;
-    protected $link;
+
 
     /**
     * Constructor
@@ -32,13 +27,12 @@ class feedsManage  {
     */
     function __construct() {
 
+        // Declare objects
         $this->rss = new suxRSS();
-        $this->user = new suxUser(); // User
-        $this->link = new suxLink();
-        $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new feedsRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
+
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -114,7 +108,7 @@ class feedsManage  {
         if (isset($clean['subscriptions']) && count($clean['subscriptions']))
             $this->link->saveLink('link_rss_users', 'users', $_SESSION['users_id'], 'rss_feeds', $clean['subscriptions']);
 
-        $this->user->log("sux0r::feedManage()", $_SESSION['users_id'], 1); // Private
+        $this->log->write($_SESSION['users_id'], "sux0r::feedManage()",  1); // Private
 
     }
 

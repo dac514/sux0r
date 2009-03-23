@@ -7,20 +7,14 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
-class userAuthenticate {
+class userAuthenticate extends component {
 
-    // Variables
-    public $gtext = array(); // Language
-    private $module = 'user'; // Module
+    // Module name
+    protected $module = 'user'; // Module
 
-
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
 
     /**
     * Constructor
@@ -28,10 +22,8 @@ class userAuthenticate {
     */
     function __construct() {
 
-        $this->user = new suxUser(); // User
-        $this->tpl = new suxTemplate($this->module); // Template
         $this->r = new suxRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
+        parent::__construct(); // Let the parent do the rest
 
     }
 
@@ -44,7 +36,7 @@ class userAuthenticate {
 
         if ($this->user->loginCheck() || !$this->user->loginCheck() && $this->user->authenticate()) {
 
-            $this->user->log("sux0r::userAuthenticate() login [IP: {$_SERVER['REMOTE_ADDR']}]", $_SESSION['users_id'], 1); // Log, private
+            $this->log->write($_SESSION['users_id'], "sux0r::userAuthenticate() login [IP: {$_SERVER['REMOTE_ADDR']}]", 1); // Log, private
 
             // Redirect to previous page
             if (isset($_SESSION['breadcrumbs'])) foreach($_SESSION['breadcrumbs'] as $val) {
@@ -87,7 +79,7 @@ class userAuthenticate {
         // Don't kill session (with password failures, perhaps?) if the
         // user isn't actually logged in.
         if ($this->user->loginCheck()) {
-            $this->user->log('sux0r::userAuthenticate() logout', $_SESSION['users_id'], 1); // Log, private
+            $this->log->write($_SESSION['users_id'], 'sux0r::userAuthenticate() logout', 1); // Log, private
             suxFunct::killSession();
         }
 

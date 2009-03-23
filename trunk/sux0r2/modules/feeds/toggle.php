@@ -5,6 +5,7 @@
 
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/../../initialize.php');
+require_once(dirname(__FILE__) . '/../../includes/suxLog.php');
 
 // ---------------------------------------------------------------------------
 // Ajax Failure
@@ -68,8 +69,8 @@ else {
 }
 
 // Log
-$user = new suxUser();
-$user->log("sux0r::feeds::toggle() bookmarks_id: {$id}", $_SESSION['users_id'], 1); // Private
+$log = new suxLog();
+$log->write($_SESSION['users_id'], "sux0r::feeds::toggle() bookmarks_id: {$id}", 1); // Private
 
 // ---------------------------------------------------------------------------
 // Clear template caches

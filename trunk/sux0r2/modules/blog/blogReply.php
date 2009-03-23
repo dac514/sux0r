@@ -7,27 +7,26 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
+require_once('blogRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
 require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once(dirname(__FILE__) . '/../bayes/bayesUser.php');
-require_once('blogRenderer.php');
 
-class blogReply {
 
-    // Variables
-    public $gtext = array();
+class blogReply extends component {
+
+    // Module name
+    protected $module = 'blog';
+
+    // Object: suxThreadedMessages()
+    protected $msg;
+
+    // Object: bayesUser()
+    protected $nb;
+
+    // Var
     private $parent;
-    private $module = 'blog';
-
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
-    private $msg;
-    private $nb;
-    private $link;
 
 
     /**
@@ -37,16 +36,12 @@ class blogReply {
     */
     function __construct($parent_id) {
 
-        $this->tpl = new suxTemplate($this->module); // Template
-        $this->r = new blogRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        suxValidate::register_object('this', $this); // Register self to validator
-
-        // Objects
-        $this->user = new suxuser();
-        $this->msg = new suxThreadedMessages();
+        // Declare objects
         $this->nb = new bayesUser();
-        $this->link = new suxLink();
+        $this->msg = new suxThreadedMessages();
+        $this->r = new blogRenderer($this->module); // Renderer
+        suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -125,7 +120,7 @@ class blogReply {
 
         $id = $this->msg->save($_SESSION['users_id'], $msg);
 
-        $this->user->log("sux0r::blogReply()  messages_id: {$id}", $_SESSION['users_id'], 1); // Private
+        $this->log->write($_SESSION['users_id'], "sux0r::blogReply()  messages_id: {$id}", 1); // Private
 
         $tmp = $this->msg->getByID($clean['parent_id']); // Is actually published?
         if ($tmp) {
@@ -142,7 +137,7 @@ class blogReply {
             $log .= " <a href='$url'>{$tmp['title']}</a>";
 
             // Log
-            $this->user->log($log);
+            $this->log->write($_SESSION['users_id'], $log);
 
             // Clear cache
             $tpl = new suxTemplate('user');
