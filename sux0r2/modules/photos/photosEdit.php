@@ -7,26 +7,25 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
-require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('photosRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
+require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
+require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
 
-class photosEdit {
 
-    // Variables
-    public $per_page; // Photos per page
-    public $gtext = array();
+class photosEdit extends component {
+
+    // Module name
+    protected $module = 'photos';
+
+    // Object: suxPhoto()
+    protected $photo;
+
+    // Var
+    public $per_page;
+
+    // Var
     private $id;
-    private $module = 'photos';
-
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
-    private $photo;
-    private $pager;
 
 
     /**
@@ -39,16 +38,16 @@ class photosEdit {
         if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
             suxFunct::redirect(suxFunct::makeURL('/photos')); // Invalid id
 
-        $this->user = new suxUser(); // User
-        $this->photo = new suxPhoto($this->module); // Photos
-        $this->tpl = new suxTemplate($this->module); // Template
+        // Declare objects
+        $this->photo = new suxPhoto(); // Photos
         $this->r = new photosRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         suxValidate::register_object('this', $this); // Register self to validator
-        $this->pager = new suxPager();
+        parent::__construct(); // Let the parent do the rest
 
-        // Object properties
+        // Declare properties
         $this->photo->setPublished(null);
+        $this->id = $id;
+        $this->per_page = $this->tpl->get_config_vars('perPage');
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -62,12 +61,6 @@ class photosEdit {
             }
         }
 
-        // Assign id
-        $this->id = $id;
-
-        // This module has config variables, load them
-        $this->tpl->config_load('my.conf', $this->module);
-        $this->per_page = $this->tpl->get_config_vars('perPage');
 
     }
 

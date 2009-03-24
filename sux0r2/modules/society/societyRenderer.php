@@ -11,10 +11,7 @@ require_once(dirname(__FILE__) . '/../bayes/bayesRenderer.php');
 
 class societyRenderer extends suxRenderer {
 
-    // Arrays
-    public $gtext = array();
-
-    // Objects
+    // Object: suxUser()
     private $user;
 
 
@@ -26,7 +23,6 @@ class societyRenderer extends suxRenderer {
     function __construct($module) {
 
         parent::__construct($module); // Call parent
-        $this->gtext = suxFunct::gtext('society'); // Language
         $this->user = new suxUser();
     }
 
@@ -141,7 +137,6 @@ class societyRenderer extends suxRenderer {
             );
 
     }
-
 
 
 }

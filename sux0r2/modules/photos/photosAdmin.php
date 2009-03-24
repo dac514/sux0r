@@ -7,24 +7,22 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
+require_once('photosRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
-require_once('photosRenderer.php');
 
 
-class photosAdmin {
+class photosAdmin extends component {
 
-    // Variables
+    // Module name
+    protected $module = 'photos';
+
+    // Object: suxPhoto()
+    protected $photo;
+
+    // Var
     public $per_page = 50;
-    private $module = 'photos';
-
-    // Objects
-    public $r;
-    public $tpl;
-    private $pager;
-    private $photos;
 
 
     /**
@@ -33,16 +31,14 @@ class photosAdmin {
     */
     function __construct() {
 
-        $this->tpl = new suxTemplate($this->module); // Template
+        // Declare objects
+        $this->photo = new suxPhoto(); // Photos
         $this->r = new photosRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         suxValidate::register_object('this', $this); // Register self to validator
-        $this->user = new suxUser();
-        $this->pager = new suxPager();
-        $this->photos = new suxPhoto();
+        parent::__construct(); // Let the parent do the rest
 
-        // Object Properties
-        $this->photos->setPublished(null);
+        // Declare Properties
+        $this->photo->setPublished(null);
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -68,7 +64,7 @@ class photosAdmin {
     }
 
 
-    function formBuild() {
+    function formBuild(&$dirty) {
 
         // --------------------------------------------------------------------
         // Form logic
@@ -98,16 +94,16 @@ class photosAdmin {
         $this->pager->limit = $this->per_page;
         $this->pager->setStart();
 
-        $this->pager->setPages($this->photos->countAlbums());
+        $this->pager->setPages($this->photo->countAlbums());
         $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/{$this->module}/admin"));
-        $this->r->arr['photos'] = $this->photos->getAlbums($this->pager->limit, $this->pager->start);
+        $this->r->arr['photos'] = $this->photo->getAlbums($this->pager->limit, $this->pager->start);
 
         // Additional variables
         if (!$this->r->arr['photos']) unset($this->r->arr['photos']);
         else foreach ($this->r->arr['photos'] as $key => $val) {
             $u = $this->user->getByID($val['users_id']);
             $this->r->arr['photos'][$key]['nickname'] = $u['nickname'];
-            $this->r->arr['photos'][$key]['photos_count'] = $this->photos->countPhotos($val['id']);
+            $this->r->arr['photos'][$key]['photos_count'] = $this->photo->countPhotos($val['id']);
         }
 
 
@@ -127,8 +123,8 @@ class photosAdmin {
     function formProcess(&$clean) {
 
         if (isset($clean['delete'])) foreach($clean['delete'] as $id => $val) {
-            $this->photos->deleteAlbum($id);
-            $this->user->log("sux0r::photosAdmin() deleted photoalbums_id: $id", $_SESSION['users_id'], 1); // Private
+            $this->photo->deleteAlbum($id);
+            $this->log->write($_SESSION['users_id'], "sux0r::photosAdmin() deleted photoalbums_id: $id", 1); // Private
         }
 
         // Clear caches, cheap and easy

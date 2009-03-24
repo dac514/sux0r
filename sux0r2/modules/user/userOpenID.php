@@ -7,25 +7,26 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
+require_once('userRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once(dirname(__FILE__) . '/../../modules/openid/openid.php');
-require_once('userRenderer.php');
 
-class userOpenID  {
 
-    // Variables
+class userOpenID extends component {
+
+    // Module name
+    protected $module = 'user';
+
+    // Var:
     private $nickname;
+
+    // Var:
     private $users_id;
-    public $gtext = array();
-    private $module = 'user';
 
-
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
+    // Object: openid()
     private $openid;
+
 
     /**
     * Constructor
@@ -33,11 +34,11 @@ class userOpenID  {
     */
     function __construct($nickname) {
 
-        $this->user = new suxUser(); // User
-        $this->tpl = new suxTemplate($this->module); // Template
+        // Declare objects
+        $this->openid = new openid();
         $this->r = new userRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -52,12 +53,10 @@ class userOpenID  {
             }
         }
 
-        // Pre assign variables
+        // Declare properties
         $this->nickname = $nickname;
         $this->users_id = $tmp['users_id'];
 
-        // Openid object
-        $this->openid = new openid();
 
     }
 

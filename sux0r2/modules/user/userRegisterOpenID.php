@@ -7,21 +7,19 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
+require_once('userRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
-class userRegisterOpenID  {
 
-    // Variables
-    public $gtext = array();
+class userRegisterOpenID extends component {
+
+    // Module name
+    protected $module = 'user';
+
+    // Var
     private $prev_skip = array();
-    private $module = 'user';
 
-    // Objects
-    public $tpl;
-    public $r;
-    protected $user;
 
     /**
     * Constructor
@@ -29,11 +27,10 @@ class userRegisterOpenID  {
     */
     function __construct() {
 
-        $this->user = new suxUser(); // User
-        $this->tpl = new suxTemplate($this->module); // Template
-        $this->r = new suxRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
+        // Declare objects
+        $this->r = new userRenderer($this->module); // Renderer
         suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
 
         // This module can fallback on user/openid module
         foreach ($GLOBALS['CONFIG']['PREV_SKIP'] as $val) {

@@ -11,13 +11,14 @@ require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
 require_once(dirname(__FILE__) . '/../../includes/suxSocialNetwork.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
+
 class userRenderer extends suxRenderer {
 
-    // Variables
-    public $profile = array(); // User profile
-
-    // Objects
+    // Object: suxUser()
     protected $user;
+
+    // Var: user profile array
+    public $profile = array();
 
 
     /**

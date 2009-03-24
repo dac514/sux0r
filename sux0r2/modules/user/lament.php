@@ -5,6 +5,8 @@
 
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/../../initialize.php');
+require_once(dirname(__FILE__) . '/../../includes/suxLog.php');
+require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 
 // ---------------------------------------------------------------------------
 // Error checking
@@ -23,14 +25,13 @@ if (!$lament) die();
 // Go
 // ---------------------------------------------------------------------------
 
-$user = new suxUser();
-$user->log($lament);
+$log = new suxLog();
+$log->write($_SESSION['users_id'], $lament);
 
 // ---------------------------------------------------------------------------
 // Clear template caches
 // ---------------------------------------------------------------------------
 
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 $tpl = new suxTemplate('user');
 $tpl->clear_cache('profile.tpl', "{$_SESSION['nickname']}|{$_SESSION['nickname']}");
 

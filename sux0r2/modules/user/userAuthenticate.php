@@ -13,7 +13,7 @@ require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 class userAuthenticate extends component {
 
     // Module name
-    protected $module = 'user'; // Module
+    protected $module = 'user';
 
 
     /**

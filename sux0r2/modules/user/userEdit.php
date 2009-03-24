@@ -7,24 +7,24 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('userRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
+require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 
-class userEdit {
 
-    // Variables
+class userEdit extends component {
 
-    public $caches = array('home', 'blog', 'feeds', 'bookmarks', 'photos'); // Caches to clear if language changes
-    public $gtext = array(); // Language
+    // Module name
+    protected $module = 'user';
+
+    // Var: caches to clear if the user changes their language
+    public $caches = array('home', 'blog', 'feeds', 'bookmarks', 'photos');
+
+    // Var: edit mode
     private $mode = 'register';
-    private $users_id = null;
-    private $module = 'user';
 
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
+    // Var:
+    private $users_id = null;
 
 
     /**
@@ -33,11 +33,11 @@ class userEdit {
     */
     function __construct($mode = 'register', $user = null) {
 
-        $this->user = new suxUser(); // User
-        $this->tpl = new suxTemplate($this->module); // Template
+        // Declare objects
         $this->r = new userRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
+
 
         // -------------------------------------------------------------------
         // Edit mode
@@ -311,18 +311,18 @@ class userEdit {
                 $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
                 $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
                 $log .= mb_strtolower($this->r->gtext['changed_profile']);
-                $this->user->log($log);
+                $this->log->write($_SESSION['users_id'], $log);
             }
             else {
                 // Administrator edit
-                $this->user->log("sux0r::userEdit() users_id: {$id}", $_SESSION['users_id'], 1); // Log, private
+                $this->log->write($_SESSION['users_id'], "sux0r::userEdit() users_id: {$id}", 1); // Log, private
             }
 
         }
         else {
 
             $id = $this->user->save(null, $clean);
-            $this->user->log("sux0r::userEdit() new users_id: {$id} ", $id, 1); // Log, private
+            $this->log->write($id, "sux0r::userEdit() new users_id: {$id} ", 1); // Log, private
 
         }
 
