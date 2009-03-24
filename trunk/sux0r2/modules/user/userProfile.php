@@ -7,22 +7,20 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxSocialNetwork.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once('userRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
+require_once(dirname(__FILE__) . '/../../includes/suxSocialNetwork.php');
 
-class userProfile {
 
-    // Variables
-    public $gtext = array();
-    public $profile; // User profile array
-    private $module = 'user';
+class userProfile extends component {
 
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
-    private $log;
+    // Module name
+    protected $module = 'user';
+
+    // Var: user profile array
+    public $profile;
+
+    // Var: minifeed limit
     private $minifeed_limit = 10;
 
 
@@ -33,17 +31,16 @@ class userProfile {
     */
     function __construct($nickname) {
 
-        $this->user = new suxUser(); // User
-        $this->log = new suxLog(); // User
-        $this->tpl = new suxTemplate($this->module); // Template
+
+        // Declare objects
         $this->r = new userRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
+        parent::__construct(); // Let the parent do the rest
+
+        // Declare properties
         $this->r->bool['analytics'] = true; // Turn on analytics
-
-        // Profile
         $this->profile = $this->user->getByNickname($nickname, true);
-        unset($this->profile['password']); // We don't need this
 
+        unset($this->profile['password']); // We don't need this
         if (!$this->profile) suxFunct::redirect(suxFunct::getPreviousURL()); // Redirect for invalid profiles
 
     }

@@ -12,9 +12,12 @@ require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
 class photosRenderer extends suxRenderer {
 
-    // Objects
+    // Object: suxPhoto()
     private $photo;
+
+    // Object: suxUser()
     private $user;
+
 
     /**
     * Constructor

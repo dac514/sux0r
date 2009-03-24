@@ -7,24 +7,23 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('photosRenderer.php');
-
-class photosUpload  {
-
-    // Variables
-    public $gtext = array();
-    private $extensions = 'jpg,jpeg,gif,png,zip'; // Supported extensions
-    private $module = 'photos';
+require_once(dirname(__FILE__) . '/../abstract.component.php');
+require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
+require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
 
 
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
-    private $photo;
+class photosUpload extends component {
+
+    // Module name
+    protected $module = 'photos';
+
+    // Object: suxPhoto()
+    protected $photo;
+
+    // Var: supported extensions
+    private $extensions = 'jpg,jpeg,gif,png,zip';
+
 
     /**
     * Constructor
@@ -37,21 +36,17 @@ class photosUpload  {
                 suxFunct::redirect(suxFunct::makeURL('/photos')); // Invalid id
         }
 
-        $this->user = new suxUser(); // User
-        $this->photo = new suxPhoto($this->module); // Photos
-        $this->tpl = new suxTemplate($this->module); // Template
+        // Declare objects
+        $this->photo = new suxPhoto(); // Photos
         $this->r = new photosRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
 
-        // Object properties
+        // Declare properties
         $this->photo->setPublished(null);
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
-
-        // This module has config variables, load them
-        $this->tpl->config_load('my.conf', $this->module);
 
         // Security check
         if (!$this->user->isRoot()) {
@@ -222,7 +217,7 @@ class photosUpload  {
 
         }
 
-        $this->user->log("sux0r::photosUpload() photoalbums_id: {$photo['photoalbums_id']}", $_SESSION['users_id'], 1); // Private
+        $this->log->write($_SESSION['users_id'], "sux0r::photosUpload() photoalbums_id: {$photo['photoalbums_id']}", 1); // Private
 
         $this->photo->setPublished(true);
         $tmp = $this->photo->getAlbumByID($photo['photoalbums_id']); // Is actually published?
@@ -242,7 +237,7 @@ class photosUpload  {
             $log .= " <a href='$url'>{$tmp['title']}</a>";
 
             // Log
-            $this->user->log($log);
+            $this->log->write($_SESSION['users_id'], $log);
 
             // Clear caches, cheap and easy
             $tpl = new suxTemplate('user');

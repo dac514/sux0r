@@ -7,26 +7,30 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('userRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
+require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
+require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 
-class userAvatar  {
 
-    // Variables
+class userAvatar extends component  {
+
+    // Module name
+    protected $module = 'user';
+
+    // Var: supported image extensions
+    private $extensions = 'jpg,jpeg,gif,png';
+
+    // Var
     private $nickname;
+
+    // Var
     private $users_id;
+
+    // Var
     private $image;
-    public $gtext = array();
-    private $extensions = 'jpg,jpeg,gif,png'; // Supported extensions
-    private $module = 'user';
 
 
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
 
     /**
     * Constructor
@@ -34,17 +38,13 @@ class userAvatar  {
     */
     function __construct($nickname) {
 
-        $this->user = new suxUser(); // User
-        $this->tpl = new suxTemplate($this->module); // Template
+        // Declare objects
         $this->r = new userRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
-
-        // This module has config variables, load them
-        $this->tpl->config_load('my.conf', $this->module);
 
         // Security check. Is the user allowed to edit this?
         $tmp = $this->user->getByNickname($nickname, true);
@@ -56,7 +56,7 @@ class userAvatar  {
             }
         }
 
-        // Pre assign variables
+        // Declare properties
         $this->nickname = $nickname;
         $this->users_id = $tmp['users_id'];
         $this->image = $tmp['image'];
@@ -168,11 +168,11 @@ class userAvatar  {
             $url = suxFunct::makeUrl("/user/profile/{$_SESSION['nickname']}", null, true);
             $log .= "<a href='$url'>{$_SESSION['nickname']}</a> ";
             $log .= mb_strtolower($this->r->gtext['changed_avatar']);
-            $this->user->log($log);
+            $this->log->write($_SESSION['users_id'], $log);
         }
         else {
             // Administrator edit
-            $this->user->log("sux0r::userAvatar() users_id: {$user['users_id']}", $_SESSION['users_id'], 1); // Log, private
+            $this->log->write($_SESSION['users_id'], "sux0r::userAvatar() users_id: {$user['users_id']}", 1); // Log, private
         }
 
         // Clear caches, cheap and easy

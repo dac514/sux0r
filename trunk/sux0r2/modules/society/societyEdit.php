@@ -8,25 +8,25 @@
 */
 
 
-require_once(dirname(__FILE__) . '/../../includes/suxSocialNetwork.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once('societyRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
+require_once(dirname(__FILE__) . '/../../includes/suxSocialNetwork.php');
+require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 
-class societyEdit {
 
-    // Variables
+class societyEdit extends component {
+
+    // Module name
+    protected $module = 'society';
+
+    // Object: suxSocialNetwork()
+    protected $soc;
+
+    // Var
     private $nickname;
+
+    // Var
     private $users_id;
-    public $gtext = array();
-    private $module = 'society';
-
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
-    private $soc;
-
 
 
     /**
@@ -36,13 +36,11 @@ class societyEdit {
     */
     function __construct($nickname) {
 
-
-        $this->user = new suxUser(); // User
+        // Declare objects
         $this->soc = new suxSocialNetwork(); // User
-        $this->tpl = new suxTemplate($this->module); // Template
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
         $this->r = new societyRenderer($this->module); // Renderer
         suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -54,6 +52,7 @@ class societyEdit {
         if ($tmp['users_id'] == $_SESSION['users_id'])
             suxFunct::redirect(suxFunct::getPreviousURL());
 
+        // Declare properties
         $this->nickname = $nickname;
         $this->users_id = $tmp['users_id'];
 
@@ -187,8 +186,8 @@ class societyEdit {
         }
 
         // Log
-        $this->user->log($log);
-        $this->user->log($log, $u['users_id']);
+        $this->log->write($_SESSION['users_id'], $log);
+        $this->log->write($u['users_id'], $log);
 
         // Clear caches, cheap and easy
         $tpl = new suxTemplate('user');

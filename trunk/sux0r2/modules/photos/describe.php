@@ -18,10 +18,10 @@ if (!isset($_POST['description'])) exit;
 // Secondary error checking
 // ---------------------------------------------------------------------------
 
-require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
+require_once(dirname(__FILE__) . '/../../includes/suxLog.php');
 require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
 
-$user = new suxUser();
+$log = new suxLog();
 $photo = new suxPhoto();
 
 $text = suxFunct::gtext('photos');
@@ -40,7 +40,7 @@ try {
     if ($tmp['description']) echo $tmp['description'];
     else echo $text['clickme'];
 
-    $user->log("sux0r::photos::describe() photos_id: {$clean['id']}", $_SESSION['users_id'], 1); // Private
+    $log->write($_SESSION['users_id'], "sux0r::photos::describe() photos_id: {$clean['id']}", 1); // Private
 
 }
 catch (Exception $e) {

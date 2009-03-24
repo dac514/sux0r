@@ -7,20 +7,16 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
+require_once('userRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
 
-class userReset {
 
-    // Variables
-    public $gtext = array();
-    private $module = 'user';
+class userReset extends component {
 
-    // Objects
-    public $tpl;
-    public $r;
-    protected $user;
+    // Module name
+    protected $module = 'user';
+
 
     /**
     * Constructor
@@ -28,11 +24,11 @@ class userReset {
     */
     function __construct() {
 
-        $this->user = new suxUser(); // User
-        $this->tpl = new suxTemplate($this->module); // Template
-        $this->r = new suxRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
+        // Declare objects
+        $this->r = new userRenderer($this->module); // Renderer
         suxValidate::register_object('this', $this); // Register self to validator
+        parent::__construct(); // Let the parent do the rest
+
 
     }
 

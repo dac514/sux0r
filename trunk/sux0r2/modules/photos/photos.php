@@ -7,25 +7,21 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
-require_once(dirname(__FILE__) . '/../../includes/suxPager.php');
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 require_once('photosRenderer.php');
+require_once(dirname(__FILE__) . '/../abstract.component.php');
+require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
 
-class photos {
 
-    // Variables
+class photos extends component {
+
+    // Module name
+    protected $module = 'photos';
+
+    // Object: suxPhoto()
+    protected $photo;
+
+    // Var
     public $per_page; // Photos per page
-    public $gtext = array();
-    private $module = 'photos';
-
-
-    // Objects
-    public $tpl;
-    public $r;
-    private $user;
-    private $photo;
-    private $pager;
 
 
     /**
@@ -34,17 +30,13 @@ class photos {
     */
     function __construct() {
 
-        $this->tpl = new suxTemplate($this->module); // Template
+        // Declare objects
+        $this->photo = new suxPhoto(); // Photos
         $this->r = new photosRenderer($this->module); // Renderer
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
+        parent::__construct(); // Let the parent do the rest
+
+        // Declare properties
         $this->r->bool['analytics'] = true; // Turn on analytics
-
-        $this->user = new suxUser();
-        $this->photo = new suxPhoto();
-        $this->pager = new suxPager();
-
-        // This module has config variables, load them
-        $this->tpl->config_load('my.conf', $this->module);
         $this->per_page = $this->tpl->get_config_vars('perPage');
 
     }
