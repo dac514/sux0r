@@ -885,6 +885,7 @@ class suxUser {
 
         header('HTTP/1.0 401 Unauthorized');
         header(sprintf('WWW-Authenticate: Digest qop="auth-int, auth", realm="%s", domain="%s", nonce="%s", opaque="%s", stale="%s", algorithm="MD5"', $GLOBALS['CONFIG']['REALM'], $GLOBALS['CONFIG']['URL'] . '/', $uid, md5($GLOBALS['CONFIG']['REALM']), $stale ? 'true' : 'false'));
+		flush();
 
         return false;
 
