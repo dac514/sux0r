@@ -166,10 +166,6 @@ class suxDB {
             $q = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' and table_type = 'BASE TABLE' ";
             break;
 
-        case 'sqlite':
-            $q = "SELECT name FROM sqlite_master WHERE type = 'table' ";
-            break;
-
         default:
             throw new Exception('Unsupported database driver');
 
