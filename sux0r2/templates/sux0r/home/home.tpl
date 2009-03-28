@@ -1,5 +1,7 @@
 {capture name=header}
 
+{* Latest version *}
+{assign var='version' value='2.0.4'}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
@@ -67,7 +69,7 @@
 			<div id="leftside">
 
             <p>
-            <span class="hl">sux0r 2.0</span> is a blogging package, an RSS aggregator, a bookmark repository,
+            <span class="hl">sux0r {$version}</span> is a blogging package, an RSS aggregator, a bookmark repository,
             and a photo publishing platform with a focus on Naive Bayesian categorization and probabilistic content.
             <a href="http://openid.net/">OpenID</a> enabled <em>(version 1.1);</em> as both a consumer and a provider.
             </p>
@@ -83,14 +85,14 @@
             </p>
 
             <p>
-            <span class="hl">sux0r 2.0</span> allows users
+            <span class="hl">sux0r</span> allows users
             to maintain lists of Naive Bayesian categories. These lists
             can be shared with other users. This allows groups
             to share, train, and use <span class="hl">sux0r</span> together.
             </p>
 
             <p>
-            <span class="hl">sux0r 2.0</span> is <a href="http://sourceforge.net/projects/sux0r/">open source</a> and is distributed under
+            <span class="hl">sux0r {$version}</span> is <a href="http://sourceforge.net/projects/sux0r/">open source</a> and is distributed under
             the <a href="http://www.fsf.org/licensing/licenses/gpl-3.0.html">GNU General Public License</a>.
             </p>
 
@@ -110,7 +112,7 @@
 
             {* Capture content *}
 
-            {capture name='title' assign='title'}Latest Version: 2.0.3{/capture}
+            {capture name='title' assign='title'}Latest Version: {$version}{/capture}
             {capture name='welcome' assign='welcome'}
 
 
