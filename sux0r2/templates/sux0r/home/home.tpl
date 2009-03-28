@@ -1,5 +1,124 @@
 {capture name=header}
 
+    {literal}
+    <style type="text/css">
+
+    #navcontainerTest {
+        width: 100%;
+        background-color: #ff0000;
+    }
+
+    #navcontainerTest ul {
+        margin: 0;
+        padding: 0;
+        z-index: 30;
+        letter-spacing: 2px;
+        font-weight: bold;
+    }
+
+    #navcontainerTest ul li {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        float: left;
+    }
+
+    #navcontainerTest ul li a {
+        display: block;
+        margin: 0 1px 0 0;
+        padding: 4px 10px;
+        background: #ff0000;
+        color: #fff;
+        text-align: center;
+        text-decoration: none;
+        border-right: 1px solid #ffffff;
+    }
+
+    #navcontainerTest ul li a:hover {
+        background: #000000;
+    }
+
+    #navcontainerTest ul div {
+        position: absolute;
+        visibility: hidden;
+        margin: 0;
+        padding: 0;
+        background: #eeeeee;
+        border: 1px solid #ff0000;
+    }
+
+    #navcontainerTest ul div a {
+        position: relative;
+        display: block;
+        margin: 0;
+        padding: 5px 10px;
+        width: auto;
+        white-space: nowrap;
+        text-align: left;
+        text-decoration: none;
+        background: #eeeeee;
+        color: #000000;
+        letter-spacing: normal;
+        font-weight: normal;
+
+    }
+
+    #navcontainerTest ul div a:hover {
+        background: #000000;
+        color: #fff;
+    }
+
+    </style>
+
+
+
+    <script type='text/javascript'>
+
+    // Forked from / inspired by
+    // http://javascript-array.com/scripts/simple_drop_down_menu
+
+    var timeout	= 500;
+    var closetimer	= 0;
+    var ddmenuitem	= 0;
+
+    // open hidden layer
+    function mopen(id) {
+        // cancel close timer
+        mcancelclosetime();
+
+        // close old layer
+        if (ddmenuitem) ddmenuitem.style.visibility = 'hidden';
+
+        // get new layer and show it
+        ddmenuitem = document.getElementById(id);
+        ddmenuitem.style.visibility = 'visible';
+
+    }
+    // close showed layer
+    function mclose() {
+        if(ddmenuitem) ddmenuitem.style.visibility = 'hidden';
+    }
+
+    // go close timer
+    function mclosetime() {
+        closetimer = window.setTimeout(mclose, timeout);
+    }
+
+    // cancel close timer
+    function mcancelclosetime() {
+        if (closetimer) {
+            window.clearTimeout(closetimer);
+            closetimer = null;
+        }
+    }
+
+    // close layer when click-out
+    document.onclick = mclose;
+
+    // ]]>
+    </script>
+    {/literal}
+
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
 {include file=$r->xhtml_header}{/strip}
@@ -9,9 +128,52 @@
 		<td colspan="2" style="vertical-align:top;">
 			<div id="header">
 
+
+
+<div id='navcontainerTest'>
+<ul>
+
+    <li><a href="{$r->url}/home">Home</a></li>
+
+    <li><a href="{$r->url}/blog"
+        onmouseover="mopen('m1')"
+        onmouseout="mclosetime()">Blog</a>
+        <div id="m1"
+            onmouseover="mcancelclosetime()"
+            onmouseout="mclosetime()">
+        <a href="#">Administration</a>
+        <hr />
+        <a href="#">Publish</a>
+        </div>
+    </li>
+
+    <li><a href="{$r->url}/feeds">Feeds</a></li>
+
+    <li><a href="{$r->url}/bookmarks"
+        onmouseover="mopen('m2')"
+        onmouseout="mclosetime()">Bookmarks</a>
+        <div id="m2"
+            onmouseover="mcancelclosetime()"
+            onmouseout="mclosetime()">
+        <a href="#">Un</a>
+        <a href="#">Deux Deux Deux</a>
+        <a href="#">Trois</a>
+        <a href="#">Quatre</a>
+        </div>
+    </li>
+
+    <li><a href="{$r->url}/photos">Photos</a></li>
+    <li><a href="{$r->url}/photos">Sourcecode</a></li>
+
+</ul>
+<div class="clearboth"></div>
+</div>
+
+                <!-- {*
                 <h1>sux0r - it sux0rs up all the web</h1>
                 {insert name="userInfo"}
                 {$r->navlist()}
+                *} -->
 
 			</div>
             <div class="clearboth"></div>
