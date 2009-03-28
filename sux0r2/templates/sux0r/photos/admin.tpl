@@ -73,7 +73,7 @@
 
     {$r->text.pager}
 
-    <p>
+    <p><br />
     <input type="button" class="button" value="{$r->gtext.delete}" onclick="rm('default', '{$r->gtext.alert_delete}');" />
     </p>
 

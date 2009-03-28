@@ -140,6 +140,11 @@ input[type="submit"], input[type="button"] {
     padding: 0.25em;
 }
 
+input[type="radio"], input[type="checkbox"] {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
 input.button {
     color: #ffffff;
     background: #ff0000;

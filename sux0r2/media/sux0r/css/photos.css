@@ -80,7 +80,7 @@ input.imageFile {
 }
 
 .annotateItem {
-    border: 1px dashed #666;
+    border: 1px solid #ccc;
     padding: 10px;
     margin: 10px;
     height: 1%; /* IE6, Holly Hack */

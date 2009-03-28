@@ -30,6 +30,7 @@
             {insert name="editLinks2" album_id=$r->arr.album.id br=true}
             </div>
 
+            <br />
             {$r->arr.album.body_html}
 
 			</div>

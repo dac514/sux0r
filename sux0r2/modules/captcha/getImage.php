@@ -21,7 +21,9 @@ ini_set('session.use_only_cookies', true);
 session_start();
 
 $captcha = new AntiSpam();
-$chars = $captcha->Set(getChallenge());
+
+$challenge = getChallenge();
+$chars = $captcha->Set($challenge);
 
 if ($captcha->Stroke() === false ) {
     die('Illegal or no data to plot');

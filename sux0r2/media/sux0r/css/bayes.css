@@ -27,6 +27,10 @@ fieldset {
 
 }
 
+textarea {
+    margin-bottom: 1em;
+}
+
 .active {
     height: 140px;
     width: 640px;

@@ -99,8 +99,8 @@
 
 {if !$thread_pos}
     <p>
-    <label>{$r->gtext.save_draft} :</label>
-    <input type="checkbox" name="draft" value="1" {if $draft}checked="checked"{/if} />
+    <label for="draft">{$r->gtext.save_draft} :</label>
+    <input type="checkbox" name="draft" id="draft" value="1" {if $draft}checked="checked"{/if} />
     </p>
 {/if}
 

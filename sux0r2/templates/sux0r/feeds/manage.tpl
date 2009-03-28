@@ -30,7 +30,7 @@
     {html_checkboxes name='subscriptions' options=$r->arr.feeds selected=$r->arr.subscriptions assign=tmp}
     {html_table loop=$tmp inner=rows table_attr='border="0" class="feedTable"' cols=3}
 
-    <p>
+    <p><br />
     <input type="button" class="button" value="{$r->gtext.cancel}" onclick="document.location='{$r->text.back_url}';" />
     <input type="submit" value="{$r->gtext.submit}" class="button" />
     </p>
