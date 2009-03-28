@@ -40,9 +40,6 @@ class suxPhoto {
     // ------------------------------------------------------------------------
 
 
-    // -=-=-
-
-
     /**
     * Set published property of object
     *
@@ -104,10 +101,6 @@ class suxPhoto {
         $query = "{$this->order[0]} {$this->order[1]} ";
         return $query;
     }
-
-
-
-    // -=-=-
 
 
     /**

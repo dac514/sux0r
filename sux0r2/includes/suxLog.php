@@ -34,9 +34,6 @@ class suxLog {
     }
 
 
-    // -=-=-
-
-
     /**
     * Set published property of object
     *
@@ -99,16 +96,6 @@ class suxLog {
         return $query;
     }
 
-
-
-    // -=-=-
-
-
-
-    // -----------------------------------------------------------------------
-    // Logs
-    // TODO: Move logging to it's own object
-    // -----------------------------------------------------------------------
 
     /**
     * Count log
