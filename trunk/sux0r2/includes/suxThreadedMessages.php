@@ -48,7 +48,6 @@ class suxThreadedMessages {
 
     }
 
-    // -=-=-
 
     /**
     * Set published property of object
@@ -112,8 +111,6 @@ class suxThreadedMessages {
         return $query;
     }
 
-
-    // -=-=-
 
     // -------------------------------------------------------------------
     // Individual messages

@@ -43,9 +43,6 @@ class suxUser {
     }
 
 
-    // -=-=-
-
-
     /**
     * Set order property of object
     *
@@ -73,10 +70,6 @@ class suxUser {
         $query = "{$this->order[0]} {$this->order[1]} ";
         return $query;
     }
-
-
-
-    // -=-=-
 
 
     /**
