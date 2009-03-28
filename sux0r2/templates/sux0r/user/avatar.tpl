@@ -35,13 +35,14 @@
 
 {if $image}
 <!-- Current image -->
+<p><em>{$r->gtext.click_to_crop}</em></p>
 <p>
-<a href="{$r->makeUrl('/cropper/user')}/{$users_id}"><img src="{$r->url}/data/user/{$image|escape:'url'}" alt="" border="0" /></a>
+<a href="{$r->makeUrl('/cropper/user')}/{$users_id}" class="noBg"><img src="{$r->url}/data/user/{$image|escape:'url'}" alt="" border="0" class="croppable" /></a>
 </p>
 
 <p>
-<label>{$r->gtext.unset_image} :</label>
-<input type="checkbox" name="unset_image" value="1" {if $unset_image}checked="checked"{/if} /><br />
+<label for="unset_image" >{$r->gtext.unset_image} :</label>
+<input type="checkbox" name="unset_image" id="unset_image" value="1" {if $unset_image}checked="checked"{/if} /><br />
 </p>
 {/if}
 

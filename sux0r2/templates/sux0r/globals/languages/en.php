@@ -21,7 +21,7 @@ the <a href="http://www.fsf.org/licensing/licenses/gpl-3.0.html">GNU General Pub
 Hosting by <a href="http://www.networkredux.com/">Network Redux</a>.';
 
 $gtext['data_license'] = 'Unless otherwise specified, contents of this site are copyright by the contributors and available under the <br />
-<a href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0</a> .
+<a href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0</a>.
 Contributors should be attributed by full name or nickname.';
 
 /* Now back our regular scheduled program */

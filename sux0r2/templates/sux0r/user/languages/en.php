@@ -13,6 +13,7 @@ $gtext['reset_2'] = 'A new password will be emailed.';
 $gtext['reset_mail_1'] = 'New password for';
 $gtext['reset_mail_2'] = 'Your new password is';
 $gtext['reset_mail_3'] = 'Once logged in, make sure you CHANGE YOUR PASSWORD! If you have received this message without asking for it, then someone requested a new password on your behalf. The IP used to do this was';
+$gtext['click_to_crop'] = 'Click on the image to crop it.';
 
 // Already translated
 $gtext['acquaintances'] = 'Acquaintances';

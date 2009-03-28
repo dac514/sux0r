@@ -3,6 +3,10 @@
 // Always UTF-8
 // Always uppercase the first word
 
+// TODO, translate
+$gtext['click_to_crop'] = 'Click on the image to crop it.';
+
+// Already translated
 $gtext['admin'] = 'Blog Administration';
 $gtext['alert_delete'] = 'Are you sure you want to delete this blog? Comments will also be deleted.';
 $gtext['archives'] = 'Archives';

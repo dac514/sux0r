@@ -1,123 +1,5 @@
 {capture name=header}
 
-    {literal}
-    <style type="text/css">
-
-    #navcontainerTest {
-        width: 100%;
-        background-color: #ff0000;
-    }
-
-    #navcontainerTest ul {
-        margin: 0;
-        padding: 0;
-        z-index: 30;
-        letter-spacing: 2px;
-        font-weight: bold;
-    }
-
-    #navcontainerTest ul li {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-        float: left;
-    }
-
-    #navcontainerTest ul li a {
-        display: block;
-        margin: 0 1px 0 0;
-        padding: 4px 10px;
-        background: #ff0000;
-        color: #fff;
-        text-align: center;
-        text-decoration: none;
-        border-right: 1px solid #ffffff;
-    }
-
-    #navcontainerTest ul li a:hover {
-        background: #000000;
-    }
-
-    #navcontainerTest ul div {
-        position: absolute;
-        visibility: hidden;
-        margin: 0;
-        padding: 0;
-        background: #eeeeee;
-        border: 1px solid #ff0000;
-    }
-
-    #navcontainerTest ul div a {
-        position: relative;
-        display: block;
-        margin: 0;
-        padding: 5px 10px;
-        width: auto;
-        white-space: nowrap;
-        text-align: left;
-        text-decoration: none;
-        background: #eeeeee;
-        color: #000000;
-        letter-spacing: normal;
-        font-weight: normal;
-
-    }
-
-    #navcontainerTest ul div a:hover {
-        background: #000000;
-        color: #fff;
-    }
-
-    </style>
-
-
-
-    <script type='text/javascript'>
-
-    // Forked from / inspired by
-    // http://javascript-array.com/scripts/simple_drop_down_menu
-
-    var timeout	= 500;
-    var closetimer	= 0;
-    var ddmenuitem	= 0;
-
-    // open hidden layer
-    function mopen(id) {
-        // cancel close timer
-        mcancelclosetime();
-
-        // close old layer
-        if (ddmenuitem) ddmenuitem.style.visibility = 'hidden';
-
-        // get new layer and show it
-        ddmenuitem = document.getElementById(id);
-        ddmenuitem.style.visibility = 'visible';
-
-    }
-    // close showed layer
-    function mclose() {
-        if(ddmenuitem) ddmenuitem.style.visibility = 'hidden';
-    }
-
-    // go close timer
-    function mclosetime() {
-        closetimer = window.setTimeout(mclose, timeout);
-    }
-
-    // cancel close timer
-    function mcancelclosetime() {
-        if (closetimer) {
-            window.clearTimeout(closetimer);
-            closetimer = null;
-        }
-    }
-
-    // close layer when click-out
-    document.onclick = mclose;
-
-    // ]]>
-    </script>
-    {/literal}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
@@ -128,12 +10,17 @@
 		<td colspan="2" style="vertical-align:top;">
 			<div id="header">
 
+                <h1 onclick="document.location='{$r->makeUrl('/home')}'" style="cursor:pointer">sux0r - it sux0rs up all the web</h1>
+                {insert name="userInfo"}
+                {* $r->navlist() *}
 
 
-<div id='navcontainerTest'>
-<ul>
 
-    <li><a href="{$r->url}/home">Home</a></li>
+
+<div id="navcontainer">
+<ul id="navlist">
+
+    <li><a href="{$r->url}/home"class="selected">Home</a></li>
 
     <li><a href="{$r->url}/blog"
         onmouseover="mopen('m1')"
@@ -166,14 +53,10 @@
     <li><a href="{$r->url}/photos">Sourcecode</a></li>
 
 </ul>
-<div class="clearboth"></div>
 </div>
+<div class="clearboth"></div>
 
-                <!-- {*
-                <h1>sux0r - it sux0rs up all the web</h1>
-                {insert name="userInfo"}
-                {$r->navlist()}
-                *} -->
+
 
 			</div>
             <div class="clearboth"></div>
@@ -196,7 +79,7 @@
             texts to work from. For example, categorizing documents in relation to a vector
             of political manifestos, or religious holy books, makes for a neat trick.
             More subjective magic 8-ball categories could be  "good vs. bad", risk assessment,
-            insurance claim fraud, the list goes on.
+            insurance claim fraud, whatever you want.
             </p>
 
             <p>
@@ -211,9 +94,14 @@
             the <a href="http://www.fsf.org/licensing/licenses/gpl-3.0.html">GNU General Public License</a>.
             </p>
 
-            <p>
-            <img src="{$r->url}/media/sux0r/assets/sux0r_logo.gif" alt="sux0r logo" width="300" height="232" border="0" class="sux0rLogo" />
-            </p>
+
+
+            <p><center>
+            <a href="http://www.php.net/" class="noBg"><img src="{$r->url}/media/sux0r/assets/php5_logo.gif" alt="PHP5" border="0" class="flair" /></a>
+            <a href="http://www.fsf.org/licensing/licenses/gpl-3.0.html" class="noBg"> <img src="{$r->url}/media/sux0r/assets/gplv3-88x31.png" alt="GPL" border="0" class="flair" /></a>
+            <a href="http://sourceforge.net/projects/sux0r" class="noBg"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=131752&type=11" width="120" height="30" border="0" alt="Get sux0r at SourceForge.net. Fast, secure and Free Open Source software downloads"  class="flair" /></a>
+            </center></p>
+
 
 			</div>
 		</td>
@@ -222,39 +110,32 @@
 
             {* Capture content *}
 
-            {capture name='title' assign='title'}CODENAME: Vorpal CMS{/capture}
+            {capture name='title' assign='title'}Latest Version: 2.0.3{/capture}
             {capture name='welcome' assign='welcome'}
 
+
             <p>
-            {$smarty.now|date_format:'%Y-%m-%d'}: <a href="http://sourceforge.net/people/viewjob.php?group_id=131752&amp;job_id=31512">Translations still wanted</a>.
-            Currently we have Chinese (zh), English (en), Dutch (nl) and German (de).
+            {$smarty.now|date_format:'%Y-%m-%d'}: Graphic designers welcome.
+            Help sux0r not suck so much in the beauty department.
+            </p>
+
+            <p>
+            {$smarty.now|date_format:'%Y-%m-%d'}: Translators welcome.
+            Currently we have English (en), Chinese (zh), Dutch (nl) and German (de).
             </p>
 
 
             <p>
-            2008-10-29: <a href="http://www.youtube.com/watch?v=ppATTkbTIhg">A short YouTube tutorial</a>
-            on how to start classifying documents using Naive Baysian Categorization with Sux0r CMS.
-            </p>
-
-
-            <p>
-            2008-10-20: You must be logged in to use Naive Bayesian
-            categorization. Once logged in, click on your nickname in the upper right,
-            then click <a href="{$r->makeUrl('/bayes')}">Edit Bayesian</a>. After you have created your
-            categories, navigate to <a href="{$r->makeUrl('/blog')}">Blog</a>, <a href="{$r->makeUrl('/feeds')}">Feeds</a>,
-            or <a href="{$r->makeUrl('/bookmarks')}">Bookmarks</a> and the AJAX interface for
-            Naive Bayesian categorization will be revealed. There isn't enough text to justify
-            categorization in the <a href="{$r->makeUrl('/photos')}">Photos</a> module. So for now,
-            it's omitted.
+            2008-10-29: Watch this short <a href="http://www.youtube.com/watch?v=ppATTkbTIhg">YouTube tutorial</a>
+            on how to start classifying documents using Naive Baysian Categorization and sux0r.
             </p>
 
 
             {/capture}
             {capture name='img' assign='img'}{$r->myHttpServer()}{$r->url}/media/sux0r/assets/nullwhore.png{/capture}
-            {capture name='caption' assign='caption'}Nullwhore Lives{/capture}
 
             {* Render widget *}
-            {$r->widget($title, $welcome, 'http://www.sux0r.org/user/profile/conner_bw', $img, $caption)}
+            {$r->widget($title, $welcome, 'http://sourceforge.net/projects/sux0r/', $img, '', 'http://www.sux0r.org/user/profile/conner_bw')}
 
             <p id="sfLinks">
             Found a bug? <a href="http://sourceforge.net/tracker2/?atid=722155&amp;group_id=131752">Report it</a>.
@@ -264,11 +145,7 @@
             All that and more at the <a href="http://sourceforge.net/projects/sux0r/">sux0r SF.net project page</a>.
             </p>
 
-            <p>
-            <a href="http://www.php.net/" class="noBg"><img src="{$r->url}/media/sux0r/assets/php5_logo.gif" alt="PHP5" border="0" class="flair" /></a>
-            <a href="http://www.fsf.org/licensing/licenses/gpl-3.0.html" class="noBg"> <img src="{$r->url}/media/sux0r/assets/gplv3-88x31.png" alt="GPL" border="0" class="flair" /></a>
-            <a href="http://sourceforge.net/projects/sux0r" class="noBg"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=131752&type=11" width="120" height="30" border="0" alt="Get sux0r at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
-            </p>
+
 
 			</div>
 		</td>

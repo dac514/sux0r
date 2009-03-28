@@ -57,8 +57,8 @@ class userRenderer extends suxRenderer {
     function getGenders() {
 
         return array(
-            'm' => $this->gtext['male'],
-            'f' => $this->gtext['female'],
+            'm' => ' ' . $this->gtext['male'],
+            'f' => ' ' . $this->gtext['female'],
             );
 
     }
@@ -294,12 +294,13 @@ function insert_editMenu($params) {
     }
     else {
 
+        $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/edit/{$params['nickname']}") . '">' . $text['edit_profile'] . '</a></li>' . "\n";
+        $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/avatar/{$params['nickname']}") . '">' . $text['edit_avatar'] . '</a></li>' . "\n";
+
         // Is feature turned off?
         if ($GLOBALS['CONFIG']['FEATURE']['bayes'] != false)
             $tmp .= '<li><a href="' . suxFunct::makeUrl("/bayes") . '">' . $text['edit_bayes'] . '</a></li>' . "\n";
 
-        $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/edit/{$params['nickname']}") . '">' . $text['edit_profile'] . '</a></li>' . "\n";
-        $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/avatar/{$params['nickname']}") . '">' . $text['edit_avatar'] . '</a></li>' . "\n";
         $tmp .= '<li><a href="' . suxFunct::makeUrl("/user/openid/{$params['nickname']}") . '">' . $text['edit_openid'] . '</a></li>' . "\n";
     }
 

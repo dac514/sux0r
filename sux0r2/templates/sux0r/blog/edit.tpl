@@ -54,13 +54,14 @@
 
     {if $image}
     <!-- Current image -->
+    <p><em>{$r->gtext.click_to_crop}</em></p>
     <p>
-    <a href="{$r->makeUrl('/cropper/blog')}/{$id}"><img src="{$r->url}/data/blog/{$image|escape:'url'}" alt="" border="0" /></a>
+    <a href="{$r->makeUrl('/cropper/blog')}/{$id}" class="noBg"><img src="{$r->url}/data/blog/{$image|escape:'url'}" alt="" border="0" class="croppable" /></a>
     </p>
 
     <p>
-    <label>{$r->gtext.unset_image} :</label>
-    <input type="checkbox" name="unset_image" value="1" {if $unset_image}checked="checked"{/if} /><br />
+    <label for="unset_image">{$r->gtext.unset_image} :</label>
+    <input type="checkbox" name="unset_image" id="unset_image" value="1" {if $unset_image}checked="checked"{/if} /><br />
     </p>
     {/if}
 
@@ -71,8 +72,8 @@
         {validate id="image2" message=$r->gtext.error_4}
         {/capture}
     {/strip}
-    <label {if $smarty.capture.error}class="error"{/if} >{$r->gtext.image} : </label>
-    <input type="file" name="image" class="imageFile" />
+    <label for="image" {if $smarty.capture.error}class="error"{/if} >{$r->gtext.image} : </label>
+    <input type="file" name="image" id="image" class="imageFile" />
     {$smarty.capture.error}
     </p>
 

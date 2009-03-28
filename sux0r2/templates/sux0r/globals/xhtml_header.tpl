@@ -6,6 +6,7 @@
     <link rel="icon" type="image/png" href="{$r->url}/media/{$r->partition}/assets/favicon.png" />
     {$r->stylesheets}
     {$r->header}
+    <script type="text/javascript" src="{$r->url}/media/{$r->partition}/shared_scripts.js"></script>
 </head>
 <body>
 <div id="encompasser">

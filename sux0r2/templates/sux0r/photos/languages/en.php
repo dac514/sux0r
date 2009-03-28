@@ -3,6 +3,10 @@
 // Always UTF-8
 // Always uppercase the first word
 
+// TODO, translate
+$gtext['annotate_tip'] = 'Click on the image to crop, click on the text to edit.';
+
+// Already translated
 $gtext['admin'] = 'Photos Administration';
 $gtext['album'] = 'Album';
 $gtext['alert_delete'] = 'Are you sure you want to delete these albums? Photos will also be deleted.';

@@ -38,14 +38,6 @@
     background: none;
 }
 
-label {
-    float: left;
-    width: auto;
-    margin-right: 0.5em;
-    padding-top: 0.2em;
-    text-align: right;
-}
-
 .widerInput {
     width: 350px;
 }

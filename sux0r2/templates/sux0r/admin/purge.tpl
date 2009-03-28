@@ -5,7 +5,6 @@
         float: left;
         width: 100px;
         margin-right: 0.5em;
-        padding-top: 0.2em;
         text-align: right;
     {rdelim}
     </style>
