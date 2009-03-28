@@ -38,7 +38,6 @@
     .typeof {
         float: left;
         width: 140px;
-        padding-top: 0.2em;
         text-align: right;
     }
     </style>

@@ -57,8 +57,8 @@ class userRenderer extends suxRenderer {
     function getGenders() {
 
         return array(
-            'm' => ' ' . $this->gtext['male'],
-            'f' => ' ' . $this->gtext['female'],
+            'm' => $this->gtext['male'],
+            'f' => $this->gtext['female'],
             );
 
     }

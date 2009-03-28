@@ -348,7 +348,7 @@
         {if $unsharevec_error1}<p class="error">{$unsharevec_error1}</p>{/if}
 
         {$r->getShareTable()}
-        <center>
+        <center><br />
         <input type="button" class="button" value="{$r->gtext.unshare}" onclick="rm('unsharevec', '{$r->gtext.alert_unshare}');"/>
         </center>
 
@@ -370,7 +370,7 @@
             {capture name=stats}{$r->getCategoryStats()}{/capture}
             {if $smarty.capture.stats}
             <p>{$r->gtext.stats}:</p>
-            {$smarty.capture.stats}
+            {$smarty.capture.stats}<br />
             {/if}
 
             <p>{$r->gtext.synopsis}:</p>

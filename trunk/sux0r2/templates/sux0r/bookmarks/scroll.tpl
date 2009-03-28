@@ -78,7 +78,7 @@
                     {$r->isSubscribed($foo.id)}
                     </div>
 
-                    <div style="float:left;">
+                    <div style="float:left; margin-bottom: 1em;">
                         <a href="{$foo.url}">{insert name="highlight" html=$foo.title}</a><br />
                         <em>{$r->gtext.published_on} : {$foo.published_on}</em>
                     </div>

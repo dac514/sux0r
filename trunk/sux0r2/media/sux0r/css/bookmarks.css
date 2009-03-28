@@ -57,9 +57,10 @@
 
 .sideListTitle {
     font-weight: bold;
-    background-color: pink;
+    background-color: #a7ffd0;
     padding: 3px;
     margin-right: 20px;
+    margin-bottom: 1em;
 }
 
 .pager {

@@ -38,8 +38,8 @@
 
             <div class="approveItemOptions" >
                 <a href="{$r->makeUrl('/bookmarks/edit')}/{$foo.id}">{$r->gtext.edit}</a> | <a href="{$foo.url}" target="_blank">{$r->gtext.url}</a> |
-                <input type="radio" name="bookmarks[{$foo.id}]" id="f_k_{$foo.id}" value="1" /><label for="f_k_{$foo.id}" >{$r->gtext.approve_2}</label> |
-                <input type="radio" name="bookmarks[{$foo.id}]" id="f_d_{$foo.id}" value="0" /><label for="f_d_{$foo.id}" >{$r->gtext.delete}</label> |
+                <input type="radio" name="bookmarks[{$foo.id}]" id="f_k_{$foo.id}" value="1" /><label for="f_k_{$foo.id}" > {$r->gtext.approve_2}</label> |
+                <input type="radio" name="bookmarks[{$foo.id}]" id="f_d_{$foo.id}" value="0" /><label for="f_d_{$foo.id}" > {$r->gtext.delete}</label> |
                 <em>{$r->gtext.suggested} <a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a></em>
             </div>
 
@@ -50,7 +50,7 @@
 
         {/foreach}
     {else}
-        {$r->gtext.nothing}
+        <p>{$r->gtext.nothing}</p>
     {/if}
 
 
