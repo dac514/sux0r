@@ -31,12 +31,15 @@
 {/if}
 
 {if $r->arr.photos}
+
+<p><em>{$r->gtext.annotate_tip}</em></p>
+
 {foreach from=$r->arr.photos item=foo}
 
     <div class="annotateItem" style="">
 
     <div style="float:left;">
-    <a href="{$r->makeUrl('/cropper/photos')}/{$foo.id}"><img src="{$r->url}/data/photos/{$foo.image|escape:'url'}?time={php}echo time();{/php}" alt="" width="{#thumbnailWidth#}" height="{#thumbnailHeight#}" border="0" /></a>
+    <a href="{$r->makeUrl('/cropper/photos')}/{$foo.id}" class="noBg"><img src="{$r->url}/data/photos/{$foo.image|escape:'url'}?time={php}echo time();{/php}" alt="" width="{#thumbnailWidth#}" height="{#thumbnailHeight#}" border="0" class="croppable" /></a>
     </div>
 
     <div class="annotateItemDesc" style="float:left;">
@@ -44,8 +47,8 @@
     </div>
 
     <div class="annotateItemOptions" style="float:right;">
-        <input type="radio" name="cover" id="cover{$foo.id}" value="{$foo.id}" {if $cover == $foo.id}checked="checked"{/if} /><label for="cover{$foo.id}">{$r->gtext.cover}</label> |
-        <input type="checkbox" name="delete[]" id="delete{$foo.id}" value="{$foo.id}" /><label for="delete{$foo.id}">{$r->gtext.delete}</label>
+        <input type="radio" name="cover" id="cover{$foo.id}" value="{$foo.id}" {if $cover == $foo.id}checked="checked"{/if} /> <label for="cover{$foo.id}">{$r->gtext.cover}</label> |
+        <input type="checkbox" name="delete[]" id="delete{$foo.id}" value="{$foo.id}" /> <label for="delete{$foo.id}">{$r->gtext.delete}</label>
     </div>
 
 
