@@ -31,7 +31,6 @@
             onmouseover="mcancelclosetime()"
             onmouseout="mclosetime()">
         <a href="#">Administration</a>
-        <hr />
         <a href="#">Publish</a>
         </div>
     </li>
