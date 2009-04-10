@@ -269,17 +269,14 @@ class suxRenderer {
     * @param array $list key => name, val => url
     * @return string the html code
     */
-    function navlist($list = null) {
-
+    static function navlist($list = null) {
 
         if (!is_array($list)) {
             $gtext = suxFunct::gtext();
             if (isset($gtext['navcontainer'])) $list = $gtext['navcontainer'];
         }
 
-
         if (is_array($list)) {
-
             // Make an educated guess as to which controller we are currently using?
             $compare = 'home';
             if (!empty($_GET['c'])) {
@@ -291,13 +288,18 @@ class suxRenderer {
             else $compare = ltrim($GLOBALS['CONFIG']['URL'] . "/$compare", '/');
 
             $selected = null;
-            foreach ($list as $key => $val) {
-                if ($compare && mb_strpos($val, $compare)) {
-                    $selected = $key;
-                    break;
-                }
-            }
-
+			if ($compare) {
+				foreach ($list as $key => $val) {
+					if (is_array($val) && mb_strpos($val[0], $compare)) { // Sub-menu
+						$selected = $key;
+						break;
+					}
+					elseif (is_string($val) && mb_strpos($val, $compare)) { // No sub-menu
+						$selected = $key;
+						break;
+					}
+				}
+			}
         }
 
         // Makeshift renderer object
@@ -310,7 +312,6 @@ class suxRenderer {
         $tpl->assign_by_ref('r', $r);
 
         return $tpl->fetch('navlist.tpl');
-
 
     }
 
@@ -420,6 +421,21 @@ class suxRenderer {
 // -------------------------------------------------------------------------
 // Smarty {insert} functions
 // -------------------------------------------------------------------------
+
+/**
+* Render navlist
+*
+* @param array $params smarty {insert} parameters
+* @return string html
+*/
+function insert_navlist() {
+
+    unset($params); // Not used
+
+	return suxRenderer::navlist();
+
+}
+
 
 /**
 * Render userInfo

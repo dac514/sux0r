@@ -14,50 +14,7 @@
 
                 <h1 onclick="document.location='{$r->makeUrl('/home')}'" style="cursor:pointer">sux0r - it sux0rs up all the web</h1>
                 {insert name="userInfo"}
-                {* $r->navlist() *}
-
-
-
-
-<div id="navcontainer">
-<ul id="navlist">
-
-    <li><a href="{$r->url}/home"class="selected">Home</a></li>
-
-    <li><a href="{$r->url}/blog"
-        onmouseover="mopen('m1')"
-        onmouseout="mclosetime()">Blog</a>
-        <div id="m1"
-            onmouseover="mcancelclosetime()"
-            onmouseout="mclosetime()">
-        <a href="#">Administration</a>
-        <a href="#">Publish</a>
-        </div>
-    </li>
-
-    <li><a href="{$r->url}/feeds">Feeds</a></li>
-
-    <li><a href="{$r->url}/bookmarks"
-        onmouseover="mopen('m2')"
-        onmouseout="mclosetime()">Bookmarks</a>
-        <div id="m2"
-            onmouseover="mcancelclosetime()"
-            onmouseout="mclosetime()">
-        <a href="#">Un</a>
-        <a href="#">Deux Deux Deux</a>
-        <a href="#">Trois</a>
-        <a href="#">Quatre</a>
-        </div>
-    </li>
-
-    <li><a href="{$r->url}/photos">Photos</a></li>
-    <li><a href="{$r->url}/photos">Sourcecode</a></li>
-
-</ul>
-</div>
-<div class="clearboth"></div>
-
-
+				{insert name="navlist"}
 
 			</div>
             <div class="clearboth"></div>

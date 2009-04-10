@@ -55,7 +55,8 @@
 
                 <h1 onclick="document.location='{$r->makeUrl('/home')}'" style="cursor:pointer">{$r->gtext.header|lower}</h1>
                 {insert name="userInfo"}
-                {$r->navlist()}
+                {insert name="navlist"}
+
                 <div class="clearboth"></div>
                 {insert name="editLinks" div=true}
 			</div>
