@@ -10,7 +10,7 @@
 require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
-require_once(dirname(__FILE__) . '/../bayes/bayesUser.php');
+require_once(dirname(__FILE__) . '/../../extensions/bayesUser.php');
 require_once(dirname(__FILE__) . '/../bayes/bayesRenderer.php');
 
 

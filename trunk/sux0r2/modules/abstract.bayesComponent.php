@@ -8,7 +8,7 @@
 */
 
 require_once(dirname(__FILE__) . '/abstract.component.php');
-require_once(dirname(__FILE__) . '/bayes/bayesUser.php');
+require_once(dirname(__FILE__) . '/../extensions/bayesUser.php');
 
 
 abstract class bayesComponent extends component {

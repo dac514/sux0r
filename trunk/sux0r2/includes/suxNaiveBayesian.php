@@ -13,7 +13,7 @@
 
 // User/link intergration is purposely left out of this class for reusability
 // reasons. An extended version of this class, with user integration, is
-// located in ./modules/bayes/bayesUser.php
+// located in ./extensions/bayesUser.php
 
 require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
 

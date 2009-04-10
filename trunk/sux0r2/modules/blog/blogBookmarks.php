@@ -12,7 +12,6 @@ require_once(dirname(__FILE__) . '/../abstract.component.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
 require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
-require_once(dirname(__FILE__) . '/../bayes/bayesUser.php');
 
 
 class blogBookmarks extends component {
@@ -23,8 +22,6 @@ class blogBookmarks extends component {
     // Object: suxThreadedMessages()
     protected $msg;
 
-    // Object: bayesUser()
-    protected $nb;
 
     // Object: suxBookmarks()
     protected $bookmarks;
@@ -41,7 +38,6 @@ class blogBookmarks extends component {
     function __construct($id) {
 
         // Declare objects
-        $this->nb = new bayesUser();
         $this->msg = new suxThreadedMessages();
         $this->bookmarks = new suxBookmarks();
         $this->r = new blogRenderer($this->module); // Renderer

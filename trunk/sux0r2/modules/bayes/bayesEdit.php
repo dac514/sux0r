@@ -8,7 +8,7 @@
 */
 
 require_once('bayesRenderer.php');
-require_once('bayesUser.php');
+require_once(dirname(__FILE__) . '/../../extensions/bayesUser.php');
 require_once(dirname(__FILE__) . '/../abstract.component.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 
