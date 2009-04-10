@@ -68,7 +68,7 @@ table#proselytizer {
     border-spacing: 8px;
     text-align: center;
     width: 972px;
-    border: 2px solid #333;
+    border: 2px solid black;
 }
 
 #header h1 {
@@ -178,7 +178,7 @@ input.button {
 }
 
 .highlight {
-    background-color: yellow;
+    background-color: #a7ffd0;
 }
 
 img.croppable {
