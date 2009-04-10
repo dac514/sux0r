@@ -11,7 +11,6 @@ require_once('blogRenderer.php');
 require_once(dirname(__FILE__) . '/../abstract.component.php');
 require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
-require_once(dirname(__FILE__) . '/../bayes/bayesUser.php');
 
 
 class blogReply extends component {
@@ -21,9 +20,6 @@ class blogReply extends component {
 
     // Object: suxThreadedMessages()
     protected $msg;
-
-    // Object: bayesUser()
-    protected $nb;
 
     // Var
     private $parent;
@@ -37,7 +33,6 @@ class blogReply extends component {
     function __construct($parent_id) {
 
         // Declare objects
-        $this->nb = new bayesUser();
         $this->msg = new suxThreadedMessages();
         $this->r = new blogRenderer($this->module); // Renderer
         suxValidate::register_object('this', $this); // Register self to validator

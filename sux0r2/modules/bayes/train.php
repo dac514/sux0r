@@ -82,7 +82,7 @@ $cat_id = $_POST['cat_id'];
 
 require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
-require_once('bayesUser.php');
+require_once(dirname(__FILE__) . '/../../extensions/bayesUser.php');
 
 $suxLink = new suxLink();
 $nb = new bayesUser();

@@ -57,7 +57,7 @@ if (get_magic_quotes_gpc() && (!ini_get('magic_quotes_sybase'))) {
     unset($in);
 }
 
-// Include suxUser and suxLog
+// Include suxUser
 require_once($GLOBALS['CONFIG']['PATH'] . '/includes/suxUser.php');
 
 // Validate user $_SESSION

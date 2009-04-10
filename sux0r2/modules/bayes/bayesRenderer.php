@@ -10,7 +10,7 @@
 require_once(dirname(__FILE__) . '/../../includes/suxSocialNetwork.php');
 require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
-require_once('bayesUser.php');
+require_once(dirname(__FILE__) . '/../../extensions/bayesUser.php');
 
 class bayesRenderer extends suxRenderer {
 
