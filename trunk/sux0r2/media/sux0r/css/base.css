@@ -297,7 +297,7 @@ img.croppable {
 #navcontainer ul {
     margin: 0;
     padding: 0;
-    z-index: 50;
+    z-index: 99;
     color: #ffffff;
     letter-spacing: 2px;
     font-weight: bold;

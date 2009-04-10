@@ -3,15 +3,20 @@
 /* Navigation menu */
 
 $gtext['navcontainer'] = array(
-
     'Home' => suxFunct::makeUrl('/home'),
-    'Blog' => suxFunct::makeUrl('/blog'),
+    'Blog' => array(
+		suxFunct::makeUrl('/blog'),
+		array(
+			'Test menu 1' => '#',
+			'Test menu 2' => '#',
+			'Test menu 3' => '#',
+			),
+		),
     'Feeds' => suxFunct::makeUrl('/feeds'),
     'Bookmarks' => suxFunct::makeUrl('/bookmarks'),
     'Photos' => suxFunct::makeUrl('/photos'),
     'Source Code' => 'http://sourceforge.net/projects/sux0r/',
-
-    );
+	);
 
 /* Copyright */
 

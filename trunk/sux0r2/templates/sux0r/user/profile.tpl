@@ -19,7 +19,7 @@
 
                 <h1>{$r->gtext.profile_of} : {$r->arr.profile.nickname}</h1>
                 {insert name="userInfo"}
-                {$r->navlist()}
+                {insert name="navlist"}
 
 			</div>
             <div class="clearboth"></div>
