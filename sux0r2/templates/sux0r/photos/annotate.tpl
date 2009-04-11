@@ -86,7 +86,7 @@
     <p>{$r->gtext.no_photos}...</p>
 {/if}
 
-<p>
+<p><br />
 <input type="button" class="button" value="{$r->gtext.cancel}" onclick="document.location='{$r->text.back_url}';" />
 <input type="submit" class="button" value="{$r->gtext.submit}" />
 </p>
