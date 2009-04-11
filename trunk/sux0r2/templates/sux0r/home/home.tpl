@@ -12,7 +12,7 @@
 		<td colspan="2" style="vertical-align:top;">
 			<div id="header">
 
-                <h1 onclick="document.location='{$r->makeUrl('/home')}'" style="cursor:pointer">sux0r - it sux0rs up all the web</h1>
+                <h1>sux0r - it sux0rs up all the web</h1>
                 {insert name="userInfo"}
 				{insert name="navlist"}
 

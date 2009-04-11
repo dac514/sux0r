@@ -45,6 +45,7 @@ $gtext['banned_continue'] = 'Klik hier om door te gaan';
 $gtext['banned_h1'] = 'Verbannen';
 $gtext['banned_p1'] = 'Je bent een slecht persoon geweest, een heel slecht persoon.';
 $gtext['continue'] = 'Doorgaan';
+$gtext['home'] = 'Home';
 $gtext['login'] = 'Inloggen';
 $gtext['logout'] = 'Uitloggen';
 $gtext['register'] = 'Registreren';
