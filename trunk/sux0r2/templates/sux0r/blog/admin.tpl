@@ -21,7 +21,9 @@
 
 {* Header *}
 <div id="header">
+    <h1>{$r->gtext.admin|lower}</h1>
     {insert name="userInfo"}
+    {insert name="navlist"}
     <div class='clearboth'></div>
 </div>
 
@@ -29,7 +31,6 @@
     <div id="middle">
 
     <fieldset>
-    <legend>{$r->gtext.admin}</legend>
 
     <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
     <input type="hidden" name="token" value="{$token}" />
@@ -47,9 +48,9 @@
     <thead>
         <tr>
             <td>{$r->gtext.title|lower}</td>
-            <td>{$r->gtext.published|lower}</td>
-            <td>{$r->gtext.thread|lower}</td>
             <td>{$r->gtext.comments|lower}</td>
+            <td>{$r->gtext.thread|lower}</td>
+            <td>{$r->gtext.published|lower}</td>
             <td>{$r->gtext.draft|lower}</td>
             <td>{$r->gtext.author|lower}</td>
             <td>{$r->gtext.delete|lower}</td>
@@ -61,9 +62,9 @@
 
     <tr style="background-color:{cycle values="#ffffff,#eeeeee"}">
         <td style="text-align: left;"><a href="{$r->makeUrl('/blog/edit')}/{$foo.id}">{$foo.title}</a></td>
-        <td>{$foo.published_on}</td>
+        <td>{if $foo.comment_count}<a href="{$r->makeUrl('/blog/view')}/{$foo.thread_id}#comments">{$foo.comment_count}</a>{/if}</td>
         <td>{$foo.thread_id}</td>
-        <td>{if $foo.comment_count}{$foo.comment_count}{/if}</td>
+        <td>{$foo.published_on}</td>
         <td>{if $foo.draft}x{/if}</td>
         <td><a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a></td>
         <td><input type="checkbox" name="delete[{$foo.thread_id}]" value="1" /></td>

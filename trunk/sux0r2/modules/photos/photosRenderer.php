@@ -150,45 +150,6 @@ class photosRenderer extends suxRenderer {
 function insert_editLinks($params) {
 
     if (!isset($_SESSION['users_id'])) return null;
-    $br = null;
-    if (isset($params['br'])) $br = '<br />';
-
-    // Check that the user is allowed to create a new album
-    $u = new suxUser();
-    $text = suxFunct::gtext('photos');
-    $html = '';
-
-    $is_root = $u->isRoot();
-    $access = $u->getAccess('photos');
-
-    if (!$is_root) {
-        if ($access < $GLOBALS['CONFIG']['ACCESS']['photos']['publisher'])
-            return null;
-    }
-
-    if ($is_root || $access >= $GLOBALS['CONFIG']['ACCESS']['photos']['admin']) {
-        $url = suxFunct::makeUrl('/photos/admin');
-        $html .= "<a href='{$url}'>{$text['admin']}</a>$br ";
-    }
-
-    $url = suxFunct::makeUrl('/photos/album/edit/');
-    $html .= "<a href='{$url}'>{$text['new']}</a>$br ";
-
-    if (isset($params['div'])) return '<div class="editLinks">' . $html . '</div>';
-    else return $html;
-
-}
-
-
-/**
-* Render edit links
-*
-* @param array $params smarty {insert} parameters
-* @return string html
-*/
-function insert_editLinks2($params) {
-
-    if (!isset($_SESSION['users_id'])) return null;
     if (empty($params['album_id'])) return null;
     if (!filter_var($params['album_id'], FILTER_VALIDATE_INT) || $params['album_id'] < 1) return null;
 

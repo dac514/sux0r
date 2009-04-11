@@ -489,41 +489,4 @@ function insert_edit($params) {
 }
 
 
-/**
-* Render admin links wrapped in <li> tag
-*
-* @param array $params smarty {insert} parameters
-* @return string html
-*/
-function insert_adminLi($params) {
-
-    if (!isset($_SESSION['users_id'])) return null;
-
-    // Check that the user is allowed to admin
-    $u = new suxUser();
-    $text = suxFunct::gtext('blog');
-    $html = '';
-
-    $is_root = $u->isRoot();
-    $access = $u->getAccess('blog');
-
-    if (!$is_root) {
-        if ($access < $GLOBALS['CONFIG']['ACCESS']['blog']['publisher'])
-            return null;
-    }
-
-    if ($is_root || $access >= $GLOBALS['CONFIG']['ACCESS']['blog']['admin']) {
-        $url = suxFunct::makeUrl('/blog/admin');
-        $html .= "<li><a href='{$url}'>{$text['admin']}</a></li>";
-    }
-
-    $url = suxFunct::makeUrl('/blog/edit/');
-    $html .= "<li><a href='{$url}'>{$text['new']}</a></li>";
-
-    return $html;
-
-}
-
-
-
 ?>

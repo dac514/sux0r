@@ -77,7 +77,7 @@ $CONFIG['SALT'] = 'flyingturtle';
 
 // Sux0r modules may cache templates, set the duration in seconds below.
 
-$CONFIG['CACHE_LIFETIME'] = 0;
+$CONFIG['CACHE_LIFETIME'] = 900;
 
 // Timzeone, pick yours from the list available at http://php.net/manual/en/timezones.php
 

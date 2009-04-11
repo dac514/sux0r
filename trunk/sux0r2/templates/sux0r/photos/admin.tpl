@@ -21,14 +21,15 @@
 
 {* Header *}
 <div id="header">
+    <h1>{$r->gtext.admin|lower}</h1>
     {insert name="userInfo"}
+    {insert name="navlist"}
     <div class='clearboth'></div>
 </div>
 
     <div id="middle">
 
     <fieldset>
-    <legend>{$r->gtext.admin}</legend>
 
     <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
     <input type="hidden" name="token" value="{$token}" />
@@ -47,8 +48,8 @@
     <thead>
         <tr>
             <td>{$r->gtext.title|lower}</td>
-            <td>{$r->gtext.published|lower}</td>
             <td>{$r->gtext.photos|lower}</td>
+            <td>{$r->gtext.published|lower}</td>
             <td>{$r->gtext.draft|lower}</td>
             <td>{$r->gtext.publisher|lower}</td>
             <td>{$r->gtext.delete|lower}</td>
@@ -59,8 +60,8 @@
 
         <tr style="background-color:{cycle values="#ffffff,#eeeeee"}">
             <td style="text-align: left;"><a href="{$r->makeUrl('/photos/album/edit')}/{$foo.id}">{$foo.title}</a></td>
+            <td>{if $foo.photos_count}<a href="{$r->makeUrl('/photos/album/annotate')}/{$foo.id}">{$foo.photos_count}</a>{/if}</td>
             <td>{$foo.published_on}</td>
-            <td>{if $foo.photos_count}{$foo.photos_count}{/if}</td>
             <td>{if $foo.draft}x{/if}</td>
             <td><a href="{$r->makeUrl('/user/profile')}/{$foo.nickname}">{$foo.nickname}</a></td>
             <td><input type="checkbox" name="delete[{$foo.id}]" value="1" /></td>

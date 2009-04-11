@@ -21,14 +21,15 @@
 
 {* Header *}
 <div id="header">
+    <h1>{$r->gtext.admin|lower}</h1>
     {insert name="userInfo"}
+    {insert name="navlist"}
     <div class='clearboth'></div>
 </div>
 
     <div id="middle">
 
     <fieldset>
-    <legend>{$r->gtext.admin}</legend>
 
     <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
     <input type="hidden" name="token" value="{$token}" />

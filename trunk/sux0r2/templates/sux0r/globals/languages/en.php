@@ -6,17 +6,23 @@ $gtext['navcontainer'] = array(
     'Home' => suxFunct::makeUrl('/home'),
     'Blog' => array(
 		suxFunct::makeUrl('/blog'),
-		array(
-			'Test menu 1' => '#',
-			'Test menu 2' => '#',
-			'Test menu 3' => '#',
-			),
+        suxFunct::getModuleMenu('blog'),
 		),
-    'Feeds' => suxFunct::makeUrl('/feeds'),
-    'Bookmarks' => suxFunct::makeUrl('/bookmarks'),
-    'Photos' => suxFunct::makeUrl('/photos'),
+    'Feeds' => array(
+		suxFunct::makeUrl('/feeds'),
+        suxFunct::getModuleMenu('feeds'),
+		),
+    'Bookmarks' => array(
+		suxFunct::makeUrl('/bookmarks'),
+        suxFunct::getModuleMenu('bookmarks'),
+		),
+    'Photos' => array(
+		suxFunct::makeUrl('/photos'),
+        suxFunct::getModuleMenu('photos'),
+		),
     'Source Code' => 'http://sourceforge.net/projects/sux0r/',
 	);
+
 
 /* Copyright */
 

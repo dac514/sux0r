@@ -8,22 +8,15 @@
 
 {* Header *}
 <div id="header">
+    <h1>{$r->gtext.admin|lower}</h1>
     {insert name="userInfo"}
+    {insert name="navlist"}
     <div class='clearboth'></div>
 </div>
 
     <div id="middle">
 
     <fieldset>
-    <legend>{$r->gtext.admin}</legend>
-
-    <ul id="adminMenu">
-        <li><a href="{$r->makeURL('/blog/admin')}">{$r->gtext.admin_blog}</a></li>
-        <li><a href="{$r->makeURL('/photos/admin')}">{$r->gtext.admin_photos}</a></li>
-        {insert name="feedsApproveLi"}
-        {insert name="bookmarksApproveLi"}
-        <li><a href="{$r->makeURL('/admin/purge')}">{$r->gtext.admin_purge}</a></li>
-    </ul>
 
     <table class="adminTable">
     <thead>

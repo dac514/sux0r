@@ -6,6 +6,8 @@ Changed license from AGPL to GPL
 
 Refactarded all up in the code
 
+Added JavaScript menus
+
 Fixed a bug that was preventing login using WAMP
 
 Fixed a search highlighting bug

@@ -9,8 +9,6 @@
 
 require_once('adminRenderer.php');
 require_once(dirname(__FILE__) . '/../abstract.component.php');
-require_once(dirname(__FILE__) . '/../feeds/feedsRenderer.php'); // TODO: Move this out of here
-require_once(dirname(__FILE__) . '/../bookmarks/bookmarksRenderer.php'); // TODO: Move this out of here, too
 
 
 class admin extends component {

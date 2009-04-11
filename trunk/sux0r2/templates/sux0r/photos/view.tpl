@@ -49,8 +49,7 @@
 
             <div class="editLinks">
             <p>{$r->gtext.publisher}: <a href="{$r->makeURL('/user/profile')}/{$r->arr.album.nickname}">{$r->arr.album.nickname}</a></p>
-            {insert name="editLinks" br=true}
-            {insert name="editLinks2" album_id=$r->arr.album.id br=true}
+            {insert name="editLinks" album_id=$r->arr.album.id br=true}
             </div>
 
             {$r->arr.album.body_html}
