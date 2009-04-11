@@ -6,6 +6,7 @@
         width: 100px;
         margin-right: 0.5em;
         text-align: right;
+		height: 1em;
     {rdelim}
     </style>
 

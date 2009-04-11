@@ -52,6 +52,7 @@
             {insert name="editLinks" album_id=$r->arr.album.id br=true}
             </div>
 
+			<br />
             {$r->arr.album.body_html}
 
 			</div>
@@ -69,7 +70,7 @@
                     </div>
 
                     <p id="suxPhoto">
-                    {strip}{if $r->text.next_id}<a href="{$r->makeUrl('photos/view')}/{$r->text.next_id}">{else}<a href="{$r->text.back_url}">{/if}
+                    {strip}{if $r->text.next_id}<a href="{$r->makeUrl('photos/view')}/{$r->text.next_id}" class="noBg">{else}<a href="{$r->text.back_url}" class="noBg">{/if}
                     {/strip}<img class="photo" src="{$r->url}/data/photos/{$r->arr.photos.image|escape:'url'}" alt="" /></a>
                     </p>
 
