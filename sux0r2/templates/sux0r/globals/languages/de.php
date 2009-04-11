@@ -45,6 +45,7 @@ $gtext['banned_continue'] = 'Hier klicken, um fortzufahren';
 $gtext['banned_h1'] = 'Gesperrt';
 $gtext['banned_p1'] = 'Sie sind eine sehr böse, eine sehr sehr böse Person gewesen.';
 $gtext['continue'] = 'Fortfahren';
+$gtext['home'] = 'Startseite';
 $gtext['login'] = 'Einloggen';
 $gtext['logout'] = 'Ausloggen';
 $gtext['register'] = 'Registrieren';

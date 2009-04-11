@@ -17,7 +17,7 @@
 
 {* Header *}
 <div id="header">
-    <h1 onclick="document.location='{$r->makeUrl('/home')}'" style="cursor:pointer">{$r->gtext.header|lower}</h1>
+    <h1>{$r->gtext.header|lower}</h1>
     {insert name="userInfo"}
 	{insert name="navlist"}
 </div>

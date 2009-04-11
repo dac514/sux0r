@@ -44,6 +44,7 @@ $gtext['admin'] = '管理';
 $gtext['banned_continue'] = '点击此处继续';
 $gtext['banned_h1'] = '禁用';
 $gtext['banned_p1'] = '你是个坏蛋，非常非常坏。';
+$gtext['home'] = '首页';
 $gtext['continue'] = '继续';
 $gtext['login'] = '登录';
 $gtext['logout'] = '退出';
