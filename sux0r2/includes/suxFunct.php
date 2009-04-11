@@ -18,24 +18,27 @@ class suxFunct {
 
 
     // ------------------------------------------------------------------------
-    // Miscelaneous
+    // Get content
     // ------------------------------------------------------------------------
 
 
     /**
-    * Kill $_SESSION
+    * Get module menu
+    *
+    * @param string $module the name of a module
+    * @return array|bool suxRenderer::navlist() compatible data structue
     */
-    static function killSession() {
+    static function getModuleMenu($module) {
 
-        // Keep breadcrumbs
-        $tmp = array();
-        if (isset($_SESSION['breadcrumbs'])) $tmp = $_SESSION['breadcrumbs'];
+        $path_to_menu = dirname(__FILE__) . "/../modules/{$module}/menu.php";
 
-        $_SESSION = array();
-        session_destroy();
+        if (is_file($path_to_menu)) {
+            include_once($path_to_menu);
+            $funct = "{$module}_menu";
+            if (function_exists($funct)) return $funct();
+        }
 
-        @session_start();
-        $_SESSION['breadcrumbs'] = $tmp;
+        return false;
 
     }
 
@@ -55,6 +58,29 @@ class suxFunct {
             return $contents;
         }
         return false;
+    }
+
+
+    // ------------------------------------------------------------------------
+    // Miscelaneous
+    // ------------------------------------------------------------------------
+
+
+    /**
+    * Kill $_SESSION
+    */
+    static function killSession() {
+
+        // Keep breadcrumbs
+        $tmp = array();
+        if (isset($_SESSION['breadcrumbs'])) $tmp = $_SESSION['breadcrumbs'];
+
+        $_SESSION = array();
+        session_destroy();
+
+        @session_start();
+        $_SESSION['breadcrumbs'] = $tmp;
+
     }
 
 
@@ -437,7 +463,11 @@ class suxFunct {
     * @param string $partition
     * @return array $gtext
     */
-    static function gtext($module = null, $partition = 'sux0r') {
+    static function gtext($module = 'globals', $partition = 'sux0r') {
+
+        // Cache
+        static $gtext_cache = array();
+        if (isset($gtext_cache[$module])) return $gtext_cache[$module];
 
         $gtext = array();
 
@@ -448,10 +478,6 @@ class suxFunct {
             $default = $GLOBALS['CONFIG']['PATH'] . "/templates/sux0r/{$module}/languages/en.php";
             $requested = $GLOBALS['CONFIG']['PATH'] . "/templates/{$partition}/{$module}/languages/{$lang}.php";
         }
-        else {
-            $default = $GLOBALS['CONFIG']['PATH'] . "/templates/sux0r/globals/languages/en.php";
-            $requested = $GLOBALS['CONFIG']['PATH'] . "/templates/{$partition}/globals/languages/{$lang}.php";
-        }
 
         if (!is_readable($default)) return false; // no default, something is wrong
         else include($default);
@@ -459,7 +485,10 @@ class suxFunct {
         if ($lang != 'en' && is_readable($requested)) include($requested);
 
         if (!is_array($gtext) || !count($gtext)) return false; // something is wrong
-        else return $gtext;
+        else {
+            $gtext_cache[$module] = $gtext;
+            return $gtext;
+        }
 
     }
 

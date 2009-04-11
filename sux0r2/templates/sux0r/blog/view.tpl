@@ -90,7 +90,6 @@
 
                 <ul>
                 <li><a href="{$r->makeUrl('/blog/tag/cloud')}">{$r->gtext.tag_cloud}</a></li>
-                {insert name="adminLi"}
                 </ul>
 
 

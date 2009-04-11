@@ -125,7 +125,6 @@
 
             <ul>
                 {if $r->isLoggedIn()}
-                {insert name="bookmarksApproveLi"}
                 <li><a href="{insert name="myBookmarksLink"}">{$r->gtext.my_bookmarks}</a></li>
                 {/if}
                 <li><a href="{$r->makeUrl('/bookmarks/tag/cloud')}">{$r->gtext.tag_cloud}</a></li>

@@ -3,15 +3,26 @@
 /* Navigation menu */
 
 $gtext['navcontainer'] = array(
-
     '首页' => suxFunct::makeUrl('/home'),
-    '日志' => suxFunct::makeUrl('/blog'),
-    'Feeds' => suxFunct::makeUrl('/feeds'),
-    '书签' => suxFunct::makeUrl('/bookmarks'),
-    '图片' => suxFunct::makeUrl('/photos'),
+    '日志' => array(
+		suxFunct::makeUrl('/blog'),
+        suxFunct::getModuleMenu('blog'),
+		),
+    'Feeds' => array(
+		suxFunct::makeUrl('/feeds'),
+        suxFunct::getModuleMenu('feeds'),
+		),
+    '书签' => array(
+		suxFunct::makeUrl('/bookmarks'),
+        suxFunct::getModuleMenu('bookmarks'),
+		),
+    '图片' => array(
+		suxFunct::makeUrl('/photos'),
+        suxFunct::getModuleMenu('photos'),
+		),
     '源代码' => 'http://sourceforge.net/projects/sux0r/',
+	);
 
-    );
 
 /* Copyright */
 

@@ -3,15 +3,26 @@
 /* Navigation menu */
 
 $gtext['navcontainer'] = array(
-
     'Home' => suxFunct::makeUrl('/home'),
-    'Blog' => suxFunct::makeUrl('/blog'),
-    'Feeds' => suxFunct::makeUrl('/feeds'),
-    'Favorieten' => suxFunct::makeUrl('/bookmarks'),
-    'Fotos' => suxFunct::makeUrl('/photos'),
+    'Blog' => array(
+		suxFunct::makeUrl('/blog'),
+        suxFunct::getModuleMenu('blog'),
+		),
+    'Feeds' => array(
+		suxFunct::makeUrl('/feeds'),
+        suxFunct::getModuleMenu('feeds'),
+		),
+    'Favorieten' => array(
+		suxFunct::makeUrl('/bookmarks'),
+        suxFunct::getModuleMenu('bookmarks'),
+		),
+    'Fotos' => array(
+		suxFunct::makeUrl('/photos'),
+        suxFunct::getModuleMenu('photos'),
+		),
     'Source Code' => 'http://sourceforge.net/projects/sux0r/',
+	);
 
-    );
 
 /* Copyright */
 

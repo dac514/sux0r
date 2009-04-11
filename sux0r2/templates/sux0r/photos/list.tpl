@@ -80,7 +80,7 @@
                     </p>
                     <div id="truncId{$foo.id}">{$foo.body_html}</div>
                     <div class="clearboth"></div>
-                    {insert name="editLinks2" album_id=$foo.id div=true}
+                    {insert name="editLinks" album_id=$foo.id div=true}
                 {/capture}
 
                 {capture name=album_url}
@@ -124,7 +124,7 @@
                     </p>
                     <div id="truncId{$foo.id}">{$foo.body_html}</div>
                     <div class="clearboth"></div>
-                    {insert name="editLinks2" album_id=$foo.id div=true}
+                    {insert name="editLinks" album_id=$foo.id div=true}
                 {/capture}
 
                 {capture name=album_url}

@@ -216,40 +216,6 @@ function insert_myBookmarksLink($params) {
 
 
 /**
-* Render approve link between <li> tags
-*
-*/
-function insert_bookmarksApproveLi($params) {
-
-    if (!isset($_SESSION['users_id'])) return null;
-
-    // Check that the user is allowed to edit
-    $u = new suxUser();
-    if (!$u->isRoot()) {
-        $access = $u->getAccess('bookmarks');
-        if ($access < $GLOBALS['CONFIG']['ACCESS']['bookmarks']['admin']) return null;
-    }
-
-    $query = "SELECT COUNT(*) FROM bookmarks WHERE draft = true  ";
-
-    $db = suxDB::get();
-    $st = $db->prepare($query);
-    $st->execute();
-
-    $count = $st->fetchColumn();
-    $text = suxFunct::gtext('bookmarks');
-
-    $url = suxFunct::makeUrl('/bookmarks/admin/');
-    $html = "<li><a href='$url'>{$text['admin']}</a></li>\n";
-
-    $url = suxFunct::makeUrl('/bookmarks/approve/');
-    $html .= "<li><a href='$url'>{$text['approve_2']} ($count)</a></li>";
-
-    return $html;
-
-}
-
-/**
 * Render edit div
 *
 */

@@ -99,7 +99,6 @@
                 <p>{$r->gtext.actions}</p>
                 <ul>
                     {if $r->isLoggedIn()}
-                    {insert name="feedsApproveLi"}
                     <li><a href="{$r->makeUrl('/feeds/manage')}">{$r->gtext.manage}</a></li>
                     {/if}
                     <li><em><a href="{$r->makeUrl('/feeds/suggest')}">{$r->gtext.suggest} &raquo;</a></em></li>
