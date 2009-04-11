@@ -1,0 +1,100 @@
+------------------------------------------------------------------------------
+sux0r 2.0.4
+------------------------------------------------------------------------------
+
+Changed license from AGPL to GPL
+
+Refactarded all up in the code
+
+Added JavaScript menus
+
+Fixed a bug that was preventing login using WAMP
+
+Fixed a search highlighting bug
+
+Fixed a bug where Smarty would crash if an apostraphe was in $title of widget()
+
+Removed redundant security checks from several modules.
+
+Added the ability to permanently delete a user
+
+Updated symbionts: htmLawed 1.1.7.2
+
+------------------------------------------------------------------------------
+sux0r 2.0.3
+------------------------------------------------------------------------------
+
+Fallback to cURL if allow_url_fopen is disabled.
+
+HTTP Authorization fix when using PHP in CGI mode
+
+Moved inline HTML in suxRenderer() to various templates
+
+Updated symbionts: htmLawed 1.1.6, JpGraph 2.3.4
+
+------------------------------------------------------------------------------
+sux0r 2.0.2
+------------------------------------------------------------------------------
+
+General bugfixes and optimizations
+
+Various changes related to problems when clean_url was false
+
+Changed renderer variable naming conventions. It was too confusing to
+know where a variable was comming from whev everything was named
+r->text.somekey.
+
+Moved language files into template directories.
+
+Using PDO::ATTR_EMULATE_PREPARES in suxDB to handle MySql's (lack of) caching
+
+Work in progress: In an effort to improve results on skewed training data, I
+am trying to adjust the value of the fake probability to that of the average of
+the token count for the vector.
+
+Bugfix: array_merge() re-numbered keys which was causing problems with the
+redunancy checking in Naive Bayesian filtering
+
+Changes to photo templates, go to next when user clicks on an image
+
+Added ability to purge user logs and RSS feeds
+
+Moved some esoteric config options to config.advanced.php
+
+Moved LICENSE.txt to the documentation directory, updated README files
+
+Updated symbionts: htmLawed 1.1.2, Smarty 2.6.22, TinyMCE 3.2.1.1
+
+------------------------------------------------------------------------------
+sux0r 2.0.1
+------------------------------------------------------------------------------
+
+Support for microformats hcard specification in user profile page
+
+AGPL exception for templates (html/css/graphics), simple permissive terms
+
+Template tweaks: changed admin menus, sprinkled some javascript in photos, etc
+
+purge_orphans script in supplemental directory to clean up deleted images and
+corrupted link tables
+
+Ability for user to reset their lost password (TODO: translate)
+
+Support for Atom 1.0 in suxRss()
+
+Regex improvements in suxHtml2UTF8()
+
+Fixed a problem where Naive Bayesian filtering was redundantly re-scanning
+items when limit was not yet reached
+
+New option in config file allows you to turn off Naive Bayesian categorization
+and automatic bookmark scanning, in case you want to use sux0r as a vanilla
+blog. (update your config.php files accordingly)
+
+Updated symbionts: Scriptaculous 1.8.2, TinyMCE 3.2.1
+
+------------------------------------------------------------------------------
+sux0r 2.0
+------------------------------------------------------------------------------
+
+Initial incarnation

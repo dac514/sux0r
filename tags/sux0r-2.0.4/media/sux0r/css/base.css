@@ -1,0 +1,597 @@
+/* Removes all the padding and margins from every element in your page */
+* {
+    padding:0;
+    margin:0;
+}
+
+/* Normalize padding on a per element basis */
+h1, h2, h3, h4, h5, h6, p, blockquote, form, label, ul, ol, dl, fieldset, address {
+    margin-bottom: 1em;
+}
+
+/* {{{ Defaults */
+
+body {
+    margin: 0px;
+    background-color: #665c5c;
+}
+
+body, tr, td {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    text-align: left;
+}
+
+a:link, a:visited, a:active {
+    font-weight: bold;
+    color: #2d3047;
+    text-decoration: underline;
+}
+
+a:hover {
+    color: #ffffff;
+    background: #2d3047;
+}
+
+a.noBg {
+    background: none;
+}
+
+ul {
+    margin-top: 1em;
+    margin-left: 2em;
+}
+
+h1 {
+    font-size: 22px;
+}
+
+h2 {
+    font-size: 16px;
+}
+
+#encompasser {
+    margin: 0px;
+}
+
+#proselytizer {
+    width: 962px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #fdfafa;
+    border: 2px solid #333;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+#middle {
+    margin: 10px;
+}
+
+table#proselytizer {
+    border-collapse: separate;
+    border-spacing: 8px;
+    text-align: center;
+    width: 972px;
+    border: 2px solid black;
+}
+
+div#proselytizer #header {
+    width: 98%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#header h1 {
+    float: left;
+    margin: 10px;
+    background-image: url('../assets/people.gif');
+    background-position: left;
+    background-repeat: no-repeat;
+    padding-left: 40px;
+    font-size: 22px;
+    min-height: 24px;
+}
+
+#header .userinfo {
+    float: right;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+#header img.openidLogin {
+    border: 0;
+    vertical-align: middle;
+}
+
+#footer {
+    margin-top: 10px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    text-align: center;
+    background-color: #cccccc;
+    background-image: url('../assets/bg3.jpg');
+    border: 1px solid #dddddd;
+    height: 1%; /* IE6, Holly Hack */
+}
+
+.dataLicense, .dataLicense a {
+    color: #ffffff;
+}
+
+div.dataLicense {
+    margin-bottom: 10px;
+}
+
+fieldset {
+    border: 1px dashed #665c5c;
+    padding: 10px;
+}
+
+legend {
+    color: #ffffff;
+    background: #ff0000;
+    border: 1px solid #ffffff;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+	margin-bottom: 10px;
+}
+
+textarea, select, input[type="text"], input[type="password"], input[type="submit"], input[type="button"] {
+    color: #000000;
+    background: #e3e3e3;
+    border: 1px solid #333333;
+    font-size: 11px;
+}
+
+input[type="submit"], input[type="button"] {
+    border: 2px outset #cccccc;
+    width: auto;
+    padding: 0.25em;
+}
+
+input[type="radio"], input[type="checkbox"] {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
+input.button {
+    color: #ffffff;
+    background: #ff0000;
+    border: 2px outset #cccccc;
+    width: auto;
+}
+
+.errorWarning {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.error {
+    color: #ff0000;
+    font-weight: bold;
+}
+
+.clearboth {
+    clear: both;
+    height: 1px;
+    overflow: hidden;
+}
+
+#adminLink {
+    color: #cccccc;
+    margin-right: 0.4em;
+}
+
+#adminLink a {
+    color: #999999;
+}
+
+.highlight {
+    background-color: #a7ffd0;
+}
+
+img.croppable {
+    padding: 4px;
+    border: 1px dashed red;
+}
+
+
+/* }}} */
+
+
+/* {{{ Pager */
+
+.pager {
+    margin-top: 5px;
+    height: 1%; /* IE6, Holly Hack */
+}
+
+.pager a, .pager span {
+    margin-right: 5px;
+}
+
+.pager .currentPage {
+    font-weight: bold;
+}
+
+/* }}} */
+
+/* {{{ genericBayesInterface */
+
+/* Ajax trainers */
+
+.nbInterface {
+
+}
+
+.nbInterface .nbCatDropdown {
+    margin-right: 10px;
+}
+
+.nbVecTrained {
+    color: green;
+    font-weight:bold;
+}
+
+.nbCatDropdown {
+    width: auto;
+}
+
+/*  Filters */
+
+#nbf {
+    margin-top: 5px;
+    border: 1px solid white; /* IE6 Hack */
+}
+
+#nbSearchBox {
+    float: right;
+}
+
+#nbSearch {
+    width: 100px;
+}
+
+#nbfCategoriesForm, #nbfSliderForm {
+    float: left;
+}
+
+#nbfTrack {
+    float: left;
+    margin-left: 1em;
+    margin-top: 0.4em;
+    width: 100px;
+    background-color: #ccc;
+    height: 10px;
+}
+
+#nbfHandle {
+    width: 10px;
+    height: 15px;
+    background-color: #f00;
+    cursor: crosshair;
+}
+
+#nbfPercentage {
+    float: left;
+    margin-left: 0.5em;
+    margin-top: 0.4em;
+}
+
+#nbfTopButton {
+    margin-left: 0.5em;
+}
+
+#nbfThresholdButton {
+    float: left;
+    margin-left: 0.5em;
+}
+
+.nbfFilteredBy {
+    color: red;
+    margin-top: 0.5em;
+}
+
+/* }}} */
+
+
+/* {{{ Horizontal Navigation Container */
+
+#navcontainer {
+    width: 100%;
+    background-color: #ff0000;
+    float: left;
+}
+
+#navcontainer ul {
+    margin: 0;
+    padding: 0;
+    z-index: 99;
+    color: #ffffff;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+#navcontainer ul li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    float: left;
+}
+
+#navcontainer ul li a {
+    display: block;
+    margin: 0 1px 0 0;
+    padding: 4px 10px;
+    background: #ff0000;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    border-right: 1px solid #ffffff;
+}
+
+#navcontainer ul li a:hover {
+    background: #000000;
+}
+
+#navcontainer a.selected {
+    color: #cccccc;
+    background: #000000;
+}
+
+#navcontainer ul div {
+    position: absolute;
+    visibility: hidden;
+    margin: 0;
+    padding: 0;
+    background: #f0f0f0;
+    border: 1px solid #ff0000;
+}
+
+#navcontainer ul div a {
+    position: relative;
+    display: block;
+    margin: 0;
+    padding: 5px 10px;
+    width: auto;
+    white-space: nowrap;
+    text-align: left;
+    text-decoration: none;
+    background: #f0f0f0;
+    color: #000000;
+    letter-spacing: normal;
+    font-weight: normal;
+}
+
+#navcontainer ul div a:hover {
+    color: #fff;
+    background: #000000;
+
+}
+
+
+/* }}} */
+
+
+/* {{{ Vertical Menu Container */
+
+.menucontainer {
+    height: 1%; /* IE6, Holly Hack */
+}
+
+.menucontainer ul {
+    margin-left: 0;
+    padding-left: 0;
+    list-style-type: none;
+    font-weight: bold;
+}
+
+.menucontainer a {
+    display: block;
+    padding: 3px;
+    background-color: #ff0000;
+    border-bottom: 1px solid #eee;
+}
+
+.menulist li {
+    display: inline;
+}
+
+.menucontainer a:link, .menulist a:visited {
+    color: #EEE;
+    text-decoration: none;
+}
+
+.menucontainer a:hover {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.menucontainer a.selected {
+    color: #cccccc;
+    background: #000000;
+}
+
+/* }}} */
+
+
+/* {{{ Horizontal Admin Menu */
+
+ul#adminMenu {
+    margin-left: 0;
+    padding-left: 0;
+    white-space: nowrap;
+}
+
+#adminMenu li {
+    display: inline;
+    list-style-type: none;
+}
+
+#adminMenu a {
+    padding: 3px 10px;
+}
+
+#adminMenu a:link, #adminMenu a:visited {
+    color: #fff;
+    background-color: #000;
+    text-decoration: none;
+}
+
+#adminMenu a:hover {
+    color: #fff;
+    background-color: #369;
+    text-decoration: none;
+}
+
+
+/* }}} */
+
+
+/* {{{ Widget */
+
+.widget {
+    border-top: 3px solid #dddddd;
+    border-right: 3px solid #dddddd;
+    border-bottom: 3px solid #dddddd;
+    border-left: 3px solid #dddddd;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.widget h2 {
+    font-size: 17px;
+    background-image: url('../assets/bg2.jpg');
+    background-color: #cccccc;
+    color: #000000;
+    margin: 0px 0px 20px 0px;
+    padding: 5px 0px 5px 5px;
+    border-bottom: 1px solid black;
+    height: 1%; /* IE6, Holly Hack */
+}
+
+.widget h2 a:link, .widget h2 a:visited, .widget h2 a:active {
+    text-decoration: none;
+}
+
+.widget .widgetContent {
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 1%; /* IE6, Holly Hack */
+    font-size: 12px;
+    line-height: 130%;
+}
+
+.widget .widgetContent h2 {
+    background-color: #ffffff;
+    color: #000000;
+    margin: 0px;
+    padding: 0px;
+    border: none;
+}
+
+.widget .floatright {
+    float: right;
+    margin: 0 0 10px 10px;
+    background-color: #ffffff;
+    padding: 10px;
+    border-top: 1px solid #999999;
+    border-right: 2px solid #555555;
+    border-bottom: 2px solid #555555;
+    border-left: 1px solid #999999;
+    margin-right: 10px;
+}
+
+.widget div.floatright img {
+    border-top: 2px solid #555555;
+    border-right: 1px solid #999999;
+    border-bottom: 1px solid #999999;
+    border-left: 2px solid #555555;
+}
+
+.widget .floatleft {
+    float: left;
+    margin: 0 0 10px 10px;
+    background-color: #ffffff;
+    padding: 10px;
+    border-top: 1px solid #999999;
+    border-right: 2px solid #555555;
+    border-bottom: 2px solid #555555;
+    border-left: 1px solid #999999;
+    margin-right: 10px;
+}
+
+.widget div.floatleft img {
+    border-top: 2px solid #555555;
+    border-right: 1px solid #999999;
+    border-bottom: 1px solid #999999;
+    border-left: 2px solid #555555;
+}
+
+/* Bottom Corners */
+
+b.bb, b.bb b {
+    display: block;
+    height: 10px;
+    font-size: 1px;
+    background:url(../assets/corners.gif) no-repeat;
+    position:relative;
+}
+
+b.bb {
+    background-position:0 0px;
+    top:3px;
+    left: -3px;
+}
+
+b.bb b {
+    background-position:100% -10px;
+    left: 6px;
+}
+
+/* }}} */
+
+/* {{{ Admin table */
+
+.adminTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.adminTable td, .adminTable th {
+    padding: 4px;
+}
+
+.adminTable thead tr td {
+    border: 1px solid #666666;
+    background-color: #d0b8b8;
+    text-align: center;
+}
+
+.adminTable tbody tr td {
+    border: 1px solid #666666;
+    text-align: center;
+}
+
+.adminTable .selected {
+    background-color: yellow;
+}
+
+/* }}} */
+
+
+pre {
+    /* Linewrap */
+    white-space: pre-wrap; /* css-3 */
+    white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    word-wrap: break-word; /* Internet Explorer 5.5+ */
+    width: 99%;
+}
+
+

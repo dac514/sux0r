@@ -1,0 +1,292 @@
+<HTML
+><HEAD
+><TITLE
+>{popup_init}</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Custom Functions"
+HREF="language.custom.functions.html"><LINK
+REL="PREVIOUS"
+TITLE="{popup}"
+HREF="language.function.popup.html"><LINK
+REL="NEXT"
+TITLE="{textformat}"
+HREF="language.function.textformat.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.function.popup.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 8. Custom Functions</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.function.textformat.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.function.popup.init"
+></A
+>{popup_init}</H1
+><P
+>&#13;  <A
+HREF="language.function.popup.html"
+><TT
+CLASS="varname"
+>{popup}</TT
+></A
+>
+  is an integration of
+  <A
+HREF="http://www.bosrup.com/web/overlib/"
+TARGET="_top"
+>overLib</A
+>, a library used for popup
+  windows. These are used for context sensitive information, such as
+  help windows or tooltips.
+  </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;  <TT
+CLASS="varname"
+>{popup_init}</TT
+> must be called <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>only once</I
+></SPAN
+>,
+  preferably within the <TT
+CLASS="literal"
+>&#60;head&#62;</TT
+> tag
+ within any page you plan on using the <A
+HREF="language.function.popup.html"
+>&#13; <TT
+CLASS="varname"
+>{popup}</TT
+></A
+> function.
+ </P
+></LI
+><LI
+><P
+>&#13; The path is relative to the executing script or a fully qualified domain
+ path, ie not the relative to the template.
+</P
+></LI
+><LI
+><P
+>&#13;  <A
+HREF="http://www.bosrup.com/web/overlib/"
+TARGET="_top"
+>overLib</A
+>  is written and maintained by
+  Erik Bosrup, and the homepage/download is at
+  <A
+HREF="http://www.bosrup.com/web/overlib/"
+TARGET="_top"
+>http://www.bosrup.com/web/overlib/</A
+>.
+ </P
+></LI
+></UL
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN4672"
+></A
+><P
+><B
+>Example 8-26. {popup_init}</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#60;head&#62;
+{* popup_init must be called once at the top of the page *}
+{popup_init src='javascripts/overlib/overlib.js'}
+
+{* fully qualified url example *}
+{popup_init src='http://myserver.org/my_js_libs/overlib/overlib.js'}
+&#60;/head&#62;
+
+// the first example will output
+&#60;head&#62;
+&#60;div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"&#62;&#60;/div&#62;
+&#60;script type="text/javascript" language="JavaScript" src="javascripts/overlib/overlib.js"&#62;&#60;/script&#62;
+&#60;/head&#62;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>XHTML validation: </B
+>The <TT
+CLASS="literal"
+>{popup_init}</TT
+> does not validate with
+strict and you will get the error
+<TT
+CLASS="literal"
+>document type does not allow element "div" here;</TT
+>
+(ie a <TT
+CLASS="literal"
+>&#60;div&#62;</TT
+> tag in the <TT
+CLASS="literal"
+>&#60;head&#62;</TT
+>).
+
+This means you will need to include the <TT
+CLASS="literal"
+>&#60;script&#62;</TT
+> and
+<TT
+CLASS="literal"
+>&#60;div&#62;</TT
+> tags manually.
+</P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.function.popup.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.function.textformat.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>{popup}</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.custom.functions.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>{textformat}</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

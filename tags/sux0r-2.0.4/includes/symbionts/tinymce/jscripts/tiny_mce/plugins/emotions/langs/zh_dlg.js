@@ -1,0 +1,20 @@
+tinyMCE.addI18n('zh.emotions_dlg',{
+title:" \r\n\u63D2\u5165\u8868\u60C5\u7B26\u53F7 \r\n",
+desc:" \r\n\u8868\u60C5\u7B26\u53F7\u522B \r\n",
+cool:" \r\n\u51B7\u9177 \r\n",
+cry:" \r\n\u54ED\u6CE3 \r\n",
+embarassed:" \r\n\u5C34\u5C2C \r\n",
+foot_in_mouth:" \r\n\u54A7\u5634 \r\n",
+frown:" \r\n\u76B1\u7709 \r\n",
+innocent:" \r\n\u5929\u771F \r\n",
+kiss:" \r\n\u543B \r\n",
+laughing:" \r\n\u5927\u7B11 \r\n",
+money_mouth:" \r\n\u53D1\u8D22 \r\n",
+sealed:" \r\n\u4FDD\u5BC6 \r\n",
+smile:" \r\n\u5FAE\u7B11 \r\n",
+surprised:" \r\n\u60CA\u5413 \r\n",
+tongue_out:" \r\n\u5410\u820C\u5934 \r\n",
+undecided:" \r\n\u8003\u8651 \r\n",
+wink:" \r\n\u7728\u773C \r\n",
+yell:" \r\n\u53EB\u56B7 \r\n"
+});
