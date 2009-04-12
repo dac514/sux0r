@@ -37,7 +37,11 @@ a.noBg {
     background: none;
 }
 
-ul {
+p {
+    margin-top: 0.5em;
+}
+
+ul, ol {
     margin-top: 1em;
     margin-left: 2em;
 }
