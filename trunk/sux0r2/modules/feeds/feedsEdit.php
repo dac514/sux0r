@@ -41,6 +41,8 @@ class feedsEdit extends component {
         suxValidate::register_object('this', $this); // Register self to validator
         parent::__construct(); // Let the parent do the rest
 
+        // Declare properties
+        $this->rss->setPublished(null);
 
         if ($id) {
             if (!filter_var($id, FILTER_VALIDATE_INT) || $id < 1)
@@ -94,7 +96,7 @@ class feedsEdit extends component {
 
             // Editing a feed
 
-            $tmp = $this->rss->getFeedByID($this->id, true);
+            $tmp = $this->rss->getFeedByID($this->id);
 
             $feed['id'] = $tmp['id'];
             $feed['title'] = $tmp['title'];
