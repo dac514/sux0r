@@ -49,11 +49,11 @@ if (!$prob) {
 </head>
 <body>
 
-    <p><pre><?php echo $prob; ?></pre></p>
+    <pre><?php echo $prob; ?></pre>
 
     <?php if ($continue) { ?>
     <p><a href="<?php echo $GLOBALS['CONFIG']['URL']; ?>"><?php echo $GLOBALS['CONFIG']['TITLE']; ?> &raquo;</a></p>
-    <? } ?>
+    <?php } ?>
 
 </body>
 </html>
