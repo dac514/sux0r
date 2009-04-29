@@ -51,15 +51,15 @@ class suxNaiveBayesian {
 
     }
 
+
     /**
     * Destructor
     */
     function __destruct() {
 
 		if (self::$destroyed == true) return; // Avoid cleaning the cache multiple times
-
 		$this->cleanCache();
-		self::$destroyed = true;
+        self::$destroyed = true;
 
     }
 

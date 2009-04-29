@@ -18,6 +18,11 @@
 
     <fieldset>
 
+    <ul id="adminMenu">
+    <li><a href="{$r->makeUrl('/admin/log')}">{$r->gtext.log}</a></li>
+    <li><a href="{$r->makeUrl('/admin/purge')}">{$r->gtext.admin_purge}</a></li>
+    </ul>
+
     <table class="adminTable">
     <thead>
         <tr>
