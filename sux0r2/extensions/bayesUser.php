@@ -35,6 +35,19 @@ class bayesUser extends suxNaiveBayesian {
         $this->link = new suxLink();
     }
 
+
+    /**
+    * Destructor
+    */
+    function __destruct() {
+
+		if (self::$destroyed == true) return; // Avoid cleaning the cache multiple times
+		if (!empty($_SESSION['users_id'])) parent::__destruct();
+        self::$destroyed = true;
+
+    }
+
+
     // --------------------------------------------------------------------
     // Get vectors
     // --------------------------------------------------------------------
