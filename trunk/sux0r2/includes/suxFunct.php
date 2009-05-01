@@ -268,6 +268,9 @@ class suxFunct {
 
         $href = filter_var($href, FILTER_SANITIZE_URL);
 
+        if ($_SESSION['birdfeed'] > 3) $href = suxFunct::makeUrl('/home'); // Avoid infinite redirects
+        ++$_SESSION['birdfeed'];
+
         if (!headers_sent()) {
             header("Location: $href");
         }
