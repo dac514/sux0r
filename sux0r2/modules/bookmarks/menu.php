@@ -14,7 +14,7 @@ function bookmarks_menu() {
     // Check access
     $user = new suxUser();
     if (!$user->isRoot()) {
-        $access = $user->getAccess('feeds');
+        $access = $user->getAccess('bookmarks');
         if ($access < $GLOBALS['CONFIG']['ACCESS']['bookmarks']['admin']) return null;
     }
 

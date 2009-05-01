@@ -2,6 +2,8 @@
 sux0r 2.0.x
 ------------------------------------------------------------------------------
 
+Fixed a bug with bookmarks menu
+
 Added log buttons in user administration menu
 
 Fixed: don't call suxNaiveBayesian destructor unless logged in
