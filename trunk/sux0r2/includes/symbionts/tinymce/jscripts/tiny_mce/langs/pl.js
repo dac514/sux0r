@@ -1,6 +1,6 @@
 tinyMCE.addI18n({pl:{
 common:{
-edit_confirm:"Czy chcesz usu trybu WYSIWYG dla tego pola formularza?",
+edit_confirm:"Czy chcesz u\u017Cy\u0107 trybu WYSIWYG dla tego pola formularza?",
 apply:"Zastosuj",
 insert:"Wstaw",
 update:"Aktualizuj",
@@ -77,7 +77,7 @@ advlink:{
 link_desc:"Wstaw/edytuj link"
 },
 xhtmlxtras:{
-cite_desc:"Cytat",
+cite_desc:"Osoba cytowana",
 abbr_desc:"Skr\u00F3t",
 acronym_desc:"Akronim",
 del_desc:"Usuni\u0119cie",

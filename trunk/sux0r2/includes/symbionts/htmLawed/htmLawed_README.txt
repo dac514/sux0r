@@ -1,6 +1,6 @@
 /*
-htmLawed_README.txt, 12 March 2009
-htmLawed 1.1.7.2, 12 March 2009
+htmLawed_README.txt, 23 April 2009
+htmLawed 1.1.8, 23 April 2009
 Copyright Santosh Patnaik
 GPL v3 license
 A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -733,7 +733,7 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 
   Some mis-usages (and the resulting permitted elements) that can be avoided:
 
-  *  '-*' -- none; one should rather use, e.g., the 'htmlspecialchars()' PHP function on the input than htmLawed
+  *  '-*' -- none; instead of htmLawed, one might just use, e.g., the 'htmlspecialchars()' PHP function
   *  '*, -script' -- all except 'script'; admin probably meant '*-script'
   *  '-*, a, em, strong' -- all; admin probably meant 'a, em, strong'
   *  '*' -- all; admin need not have set 'elements'
@@ -907,7 +907,9 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 
   Note that attributes specified in '$config["deny_attribute"]' are denied globally, for all elements. To deny attributes for only specific elements, '$spec' (see section:- #2.3) can be used. '$spec' can also be used to element-specifically permit an attribute otherwise denied through '$config["deny_attribute"]'.
 
-  With '$config["safe"] = 1', the 'on*' attributes are automatically disallowed.
+  With '$config["safe"] = 1' (section:- #3.6), the 'on*' attributes are automatically disallowed.
+
+  *Note*: To deny all but a few attributes globally, a simpler way to specify '$config["deny_attribute"]' would be to use the notation '* -attribute1 -attribute2 ...'. Thus, a value of '* -title -href' implies that except 'href' and 'title' (where allowed as per standards) all other attributes are to be removed. With this notation, the value for the parameter 'safe' (section:- #3.6) will have no effect on 'deny_attribute'.
 
   htmLawed (function 'hl_tag()') also:
 
@@ -966,9 +968,9 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 
   These default sets are used when '$config["schemes"]' is not set (see section:- #2.2). To over-ride the defaults, '$config["schemes"]' is defined as a string of semi-colon-separated sub-strings of type 'attribute: comma-separated schemes'. E.g., 'href: mailto, http, https; onclick: javascript; src: http, https'. For unspecified attributes, 'file', 'http' and 'https' are permitted. This can be changed by passing schemes for '*' in '$config["schemes"]'. E.g., 'href: mailto, http, https; *: https, https'.
 
-  Thus, `to allow Javascript`, one can set '$config["schemes"]' as 'href: mailto, http, https; *: https, https, javascript'.
-
   '*' can be put in the list of schemes to permit all protocols. E.g., 'style: *; img: http, https' results in protocols not being checked in 'style' attribute values. However, in such cases, any relative-to-absolute URL conversion, or vice versa, (section:- #3.4.4) is not done.
+
+  Thus, `to allow Javascript`, one can set '$config["schemes"]' as 'href: mailto, http, https; *: http, https, javascript', or 'href: mailto, http, https, javascript; *: http, https, javascript', or '*: *', and so on.
 
   As a side-note, one may find 'style: *' useful as URLs in 'style' attributes can be specified in a variety of ways, and the patterns that htmLawed uses to identify URLs may mistakenly identify non-URL text.
 
@@ -1239,7 +1241,9 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 
   `Version number - Release date. Notes`
   
-  1.1.7 - 11 March 2009. Attributes globally denied through 'deny_attribute' can be allowed element-specifically through '$spec'; '$config["style_pass"]' allowing letting through any 'style' value introduced; altered logic to catch certain types of dynamic crafted CSS expressions
+  1.1.8 - 23 April 2009. Parameter 'deny_attribute' now accepts the wild-card '*', making it simpler to specify its value when all but a few attributes are being denied; fixed a bug in interpreting '$spec'
+
+  1.1.7 - 11-12 March 2009. Attributes globally denied through 'deny_attribute' can be allowed element-specifically through '$spec'; '$config["style_pass"]' allowing letting through any 'style' value introduced; altered logic to catch certain types of dynamic crafted CSS expressions
 
   1.1.3-6 - 28-31 January - 4 February 2009. Altered logic to catch certain types of dynamic crafted CSS expressions
 
