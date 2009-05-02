@@ -47,7 +47,7 @@ dBug
 
 htmLawed
 * Path: ./htmLawed/
-* Version: 1.1.7.2
+* Version: 1.1.8
 * Licence: GPL 3
 * Website: http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/index.php
 
@@ -105,6 +105,6 @@ Stopwords
 
 TinyMCE
 * Path: ./tinymce/
-* Version: 3.2.1.1 (+ language files)
+* Version: 3.2.3 (+ language files)
 * Licence: LGPL 2.1
 * Website: http://tinymce.moxiecode.com/

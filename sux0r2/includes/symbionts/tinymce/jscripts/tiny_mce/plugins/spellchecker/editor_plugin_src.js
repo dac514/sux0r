@@ -2,7 +2,7 @@
  * $Id: editor_plugin_src.js 425 2007-11-21 15:17:39Z spocke $
  *
  * @author Moxiecode
- * @copyright Copyright Â© 2004-2008, Moxiecode Systems AB, All rights reserved.
+ * @copyright Copyright © 2004-2008, Moxiecode Systems AB, All rights reserved.
  */
 
 (function() {
@@ -131,7 +131,7 @@
 		},
 
 		_getSeparators : function() {
-			var re = '', i, str = this.editor.getParam('spellchecker_word_separator_chars', '\\s!"#$%&()*+,-./:;<=>?@[\]^_{|}Â§Â©Â«Â®Â±Â¶Â·Â¸Â»Â¼Â½Â¾Â¿Ã—Ã·Â¤\u201d\u201c');
+			var re = '', i, str = this.editor.getParam('spellchecker_word_separator_chars', '\\s!"#$%&()*+,-./:;<=>?@[\]^_{|}§©«®±¶·¸»¼½¾¿×÷¤\u201d\u201c');
 
 			// Build word separator regexp
 			for (i=0; i<str.length; i++)

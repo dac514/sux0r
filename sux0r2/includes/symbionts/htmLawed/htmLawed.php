@@ -1,7 +1,7 @@
 <?php
 
 /*
-htmLawed 1.1.7.2, 12 March 2009
+htmLawed 1.1.8, 23 April 2009
 Copyright Santosh Patnaik
 GPL v3 license
 A PHP Labware internal utility; www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -36,11 +36,13 @@ else{
 }
 $C['elements'] =& $e;
 // config attrs
-$C['deny_attribute'] = !empty($C['deny_attribute']) ? array_flip(explode(',', str_replace(array("\n", "\r", "\t", ' '), '', $C['deny_attribute']. (!empty($C['safe']) ? ',on*' : '')))) : (!empty($C['safe']) ? array('on*'=>1) : array());
-if(isset($C['deny_attribute']['on*'])){
- unset($C['deny_attribute']['on*']);
- $C['deny_attribute'] += array('onblur'=>1, 'onchange'=>1, 'onclick'=>1, 'ondblclick'=>1, 'onfocus'=>1, 'onkeydown'=>1, 'onkeypress'=>1, 'onkeyup'=>1, 'onmousedown'=>1, 'onmousemove'=>1, 'onmouseout'=>1, 'onmouseover'=>1, 'onmouseup'=>1, 'onreset'=>1, 'onselect'=>1, 'onsubmit'=>1);
+$x = !empty($C['deny_attribute']) ? str_replace(array("\n", "\r", "\t", ' '), '', $C['deny_attribute']) : '';
+$x = array_flip((isset($x[0]) && $x[0] == '*') ? explode('-', $x) : explode(',', $x. ($C['safe'] == 1 ? ',on*' : '')));
+if(isset($x['on*'])){
+ unset($x['on*']);
+ $x += array('onblur'=>1, 'onchange'=>1, 'onclick'=>1, 'ondblclick'=>1, 'onfocus'=>1, 'onkeydown'=>1, 'onkeypress'=>1, 'onkeyup'=>1, 'onmousedown'=>1, 'onmousemove'=>1, 'onmouseout'=>1, 'onmouseover'=>1, 'onmouseup'=>1, 'onreset'=>1, 'onselect'=>1, 'onsubmit'=>1);
 }
+$C['deny_attribute'] = $x;
 // config URL
 $x = (isset($C['schemes'][2]) && strpos($C['schemes'], ':')) ? strtolower($C['schemes']) : 'href: aim, feed, file, ftp, gopher, http, https, irc, mailto, news, nntp, sftp, ssh, telnet; *:file, http, https';
 $C['schemes'] = array();
@@ -394,11 +396,6 @@ for($i = count(($t = explode(';', $t))); --$i>=0;){
   if(isset($y[$x]['nomatch']) && !hl_regex($y[$x]['nomatch'])){unset($y[$x]['nomatch']);}
  }
  if(!count($y) && !count($n)){continue;}
- if(!isset($n['*'])){
-  foreach($y as $k=>$v){
-   if(!is_array($v) or !count($v)){unset($y[$k]);}
-  }
- }
  foreach(explode(',', substr($w, 0, $e)) as $v){
   if(!strlen(($v = strtolower($v)))){continue;}
   if(count($y)){$s[$v] = $y;}
@@ -496,7 +493,7 @@ global $S;
 $rl = isset($S[$e]) ? $S[$e] : array();
 $a = array(); $nfr = 0;
 foreach($aA as $k=>$v){
- if((!isset($C['deny_attribute'][$k]) or isset($rl[$k])) && ((!isset($rl['n'][$k]) && !isset($rl['n']['*'])) or isset($rl[$k])) && (isset($aN[$k][$e]) or (isset($aNU[$k]) && !isset($aNU[$k][$e])))){
+ if(((isset($C['deny_attribute']['*']) ? isset($C['deny_attribute'][$k]) : !isset($C['deny_attribute'][$k])) or isset($rl[$k])) && ((!isset($rl['n'][$k]) && !isset($rl['n']['*'])) or isset($rl[$k])) && (isset($aN[$k][$e]) or (isset($aNU[$k]) && !isset($aNU[$k][$e])))){
   if(isset($aNE[$k])){$v = $k;}
   elseif(!empty($lcase) && (($e != 'button' or $e != 'input') or $k == 'type')){ // Rather loose but ?not cause issues
    $v = (isset($aNL[($v2 = strtolower($v))])) ? $v2 : $v;
@@ -693,7 +690,7 @@ return str_replace(array("\x01", "\x02", "\x03", "\x04", "\x05", "\x07"), array(
 
 function hl_version(){
 // rel
-return '1.1.7.2';
+return '1.1.8';
 // eof
 }
 
