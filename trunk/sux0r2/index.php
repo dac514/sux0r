@@ -77,10 +77,8 @@ if (!isset($_SESSION['breadcrumbs'])) $_SESSION['breadcrumbs'] = array();
 array_unshift($_SESSION['breadcrumbs'], $crumb);
 $_SESSION['breadcrumbs'] = array_unique($_SESSION['breadcrumbs']);
 $_SESSION['breadcrumbs'] = array_slice($_SESSION['breadcrumbs'], 0, 10); // maximum 10
-$_SESSION['birdfeed'] = 0; // Reset
+$_SESSION['birdfeed'] = 0; // Reset, used to prevent infinite redirects
 
 // new dBug($_SESSION);
-// new dBug($_SESSION['breadcrumbs']);
-// new dBug($_SESSION['birdfeed']);
 
 ?>
