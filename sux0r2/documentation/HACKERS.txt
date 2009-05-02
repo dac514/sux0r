@@ -76,11 +76,6 @@ Modules. You got ideas? We got a lack of implemented ideas! Go for it!
 
 Optimizations. Patches welcome.
 
-Stats and graphs. Currently we use JpGraph to generate captchas. This is
-overkill. JpGraph is foresight combined with laziness. Statistical
-representation of sux0r data using JpGraph is something I encourage coders to
-explore.
-
 
 ### IDEAS? ###
 

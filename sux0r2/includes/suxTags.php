@@ -30,9 +30,9 @@ class suxTags {
 
 
     /**
-    * Get a bookmark by id or URL
+    * Get a tag by id or word
     *
-    * @param int|string $id bookmard id or url
+    * @param int|string $id id or word
     * @return array|false
     */
     function getByID($id) {
