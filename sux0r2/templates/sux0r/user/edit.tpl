@@ -179,12 +179,17 @@
         {/capture}
     {/strip}
     <label {if $smarty.capture.error}class="error"{/if} >* {$r->gtext.captcha} :</label>
-    <img src="{$r->url}/modules/captcha/getImage.php" alt="Captcha" style="margin-bottom: 0.5em;" />
-    <br />
+
+	<div>
+	<img src="{$r->url}/modules/captcha/getImage.php?sid={php}echo md5(uniqid(time()));{/php}" alt="Captcha" border="0" />
+	<a href="{$r->url}/modules/captcha/getSound.php"><img src="{$r->url}/includes/symbionts/securimage/images/audio_icon.gif" alt="Audio Version"  border="0" /></a>
+	</div>
+
     <label>&nbsp;</label>
     <input type="text" name="captcha" class="captcha"/>
     {$smarty.capture.error}
     </p>
+	<div class="clearboth"></div>
 {/if}
 
 <p>

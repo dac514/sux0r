@@ -1,34 +1,22 @@
 <?php
 
-// TODO:
-// Make this accessible for the visually impaired
-
-require_once(dirname(__FILE__) . '/../../includes/symbionts/jpgraph/src/jpgraph_antispam.php');
-
-function getChallenge() {
-
-    // Note: Don't use '0' (digit) or 'O' (letter) to avoid confusion
-    $possible = '123456789ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijklmnpqrstuvwxyz';
-    $code = '';
-    for ($i = 0; $i < 5; ++$i) {
-        $code .= substr($possible, mt_rand(0, strlen($possible)-1), 1);
-    }
-    return $code;
-
-}
+error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING); // Wimpy mode
 
 ini_set('session.use_only_cookies', true);
 session_start();
 
-$captcha = new AntiSpam();
+require_once(dirname(__FILE__) . '/../../includes/symbionts/securimage/securimage.php');
 
-$challenge = getChallenge();
-$chars = $captcha->Set($challenge);
+$image = new Securimage();
 
-if ($captcha->Stroke() === false ) {
-    die('Illegal or no data to plot');
-}
+// Set some variables
+$image->use_wordlist = false;
+$image->gd_font_file = realpath(dirname(__FILE__) . '/../../includes/symbionts/securimage/gdfonts/bublebath.gdf');
+$image->ttf_file =  realpath(dirname(__FILE__) . '/../../includes/symbionts/securimage/elephant.ttf');
 
-$_SESSION['captcha'] = $challenge;
+$image->show();
+
+// Use our own session variable
+$_SESSION['captcha'] = $image->getCode();
 
 ?>
