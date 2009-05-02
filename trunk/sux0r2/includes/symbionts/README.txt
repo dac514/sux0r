@@ -52,13 +52,6 @@ htmLawed
 * Website: http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/index.php
 
 
-JpGraph
-* Path: ./jpgraph/
-* Version: 2.3.4
-* Licence: QPL 1.0
-* Website: http://www.aditus.nu/jpgraph/
-
-
 PHP Calendar
 * Path: ./calendar.php
 * Version: 2.3
@@ -71,6 +64,14 @@ Scriptaculous
 * Version: 1.8.2
 * Licence: MIT
 * Website: http://script.aculo.us/
+
+
+Securimage
+* Path: ./securimage/
+* Version: 1.0.3.1
+* Licence: GPL 2.1 or any later version
+* Website: http://www.phpcaptcha.org/
+
 
 Smarty
 * Path: ./Smarty/
