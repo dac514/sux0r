@@ -2,20 +2,21 @@
 sux0r 2.0.5
 ------------------------------------------------------------------------------
 
-Removed jpGraph. It was taking too much space and was not being used.
-
-Migrated captcha from jpGraph to Securimage
-
 Fixed a rare infinite redirect problem
 
 Fixed a bug with bookmarks menu
 
 Added log buttons in user administration menu
 
-Fixed: don't call suxNaiveBayesian destructor unless logged-in
+Optimized: don't call suxNaiveBayesian destructor unless logged-in
 
 Fixed bug #2754647: Can't Edit Un-approved Feed
 
+Migrated captcha from jpGraph to Securimage
+
+Removed symbiont jpGraph. It was taking too much space and was not being used.
+
+Updated symbionts: htmLawed 1.1.8, TinyMCE 3.2.3
 
 ------------------------------------------------------------------------------
 sux0r 2.0.4
