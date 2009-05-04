@@ -1,0 +1,197 @@
+<HTML
+><HEAD
+><TITLE
+>Writing Plugins</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Extending Smarty With Plugins"
+HREF="plugins.html"><LINK
+REL="PREVIOUS"
+TITLE="Naming Conventions"
+HREF="plugins.naming.conventions.html"><LINK
+REL="NEXT"
+TITLE="Template Functions"
+HREF="plugins.functions.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="plugins.naming.conventions.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 16. Extending Smarty With Plugins</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="plugins.functions.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="plugins.writing"
+></A
+>Writing Plugins</H1
+><P
+>&#13;     Plugins can be either loaded by Smarty automatically from the
+     filesystem or they can be registered at runtime via one of the
+     register_* API functions. They can also be unregistered by using
+     unregister_* API functions.
+    </P
+><P
+>&#13;     For the plugins that are registered at runtime, the name of the plugin
+     function(s) does not have to follow the naming convention.
+    </P
+><P
+>&#13;     If a plugin depends on some functionality provided by another plugin
+     (as is the case with some plugins bundled with Smarty), then the proper
+     way to load the needed plugin is this:
+    </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #007700">require_once&nbsp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">_get_plugin_filepath</span><span style="color: #007700">(</span><span style="color: #DD0000">'function'</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'html_options'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+><P
+>&#13;     As a general rule, Smarty object is always passed to the plugins
+     as the last parameter with two exceptions:
+     </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;     modifiers do not get passed the Smarty object at all
+     </P
+></LI
+><LI
+><P
+>&#13;     blocks get passed
+     <TT
+CLASS="parameter"
+><I
+>$repeat</I
+></TT
+> after the Smarty object to keep
+     backwards compatibility to older versions of Smarty.
+     </P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="plugins.naming.conventions.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="plugins.functions.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Naming Conventions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="plugins.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Template Functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

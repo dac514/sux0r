@@ -1,0 +1,275 @@
+<HTML
+><HEAD
+><TITLE
+>Output Filters</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Advanced Features"
+HREF="advanced.features.html"><LINK
+REL="PREVIOUS"
+TITLE="Postfilters"
+HREF="advanced.features.postfilters.html"><LINK
+REL="NEXT"
+TITLE="Cache Handler Function"
+HREF="section.template.cache.handler.func.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="advanced.features.postfilters.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 15. Advanced Features</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="section.template.cache.handler.func.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="advanced.features.outputfilters"
+></A
+>Output Filters</H1
+><P
+>&#13;    When the template is invoked via
+    <A
+HREF="api.display.html"
+><TT
+CLASS="varname"
+>display()</TT
+></A
+> or
+    <A
+HREF="api.fetch.html"
+><TT
+CLASS="varname"
+>fetch()</TT
+></A
+>, its output can
+    be  sent through one or more output filters. This differs from
+    <A
+HREF="advanced.features.postfilters.html"
+>&#13;    <TT
+CLASS="varname"
+>postfilters</TT
+></A
+>
+    because postfilters operate on compiled templates before they are saved to
+    the disk, whereas output filters operate on the template output when it is
+    executed.
+   </P
+><P
+>&#13;    Output filters can be either
+    <A
+HREF="api.register.outputfilter.html"
+>registered</A
+> or loaded
+    from the
+    <A
+HREF="variable.plugins.dir.html"
+>plugins directory</A
+> by using the
+    <A
+HREF="api.load.filter.html"
+><TT
+CLASS="varname"
+>load_filter()</TT
+></A
+>
+    method or by setting the  <A
+HREF="variable.autoload.filters.html"
+>&#13;    <TT
+CLASS="parameter"
+><I
+>$autoload_filters</I
+></TT
+></A
+> variable.
+    Smarty will pass the template output as the first argument,
+    and expect the function to return the result of the processing.
+   </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN7068"
+></A
+><P
+><B
+>Example 15-4. Using a template outputfilter</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #FF8000">//&nbsp;put&nbsp;this&nbsp;in&nbsp;your&nbsp;application<br /></span><span style="color: #007700">function&nbsp;</span><span style="color: #0000BB">protect_email</span><span style="color: #007700">(</span><span style="color: #0000BB">$tpl_output</span><span style="color: #007700">,&nbsp;&amp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">)<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$tpl_output&nbsp;</span><span style="color: #007700">=<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">preg_replace</span><span style="color: #007700">(</span><span style="color: #DD0000">'!(\S+)@([a-zA-Z0-9\.\-]+\.([a-zA-Z]{2,3}|[0-9]{1,3}))!'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'$1%40$2'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$tpl_output</span><span style="color: #007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span style="color: #0000BB">$tpl_output</span><span style="color: #007700">;<br />}<br /><br /></span><span style="color: #FF8000">//&nbsp;register&nbsp;the&nbsp;outputfilter<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">register_outputfilter</span><span style="color: #007700">(</span><span style="color: #DD0000">'protect_email'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">);<br /><br /></span><span style="color: #FF8000">//&nbsp;now&nbsp;any&nbsp;occurrence&nbsp;of&nbsp;an&nbsp;email&nbsp;address&nbsp;in&nbsp;the&nbsp;template&nbsp;output&nbsp;will&nbsp;have<br />//&nbsp;a&nbsp;simple&nbsp;protection&nbsp;against&nbsp;spambots<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;   See also
+   <A
+HREF="api.register.outputfilter.html"
+><TT
+CLASS="varname"
+>register_outpurfilter()</TT
+></A
+>,
+   <A
+HREF="api.load.filter.html"
+><TT
+CLASS="varname"
+>load_filter()</TT
+></A
+>,
+   <A
+HREF="variable.autoload.filters.html"
+><TT
+CLASS="parameter"
+><I
+>$autoload_filters</I
+></TT
+></A
+>,
+   <A
+HREF="advanced.features.postfilters.html"
+>postfilters</A
+> and
+   <A
+HREF="variable.plugins.dir.html"
+><TT
+CLASS="parameter"
+><I
+>$plugins_dir</I
+></TT
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="advanced.features.postfilters.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="section.template.cache.handler.func.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Postfilters</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="advanced.features.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Cache Handler Function</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

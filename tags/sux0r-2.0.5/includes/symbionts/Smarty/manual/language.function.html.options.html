@@ -1,0 +1,763 @@
+<HTML
+><HEAD
+><TITLE
+>{html_options}</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Custom Functions"
+HREF="language.custom.functions.html"><LINK
+REL="PREVIOUS"
+TITLE="{html_image}"
+HREF="language.function.html.image.html"><LINK
+REL="NEXT"
+TITLE="{html_radios}"
+HREF="language.function.html.radios.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.function.html.image.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 8. Custom Functions</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.function.html.radios.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.function.html.options"
+></A
+>{html_options}</H1
+><P
+>&#13;   <TT
+CLASS="varname"
+>{html_options}</TT
+> is a
+   <A
+HREF="language.custom.functions.html"
+>custom function</A
+>
+   that creates the html <TT
+CLASS="literal"
+>&#60;select&#62;&#60;option&#62;</TT
+> group
+   with the assigned data. It takes care of which item(s) are selected by
+   default as well.
+   </P
+><DIV
+CLASS="informaltable"
+><A
+NAME="AEN3379"
+></A
+><P
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Attribute Name</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Type</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Required</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Default</TH
+><TH
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Description</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>values</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>array</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Yes, unless using options attribute</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>n/a</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>An array of values for dropdown</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>output</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>array</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Yes, unless using options attribute</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>n/a</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>An array of output for dropdown</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>selected</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string/array</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>No</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>empty</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>The selected option element(s)</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>options</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>associative array</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Yes, unless using values and output</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>n/a</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>An associative array of values and output</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>name</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>No</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>empty</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Name of select group</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+><P
+></P
+><UL
+><LI
+><P
+>&#13;   Required attributes are
+   <TT
+CLASS="parameter"
+><I
+>values</I
+></TT
+> and <TT
+CLASS="parameter"
+><I
+>output</I
+></TT
+>,
+   unless you use the combined <TT
+CLASS="parameter"
+><I
+>options</I
+></TT
+> instead.
+ </P
+></LI
+><LI
+><P
+>&#13;  If the optional <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+> attribute is given, the
+  <TT
+CLASS="literal"
+>&#60;select&#62;&#60;/select&#62;</TT
+> tags are created,
+  otherwise ONLY the <TT
+CLASS="literal"
+>&#60;option&#62;</TT
+> list is generated.
+ </P
+></LI
+><LI
+><P
+>&#13;  If a given value is an array, it will treat it as an html
+  <TT
+CLASS="literal"
+>&#60;optgroup&#62;</TT
+>, and display the groups.
+  Recursion is supported with <TT
+CLASS="literal"
+>&#60;optgroup&#62;</TT
+>.
+ </P
+></LI
+><LI
+><P
+>&#13;  All parameters that are not in the list above are printed as name/value-pairs
+  inside the <TT
+CLASS="literal"
+>&#60;select&#62;</TT
+> tag. They are ignored if
+  the optional <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+> is not given.
+ </P
+></LI
+><LI
+><P
+>&#13;	All output is XHTML compliant.
+	</P
+></LI
+></UL
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN3450"
+></A
+><P
+><B
+>Example 8-12. Associative array with the <TT
+CLASS="varname"
+>options</TT
+> attribute</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br />$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'myOptions'</span><span style="color: #007700">,&nbsp;array(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">1800&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Joe&nbsp;Schmoe'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">9904&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Jack&nbsp;Smith'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">2003&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Charlie&nbsp;Brown'</span><span style="color: #007700">)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'mySelect'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">9904</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+><P
+>&#13;  The following template will generate a drop-down list.
+  Note the presence of the <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+> attribute
+  which creates the <TT
+CLASS="literal"
+>&#60;select&#62;</TT
+> tags.
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{html_options name=foo options=$myOptions selected=$mySelect}</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;   Output of the above example would be:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#60;select name="foo"&#62;
+&#60;option label="Joe Schmoe" value="1800"&#62;Joe Schmoe&#60;/option&#62;
+&#60;option label="Jack Smith" value="9904" selected="selected"&#62;Jack Smith&#60;/option&#62;
+&#60;option label="Charlie Brown" value="2003"&#62;Charlie Brown&#60;/option&#62;
+&#60;/select&#62;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN3460"
+></A
+><P
+><B
+>Example 8-13. Dropdown with seperate arrays for <TT
+CLASS="varname"
+>values</TT
+> and
+<TT
+CLASS="varname"
+>ouptut</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br />$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'cust_ids'</span><span style="color: #007700">,&nbsp;array(</span><span style="color: #0000BB">56</span><span style="color: #007700">,</span><span style="color: #0000BB">92</span><span style="color: #007700">,</span><span style="color: #0000BB">13</span><span style="color: #007700">));<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'cust_names'</span><span style="color: #007700">,&nbsp;array(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'Joe&nbsp;Schmoe'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'Jane&nbsp;Johnson'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'Charlie&nbsp;Brown'</span><span style="color: #007700">));<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'customer_id'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">92</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+><P
+>&#13;  The above arrays would be output with the following template
+  (note the use of the php <A
+HREF="http://php.net/function.count"
+TARGET="_top"
+>&#13;  <TT
+CLASS="varname"
+>count()</TT
+></A
+> function as a modifier
+  to set the select size).
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#60;select name="customer_id" size="{$cust_names|@count}"&#62;
+   {html_options values=$cust_ids output=$cust_names selected=$customer_id}
+&#60;/select&#62;</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;   The above example would output:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#60;select name="customer_id"&#62;
+    &#60;option label="Joe Schmoe" value="56"&#62;Joe Schmoe&#60;/option&#62;
+    &#60;option label="Jack Smith" value="92" selected="selected"&#62;Jane Johnson&#60;/option&#62;
+    &#60;option label="Charlie Brown" value="13"&#62;Charlie Brown&#60;/option&#62;
+&#60;/select&#62;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN3471"
+></A
+><P
+><B
+>Example 8-14. Database example (eg ADODB or PEAR)</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /><br />$sql&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'select&nbsp;type_id,&nbsp;types&nbsp;from&nbsp;contact_types&nbsp;order&nbsp;by&nbsp;type'</span><span style="color: #007700">;<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'contact_types'</span><span style="color: #007700">,</span><span style="color: #0000BB">$db</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getAssoc</span><span style="color: #007700">(</span><span style="color: #0000BB">$sql</span><span style="color: #007700">));<br /><br /></span><span style="color: #0000BB">$sql&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'select&nbsp;contact_id,&nbsp;name,&nbsp;email,&nbsp;contact_type_id<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;contacts&nbsp;where&nbsp;contact_id='</span><span style="color: #007700">.</span><span style="color: #0000BB">$contact_id</span><span style="color: #007700">;<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'contact'</span><span style="color: #007700">,</span><span style="color: #0000BB">$db</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getRow</span><span style="color: #007700">(</span><span style="color: #0000BB">$sql</span><span style="color: #007700">));<br /><br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+><P
+>&#13;Where a template could be as follows. Note the use of the
+<A
+HREF="language.modifier.truncate.html"
+><TT
+CLASS="varname"
+>truncate</TT
+></A
+>
+modifier.
+</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#60;select name="type_id"&#62;
+    &#60;option value='null'&#62;-- none --&#60;/option&#62;
+    {html_options options=$contact_types|truncate:20 selected=$contact.type_id}
+&#60;/select&#62;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN3478"
+></A
+><P
+><B
+>Example 8-15. Dropdown's with &#60;optgroup&#62; </B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br />$arr</span><span style="color: #007700">[</span><span style="color: #DD0000">'Sport'</span><span style="color: #007700">]&nbsp;=&nbsp;array(</span><span style="color: #0000BB">6&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Golf'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">9&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Cricket'</span><span style="color: #007700">,</span><span style="color: #0000BB">7&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Swim'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$arr</span><span style="color: #007700">[</span><span style="color: #DD0000">'Rest'</span><span style="color: #007700">]&nbsp;&nbsp;=&nbsp;array(</span><span style="color: #0000BB">3&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Sauna'</span><span style="color: #007700">,</span><span style="color: #0000BB">1&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Massage'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'lookups'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$arr</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'fav'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">7</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+><P
+>The script above and the following template
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{html_options name=foo options=$lookups selected=$fav}</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;   would output:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#60;select name="foo"&#62;
+&#60;optgroup label="Sport"&#62;
+&#60;option label="Golf" value="6"&#62;Golf&#60;/option&#62;
+&#60;option label="Cricket" value="9"&#62;Cricket&#60;/option&#62;
+&#60;option label="Swim" value="7" selected="selected"&#62;Swim&#60;/option&#62;
+&#60;/optgroup&#62;
+&#60;optgroup label="Rest"&#62;
+&#60;option label="Sauna" value="3"&#62;Sauna&#60;/option&#62;
+&#60;option label="Massage" value="1"&#62;Massage&#60;/option&#62;
+&#60;/optgroup&#62;
+&#60;/select&#62;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;    See also
+    <A
+HREF="language.function.html.checkboxes.html"
+><TT
+CLASS="varname"
+>{html_checkboxes}</TT
+></A
+>
+    and
+    <A
+HREF="language.function.html.radios.html"
+><TT
+CLASS="varname"
+>{html_radios}</TT
+></A
+>
+ </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.function.html.image.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.function.html.radios.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>{html_image}</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.custom.functions.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>{html_radios}</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

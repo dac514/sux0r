@@ -1,0 +1,687 @@
+<HTML
+><HEAD
+><TITLE
+>date_format</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Variable Modifiers"
+HREF="language.modifiers.html"><LINK
+REL="PREVIOUS"
+TITLE="count_words"
+HREF="language.modifier.count.words.html"><LINK
+REL="NEXT"
+TITLE="default"
+HREF="language.modifier.default.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.modifier.count.words.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 5. Variable Modifiers</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.modifier.default.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.modifier.date.format"
+></A
+>date_format</H1
+><P
+>&#13;     This formats a date and time into the given
+     <A
+HREF="http://php.net/strftime"
+TARGET="_top"
+><TT
+CLASS="varname"
+>strftime()</TT
+></A
+> format.
+     Dates can be passed to Smarty as unix
+     <A
+HREF="http://php.net/function.time"
+TARGET="_top"
+>timestamps</A
+>, mysql timestamps
+     or any string made up of month day year, parsable by php's
+     <A
+HREF="http://php.net/strtotime"
+TARGET="_top"
+><TT
+CLASS="varname"
+>strtotime()</TT
+></A
+>.
+     Designers can then use <TT
+CLASS="varname"
+>date_format</TT
+> to have complete control of the
+     formatting of the date. If the date passed to
+     <TT
+CLASS="varname"
+>date_format</TT
+> is empty  and a second parameter is passed,
+     that will be used as the date to format.
+   </P
+><DIV
+CLASS="informaltable"
+><A
+NAME="AEN836"
+></A
+><P
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Parameter Position</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Type</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Required</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Default</TH
+><TH
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Description</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>1</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>No</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>%b %e, %Y</TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>This is the format for the outputted date.</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>2</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>No</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>n/a</TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>This is the default date if the input is empty.</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+><P
+>&#13;   <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     Since Smarty-2.6.10 numeric values passed to <TT
+CLASS="varname"
+>date_format</TT
+> are
+     <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>always</I
+></SPAN
+> (except for mysql timestamps, see
+     below) interpreted as a unix timestamp.
+    </P
+><P
+>&#13;     Before Smarty-2.6.10 numeric strings that where also parsable by
+     <TT
+CLASS="varname"
+>strtotime()</TT
+> in php (like <TT
+CLASS="literal"
+>YYYYMMDD</TT
+>)
+     where sometimes (depending on the underlying implementation of
+     <TT
+CLASS="varname"
+>strtotime()</TT
+>) interpreted as
+     date strings and NOT as timestamps.
+    </P
+><P
+>&#13;     The only exception are mysql timestamps: They are also numeric
+     only and 14 characters long (<TT
+CLASS="literal"
+>YYYYMMDDHHMMSS</TT
+>),
+     mysql timestamps have precedence over unix timestamps.
+    </P
+></BLOCKQUOTE
+></DIV
+>
+      <DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Programmers note: </B
+>
+     <TT
+CLASS="varname"
+>date_format</TT
+> is essentially a wrapper to PHP's
+     <A
+HREF="http://php.net/strftime"
+TARGET="_top"
+><TT
+CLASS="varname"
+>strftime()</TT
+></A
+> function.
+     You may have more or less conversion specifiers available depending
+     on your system's <A
+HREF="http://php.net/strftime"
+TARGET="_top"
+><TT
+CLASS="varname"
+>strftime()</TT
+></A
+>
+     function where PHP was compiled. Check your
+     system's manpage for a full list of valid specifiers. However, a few of
+     the specifiers are emulated on Windows. These are: %D, %e, %h, %l, %n, 
+     %r, %R, %t, %T.
+    </P
+></BLOCKQUOTE
+></DIV
+>
+  </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN882"
+></A
+><P
+><B
+>Example 5-8. date_format</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /><br />$config</span><span style="color: #007700">[</span><span style="color: #DD0000">'date'</span><span style="color: #007700">]&nbsp;=&nbsp;</span><span style="color: #DD0000">'%I:%M&nbsp;%p'</span><span style="color: #007700">;<br /></span><span style="color: #0000BB">$config</span><span style="color: #007700">[</span><span style="color: #DD0000">'time'</span><span style="color: #007700">]&nbsp;=&nbsp;</span><span style="color: #DD0000">'%H:%M:%S'</span><span style="color: #007700">;<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'config'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$config</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'yesterday'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">strtotime</span><span style="color: #007700">(</span><span style="color: #DD0000">'-1&nbsp;day'</span><span style="color: #007700">));<br /><br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+><P
+>&#13;    This template uses <A
+HREF="language.variables.smarty.html#language.variables.smarty.now"
+>&#13;    <TT
+CLASS="parameter"
+><I
+>$smarty.now</I
+></TT
+></A
+> to get the current time:
+   </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{$smarty.now|date_format}
+{$smarty.now|date_format:"%D"}
+{$smarty.now|date_format:$config.date}
+{$yesterday|date_format}
+{$yesterday|date_format:"%A, %B %e, %Y"}
+{$yesterday|date_format:$config.time}</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;    This above will output:
+   </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>Jan 1, 2022
+01/01/22
+02:33 pm
+Dec 31, 2021
+Monday, December 1, 2021
+14:33:00</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;
+  <B
+CLASS="command"
+>date_format</B
+> conversion specifiers:
+   <P
+></P
+><UL
+><LI
+><P
+>&#13;     %a - abbreviated weekday name according to the current locale
+    </P
+></LI
+><LI
+><P
+>&#13;     %A - full weekday name according to the current locale
+    </P
+></LI
+><LI
+><P
+>&#13;     %b - abbreviated month name according to the current locale
+    </P
+></LI
+><LI
+><P
+>&#13;     %B - full month name according to the current locale
+    </P
+></LI
+><LI
+><P
+>&#13;     %c - preferred date and time representation for the current locale
+    </P
+></LI
+><LI
+><P
+>&#13;     %C - century number (the year divided by 100 and truncated to an integer, range 00 to 99)
+    </P
+></LI
+><LI
+><P
+>&#13;     %d - day of the month as a decimal number (range 01 to 31)
+    </P
+></LI
+><LI
+><P
+>&#13;     %D - same as %m/%d/%y
+    </P
+></LI
+><LI
+><P
+>&#13;     %e - day of the month as a decimal number, a single digit is preceded by a space (range 1
+     to 31)
+    </P
+></LI
+><LI
+><P
+>&#13;     %g - Week-based year within century [00,99]
+    </P
+></LI
+><LI
+><P
+>&#13;     %G - Week-based year, including the century [0000,9999]
+    </P
+></LI
+><LI
+><P
+>&#13;     %h - same as %b
+    </P
+></LI
+><LI
+><P
+>&#13;     %H - hour as a decimal number using a 24-hour clock (range 00 to 23)
+    </P
+></LI
+><LI
+><P
+>&#13;     %I - hour as a decimal number using a 12-hour clock (range 01 to 12)
+    </P
+></LI
+><LI
+><P
+>&#13;     %j - day of the year as a decimal number (range 001 to 366)
+    </P
+></LI
+><LI
+><P
+>&#13;     %k - Hour (24-hour clock) single digits are preceded by a blank. (range 0 to 23)
+    </P
+></LI
+><LI
+><P
+>&#13;     %l - hour as a decimal number using a 12-hour clock, single digits preceeded by a space
+     (range 1 to 12)
+    </P
+></LI
+><LI
+><P
+>&#13;     %m - month as a decimal number (range 01 to 12)
+    </P
+></LI
+><LI
+><P
+>&#13;     %M - minute as a decimal number
+    </P
+></LI
+><LI
+><P
+>&#13;     %n - newline character
+    </P
+></LI
+><LI
+><P
+>&#13;     %p - either `am' or `pm' according to the given time value, or the corresponding strings
+     for the
+     current locale
+    </P
+></LI
+><LI
+><P
+>&#13;     %r - time in a.m. and p.m. notation
+    </P
+></LI
+><LI
+><P
+>&#13;     %R - time in 24 hour notation
+    </P
+></LI
+><LI
+><P
+>&#13;     %S - second as a decimal number
+    </P
+></LI
+><LI
+><P
+>&#13;     %t - tab character
+    </P
+></LI
+><LI
+><P
+>&#13;     %T - current time, equal to %H:%M:%S
+    </P
+></LI
+><LI
+><P
+>&#13;     %u - weekday as a decimal number [1,7], with 1 representing Monday
+    </P
+></LI
+><LI
+><P
+>&#13;     %U - week number of the current year as a decimal number, starting with the first Sunday
+     as the first
+     day of the first week
+    </P
+></LI
+><LI
+><P
+>&#13;     %V - The ISO 8601:1988 week number of the current year as a decimal number, range 01 to
+     53, where week
+     1 is the first week that has at least 4 days in the current
+     year, and with Monday as the first day of the week.
+    </P
+></LI
+><LI
+><P
+>&#13;     %w - day of the week as a decimal, Sunday being 0
+    </P
+></LI
+><LI
+><P
+>&#13;     %W - week number of the current year as a decimal number, starting with the first Monday
+     as the first
+     day of the first week
+    </P
+></LI
+><LI
+><P
+>&#13;     %x - preferred date representation for the current locale without the time
+    </P
+></LI
+><LI
+><P
+>&#13;     %X - preferred time representation for the current locale without the date
+    </P
+></LI
+><LI
+><P
+>&#13;     %y - year as a decimal number without a century (range 00 to 99)
+    </P
+></LI
+><LI
+><P
+>&#13;     %Y - year as a decimal number including the century
+    </P
+></LI
+><LI
+><P
+>&#13;     %Z - time zone or name or abbreviation
+    </P
+></LI
+><LI
+><P
+>&#13;     %% - a literal `%' character
+    </P
+></LI
+></UL
+>
+
+  </P
+><P
+>&#13;   See also <A
+HREF="language.variables.smarty.html#language.variables.smarty.now"
+><TT
+CLASS="parameter"
+><I
+>$smarty.now</I
+></TT
+></A
+>,
+   <A
+HREF="http://php.net/strftime"
+TARGET="_top"
+><TT
+CLASS="varname"
+>strftime()</TT
+></A
+>,
+   <A
+HREF="language.function.html.select.date.html"
+><TT
+CLASS="varname"
+>{html_select_date}</TT
+></A
+>
+   and the <A
+HREF="tips.dates.html"
+>date tips</A
+> page.
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.modifier.count.words.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.modifier.default.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>count_words</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.modifiers.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>default</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

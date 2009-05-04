@@ -1,0 +1,272 @@
+<HTML
+><HEAD
+><TITLE
+>$security_settings</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Smarty Class Variables"
+HREF="api.variables.html"><LINK
+REL="PREVIOUS"
+TITLE="$secure_dir"
+HREF="variable.secure.dir.html"><LINK
+REL="NEXT"
+TITLE="$trusted_dir"
+HREF="variable.trusted.dir.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="variable.secure.dir.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 12. Smarty Class Variables</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="variable.trusted.dir.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="variable.security.settings"
+></A
+>$security_settings</H1
+><P
+>&#13;       These are used to override or specify the security settings when
+<A
+HREF="variable.security.html"
+><TT
+CLASS="parameter"
+><I
+>$security</I
+></TT
+></A
+> is enabled.
+These are the possible settings:
+      </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;  <TT
+CLASS="constant"
+>PHP_HANDLING</TT
+> - boolean. If set to <TT
+CLASS="constant"
+>TRUE</TT
+>, the
+  <A
+HREF="variable.php.handling.html"
+><TT
+CLASS="parameter"
+><I
+>$php_handling</I
+></TT
+></A
+>
+  setting is not checked for security.
+ </P
+></LI
+><LI
+><P
+>&#13;  <TT
+CLASS="constant"
+>IF_FUNCS</TT
+> - array. The names of permitted PHP functions in
+  <A
+HREF="language.function.if.html"
+><TT
+CLASS="varname"
+>{if}</TT
+></A
+> statements.
+ </P
+></LI
+><LI
+><P
+>&#13;  <TT
+CLASS="constant"
+>INCLUDE_ANY</TT
+> - boolean. If set to <TT
+CLASS="constant"
+>TRUE</TT
+>, any
+         template can be <A
+HREF="language.function.include.html"
+>included</A
+>
+          from the file system, regardless of the
+  <A
+HREF="variable.secure.dir.html"
+><TT
+CLASS="parameter"
+><I
+>$secure_dir</I
+></TT
+></A
+> list.
+ </P
+></LI
+><LI
+><P
+>&#13;  <TT
+CLASS="constant"
+>PHP_TAGS</TT
+> - boolean. If set to <TT
+CLASS="constant"
+>TRUE</TT
+>,
+  <A
+HREF="language.function.php.html"
+><TT
+CLASS="varname"
+>{php}{/php}</TT
+></A
+>
+  tags are permitted in the templates.
+ </P
+></LI
+><LI
+><P
+>&#13;  <TT
+CLASS="constant"
+>MODIFIER_FUNCS</TT
+> - array. The names of permitted
+  PHP functions that can be used as variable modifiers.
+ </P
+></LI
+><LI
+><P
+>&#13;  <TT
+CLASS="constant"
+>ALLOW_CONSTANTS</TT
+> - boolean. If set to <TT
+CLASS="constant"
+>TRUE</TT
+>, constants via
+  <A
+HREF="language.variables.smarty.html#language.variables.smarty.const"
+><TT
+CLASS="parameter"
+><I
+>{$smarty.const.FOO}</I
+></TT
+></A
+>
+  are allowed in the templates.
+ </P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="variable.secure.dir.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="variable.trusted.dir.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>$secure_dir</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="api.variables.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>$trusted_dir</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

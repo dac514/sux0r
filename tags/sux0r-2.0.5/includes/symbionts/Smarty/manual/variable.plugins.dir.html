@@ -1,0 +1,273 @@
+<HTML
+><HEAD
+><TITLE
+>$plugins_dir</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Smarty Class Variables"
+HREF="api.variables.html"><LINK
+REL="PREVIOUS"
+TITLE="$config_dir"
+HREF="variable.config.dir.html"><LINK
+REL="NEXT"
+TITLE="$debugging"
+HREF="variable.debugging.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="variable.config.dir.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 12. Smarty Class Variables</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="variable.debugging.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="variable.plugins.dir"
+></A
+>$plugins_dir</H1
+><P
+>&#13;       This is the directory or directories where Smarty will look for the
+       plugins that it needs. Default is
+       <TT
+CLASS="filename"
+>plugins/</TT
+> under the
+       <A
+HREF="smarty.constants.html#constant.smarty.dir"
+><TT
+CLASS="constant"
+>SMARTY_DIR</TT
+></A
+>.
+        If you supply a relative path, Smarty will first look under the
+       <A
+HREF="smarty.constants.html#constant.smarty.dir"
+><TT
+CLASS="constant"
+>SMARTY_DIR</TT
+></A
+>, then
+       relative to the current working directory, then relative to the PHP
+       include_path. If <TT
+CLASS="parameter"
+><I
+>$plugins_dir</I
+></TT
+>
+        is an array of directories, Smarty will
+       search for your plugin in each plugin directory
+       <SPAN
+CLASS="bold"
+><B
+CLASS="emphasis"
+>in the order they are given</B
+></SPAN
+>.
+      </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Technical Note: </B
+>
+          For best performance, do not setup your <TT
+CLASS="parameter"
+><I
+>$plugins_dir</I
+></TT
+>
+          to have to use the PHP include path. Use an absolute pathname,
+          or a path relative  to <TT
+CLASS="constant"
+>SMARTY_DIR</TT
+> or the current
+           working directory.
+          </P
+></BLOCKQUOTE
+></DIV
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN4939"
+></A
+><P
+><B
+>Example 12-1. Appending a local plugin dir</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /><br />$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">plugins_dir</span><span style="color: #007700">[]&nbsp;=&nbsp;</span><span style="color: #DD0000">'includes/my_smarty_plugins'</span><span style="color: #007700">;<br /><br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN4942"
+></A
+><P
+><B
+>Example 12-2. Multiple $plugins_dir</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /><br />$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">plugins_dir&nbsp;</span><span style="color: #007700">=&nbsp;array(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'plugins'</span><span style="color: #007700">,&nbsp;</span><span style="color: #FF8000">//&nbsp;the&nbsp;default&nbsp;under&nbsp;SMARTY_DIR<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'/path/to/shared/plugins'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'../../includes/my/plugins'<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="variable.config.dir.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="variable.debugging.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>$config_dir</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="api.variables.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>$debugging</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
