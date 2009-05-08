@@ -18,11 +18,11 @@ if (isset($_POST['id']) && filter_var($_POST['id'], FILTER_VALIDATE_INT)) {
 
         $tmp = null;
         $link = new suxLink();
-        foreach ($link->getLinkTables('bayes') as $table) {
+        foreach ($link->getLinkTables('bayes_documents') as $table) {
             $links = $link->getLinks($table, 'bayes_documents', $_POST['id']);
             if($links && count($links)) {
 
-                $table = str_replace('link_', '', $table);
+                $table = str_replace('link__', '', $table);
                 $table = str_replace('bayes', '', $table);
                 $table = str_replace('_', '', $table);
 

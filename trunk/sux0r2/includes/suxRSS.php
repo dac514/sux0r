@@ -466,16 +466,17 @@ class suxRSS extends DOMDocument {
 
         // Delete links, too
         $link = new suxLink();
-        $links = $link->getLinkTables('rss');
-        foreach ($links as $table) {
-            if ($table == 'link_rss_users')
-                $link->deleteLink($table, $link->buildColumnName($table, 'rss'), $id);
-            else {
-                foreach($result as $key => $val) {
-                    $link->deleteLink($table, $link->buildColumnName($table, 'rss'), $val['id']);
-                }
+        $links = $link->getLinkTables('rss_feeds');
+        foreach ($links as $table) {            
+            $link->deleteLink($table, 'rss_feeds', $id);            
+        }         
+        $links = $link->getLinkTables('rss_items');
+        foreach ($links as $table) {            
+            foreach($result as $key => $val) {
+                $link->deleteLink($table, 'rss_items', $val['id']);
             }
-        }
+            
+        }              
 
         suxDB::commitTransaction($tid);
         $this->inTransaction = false;

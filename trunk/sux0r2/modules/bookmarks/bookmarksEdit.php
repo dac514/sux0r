@@ -117,7 +117,7 @@ class bookmarksEdit extends component {
 
             /* Tags */
 
-            $links = $this->link->getLinks('link_bookmarks_tags', 'bookmarks', $bookmark['id']);
+            $links = $this->link->getLinks('link__bookmarks__tags', 'bookmarks', $bookmark['id']);
             $bookmark['tags'] = '';
             foreach($links as $val) {
                 $tmp = $this->tags->getByID($val);
@@ -251,11 +251,11 @@ class bookmarksEdit extends component {
         }
 
         //Delete current links
-        $this->link->deleteLink('link_bookmarks_tags', 'bookmarks', $clean['id']);
+        $this->link->deleteLink('link__bookmarks__tags', 'bookmarks', $clean['id']);
 
         // Reconnect links
         foreach ($tag_ids as $id) {
-            $this->link->saveLink('link_bookmarks_tags', 'bookmarks', $clean['id'], 'tags', $id);
+            $this->link->saveLink('link__bookmarks__tags', 'bookmarks', $clean['id'], 'tags', $id);
         }
 
         $this->log->write($_SESSION['users_id'], "sux0r::bookmarksEdit() bookmarks_id: {$clean['id']}", 1); // Private

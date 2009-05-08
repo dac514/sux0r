@@ -423,12 +423,12 @@ class suxPhoto {
         $link = new suxLink();
         $links = $link->getLinkTables('photoalbums');
         foreach ($links as $table) {
-            $link->deleteLink($table, $link->buildColumnName($table, 'photoalbums'), $id);
+            $link->deleteLink($table, 'photoalbums', $id);
         }
         $links = $link->getLinkTables('photos');
         foreach($result as $key => $val) {
             foreach ($links as $table) {
-                $link->deleteLink($table, $link->buildColumnName($table, 'photos'), $val['id']);
+                $link->deleteLink($table, 'photos', $val['id']);
             }
         }
 
@@ -689,7 +689,7 @@ class suxPhoto {
         $link = new suxLink();
         $links = $link->getLinkTables('photos');
         foreach ($links as $table) {
-            $link->deleteLink($table, $link->buildColumnName($table, 'photos'), $id);
+            $link->deleteLink($table, 'photos', $id);
         }
 
         suxDB::commitTransaction($tid);

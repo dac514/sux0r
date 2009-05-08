@@ -86,7 +86,7 @@ class feedsManage extends component  {
 
         // Subscriptions
         if (!isset($_POST['subscriptions'])) {
-            $this->r->arr['subscriptions'] = $this->link->getLinks('link_rss_users', 'users', $_SESSION['users_id']);
+            $this->r->arr['subscriptions'] = $this->link->getLinks('link__rss_feeds__users', 'users', $_SESSION['users_id']);
         }
 
         $this->r->title .= " | {$this->r->gtext['manage']}";
@@ -103,10 +103,10 @@ class feedsManage extends component  {
     */
     function formProcess(&$clean) {
 
-        $this->link->deleteLink('link_rss_users', 'users', $_SESSION['users_id']);
+        $this->link->deleteLink('link__rss_feeds__users', 'users', $_SESSION['users_id']);
 
         if (isset($clean['subscriptions']) && count($clean['subscriptions']))
-            $this->link->saveLink('link_rss_users', 'users', $_SESSION['users_id'], 'rss_feeds', $clean['subscriptions']);
+            $this->link->saveLink('link__rss_feeds__users', 'users', $_SESSION['users_id'], 'rss_feeds', $clean['subscriptions']);
 
         $this->log->write($_SESSION['users_id'], "sux0r::feedManage()",  1); // Private
 

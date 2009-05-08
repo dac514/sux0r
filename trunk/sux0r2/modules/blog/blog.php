@@ -600,8 +600,8 @@ class blog extends bayesComponent {
         // Count
         $count_query = "
         SELECT COUNT(*) FROM messages
-        INNER JOIN link_messages_tags ON link_messages_tags.messages_id = messages.id
-        WHERE link_messages_tags.tags_id = ? AND messages.thread_pos = 0 AND messages.blog = true AND {$this->msg->sqlPublished()}
+        INNER JOIN link__messages__tags ON link__messages__tags.messages_id = messages.id
+        WHERE link__messages__tags.tags_id = ? AND messages.thread_pos = 0 AND messages.blog = true AND {$this->msg->sqlPublished()}
         ";
 
         $st = $db->prepare($count_query);
@@ -618,8 +618,8 @@ class blog extends bayesComponent {
         // Get Items
         $query = "
         SELECT messages.* FROM messages
-        INNER JOIN link_messages_tags ON link_messages_tags.messages_id = messages.id
-        WHERE link_messages_tags.tags_id = ? AND messages.thread_pos = 0 AND messages.blog = true AND {$this->msg->sqlPublished()}
+        INNER JOIN link__messages__tags ON link__messages__tags.messages_id = messages.id
+        WHERE link__messages__tags.tags_id = ? AND messages.thread_pos = 0 AND messages.blog = true AND {$this->msg->sqlPublished()}
         ORDER BY {$this->msg->sqlOrder()}
         LIMIT {$limit} OFFSET {$start}
         ";
@@ -638,8 +638,8 @@ class blog extends bayesComponent {
         // Get Items
         $query = "
         SELECT messages.id, messages.thread_id, messages.title FROM messages
-        INNER JOIN link_messages_tags ON link_messages_tags.messages_id = messages.id
-        WHERE link_messages_tags.tags_id = ? AND messages.thread_pos = 0 AND messages.blog = true AND {$this->msg->sqlPublished()}
+        INNER JOIN link__messages__tags ON link__messages__tags.messages_id = messages.id
+        WHERE link__messages__tags.tags_id = ? AND messages.thread_pos = 0 AND messages.blog = true AND {$this->msg->sqlPublished()}
         ORDER BY {$this->msg->sqlOrder()}
         ";
 
@@ -662,8 +662,8 @@ class blog extends bayesComponent {
         // Count
         $count_query = "
         SELECT COUNT(*) FROM messages
-        INNER JOIN link_bayes_messages ON link_bayes_messages.messages_id = messages.id
-        INNER JOIN bayes_documents ON link_bayes_messages.bayes_documents_id = bayes_documents.id
+        INNER JOIN link__bayes_documents__messages ON link__bayes_documents__messages.messages_id = messages.id
+        INNER JOIN bayes_documents ON link__bayes_documents__messages.bayes_documents_id = bayes_documents.id
         INNER JOIN bayes_categories ON bayes_documents.bayes_categories_id = bayes_categories.id
         WHERE bayes_categories.id = ? AND messages.thread_pos = 0 AND messages.blog = true AND {$this->msg->sqlPublished()}
         ";
@@ -681,8 +681,8 @@ class blog extends bayesComponent {
         // Get Items
         $query = "
         SELECT messages.* FROM messages
-        INNER JOIN link_bayes_messages ON link_bayes_messages.messages_id = messages.id
-        INNER JOIN bayes_documents ON link_bayes_messages.bayes_documents_id = bayes_documents.id
+        INNER JOIN link__bayes_documents__messages ON link__bayes_documents__messages.messages_id = messages.id
+        INNER JOIN bayes_documents ON link__bayes_documents__messages.bayes_documents_id = bayes_documents.id
         INNER JOIN bayes_categories ON bayes_documents.bayes_categories_id = bayes_categories.id
         WHERE bayes_categories.id = ? AND messages.thread_pos = 0 AND messages.blog = true AND {$this->msg->sqlPublished()}
         ORDER BY {$this->msg->sqlOrder()}
@@ -703,8 +703,8 @@ class blog extends bayesComponent {
         // Get Items
         $query = "
         SELECT messages.id, messages.thread_id, messages.title FROM messages
-        INNER JOIN link_bayes_messages ON link_bayes_messages.messages_id = messages.id
-        INNER JOIN bayes_documents ON link_bayes_messages.bayes_documents_id = bayes_documents.id
+        INNER JOIN link__bayes_documents__messages ON link__bayes_documents__messages.messages_id = messages.id
+        INNER JOIN bayes_documents ON link__bayes_documents__messages.bayes_documents_id = bayes_documents.id
         INNER JOIN bayes_categories ON bayes_documents.bayes_categories_id = bayes_categories.id
         WHERE bayes_categories.id = ? AND messages.thread_pos = 0 AND messages.blog = true AND {$this->msg->sqlPublished()}
         ORDER BY {$this->msg->sqlOrder()}

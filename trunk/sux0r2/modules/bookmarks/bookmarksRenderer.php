@@ -49,14 +49,14 @@ class bookmarksRenderer extends suxRenderer {
 
         // Innerjoin query
         $innerjoin = '
-        INNER JOIN link_bookmarks_tags ON link_bookmarks_tags.tags_id = tags.id
+        INNER JOIN link__bookmarks__tags ON link__bookmarks__tags.tags_id = tags.id
         ';
 
         // Select
         $query = "
         SELECT tags.id, tags.tag FROM tags
         {$innerjoin}
-        WHERE link_bookmarks_tags.bookmarks_id = ?
+        WHERE link__bookmarks__tags.bookmarks_id = ?
         ";
 
         $db = suxDB::get();
@@ -175,7 +175,7 @@ class bookmarksRenderer extends suxRenderer {
         }
         else {
             // If subscribed, change image
-            $query = 'SELECT COUNT(*) FROM link_bookmarks_users WHERE bookmarks_id = ? AND users_id = ? ';
+            $query = 'SELECT COUNT(*) FROM link__bookmarks__users WHERE bookmarks_id = ? AND users_id = ? ';
             $db = suxDB::get();
             $st = $db->prepare($query);
             $st->execute(array($bookmark_id, $_SESSION['users_id']));

@@ -132,7 +132,7 @@ class blogEdit extends component {
 
             /* Tags */
 
-            $links = $this->link->getLinks('link_messages_tags', 'messages', $blog['id']);
+            $links = $this->link->getLinks('link__messages__tags', 'messages', $blog['id']);
             $blog['tags'] = '';
             foreach($links as $val) {
                 $tmp = $this->tags->getByID($val);
@@ -142,13 +142,13 @@ class blogEdit extends component {
 
 
             /* Naive Bayesian:
-            1) Get the `link_bayes_messages` matching this messages_id
+            1) Get the `link__bayes_documents__messages` matching this messages_id
             2) Foreach linking bayes_document_id
             3) get the categories I can train (nb::isCategoryTrainer($cat_id, $users_id)
             4) stuff them into {$category_id} for template, append doc_id to {$link} string
             */
 
-            $links = $this->link->getLinks('link_bayes_messages', 'messages', $blog['id']);
+            $links = $this->link->getLinks('link__bayes_documents__messages', 'messages', $blog['id']);
             $blog['linked'] = '';
             foreach($links as $val) {
                 $cat = $this->nb->getCategoriesByDocument($val);
@@ -332,11 +332,11 @@ class blogEdit extends component {
         }
 
         //Delete current links
-        $this->link->deleteLink('link_messages_tags', 'messages', $clean['id']);
+        $this->link->deleteLink('link__messages__tags', 'messages', $clean['id']);
 
         // Reconnect links
         foreach ($tag_ids as $id) {
-            $this->link->saveLink('link_messages_tags', 'messages', $clean['id'], 'tags', $id);
+            $this->link->saveLink('link__messages__tags', 'messages', $clean['id'], 'tags', $id);
         }
 
 
@@ -345,7 +345,7 @@ class blogEdit extends component {
         // --------------------------------------------------------------------
 
         /*
-        `link_bayes_messages` asserts that a message was trained and copied into
+        `link__bayes_documents__messages` asserts that a message was trained and copied into
         a bayes document, it does not imply that it's the same document
 
         When a user edits their own document we can assume that we want
@@ -380,8 +380,8 @@ class blogEdit extends component {
         // untrain it, delete links
 
         $innerjoin = "
-        INNER JOIN link_bayes_messages ON link_bayes_messages.bayes_documents_id = bayes_documents.id
-        INNER JOIN messages ON link_bayes_messages.messages_id = messages.id
+        INNER JOIN link__bayes_documents__messages ON link__bayes_documents__messages.bayes_documents_id = bayes_documents.id
+        INNER JOIN messages ON link__bayes_documents__messages.messages_id = messages.id
         INNER JOIN bayes_categories ON bayes_categories.id = bayes_documents.bayes_categories_id
         INNER JOIN bayes_auth ON bayes_categories.bayes_vectors_id = bayes_auth.bayes_vectors_id
         ";
@@ -409,7 +409,7 @@ class blogEdit extends component {
             if (!empty($val) && $this->nb->isCategoryTrainer($val, $_SESSION['users_id'])) {
 
                 $doc_id = $this->nb->trainDocument("{$clean['title']} \n\n {$clean['body']}", $val);
-                $this->link->saveLink('link_bayes_messages', 'bayes_documents', $doc_id, 'messages', $clean['id']);
+                $this->link->saveLink('link__bayes_documents__messages', 'bayes_documents', $doc_id, 'messages', $clean['id']);
 
             }
         }

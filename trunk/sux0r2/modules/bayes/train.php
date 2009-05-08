@@ -105,11 +105,10 @@ if ($body === false) failure('No $body, nothing to train.'); // Something is wro
 // Get all the bayes_documents linked to this message where user is trainer
 // Also get associated vectors
 
-$link_table = $suxLink->buildTableName($link, 'bayes');
-$link_table2 = $suxLink->buildColumnName($link_table, $link);
+$link_table = $suxLink->buildTableName($link, 'bayes_documents');
 $innerjoin = "
 INNER JOIN {$link_table} ON {$link_table}.bayes_documents_id = bayes_documents.id
-INNER JOIN {$link_table2} ON {$link_table}.{$link_table2}_id = {$link_table2}.id
+INNER JOIN {$link} ON {$link_table}.{$link}_id = {$link}.id
 INNER JOIN bayes_categories ON bayes_categories.id = bayes_documents.bayes_categories_id
 INNER JOIN bayes_auth ON bayes_categories.bayes_vectors_id = bayes_auth.bayes_vectors_id
 ";
@@ -117,7 +116,7 @@ INNER JOIN bayes_auth ON bayes_categories.bayes_vectors_id = bayes_auth.bayes_ve
 $query = "
 SELECT bayes_documents.id, bayes_auth.bayes_vectors_id FROM bayes_documents
 {$innerjoin}
-WHERE {$link_table2}.id = ?
+WHERE {$link}.id = ?
 AND bayes_auth.users_id = ? AND (bayes_auth.owner = true OR bayes_auth.trainer = true)
 "; // Note: bayes_auth WHERE condition equivilant to nb->isCategoryTrainer()
 
@@ -138,7 +137,7 @@ foreach ($tmp as $val) {
 
 // Recategorize
 $doc_id = $nb->trainDocument($body, $cat_id);
-$suxLink->saveLink($link_table, 'bayes_documents', $doc_id, $link_table2, $id);
+$suxLink->saveLink($link_table, 'bayes_documents', $doc_id, $link, $id);
 
 
 // Log

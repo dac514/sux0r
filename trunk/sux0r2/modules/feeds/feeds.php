@@ -128,7 +128,7 @@ class feeds extends bayesComponent {
         // Check if the user has any subscriptions
         $subscriptions = array();
         if (isset($_SESSION['users_id'])) {
-            $subscriptions = $this->link->getLinks('link_rss_users', 'users', $_SESSION['users_id']);
+            $subscriptions = $this->link->getLinks('link__rss_feeds__users', 'users', $_SESSION['users_id']);
             $this->tpl->assign('users_id', $_SESSION['users_id']);
         }
 
@@ -229,8 +229,8 @@ class feeds extends bayesComponent {
         $query = "
         SELECT COUNT(*) FROM rss_items
         INNER JOIN rss_feeds on rss_feeds.id = rss_items.rss_feeds_id
-        INNER JOIN link_rss_users ON link_rss_users.rss_feeds_id = rss_feeds.id
-        WHERE link_rss_users.users_id = ?
+        INNER JOIN link__rss_feeds__users ON link__rss_feeds__users.rss_feeds_id = rss_feeds.id
+        WHERE link__rss_feeds__users.users_id = ?
         ";
         $st = $db->prepare($query);
         $st->execute(array($users_id));
@@ -247,8 +247,8 @@ class feeds extends bayesComponent {
         $query = "
         SELECT rss_items.* FROM rss_items
         INNER JOIN rss_feeds on rss_feeds.id = rss_items.rss_feeds_id
-        INNER JOIN link_rss_users ON link_rss_users.rss_feeds_id = rss_feeds.id
-        WHERE link_rss_users.users_id = ?
+        INNER JOIN link__rss_feeds__users ON link__rss_feeds__users.rss_feeds_id = rss_feeds.id
+        WHERE link__rss_feeds__users.users_id = ?
         ORDER BY rss_items.published_on DESC, rss_items.id DESC
         LIMIT {$limit} OFFSET {$start}
         ";

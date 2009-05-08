@@ -35,8 +35,8 @@ be dealt with according to their own licenses.
 
 ### INSTALL ###
 
-1. Import ./supplemental/db-mysql.sql into MySQL
-   (or) Import ./supplemental/db-pgsql.sql into PostgreSQL
+1. Import ./supplemental/sql/db-mysql.sql into MySQL
+   (or) Import ./supplemental/sql/db-postgres.sql into PostgreSQL
 
 2. chmod 777 ./data
 

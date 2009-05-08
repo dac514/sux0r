@@ -40,7 +40,7 @@ if (!$bm->getByID($id)) failure('Invalid bookmark ' . $id);
 // ---------------------------------------------------------------------------
 
 $module = 'bookmarks';
-$link = 'link_bookmarks_users';
+$link = 'link__bookmarks__users';
 $col = 'bookmarks';
 
 // Get image names from template config

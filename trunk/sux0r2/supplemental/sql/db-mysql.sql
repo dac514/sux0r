@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 2.10.2
+-- version 2.11.7.1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 29, 2008 at 04:43 PM
+-- Generation Time: May 07, 2009 at 09:29 PM
 -- Server version: 5.0.41
--- PHP Version: 5.2.5
+-- PHP Version: 5.2.6
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -29,11 +29,6 @@ CREATE TABLE `bayes_auth` (
   UNIQUE KEY `users_bayes_vectors` (`users_id`,`bayes_vectors_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `bayes_auth`
---
-
-
 -- --------------------------------------------------------
 
 --
@@ -49,11 +44,6 @@ CREATE TABLE `bayes_cache` (
   KEY `expiration` (`expiration`),
   KEY `bayes_vectors_id` (`bayes_vectors_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `bayes_cache`
---
-
 
 -- --------------------------------------------------------
 
@@ -72,11 +62,6 @@ CREATE TABLE `bayes_categories` (
   KEY `bayes_vectors_id` (`bayes_vectors_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `bayes_categories`
---
-
-
 -- --------------------------------------------------------
 
 --
@@ -90,11 +75,6 @@ CREATE TABLE `bayes_documents` (
   PRIMARY KEY  (`id`),
   KEY `bayes_categories_id` (`bayes_categories_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `bayes_documents`
---
-
 
 -- --------------------------------------------------------
 
@@ -112,11 +92,6 @@ CREATE TABLE `bayes_tokens` (
   KEY `bayes_categories_id` (`bayes_categories_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `bayes_tokens`
---
-
-
 -- --------------------------------------------------------
 
 --
@@ -128,11 +103,6 @@ CREATE TABLE `bayes_vectors` (
   `vector` varchar(64) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `bayes_vectors`
---
-
 
 -- --------------------------------------------------------
 
@@ -153,131 +123,91 @@ CREATE TABLE `bookmarks` (
   UNIQUE KEY `url` (`url`),
   KEY `users_id` (`users_id`),
   KEY `published` (`draft`,`published_on`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `bookmarks`
---
-
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `link_bayes_bookmarks`
+-- Table structure for table `link__bayes_documents__bookmarks`
 --
 
-CREATE TABLE `link_bayes_bookmarks` (
+CREATE TABLE `link__bayes_documents__bookmarks` (
   `bookmarks_id` int(11) NOT NULL,
   `bayes_documents_id` int(11) NOT NULL,
   UNIQUE KEY `idx` (`bookmarks_id`,`bayes_documents_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `link_bayes_bookmarks`
---
-
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `link_bayes_messages`
+-- Table structure for table `link__bayes_documents__messages`
 --
 
-CREATE TABLE `link_bayes_messages` (
+CREATE TABLE `link__bayes_documents__messages` (
   `messages_id` int(11) NOT NULL,
   `bayes_documents_id` int(11) NOT NULL,
   UNIQUE KEY `idx` (`messages_id`,`bayes_documents_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `link_bayes_messages`
---
-
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `link_bayes_rss`
+-- Table structure for table `link__bayes_documents__rss_items`
 --
 
-CREATE TABLE `link_bayes_rss` (
+CREATE TABLE `link__bayes_documents__rss_items` (
   `rss_items_id` int(11) NOT NULL,
   `bayes_documents_id` int(11) NOT NULL,
   UNIQUE KEY `idx` (`rss_items_id`,`bayes_documents_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `link_bayes_rss`
---
-
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `link_bookmarks_tags`
+-- Table structure for table `link__bookmarks__tags`
 --
 
-CREATE TABLE `link_bookmarks_tags` (
+CREATE TABLE `link__bookmarks__tags` (
   `bookmarks_id` int(11) NOT NULL,
   `tags_id` int(11) NOT NULL,
   UNIQUE KEY `idx` (`bookmarks_id`,`tags_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `link_bookmarks_tags`
---
-
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `link_bookmarks_users`
+-- Table structure for table `link__bookmarks__users`
 --
 
-CREATE TABLE `link_bookmarks_users` (
+CREATE TABLE `link__bookmarks__users` (
   `bookmarks_id` int(11) NOT NULL,
   `users_id` int(11) NOT NULL,
   UNIQUE KEY `idx` (`bookmarks_id`,`users_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `link_bookmarks_users`
---
-
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `link_messages_tags`
+-- Table structure for table `link__messages__tags`
 --
 
-CREATE TABLE `link_messages_tags` (
+CREATE TABLE `link__messages__tags` (
   `messages_id` int(11) NOT NULL,
   `tags_id` int(11) NOT NULL,
   UNIQUE KEY `idx` (`messages_id`,`tags_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `link_messages_tags`
---
-
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `link_rss_users`
+-- Table structure for table `link__rss_feeds__users`
 --
 
-CREATE TABLE `link_rss_users` (
+CREATE TABLE `link__rss_feeds__users` (
   `rss_feeds_id` int(11) NOT NULL,
   `users_id` int(11) NOT NULL,
   UNIQUE KEY `idx` (`rss_feeds_id`,`users_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `link_rss_users`
---
-
 
 -- --------------------------------------------------------
 
@@ -310,11 +240,6 @@ CREATE TABLE `messages` (
   KEY `parent_id` (`parent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `messages`
---
-
-
 -- --------------------------------------------------------
 
 --
@@ -335,11 +260,6 @@ CREATE TABLE `messages_history` (
   KEY `users_id` (`users_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `messages_history`
---
-
-
 -- --------------------------------------------------------
 
 --
@@ -352,11 +272,6 @@ CREATE TABLE `openid_secrets` (
   `shared_secret` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `openid_secrets`
---
-
 
 -- --------------------------------------------------------
 
@@ -371,11 +286,6 @@ CREATE TABLE `openid_trusted` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `authorized` (`auth_url`,`users_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `openid_trusted`
---
-
 
 -- --------------------------------------------------------
 
@@ -397,11 +307,6 @@ CREATE TABLE `photoalbums` (
   KEY `published` (`draft`,`published_on`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `photoalbums`
---
-
-
 -- --------------------------------------------------------
 
 --
@@ -421,11 +326,6 @@ CREATE TABLE `photos` (
   KEY `photoalbums_id` (`photoalbums_id`),
   KEY `image` (`image`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `photos`
---
-
 
 -- --------------------------------------------------------
 
@@ -447,11 +347,6 @@ CREATE TABLE `rss_feeds` (
   KEY `approved` (`draft`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `rss_feeds`
---
-
-
 -- --------------------------------------------------------
 
 --
@@ -472,11 +367,6 @@ CREATE TABLE `rss_items` (
   KEY `published` (`published_on`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `rss_items`
---
-
-
 -- --------------------------------------------------------
 
 --
@@ -492,11 +382,6 @@ CREATE TABLE `socialnetwork` (
   UNIQUE KEY `friendship` (`users_id`,`friend_users_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `socialnetwork`
---
-
-
 -- --------------------------------------------------------
 
 --
@@ -509,12 +394,7 @@ CREATE TABLE `tags` (
   `tag` varchar(64) NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `tag` (`tag`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `tags`
---
-
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -532,12 +412,7 @@ CREATE TABLE `users` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `nickname` (`nickname`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT= 1;
-
---
--- Dumping data for table `users`
---
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -553,11 +428,6 @@ CREATE TABLE `users_access` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `users_id` (`users_id`,`module`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `users_access`
---
-
 
 -- --------------------------------------------------------
 
@@ -586,11 +456,6 @@ CREATE TABLE `users_info` (
   UNIQUE KEY `users_id` (`users_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `users_info`
---
-
-
 -- --------------------------------------------------------
 
 --
@@ -607,12 +472,7 @@ CREATE TABLE `users_log` (
   PRIMARY KEY  (`id`),
   KEY `users_id` (`users_id`,`private`),
   KEY `ts` (`ts`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `users_log`
---
-
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -628,9 +488,4 @@ CREATE TABLE `users_openid` (
   UNIQUE KEY `openid_url` (`openid_url`),
   KEY `users_id` (`users_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `users_openid`
---
-
 
