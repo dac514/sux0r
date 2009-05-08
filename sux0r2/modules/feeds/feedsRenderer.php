@@ -88,7 +88,7 @@ class feedsRenderer extends suxRenderer {
         }
         else {
             // If subscribed, change image
-            $query = 'SELECT COUNT(*) FROM link_rss_users WHERE rss_feeds_id = ? AND users_id = ? ';
+            $query = 'SELECT COUNT(*) FROM link__rss_feeds__users WHERE rss_feeds_id = ? AND users_id = ? ';
             $db = suxDB::get();
             $st = $db->prepare($query);
             $st->execute(array($feed_id, $_SESSION['users_id']));
@@ -138,7 +138,7 @@ class feedsRenderer extends suxRenderer {
         if (!is_array($subscriptions)) {
             $subscriptions = array();
             if (isset($users_id))
-                $subscriptions = $this->link->getLinks('link_rss_users', 'users', $users_id);
+                $subscriptions = $this->link->getLinks('link__rss_feeds__users', 'users', $users_id);
         }
 
         $tmp = array();

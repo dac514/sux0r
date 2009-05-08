@@ -11,11 +11,11 @@ class suxLink {
 
     /*
     Link tables are special tables that join two other tables using a 1 to 1
-    relationship with primary keys. The table name is "link_" followed by two
+    relationship with primary keys. The table name is "link__" followed by two
     other representative names. The order of the two other tables should be in
     alphabetical order. An example of a link table for "messages" and "bayes" :
 
-    CREATE TABLE `link_bayes_messages` (
+    CREATE TABLE ` link__bayes_documents__messages` (
     `messages_id` int(11) NOT NULL,
     `bayes_documents_id` int(11) NOT NULL,
     UNIQUE KEY `idx` (`messages_id`,`bayes_documents_id`)
@@ -51,36 +51,12 @@ class suxLink {
     function buildTableName($table1, $table2) {
 
         // Convention
-        // Link tables should be named "link_table_table"
-        // where table_table is in alphabetical order
+        // Link tables should be named "link__table__table"
+        // where table__table is in alphabetical order
 
         $tmp = array($table1, $table2);
         natsort($tmp);
-        $link = 'link_' . implode('_', $tmp);
-        return $link;
-
-    }
-
-
-    /**
-    * Some link columns break naming conventions. Use this function to get the
-    * correct linked table name.
-    *
-    * @param string $table name of a link table
-    * @param string $link name of column in the link table
-    * @return string
-    **/
-    function buildColumnName($table, $link) {
-
-        if ($link == 'bayes')
-            return 'bayes_documents';
-
-        elseif ($table == 'link_bayes_rss' && $link == 'rss')
-            return 'rss_items';
-
-        elseif ($table == 'link_rss_users' && $link == 'rss')
-            return 'rss_feeds';
-
+        $link = 'link__' . implode('__', $tmp);
         return $link;
 
     }
@@ -98,7 +74,7 @@ class suxLink {
 
         $st = $this->db->query(suxDB::showTablesQuery());
         foreach ($st->fetchAll(PDO::FETCH_NUM) as $val) {
-            if (preg_match('/^link_/', $val[0]) && (!$match || mb_strpos($val[0], "_{$match}")))
+            if (preg_match('/^link__/', $val[0]) && (!$match || mb_strpos($val[0], "__{$match}")))
                 $return[] = $val[0];
         }
         return $return;

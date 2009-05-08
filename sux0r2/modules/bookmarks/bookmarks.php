@@ -390,8 +390,8 @@ class bookmarks extends bayesComponent {
         // Count
         $query = "
         SELECT COUNT(*) FROM bookmarks
-        INNER JOIN link_bookmarks_users ON link_bookmarks_users.bookmarks_id = bookmarks.id
-        WHERE link_bookmarks_users.users_id = ? AND {$this->bm->sqlPublished()}
+        INNER JOIN link__bookmarks__users ON link__bookmarks__users.bookmarks_id = bookmarks.id
+        WHERE link__bookmarks__users.users_id = ? AND {$this->bm->sqlPublished()}
         ";
         $st = $db->prepare($query);
         $st->execute(array($users_id));
@@ -407,8 +407,8 @@ class bookmarks extends bayesComponent {
         // Get Items
         $query = "
         SELECT bookmarks.* FROM bookmarks
-        INNER JOIN link_bookmarks_users ON link_bookmarks_users.bookmarks_id = bookmarks.id
-        WHERE link_bookmarks_users.users_id = ? AND {$this->bm->sqlPublished()}
+        INNER JOIN link__bookmarks__users ON link__bookmarks__users.bookmarks_id = bookmarks.id
+        WHERE link__bookmarks__users.users_id = ? AND {$this->bm->sqlPublished()}
         ORDER BY {$this->bm->sqlOrder()}
         LIMIT {$limit} OFFSET {$start} ";
 
@@ -430,8 +430,8 @@ class bookmarks extends bayesComponent {
         // Count
         $count_query = "
         SELECT COUNT(*) FROM bookmarks
-        INNER JOIN link_bookmarks_tags ON link_bookmarks_tags.bookmarks_id = bookmarks.id
-        WHERE link_bookmarks_tags.tags_id = ? AND {$this->bm->sqlPublished()}
+        INNER JOIN link__bookmarks__tags ON link__bookmarks__tags.bookmarks_id = bookmarks.id
+        WHERE link__bookmarks__tags.tags_id = ? AND {$this->bm->sqlPublished()}
         ";
         $st = $db->prepare($count_query);
         $st->execute(array($id));
@@ -447,8 +447,8 @@ class bookmarks extends bayesComponent {
         // Get Items
         $query = "
         SELECT bookmarks.* FROM bookmarks
-        INNER JOIN link_bookmarks_tags ON link_bookmarks_tags.bookmarks_id = bookmarks.id
-        WHERE link_bookmarks_tags.tags_id = ? AND {$this->bm->sqlPublished()}
+        INNER JOIN link__bookmarks__tags ON link__bookmarks__tags.bookmarks_id = bookmarks.id
+        WHERE link__bookmarks__tags.tags_id = ? AND {$this->bm->sqlPublished()}
         ORDER BY {$this->bm->sqlOrder()}
         LIMIT {$limit} OFFSET {$start} ";
 

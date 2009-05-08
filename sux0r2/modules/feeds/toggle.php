@@ -40,7 +40,7 @@ if (!$feed->getFeedByID($id)) failure('Invalid feed');
 // ---------------------------------------------------------------------------
 
 $module = 'feeds';
-$link = 'link_rss_users';
+$link = 'link__rss_feeds__users';
 $col = 'rss_feeds';
 
 // Get image names from template config

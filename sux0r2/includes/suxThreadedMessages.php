@@ -423,7 +423,7 @@ class suxThreadedMessages {
         $link = new suxLink();
         $links = $link->getLinkTables('messages');
         foreach ($links as $table) {
-            $link->deleteLink($table, $link->buildColumnName($table, 'messages'), $id);
+            $link->deleteLink($table, 'messages', $id);
         }
 
         // Commit
@@ -1034,7 +1034,7 @@ class suxThreadedMessages {
         $links = $link->getLinkTables('messages');
         foreach($result as $key => $val) {
             foreach ($links as $table) {
-                $link->deleteLink($table, $link->buildColumnName($table, 'messages'), $val['id']);
+                $link->deleteLink($table, 'messages', $val['id']);
             }
         }
 

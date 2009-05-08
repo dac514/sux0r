@@ -29,8 +29,8 @@ Sux0r是免费软件：您可以在Free Software Foundation发布的GNU许可协
 
 ### 安装 ###
 
-1. 将./supplemental/db-mysql.sql 导入 MySQL数据库
-   (或) 将./supplemental/db-pgsql.sql 导入 PostgreSQL数据库
+1. 将./supplemental/sql/db-mysql.sql 导入 MySQL数据库
+   (或) 将./supplemental/sql/db-postgres.sql 导入 PostgreSQL数据库
 
 2. 更改./data读写权限为777
 

@@ -63,14 +63,14 @@ class blogRenderer extends suxRenderer {
 
         // Innerjoin query
         $innerjoin = '
-        INNER JOIN link_messages_tags ON link_messages_tags.tags_id = tags.id
+        INNER JOIN link__messages__tags ON link__messages__tags.tags_id = tags.id
         ';
 
         // Select
         $query = "
         SELECT tags.id, tags.tag FROM tags
         {$innerjoin}
-        WHERE link_messages_tags.messages_id = ?
+        WHERE link__messages__tags.messages_id = ?
         ";
 
         $db = suxDB::get();
@@ -132,8 +132,8 @@ class blogRenderer extends suxRenderer {
         $innerjoin = '
         INNER JOIN bayes_auth ON bayes_categories.bayes_vectors_id = bayes_auth.bayes_vectors_id
         INNER JOIN bayes_documents ON bayes_categories.id = bayes_documents.bayes_categories_id
-        INNER JOIN link_bayes_messages ON link_bayes_messages.bayes_documents_id = bayes_documents.id
-        INNER JOIN messages ON link_bayes_messages.messages_id = messages.id
+        INNER JOIN link__bayes_documents__messages ON link__bayes_documents__messages.bayes_documents_id = bayes_documents.id
+        INNER JOIN messages ON link__bayes_documents__messages.messages_id = messages.id
         ';
 
         // Select, equivilant to nb->isCategoryTrainer()

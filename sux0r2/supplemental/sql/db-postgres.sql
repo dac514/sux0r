@@ -101,70 +101,70 @@ CREATE INDEX bookmarks_published_idx on bookmarks(draft,published_on);
 -- --------------------------------------------------------
 
 
-CREATE TABLE link_bayes_bookmarks (
+CREATE TABLE link__bayes_documents__bookmarks (
   bookmarks_id integer NOT NULL,
   bayes_documents_id integer NOT NULL,
-  CONSTRAINT link_bayes_bookmarks_grouping UNIQUE (bookmarks_id,bayes_documents_id)
+  CONSTRAINT link__bayes_documents__bookmarks_grouping UNIQUE (bookmarks_id,bayes_documents_id)
 ) ;
 
 
 -- --------------------------------------------------------
 
 
-CREATE TABLE link_bayes_messages (
+CREATE TABLE link__bayes_documents__messages (
   messages_id integer NOT NULL,
   bayes_documents_id integer NOT NULL,
-  CONSTRAINT link_bayes_messages_grouping UNIQUE (messages_id,bayes_documents_id)
+  CONSTRAINT link__bayes_documents__messages_grouping UNIQUE (messages_id,bayes_documents_id)
 ) ;
 
 
 -- --------------------------------------------------------
 
 
-CREATE TABLE link_bayes_rss (
+CREATE TABLE link__bayes_documents__rss_items (
   rss_items_id integer NOT NULL,
   bayes_documents_id integer NOT NULL,
-  CONSTRAINT link_bayes_rss_grouping UNIQUE (rss_items_id,bayes_documents_id)
+  CONSTRAINT link__bayes_documents__rss_items_grouping UNIQUE (rss_items_id,bayes_documents_id)
 ) ;
 
 
 -- --------------------------------------------------------
 
 
-CREATE TABLE link_bookmarks_tags (
+CREATE TABLE link__bookmarks__tags (
   bookmarks_id integer NOT NULL,
   tags_id integer NOT NULL,
-  CONSTRAINT link_bookmarks_tags_grouping UNIQUE (bookmarks_id,tags_id)
+  CONSTRAINT link__bookmarks__tags_grouping UNIQUE (bookmarks_id,tags_id)
 ) ;
 
 
 -- --------------------------------------------------------
 
 
-CREATE TABLE link_bookmarks_users (
+CREATE TABLE link__bookmarks__users (
   bookmarks_id integer NOT NULL,
   users_id integer NOT NULL,
-  CONSTRAINT link_bookmarks_users_grouping UNIQUE (bookmarks_id,users_id)
+  CONSTRAINT link__bookmarks__users_grouping UNIQUE (bookmarks_id,users_id)
 ) ;
 
 
 -- --------------------------------------------------------
 
 
-CREATE TABLE link_messages_tags (
+CREATE TABLE link__messages__tags (
   messages_id integer NOT NULL,
   tags_id integer NOT NULL,
-  CONSTRAINT link_messages_tags_grouping UNIQUE (messages_id,tags_id)
+  CONSTRAINT link__messages__tags_grouping UNIQUE (messages_id,tags_id)
 ) ;
 
 
 -- --------------------------------------------------------
 
 
-CREATE TABLE link_rss_users (
+CREATE TABLE link__rss_feeds__users (
   rss_feeds_id integer NOT NULL,
   users_id integer NOT NULL,
-  CONSTRAINT link_rss_users_grouping UNIQUE (rss_feeds_id,users_id)
+  CONSTRAINT link__rss_feeds__users_grouping UNIQUE (rss_feeds_id,users_id)
 ) ;
 
 

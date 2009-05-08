@@ -601,7 +601,7 @@ class bayesUser extends suxNaiveBayesian {
         $this->inTransaction = true;
 
         // Remove any links to vector documents in associated link tables
-        $links = $this->link->getLinkTables('bayes');
+        $links = $this->link->getLinkTables('bayes_documents');
         foreach ($this->getDocumentsByVector($vector_id) as $key => $val) {
             foreach ($links as $tmp) {
                 $this->link->deleteLink($tmp, 'bayes_documents', $key);
@@ -636,7 +636,7 @@ class bayesUser extends suxNaiveBayesian {
         $this->inTransaction = true;
 
         // Remove any links to category documents in associated link tables
-        $links = $this->link->getLinkTables('bayes');
+        $links = $this->link->getLinkTables('bayes_documents');
         foreach ($this->getDocumentsByCategory($category_id) as $key => $val) {
             foreach ($links as $tmp) {
                 $this->link->deleteLink($tmp, 'bayes_documents', $key);
@@ -664,7 +664,7 @@ class bayesUser extends suxNaiveBayesian {
         $this->inTransaction = true;
 
         // Remove any links to category documents in associated link tables
-        $links = $this->link->getLinkTables('bayes');
+        $links = $this->link->getLinkTables('bayes_documents');
         foreach ($links as $tmp) {
             $this->link->deleteLink($tmp, 'bayes_documents', $document_id);
         }

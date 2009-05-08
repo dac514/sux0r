@@ -176,11 +176,11 @@ class adminAccess extends component {
                 $st = $db->prepare($query);
                 $st->execute(array($this->users_id));
 
-                $query = 'DELETE FROM link_bookmarks_users WHERE users_id = ? ';
+                $query = 'DELETE FROM link__bookmarks__users WHERE users_id = ? ';
                 $st = $db->prepare($query);
                 $st->execute(array($this->users_id));
 
-                $query = 'DELETE FROM link_rss_users WHERE users_id = ? ';
+                $query = 'DELETE FROM link__rss_feeds__users WHERE users_id = ? ';
                 $st = $db->prepare($query);
                 $st->execute(array($this->users_id));
 

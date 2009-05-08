@@ -136,7 +136,7 @@
 
                     {capture name=nbc}{strip}
                         {capture name=document}{$foo.title} {$foo.body_plaintext}{/capture}
-                        {$r->genericBayesInterface($foo.id, 'rss', 'feeds', $smarty.capture.document)}
+                        {$r->genericBayesInterface($foo.id, 'rss_items', 'feeds', $smarty.capture.document)}
                     {/strip}{/capture}
                     {if $smarty.capture.nbc}
                         <!-- Naive Baysian Classification -->

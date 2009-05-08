@@ -127,7 +127,7 @@ class suxTags {
         $link = new suxLink();
         $links = $link->getLinkTables('tags');
         foreach ($links as $table) {
-            $link->deleteLink($table, $link->buildColumnName($table, 'tags'), $id);
+            $link->deleteLink($table, 'tags', $id);
         }
 
         suxDB::commitTransaction($tid);
