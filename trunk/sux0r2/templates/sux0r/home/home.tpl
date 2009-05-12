@@ -1,7 +1,7 @@
 {capture name=header}
 
 {* Latest version *}
-{assign var='version' value='2.0.5'}
+{assign var='version' value='2.0.x'}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
@@ -79,7 +79,7 @@
 
             <p>
             {$smarty.now|date_format:'%Y-%m-%d'}: Translators welcome.
-            Currently we have English (en), Chinese (zh), Dutch (nl) and German (de).
+            Currently we have English (en), Chinese (zh), Dutch (nl), Italian (it), and German (de).
             </p>
 
 
