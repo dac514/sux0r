@@ -7,6 +7,7 @@ sux0r is hosted by Network Redux: http://www.networkredux.com/
 
 Chinese (zn) by Wang Zhenzhen: http://blog.csdn.net/tp906
 Dutch (nl) by Peter van Es: peteres@users.sourceforge.net
+Italian (it) by Gilberto Ficara: g.ficara@gmail.com
 German (de) by Niklas Pluem: l4nm4n@users.sourceforge.net
 
 
