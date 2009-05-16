@@ -28,7 +28,7 @@ $link_tables = $link->getLinkTables();
 $not_found = array();
 foreach ($link_tables as $val) {
 
-    $parts = explode('_', $val);
+    $parts = explode('__', $val);
     if (count($parts) != 3) die('Unexpected result, ejecting early to avoid catastrophe...');
 
     $st = $db->query("SELECT * FROM {$val} ");

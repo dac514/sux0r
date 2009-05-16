@@ -25,6 +25,11 @@ if (!extension_loaded('pdo_mysql') && !extension_loaded('pdo_pgsql')) {
     $prob .= "Error: sux0r requires the PDO extension for either MySQL or PostgreSQL, see: http://php.net/pdo \n";
 }
 
+// Check for gd
+if (!extension_loaded('gd')) {
+    $prob .= "Error: sux0r requires the gd extension, see: http://php.net/gd \n";
+}
+
 // Problems?
 if (!$prob) {
     $prob = 'Ok!';
