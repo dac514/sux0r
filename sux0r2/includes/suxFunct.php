@@ -297,7 +297,7 @@ class suxFunct {
     static function myHttpServer() {
 
         // Autodetect ourself
-        $s = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] ? 's' : '';
+        $s = isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off' ? 's' : '';
         $host = $_SERVER['SERVER_NAME'];
         $port = $_SERVER['SERVER_PORT'];
         if (($s && $port == "443") || (!$s && $port == "80") || preg_match("/:$port\$/", $host)) {
