@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 07, 2009 at 09:29 PM
+-- Generation Time: May 18, 2009 at 09:57 PM
 -- Server version: 5.0.41
 -- PHP Version: 5.2.6
 
@@ -43,7 +43,7 @@ CREATE TABLE `bayes_cache` (
   PRIMARY KEY  (`md5`),
   KEY `expiration` (`expiration`),
   KEY `bayes_vectors_id` (`bayes_vectors_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -123,7 +123,7 @@ CREATE TABLE `bookmarks` (
   UNIQUE KEY `url` (`url`),
   KEY `users_id` (`users_id`),
   KEY `published` (`draft`,`published_on`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -271,7 +271,7 @@ CREATE TABLE `openid_secrets` (
   `expiration` int(11) NOT NULL,
   `shared_secret` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -285,7 +285,7 @@ CREATE TABLE `openid_trusted` (
   `users_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `authorized` (`auth_url`,`users_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -380,7 +380,7 @@ CREATE TABLE `socialnetwork` (
   `relationship` varchar(255) default NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `friendship` (`users_id`,`friend_users_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -394,7 +394,7 @@ CREATE TABLE `tags` (
   `tag` varchar(64) NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `tag` (`tag`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -472,7 +472,7 @@ CREATE TABLE `users_log` (
   PRIMARY KEY  (`id`),
   KEY `users_id` (`users_id`,`private`),
   KEY `ts` (`ts`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
