@@ -2,6 +2,8 @@
 sux0r 2.0.x
 ------------------------------------------------------------------------------
 
+A couple of fixes to make sux0r compatible on IIS 7
+
 Italian translation
 
 Changed link_table_ naming convention to: link__table__
