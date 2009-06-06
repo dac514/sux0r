@@ -43,12 +43,10 @@ ALTER TABLE bayes_tokens DROP CONSTRAINT bayes_tokens_grouping;
 ALTER TABLE bayes_tokens ADD CONSTRAINT bayes_tokens_grouping UNIQUE (bayes_categories_id,token);
 
 DROP INDEX messages_thread_idx;
-CREATE INDEX messages_thread_id_idx on messages(thread_id);
+CREATE INDEX messages_thread_idx on messages(thread_id,parent_id);
 CREATE INDEX messages_thread_pos_idx on messages(thread_pos);
 DROP INDEX messages_type_idx;
-CREATE INDEX messages_forum_idx on messages(forum);
 CREATE INDEX messages_blog_idx on messages(blog);
-CREATE INDEX messages_wiki_idx on messages(wiki);
 
 ALTER TABLE openid_trusted DROP CONSTRAINT openid_trusted_grouping;
 ALTER TABLE openid_trusted ADD CONSTRAINT openid_trusted_grouping UNIQUE (users_id,auth_url);

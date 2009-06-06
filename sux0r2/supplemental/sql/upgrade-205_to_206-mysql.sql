@@ -57,13 +57,10 @@ ALTER TABLE bayes_tokens DROP INDEX `grouping` , ADD UNIQUE `grouping` ( bayes_c
 ALTER TABLE bayes_tokens DROP INDEX bayes_categories_id;
 
 ALTER TABLE messages DROP INDEX thread;
-ALTER TABLE messages ADD INDEX ( thread_id );
+ALTER TABLE messages ADD INDEX thread ( thread_id, parent_id );
 ALTER TABLE messages ADD INDEX ( thread_pos );
 ALTER TABLE messages DROP INDEX type;
-ALTER TABLE messages ADD INDEX ( forum );
 ALTER TABLE messages ADD INDEX ( blog );
-ALTER TABLE messages ADD INDEX ( wiki );
-ALTER TABLE messages ADD INDEX ( slideshow );
 
 ALTER TABLE openid_trusted DROP INDEX authorized , ADD UNIQUE authorized ( users_id , auth_url );
 

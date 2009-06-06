@@ -232,13 +232,9 @@ CREATE TABLE IF NOT EXISTS `messages` (
   PRIMARY KEY (`id`),
   KEY `users_id` (`users_id`),
   KEY `published` (`published_on`,`draft`),
-  KEY `parent_id` (`parent_id`),
-  KEY `thread_id` (`thread_id`),
+  KEY `thread` (`thread_id`, `parent_id`),
   KEY `thread_pos` (`thread_pos`),
-  KEY `forum` (`forum`),
-  KEY `blog` (`blog`),
-  KEY `wiki` (`wiki`),
-  KEY `slideshow` (`slideshow`)
+  KEY `blog` (`blog`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
