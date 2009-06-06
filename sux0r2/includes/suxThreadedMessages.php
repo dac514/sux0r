@@ -312,6 +312,7 @@ class suxThreadedMessages {
                 $clean['thread_pos'] = 0;
                 $clean['thread_id'] = $this->db->query("SELECT MAX(thread_id) + 1 FROM {$this->db_table} ")->fetchColumn(0);
 
+
             }
 
             // Sanity check
@@ -333,28 +334,28 @@ class suxThreadedMessages {
         if  ($this->db_driver == 'pgsql') {
 
             if (isset($clean['id'])) $st->bindParam(':id', $clean['id'], PDO::PARAM_INT);
+			else {
+                $st->bindParam(':thread_id', $clean['thread_id'], PDO::PARAM_INT);
+                $st->bindParam(':level', $clean['level'], PDO::PARAM_INT);
+                $st->bindParam(':thread_pos', $clean['thread_pos'], PDO::PARAM_INT);
+			}
+
             if (isset($clean['users_id'])) $st->bindParam(':users_id', $clean['users_id'], PDO::PARAM_INT);
 
             $st->bindParam(':title', $clean['title'], PDO::PARAM_STR);
             $st->bindParam(':body_html', $clean['body_html'], PDO::PARAM_STR);
             $st->bindParam(':body_plaintext', $clean['body_plaintext'], PDO::PARAM_STR);
             $st->bindParam(':draft', $clean['draft'], PDO::PARAM_BOOL);
+			$st->bindParam(':parent_id', $clean['parent_id'], PDO::PARAM_INT);
 
             if (isset($clean['image'])) $st->bindParam(':image', $clean['image'], PDO::PARAM_STR);
-
-            if (!isset($clean['id'])) {
-                $st->bindParam(':thread_id', $clean['thread_id'], PDO::PARAM_INT);
-                $st->bindParam(':parent_id', $clean['parent_id'], PDO::PARAM_INT);
-                $st->bindParam(':level', $clean['level'], PDO::PARAM_INT);
-                $st->bindParam(':thread_pos', $clean['thread_pos'], PDO::PARAM_INT);
-            }
-
             if (isset($clean['published_on'])) $st->bindParam(':published_on', $clean['published_on'], PDO::PARAM_STR);
 
             $st->bindParam(':forum', $clean['forum'], PDO::PARAM_BOOL);
             $st->bindParam(':blog', $clean['blog'], PDO::PARAM_BOOL);
             $st->bindParam(':wiki', $clean['wiki'], PDO::PARAM_BOOL);
             $st->bindParam(':slideshow', $clean['slideshow'], PDO::PARAM_BOOL);
+
             $st->execute();
         }
         else {
