@@ -189,13 +189,9 @@ CREATE TABLE messages (
 ) ;
 CREATE INDEX messages_users_id_idx on messages(users_id);
 CREATE INDEX messages_published_idx on messages(published_on,draft);
-CREATE INDEX messages_parent_id_idx on messages(parent_id);
-CREATE INDEX messages_thread_id_idx on messages(thread_id);
+CREATE INDEX messages_thread_idx on messages(thread_id,parent_id);
 CREATE INDEX messages_thread_pos_idx on messages(thread_pos);
-CREATE INDEX messages_forum_idx on messages(forum);
 CREATE INDEX messages_blog_idx on messages(blog);
-CREATE INDEX messages_wiki_idx on messages(wiki);
-CREATE INDEX messages_slideshow_idx on messages(slideshow);
 
 -- --------------------------------------------------------
 
