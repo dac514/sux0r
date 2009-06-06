@@ -11,7 +11,7 @@ CREATE TABLE bayes_auth (
   "owner" boolean DEFAULT false,
   trainer boolean DEFAULT false,
   CONSTRAINT bayes_auth_pkey PRIMARY KEY (id),
-  CONSTRAINT bayes_auth_grouping UNIQUE (users_id,bayes_vectors_id)
+  CONSTRAINT bayes_auth_grouping UNIQUE (bayes_vectors_id,users_id)
 ) ;
 
 
@@ -39,10 +39,8 @@ CREATE TABLE bayes_categories (
   probability float8 NOT NULL default '0',
   token_count bigint NOT NULL default '0',
   CONSTRAINT bayes_categories_pkey PRIMARY KEY (id),
-  CONSTRAINT bayes_categories_grouping UNIQUE (category,bayes_vectors_id)
+  CONSTRAINT bayes_categories_grouping UNIQUE (bayes_vectors_id,category)
 )  ;
-CREATE INDEX bayes_categories_bayes_vectors_id_idx on bayes_categories(bayes_vectors_id);
-
 
 -- --------------------------------------------------------
 
@@ -65,9 +63,8 @@ CREATE TABLE bayes_tokens (
   bayes_categories_id integer NOT NULL,
   count bigint NOT NULL default '0',
   CONSTRAINT bayes_tokens_pkey PRIMARY KEY (id),
-  CONSTRAINT bayes_tokens_grouping UNIQUE (token,bayes_categories_id)
+  CONSTRAINT bayes_tokens_grouping UNIQUE (bayes_categories_id,token)
 )  ;
-CREATE INDEX bayes_tokens_bayes_categories_id_idx on bayes_tokens(bayes_categories_id);
 
 
 -- --------------------------------------------------------
@@ -104,7 +101,7 @@ CREATE INDEX bookmarks_published_idx on bookmarks(draft,published_on);
 CREATE TABLE link__bayes_documents__bookmarks (
   bookmarks_id integer NOT NULL,
   bayes_documents_id integer NOT NULL,
-  CONSTRAINT link__bayes_documents__bookmarks_grouping UNIQUE (bookmarks_id,bayes_documents_id)
+  CONSTRAINT link__bayes_documents__bookmarks_grouping PRIMARY KEY (bookmarks_id,bayes_documents_id)
 ) ;
 
 
@@ -114,7 +111,7 @@ CREATE TABLE link__bayes_documents__bookmarks (
 CREATE TABLE link__bayes_documents__messages (
   messages_id integer NOT NULL,
   bayes_documents_id integer NOT NULL,
-  CONSTRAINT link__bayes_documents__messages_grouping UNIQUE (messages_id,bayes_documents_id)
+  CONSTRAINT link__bayes_documents__messages_grouping PRIMARY KEY (messages_id,bayes_documents_id)
 ) ;
 
 
@@ -124,7 +121,7 @@ CREATE TABLE link__bayes_documents__messages (
 CREATE TABLE link__bayes_documents__rss_items (
   rss_items_id integer NOT NULL,
   bayes_documents_id integer NOT NULL,
-  CONSTRAINT link__bayes_documents__rss_items_grouping UNIQUE (rss_items_id,bayes_documents_id)
+  CONSTRAINT link__bayes_documents__rss_items_grouping PRIMARY KEY (rss_items_id,bayes_documents_id)
 ) ;
 
 
@@ -134,7 +131,7 @@ CREATE TABLE link__bayes_documents__rss_items (
 CREATE TABLE link__bookmarks__tags (
   bookmarks_id integer NOT NULL,
   tags_id integer NOT NULL,
-  CONSTRAINT link__bookmarks__tags_grouping UNIQUE (bookmarks_id,tags_id)
+  CONSTRAINT link__bookmarks__tags_grouping PRIMARY KEY (bookmarks_id,tags_id)
 ) ;
 
 
@@ -144,7 +141,7 @@ CREATE TABLE link__bookmarks__tags (
 CREATE TABLE link__bookmarks__users (
   bookmarks_id integer NOT NULL,
   users_id integer NOT NULL,
-  CONSTRAINT link__bookmarks__users_grouping UNIQUE (bookmarks_id,users_id)
+  CONSTRAINT link__bookmarks__users_grouping PRIMARY KEY (bookmarks_id,users_id)
 ) ;
 
 
@@ -154,7 +151,7 @@ CREATE TABLE link__bookmarks__users (
 CREATE TABLE link__messages__tags (
   messages_id integer NOT NULL,
   tags_id integer NOT NULL,
-  CONSTRAINT link__messages__tags_grouping UNIQUE (messages_id,tags_id)
+  CONSTRAINT link__messages__tags_grouping PRIMARY KEY (messages_id,tags_id)
 ) ;
 
 
@@ -164,7 +161,7 @@ CREATE TABLE link__messages__tags (
 CREATE TABLE link__rss_feeds__users (
   rss_feeds_id integer NOT NULL,
   users_id integer NOT NULL,
-  CONSTRAINT link__rss_feeds__users_grouping UNIQUE (rss_feeds_id,users_id)
+  CONSTRAINT link__rss_feeds__users_grouping PRIMARY KEY (rss_feeds_id,users_id)
 ) ;
 
 
@@ -191,11 +188,14 @@ CREATE TABLE messages (
   CONSTRAINT messages_pkey PRIMARY KEY (id)
 ) ;
 CREATE INDEX messages_users_id_idx on messages(users_id);
-CREATE INDEX messages_thread_idx on messages(thread_id,thread_pos);
 CREATE INDEX messages_published_idx on messages(published_on,draft);
-CREATE INDEX messages_type_idx on messages(forum,blog,wiki,slideshow);
 CREATE INDEX messages_parent_id_idx on messages(parent_id);
-
+CREATE INDEX messages_thread_id_idx on messages(thread_id);
+CREATE INDEX messages_thread_pos_idx on messages(thread_pos);
+CREATE INDEX messages_forum_idx on messages(forum);
+CREATE INDEX messages_blog_idx on messages(blog);
+CREATE INDEX messages_wiki_idx on messages(wiki);
+CREATE INDEX messages_slideshow_idx on messages(slideshow);
 
 -- --------------------------------------------------------
 
@@ -234,7 +234,7 @@ CREATE TABLE openid_trusted (
   auth_url varchar(255) NOT NULL,
   users_id integer NOT NULL,
   CONSTRAINT openid_trusted_pkey PRIMARY KEY (id),
-  CONSTRAINT openid_trusted_grouping UNIQUE (auth_url,users_id)
+  CONSTRAINT openid_trusted_grouping UNIQUE (users_id,auth_url)
 ) ;
 
 
@@ -321,6 +321,7 @@ CREATE TABLE socialnetwork (
   CONSTRAINT socialnetwork_pkey PRIMARY KEY (id),
   CONSTRAINT socialnetwork_grouping UNIQUE (users_id,friend_users_id)
 ) ;
+CREATE INDEX socialnetwork_friend_users_id_idx on socialnetwork(friend_users_id);
 
 
 -- --------------------------------------------------------
@@ -399,8 +400,9 @@ CREATE TABLE users_log (
   ts timestamp NOT NULL,
   private boolean NOT NULL,
   CONSTRAINT users_log_pkey PRIMARY KEY (id)
-) ;  
-CREATE INDEX users_log_users_id_idx on users_log(users_id,private);  
+) ;
+CREATE INDEX users_log_users_id_idx on users_log(users_id);
+CREATE INDEX users_log_private_idx on users_log(private);
 CREATE INDEX users_log_ts_idx on users_log(ts);
 
 
