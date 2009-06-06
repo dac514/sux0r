@@ -12,24 +12,31 @@ ALTER TABLE link_rss_users RENAME TO link__rss_feeds__users;
 
 ALTER TABLE link__bayes_documents__bookmarks DROP CONSTRAINT link_bayes_bookmarks_grouping;
 ALTER TABLE link__bayes_documents__bookmarks ADD CONSTRAINT link__bayes_documents__bookmarks_grouping PRIMARY KEY (bookmarks_id,bayes_documents_id);
+CREATE INDEX link__bayes_documents__bookmarks_bayes_documents_id_idx on link__bayes_documents__bookmarks(bayes_documents_id);
 
 ALTER TABLE link__bayes_documents__messages DROP CONSTRAINT link_bayes_messages_grouping;
 ALTER TABLE link__bayes_documents__messages ADD CONSTRAINT link__bayes_documents__messages_grouping PRIMARY KEY (messages_id, bayes_documents_id);
+CREATE INDEX link__bayes_documents__messages_bayes_documents_id_idx on link__bayes_documents__messages(bayes_documents_id);
 
 ALTER TABLE link__bayes_documents__rss_items DROP CONSTRAINT link_bayes_rss_grouping;
 ALTER TABLE link__bayes_documents__rss_items ADD CONSTRAINT link__bayes_documents__rss_items_grouping PRIMARY KEY (rss_items_id, bayes_documents_id);
+CREATE INDEX link__bayes_documents__rss_items_bayes_documents_id_idx on link__bayes_documents__rss_items(bayes_documents_id);
 
 ALTER TABLE link__bookmarks__tags DROP CONSTRAINT link_bookmarks_tags_grouping;
 ALTER TABLE link__bookmarks__tags ADD CONSTRAINT link__bookmarks__tags_grouping PRIMARY KEY (bookmarks_id, tags_id);
+CREATE INDEX link__bookmarks__tags_tags_id_idx on link__bookmarks__tags(tags_id);
 
 ALTER TABLE link__bookmarks__users DROP CONSTRAINT link_bookmarks_users_grouping;
 ALTER TABLE link__bookmarks__users ADD CONSTRAINT link__bookmarks__users_grouping PRIMARY KEY (bookmarks_id, users_id);
+CREATE INDEX link__bookmarks__users_users_id_idx on link__bookmarks__users(users_id);
 
 ALTER TABLE link__messages__tags DROP CONSTRAINT link_messages_tags_grouping;
 ALTER TABLE link__messages__tags ADD CONSTRAINT link__messages__tags_grouping PRIMARY KEY (messages_id, tags_id);
+CREATE INDEX link__messages__tags_tags_id_idx on link__messages__tags(tags_id);
 
 ALTER TABLE link__rss_feeds__users DROP CONSTRAINT link_rss_users_grouping;
 ALTER TABLE link__rss_feeds__users ADD CONSTRAINT link__rss_feeds__users_grouping PRIMARY KEY (rss_feeds_id, users_id);
+CREATE INDEX link__rss_feeds__users_users_id_idx on link__rss_feeds__users(users_id);
 
 ALTER TABLE bayes_auth DROP CONSTRAINT bayes_auth_grouping;
 ALTER TABLE bayes_auth ADD CONSTRAINT bayes_auth_grouping UNIQUE ( bayes_vectors_id , users_id );
