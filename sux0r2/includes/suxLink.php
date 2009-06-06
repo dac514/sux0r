@@ -15,13 +15,13 @@ class suxLink {
     other representative names. The order of the two other tables should be in
     alphabetical order. An example of a link table for "messages" and "bayes" :
 
-    CREATE TABLE ` link__bayes_documents__messages` (
-    `messages_id` int(11) NOT NULL,
-    `bayes_documents_id` int(11) NOT NULL,
-    UNIQUE KEY `idx` (`messages_id`,`bayes_documents_id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	CREATE TABLE IF NOT EXISTS `link__bayes_documents__messages` (
+	  `messages_id` int(11) NOT NULL,
+	  `bayes_documents_id` int(11) NOT NULL,
+	  PRIMARY KEY (`messages_id`,`bayes_documents_id`),
+	  KEY `bayes_documents_id` (`bayes_documents_id`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-    NB: Because we need rollback, link tables are InnoDB
     */
 
 
