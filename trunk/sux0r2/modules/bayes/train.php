@@ -17,7 +17,7 @@ require_once(dirname(__FILE__) . '/../../includes/suxLog.php');
 // Variables
 // ---------------------------------------------------------------------------
 
-$valid_links = array('messages', 'rss', 'bookmarks');
+$valid_links = array('messages', 'rss_items', 'bookmarks');
 $valid_modules = array('blog', 'feeds', 'bookmarks');
 
 // ---------------------------------------------------------------------------
@@ -34,7 +34,7 @@ function getBody($link, $id) {
         $body = $msg->getByID($id);
         $body = "{$body['title']} \n\n {$body['body_plaintext']}";
     }
-    elseif ($link == 'rss') {
+    elseif ($link == 'rss_items') {
         require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
         $rss = new suxRSS();
         $body = $rss->getItemByID($id);
