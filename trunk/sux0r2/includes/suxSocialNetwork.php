@@ -15,7 +15,7 @@ class suxSocialNetwork {
     // Database suff
     protected $db;
     protected $inTransaction = false;
-    // MyISAM (faster, no rollback)
+    // Tables
     protected $db_table = 'socialnetwork';
 
     // Enum (zero or one value)

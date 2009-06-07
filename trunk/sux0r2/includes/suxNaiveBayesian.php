@@ -23,12 +23,11 @@ class suxNaiveBayesian {
     protected $db;
     protected $inTransaction = false;
     protected $db_driver;
-    // InnoDB
+    // Tables
     protected $db_table_vec = 'bayes_vectors';
     protected $db_table_cat = 'bayes_categories';
     protected $db_table_doc = 'bayes_documents';
     protected $db_table_tok = 'bayes_tokens';
-    // MyISAM (faster, no rollback)
     protected $db_table_cache = 'bayes_cache';
 
     // If you change these, then you need to adjust your database columns
