@@ -1,3 +1,17 @@
+Version 2.6.25 (May 19th, 2009)
+-------------------------------
+- fix E_NOTICE when sessions are disabled (mohrt)
+
+Version 2.6.24 (May 16th, 2009)
+-------------------------------
+- fix problem introduced with super global changes (mohrt)
+
+Version 2.6.23 (May 13th, 2009)
+-------------------------------
+- strip backticks from {math} equations (mohrt)
+- make PHP super globals read-only from template (mohrt)
+- throw error when template exists but not readable (mohrt)
+
 Version 2.6.22 (Dec 17th, 2008)
 -------------------------------
 
@@ -449,7 +463,7 @@ Version 2.5.0-RC2 (March 26, 2003)
       the "checked" value of html_radios (Monte)
     - fixed errormessage in _compile_smarty_ref() (messju)
     - updated docs for html_image "name" -> "file" (messju)
-    - fixed bug with html_options-optgroups (Nichlas LÃ¶fdahl, messju)
+    - fixed bug with html_options-optgroups (Nichlas Löfdahl, messju)
     - cleaned up calls to readdir() (messju)
     - fixed bug with passing multiple modifiers to a parameter
       (Monte)
@@ -513,7 +527,7 @@ Version 2.5.0-RC1 (March 5, 2003)
     - fix cache groups with compile_id set (Monte)
     - add support for merging appended vars (messju, Monte)
     - allow null as function attribute value
-      (AndrÃ© Rabold, Monte)
+      (André Rabold, Monte)
     - support $foo->bar[index] syntax (Monte)
     - add get_registered_object function (messju, Monte)
     - treat unrecognized param attribute syntax as string (Monte)
