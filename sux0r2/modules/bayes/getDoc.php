@@ -23,8 +23,8 @@ if (isset($_POST['id']) && filter_var($_POST['id'], FILTER_VALIDATE_INT)) {
             if($links && count($links)) {
 
                 $table = str_replace('link__', '', $table);
-                $table = str_replace('bayes', '', $table);
-                $table = str_replace('_', '', $table);
+                $table = str_replace('bayes_documents', '', $table);
+                $table = str_replace('__', '', $table);
 
                 $tmp .= "[ {$text['to']} {$table}_id -&gt; ";
                 foreach ($links as $val) $tmp .= " $val,";
