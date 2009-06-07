@@ -75,7 +75,7 @@ Securimage
 
 Smarty
 * Path: ./Smarty/
-* Version: 2.6.22
+* Version: 2.6.25
 * Licence: LGPL 2.1
 * Website: http://www.smarty.net/
 

@@ -12,6 +12,8 @@ Converted all tables to Innodb, tried to optimize SQL indexes
 
 Changed link_table_ naming convention to: link__table__
 
+Updated symbionts: Smarty 2.6.25, TinyMCE 3.2.4.1
+
 ------------------------------------------------------------------------------
 sux0r 2.0.5
 ------------------------------------------------------------------------------
