@@ -13,7 +13,7 @@ class suxTags {
     protected $db;
     protected $inTransaction = false;
     protected $db_driver;
-    // MyISAM (faster, no rollback)
+    // Tables
     protected $db_table = 'tags';
 
 

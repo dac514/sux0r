@@ -13,12 +13,11 @@ class suxUser {
     protected $db;
     protected $inTransaction = false;
     protected $db_driver;
-    // InnoDB
+    // Tables
     protected $db_table = 'users';
     protected $db_table_info = 'users_info';
     protected $db_table_openid = 'users_openid';
     protected $db_table_access = 'users_access';
-    // MyISAM (faster, no rollback)
     protected $db_table_log = 'users_log';
 
     // Maximum authetication failures allowed

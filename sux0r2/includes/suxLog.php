@@ -13,8 +13,7 @@ class suxLog {
     protected $db;
     protected $inTransaction = false;
     protected $db_driver;
-
-    // MyISAM (faster, no rollback)
+	// Tables
     protected $db_table = 'users_log';
 
     // Object properties, with defaults
