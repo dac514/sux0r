@@ -102,7 +102,7 @@ class blogBookmarks extends component {
             }
         }
 
-        $count = count($this->arr['found_links']);
+        $count = count(@$this->arr['found_links']);
         if (!$count) suxFunct::redirect(suxFunct::getPreviousURL()); //  No links, skip
 
     }
