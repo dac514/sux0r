@@ -1,10 +1,14 @@
 ------------------------------------------------------------------------------
-sux0r 2.0.x
+sux0r 2.0.6
 ------------------------------------------------------------------------------
 
-A couple of fixes to make sux0r compatible on IIS 7
-
 Italian translation
+
+A few tweaks to make sux0r IIS 7 compatible
+
+Bugfix: Editing a blog wasn't working with Postgres
+
+Converted all tables to Innodb, tried to optimize SQL indexes
 
 Changed link_table_ naming convention to: link__table__
 
