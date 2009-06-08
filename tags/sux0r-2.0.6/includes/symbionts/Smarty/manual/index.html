@@ -1,0 +1,1145 @@
+<HTML
+><HEAD
+><TITLE
+>Smarty - the compiling PHP template engine</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="NEXT"
+TITLE="Preface"
+HREF="preface.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="book"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="BOOK"
+><A
+NAME="manual"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+><A
+NAME="bookinfo"
+></A
+>Smarty - the compiling PHP template engine</H1
+><DIV
+CLASS="author"
+>Monte Ohrt &#60;monte at ohrt dot com&#62;</DIV
+><DIV
+CLASS="author"
+>Andrei Zmievski &#60;andrei@php.net&#62;</DIV
+><P
+CLASS="pubdate"
+>04-05-2007<BR></P
+><P
+CLASS="copyright"
+>Copyright &copy; 2001-2005 New Digital Group, Inc.</P
+><HR></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="preface.html"
+>Preface</A
+></DT
+><DT
+>I. <A
+HREF="getting.started.html"
+>Getting Started</A
+></DT
+><DD
+><DL
+><DT
+>1. <A
+HREF="what.is.smarty.html"
+>What is Smarty?</A
+></DT
+><DT
+>2. <A
+HREF="installation.html"
+>Installation</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="installation.html#installation.requirements"
+>Requirements</A
+></DT
+><DT
+><A
+HREF="installing.smarty.basic.html"
+>Basic Installation</A
+></DT
+><DT
+><A
+HREF="installing.smarty.extended.html"
+>Extended Setup</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>II. <A
+HREF="smarty.for.designers.html"
+>Smarty For Template Designers</A
+></DT
+><DD
+><DL
+><DT
+>3. <A
+HREF="language.basic.syntax.html"
+>Basic Syntax</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="language.basic.syntax.html#language.syntax.comments"
+>Comments</A
+></DT
+><DT
+><A
+HREF="language.syntax.variables.html"
+>Variables</A
+></DT
+><DT
+><A
+HREF="language.syntax.functions.html"
+>Functions</A
+></DT
+><DT
+><A
+HREF="language.syntax.attributes.html"
+>Attributes</A
+></DT
+><DT
+><A
+HREF="language.syntax.quotes.html"
+>Embedding Vars in Double Quotes</A
+></DT
+><DT
+><A
+HREF="language.math.html"
+>Math</A
+></DT
+><DT
+><A
+HREF="language.escaping.html"
+>Escaping Smarty Parsing</A
+></DT
+></DL
+></DD
+><DT
+>4. <A
+HREF="language.variables.html"
+>Variables</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="language.variables.html#language.assigned.variables"
+>Variables assigned from PHP</A
+></DT
+><DT
+><A
+HREF="language.config.variables.html"
+>Variables loaded from config files</A
+></DT
+><DT
+><A
+HREF="language.variables.smarty.html"
+>{$smarty} reserved variable</A
+></DT
+></DL
+></DD
+><DT
+>5. <A
+HREF="language.modifiers.html"
+>Variable Modifiers</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="language.modifiers.html#language.modifier.capitalize"
+>capitalize</A
+></DT
+><DT
+><A
+HREF="language.modifier.cat.html"
+>cat</A
+></DT
+><DT
+><A
+HREF="language.modifier.count.characters.html"
+>count_characters</A
+></DT
+><DT
+><A
+HREF="language.modifier.count.paragraphs.html"
+>count_paragraphs</A
+></DT
+><DT
+><A
+HREF="language.modifier.count.sentences.html"
+>count_sentences</A
+></DT
+><DT
+><A
+HREF="language.modifier.count.words.html"
+>count_words</A
+></DT
+><DT
+><A
+HREF="language.modifier.date.format.html"
+>date_format</A
+></DT
+><DT
+><A
+HREF="language.modifier.default.html"
+>default</A
+></DT
+><DT
+><A
+HREF="language.modifier.escape.html"
+>escape</A
+></DT
+><DT
+><A
+HREF="language.modifier.indent.html"
+>indent</A
+></DT
+><DT
+><A
+HREF="language.modifier.lower.html"
+>lower</A
+></DT
+><DT
+><A
+HREF="language.modifier.nl2br.html"
+>nl2br</A
+></DT
+><DT
+><A
+HREF="language.modifier.regex.replace.html"
+>regex_replace</A
+></DT
+><DT
+><A
+HREF="language.modifier.replace.html"
+>replace</A
+></DT
+><DT
+><A
+HREF="language.modifier.spacify.html"
+>spacify</A
+></DT
+><DT
+><A
+HREF="language.modifier.string.format.html"
+>string_format</A
+></DT
+><DT
+><A
+HREF="language.modifier.strip.html"
+>strip</A
+></DT
+><DT
+><A
+HREF="language.modifier.strip.tags.html"
+>strip_tags</A
+></DT
+><DT
+><A
+HREF="language.modifier.truncate.html"
+>truncate</A
+></DT
+><DT
+><A
+HREF="language.modifier.upper.html"
+>upper</A
+></DT
+><DT
+><A
+HREF="language.modifier.wordwrap.html"
+>wordwrap</A
+></DT
+></DL
+></DD
+><DT
+>6. <A
+HREF="language.combining.modifiers.html"
+>Combining Modifiers</A
+></DT
+><DT
+>7. <A
+HREF="language.builtin.functions.html"
+>Built-in Functions</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="language.builtin.functions.html#language.function.capture"
+>{capture}</A
+></DT
+><DT
+><A
+HREF="language.function.config.load.html"
+>{config_load}</A
+></DT
+><DT
+><A
+HREF="language.function.foreach.html"
+>{foreach},{foreachelse}</A
+></DT
+><DT
+><A
+HREF="language.function.if.html"
+>{if},{elseif},{else}</A
+></DT
+><DT
+><A
+HREF="language.function.include.html"
+>{include}</A
+></DT
+><DT
+><A
+HREF="language.function.include.php.html"
+>{include_php}</A
+></DT
+><DT
+><A
+HREF="language.function.insert.html"
+>{insert}</A
+></DT
+><DT
+><A
+HREF="language.function.ldelim.html"
+>{ldelim},{rdelim}</A
+></DT
+><DT
+><A
+HREF="language.function.literal.html"
+>{literal}</A
+></DT
+><DT
+><A
+HREF="language.function.php.html"
+>{php}</A
+></DT
+><DT
+><A
+HREF="language.function.section.html"
+>{section},{sectionelse}</A
+></DT
+><DT
+><A
+HREF="language.function.strip.html"
+>{strip}</A
+></DT
+></DL
+></DD
+><DT
+>8. <A
+HREF="language.custom.functions.html"
+>Custom Functions</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="language.custom.functions.html#language.function.assign"
+>{assign}</A
+></DT
+><DT
+><A
+HREF="language.function.counter.html"
+>{counter}</A
+></DT
+><DT
+><A
+HREF="language.function.cycle.html"
+>{cycle}</A
+></DT
+><DT
+><A
+HREF="language.function.debug.html"
+>{debug}</A
+></DT
+><DT
+><A
+HREF="language.function.eval.html"
+>{eval}</A
+></DT
+><DT
+><A
+HREF="language.function.fetch.html"
+>{fetch}</A
+></DT
+><DT
+><A
+HREF="language.function.html.checkboxes.html"
+>{html_checkboxes}</A
+></DT
+><DT
+><A
+HREF="language.function.html.image.html"
+>{html_image}</A
+></DT
+><DT
+><A
+HREF="language.function.html.options.html"
+>{html_options}</A
+></DT
+><DT
+><A
+HREF="language.function.html.radios.html"
+>{html_radios}</A
+></DT
+><DT
+><A
+HREF="language.function.html.select.date.html"
+>{html_select_date}</A
+></DT
+><DT
+><A
+HREF="language.function.html.select.time.html"
+>{html_select_time}</A
+></DT
+><DT
+><A
+HREF="language.function.html.table.html"
+>{html_table}</A
+></DT
+><DT
+><A
+HREF="language.function.mailto.html"
+>{mailto}</A
+></DT
+><DT
+><A
+HREF="language.function.math.html"
+>{math}</A
+></DT
+><DT
+><A
+HREF="language.function.popup.html"
+>{popup}</A
+></DT
+><DT
+><A
+HREF="language.function.popup.init.html"
+>{popup_init}</A
+></DT
+><DT
+><A
+HREF="language.function.textformat.html"
+>{textformat}</A
+></DT
+></DL
+></DD
+><DT
+>9. <A
+HREF="config.files.html"
+>Config Files</A
+></DT
+><DT
+>10. <A
+HREF="chapter.debugging.console.html"
+>Debugging Console</A
+></DT
+></DL
+></DD
+><DT
+>III. <A
+HREF="smarty.for.programmers.html"
+>Smarty For Programmers</A
+></DT
+><DD
+><DL
+><DT
+>11. <A
+HREF="smarty.constants.html"
+>Constants</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="smarty.constants.html#constant.smarty.dir"
+>SMARTY_DIR</A
+></DT
+><DT
+><A
+HREF="constant.smarty.core.dir.html"
+>SMARTY_CORE_DIR</A
+></DT
+></DL
+></DD
+><DT
+>12. <A
+HREF="api.variables.html"
+>Smarty Class Variables</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="api.variables.html#variable.template.dir"
+>$template_dir</A
+></DT
+><DT
+><A
+HREF="variable.compile.dir.html"
+>$compile_dir</A
+></DT
+><DT
+><A
+HREF="variable.config.dir.html"
+>$config_dir</A
+></DT
+><DT
+><A
+HREF="variable.plugins.dir.html"
+>$plugins_dir</A
+></DT
+><DT
+><A
+HREF="variable.debugging.html"
+>$debugging</A
+></DT
+><DT
+><A
+HREF="variable.debug.tpl.html"
+>$debug_tpl</A
+></DT
+><DT
+><A
+HREF="variable.debugging.ctrl.html"
+>$debugging_ctrl</A
+></DT
+><DT
+><A
+HREF="variable.autoload.filters.html"
+>$autoload_filters</A
+></DT
+><DT
+><A
+HREF="variable.compile.check.html"
+>$compile_check</A
+></DT
+><DT
+><A
+HREF="variable.force.compile.html"
+>$force_compile</A
+></DT
+><DT
+><A
+HREF="variable.caching.html"
+>$caching</A
+></DT
+><DT
+><A
+HREF="variable.cache.dir.html"
+>$cache_dir</A
+></DT
+><DT
+><A
+HREF="variable.cache.lifetime.html"
+>$cache_lifetime</A
+></DT
+><DT
+><A
+HREF="variable.cache.handler.func.html"
+>$cache_handler_func</A
+></DT
+><DT
+><A
+HREF="variable.cache.modified.check.html"
+>$cache_modified_check</A
+></DT
+><DT
+><A
+HREF="variable.config.overwrite.html"
+>$config_overwrite</A
+></DT
+><DT
+><A
+HREF="variable.config.booleanize.html"
+>$config_booleanize</A
+></DT
+><DT
+><A
+HREF="variable.config.read.hidden.html"
+>$config_read_hidden</A
+></DT
+><DT
+><A
+HREF="variable.config.fix.newlines.html"
+>$config_fix_newlines</A
+></DT
+><DT
+><A
+HREF="variable.default.template.handler.func.html"
+>$default_template_handler_func</A
+></DT
+><DT
+><A
+HREF="variable.php.handling.html"
+>$php_handling</A
+></DT
+><DT
+><A
+HREF="variable.security.html"
+>$security</A
+></DT
+><DT
+><A
+HREF="variable.secure.dir.html"
+>$secure_dir</A
+></DT
+><DT
+><A
+HREF="variable.security.settings.html"
+>$security_settings</A
+></DT
+><DT
+><A
+HREF="variable.trusted.dir.html"
+>$trusted_dir</A
+></DT
+><DT
+><A
+HREF="variable.left.delimiter.html"
+>$left_delimiter</A
+></DT
+><DT
+><A
+HREF="variable.right.delimiter.html"
+>$right_delimiter</A
+></DT
+><DT
+><A
+HREF="variable.compiler.class.html"
+>$compiler_class</A
+></DT
+><DT
+><A
+HREF="variable.request.vars.order.html"
+>$request_vars_order</A
+></DT
+><DT
+><A
+HREF="variable.request.use.auto.globals.html"
+>$request_use_auto_globals</A
+></DT
+><DT
+><A
+HREF="variable.error.reporting.html"
+>$error_reporting</A
+></DT
+><DT
+><A
+HREF="variable.compile.id.html"
+>$compile_id</A
+></DT
+><DT
+><A
+HREF="variable.use.sub.dirs.html"
+>$use_sub_dirs</A
+></DT
+><DT
+><A
+HREF="variable.default.modifiers.html"
+>$default_modifiers</A
+></DT
+><DT
+><A
+HREF="variable.default.resource.type.html"
+>$default_resource_type</A
+></DT
+></DL
+></DD
+><DT
+>13. <A
+HREF="api.functions.html"
+>Smarty Class Methods()</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="api.append.html"
+>append()</A
+>&nbsp;--&nbsp;append an element to an assigned array</DT
+><DT
+><A
+HREF="api.append.by.ref.html"
+>append_by_ref()</A
+>&nbsp;--&nbsp;append values  by reference</DT
+><DT
+><A
+HREF="api.assign.html"
+>assign()</A
+>&nbsp;--&nbsp;assign values to the templates</DT
+><DT
+><A
+HREF="api.assign.by.ref.html"
+>assign_by_ref()</A
+>&nbsp;--&nbsp;assign values by reference</DT
+><DT
+><A
+HREF="api.clear.all.assign.html"
+>clear_all_assign()</A
+>&nbsp;--&nbsp;clears the values of all assigned variables</DT
+><DT
+><A
+HREF="api.clear.all.cache.html"
+>clear_all_cache()</A
+>&nbsp;--&nbsp;clears the entire template cache</DT
+><DT
+><A
+HREF="api.clear.assign.html"
+>clear_assign()</A
+>&nbsp;--&nbsp;clears the value of an assigned variable</DT
+><DT
+><A
+HREF="api.clear.cache.html"
+>clear_cache()</A
+>&nbsp;--&nbsp;clears the cache for a specific template</DT
+><DT
+><A
+HREF="api.clear.compiled.tpl.html"
+>clear_compiled_tpl()</A
+>&nbsp;--&nbsp;clears the compiled version of the specified template resource</DT
+><DT
+><A
+HREF="api.clear.config.html"
+>clear_config()</A
+>&nbsp;--&nbsp;clears assigned config variables</DT
+><DT
+><A
+HREF="api.config.load.html"
+>config_load()</A
+>&nbsp;--&nbsp; loads config file  data and assigns it to the template</DT
+><DT
+><A
+HREF="api.display.html"
+>display()</A
+>&nbsp;--&nbsp;displays the template</DT
+><DT
+><A
+HREF="api.fetch.html"
+>fetch()</A
+>&nbsp;--&nbsp;returns the template output</DT
+><DT
+><A
+HREF="api.get.config.vars.html"
+>get_config_vars()</A
+>&nbsp;--&nbsp;returns the given loaded config variable value</DT
+><DT
+><A
+HREF="api.get.registered.object.html"
+>get_registered_object()</A
+>&nbsp;--&nbsp;returns a reference to a registered object</DT
+><DT
+><A
+HREF="api.get.template.vars.html"
+>get_template_vars()</A
+>&nbsp;--&nbsp;returns  assigned variable value(s)</DT
+><DT
+><A
+HREF="api.is.cached.html"
+>is_cached()</A
+>&nbsp;--&nbsp;returns true if there is a valid cache for this template</DT
+><DT
+><A
+HREF="api.load.filter.html"
+>load_filter()</A
+>&nbsp;--&nbsp;load a filter plugin</DT
+><DT
+><A
+HREF="api.register.block.html"
+>register_block()</A
+>&nbsp;--&nbsp;dynamically register block functions plugins</DT
+><DT
+><A
+HREF="api.register.compiler.function.html"
+>register_compiler_function()</A
+>&nbsp;--&nbsp;dynamically register a compiler function plugin</DT
+><DT
+><A
+HREF="api.register.function.html"
+>register_function()</A
+>&nbsp;--&nbsp;dynamically register template function plugins</DT
+><DT
+><A
+HREF="api.register.modifier.html"
+>register_modifier()</A
+>&nbsp;--&nbsp;dynamically register modifier plugin</DT
+><DT
+><A
+HREF="api.register.object.html"
+>register_object()</A
+>&nbsp;--&nbsp;register an object for use in the templates</DT
+><DT
+><A
+HREF="api.register.outputfilter.html"
+>register_outputfilter()</A
+>&nbsp;--&nbsp;dynamically register outputfilters</DT
+><DT
+><A
+HREF="api.register.postfilter.html"
+>register_postfilter()</A
+>&nbsp;--&nbsp;dynamically register postfilters</DT
+><DT
+><A
+HREF="api.register.prefilter.html"
+>register_prefilter()</A
+>&nbsp;--&nbsp;dynamically register prefilters</DT
+><DT
+><A
+HREF="api.register.resource.html"
+>register_resource()</A
+>&nbsp;--&nbsp;dynamically register resources</DT
+><DT
+><A
+HREF="api.trigger.error.html"
+>trigger_error()</A
+>&nbsp;--&nbsp;output an error message</DT
+><DT
+><A
+HREF="api.template.exists.html"
+>template_exists()</A
+>&nbsp;--&nbsp;checks whether the specified template exists</DT
+><DT
+><A
+HREF="api.unregister.block.html"
+>unregister_block()</A
+>&nbsp;--&nbsp;dynamically unregister block function plugins</DT
+><DT
+><A
+HREF="api.unregister.compiler.function.html"
+>unregister_compiler_function()</A
+>&nbsp;--&nbsp;dynamically unregister a compiler function</DT
+><DT
+><A
+HREF="api.unregister.function.html"
+>unregister_function</A
+>&nbsp;--&nbsp;dynamically unregister template function plugin</DT
+><DT
+><A
+HREF="api.unregister.modifier.html"
+>unregister_modifier()</A
+>&nbsp;--&nbsp;dynamically unregister modifier plugin</DT
+><DT
+><A
+HREF="api.unregister.object.html"
+>unregister_object()</A
+>&nbsp;--&nbsp;dynamically unregister an object</DT
+><DT
+><A
+HREF="api.unregister.outputfilter.html"
+>unregister_outputfilter()</A
+>&nbsp;--&nbsp;dynamically unregister an output filter</DT
+><DT
+><A
+HREF="api.unregister.postfilter.html"
+>unregister_postfilter()</A
+>&nbsp;--&nbsp;dynamically unregister a postfilter</DT
+><DT
+><A
+HREF="api.unregister.prefilter.html"
+>unregister_prefilter()</A
+>&nbsp;--&nbsp;dynamically unregister a prefilter</DT
+><DT
+><A
+HREF="api.unregister.resource.html"
+>unregister_resource()</A
+>&nbsp;--&nbsp;dynamically unregister a resource plugin</DT
+></DL
+></DD
+><DT
+>14. <A
+HREF="caching.html"
+>Caching</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="caching.html#caching.setting.up"
+>Setting Up Caching</A
+></DT
+><DT
+><A
+HREF="caching.multiple.caches.html"
+>Multiple Caches Per Page</A
+></DT
+><DT
+><A
+HREF="caching.groups.html"
+>Cache Groups</A
+></DT
+><DT
+><A
+HREF="caching.cacheable.html"
+>Controlling Cacheability of Plugins' Output</A
+></DT
+></DL
+></DD
+><DT
+>15. <A
+HREF="advanced.features.html"
+>Advanced Features</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="advanced.features.html#advanced.features.objects"
+>Objects</A
+></DT
+><DT
+><A
+HREF="advanced.features.prefilters.html"
+>Prefilters</A
+></DT
+><DT
+><A
+HREF="advanced.features.postfilters.html"
+>Postfilters</A
+></DT
+><DT
+><A
+HREF="advanced.features.outputfilters.html"
+>Output Filters</A
+></DT
+><DT
+><A
+HREF="section.template.cache.handler.func.html"
+>Cache Handler Function</A
+></DT
+><DT
+><A
+HREF="template.resources.html"
+>Resources</A
+></DT
+></DL
+></DD
+><DT
+>16. <A
+HREF="plugins.html"
+>Extending Smarty With Plugins</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="plugins.html#plugins.howto"
+>How Plugins Work</A
+></DT
+><DT
+><A
+HREF="plugins.naming.conventions.html"
+>Naming Conventions</A
+></DT
+><DT
+><A
+HREF="plugins.writing.html"
+>Writing Plugins</A
+></DT
+><DT
+><A
+HREF="plugins.functions.html"
+>Template Functions</A
+></DT
+><DT
+><A
+HREF="plugins.modifiers.html"
+>Modifiers</A
+></DT
+><DT
+><A
+HREF="plugins.block.functions.html"
+>Block Functions</A
+></DT
+><DT
+><A
+HREF="plugins.compiler.functions.html"
+>Compiler Functions</A
+></DT
+><DT
+><A
+HREF="plugins.prefilters.postfilters.html"
+>Prefilters/Postfilters</A
+></DT
+><DT
+><A
+HREF="plugins.outputfilters.html"
+>Output Filters</A
+></DT
+><DT
+><A
+HREF="plugins.resources.html"
+>Resources</A
+></DT
+><DT
+><A
+HREF="plugins.inserts.html"
+>Inserts</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>IV. <A
+HREF="appendixes.html"
+>Appendixes</A
+></DT
+><DD
+><DL
+><DT
+>17. <A
+HREF="troubleshooting.html"
+>Troubleshooting</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="troubleshooting.html#smarty.php.errors"
+>Smarty/PHP errors</A
+></DT
+></DL
+></DD
+><DT
+>18. <A
+HREF="tips.html"
+>Tips &#38; Tricks</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="tips.html#tips.blank.var.handling"
+>Blank Variable Handling</A
+></DT
+><DT
+><A
+HREF="tips.default.var.handling.html"
+>Default Variable Handling</A
+></DT
+><DT
+><A
+HREF="tips.passing.vars.html"
+>Passing variable title to header template</A
+></DT
+><DT
+><A
+HREF="tips.dates.html"
+>Dates</A
+></DT
+><DT
+><A
+HREF="tips.wap.html"
+>WAP/WML</A
+></DT
+><DT
+><A
+HREF="tips.componentized.templates.html"
+>Componentized Templates</A
+></DT
+><DT
+><A
+HREF="tips.obfuscating.email.html"
+>Obfuscating E-mail Addresses</A
+></DT
+></DL
+></DD
+><DT
+>19. <A
+HREF="resources.html"
+>Resources</A
+></DT
+><DT
+>20. <A
+HREF="bugs.html"
+>BUGS</A
+></DT
+></DL
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="preface.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Preface</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

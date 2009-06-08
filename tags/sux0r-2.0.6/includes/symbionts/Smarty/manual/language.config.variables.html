@@ -1,0 +1,327 @@
+<HTML
+><HEAD
+><TITLE
+>Variables loaded from config files</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Variables"
+HREF="language.variables.html"><LINK
+REL="PREVIOUS"
+TITLE="Variables"
+HREF="language.variables.html"><LINK
+REL="NEXT"
+TITLE="{$smarty} reserved variable"
+HREF="language.variables.smarty.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.variables.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 4. Variables</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.variables.smarty.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.config.variables"
+></A
+>Variables loaded from config files</H1
+><P
+>&#13; Variables that are loaded from the
+ <A
+HREF="config.files.html"
+>config files</A
+>
+ are referenced by enclosing them within <TT
+CLASS="literal"
+>#hash marks#</TT
+>,
+ or with the smarty variable
+ <A
+HREF="language.variables.smarty.html#language.variables.smarty.config"
+>&#13; <TT
+CLASS="parameter"
+><I
+>$smarty.config</I
+></TT
+></A
+>.
+  The later syntax is useful for embedding into quoted attribute values.
+  </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN501"
+></A
+><P
+><B
+>Example 4-6. config variables</B
+></P
+><P
+>&#13;     Example config file - <TT
+CLASS="filename"
+>foo.conf</TT
+>:
+    </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>pageTitle = "This is mine"
+bodyBgColor = '#eeeeee'
+tableBorderSize = 3
+tableBgColor = "#bbbbbb"
+rowBgColor = "#cccccc"</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;     A template demonstrating the <TT
+CLASS="parameter"
+><I
+>#hash#</I
+></TT
+> method:
+    </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{config_load file='foo.conf'}
+&#60;html&#62;
+&#60;title&#62;{#pageTitle#}&#60;/title&#62;
+&#60;body bgcolor="{#bodyBgColor#}"&#62;
+&#60;table border="{#tableBorderSize#}" bgcolor="{#tableBgColor#}"&#62;
+&#60;tr bgcolor="{#rowBgColor#}"&#62;
+    &#60;td&#62;First&#60;/td&#62;
+    &#60;td&#62;Last&#60;/td&#62;
+    &#60;td&#62;Address&#60;/td&#62;
+&#60;/tr&#62;
+&#60;/table&#62;
+&#60;/body&#62;
+&#60;/html&#62;</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;     A template demonstrating the
+     <A
+HREF="language.variables.smarty.html#language.variables.smarty.config"
+>&#13;     <TT
+CLASS="parameter"
+><I
+>$smarty.config</I
+></TT
+></A
+> method:
+    </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{config_load file='foo.conf'}
+&#60;html&#62;
+&#60;title&#62;{$smarty.config.pageTitle}&#60;/title&#62;
+&#60;body bgcolor="{$smarty.config.bodyBgColor}"&#62;
+&#60;table border="{$smarty.config.tableBorderSize}" bgcolor="{$smarty.config.tableBgColor}"&#62;
+&#60;tr bgcolor="{$smarty.config.rowBgColor}"&#62;
+    &#60;td&#62;First&#60;/td&#62;
+    &#60;td&#62;Last&#60;/td&#62;
+    &#60;td&#62;Address&#60;/td&#62;
+&#60;/tr&#62;
+&#60;/table&#62;
+&#60;/body&#62;
+&#60;/html&#62;</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;     Both examples would output:
+    </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#60;html&#62;
+&#60;title&#62;This is mine&#60;/title&#62;
+&#60;body bgcolor="#eeeeee"&#62;
+&#60;table border="3" bgcolor="#bbbbbb"&#62;
+&#60;tr bgcolor="#cccccc"&#62;
+	&#60;td&#62;First&#60;/td&#62;
+	&#60;td&#62;Last&#60;/td&#62;
+	&#60;td&#62;Address&#60;/td&#62;
+&#60;/tr&#62;
+&#60;/table&#62;
+&#60;/body&#62;
+&#60;/html&#62;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;  Config file variables cannot be used until
+  after they are loaded in from a config file. This procedure is
+  explained later in this document under
+  <A
+HREF="language.function.config.load.html"
+>&#13;  <TT
+CLASS="varname"
+>{config_load}</TT
+></A
+>.
+</P
+><P
+>&#13;  See also <A
+HREF="language.syntax.variables.html"
+>variables</A
+> and
+  <A
+HREF="language.variables.smarty.html"
+>$smarty reserved
+  variables</A
+>
+</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.variables.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.variables.smarty.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Variables</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.variables.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>{$smarty} reserved variable</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,738 @@
+<HTML
+><HEAD
+><TITLE
+>{textformat}</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Custom Functions"
+HREF="language.custom.functions.html"><LINK
+REL="PREVIOUS"
+TITLE="{popup_init}"
+HREF="language.function.popup.init.html"><LINK
+REL="NEXT"
+TITLE="Config Files"
+HREF="config.files.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.function.popup.init.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 8. Custom Functions</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="config.files.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.function.textformat"
+></A
+>{textformat}</H1
+><P
+>&#13;   <TT
+CLASS="varname"
+>{textformat}</TT
+> is a
+   <A
+HREF="plugins.block.functions.html"
+>block function</A
+>
+   used to format text. It basically  cleans up spaces and special characters,
+   and formats paragraphs by  wrapping at a boundary and indenting lines.
+  </P
+><P
+>&#13;   You can set the parameters explicitly, or use a preset style.
+   Currently <SPAN
+CLASS="QUOTE"
+>"email"</SPAN
+> is the only available style.
+ </P
+><DIV
+CLASS="informaltable"
+><A
+NAME="AEN4691"
+></A
+><P
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Attribute Name</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Type</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Required</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Default</TH
+><TH
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Description</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>style</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>No</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>n/a</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Preset style</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>indent</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>number</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>No</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>0</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>The number of chars to indent every line</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>indent_first</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>number</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>No</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>0</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>The number of chars to indent the first line</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>indent_char</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>No</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>(single space)</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>The character (or string of chars) to indent with</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>wrap</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>number</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>No</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>80</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>How many characters to wrap each line to</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>wrap_char</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>No</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>\n</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>The character (or string of chars) to break each line with</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>wrap_cut</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>boolean</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>No</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+><TT
+CLASS="constant"
+>FALSE</TT
+></I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>If <TT
+CLASS="constant"
+>TRUE</TT
+>, wrap will break the line at the exact
+      character instead of at a word boundary</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>assign</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>No</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>n/a</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>The template variable the output will be assigned to</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN4764"
+></A
+><P
+><B
+>Example 8-27. {textformat}</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{textformat wrap=40}
+
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+
+   This is bar.
+
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+
+   {/textformat}</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;   The above example will output:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>This is foo. This is foo. This is foo.
+   This is foo. This is foo. This is foo.
+
+   This is bar.
+
+   bar foo bar foo foo. bar foo bar foo
+   foo. bar foo bar foo foo. bar foo bar
+   foo foo. bar foo bar foo foo. bar foo
+   bar foo foo. bar foo bar foo foo.</PRE
+></TD
+></TR
+></TABLE
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{textformat wrap=40 indent=4}
+
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+
+   This is bar.
+
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+
+   {/textformat}</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;   The above example will output:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>This is foo. This is foo. This is
+   foo. This is foo. This is foo. This
+   is foo.
+
+   This is bar.
+
+   bar foo bar foo foo. bar foo bar foo
+   foo. bar foo bar foo foo. bar foo
+   bar foo foo. bar foo bar foo foo.
+   bar foo bar foo foo. bar foo bar
+   foo foo.</PRE
+></TD
+></TR
+></TABLE
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{textformat wrap=40 indent=4 indent_first=4}
+
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+
+   This is bar.
+
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+
+   {/textformat}</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;   The above example will output:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>This is foo. This is foo. This
+   is foo. This is foo. This is foo.
+   This is foo.
+
+   This is bar.
+
+   bar foo bar foo foo. bar foo bar
+   foo foo. bar foo bar foo foo. bar
+   foo bar foo foo. bar foo bar foo
+   foo. bar foo bar foo foo. bar foo
+   bar foo foo.</PRE
+></TD
+></TR
+></TABLE
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{textformat style="email"}
+
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+
+   This is bar.
+
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+
+   {/textformat}</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;   The above example will output:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>This is foo. This is foo. This is foo. This is foo. This is foo. This is
+   foo.
+
+   This is bar.
+
+   bar foo bar foo foo. bar foo bar foo foo. bar foo bar foo foo. bar foo
+   bar foo foo. bar foo bar foo foo. bar foo bar foo foo. bar foo bar foo
+   foo.</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;  See also
+  <A
+HREF="language.function.strip.html"
+><TT
+CLASS="varname"
+>{strip}</TT
+></A
+>
+  and
+  <A
+HREF="language.modifier.wordwrap.html"
+><TT
+CLASS="varname"
+>wordwrap</TT
+></A
+>.
+ </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.function.popup.init.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="config.files.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>{popup_init}</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.custom.functions.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Config Files</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
