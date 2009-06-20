@@ -1,0 +1,247 @@
+<HTML
+><HEAD
+><TITLE
+>$use_sub_dirs</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Smarty Class Variables"
+HREF="api.variables.html"><LINK
+REL="PREVIOUS"
+TITLE="$compile_id"
+HREF="variable.compile.id.html"><LINK
+REL="NEXT"
+TITLE="$default_modifiers"
+HREF="variable.default.modifiers.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="variable.compile.id.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 12. Smarty Class Variables</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="variable.default.modifiers.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="variable.use.sub.dirs"
+></A
+>$use_sub_dirs</H1
+><P
+>&#13;Smarty will create subdirectories under the
+<A
+HREF="variable.compile.dir.html"
+>compiled templates</A
+> and
+<A
+HREF="variable.cache.dir.html"
+>cache</A
+>
+directories if <TT
+CLASS="parameter"
+><I
+>$use_sub_dirs</I
+></TT
+> is set to <TT
+CLASS="constant"
+>TRUE</TT
+>,
+ default is <TT
+CLASS="constant"
+>FALSE</TT
+>.
+In an environment where there are potentially tens of thousands of files created,
+this may help the filesystem speed.
+On the other hand, some environments do not allow PHP processes to
+create directories, so this must be disabled which is the default.
+</P
+><P
+>&#13;Sub directories are more efficient, so use them  if you can.
+Theoretically you get much better perfomance on a filesystem with 10
+directories each having 100 files, than with 1 directory having 1000
+files. This was certainly the case with Solaris 7 (UFS)... with newer
+filesystems such as ext3 and especially reiserfs, the difference is almost
+nothing.
+</P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+></P
+><UL
+><LI
+><P
+><TT
+CLASS="literal"
+>$use_sub_dirs=true</TT
+> doesn't work with
+	<A
+HREF="http://php.net/features.safe-mode"
+TARGET="_top"
+>safe_mode=On</A
+>,
+	that's why it's switchable and why it's off by default.
+	</P
+></LI
+><LI
+><P
+><TT
+CLASS="literal"
+>$use_sub_dirs=true</TT
+> on Windows can cause problems.</P
+></LI
+><LI
+><P
+>Safe_mode is being deprecated in PHP6.</P
+></LI
+></UL
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;  See also
+  <A
+HREF="variable.compile.id.html"
+><TT
+CLASS="parameter"
+><I
+>$compile_id</I
+></TT
+></A
+>,
+  <A
+HREF="variable.cache.dir.html"
+><TT
+CLASS="parameter"
+><I
+>$cache_dir</I
+></TT
+></A
+>,
+   and
+   <A
+HREF="variable.compile.dir.html"
+><TT
+CLASS="parameter"
+><I
+>$compile_dir</I
+></TT
+></A
+>.
+ </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="variable.compile.id.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="variable.default.modifiers.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>$compile_id</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="api.variables.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>$default_modifiers</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

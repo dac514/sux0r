@@ -1,0 +1,355 @@
+<HTML
+><HEAD
+><TITLE
+>Controlling Cacheability of Plugins' Output</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Caching"
+HREF="caching.html"><LINK
+REL="PREVIOUS"
+TITLE="Cache Groups"
+HREF="caching.groups.html"><LINK
+REL="NEXT"
+TITLE="Advanced Features"
+HREF="advanced.features.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="caching.groups.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 14. Caching</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="advanced.features.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="caching.cacheable"
+></A
+>Controlling Cacheability of Plugins' Output</H1
+><P
+>&#13;   Since Smarty-2.6.0 plugins the cacheability of plugins can be
+   declared when registering them. The third parameter to
+   <A
+HREF="api.register.block.html"
+><TT
+CLASS="varname"
+>register_block()</TT
+></A
+>,
+   <A
+HREF="api.register.compiler.function.html"
+>&#13;   <TT
+CLASS="varname"
+>register_compiler_function()</TT
+></A
+> and <A
+HREF="api.register.function.html"
+><TT
+CLASS="varname"
+>register_function()</TT
+></A
+>
+    is called <TT
+CLASS="parameter"
+><I
+>$cacheable</I
+></TT
+> and defaults to <TT
+CLASS="constant"
+>TRUE</TT
+> which
+   is also the behaviour of plugins in Smarty versions before 2.6.0
+  </P
+><P
+>&#13;   When registering a plugin with <TT
+CLASS="literal"
+>$cacheable=false</TT
+> the plugin
+   is called everytime the page is displayed, even if the page comes
+   from the cache. The plugin function behaves a little like an
+   <A
+HREF="plugins.inserts.html"
+><TT
+CLASS="varname"
+>{insert}</TT
+></A
+> function.
+  </P
+><P
+>&#13;   In contrast to <A
+HREF="plugins.inserts.html"
+><TT
+CLASS="varname"
+>{insert}</TT
+>
+   </A
+>
+   the attributes to the plugins are not cached by default. They can be
+   declared to be cached with the fourth parameter
+   <TT
+CLASS="parameter"
+><I
+>$cache_attrs</I
+></TT
+>. <TT
+CLASS="parameter"
+><I
+>$cache_attrs</I
+></TT
+>
+   is an array of attribute-names that should be cached, so the
+   plugin-function get value as it was the time the page was written
+   to cache everytime it is fetched from the cache.
+  </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN6945"
+></A
+><P
+><B
+>Example 14-10. Preventing a plugin's output from being cached</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br />$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">caching&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">true</span><span style="color: #007700">;<br /><br />function&nbsp;</span><span style="color: #0000BB">remaining_seconds</span><span style="color: #007700">(</span><span style="color: #0000BB">$params</span><span style="color: #007700">,&nbsp;&amp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">)&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$remain&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">$params</span><span style="color: #007700">[</span><span style="color: #DD0000">'endtime'</span><span style="color: #007700">]&nbsp;-&nbsp;</span><span style="color: #0000BB">time</span><span style="color: #007700">();<br />&nbsp;&nbsp;&nbsp;&nbsp;if(</span><span style="color: #0000BB">$remain&nbsp;</span><span style="color: #007700">&gt;=&nbsp;</span><span style="color: #0000BB">0</span><span style="color: #007700">){<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span style="color: #0000BB">$remain&nbsp;</span><span style="color: #007700">.&nbsp;</span><span style="color: #DD0000">'&nbsp;second(s)'</span><span style="color: #007700">;<br />&nbsp;&nbsp;&nbsp;&nbsp;}else{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span style="color: #DD0000">'done'</span><span style="color: #007700">;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">register_function</span><span style="color: #007700">(</span><span style="color: #DD0000">'remaining'</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'remaining_seconds'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">false</span><span style="color: #007700">,&nbsp;array(</span><span style="color: #DD0000">'endtime'</span><span style="color: #007700">));<br /><br />if&nbsp;(!</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">is_cached</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">))&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #FF8000">//&nbsp;fetch&nbsp;$obj&nbsp;from&nbsp;db&nbsp;and&nbsp;assign...<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign_by_ref</span><span style="color: #007700">(</span><span style="color: #DD0000">'obj'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$obj</span><span style="color: #007700">);<br />}<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+><P
+>&#13;    where <TT
+CLASS="filename"
+>index.tpl</TT
+> is:
+   </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>Time Remaining: {remaining endtime=$obj-&#62;endtime}</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;    The number of seconds till the endtime of <TT
+CLASS="literal"
+>$obj</TT
+> is reached
+    changes on each display of the page, even if the page is cached. Since the
+    endtime attribute is cached the object only has to be pulled from the
+    database when page is written to the cache but not on subsequent requests
+    of the page.
+   </P
+></DIV
+></TD
+></TR
+></TABLE
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN6953"
+></A
+><P
+><B
+>Example 14-11. Preventing a whole passage of a template from being cached</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+index.php:<br /><br /><span style="color: #0000BB">&lt;?php<br />$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">caching&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">1</span><span style="color: #007700">;<br /><br />function&nbsp;</span><span style="color: #0000BB">smarty_block_dynamic</span><span style="color: #007700">(</span><span style="color: #0000BB">$param</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$content</span><span style="color: #007700">,&nbsp;&amp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">)&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span style="color: #0000BB">$content</span><span style="color: #007700">;<br />}<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">register_block</span><span style="color: #007700">(</span><span style="color: #DD0000">'dynamic'</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'smarty_block_dynamic'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">false</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+><P
+>&#13;    where <TT
+CLASS="filename"
+>index.tpl</TT
+> is:
+   </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>Page created: {'0'|date_format:'%D %H:%M:%S'}
+
+{dynamic}
+
+Now is: {'0'|date_format:'%D %H:%M:%S'}
+
+... do other stuff ...
+
+{/dynamic}</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;   When reloading the page you will notice that both dates differ. One
+   is <SPAN
+CLASS="QUOTE"
+>"dynamic"</SPAN
+> one is <SPAN
+CLASS="QUOTE"
+>"static"</SPAN
+>. You can do everything
+    between <TT
+CLASS="literal"
+>{dynamic}...{/dynamic}</TT
+> and be sure it will not
+    be cached like the rest of the page.
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="caching.groups.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="advanced.features.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Cache Groups</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="caching.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Advanced Features</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
