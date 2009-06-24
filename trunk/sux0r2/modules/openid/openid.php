@@ -1503,7 +1503,7 @@ class openid {
             throw new Exception('errorPost: Headers already sent');
 
         header("HTTP/1.1 400 Bad Request");
-        echo ('error:' . $message);
+        echo 'error:' , $message;
         exit;
 
     }

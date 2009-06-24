@@ -33,7 +33,7 @@ if (isset($_POST['id']) && filter_var($_POST['id'], FILTER_VALIDATE_INT)) {
             }
         }
 
-        echo '<em>bayes_document_id: ' . $_POST['id'] . '</em><br />';
+        echo '<em>bayes_document_id: ' , $_POST['id'] , '</em><br />';
 
         if ($tmp) {
             echo "<em><strong>{$text['is_linked']}</strong></em> ";
