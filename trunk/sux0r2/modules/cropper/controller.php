@@ -9,7 +9,6 @@
 
 function sux($action, $params = null) {
 
-
     include_once('cropper.php');
     $cropper = new cropper();
 
@@ -21,11 +20,6 @@ function sux($action, $params = null) {
     else {
         $cropper->formBuild($action, $params[0], $_POST);
     }
-
-
-
-
-
 
 }
 
