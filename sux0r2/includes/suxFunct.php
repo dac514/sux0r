@@ -357,24 +357,21 @@ class suxFunct {
         if ($skip == null) $skip = $GLOBALS['CONFIG']['PREV_SKIP'];
         elseif (!is_array($skip)) $skip = array($skip);
 
+		// Sanitize and transform array into regular expressions
         foreach ($skip as $key => $val) {
             $val = str_replace('#', '', $val);
             $val = trim($val);
             $val = trim($val, '/');
-            $val = "#^{$val}#i";
-            $skip[$key] = $val;
+            $skip[$key] = "#^{$val}#i"; // regex
         }
 
         if (isset($_SESSION['breadcrumbs'])) foreach($_SESSION['breadcrumbs'] as $val) {
 
             $ok = true;
-            $url = suxFunct::makeUrl($val);
-
             foreach ($skip as $val2) {
                 if (preg_match($val2, $val)) $ok = false;
             }
-
-            if ($ok) return $url;
+            if ($ok) return suxFunct::makeUrl($val);
 
         }
 
