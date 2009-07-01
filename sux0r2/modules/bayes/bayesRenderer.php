@@ -142,7 +142,7 @@ class bayesRenderer extends suxRenderer {
 
         /* Get all the bayes categories linked to the document id that the user has access to */
 
-        $link_table = $this->link->buildTableName($link, 'bayes_documents');        
+        $link_table = $this->link->buildTableName($link, 'bayes_documents');
         $innerjoin = "
         INNER JOIN bayes_auth ON bayes_categories.bayes_vectors_id = bayes_auth.bayes_vectors_id
         INNER JOIN bayes_documents ON bayes_categories.id = bayes_documents.bayes_categories_id
@@ -184,7 +184,8 @@ class bayesRenderer extends suxRenderer {
                 if ($i == 0) {
                     // this is $v_trainer[], Ajax trainable
                     $html .= '<select name="category_id[]" class="nbCatDropdown" ';
-                    $html .= "onchange=\"suxTrain('nb{$uniqid}', '{$link}', '{$module}', {$id}, this.options[selectedIndex].value);\" ";
+                    $html .= "%_{$uniqid}_%"; // Action to be replaced
+                    $html .= "=\"suxTrain('nb{$uniqid}', '{$link}', '{$module}', {$id}, this.options[selectedIndex].value);\" ";
                     $html .= '>';
 
                 }
@@ -207,11 +208,21 @@ class bayesRenderer extends suxRenderer {
                 }
 
 
-                /* Get bayesian scores */
+                /* Replace strings */
 
-                if ($is_categorized) $replace = "<span class='nbVecTrained'>{$val['vector']} : </span>";
-                else $replace = $val['vector'] . ' : ';
+                if ($is_categorized) {
+                    $replace = "<span class='nbVecTrained'>{$val['vector']} : </span>";
+                    $replace2 = 'onchange';
+                }
+                else {
+                    $replace = $val['vector'] . ' : ';
+                    $replace2 = 'onmouseup';
+                }
                 $html = str_replace("@_{$uniqid}_@", $replace, $html);
+                $html = str_replace("%_{$uniqid}_%", $replace2, $html);
+
+
+                /* Get bayesian scores */
 
                 $j = 0;
                 $scores = $this->nb->categorize($document, $key);
