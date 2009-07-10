@@ -755,12 +755,6 @@ class suxUser {
             }
         }
 
-        // Forecfully check if a user is banned
-        if ($proceed && $this->isBanned($_SESSION['users_id'])) {
-            suxFunct::killSession();
-            suxFunct::redirect(suxFunct::makeUrl('/banned'));
-        }
-
         // Conditionally redirect
         if (!$proceed && $redirect) {
             suxFunct::killSession();
@@ -955,9 +949,15 @@ class suxUser {
 
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1) return false;
 
-        $st = $this->db->prepare("SELECT password FROM {$this->db_table} WHERE id = ? ");
+        $st = $this->db->prepare("SELECT banned, password FROM {$this->db_table} WHERE id = ? ");
         $st->execute(array($users_id));
         $row = $st->fetch();
+
+        // Forecfully redirect a banned user
+        if ($row['banned']) {
+            suxFunct::killSession();
+            suxFunct::redirect(suxFunct::makeUrl('/banned'));
+        }
 
         if (empty($row['password'])) {
             return false;
