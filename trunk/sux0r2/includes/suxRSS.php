@@ -467,16 +467,16 @@ class suxRSS extends DOMDocument {
         // Delete links, too
         $link = new suxLink();
         $links = $link->getLinkTables('rss_feeds');
-        foreach ($links as $table) {            
-            $link->deleteLink($table, 'rss_feeds', $id);            
-        }         
+        foreach ($links as $table) {
+            $link->deleteLink($table, 'rss_feeds', $id);
+        }
         $links = $link->getLinkTables('rss_items');
-        foreach ($links as $table) {            
+        foreach ($links as $table) {
             foreach($result as $key => $val) {
                 $link->deleteLink($table, 'rss_items', $val['id']);
             }
-            
-        }              
+
+        }
 
         suxDB::commitTransaction($tid);
         $this->inTransaction = false;
@@ -740,7 +740,7 @@ class suxRSS extends DOMDocument {
 
         // If not UTF-8, convert to UTF-8
         if (mb_strtoupper($this->rsscp) != 'UTF-8') {
-            $out[1] = @mb_convert_encoding($out[1], 'UTF-8', $this->rsscp);
+            $out[1] = $this->convertToUTF8($out[1]);
         }
 
         // Return result
@@ -781,12 +781,31 @@ class suxRSS extends DOMDocument {
 
         // If not UTF-8, convert to UTF-8
         if (mb_strtoupper($this->rsscp) != 'UTF-8') {
-            $concat = @mb_convert_encoding($concat, 'UTF-8', $this->rsscp);
+            $concat = $this->convertToUTF8($concat);
         }
 
         // Return result
         return trim($concat);
 
+	}
+
+
+	/**
+	* Convert to UTF-8
+    *
+    * @param string $text
+    * @return string
+	*/
+	private function convertToUTF8($text) {
+
+		if (function_exists('iconv')) {
+			$text = @iconv($this->rsscp, 'UTF-8//TRANSLIT', $text);
+		}
+		else {
+			$text = @mb_convert_encoding($text, 'UTF-8', $this->rsscp);
+		}
+
+		return $text;
 	}
 
 
