@@ -757,7 +757,7 @@ class suxUser {
 
         // Conditionally redirect
         if (!$proceed && $redirect) {
-            suxFunct::killSession();
+            self::killSession();
             suxFunct::redirect($redirect);
         }
 
@@ -889,7 +889,7 @@ class suxUser {
         $user = $this->getByID($users_id, true);
 
         if (!$user) {
-            suxFunct::killSession();
+            self::killSession();
             return false;
         }
 
@@ -899,6 +899,24 @@ class suxUser {
         $_SESSION['nickname'] = $user['nickname'];
         $_SESSION['token'] = md5(date('W') . $user['password'] . @$GLOBALS['CONFIG']['SALT']);
         $_SESSION['language'] = $user['language'];
+
+    }
+
+
+    /**
+    * Kill $_SESSION
+    */
+    static function killSession() {
+
+        // Keep breadcrumbs
+        $tmp = array();
+        if (isset($_SESSION['breadcrumbs'])) $tmp = $_SESSION['breadcrumbs'];
+
+        $_SESSION = array();
+        session_destroy();
+
+        @session_start();
+        $_SESSION['breadcrumbs'] = $tmp;
 
     }
 
@@ -955,7 +973,7 @@ class suxUser {
 
         // Forecfully redirect a banned user
         if ($row['banned']) {
-            suxFunct::killSession();
+            self::killSession();
             suxFunct::redirect(suxFunct::makeUrl('/banned'));
         }
 

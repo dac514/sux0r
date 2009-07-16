@@ -65,25 +65,6 @@ class suxFunct {
     // Miscelaneous
     // ------------------------------------------------------------------------
 
-
-    /**
-    * Kill $_SESSION
-    */
-    static function killSession() {
-
-        // Keep breadcrumbs
-        $tmp = array();
-        if (isset($_SESSION['breadcrumbs'])) $tmp = $_SESSION['breadcrumbs'];
-
-        $_SESSION = array();
-        session_destroy();
-
-        @session_start();
-        $_SESSION['breadcrumbs'] = $tmp;
-
-    }
-
-
     /**
     * Sanitize HTML
     *
