@@ -80,7 +80,7 @@ class userAuthenticate extends component {
         // user isn't actually logged in.
         if ($this->user->loginCheck()) {
             $this->log->write($_SESSION['users_id'], 'sux0r::userAuthenticate() logout', 1); // Log, private
-            suxFunct::killSession();
+            suxUser::killSession();
         }
 
         // Ask browser to clear authentication

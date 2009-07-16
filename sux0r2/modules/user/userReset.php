@@ -97,7 +97,7 @@ class userReset extends component {
         if (!$user) throw new Exception('Invalid user?!');
         elseif (@$user['banned']) {
             // Banned user, abort
-            suxFunct::killSession();
+            suxUser::killSession();
             suxFunct::redirect(suxFunct::makeUrl('/banned'));
         }
 
