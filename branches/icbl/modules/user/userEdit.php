@@ -488,8 +488,194 @@ class userEdit extends component {
 
     }
 
+		
+		
+    /**
+    * Validate the form
+    *
+    * @param array $dirty reference to unverified $_GET
+    * @return bool
+    */
+    function apiFormValidate($params) {
 
+        // ------------------------------------------------------------------
+        // Token validation
+        // ------------------------------------------------------------------
+
+        if (empty($params[1]) || empty($_SESSION['SmartyValidate'][SMARTY_VALIDATE_DEFAULT_FORM]['token'])) {
+            //trigger_error("SmartyValidate: [token] is not set.");
+            return false;
+        }		
+		    if(sizeof($params)==5) {
+				   if($params[1]==$_SESSION['SmartyValidate'][SMARTY_VALIDATE_DEFAULT_FORM]['token']) {
+					    return true;
+					 } else return false;
+				} else return false;
+        //return suxValidate::formValidate($dirty, $this->tpl);
+
+    }
+
+
+    /**
+    * Build the form and show the template
+    *
+    * @param array $dirty reference to unverified $_POST
+    * @param array $filthy reference to unverified $_GET
+    */
+    function apiFormBuild(&$dirty, &$filthy) {
+
+        // --------------------------------------------------------------------
+        // Pre assign template variables, maybe overwritten by &$dirty
+        // --------------------------------------------------------------------
+
+        $u = array();
+
+        if ($this->isOpenID()) {
+
+            // OpenID Registration
+            $this->r->bool['openid'] = true;
+            $this->r->text['openid_url'] = $_SESSION['openid_url_registration'];
+
+            // Sreg
+            if (!empty($filthy['nickname'])) $u['nickname'] = $filthy['nickname'];
+            if (!empty($filthy['email'])) $u['email'] = $filthy['email'];
+            if (!empty($filthy['fullname'])) {
+                // \w means alphanumeric characters, \W is the negated version of \w
+                $tmp = mb_split("\W", $filthy['fullname']);
+                $u['given_name'] = array_shift($tmp);
+                $u['family_name'] = array_pop($tmp);
+            }
+            if (!empty($filthy['dob'])) {
+                $tmp = mb_split("-", $filthy['dob']);
+                $u['Date_Year'] = array_shift($tmp);
+                $u['Date_Month'] = array_shift($tmp);
+                $u['Date_Day'] = array_shift($tmp);
+            }
+            if (!empty($filthy['country'])) $u['country'] = mb_strtolower($filthy['country']);
+            if (!empty($filthy['gender'])) $u['gender'] = mb_strtolower($filthy['gender']);
+            if (!empty($filthy['postcode'])) $u['postcode'] = $filthy['postcode'];
+            if (!empty($filthy['language'])) $u['language'] = mb_strtolower($filthy['language']);
+            if (!empty($filthy['timezone'])) $u['timezone'] = $filthy['timezone'];
+
+        }
+        elseif ($this->mode == 'edit') {
+
+            $u = $this->user->getByID($this->users_id, true);
+
+            // Unset
+            unset($u['password']);
+            unset($u['root']);
+
+            // Dob
+            if (!empty($u['dob'])) {
+                $tmp = mb_split("-", $u['dob']);
+                $u['Date_Year'] = array_shift($tmp);
+                $u['Date_Month'] = array_shift($tmp);
+                $u['Date_Day'] = array_shift($tmp);
+            }
+            unset($u['dob']);
+
+            // Country
+            if (!empty($u['country'])) {
+                $u['country'] = mb_strtolower($u['country']);
+            }
+
+            // Don't allow spoofing
+            unset($dirty['nickname']);
+
+        }
+
+        // Assign user
+        $this->tpl->assign($u);
+
+        // --------------------------------------------------------------------
+        // Form logic
+        // --------------------------------------------------------------------
+
+        if (!empty($dirty)) $this->tpl->assign($dirty);
+        else suxValidate::disconnect();
+
+        if (!suxValidate::is_registered_form()) {
+
+            suxValidate::connect($this->tpl, true); // Reset connection
+
+            // Register our additional criterias
+            suxValidate::register_criteria('invalidCharacters', 'this->invalidCharacters');
+            suxValidate::register_criteria('isDuplicateNickname', 'this->isDuplicateNickname');
+            suxValidate::register_criteria('isReservedNickname', 'this->isReservedNickname');
+            suxValidate::register_criteria('isDuplicateEmail', 'this->isDuplicateEmail');
+            suxValidate::register_criteria('isValidCaptcha', 'this->isValidCaptcha');
+
+            // Register our validators
+            // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
+            suxValidate::register_validator('nickname', 'nickname', 'notEmpty', false, false, 'trim');
+            suxValidate::register_validator('nickname2', 'nickname', 'invalidCharacters');
+            suxValidate::register_validator('nickname3', 'nickname', 'isDuplicateNickname');
+            suxValidate::register_validator('nickname4', 'nickname', 'isReservedNickname');
+            suxValidate::register_validator('email', 'email', 'isEmail', false, false, 'trim');
+            suxValidate::register_validator('email2', 'email', 'isDuplicateEmail');
+            if ($this->mode == 'edit') suxValidate::register_validator('integrity', 'integrity:nickname', 'hasIntegrity');
+
+
+
+            // --------------------------------------------------------------------
+            // Validators with special conditions
+            // --------------------------------------------------------------------
+
+            // Passwords
+            if (!$this->isOpenID()) {
+
+                if ($this->mode == 'edit') {
+                    // Empty is ok in edit mode
+                    suxValidate::register_validator('password', 'password:6:-1', 'isLength', true, false, 'trim');
+                    suxValidate::register_validator('password2', 'password:password_verify', 'isEqual', true);
+                }
+                else {
+                    suxValidate::register_validator('password', 'password:6:-1', 'isLength', false, false, 'trim');
+                    suxValidate::register_validator('password2', 'password:password_verify', 'isEqual');
+                }
+
+            }
+
+            // Captcha
+            if ($this->mode != 'edit') suxValidate::register_validator('captcha', 'captcha', 'isValidCaptcha');
+
+        }
+
+
+        // --------------------------------------------------------------------
+        // Template
+        // --------------------------------------------------------------------
+
+        // Defaults
+        if (!$this->tpl->get_template_vars('country'))
+            $this->tpl->assign('country', $GLOBALS['CONFIG']['COUNTRY']); // Country
+        if (!$this->tpl->get_template_vars('timezone'))
+            $this->tpl->assign('timezone', $GLOBALS['CONFIG']['TIMEZONE']); // Timezone
+        if (!$this->tpl->get_template_vars('language'))
+            $this->tpl->assign('language', $GLOBALS['CONFIG']['LANGUAGE']); // Languages
+
+
+        // Additional variables
+        $this->r->text['form_url'] = suxFunct::makeUrl('/user/register'); // Register
+
+        // Overrides for edit mode
+        if ($this->mode == 'edit') {
+            $this->r->text['form_url'] = suxFunct::makeUrl('/user/edit/' . @$u['nickname']); // Edit
+            $this->r->bool['edit'] = true;
+        }
+
+        $this->r->text['back_url'] = suxFunct::getPreviousURL();
+
+
+        if ($this->mode == 'edit') $this->r->title .= " | {$this->r->gtext['edit_profile']}";
+        else $this->r->title .= " | {$this->r->gtext['reg']}";
+
+        // Template
+				$params = explode('/', $_GET['c']);
+				if(in_array('requestToken',$params)) $this->tpl->display('api_edit.tpl');
+				else $this->tpl->display('edit.tpl');
+    }
 }
-
 
 ?>
