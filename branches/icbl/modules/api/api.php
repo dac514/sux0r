@@ -13,11 +13,11 @@ Example of a REST API, loosely inpired from:
 http://www.gen-x-design.com/archives/create-a-rest-api-with-php/
 http://restpatterns.org/HTTP_Status_Codes
 
-GET request to /api/users – List all users
-GET request to /api/users/1 – List info for user with ID of 1
-POST request to /api/users – Create a new user
-PUT request to /api/users/1 – Update user with ID of 1
-DELETE request to /api/users/1 – Delete user with ID of 1
+GET request to /api/users : List all users
+GET request to /api/users/1 : List info for user with ID of 1
+POST request to /api/users/nickname/email/password : Create a new user
+PUT request to /api/users/1 : Update user with ID of 1
+DELETE request to /api/users/1 : Delete user with ID of 1
 
 */
 
@@ -55,7 +55,7 @@ class api extends bayesComponent {
     }
 
 
-    function user_restApi($params) {
+    function users_restApi($params) {
 
         // --------------------------------------------------------------------
         // Instatiate REST

@@ -16,7 +16,7 @@ include_once(dirname(__FILE__)  . '/includes/symbionts/dBug.php');
 
 // Database parameters, PDO compatible, NB: first key is default
 $CONFIG['DSN'] =  array(
-    'sux0r' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
+    'sux0r' => array('mysql:host=localhost;dbname=sux0r', 'icbl', '1cbl'),
     // 'sux0r' => array('pgsql:host=localhost;dbname=sux0r', 'postgres', 'root'),
     );
 
@@ -33,7 +33,8 @@ $CONFIG['PATH'] = dirname(__FILE__);
 // http://domain.com/my/sux0r/ then '/my/sux0r' is the correct value.
 // No trailing slash!
 
-$CONFIG['URL'] = '/sux0r2';
+// $CONFIG['URL'] = '/sux0r2';
+$CONFIG['URL'] = '/sux0r206';
 
 // Default language for site, uses a 2 letter l10n ISO-CODE naming convention
 // See: http://www.loc.gov/standards/iso639-2/php/code_list.php
@@ -67,7 +68,7 @@ $CONFIG['CLEAN_URL'] = true;
 // For more infom see:
 // http://en.wikipedia.org/wiki/Digest_access_authentication
 
-$CONFIG['REALM'] = 'users@sux0r.org';
+$CONFIG['REALM'] = 'santiago@macs.hw.ac.uk';
 
 // A salt used to create data verification hashes. Any random word will do.
 // If a malicious user discovers your salt, this offers no real protection.
