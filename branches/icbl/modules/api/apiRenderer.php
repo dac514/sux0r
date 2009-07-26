@@ -1,7 +1,7 @@
 <?php
 
 /**
-* homeRenderer
+* apiRenderer
 *
 * @author     Dac Chartrand <dac.chartrand@gmail.com>
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html

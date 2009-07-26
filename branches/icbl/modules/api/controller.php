@@ -12,10 +12,9 @@ function sux($action, $params = array()) {
     require_once('api.php');
     $api = new api();
 
-    $action = $action . '_restApi';
+    $action = $action . '_api';
     if (method_exists($api, $action)) $api->$action($params);
-    else $api->welcome();
-
+    else $api->welcome_api();
 
 }
 
