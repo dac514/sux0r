@@ -33,7 +33,7 @@
     # For example if your site is at http://domain.com/my/sux0r uncomment and
     # modify the following line:
     #
-    # RewriteBase /my/sux0r
+    RewriteBase /~dac514/icbl_sux0r
 
 
     # If your site is running in a VirtualDocumentRoot at http://domain.com/,
