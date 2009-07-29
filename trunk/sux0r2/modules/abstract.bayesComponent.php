@@ -49,12 +49,13 @@ abstract class bayesComponent extends component {
         // -------------------------------------------------------------------
 
         $results = array();
+        $timer = microtime(true);
 
         // Force timeout if this operation takes too long
-        $timer = microtime(true);
         $timeout_max = ini_get('max_execution_time') * 0.333333;
         if ($timeout_max > 30) $timeout_max = 30;
 
+        // Assign search string to $rawtokens / $rawtoken_count
         $search = trim(strip_tags($search));
         if ($search) {
             $rawtokens = mb_split("\W", $search);

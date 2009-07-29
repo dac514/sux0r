@@ -30,6 +30,9 @@ class suxNaiveBayesian {
     protected $db_table_tok = 'bayes_tokens';
     protected $db_table_cache = 'bayes_cache';
 
+    // Set to false when debugging
+    public $use_cache = true;
+
     // If you change these, then you need to adjust your database columns
     private $max_category_length = 64;
     private $max_vector_length = 64;
@@ -756,11 +759,13 @@ class suxNaiveBayesian {
         $md5 = md5($tmp);
 
         // Check cache
-        if ($scores = $this->checkCache($md5)) return $scores;
+        if ($this->use_cache) {
+        	if ($scores = $this->checkCache($md5)) return $scores;
+        }
 
         $scores = array();
         $categorized = array();
-        $fake_prob = array(); // TODO: Improve this?
+        $fake_prob = array();
         $total_tokens = 0;
         $ncat = 0;
 
@@ -768,41 +773,34 @@ class suxNaiveBayesian {
         if (count($categories) <= 1) return array(); // Less than two categories, skip
 
         foreach ($categories as $data) {
-            $fake_prob[] = $data['token_count'];
+        	$fake_prob[] = $data['token_count'];
             $total_tokens += $data['token_count'];
             $ncat++;
         }
 
-        // Fake probability based on average, this seems to improve
-        // results when training data is skewed
+        // Fake probability
+        // Using the average between the biggest and smallest token_count values
+        // seems to improve results when training data is skewed
         sort($fake_prob);
         $n = count($fake_prob);
-        $fake_prob = ($fake_prob[0] + $fake_prob[$n-1]) / 2; // Override array, change to a number
-        if ($fake_prob) $fake_prob = (float) 1/$fake_prob;
-        else $fake_prob = 0; // Shouldn't happen
+        $fake_prob = ($fake_prob[0] + $fake_prob[$n-1]) / 2;
 
-        // Checking against stopwords is a big performance hog and
-        // they don't affect the results here, so not using them
-        // speeds things up significantly, hence false
+        // Parse tokens, don't use stopwords
         $tokens = $this->parseTokens($document, false);
 
-        // Needs optimizing, needs peer review, help?
         // $debug1 = microtime(true);
         foreach($categories as $category_id => $data) {
             $scores[$category_id] = $data['probability'];
             foreach($tokens as $token => $count) {
                 if ($this->tokenExists($token, $vector_id)) {
-
                     $token_count = $this->getTokenCount($token, $category_id);
 
-                    // Avoid calculating 0/x which is always 0, also avoid divide by zero errors
-                    if ($token_count && $data['token_count']) $prob = (float) $token_count/$data['token_count']; // Probability
-                    elseif ($data['token_count']) $prob = (float) $fake_prob; // Fake probability, like a very infrequent word
-                    else $prob = 0; // Set this to zero, last resort, shouldn't happen?
+                    if ($token_count && $data['token_count']) $prob = (float) $token_count/$data['token_count']; // Real probability
+                    elseif ($data['token_count']) $prob = (float) 1/$fake_prob; // Fake probability
+                    else $prob = 0;
 
                     // pow($total_tokens/$ncat, $count) is here to avoid underflow.
                     $scores[$category_id] *= pow($prob, $count)*pow($total_tokens/$ncat, $count);
-
                 }
             }
             // Remember and use in reorganization of array
