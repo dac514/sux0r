@@ -12,7 +12,10 @@
         var len = 80;
         var p = $(truncateMe);
         if (p) {
+
             var trunc = p.innerHTML.stripTags();
+            trunc = trunc.replace('&nbsp;', ' ');
+
             if (trunc.length > len) {
 
                 // Truncate the content of the P, then go back to the end of the
