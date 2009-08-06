@@ -52,7 +52,7 @@ class blog extends bayesComponent {
     function author($author) {
 
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog/author/' . $author); // Form Url
-        $cache_id = false;
+        $cache_id = null;
 
         $u = $this->user->getByNickname($author);
         if(!$u) suxFunct::redirect(suxFunct::makeUrl('/blog'));
@@ -118,8 +118,7 @@ class blog extends bayesComponent {
 
         }
 
-        if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
-        else $this->tpl->display('scroll.tpl');
+        $this->tpl->display('scroll.tpl', $cache_id);
 
     }
 
@@ -130,7 +129,7 @@ class blog extends bayesComponent {
     function tag($tag_id) {
 
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog/tag/' . $tag_id); // Form Url
-        $cache_id = false;
+        $cache_id = null;
 
         $tag = $this->tags->getByID($tag_id);
         if (!$tag) suxFunct::redirect(suxFunct::makeUrl('/blog'));
@@ -198,8 +197,7 @@ class blog extends bayesComponent {
 
         }
 
-        if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
-        else $this->tpl->display('scroll.tpl');
+        $this->tpl->display('scroll.tpl', $cache_id);
 
     }
 
@@ -247,7 +245,7 @@ class blog extends bayesComponent {
     function category($cat_id) {
 
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog/category/' . $cat_id); // Form Url
-        $cache_id = false;
+        $cache_id = null;
 
         $c = $this->nb->getCategory($cat_id);
         if (!$c) suxFunct::redirect(suxFunct::makeUrl('/blog'));
@@ -316,8 +314,7 @@ class blog extends bayesComponent {
         }
 
 
-        if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
-        else $this->tpl->display('scroll.tpl');
+        $this->tpl->display('scroll.tpl', $cache_id);
 
     }
 
@@ -334,7 +331,7 @@ class blog extends bayesComponent {
         $datetime = $date . ' ' . date('H:i:s'); // Append current time
 
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog/month/' . $date); // Form Url
-        $cache_id = false;
+        $cache_id = null;
 
         $this->r->title .= " | {$this->r->gtext['blog']}  | " .  date('F Y', strtotime($date));
 
@@ -397,8 +394,7 @@ class blog extends bayesComponent {
 
         }
 
-        if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
-        else $this->tpl->display('scroll.tpl');
+        $this->tpl->display('scroll.tpl', $cache_id);
 
     }
 
@@ -409,7 +405,7 @@ class blog extends bayesComponent {
     function listing() {
 
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog'); // Form Url
-        $cache_id = false;
+        $cache_id = null;
 
         $this->r->title .= " | {$this->r->gtext['blog']}";
 
@@ -461,8 +457,7 @@ class blog extends bayesComponent {
 
         }
 
-        if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
-        else $this->tpl->display('scroll.tpl');
+        $this->tpl->display('scroll.tpl', $cache_id);
 
 
     }
