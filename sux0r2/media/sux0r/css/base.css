@@ -63,9 +63,14 @@ h2 {
     margin-left: auto;
     margin-right: auto;
     background-color: #fdfafa;
-    border: 2px solid #333;
+    border: 2px solid black;
     margin-top: 1%;
     margin-bottom: 1%;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-box-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+    -webkit-box-shadow: 2px 2px 6px rgba(0,0,0,0.6);
 }
 
 #middle {
@@ -313,7 +318,6 @@ img.croppable {
 #navcontainer ul {
     margin: 0;
     padding: 0;
-    z-index: 99;
     color: #ffffff;
     letter-spacing: 2px;
     font-weight: bold;
@@ -353,6 +357,7 @@ img.croppable {
     padding: 0;
     background: #f0f0f0;
     border: 1px solid #ff0000;
+    z-index: 99;
 }
 
 #navcontainer ul div a {
