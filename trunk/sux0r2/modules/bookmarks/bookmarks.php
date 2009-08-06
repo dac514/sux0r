@@ -50,7 +50,7 @@ class bookmarks extends bayesComponent {
 
     function user($nickname, $alphasort) {
 
-        $cache_id = false;
+        $cache_id = null;
         $sort = array();
 
         // Get users_id based on nickname
@@ -127,9 +127,8 @@ class bookmarks extends bayesComponent {
         }
 
         $this->tpl->assign('users_id', $this->users_id);
-        if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
-        else $this->tpl->display('scroll.tpl');
 
+        $this->tpl->display('scroll.tpl', $cache_id);
 
     }
 
@@ -140,7 +139,7 @@ class bookmarks extends bayesComponent {
     */
     function tag($tag_id, $alphasort = false) {
 
-		$cache_id = false;
+		$cache_id = null;
         $sort = array();
 
         $tag = $this->tags->getByID($tag_id);
@@ -215,9 +214,7 @@ class bookmarks extends bayesComponent {
 
         }
 
-        if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
-        else $this->tpl->display('scroll.tpl');
-
+        $this->tpl->display('scroll.tpl', $cache_id);
 
     }
 
@@ -269,7 +266,7 @@ class bookmarks extends bayesComponent {
     */
     function listing($alphasort = false) {
 
-		$cache_id = false;
+		$cache_id = null;
 		$sort = array();
 
 		// Establish order
@@ -337,8 +334,7 @@ class bookmarks extends bayesComponent {
 
         }
 
-        if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
-        else $this->tpl->display('scroll.tpl');
+        $this->tpl->display('scroll.tpl', $cache_id);
 
     }
 

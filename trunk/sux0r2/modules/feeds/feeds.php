@@ -55,7 +55,7 @@ class feeds extends bayesComponent {
 
         // Assign stuff
         $this->r->text['form_url'] = suxFunct::makeUrl("/feeds/user/$nickname"); // Forum Url
-        $cache_id = false;
+        $cache_id = null;
 
         $this->r->title .= " | {$this->r->gtext['feeds']} | $nickname";
 
@@ -110,9 +110,8 @@ class feeds extends bayesComponent {
         }
 
         $this->tpl->assign('users_id', $this->users_id);
-        if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
-        else $this->tpl->display('scroll.tpl');
 
+        $this->tpl->display('scroll.tpl', $cache_id);
 
     }
 
@@ -134,7 +133,7 @@ class feeds extends bayesComponent {
 
         // Assign stuff
         $this->r->text['form_url'] = suxFunct::makeUrl("/feeds/$feeds_id"); // Forum Url
-        $cache_id = false;
+        $cache_id = null;
 
         // Title
         if ($feeds_id) {
@@ -211,8 +210,7 @@ class feeds extends bayesComponent {
 
         }
 
-        if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
-        else $this->tpl->display('scroll.tpl');
+        $this->tpl->display('scroll.tpl', $cache_id);
 
     }
 
