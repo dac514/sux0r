@@ -26,7 +26,7 @@ Changed the way we ignore indexes to be compatible with XAMPP and ~/user_dirs
 
 Minor optimization to the getPreviousUrl() function
 
-Use comma to concatinate echo where approproate
+Use comma to concatenate echo() where appropriate
 
 Updated symbionts: Smarty 2.6.26, TinyMCE 3.2.5
 
