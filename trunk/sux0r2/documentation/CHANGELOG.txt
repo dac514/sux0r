@@ -1,4 +1,36 @@
 ------------------------------------------------------------------------------
+sux0r 2.0.7
+------------------------------------------------------------------------------
+
+Change from $cache_id = false to $cache_id = null to remove redundant template display condition
+
+Added rounded borders and drop shadows to #proselytizer with non-standards compliant CSS
+
+Fixed JavaScript menus: Z-index only works on elements that are position:absolute
+
+Bugfix: Weird & character was showing in photoalbum lists
+
+Minor changes to code comments and formatting for legibility reasons
+
+Stopwords were corrupted. Converted back to proper UTF-8 format
+
+Moved  killSession() function to suxUser() class
+
+If available, try to use iconv //TRANSLIT for RSS feeds
+
+Reduce SQL queries when doing loginCheck()
+
+Changed the behavior of the <select> list to make it easier to initially train documents
+
+Changed the way we ignore indexes to be compatible with XAMPP and ~/user_dirs
+
+Minor optimization to the getPreviousUrl() function
+
+Use comma to concatinate echo where approproate
+
+Updated symbionts: Smarty 2.6.26, TinyMCE 3.2.5
+
+------------------------------------------------------------------------------
 sux0r 2.0.6
 ------------------------------------------------------------------------------
 
