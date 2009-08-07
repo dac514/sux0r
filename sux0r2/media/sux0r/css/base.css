@@ -63,7 +63,7 @@ h2 {
     margin-left: auto;
     margin-right: auto;
     background-color: #fdfafa;
-    border: 2px solid black;
+    border: 4px solid #dddddd;
     margin-top: 1%;
     margin-bottom: 1%;
     border-radius: 10px;
@@ -82,7 +82,6 @@ table#proselytizer {
     border-spacing: 8px;
     text-align: center;
     width: 972px;
-    border: 2px solid black;
 }
 
 div#proselytizer #header {
