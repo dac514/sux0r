@@ -27,8 +27,7 @@ function smarty_function_math($params, &$smarty)
         return;
     }
 
-    // strip out backticks, not necessary for math
-    $equation = str_replace('`','',$params['equation']);
+    $equation = $params['equation'];
 
     // make sure parenthesis are balanced
     if (substr_count($equation,"(") != substr_count($equation,")")) {

@@ -3,54 +3,34 @@ About symbionts
 ------------------------------------------------------------------------------
 
 Symbionts are 3rd party open source vendors that may or may not be licensed
-under the GNU General Public License (version 3)
+under the GNU Affero General Public License (version 3)
 
 These additional open source libraries have their own licensing requirements
-and, as such, should not be directly modified by the sux0r development group.
+and, as such, should not be directly modified by the sux0r developement group.
 
 ------------------------------------------------------------------------------
 Rationale
 ------------------------------------------------------------------------------
 
-Sux0r is far removed from the world of compiled languages that many of the
-FSF licenses are meant for. Since everything sux0r deals with are human readable
-scripts, we hope everyone can agree that we are being respectful and allowing
-for exceptions where necessary. If you disgree please contact us so we can
-resolve the issue.
+Acdording to gnu.org, the GNU AGPL is not compatible with GPLv2. It is also
+technically not compatible with GPLv3 in a strict sense: you cannot take code
+released under the GNU AGPL and use it under the terms of GPLv3, or vice versa.
 
-------------------------------------------------------------------------------
-Pro-tip
-------------------------------------------------------------------------------
+However, according to section 13 of both licenses, you are allowed to combine
+separate modules or source files released under both of those licenses in a
+single project.
 
-Use rsync when updating 3rd party vendors, example:
+Additionally, most software released under GPLv2 allows you to use the terms
+of later versions of the GPL.
 
-rsync -rcvb --backup-dir=/tmp --cvs-exclude ~/Desktop/tinymce/ ~/Sites/sux0r2/includes/symbionts/tinymce/
+This logic, evidently, can be extended to any GPL compatible licence. A list
+of compatible licences is located at:
+
+http://www.gnu.org/philosophy/license-list.html
 
 ------------------------------------------------------------------------------
 3rd Party Vendors, in alphabetical order
 ------------------------------------------------------------------------------
-
-Cropper
-* Path: ./cropper/
-* Version: 1.2.0
-* Licence: BSD
-* Website: http://www.defusion.org.uk/
-
-
-dBug
-* Path: ./dBug.php
-* Version: Dec 04, 2007
-* Licence: GPL, (version unspecified, assuming GPL 3)
-* Website: http://dbug.ospinto.com/
-* Notes: The PHP file says March 22, 2007 but the website says Dec 04, 2007
-
-
-htmLawed
-* Path: ./htmLawed/
-* Version: 1.1.8
-* Licence: GPL 3
-* Website: http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/index.php
-
 
 PHP Calendar
 * Path: ./calendar.php
@@ -59,23 +39,17 @@ PHP Calendar
 * Website: http://keithdevens.com/software/php_calendar
 
 
-Scriptaculous
-* Path: ./scriptaculous/
-* Version: 1.8.2
-* Licence: MIT
-* Website: http://script.aculo.us/
-
-
-Securimage
-* Path: ./securimage/
-* Version: 1.0.3.1
-* Licence: GPL 2.1 or any later version
-* Website: http://www.phpcaptcha.org/
+dBug
+* Path: ./dBug.php
+* Version: Dec 04, 2007
+* Licence: GPL, (version unspecified, assuming GPLv3)
+* Website: http://dbug.ospinto.com/
+* Notes: The PHP file says March 22, 2007 but the website says Dec 04, 2007
 
 
 Smarty
 * Path: ./Smarty/
-* Version: 2.6.25
+* Version: 2.6.19
 * Licence: LGPL 2.1
 * Website: http://www.smarty.net/
 
@@ -91,7 +65,7 @@ SmartyValidate
 * Path: ./SmartyAddons/libs/SmartyValidate.class.php
         ./SmartyAddons/plugins/%validate%
         ./SmartyAddons/docs/SmartyValidate/
-* Version: 2.9-dev
+* Version: 2.9
 * Licence: LGPL 2.1
 * Website: http://www.phpinsider.com/php/code/SmartyValidate/
 
@@ -105,6 +79,6 @@ Stopwords
 
 TinyMCE
 * Path: ./tinymce/
-* Version: 3.2.3 (+ language files)
+* Version: 3.0.7
 * Licence: LGPL 2.1
 * Website: http://tinymce.moxiecode.com/

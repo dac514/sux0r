@@ -2,13 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title>{#media_dlg.title}</title>
-	<script type="text/javascript" src="../../tiny_mce_popup.js"></script>
-	<script type="text/javascript" src="js/media.js"></script>
-	<script type="text/javascript" src="../../utils/mctabs.js"></script>
-	<script type="text/javascript" src="../../utils/validate.js"></script>
-	<script type="text/javascript" src="../../utils/form_utils.js"></script>
-	<script type="text/javascript" src="../../utils/editable_selects.js"></script>
-	<link href="css/media.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="../../tiny_mce_popup.js?v=307"></script>
+	<script type="text/javascript" src="js/media.js?v=307"></script>
+	<script type="text/javascript" src="../../utils/mctabs.js?v=307"></script>
+	<script type="text/javascript" src="../../utils/validate.js?v=307"></script>
+	<script type="text/javascript" src="../../utils/form_utils.js?v=307"></script>
+	<script type="text/javascript" src="../../utils/editable_selects.js?v=307"></script>
+	<link href="css/media.css?v=307" rel="stylesheet" type="text/css" />
+	<base target="_self" />
 </head>
 <body style="display: none">
     <form onsubmit="insertMedia();return false;" action="#">
@@ -51,7 +52,7 @@
 							</tr>
 							<tr id="linklistrow">
 								<td><label for="linklist">{#media_dlg.list}</label></td>
-								<td id="linklistcontainer"><select id="linklist"><option value=""></option></select></td>
+								<td id="linklistcontainer">&nbsp;</td>
 							</tr>
 							<tr>
 								<td><label for="width">{#media_dlg.size}</label></td>
@@ -259,7 +260,8 @@
 							<td><label for="flv_defaultvolume">{#media_dlg.flv_defaultvolume}</label></td>
 							<td><input type="text" id="flv_defaultvolume" name="flv_defaultvolume" onchange="generatePreview();" /></td>
 
-
+							<td><label for="flv_starttime">{#media_dlg.flv_starttime}</label></td>
+							<td><input type="text" id="flv_starttime" name="flv_starttime" onchange="generatePreview();" /></td>
 						</tr>
 
 						<tr>

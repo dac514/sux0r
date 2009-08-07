@@ -14,4 +14,3 @@ ar, bg, cs, de, en, es, fi, fr, hu, it, pl, pt, ro, ru, sv
 See:
 http://members.unine.ch/jacques.savoy/clef/
 http://www.opensource.org/licenses/bsd-license.html
-http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes

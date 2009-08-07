@@ -1,13 +1,9 @@
-* allow negative integers for isInt tests (hardipe, monte)
-* remove notice errors with non-existing form vars (monte)
-* fix isEmail validator to allow six-char domains (monte)
-
 2.9 Apr 23, 2007
 ----------------
 
 * fix bug with multiple validators on a field (mckneisler, monte)
 * fix bug with initialization of multiple forms (schildi, monte)
-* fix looping on non-numeric index arrays (hayk, monte)
+* fix looping on non-numeric index arrays (kayk, monte)
 
 2.8 Aug 7, 2006
 ---------------

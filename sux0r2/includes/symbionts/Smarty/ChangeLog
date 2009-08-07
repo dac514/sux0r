@@ -752,7 +752,7 @@
       docs/fr/programmers/plugins/plugins-inserts.xml:
       sync with EN
 
-2006-10-14  Fernando Correa da Conceição  <fernando_conceicao@yahoo.com.br>
+2006-10-14  Fernando Correa da ConceiÃ§Ã£o  <fernando_conceicao@yahoo.com.br>
 
     * docs/pt_BR/programmers/api-variables/variable-error-reporting.xml:
       New Translation
@@ -4293,7 +4293,7 @@
       fixed bug in _run_mod_handler
 
     * libs/Smarty_Compiler.class.php:
-      fixed bug with autoload-handling of modifiers. thanks ándre.
+      fixed bug with autoload-handling of modifiers. thanks Ã¡ndre.
 
 2003-08-05  Messju Mohr  <messju@lammfellpuschen.de>
 
@@ -5250,7 +5250,7 @@
 
     * libs/Smarty.class.php
       libs/Smarty_Compiler.class.php:
-      added CVS $Id: ChangeLog 2746 2007-09-28 01:32:05Z changelog $
+      added CVS $Id: ChangeLog,v 1.1.1.1 2008/04/09 20:45:17 conner_bw Exp $
 
 2003-03-31  Messju Mohr  <messju@lammfellpuschen.de>
 

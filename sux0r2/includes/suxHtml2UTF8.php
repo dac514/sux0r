@@ -3,11 +3,26 @@
 /**
 * suxHtml2UTF8
 *
-* Forked from / Inspired by:
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as
+* published by the Free Software Foundation, either version 3 of the
+* License, or (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Affero General Public License for more details.
+*
+* You should have received a copy of the GNU Affero General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*
+* Inspired by:
 * Jon Abernathy <jon@chuggnutt.com>: http://www.chuggnutt.com/html2text.php
 *
 * @author     Dac Chartrand <dac.chartrand@gmail.com>
-* @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
+* @copyright  2008 sux0r development group
+* @license    http://www.gnu.org/licenses/agpl.html
+*
 */
 
 class suxHtml2UTF8 {
@@ -21,7 +36,7 @@ class suxHtml2UTF8 {
     /**
     *  Contains the HTML content to convert.
     *
-    *  @param string $html
+    *  @var string $html
     */
     public $html;
 
@@ -29,7 +44,7 @@ class suxHtml2UTF8 {
     /**
     *  Contains the converted, formatted UTF-8 text
     *
-    *  @param string $text
+    *  @var string $text
     */
     public $text;
 
@@ -37,7 +52,8 @@ class suxHtml2UTF8 {
     /**
     *  Contains the base URL that relative links should resolve to.
     *
-    *  @param string $url
+    *  @var string $url
+    *  @access public
     */
     public $url;
 
@@ -46,33 +62,34 @@ class suxHtml2UTF8 {
     *  List of preg* regular expression patterns to search for,
     *  used in conjunction with $replace.
     *
-    *  @param array $search
+    *  @var array $search
+    *  @access public
     *  @see $replace
     */
     private $search = array(
         "/\r/",                                  // Non-legal carriage return
         "/[\n\t]+/",                             // Newlines and tabs
         '/[ ]{2,}/',                             // Runs of spaces, pre-handling
-        '/<script[^>]*>.*?<\/script>/si',        // <script>s -- which strip_tags supposedly has problems with
-        '/<style[^>]*>.*?<\/style>/si',          // <style>s -- which strip_tags supposedly has problems with
-        '/<h[123][^>]*>(.*?)<\/h[123]>/sie',     // H1 - H3
-        '/<h[456][^>]*>(.*?)<\/h[456]>/sie',     // H4 - H6
+        '/<script[^>]*>.*?<\/script>/i',         // <script>s -- which strip_tags supposedly has problems with
+        '/<style[^>]*>.*?<\/style>/i',           // <style>s -- which strip_tags supposedly has problems with
+        '/<h[123][^>]*>(.*?)<\/h[123]>/ie',      // H1 - H3
+        '/<h[456][^>]*>(.*?)<\/h[456]>/ie',      // H4 - H6
         '/<p[^>]*>/i',                           // <P>
         '/<br[^>]*>/i',                          // <br>
-        '/<b[^>]*>(.*?)<\/b>/sie',               // <b>
-        '/<strong[^>]*>(.*?)<\/strong>/sie',     // <strong>
-        '/<i[^>]*>(.*?)<\/i>/si',                // <i>
-        '/<em[^>]*>(.*?)<\/em>/si',              // <em>
+        '/<b[^>]*>(.*?)<\/b>/ie',                // <b>
+        '/<strong[^>]*>(.*?)<\/strong>/ie',      // <strong>
+        '/<i[^>]*>(.*?)<\/i>/i',                 // <i>
+        '/<em[^>]*>(.*?)<\/em>/i',               // <em>
         '/(<ul[^>]*>|<\/ul>)/i',                 // <ul> and </ul>
         '/(<ol[^>]*>|<\/ol>)/i',                 // <ol> and </ol>
-        '/<li[^>]*>(.*?)<\/li>/si',              // <li> and </li>
+        '/<li[^>]*>(.*?)<\/li>/i',               // <li> and </li>
         '/<li[^>]*>/i',                          // <li>
-        '#<a[\s]+[^>]*?href[\s]?=[\s"\']+(.*?)["\']+.*?>([^<]+|.*?)?</a>#sie', // <a href="">, <a href=''>, and other mutations
+        '/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/ie', // <a href="">
         '/<hr[^>]*>/i',                          // <hr>
         '/(<table[^>]*>|<\/table>)/i',           // <table> and </table>
         '/(<tr[^>]*>|<\/tr>)/i',                 // <tr> and </tr>
-        '/<td[^>]*>(.*?)<\/td>/si',              // <td> and </td>
-        '/<th[^>]*>(.*?)<\/th>/sie',             // <th> and </th>
+        '/<td[^>]*>(.*?)<\/td>/i',               // <td> and </td>
+        '/<th[^>]*>(.*?)<\/th>/ie',              // <th> and </th>
         '/&(nbsp|#160);/i',                      // Non-breaking space
         '/[ ]{2,}/'                              // Runs of spaces, post-handling
         );
@@ -81,7 +98,8 @@ class suxHtml2UTF8 {
     /**
     *  List of pattern replacements corresponding to patterns searched.
     *
-    *  @param array $replace
+    *  @var array $replace
+    *  @access public
     *  @see $search
     */
     private $replace = array(
@@ -116,7 +134,8 @@ class suxHtml2UTF8 {
     /**
     *  Indicates whether content in the $html variable has been converted yet.
     *
-    *  @param boolean $converted
+    *  @var boolean $converted
+    *  @access private
     *  @see $html, $text
     */
     private $converted = false;
@@ -125,7 +144,8 @@ class suxHtml2UTF8 {
     /**
     *  Contains URL addresses from links to be rendered in plain UTF-8 text.
     *
-    *  @param string $link_list
+    *  @var string $link_list
+    *  @access private
     *  @see buildLinkList()
     */
     private $link_list = '';
@@ -135,7 +155,8 @@ class suxHtml2UTF8 {
     *  Number of valid links detected in the text, used for plain UTF-8 text
     *  display (rendered similar to footnotes).
     *
-    *  @param integer $link_count
+    *  @var integer $link_count
+    *  @access private
     *  @see buildLinkList()
     */
     private $link_count = 0;
@@ -197,9 +218,8 @@ class suxHtml2UTF8 {
 
 
     /**
-    * Sets a base URL to handle relative links.
+    *  Sets a base URL to handle relative links.
     *
-    * @param string $url url
     */
     function setBaseUrl( $url = '' ) {
         if ( empty($url) ) {
@@ -252,7 +272,7 @@ class suxHtml2UTF8 {
             $text = trim(html_entity_decode(stripslashes($this->html), ENT_QUOTES, 'UTF-8'));
 
             // Run our defined search-and-replace
-            $text = @preg_replace($this->search, $this->replace, $text); // Ignore warnings?
+            $text = preg_replace($this->search, $this->replace, $text);
 
             // Strip any other HTML tags
             $text = strip_tags($text);
@@ -294,38 +314,25 @@ class suxHtml2UTF8 {
     *  @return string
     */
     private function buildLinkList( $link, $display ) {
-
-		if (mb_substr($link, 0, 7) == 'http://' || mb_substr($link, 0, 8) == 'https://' || mb_substr($link, 0, 7) == 'mailto:') {
-
-            // Absolute href links
-            $link = suxFunct::canonicalizeUrl($link);
+		if ( mb_substr($link, 0, 7) == 'http://' || mb_substr($link, 0, 8) == 'https://' || mb_substr($link, 0, 7) == 'mailto:' ) {
             $this->link_count++;
             $this->link_list .= "[" . $this->link_count . "] $link\n";
             $additional = ' [' . $this->link_count . ']';
-
-		}
-        elseif (mb_substr($link, 0, 11) == 'javascript:') {
-
-			// Ignore javascript links
+		} elseif ( mb_substr($link, 0, 11) == 'javascript:' ) {
+			// Don't count the link; ignore it
 			$additional = '';
-
-        }
-        else {
-
-            // Relative href links
+            // what about href="#anchor" ?
+        } else {
             $this->link_count++;
-            $this->link_list .= "[" . $this->link_count . "] ";
+            $this->link_list .= "[" . $this->link_count . "] " . $this->url;
             if ( mb_substr($link, 0, 1) != '/' ) {
-                $link = '/' . $link;
+                $this->link_list .= '/';
             }
-            $link = suxFunct::canonicalizeUrl($this->url . $link);
             $this->link_list .= "$link\n";
             $additional = ' [' . $this->link_count . ']';
-
         }
 
         return $display . $additional;
-
     }
 
 }

@@ -20,17 +20,17 @@
  *
  * For questions, help, comments, discussion, etc., please join the
  * Smarty mailing list. Send a blank e-mail to
- * smarty-discussion-subscribe@googlegroups.com 
+ * smarty-general-subscribe@lists.php.net
  *
- * @link http://www.smarty.net/
+ * @link http://smarty.php.net/
  * @copyright 2001-2005 New Digital Group, Inc.
  * @author Monte Ohrt <monte at ohrt dot com>
  * @author Andrei Zmievski <andrei@php.net>
  * @package Smarty
- * @version 2.6.26
+ * @version 2.6.19
  */
 
-/* $Id: Smarty.class.php 3163 2009-06-17 14:39:24Z monte.ohrt $ */
+/* $Id: Smarty.class.php,v 1.1.1.1 2008/04/09 20:45:18 conner_bw Exp $ */
 
 /**
  * DIR_SEP isn't used anymore, but third party apps might
@@ -107,7 +107,7 @@ class Smarty
     /**
      * When set, smarty does uses this value as error_reporting-level.
      *
-     * @var integer
+     * @var boolean
      */
     var $error_reporting  =  null;
 
@@ -236,8 +236,7 @@ class Smarty
                                     'INCLUDE_ANY'     => false,
                                     'PHP_TAGS'        => false,
                                     'MODIFIER_FUNCS'  => array('count'),
-                                    'ALLOW_CONSTANTS'  => false,
-                                    'ALLOW_SUPER_GLOBALS' => true
+                                    'ALLOW_CONSTANTS'  => false
                                    );
 
     /**
@@ -465,7 +464,7 @@ class Smarty
      *
      * @var string
      */
-    var $_version              = '2.6.26';
+    var $_version              = '2.6.19';
 
     /**
      * current template inclusion depth
@@ -1549,7 +1548,7 @@ class Smarty
                         $params['source_content'] = $this->_read_file($_resource_name);
                     }
                     $params['resource_timestamp'] = filemtime($_resource_name);
-                    $_return = is_file($_resource_name) && is_readable($_resource_name);
+                    $_return = is_file($_resource_name);
                     break;
 
                 default:
@@ -1712,7 +1711,7 @@ class Smarty
      */
     function _read_file($filename)
     {
-        if ( file_exists($filename) && is_readable($filename) && ($fd = @fopen($filename, 'rb')) ) {
+        if ( file_exists($filename) && ($fd = @fopen($filename, 'rb')) ) {
             $contents = '';
             while (!feof($fd)) {
                 $contents .= fread($fd, 8192);
@@ -1951,7 +1950,7 @@ class Smarty
 			return $function;
 		}
 	}
-  
+    
     /**#@-*/
 
 }

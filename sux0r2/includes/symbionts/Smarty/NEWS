@@ -1,46 +1,3 @@
-Version 2.6.26 (June 18th, 2009)
--------------------------------
-- revert super global access changes, and instead rely on
-  USE_SUPER_GLOBALS for security
-
-Version 2.6.25 (May 19th, 2009)
--------------------------------
-- fix E_NOTICE when sessions are disabled (mohrt)
-
-Version 2.6.24 (May 16th, 2009)
--------------------------------
-- fix problem introduced with super global changes (mohrt)
-
-Version 2.6.23 (May 13th, 2009)
--------------------------------
-- strip backticks from {math} equations (mohrt)
-- make PHP super globals read-only from template (mohrt)
-- throw error when template exists but not readable (mohrt)
-
-Version 2.6.22 (Dec 17th, 2008)
--------------------------------
-
-- back out method chaining, bug in some versions of PCRE causes errors (mohrt)
-
-Version 2.6.21 (Dec 2nd, 2008)
-------------------------------
-
-- fix  function injection security hole closed (U.Tews)
-- fix pass expiration time at cache_handler_fuc call in core.write_cache_file.php (U.Tews)
-- Update of compiler.class.php to allow method chaining for PHP4 and PHP5 (U.Tews)
-
-Version 2.6.20 (Feb 15th, 2008)
--------------------------------
-
-- fix cache tag bug when multiple cache tags on a page (mankyd,
-  mohrt)
-- fix /e tag checking when using arrays with regex_replace
-  (mohrt)
-- fix that function results can be used with condition like "is even" in 
-  {if} tags (U.Tews)
-- fix handling of non-empty <pre>-tags and empty <textarea>- and
-  <script>-tags (Spuerhund, messju)
-
 Version 2.6.19 (Feb 11th, 2008)
 -------------------------------
 
@@ -468,7 +425,7 @@ Version 2.5.0-RC2 (March 26, 2003)
       the "checked" value of html_radios (Monte)
     - fixed errormessage in _compile_smarty_ref() (messju)
     - updated docs for html_image "name" -> "file" (messju)
-    - fixed bug with html_options-optgroups (Nichlas Löfdahl, messju)
+    - fixed bug with html_options-optgroups (Nichlas LÃ¶fdahl, messju)
     - cleaned up calls to readdir() (messju)
     - fixed bug with passing multiple modifiers to a parameter
       (Monte)
@@ -532,7 +489,7 @@ Version 2.5.0-RC1 (March 5, 2003)
     - fix cache groups with compile_id set (Monte)
     - add support for merging appended vars (messju, Monte)
     - allow null as function attribute value
-      (André Rabold, Monte)
+      (AndrÃ© Rabold, Monte)
     - support $foo->bar[index] syntax (Monte)
     - add get_registered_object function (messju, Monte)
     - treat unrecognized param attribute syntax as string (Monte)

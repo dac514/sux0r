@@ -3,8 +3,22 @@
 /**
 * suxDB
 *
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as
+* published by the Free Software Foundation, either version 3 of the
+* License, or (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Affero General Public License for more details.
+*
+* You should have received a copy of the GNU Affero General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*
 * @author     Dac Chartrand <dac.chartrand@gmail.com>
-* @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
+* @copyright  2008 sux0r development group
+* @license    http://www.gnu.org/licenses/agpl.html
 */
 
 class suxDB {
@@ -16,25 +30,19 @@ class suxDB {
     *
     * Example:
     * suxDB::$dsn = array(
-    *   'sux0r' => array('mysql:host=localhost', 'user', 'password'),
+    *   'blogs' => 'sqlite:/tmp/blogs.db',
+    *   'users' => array('mysql:host=localhost', 'user', 'password'),
+    *   'admin' => array('mysql:host=db.example.com', 'user', 'password'),
     *   'stats' => array('oci:statistics', 'user', 'password'),
-    *   'dev' => 'sqlite:/tmp/blogs.db',
     * );
-    * $db = suxDB::get(); // Defaults to first item in DSN array, i.e. sux0r
+    * $db = suxDB::get(); // Defaults to first item in DSN array, i.e. blogs
     * $db2 = suxDB::get('stats');
     */
 
-    // Sux0r is theoretically able to span multiple databases but in practice
-    // LEFT JOIN and INNER JOIN queries accross multiple tables make this very
-    // difficult to manage. The option is here for future developement.
-
     public static $dsn = array();
-    private static $supported = array('mysql', 'pgsql');
     private static $db = array();
-    private static $transaction = array();
 
-
-    // Static class, no cloning or instantiating allowed
+    // No cloning or instantiating allowed
     final private function __construct() { }
     final private function __clone() { }
 
@@ -42,11 +50,6 @@ class suxDB {
     // Static Functions
     // ------------------------------------------------------------------------
 
-    /**
-    * Get a PDO database connection
-    *
-    * @param string $key PDO dsn key
-    */
     static function get($key = null) {
 
         if (!$key) {
@@ -55,7 +58,9 @@ class suxDB {
             $key = array_shift($key);
         }
 
-        if (!isset(self::$dsn[$key])) throw new Exception("Unknown DSN: $key");
+        if (!isset(self::$dsn[$key])) {
+            throw new Exception("Unknown DSN: $key");
+        }
 
         // Connect if not already connected
         if (!isset(self::$db[$key])) {
@@ -76,26 +81,15 @@ class suxDB {
                 // Throw exceptions every time an error is encountered
                 self::$db[$key]->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                // Check if we support this database
-                if (!in_array(self::$db[$key]->getAttribute(PDO::ATTR_DRIVER_NAME), self::$supported)) {
-                    throw new Exception('Unsupported database driver');
-                }
-
                 // MySQL Specfic
                 if (self::$db[$key]->getAttribute(PDO::ATTR_DRIVER_NAME) == 'mysql') {
-                    // Force UTF-8
-                    self::$db[$key]->query("SET NAMES 'utf8' ");
-                    // Clear SQL Modes to avoid problems with boolean values in transactions
-                    self::$db[$key]->query("SET SESSION sql_mode='' ");
-                    // Let PDO handle MySql's (lack of) caching
-                    if (defined('PDO::ATTR_EMULATE_PREPARES'))
-                        self::$db[$key]->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+                    self::$db[$key]->query("SET NAMES 'utf8'"); // Force UTF-8
                 }
 
             }
             catch (Exception $e) {
                 $message = "suxDB Error: \n";
-                $message .= "There was a problem connecting to the database.\n";
+                $message .= "There was a problem initializing the connection to the database.\n";
                 $message .= $e->getMessage();
                 die("<pre>{$message}</pre>");
             }
@@ -105,130 +99,6 @@ class suxDB {
         // Return the connection
         return self::$db[$key];
 
-    }
-
-
-    /**
-    * Request transaction
-    *
-    * @param string $key PDO dsn key
-    * @return string unique id
-    */
-    static function requestTransaction($key = null) {
-
-        $tid = uniqid();
-        if (empty(self::$transaction[$key])) {
-            self::$transaction[$key] = $tid;
-            $db = self::get($key);
-            $db->beginTransaction();
-        }
-
-        return $tid;
-
-    }
-
-
-    /**
-    * Commit transaction
-    *
-    * @param string $tid unique id
-    * @param string $key PDO dsn key
-    */
-    static function commitTransaction($tid, $key = null) {
-
-        if (empty(self::$transaction[$key])) throw new Exception("Transaction was never initiated for: $key");
-
-        if($tid == self::$transaction[$key]) {
-            $db = self::get($key);
-            $db->commit();
-            unset(self::$transaction[$key]);
-        }
-
-    }
-
-
-    /**
-    * Show Tables SQL query
-    *
-    * @param string $key PDO dsn key
-    */
-    static function showTablesQuery($key = null) {
-
-        $db = self::get($key);
-        switch($db->getAttribute(PDO::ATTR_DRIVER_NAME))
-        {
-
-        case 'mysql':
-            $q = "SHOW TABLES ";
-            break;
-
-        case 'pgsql':
-            $q = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' and table_type = 'BASE TABLE' ";
-            break;
-
-        default:
-            throw new Exception('Unsupported database driver');
-
-        }
-
-        return $q;
-
-    }
-
-
-    /**
-    * Show Columns SQL query
-    *
-    * @param string $key PDO dsn key
-    */
-    static function showColumnsQuery($table, $key = null) {
-
-        if (!preg_match('/^[A-Za-z0-9_]+$/', $table)) throw new Exception('Invalid table name');
-
-        $db = self::get($key);
-        switch($db->getAttribute(PDO::ATTR_DRIVER_NAME))
-
-        {
-
-        case 'mysql':
-            $q = "SHOW COLUMNS FROM {$table} ";
-            break;
-
-        case 'pgsql':
-            $q = "SELECT column_name FROM information_schema.columns WHERE table_name = '{$table}' ";
-            break;
-
-        default:
-            throw new Exception('Unsupported database driver');
-
-        }
-
-        return $q;
-
-    }
-
-
-
-    /**
-    * Autogenerate SQL COUNT query with PDO named placeholders
-    *
-    * @param string $table the name of a table to insert into
-    * @param array $form a list where the keys (optionally values) are database column names and placeholders
-    * @param bool $useValues use the keys or the values as placeholders? Default is keys
-    * @return string PDO formated prepared statement
-    */
-    static function prepareCountQuery($table, array $form, $useValues = false) {
-
-        $query = "SELECT COUNT(*) FROM {$table} WHERE ";
-
-        foreach ($form as $key => $value ) {
-            $query .= ($useValues ? "$value = :$value " : "$key = :$key ");
-            $query .= 'AND ';
-        }
-
-        $query = rtrim($query, 'AND '); // Remove trailing AND
-
-        return "$query "; // Add space, just incase
     }
 
 
@@ -252,11 +122,12 @@ class suxDB {
             $placeholders .= ($useValues ? ":$value, " : ":$key, ");
         }
 
-        $column = rtrim($column, ', '); // Remove trailing Coma
+        // Remove Trailing Coma
+        $column = rtrim($column, ', ');
         $placeholders = rtrim($placeholders, ', ');
         $query = $query . $column . ') ' . $placeholders . ') ';
 
-        return "$query "; // Add space, just incase
+        return $query;
     }
 
 
@@ -283,51 +154,10 @@ class suxDB {
         }
 
         $where = " WHERE $id_column = :$id_column";
-        $placeholders = rtrim($placeholders, ', '); // Remove trailing Coma
+        $placeholders = rtrim($placeholders, ', ');
         $query = $query . $column . $placeholders . $where;
 
-        return "$query "; // Add space, just incase
-
-    }
-
-
-
-    /**
-    * Autogenerate cheap SQL SEARCH query, for a table with `title`
-    * and `body_plaintext` columns
-    *
-    * @param string $table the name of a table to insert into
-    * @param string $string search query
-    * @param string $op SQL operator, AND/OR
-    * @param string $key PDO dsn key
-    * @return string|false SQL query
-    */
-    static function prepareSearchQuery($table, $string, $where = '', $op = 'AND', $key = null) {
-
-        $tokens = suxFunct::parseTokens($string);
-
-        $op = mb_strtoupper($op);
-        if ($op != 'AND') $op = 'OR'; // Enforce OR/AND
-
-        $db = self::get($key);
-        $q = "SELECT * FROM {$table} WHERE ( ";
-        foreach ($tokens as $string) {
-            //quote
-            $string = $db->quote($string);
-            // replace the first character
-            $tmp = substr($string, 0, 1);
-            $string = substr_replace($string, "{$tmp}%", 0, 1);
-            // replace the last character
-            $tmp = substr($string, -1, 1);
-            $string = substr_replace($string, "%{$tmp}", -1, 1);
-            // append to query
-            $q .= "(title LIKE {$string} OR body_plaintext LIKE {$string}) $op ";
-        }
-        $q = rtrim($q, "$op "); // Remove trailing OR
-        if (trim($where)) $q .= "AND $where "; // Append additional $where query
-        $q .= ') ';
-
-        return $q;
+        return $query;
 
     }
 

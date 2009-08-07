@@ -1,8 +1,8 @@
 /**
- * $Id: editor_plugin_src.js 1150 2009-06-01 11:50:46Z spocke $
+ * $Id: editor_plugin_src.js 776 2008-04-08 17:00:39Z spocke $
  *
  * @author Moxiecode
- * @copyright Copyright © 2004-2008, Moxiecode Systems AB, All rights reserved.
+ * @copyright Copyright Â© 2004-2008, Moxiecode Systems AB, All rights reserved.
  */
 
 (function() {
@@ -35,7 +35,6 @@
 			t.parent(ed);
 			t.zIndex = 300000;
 			t.count = 0;
-			t.windows = {};
 		},
 
 		open : function(f, p) {
@@ -50,7 +49,7 @@
 
 			// Only store selection if the type is a normal window
 			if (!f.type)
-				t.bookmark = ed.selection.getBookmark(1);
+				t.bookmark = ed.selection.getBookmark('simple');
 
 			id = DOM.uniqueId();
 			vp = DOM.getViewPort();
@@ -238,6 +237,7 @@
 			});
 
 			// Add window
+			t.windows = t.windows || {};
 			w = t.windows[id] = {
 				id : id,
 				mousedown_func : mdf,
@@ -254,19 +254,16 @@
 			});
 
 			// Setup blocker
-			if (t.count == 0 && t.editor.getParam('dialog_type', 'modal') == 'modal') {
+			if (t.count == 0 && t.editor.getParam('dialog_type') == 'modal') {
 				DOM.add(DOM.doc.body, 'div', {
 					id : 'mceModalBlocker',
 					'class' : (t.editor.settings.inlinepopups_skin || 'clearlooks2') + '_modalBlocker',
-					style : {zIndex : t.zIndex - 1}
+					style : {left : vp.x, top : vp.y, zIndex : t.zIndex - 1}
 				});
 
 				DOM.show('mceModalBlocker'); // Reduces flicker in IE
 			} else
 				DOM.setStyle('mceModalBlocker', 'z-index', t.zIndex - 1);
-
-			if (tinymce.isIE6 || /Firefox\/2\./.test(navigator.userAgent) || (tinymce.isIE && !DOM.boxModel))
-				DOM.setStyles('mceModalBlocker', {position : 'absolute', left : vp.x, top : vp.y, width : vp.w - 2, height : vp.h - 2});
 
 			t.focus(id);
 			t._fixIELayout(id, 1);
@@ -281,18 +278,16 @@
 		},
 
 		focus : function(id) {
-			var t = this, w;
+			var t = this, w = t.windows[id];
 
-			if (w = t.windows[id]) {
-				w.zIndex = this.zIndex++;
-				w.element.setStyle('zIndex', w.zIndex);
-				w.element.update();
+			w.zIndex = this.zIndex++;
+			w.element.setStyle('zIndex', w.zIndex);
+			w.element.update();
 
-				id = id + '_wrapper';
-				DOM.removeClass(t.lastId, 'mceFocus');
-				DOM.addClass(id, 'mceFocus');
-				t.lastId = id;
-			}
+			id = id + '_wrapper';
+			DOM.removeClass(t.lastId, 'mceFocus');
+			DOM.addClass(id, 'mceFocus');
+			t.lastId = id;
 		},
 
 		_addAll : function(te, ne) {
@@ -354,12 +349,8 @@
 				DOM.add(d.body, 'div', {
 					id : 'mceEventBlocker',
 					'class' : 'mceEventBlocker ' + (t.editor.settings.inlinepopups_skin || 'clearlooks2'),
-					style : {zIndex : t.zIndex + 1}
+					style : {left : vp.x, top : vp.y, zIndex : t.zIndex + 1}
 				});
-
-				if (tinymce.isIE6 || (tinymce.isIE && !DOM.boxModel))
-					DOM.setStyles('mceEventBlocker', {position : 'absolute', left : vp.x, top : vp.y, width : vp.w - 2, height : vp.h - 2});
-
 				eb = new Element('mceEventBlocker');
 				eb.update();
 
@@ -475,20 +466,18 @@
 		},
 
 		close : function(win, id) {
-			var t = this, w, d = DOM.doc, ix = 0, fw, id;
-
-			id = t._findId(id || win);
-
-			// Probably not inline
-			if (!t.windows[id]) {
-				t.parent(win);
-				return;
-			}
+			var t = this, w, d = DOM.doc, ix = 0, fw;
 
 			t.count--;
 
 			if (t.count == 0)
 				DOM.remove('mceModalBlocker');
+
+			// Probably not inline
+			if (!id && win) {
+				t.parent(win);
+				return;
+			}
 
 			if (w = t.windows[id]) {
 				t.onClose.dispatch(t);
@@ -514,12 +503,10 @@
 			}
 		},
 
-		setTitle : function(w, ti) {
+		setTitle : function(ti, id) {
 			var e;
 
-			w = this._findId(w);
-
-			if (e = DOM.get(w + '_title'))
+			if (e = DOM.get(id + '_title'))
 				e.innerHTML = DOM.encode(ti);
 		},
 
@@ -562,24 +549,6 @@
 		},
 
 		// Internal functions
-
-		_findId : function(w) {
-			var t = this;
-
-			if (typeof(w) == 'string')
-				return w;
-
-			each(t.windows, function(wo) {
-				var ifr = DOM.get(wo.id + '_ifr');
-
-				if (ifr && w == ifr.contentWindow) {
-					w = wo.id;
-					return false;
-				}
-			});
-
-			return w;
-		},
 
 		_fixIELayout : function(id, s) {
 			var w, img;

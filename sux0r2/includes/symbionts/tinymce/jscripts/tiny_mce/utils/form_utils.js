@@ -1,10 +1,10 @@
 /**
- * $Id: form_utils.js 996 2009-02-06 17:32:20Z spocke $
+ * $Id: form_utils.js 673 2008-03-06 13:26:20Z spocke $
  *
  * Various form utilitiy functions.
  *
  * @author Moxiecode
- * @copyright Copyright © 2004-2008, Moxiecode Systems AB, All rights reserved.
+ * @copyright Copyright Â© 2004-2008, Moxiecode Systems AB, All rights reserved.
  */
 
 var themeBaseURL = tinyMCEPopup.editor.baseURI.toAbsolute('themes/' + tinyMCEPopup.getParam("theme"));
@@ -13,7 +13,7 @@ function getColorPickerHTML(id, target_form_element) {
 	var h = "";
 
 	h += '<a id="' + id + '_link" href="javascript:;" onclick="tinyMCEPopup.pickColor(event,\'' + target_form_element +'\');" onmousedown="return false;" class="pickcolor">';
-	h += '<span id="' + id + '" title="' + tinyMCEPopup.getLang('browse') + '">&nbsp;</span></a>';
+	h += '<span id="' + id + '" title="' + tinyMCEPopup.getLang('browse') + '"></span></a>';
 
 	return h;
 }
@@ -50,7 +50,7 @@ function getBrowserHTML(id, target_form_element, type, prefix) {
 
 	html = "";
 	html += '<a id="' + id + '_link" href="javascript:openBrowser(\'' + id + '\',\'' + target_form_element + '\', \'' + type + '\',\'' + option + '\');" onmousedown="return false;" class="browse">';
-	html += '<span id="' + id + '" title="' + tinyMCEPopup.getLang('browse') + '">&nbsp;</span></a>';
+	html += '<span id="' + id + '" title="' + tinyMCEPopup.getLang('browse') + '"></span></a>';
 
 	return html;
 }
