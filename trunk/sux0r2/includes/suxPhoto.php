@@ -501,6 +501,16 @@ class suxPhoto {
         if ($photoalbums_id && (!filter_var($photoalbums_id, FILTER_VALIDATE_INT) || $photoalbums_id < 1))
             throw new Exception('Invalid photoalbums id');
 
+        // Publish / Draft
+        if ($photoalbums_id && is_bool($this->published)) {
+
+            $query = "SELECT COUNT(*) FROM {$this->db_albums} WHERE id = ? AND " . $this->sqlPublished();
+            $st = $this->db->prepare($query);
+            $st->execute(array($photoalbums_id));
+
+            if ($st->fetchColumn() <= 0) return false;
+        }
+
         $query = "SELECT * FROM {$this->db_photos} ";
         if ($photoalbums_id) $query .= "WHERE photoalbums_id = ? ";
         $query .= "ORDER BY image ";
@@ -562,6 +572,16 @@ class suxPhoto {
         // Sanity check
         if ($photoalbums_id && (!filter_var($photoalbums_id, FILTER_VALIDATE_INT) || $photoalbums_id < 1))
             throw new Exception('Invalid photoalbums id');
+
+        // Publish / Draft
+        if ($photoalbums_id && is_bool($this->published)) {
+
+            $query = "SELECT COUNT(*) FROM {$this->db_albums} WHERE id = ? AND " . $this->sqlPublished();
+            $st = $this->db->prepare($query);
+            $st->execute(array($photoalbums_id));
+
+            if ($st->fetchColumn() <= 0) return 0;
+        }
 
         $query = "SELECT COUNT(*) FROM {$this->db_photos} ";
         if ($photoalbums_id) $query .= "WHERE photoalbums_id = ? ";

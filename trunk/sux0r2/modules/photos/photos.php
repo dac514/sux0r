@@ -113,15 +113,18 @@ class photos extends component {
             $this->pager->setPages($this->photo->countPhotos($id));
             $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/photos/album/{$id}"));
             $this->r->arr['photos'] = $this->photo->getPhotos($this->pager->limit, $this->pager->start, $id);
-
             $this->r->arr['album'] = $this->photo->getAlbumByID($id);
-            $tmp = $this->user->getByID($this->r->arr['album']['users_id']);
-            $this->r->arr['album']['nickname'] = $tmp['nickname'];
 
-            $this->r->title .= " | {$this->r->gtext['photos']} | {$this->r->arr['album']['title']}";
+            if ($this->r->arr['album'] && $this->r->arr['photos'] && count($this->r->arr['photos']))
+            {
+                $tmp = $this->user->getByID($this->r->arr['album']['users_id']);
+                $this->r->arr['album']['nickname'] = $tmp['nickname'];
+                $this->r->title .= " | {$this->r->gtext['photos']} | {$this->r->arr['album']['title']}";
+            }
 
-            if ($this->r->arr['photos'] == false || !count($this->r->arr['photos']))
+            else {
                 $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+            }
 
         }
 
