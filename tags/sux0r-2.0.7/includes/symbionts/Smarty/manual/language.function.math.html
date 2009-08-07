@@ -1,0 +1,624 @@
+<HTML
+><HEAD
+><TITLE
+>{math}</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Custom Functions"
+HREF="language.custom.functions.html"><LINK
+REL="PREVIOUS"
+TITLE="{mailto}"
+HREF="language.function.mailto.html"><LINK
+REL="NEXT"
+TITLE="{popup}"
+HREF="language.function.popup.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.function.mailto.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 8. Custom Functions</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.function.popup.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.function.math"
+></A
+>{math}</H1
+><P
+>&#13;   <TT
+CLASS="varname"
+>{math}</TT
+> allows the template designer to do math equations
+   in the template.
+   </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;   Any numeric template variables may be used in the
+   equations, and the result is printed in place of the tag.
+   </P
+></LI
+><LI
+><P
+>&#13;   The variables used in the equation are passed as parameters,
+   which can  be template variables or static values.
+   </P
+></LI
+><LI
+><P
+>+, -, /, *, abs, ceil, cos,  exp, floor, log, log10, max, min,
+   pi, pow, rand, round, sin, sqrt, srans and tan are all valid operators.
+   Check the PHP documentation  for further information on these
+   <A
+HREF="http://php.net/eval"
+TARGET="_top"
+>math</A
+> functions.
+  </P
+></LI
+><LI
+><P
+>&#13;   If you supply the <TT
+CLASS="parameter"
+><I
+>assign</I
+></TT
+> attribute, the output of the
+   <TT
+CLASS="varname"
+>{math}</TT
+> function will be assigned to this template
+   variable instead of  being output to the template.
+   </P
+></LI
+></UL
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Technical Note: </B
+>
+   <TT
+CLASS="varname"
+>{math}</TT
+> is an expensive function in performance due to
+   its use of the php <A
+HREF="http://php.net/eval"
+TARGET="_top"
+>&#13;   <TT
+CLASS="varname"
+>eval()</TT
+></A
+> function. Doing the math in PHP is much
+   more  efficient, so whenever possible do the math calculations in the script
+   and <A
+HREF="api.assign.html"
+><TT
+CLASS="varname"
+>assign()</TT
+></A
+>
+   the results to the template. Definitely avoid  repetitive
+   <TT
+CLASS="varname"
+>{math}</TT
+> function calls, eg within
+    <A
+HREF="language.function.section.html"
+>&#13;    <TT
+CLASS="varname"
+>{section}</TT
+></A
+> loops.
+  </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="informaltable"
+><A
+NAME="AEN4201"
+></A
+><P
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Attribute Name</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Type</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Required</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Default</TH
+><TH
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Description</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>equation</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Yes</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>n/a</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>The equation to execute</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>format</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>No</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>n/a</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>The format of the result (sprintf)</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>var</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>numeric</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Yes</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>n/a</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Equation variable value</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>assign</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>No</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>n/a</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Template variable the output will be assigned to</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>[var ...]</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>numeric</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Yes</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>n/a</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Equation variable value</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN4251"
+></A
+><P
+><B
+>Example 8-24. {math}</B
+></P
+><P
+>&#13;  <SPAN
+CLASS="bold"
+><B
+CLASS="emphasis"
+>Example a:</B
+></SPAN
+>
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{* $height=4, $width=5 *}
+
+   {math equation="x + y" x=$height y=$width}</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;   The above example will output:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>9</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;    <SPAN
+CLASS="bold"
+><B
+CLASS="emphasis"
+>Example b:</B
+></SPAN
+>
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{* $row_height = 10, $row_width = 20, #col_div# = 2, assigned in template *}
+
+   {math equation="height * width / division"
+   height=$row_height
+   width=$row_width
+   division=#col_div#}</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;   The above example will output:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>100</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;  <SPAN
+CLASS="bold"
+><B
+CLASS="emphasis"
+>Example c:</B
+></SPAN
+>
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{* you can use parenthesis *}
+
+   {math equation="(( x + y ) / z )" x=2 y=10 z=2}</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;   The above example will output:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>6</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;    <SPAN
+CLASS="bold"
+><B
+CLASS="emphasis"
+>Example d:</B
+></SPAN
+>
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{* you can supply a format parameter in sprintf format *}
+
+   {math equation="x + y" x=4.4444 y=5.0000 format="%.2f"}</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;   The above example will output:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>9.44</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.function.mailto.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.function.popup.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>{mailto}</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.custom.functions.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>{popup}</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

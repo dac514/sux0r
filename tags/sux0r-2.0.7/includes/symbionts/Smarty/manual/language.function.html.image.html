@@ -1,0 +1,596 @@
+<HTML
+><HEAD
+><TITLE
+>{html_image}</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Custom Functions"
+HREF="language.custom.functions.html"><LINK
+REL="PREVIOUS"
+TITLE="{html_checkboxes}"
+HREF="language.function.html.checkboxes.html"><LINK
+REL="NEXT"
+TITLE="{html_options}"
+HREF="language.function.html.options.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.function.html.checkboxes.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 8. Custom Functions</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.function.html.options.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.function.html.image"
+></A
+>{html_image}</H1
+><P
+>&#13;   <TT
+CLASS="varname"
+>{html_image}</TT
+> is a
+   <A
+HREF="language.custom.functions.html"
+>custom function</A
+>
+   that generates an HTML <TT
+CLASS="literal"
+>&#60;img&#62;</TT
+> tag.
+   The <TT
+CLASS="parameter"
+><I
+>height</I
+></TT
+> and <TT
+CLASS="parameter"
+><I
+>width</I
+></TT
+>
+   are automatically calculated from the image file if they are not supplied.
+ </P
+><DIV
+CLASS="informaltable"
+><A
+NAME="AEN3279"
+></A
+><P
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Attribute Name</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Type</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Required</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Default</TH
+><TH
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Description</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>file</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Yes</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>n/a</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>name/path to image</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>height</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>No</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>actual image height</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Height to display image</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>width</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>No</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>actual image width</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Width to display image</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>basedir</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>no</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>web server doc root</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Directory to base relative paths from</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>alt</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>no</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+><SPAN
+CLASS="QUOTE"
+>""</SPAN
+></I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Alternative description of the image</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>href</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>no</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>n/a</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>href value to link the image to</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>path_prefix</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>no</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>n/a</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Prefix for output path</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+><P
+></P
+><UL
+><LI
+><P
+>&#13;  <TT
+CLASS="parameter"
+><I
+>basedir</I
+></TT
+> is the base directory that relative image
+  paths are based from. If not given, the web server's document root
+  <TT
+CLASS="varname"
+>$_ENV['DOCUMENT_ROOT']</TT
+> is used as the base.
+  If <A
+HREF="variable.security.html"
+><TT
+CLASS="parameter"
+><I
+>$security</I
+></TT
+></A
+>
+  is enabled, the path to the image must be within a
+  <A
+HREF="variable.secure.dir.html"
+>secure directory</A
+>.
+ </P
+></LI
+><LI
+><P
+>&#13;  <TT
+CLASS="parameter"
+><I
+>href</I
+></TT
+> is the href value to link the image to.
+  If link is supplied, an <TT
+CLASS="literal"
+>&#60;a href="LINKVALUE"&#62;&#60;a&#62;</TT
+>
+  tag is placed around the image tag.
+ </P
+></LI
+><LI
+><P
+>&#13;  <TT
+CLASS="parameter"
+><I
+>path_prefix</I
+></TT
+> is an optional prefix string you can give
+  the output path.
+  This is useful if you want to supply a different server name for the image.
+ </P
+></LI
+><LI
+><P
+>&#13;  All parameters that are not in the list above are printed as
+  name/value-pairs inside the created <TT
+CLASS="literal"
+>&#60;img&#62;</TT
+> tag.
+ </P
+></LI
+></UL
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Technical Note: </B
+>
+   <TT
+CLASS="varname"
+>{html_image}</TT
+> requires a hit to the disk to read the
+   image and  calculate the height and width. If you don't use template
+   <A
+HREF="caching.html"
+>caching</A
+>,
+   it is generally better to avoid <TT
+CLASS="varname"
+>{html_image}</TT
+> and leave
+   image tags static for optimal performance.
+  </P
+></BLOCKQUOTE
+></DIV
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN3368"
+></A
+><P
+><B
+>Example 8-11. {html_image} example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{html_image file='pumpkin.jpg'}
+{html_image file='/path/from/docroot/pumpkin.jpg'}
+{html_image file='../path/relative/to/currdir/pumpkin.jpg'}</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;    Example output of the above template would be:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#60;img src="pumpkin.jpg" alt="" width="44" height="68" /&#62;
+&#60;img src="/path/from/docroot/pumpkin.jpg" alt="" width="44" height="68" /&#62;
+&#60;img src="../path/relative/to/currdir/pumpkin.jpg" alt="" width="44" height="68" /&#62;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.function.html.checkboxes.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.function.html.options.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>{html_checkboxes}</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.custom.functions.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>{html_options}</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

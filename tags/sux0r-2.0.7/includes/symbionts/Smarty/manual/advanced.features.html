@@ -1,0 +1,410 @@
+<HTML
+><HEAD
+><TITLE
+>Advanced Features</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Smarty For Programmers"
+HREF="smarty.for.programmers.html"><LINK
+REL="PREVIOUS"
+TITLE="Controlling Cacheability of Plugins' Output"
+HREF="caching.cacheable.html"><LINK
+REL="NEXT"
+TITLE="Prefilters"
+HREF="advanced.features.prefilters.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="caching.cacheable.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="advanced.features.prefilters.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="advanced.features"
+></A
+>Chapter 15. Advanced Features</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="advanced.features.html#advanced.features.objects"
+>Objects</A
+></DT
+><DT
+><A
+HREF="advanced.features.prefilters.html"
+>Prefilters</A
+></DT
+><DT
+><A
+HREF="advanced.features.postfilters.html"
+>Postfilters</A
+></DT
+><DT
+><A
+HREF="advanced.features.outputfilters.html"
+>Output Filters</A
+></DT
+><DT
+><A
+HREF="section.template.cache.handler.func.html"
+>Cache Handler Function</A
+></DT
+><DT
+><A
+HREF="template.resources.html"
+>Resources</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="advanced.features.objects"
+></A
+>Objects</H1
+><P
+>&#13;  Smarty allows access to PHP
+  <A
+HREF="http://php.net/object"
+TARGET="_top"
+>objects</A
+> through the templates.
+  There are two ways to access them.
+  </P
+><P
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+><P
+>&#13; One way is to <A
+HREF="api.register.object.html"
+>register objects</A
+> to
+ the template, then use access them via syntax similar to
+ <A
+HREF="language.custom.functions.html"
+>custom functions</A
+>.
+ </P
+></LI
+><LI
+><P
+>&#13; The other way is to <A
+HREF="api.assign.html"
+><TT
+CLASS="varname"
+>assign()</TT
+>
+ </A
+> objects to the templates and access them much like any other
+	 assigned variable.
+ </P
+></LI
+></UL
+><P
+>&#13;    The first method has a much nicer template syntax. It
+	 is also more secure, as a registered object can be restricted to certain
+ methods or properties. However,
+ <SPAN
+CLASS="bold"
+><B
+CLASS="emphasis"
+>a registered object cannot be looped over
+ or assigned in arrays of objects</B
+></SPAN
+>, etc. The method you choose will be
+	 determined by your needs, but use the first method whenever possible to
+	 keep template syntax to a minimum.
+ </P
+><P
+>&#13;  If <A
+HREF="variable.security.html"
+><TT
+CLASS="parameter"
+><I
+>$security</I
+></TT
+></A
+>
+  is enabled,  no private methods or functions can be accessed
+ 	(begininning with '_'). If a method and property of the same name exist,
+ 	the method will be used.
+	</P
+><P
+>&#13; 	You can restrict the methods and properties that can be accessed by
+ 	listing them in an array as the third registration parameter.
+	</P
+><P
+>&#13;	 By default, parameters passed to objects through the templates are passed
+  the same way
+  <A
+HREF="language.custom.functions.html"
+>custom functions</A
+> get them.
+  An associative array is passed
+	 as the first parameter, and the smarty object as the second. If you want
+	 the parameters passed one at a time for each argument like traditional
+	 object parameter passing, set the fourth registration parameter to <TT
+CLASS="constant"
+>FALSE</TT
+>.
+	</P
+><P
+>&#13;	 The optional fifth parameter has only effect with
+	 <TT
+CLASS="parameter"
+><I
+>format</I
+></TT
+> being <TT
+CLASS="constant"
+>TRUE</TT
+>
+	 and contains a list of methods that should be treated as
+	 blocks. That means these methods have a closing tag in the
+	 template
+	 (<TT
+CLASS="literal"
+>{foobar-&#62;meth2}...{/foobar-&#62;meth2}</TT
+>) and
+	 the parameters to the methods have the same synopsis as the
+  parameters for
+  <A
+HREF="plugins.block.functions.html"
+>&#13;  <TT
+CLASS="varname"
+>block-function-plugins</TT
+></A
+>:
+ They get the four parameters
+	 <TT
+CLASS="parameter"
+><I
+>$params</I
+></TT
+>,
+	 <TT
+CLASS="parameter"
+><I
+>$content</I
+></TT
+>,
+	 <TT
+CLASS="parameter"
+><I
+>&#38;$smarty</I
+></TT
+> and
+	 <TT
+CLASS="parameter"
+><I
+>&#38;$repeat</I
+></TT
+> and they also behave like
+	 block-function-plugins.
+	</P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN6997"
+></A
+><P
+><B
+>Example 15-1. Using a registered or assigned object</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #FF8000">//&nbsp;the&nbsp;object<br /><br /></span><span style="color: #007700">class&nbsp;</span><span style="color: #0000BB">My_Object&nbsp;</span><span style="color: #007700">{<br />&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;</span><span style="color: #0000BB">meth1</span><span style="color: #007700">(</span><span style="color: #0000BB">$params</span><span style="color: #007700">,&nbsp;&amp;</span><span style="color: #0000BB">$smarty_obj</span><span style="color: #007700">)&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span style="color: #DD0000">'this&nbsp;is&nbsp;my&nbsp;meth1'</span><span style="color: #007700">;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /><br /></span><span style="color: #0000BB">$myobj&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">My_Object</span><span style="color: #007700">;<br /><br /></span><span style="color: #FF8000">//&nbsp;registering&nbsp;the&nbsp;object&nbsp;(will&nbsp;be&nbsp;by&nbsp;reference)<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">register_object</span><span style="color: #007700">(</span><span style="color: #DD0000">'foobar'</span><span style="color: #007700">,</span><span style="color: #0000BB">$myobj</span><span style="color: #007700">);<br /><br /></span><span style="color: #FF8000">//&nbsp;if&nbsp;we&nbsp;want&nbsp;to&nbsp;restrict&nbsp;access&nbsp;to&nbsp;certain&nbsp;methods&nbsp;or&nbsp;properties,&nbsp;list&nbsp;them<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">register_object</span><span style="color: #007700">(</span><span style="color: #DD0000">'foobar'</span><span style="color: #007700">,</span><span style="color: #0000BB">$myobj</span><span style="color: #007700">,array(</span><span style="color: #DD0000">'meth1'</span><span style="color: #007700">,</span><span style="color: #DD0000">'meth2'</span><span style="color: #007700">,</span><span style="color: #DD0000">'prop1'</span><span style="color: #007700">));<br /><br /></span><span style="color: #FF8000">//&nbsp;if&nbsp;you&nbsp;want&nbsp;to&nbsp;use&nbsp;the&nbsp;traditional&nbsp;object&nbsp;parameter&nbsp;format,&nbsp;pass&nbsp;a&nbsp;boolean&nbsp;of&nbsp;false<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">register_object</span><span style="color: #007700">(</span><span style="color: #DD0000">'foobar'</span><span style="color: #007700">,</span><span style="color: #0000BB">$myobj</span><span style="color: #007700">,</span><span style="color: #0000BB">null</span><span style="color: #007700">,</span><span style="color: #0000BB">false</span><span style="color: #007700">);<br /><br /></span><span style="color: #FF8000">//&nbsp;We&nbsp;can&nbsp;also&nbsp;assign&nbsp;objects.&nbsp;assign_by_ref&nbsp;when&nbsp;possible.<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign_by_ref</span><span style="color: #007700">(</span><span style="color: #DD0000">'myobj'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$myobj</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+><P
+>&#13;   And here's how to access your objects in <TT
+CLASS="filename"
+>index.tpl</TT
+>:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{* access our registered object *}
+{foobar-&#62;meth1 p1='foo' p2=$bar}
+
+{* you can also assign the output *}
+{foobar-&#62;meth1 p1='foo' p2=$bar assign='output'}
+the output was {$output}
+
+{* access our assigned object *}
+{$myobj-&#62;meth1('foo',$bar)}</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;  See also <A
+HREF="api.register.object.html"
+><TT
+CLASS="varname"
+>register_object()</TT
+></A
+>
+  and
+  <A
+HREF="api.assign.html"
+><TT
+CLASS="varname"
+>assign()</TT
+></A
+>.
+ </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="caching.cacheable.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="advanced.features.prefilters.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Controlling Cacheability of Plugins' Output</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="smarty.for.programmers.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Prefilters</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

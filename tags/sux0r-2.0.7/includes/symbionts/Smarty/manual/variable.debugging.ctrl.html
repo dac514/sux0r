@@ -1,0 +1,224 @@
+<HTML
+><HEAD
+><TITLE
+>$debugging_ctrl</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Smarty Class Variables"
+HREF="api.variables.html"><LINK
+REL="PREVIOUS"
+TITLE="$debug_tpl"
+HREF="variable.debug.tpl.html"><LINK
+REL="NEXT"
+TITLE="$autoload_filters"
+HREF="variable.autoload.filters.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="variable.debug.tpl.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 12. Smarty Class Variables</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="variable.autoload.filters.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="variable.debugging.ctrl"
+></A
+>$debugging_ctrl</H1
+><P
+>&#13;       This allows alternate ways to enable debugging. <TT
+CLASS="literal"
+>NONE</TT
+>
+        means no  alternate methods are allowed. <TT
+CLASS="literal"
+>URL</TT
+>
+        means when the keyword <TT
+CLASS="literal"
+>SMARTY_DEBUG</TT
+> is found in the
+        <TT
+CLASS="literal"
+>QUERY_STRING</TT
+>, debugging is enabled for that
+        invocation of the script. If <A
+HREF="variable.debugging.html"
+>&#13;        <TT
+CLASS="parameter"
+><I
+>$debugging</I
+></TT
+></A
+> is <TT
+CLASS="constant"
+>TRUE</TT
+>, this value is ignored.
+      </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN4984"
+></A
+><P
+><B
+>Example 12-3. $debugging_ctrl on localhost</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #FF8000">//&nbsp;shows&nbsp;debug&nbsp;console&nbsp;only&nbsp;on&nbsp;localhost&nbsp;ie<br />//&nbsp;http://localhost/script.php?foo=bar&amp;SMARTY_DEBUG<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">debugging&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">false</span><span style="color: #007700">;&nbsp;</span><span style="color: #FF8000">//&nbsp;the&nbsp;default<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">debugging_ctrl&nbsp;</span><span style="color: #007700">=&nbsp;(</span><span style="color: #0000BB">$_SERVER</span><span style="color: #007700">[</span><span style="color: #DD0000">'SERVER_NAME'</span><span style="color: #007700">]&nbsp;==&nbsp;</span><span style="color: #DD0000">'localhost'</span><span style="color: #007700">)&nbsp;?&nbsp;</span><span style="color: #DD0000">'URL'&nbsp;</span><span style="color: #007700">:&nbsp;</span><span style="color: #DD0000">'NONE'</span><span style="color: #007700">;<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;      See also <A
+HREF="chapter.debugging.console.html"
+>debugging console</A
+>
+     section and
+     <A
+HREF="variable.debugging.html"
+><TT
+CLASS="parameter"
+><I
+>$debugging</I
+></TT
+></A
+>.
+      </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="variable.debug.tpl.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="variable.autoload.filters.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>$debug_tpl</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="api.variables.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>$autoload_filters</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

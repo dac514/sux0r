@@ -1,0 +1,593 @@
+<HTML
+><HEAD
+><TITLE
+>Built-in Functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Smarty For Template Designers"
+HREF="smarty.for.designers.html"><LINK
+REL="PREVIOUS"
+TITLE="Combining Modifiers"
+HREF="language.combining.modifiers.html"><LINK
+REL="NEXT"
+TITLE="{config_load}"
+HREF="language.function.config.load.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.combining.modifiers.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.function.config.load.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="language.builtin.functions"
+></A
+>Chapter 7. Built-in Functions</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="language.builtin.functions.html#language.function.capture"
+>{capture}</A
+></DT
+><DT
+><A
+HREF="language.function.config.load.html"
+>{config_load}</A
+></DT
+><DT
+><A
+HREF="language.function.foreach.html"
+>{foreach},{foreachelse}</A
+></DT
+><DT
+><A
+HREF="language.function.if.html"
+>{if},{elseif},{else}</A
+></DT
+><DT
+><A
+HREF="language.function.include.html"
+>{include}</A
+></DT
+><DT
+><A
+HREF="language.function.include.php.html"
+>{include_php}</A
+></DT
+><DT
+><A
+HREF="language.function.insert.html"
+>{insert}</A
+></DT
+><DT
+><A
+HREF="language.function.ldelim.html"
+>{ldelim},{rdelim}</A
+></DT
+><DT
+><A
+HREF="language.function.literal.html"
+>{literal}</A
+></DT
+><DT
+><A
+HREF="language.function.php.html"
+>{php}</A
+></DT
+><DT
+><A
+HREF="language.function.section.html"
+>{section},{sectionelse}</A
+></DT
+><DT
+><A
+HREF="language.function.strip.html"
+>{strip}</A
+></DT
+></DL
+></DIV
+><P
+>&#13;  Smarty comes with several built-in functions. These built-in functions
+  are the integral part of the smarty template engine. You cannot create your own
+  <A
+HREF="language.custom.functions.html"
+>custom functions</A
+>
+  with the same name; and you  should  not need to
+  modify the built-in functions.</P
+><P
+>&#13; A few of these functions have an <TT
+CLASS="parameter"
+><I
+>assign</I
+></TT
+>
+ attribute which collects the result the function to a named template
+ variable instead of being output;
+ much like the <A
+HREF="language.custom.functions.html#language.function.assign"
+>&#13; <TT
+CLASS="varname"
+>{assign}</TT
+></A
+> function.
+ </P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.function.capture"
+></A
+>{capture}</H1
+><P
+>&#13;   <TT
+CLASS="varname"
+>{capture}</TT
+> is used to collect the output of the template between the
+   tags into a  variable instead of displaying it. Any content between
+   <TT
+CLASS="varname"
+>{capture name='foo'}</TT
+> and <TT
+CLASS="varname"
+>{/capture}</TT
+> is collected
+   into the variable specified  in the <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+> attribute.
+   </P
+><P
+>The captured content can be used in the
+   template from the variable <A
+HREF="language.variables.smarty.html#language.variables.smarty.capture"
+><TT
+CLASS="parameter"
+><I
+>$smarty.capture.foo</I
+></TT
+></A
+>
+   where <SPAN
+CLASS="QUOTE"
+>"foo"</SPAN
+> is the value passed in the <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+> attribute.
+   If you do not supply the <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+> attribute, then <SPAN
+CLASS="QUOTE"
+>"default"</SPAN
+> will
+   be used as the name ie <TT
+CLASS="parameter"
+><I
+>$smarty.capture.default</I
+></TT
+>.
+   </P
+><P
+><TT
+CLASS="varname"
+>{capture}'s</TT
+> can be nested.
+   </P
+><DIV
+CLASS="informaltable"
+><A
+NAME="AEN1571"
+></A
+><P
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Attribute Name</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Type</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Required</TH
+><TH
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>Default</TH
+><TH
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Description</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>name</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>no</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>default</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>The name of the captured block</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>assign</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>string</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+>No</TD
+><TD
+WIDTH="20%"
+ALIGN="CENTER"
+VALIGN="MIDDLE"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>n/a</I
+></SPAN
+></TD
+><TD
+WIDTH="20%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>The variable name where to assign the captured output to</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Caution: </B
+>
+   Be careful when capturing <A
+HREF="language.function.insert.html"
+><TT
+CLASS="varname"
+>{insert}</TT
+></A
+>
+   output. If you have
+   <A
+HREF="caching.html"
+><TT
+CLASS="parameter"
+><I
+>$caching</I
+></TT
+></A
+>
+   enabled and you have
+   <A
+HREF="language.function.insert.html"
+><TT
+CLASS="varname"
+>{insert}</TT
+></A
+>
+   commands that you expect to run
+   within cached content, do not capture this content.
+  </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;  <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN1610"
+></A
+><P
+><B
+>Example 7-1. {capture} with the name attribute</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{* we don't want to print a div tag unless content is displayed *}
+{capture name=banner}
+  {include file='get_banner.tpl'}
+{/capture}
+
+{if $smarty.capture.banner ne ''}
+&#60;div id="banner"&#62;{$smarty.capture.banner}&#60;/div&#62;
+{/if}</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN1613"
+></A
+><P
+><B
+>Example 7-2. {capture} into a template variable</B
+></P
+><P
+>This example also demonstrates the
+     <A
+HREF="language.function.popup.html"
+><TT
+CLASS="varname"
+>{popup}</TT
+></A
+>
+     function</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{capture name=some_content assign=popText}
+The server is {$smarty.server.SERVER_NAME|upper} at {$smarty.server.SERVER_ADDR}&#60;br&#62;
+Your ip is {$smarty.server.REMOTE_ADDR}.
+{/capture}
+&#60;a href="#" {popup caption='Server Info' text=$popText}&#62;help&#60;/a&#62;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+
+
+ </P
+><P
+>&#13;  See also
+  <A
+HREF="language.variables.smarty.html#language.variables.smarty.capture"
+><TT
+CLASS="parameter"
+><I
+>$smarty.capture</I
+></TT
+></A
+>,
+   <A
+HREF="language.function.eval.html"
+><TT
+CLASS="varname"
+>{eval}</TT
+></A
+>,
+  <A
+HREF="language.function.fetch.html"
+><TT
+CLASS="varname"
+>{fetch}</TT
+></A
+>,
+  <A
+HREF="api.fetch.html"
+><TT
+CLASS="varname"
+>fetch()</TT
+></A
+>
+  and <A
+HREF="language.custom.functions.html#language.function.assign"
+><TT
+CLASS="varname"
+>{assign}</TT
+></A
+>.
+ </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.combining.modifiers.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.function.config.load.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Combining Modifiers</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="smarty.for.designers.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>{config_load}</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

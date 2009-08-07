@@ -1,0 +1,381 @@
+<HTML
+><HEAD
+><TITLE
+>Resources</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Extending Smarty With Plugins"
+HREF="plugins.html"><LINK
+REL="PREVIOUS"
+TITLE="Output Filters"
+HREF="plugins.outputfilters.html"><LINK
+REL="NEXT"
+TITLE="Inserts"
+HREF="plugins.inserts.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="plugins.outputfilters.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 16. Extending Smarty With Plugins</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="plugins.inserts.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="plugins.resources"
+></A
+>Resources</H1
+><P
+>&#13;     Resource plugins are meant as a generic way of providing template
+     sources or PHP script components to Smarty. Some examples of resources:
+     databases, LDAP, shared memory, sockets, and so on.
+    </P
+><P
+>&#13;     There are a total of four functions that need to be registered for each
+     type of resource. Every function will receive the requested resource as
+     the first parameter and the Smarty object as the last parameter. The
+     rest of parameters depend on the function.
+    </P
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN7492"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>bool <B
+CLASS="function"
+>smarty_resource_<TT
+CLASS="replaceable"
+><I
+>name</I
+></TT
+>_source</B
+></CODE
+> (string $rsrc_name, string &#38;$source, object &#38;$smarty)</CODE
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>bool <B
+CLASS="function"
+>smarty_resource_<TT
+CLASS="replaceable"
+><I
+>name</I
+></TT
+>_timestamp</B
+></CODE
+> (string $rsrc_name, int &#38;$timestamp, object &#38;$smarty)</CODE
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>bool <B
+CLASS="function"
+>smarty_resource_<TT
+CLASS="replaceable"
+><I
+>name</I
+></TT
+>_secure</B
+></CODE
+> (string $rsrc_name, object &#38;$smarty)</CODE
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>bool <B
+CLASS="function"
+>smarty_resource_<TT
+CLASS="replaceable"
+><I
+>name</I
+></TT
+>_trusted</B
+></CODE
+> (string $rsrc_name, object &#38;$smarty)</CODE
+></P
+><P
+></P
+></DIV
+><P
+></P
+><UL
+><LI
+><P
+>&#13;     The first function, <TT
+CLASS="literal"
+>source()</TT
+> is supposed to retrieve
+     the resource. Its second parameter <TT
+CLASS="parameter"
+><I
+>$source</I
+></TT
+> is a
+     variable passed by reference where the result should be
+     stored. The function is supposed to return <TT
+CLASS="constant"
+>TRUE</TT
+> if
+     it was able to successfully retrieve the resource and <TT
+CLASS="constant"
+>FALSE</TT
+> otherwise.
+    </P
+></LI
+><LI
+><P
+>&#13;     The second function, <TT
+CLASS="literal"
+>timestamp()</TT
+> is supposed to
+     retrieve the last modification time of the requested resource, as a UNIX
+     timestamp. The second parameter <TT
+CLASS="parameter"
+><I
+>$timestamp</I
+></TT
+>
+     is a variable passed by reference where the timestamp should be stored.
+     The function is supposed to return <TT
+CLASS="constant"
+>TRUE</TT
+> if the timestamp could be
+     succesfully determined, or <TT
+CLASS="constant"
+>FALSE</TT
+> otherwise.
+    </P
+></LI
+><LI
+><P
+>&#13;     The third function, <TT
+CLASS="literal"
+>secure()</TT
+>is supposed to return
+     <TT
+CLASS="constant"
+>TRUE</TT
+> or <TT
+CLASS="constant"
+>FALSE</TT
+>, depending on whether the requested resource is secure
+     or not. This function is used only for template resources but
+     should still be defined.
+    </P
+></LI
+><LI
+><P
+>&#13;     The fourth function, <TT
+CLASS="literal"
+>trusted()</TT
+> is supposed to return
+     <TT
+CLASS="constant"
+>TRUE</TT
+> or <TT
+CLASS="constant"
+>FALSE</TT
+>, depending on whether the requested resource
+     is trusted or not. This function is used for only for PHP script
+     components requested by <A
+HREF="language.function.include.php.html"
+>&#13;     <TT
+CLASS="varname"
+>{include_php}</TT
+></A
+> tag or
+     <A
+HREF="language.function.insert.html"
+><TT
+CLASS="varname"
+>{insert}</TT
+></A
+>
+     tag with the <TT
+CLASS="parameter"
+><I
+>src</I
+></TT
+> attribute. However, it should still
+     be defined even for template resources.
+    </P
+></LI
+></UL
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN7557"
+></A
+><P
+><B
+>Example 16-10. resource plugin</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #FF8000">/*<br />&nbsp;*&nbsp;Smarty&nbsp;plugin<br />&nbsp;*&nbsp;-------------------------------------------------------------<br />&nbsp;*&nbsp;File:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resource.db.php<br />&nbsp;*&nbsp;Type:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resource<br />&nbsp;*&nbsp;Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;db<br />&nbsp;*&nbsp;Purpose:&nbsp;&nbsp;Fetches&nbsp;templates&nbsp;from&nbsp;a&nbsp;database<br />&nbsp;*&nbsp;-------------------------------------------------------------<br />&nbsp;*/<br /></span><span style="color: #007700">function&nbsp;</span><span style="color: #0000BB">smarty_resource_db_source</span><span style="color: #007700">(</span><span style="color: #0000BB">$tpl_name</span><span style="color: #007700">,&nbsp;&amp;</span><span style="color: #0000BB">$tpl_source</span><span style="color: #007700">,&nbsp;&amp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">)<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #FF8000">//&nbsp;do&nbsp;database&nbsp;call&nbsp;here&nbsp;to&nbsp;fetch&nbsp;your&nbsp;template,<br />&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;populating&nbsp;$tpl_source<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$sql&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">SQL</span><span style="color: #007700">;<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$sql</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">query</span><span style="color: #007700">(</span><span style="color: #DD0000">"select&nbsp;tpl_source<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;my_table<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;tpl_name='$tpl_name'"</span><span style="color: #007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(</span><span style="color: #0000BB">$sql</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">num_rows</span><span style="color: #007700">)&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$tpl_source&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">$sql</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">record</span><span style="color: #007700">[</span><span style="color: #DD0000">'tpl_source'</span><span style="color: #007700">];<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span style="color: #0000BB">true</span><span style="color: #007700">;<br />&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;else&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span style="color: #0000BB">false</span><span style="color: #007700">;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /><br />function&nbsp;</span><span style="color: #0000BB">smarty_resource_db_timestamp</span><span style="color: #007700">(</span><span style="color: #0000BB">$tpl_name</span><span style="color: #007700">,&nbsp;&amp;</span><span style="color: #0000BB">$tpl_timestamp</span><span style="color: #007700">,&nbsp;&amp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">)<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #FF8000">//&nbsp;do&nbsp;database&nbsp;call&nbsp;here&nbsp;to&nbsp;populate&nbsp;$tpl_timestamp.<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$sql&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">SQL</span><span style="color: #007700">;<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$sql</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">query</span><span style="color: #007700">(</span><span style="color: #DD0000">"select&nbsp;tpl_timestamp<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;my_table<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;tpl_name='$tpl_name'"</span><span style="color: #007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(</span><span style="color: #0000BB">$sql</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">num_rows</span><span style="color: #007700">)&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$tpl_timestamp&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">$sql</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">record</span><span style="color: #007700">[</span><span style="color: #DD0000">'tpl_timestamp'</span><span style="color: #007700">];<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span style="color: #0000BB">true</span><span style="color: #007700">;<br />&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;else&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span style="color: #0000BB">false</span><span style="color: #007700">;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /><br />function&nbsp;</span><span style="color: #0000BB">smarty_resource_db_secure</span><span style="color: #007700">(</span><span style="color: #0000BB">$tpl_name</span><span style="color: #007700">,&nbsp;&amp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">)<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #FF8000">//&nbsp;assume&nbsp;all&nbsp;templates&nbsp;are&nbsp;secure<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">return&nbsp;</span><span style="color: #0000BB">true</span><span style="color: #007700">;<br />}<br /><br />function&nbsp;</span><span style="color: #0000BB">smarty_resource_db_trusted</span><span style="color: #007700">(</span><span style="color: #0000BB">$tpl_name</span><span style="color: #007700">,&nbsp;&amp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">)<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #FF8000">//&nbsp;not&nbsp;used&nbsp;for&nbsp;templates<br /></span><span style="color: #007700">}<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13; See also
+ <A
+HREF="api.register.resource.html"
+><TT
+CLASS="varname"
+>register_resource()</TT
+></A
+>,
+ <A
+HREF="api.unregister.resource.html"
+><TT
+CLASS="varname"
+>unregister_resource()</TT
+></A
+>.
+</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="plugins.outputfilters.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="plugins.inserts.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Output Filters</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="plugins.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Inserts</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

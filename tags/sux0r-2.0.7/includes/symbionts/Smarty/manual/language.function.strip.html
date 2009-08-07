@@ -1,0 +1,256 @@
+<HTML
+><HEAD
+><TITLE
+>{strip}</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Built-in Functions"
+HREF="language.builtin.functions.html"><LINK
+REL="PREVIOUS"
+TITLE="{section},{sectionelse}"
+HREF="language.function.section.html"><LINK
+REL="NEXT"
+TITLE="Custom Functions"
+HREF="language.custom.functions.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="language.function.section.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 7. Built-in Functions</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.custom.functions.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.function.strip"
+></A
+>{strip}</H1
+><P
+>&#13;  Many times web designers run into the issue where white space and
+  carriage returns affect the output of the rendered HTML (browser
+  "features"), so you must run all your tags together in the template
+  to get the desired results. This usually ends up in unreadable or
+  unmanageable templates.
+ </P
+><P
+>&#13;  Anything within <TT
+CLASS="varname"
+>{strip}{/strip}</TT
+> tags  are stripped of the
+  extra spaces or carriage returns at the beginnings and ends of the
+  lines before they are displayed. This way you can keep your
+  templates readable, and not worry about extra white space causing
+  problems.
+ </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+   <TT
+CLASS="varname"
+>{strip}{/strip}</TT
+> does not affect the contents of template variables,
+   see the <A
+HREF="language.modifier.strip.html"
+>strip modifier</A
+> instead.
+  </P
+></BLOCKQUOTE
+></DIV
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN2738"
+></A
+><P
+><B
+>Example 7-44. {strip} tags</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{* the following will be all run into one line upon output *}
+{strip}
+&#60;table border='0'&#62;
+ &#60;tr&#62;
+  &#60;td&#62;
+   &#60;a href="{$url}"&#62;
+    &#60;font color="red"&#62;This is a test&#60;/font&#62;
+   &#60;/a&#62;
+  &#60;/td&#62;
+ &#60;/tr&#62;
+&#60;/table&#62;
+{/strip}</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;   The above example will output:
+  </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#60;table border='0'&#62;&#60;tr&#62;&#60;td&#62;&#60;a href="http://. snipped...&#60;/a&#62;&#60;/td&#62;&#60;/tr&#62;&#60;/table&#62;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;  Notice that in the above example, all the lines begin and end
+  with HTML tags. Be aware that all the lines are run together.
+  If you have plain text at the beginning or end of any line,
+  they will be run together, and may not be desired results.
+ </P
+><P
+>&#13; See also the
+ <A
+HREF="language.modifier.strip.html"
+><TT
+CLASS="varname"
+>strip</TT
+></A
+> modifier.
+ </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="language.function.section.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.custom.functions.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>{section},{sectionelse}</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="language.builtin.functions.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Custom Functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
