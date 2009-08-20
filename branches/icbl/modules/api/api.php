@@ -125,6 +125,70 @@ class api extends bayesComponent {
 
     }
 
+		
+   function feeds_api($params) {
+
+        /*
+        GET request to /api/feeds            : List all feeds
+        GET request to /api/feeds/user/1     : List feeds for user with ID of 1
+        TODO? POST request to /api/feeds/user/1    : Create a new feed for user with ID of 1
+        TODO? PUT request to /api/feeds/feed/5    : Update feed with ID of 5
+        TODO? DELETE request to /api/feeds/feed/5 : Delete feed with ID of 5
+        */
+
+        // --------------------------------------------------------------------
+        // Set up some variables
+        // --------------------------------------------------------------------
+
+        $method = $this->getRequestMethod();
+        $results = null;
+
+        // --------------------------------------------------------------------
+        // Decide what to do
+        // --------------------------------------------------------------------
+
+        // GET
+        if ('GET' == $method ) {
+						include_once(dirname(__FILE__) . '/../feeds/feeds.php');
+				    $feeds = new feeds();
+            if (empty($params[0])) {
+                // Get feeds for all users
+                if (filter_var($action, FILTER_VALIDATE_INT) && $action > 0) $results = $feeds->listing($action);
+                else $results = $feeds->listing();
+            }
+            else {
+                // Get feeds for a single user
+								$results = $feeds->user($params[0]);
+            }
+        }
+        // POST
+        elseif ('POST' == $method) {
+
+            /* TODO: validate $_POST */
+
+        }
+
+
+        // --------------------------------------------------------------------
+        // Send output
+        // --------------------------------------------------------------------
+
+				$resourceType = 'feeds';
+				
+        if (is_array($results)) {
+            // Array
+            $this->sendResponse(self::array2Xml($resourceType,$results), 200);
+        }
+        else {
+            // TODO?
+            $this->sendResponse($results, 302, 'Insert Message here', 'text/html');
+        }
+
+
+    }		
+		
+				
+		
 
     // --------------------------------------------------------------------
     // Private functions,
