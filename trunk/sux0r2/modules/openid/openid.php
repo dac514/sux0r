@@ -501,7 +501,7 @@ class openid {
 
                 if ($this->user->loginCheck() && $_SESSION['users_id'] != $u['users_id']) {
                     // Wrong openid?
-                    $this->wrapHtml($this->gtext['error_id_conflict']);
+                    $this->wrapHtml($this->r->gtext['error_id_conflict']);
                 }
                 else {
                     // Log this user in
@@ -547,15 +547,15 @@ class openid {
 
             // Failure
             $this->destroyOpenIDSession();
-            $this->wrapHtml($this->gtext['error_failed'] . ': ' . $_GET['openid_identity']);
+            $this->wrapHtml($this->r->gtext['error_failed'] . ': ' . $_GET['openid_identity']);
 
         }
         else {
 
             // Otherwise, provide useless info
             $this->destroyOpenIDSession();
-            if ($this->user->loginCheck()) $this->wrapHtml($this->gtext['logged_in'] . ' ' . $_SESSION['nickname']);
-            else $this->wrapHtml($this->gtext['not_logged_in']);
+            if ($this->user->loginCheck()) $this->wrapHtml($this->r->gtext['logged_in'] . ' ' . $_SESSION['nickname']);
+            else $this->wrapHtml($this->r->gtext['not_logged_in']);
 
         }
 
@@ -575,7 +575,7 @@ class openid {
 
         // the user needs refresh urls in their session to access this mode
         if (empty($_SESSION['openid_post_accept_url']) || empty($_SESSION['openid_cancel_accept_url']) || empty($_SESSION['openid_unaccepted_url']))
-            $this->error500($this->gtext['error_directly']);
+            $this->error500($this->r->gtext['error_directly']);
 
         // has the user accepted the trust_root?
         $accepted = (!empty($_REQUEST['accepted'])) ? $_REQUEST['accepted'] : null;
@@ -623,7 +623,7 @@ class openid {
 
         // the user needs refresh urls in their session to access this mode
         if (empty($_SESSION['openid_post_auth_url']) || empty($_SESSION['openid_cancel_auth_url']))
-            $this->error500($this->gtext['error_directly']);
+            $this->error500($this->r->gtext['error_directly']);
 
         if (!$this->user->loginCheck() && $this->user->authenticate()) {
 
@@ -635,7 +635,7 @@ class openid {
 
             // Too many password failures?
             if ($this->user->maxPasswordFailures()) {
-                $this->errorGet($_SESSION['openid_cancel_auth_url'], $this->gtext['error_pw_fail']);
+                $this->errorGet($_SESSION['openid_cancel_auth_url'], $this->r->gtext['error_pw_fail']);
             }
 
             // Cancelled
@@ -651,7 +651,7 @@ class openid {
     *  Handle a consumer's request for cancellation.
     */
     function cancel_mode () {
-        $this->wrapHtml($this->gtext['cancelled']);
+        $this->wrapHtml($this->r->gtext['cancelled']);
     }
 
 
@@ -670,7 +670,7 @@ class openid {
     */
     function login_mode() {
 
-        if (empty($_REQUEST['openid_url'])) $this->error500($this->gtext['error_directly']);
+        if (empty($_REQUEST['openid_url'])) $this->error500($this->r->gtext['error_directly']);
 
 
         // Pass this to consumer
