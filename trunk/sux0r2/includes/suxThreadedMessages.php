@@ -387,15 +387,20 @@ class suxThreadedMessages {
     */
     private function biggestThreadPos($thread_id, $parent_id) {
 
+        // A static variable exists only in a local function scope, but it does
+        // not lose its value when program execution leaves this scope.
+        // $max_pos is initialized only in first call of function
+        static $max_pos = 0;
+
         $st = $this->db->prepare("SELECT id, thread_pos FROM {$this->db_table} WHERE thread_id = ? AND parent_id = ? ORDER BY thread_pos DESC ");
         $st->execute(array($thread_id, $parent_id));
         $result = $st->fetch(PDO::FETCH_ASSOC);
 
-        static $max_pos = 0;
         if ($result['thread_pos'] && $max_pos < $result['thread_pos']) {
             $max_pos = $result['thread_pos'];
             return $this->biggestThreadPos($thread_id, $result['id']);
         }
+
         return $max_pos;
 
     }
