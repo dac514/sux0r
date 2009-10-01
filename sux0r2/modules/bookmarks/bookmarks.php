@@ -17,7 +17,7 @@ class bookmarks extends bayesComponent {
     // Module name
     protected $module = 'bookmarks';
 
-    // Object: bayesUser()
+    // Object: suxUserNaiveBayesian()
     protected $nb;
 
     // Object: suxBookmarks()
@@ -37,7 +37,7 @@ class bookmarks extends bayesComponent {
     function __construct() {
 
         // Declare objects
-        $this->nb = new bayesUser();
+        $this->nb = new suxUserNaiveBayesian();
         $this->bm = new suxBookmarks();
         $this->r = new bookmarksRenderer($this->module); // Rend
         parent::__construct(); // Let the parent do the rest

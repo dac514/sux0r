@@ -7,15 +7,9 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
-require_once(dirname(__FILE__) . '/../bayes/bayesRenderer.php');
+require_once(dirname(__FILE__) . '/../../extensions/suxBayesRenderer.php');
 
-
-class bookmarksRenderer extends suxRenderer {
-
-
-    // Object: bayesRenderer()
-    private $bayesRenderer;
+class bookmarksRenderer extends suxBayesRenderer {
 
     // Object: suxUser();
     private $user;
@@ -30,7 +24,6 @@ class bookmarksRenderer extends suxRenderer {
 
         parent::__construct($module); // Call parent
         $this->user = new suxUser();
-        $this->bayesRenderer = new bayesRenderer('bayes');
 
     }
 
@@ -127,30 +120,6 @@ class bookmarksRenderer extends suxRenderer {
         inline_styles : false,
         ';
         return $this->tinyMce($init);
-
-    }
-
-
-    /**
-    * @return string javascript
-    */
-    function genericBayesInterfaceInit() {
-
-        return $this->bayesRenderer->genericBayesInterfaceInit();
-
-    }
-
-
-    /**
-    * @param int $id messages id
-    * @param string $link link table
-    * @param string $module sux0r module, used to clear cache
-    * @param string $document document to train
-    * @return string html
-    */
-    function genericBayesInterface($id, $link, $module, $document) {
-
-        return $this->bayesRenderer->genericBayesInterface($id, $link, $module, $document);
 
     }
 

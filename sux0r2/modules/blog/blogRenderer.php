@@ -9,27 +9,16 @@
 
 require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
-require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
-require_once(dirname(__FILE__) . '/../../extensions/bayesUser.php');
-require_once(dirname(__FILE__) . '/../bayes/bayesRenderer.php');
+require_once(dirname(__FILE__) . '/../../extensions/suxBayesRenderer.php');
+require_once(dirname(__FILE__) . '/../../extensions/suxUserNaiveBayesian.php');
 
-
-class blogRenderer extends suxRenderer {
+class blogRenderer extends suxBayesRenderer {
 
     // Object: suxUser()
     private $user;
 
     // Object: suxThreadedMessages()
     private $msg;
-
-    // Object: bayesUser()
-    private $nb;
-
-    // Object: suxLink()
-    private $link;
-
-    // Object: bayesRenderer()
-    private $bayesRenderer;
 
 
     /**
@@ -42,9 +31,6 @@ class blogRenderer extends suxRenderer {
         parent::__construct($module); // Call parent
         $this->user = new suxUser();
         $this->msg = new suxThreadedMessages();
-        $this->nb = new bayesUser();
-        $this->link = new suxLink();
-        $this->bayesRenderer = new bayesRenderer('bayes');
 
     }
 
@@ -163,42 +149,6 @@ class blogRenderer extends suxRenderer {
         $html = "<p>{$this->gtext['bayes_categories']}: " . $html . '</p>';
 
         return $html;
-
-    }
-
-
-    /**
-    * @return string javascript
-    */
-    function genericBayesInterfaceInit() {
-
-        return $this->bayesRenderer->genericBayesInterfaceInit();
-
-    }
-
-
-    /**
-    * @param int $id messages id
-    * @param string $link link table
-    * @param string $module sux0r module, used to clear cache
-    * @param string $document document to train
-    * @return string html
-    */
-    function genericBayesInterface($id, $link, $module, $document) {
-
-        return $this->bayesRenderer->genericBayesInterface($id, $link, $module, $document);
-
-    }
-
-
-    /**
-    * Get {html_options} formated categories array
-    *
-    * @return array
-    */
-    function getUserCategories() {
-
-        return $this->bayesRenderer->getUserCategories();
 
     }
 

@@ -35,7 +35,7 @@ class blog extends bayesComponent {
     function __construct() {
 
         // Declare objects
-        $this->nb = new bayesUser();
+        $this->nb = new suxUserNaiveBayesian();
         $this->msg = new suxThreadedMessages();
         $this->r = new blogRenderer($this->module); // Renderer
         parent::__construct(); // Let the parent do the rest

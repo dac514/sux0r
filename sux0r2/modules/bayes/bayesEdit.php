@@ -8,7 +8,7 @@
 */
 
 require_once('bayesRenderer.php');
-require_once(dirname(__FILE__) . '/../../extensions/bayesUser.php');
+require_once(dirname(__FILE__) . '/../../extensions/suxUserNaiveBayesian.php');
 require_once(dirname(__FILE__) . '/../abstract.component.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 
@@ -18,7 +18,7 @@ class bayesEdit extends component {
     // Module name
     protected $module = 'bayes';
 
-    // Object: bayesUser();
+    // Object: suxUserNaiveBayesian();
     public $nb;
 
     // Array: Modules that cache bayes interfaces
@@ -32,7 +32,7 @@ class bayesEdit extends component {
     function __construct() {
 
         // Declare objects
-        $this->nb = new bayesUser();
+        $this->nb = new suxUserNaiveBayesian();
         $this->r = new bayesRenderer($this->module); // Renderer
         suxValidate::register_object('this', $this); // Register self to validator
         parent::__construct(); // Let the parent do the rest

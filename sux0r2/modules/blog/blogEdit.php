@@ -12,7 +12,7 @@ require_once(dirname(__FILE__) . '/../abstract.component.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
 require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
 require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
-require_once(dirname(__FILE__) . '/../../extensions/bayesUser.php');
+require_once(dirname(__FILE__) . '/../../extensions/suxUserNaiveBayesian.php');
 
 
 class blogEdit extends component {
@@ -23,7 +23,7 @@ class blogEdit extends component {
     // Object: suxThreadedMessages()
     protected $msg;
 
-    // Object: bayesUser()
+    // Object: suxUserNaiveBayesian()
     protected $nb;
 
     // Var: message id
@@ -42,7 +42,7 @@ class blogEdit extends component {
     function __construct($id = null) {
 
         // Declare objects
-        $this->nb = new bayesUser();
+        $this->nb = new suxUserNaiveBayesian();
         $this->msg = new suxThreadedMessages();
         $this->r = new blogRenderer($this->module); // Renderer
         suxValidate::register_object('this', $this); // Register self to validator

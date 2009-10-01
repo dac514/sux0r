@@ -20,7 +20,7 @@ class feeds extends bayesComponent {
     // Object: suxRSS()
     protected $rss;
 
-    // Object: bayesUser()
+    // Object: suxUserNaiveBayesian()
     protected $nb;
 
     // Var: used by filter() method
@@ -34,7 +34,7 @@ class feeds extends bayesComponent {
     function __construct() {
 
         // Declare objects
-        $this->nb = new bayesUser();
+        $this->nb = new suxUserNaiveBayesian();
         $this->rss = new suxRSS();
         $this->r = new feedsRenderer($this->module); // Renderer
         parent::__construct(); // Let the parent do the rest

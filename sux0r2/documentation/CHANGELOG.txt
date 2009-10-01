@@ -1,4 +1,13 @@
 ------------------------------------------------------------------------------
+sux0r 2.0.x
+------------------------------------------------------------------------------
+
+Refactoring: Since bayesRenderer is reused, it was moved to the extensions/ directory.
+Child classes now inherit instead of instatiate.  It was also renamed to suxBayesRenderer.
+In addition, bayesUser was renamed to  suxUserNaiveBayesian to in an attempt to make things
+clearer. Same for openid class.
+
+------------------------------------------------------------------------------
 sux0r 2.0.7
 ------------------------------------------------------------------------------
 
