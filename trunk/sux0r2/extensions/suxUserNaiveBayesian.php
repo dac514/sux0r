@@ -1,7 +1,7 @@
 <?php
 
 /**
-* bayesUser
+* suxUserNaiveBayesian
 *
 * @author     Dac Chartrand <dac.chartrand@gmail.com>
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
@@ -10,7 +10,7 @@
 require_once(dirname(__FILE__) . '/../includes/suxNaiveBayesian.php');
 require_once(dirname(__FILE__) . '/../includes/suxLink.php');
 
-class bayesUser extends suxNaiveBayesian {
+class suxUserNaiveBayesian extends suxNaiveBayesian {
 
     /*
     Conventions:

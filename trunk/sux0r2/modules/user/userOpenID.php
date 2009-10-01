@@ -10,7 +10,7 @@
 require_once('userRenderer.php');
 require_once(dirname(__FILE__) . '/../abstract.component.php');
 require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
-require_once(dirname(__FILE__) . '/../../modules/openid/openid.php');
+require_once(dirname(__FILE__) . '/../../extensions/openid.php');
 
 
 class userOpenID extends component {

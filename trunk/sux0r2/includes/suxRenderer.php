@@ -7,8 +7,22 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-// See:
-// http://www.phpinsider.com/smarty-forum/viewtopic.php?t=12683
+
+/*
+A renderer object acts as a bridge, and is generally passed to a template.
+
+Example:
+$r = new suxRenderer('module');
+$smarty->assign_by_ref('r', $r);
+
+PHP pages are procedural in the sense that a page will be rendered once, from
+top to bottom, then PHP will exit. Knowing this, a renderer object can do
+interesting things, such as cache the return values of functions, to allow for
+smarter interactions between Templates and the rest of the application.
+
+See:
+http://www.phpinsider.com/smarty-forum/viewtopic.php?t=12683
+*/
 
 require_once('suxTemplate.php');
 
@@ -45,8 +59,14 @@ class suxRenderer {
     */
     function __construct($module) {
 
-        // Module
-        $this->module = $module;
+        // Defaults
+        $this->url = $GLOBALS['CONFIG']['URL'];
+        $this->title = $GLOBALS['CONFIG']['TITLE'];
+        $this->sitename = $GLOBALS['CONFIG']['TITLE'];
+        $this->bool['analytics'] = false;
+
+        $this->gtext = suxFunct::gtext($module); // Gtext
+        $this->module = $module; // Module
 
         // Partition
         if (!empty($_SESSION['partition'])) $this->partition = $_SESSION['partition'];
@@ -58,20 +78,11 @@ class suxRenderer {
         $this->xhtml_footer = $GLOBALS['CONFIG']['PATH'] . '/templates/' . $this->partition  . '/globals/xhtml_footer.tpl';
         if (!file_exists($this->xhtml_footer)) $this->xhtml_footer = $GLOBALS['CONFIG']['PATH'] . '/templates/sux0r/globals/xhtml_footer.tpl';
 
-        // Defaults
-        $this->url = $GLOBALS['CONFIG']['URL'];
-        $this->title = $GLOBALS['CONFIG']['TITLE'];
-        $this->sitename = $GLOBALS['CONFIG']['TITLE'];
-        $this->bool['analytics'] = false;
-
         // Stylesheets
         $this->stylesheets = "<link rel='stylesheet' type='text/css' href='{$this->url}/media/{$this->partition}/css/base.css' />\n";
         if (file_exists($GLOBALS['CONFIG']['PATH'] . "/media/{$this->partition}/css/{$this->module}.css")) {
             $this->stylesheets .= "<link rel='stylesheet' type='text/css' href='{$this->url}/media/{$this->partition}/css/{$this->module}.css' />\n";
         }
-
-        // Gtext
-        $this->gtext = suxFunct::gtext($module);
 
     }
 

@@ -8,12 +8,12 @@
 */
 
 require_once(dirname(__FILE__) . '/abstract.component.php');
-require_once(dirname(__FILE__) . '/../extensions/bayesUser.php');
+require_once(dirname(__FILE__) . '/../extensions/suxUserNaiveBayesian.php');
 
 
 abstract class bayesComponent extends component {
 
-    // Object: bayesUser()
+    // Object: suxUserNaiveBayesian()
     protected $nb;
 
 
@@ -23,8 +23,8 @@ abstract class bayesComponent extends component {
     function __construct() {
 
         // Pre-condition sanity check
-        if (!($this->nb instanceof bayesUser))
-            throw new Exception('$this->nb is not an instance of bayesUser()');
+        if (!($this->nb instanceof suxUserNaiveBayesian))
+            throw new Exception('$this->nb is not an instance of suxUserNaiveBayesian()');
 
         parent::__construct(); // Let the parent do the rest
 

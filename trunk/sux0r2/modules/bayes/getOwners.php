@@ -8,10 +8,10 @@ if (isset($_POST['id']) && filter_var($_POST['id'], FILTER_VALIDATE_INT)) {
     require_once(dirname(__FILE__) . '/../../config.php');
     require_once(dirname(__FILE__) . '/../../initialize.php');
     require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
-    require_once(dirname(__FILE__) . '/../../extensions/bayesUser.php');
+    require_once(dirname(__FILE__) . '/../../extensions/suxUserNaiveBayesian.php');
 
     $user = new suxUser();
-    $nb = new bayesUser();
+    $nb = new suxUserNaiveBayesian();
 
     $vectors = $nb->getVectorShares($_POST['id']);
 

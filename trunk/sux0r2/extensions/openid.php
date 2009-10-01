@@ -10,8 +10,8 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
+require_once(dirname(__FILE__) . '/../includes/suxTemplate.php');
+require_once(dirname(__FILE__) . '/../includes/suxRenderer.php');
 
 class openid {
 

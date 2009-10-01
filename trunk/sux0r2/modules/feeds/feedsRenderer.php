@@ -9,20 +9,12 @@
 
 require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
-require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
-require_once(dirname(__FILE__) . '/../bayes/bayesRenderer.php');
+require_once(dirname(__FILE__) . '/../../extensions/suxBayesRenderer.php');
 
-class feedsRenderer extends suxRenderer {
-
-    // Object: bayesRenderer()
-    private $bayesRenderer;
+class feedsRenderer extends suxBayesRenderer {
 
     // Object: suxRss()
     private $rss;
-
-    // Object: suxLink()
-    private $link;
-
 
     /**
     * Constructor
@@ -32,32 +24,7 @@ class feedsRenderer extends suxRenderer {
     function __construct($module) {
 
         parent::__construct($module); // Call parent
-        $this->bayesRenderer = new bayesRenderer('bayes');
         $this->rss = new suxRSS();
-        $this->link = new suxLink();
-    }
-
-
-    /**
-    * @return string javascript
-    */
-    function genericBayesInterfaceInit() {
-
-        return $this->bayesRenderer->genericBayesInterfaceInit();
-
-    }
-
-
-    /**
-    * @param int $id messages id
-    * @param string $link link table
-    * @param string $module sux0r module, used to clear cache
-    * @param string $document document to train
-    * @return string html
-    */
-    function genericBayesInterface($id, $link, $module, $document) {
-
-        return $this->bayesRenderer->genericBayesInterface($id, $link, $module, $document);
 
     }
 
