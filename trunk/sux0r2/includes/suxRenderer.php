@@ -9,16 +9,19 @@
 
 
 /*
-A renderer object acts as a bridge, and is generally passed to a template.
+A renderer object acts as a bridge, and is generally passed to a template
+object.
 
 Example:
 $r = new suxRenderer('module');
 $smarty->assign_by_ref('r', $r);
 
 PHP pages are procedural in the sense that a page will be rendered once, from
-top to bottom, then PHP will exit. Knowing this, a renderer object can do
-interesting things, such as cache the return values of functions, to allow for
-smarter interactions between Templates and the rest of the application.
+top to bottom, then PHP will exit. Additionally, template rendering happens
+after everything else, so the state of the application doesn't change while
+rendering. Knowing this, a renderer  object can do interesting things, such as
+cache the return values of functions, to allow for smarter interactions between
+Templates and the rest of the application.
 
 See:
 http://www.phpinsider.com/smarty-forum/viewtopic.php?t=12683
