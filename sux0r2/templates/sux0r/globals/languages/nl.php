@@ -26,12 +26,12 @@ $gtext['navcontainer'] = array(
 
 /* Copyright */
 
-$gtext['copyright'] = '<a href="http://www.sux0r.org/">sux0r</a> is copyright &copy;
+$gtext['copyright'] = '<a href="http://www.sux0r.org/">sux0r</a> is copyleft &copy;
 <a href="http://www.trotch.com/">Trotch Inc</a> ' . date('Y') . ' en is uitgebracht onder
 de <a href="http://www.fsf.org/licensing/licenses/gpl-3.0.html">GNU General Public License</a>.
 Hosting door <a href="http://www.networkredux.com/">Network Redux</a>.';
 
-$gtext['data_license'] = 'Tenzij anders vermeld, is alle inhoud op deze site is copyright bij de auteur en beschikbaar onder de  <br />
+$gtext['data_license'] = 'Tenzij anders vermeld, is alle inhoud op deze site is copyleft bij de auteur en beschikbaar onder de  <br />
 <a href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0</a> .
 Auteurs worden bij hun volledige naam of nickname genoemd.';
 
