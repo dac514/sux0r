@@ -28,9 +28,9 @@ be dealt with according to their own licenses.
 
 ### REQUIREMENTS ###
 
-* PHP 5.2.3 or higher with mb_ and PDO extensions
+* PHP 5.2.3 or higher with mb, gd, and PDO extensions
 * MySQL 5.0+ or PostgreSQL 8.3+, UTF enabled
-* Apache webserver
+* Apache or IIS7
 
 
 ### INSTALL ###
@@ -46,14 +46,17 @@ be dealt with according to their own licenses.
 
 4. Edit ./config.php and ./.htaccess appropriately
 
-5. Point your web browser to 'http://YOURSITE/supplemental/root.php' and make
-   yourself a root user
+5. Check dependencies, e.g.
+   http://YOURSITE/supplemental/dependencies.php
 
-6. Delete the ./supplemental directory from the webserver
+6. Point your web browser to 'http://YOURSITE/supplemental/root.php' and make
+   yourself a root user
 
 7. Setup a CRON job to get RSS feeds by calling
    'http://YOURSITE/modules/feeds/cron.php' every =~ 15 minutes
    (example: /bin/nice /usr/bin/wget -q -O /dev/null "http://YOURSITE/modules/feeds/cron.php")
+
+8. Delete the ./supplemental directory from the webserver.
 
 
 ### SUPPORT/HELP ###
@@ -65,8 +68,7 @@ be dealt with according to their own licenses.
 
 - Pages pass W3C Validation (as best I can test)
 
-- Tested with: (OS X) Firefox 2.0.0.17, (OS X) Safari 3.1.2, (OS X) Opera 9.2
-  (Win XP) Internet Explorer 6, (Win XP) Firefox 3.0.1
+- Tested with many web browsers, but certainly not all of them.
 
 
 ### THANKS! ###
