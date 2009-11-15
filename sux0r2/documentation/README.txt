@@ -39,8 +39,10 @@ be dealt with according to their own licenses.
    (or) Import ./supplemental/sql/db-postgres.sql into PostgreSQL
 
 2. chmod 777 ./data
+   chmod 777 ./temporary
 
-3. chmod 777 ./temporary
+3. mv ./sample-config.php ./config.php
+   mv ./sample-.htaccess ./.htaccess
 
 4. Edit ./config.php and ./.htaccess appropriately
 
