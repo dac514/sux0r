@@ -60,7 +60,7 @@ class suxNaiveBayesian {
     function __destruct() {
 
 		if (self::$destroyed == true) return; // Avoid cleaning the cache multiple times
-		$this->cleanCache();
+		if (1 == rand(1, 5)) $this->cleanCache(); // 1 in 5 chance
         self::$destroyed = true;
 
     }
@@ -1036,6 +1036,16 @@ class suxNaiveBayesian {
     // Caching for categorization scores
     // ----------------------------------------------------------------------------
 
+    /**
+    * Purge expired cache elements
+    */
+    public function cleanCache() {
+
+        $st = $this->db->prepare("DELETE FROM {$this->db_table_cache} WHERE expiration < ? ");
+        $st->execute(array(time()));
+
+    }
+
 
     /**
     * @param int $vector_id vector id
@@ -1044,17 +1054,6 @@ class suxNaiveBayesian {
 
         $st = $this->db->prepare("DELETE FROM {$this->db_table_cache} WHERE bayes_vectors_id = ? ");
         $st->execute(array($vector_id));
-
-    }
-
-
-    /**
-    *
-    */
-    private function cleanCache() {
-
-        $st = $this->db->prepare("DELETE FROM {$this->db_table_cache} WHERE expiration < ? ");
-        $st->execute(array(time()));
 
     }
 
