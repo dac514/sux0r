@@ -61,7 +61,7 @@ PHP Calendar
 
 Scriptaculous
 * Path: ./scriptaculous/
-* Version: 1.8.2
+* Version: 1.8.3
 * Licence: MIT
 * Website: http://script.aculo.us/
 
@@ -75,7 +75,7 @@ Securimage
 
 Smarty
 * Path: ./Smarty/
-* Version: 2.6.25
+* Version: 2.6.26
 * Licence: LGPL 2.1
 * Website: http://www.smarty.net/
 
@@ -105,6 +105,6 @@ Stopwords
 
 TinyMCE
 * Path: ./tinymce/
-* Version: 3.2.3 (+ language files)
+* Version: 3.2.7 (+ language files)
 * Licence: LGPL 2.1
 * Website: http://tinymce.moxiecode.com/

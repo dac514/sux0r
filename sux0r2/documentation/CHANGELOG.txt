@@ -19,6 +19,8 @@ Pre-pended 'ajax.' to all files that are called correspondingly
 
 Added a DEBUG mode to the advanced configuration file
 
+Updated symbionts: Scriptaculous 1.8.3, TinyMCE 3.2.7
+
 ------------------------------------------------------------------------------
 sux0r 2.0.7
 ------------------------------------------------------------------------------
