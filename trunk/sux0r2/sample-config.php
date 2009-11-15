@@ -4,11 +4,10 @@
 /* Error reporting and debugging */
 /* ------------------------------------------------------------------------- */
 
+$CONFIG['DEBUG'] = false;
+
 error_reporting(E_ALL | E_STRICT); // Development
 // error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING); // Hosting
-
-// Debug
-include_once(dirname(__FILE__)  . '/includes/symbionts/dBug.php');
 
 /* ------------------------------------------------------------------------- */
 /* Configuration variables */
