@@ -2,20 +2,35 @@
 sux0r 2.0.x
 ------------------------------------------------------------------------------
 
-Refactoring: Since bayesRenderer is reused, it was moved to the extensions/ directory.
-Child classes now inherit instead of instatiate.  It was also renamed to suxBayesRenderer.
-In addition, bayesUser was renamed to  suxUserNaiveBayesian to in an attempt to make things
-clearer. Same for openid class.
+Refactoring:
+
+Since bayesRenderer is reused, it was moved to the extensions/ directory.
+Child classes now inherit instead of instatiate.  It was also renamed to
+suxBayesRenderer. In addition, bayesUser was renamed to  suxUserNaiveBayesian
+to in an attempt to make things clearer. Same for openid class.
+
+Moved the Banned and 404 templates out of the root directory, added them to
+the globals module
+
+Renamed the config.php and .htaccess files, turned them into sample files
+instead
+
+Pre-pended 'ajax.' to all files that are called correspondingly
+
+Added a DEBUG mode to the advanced configuration file
 
 ------------------------------------------------------------------------------
 sux0r 2.0.7
 ------------------------------------------------------------------------------
 
-Change from $cache_id = false to $cache_id = null to remove redundant template display condition
+Change from $cache_id = false to $cache_id = null to remove redundant template
+display condition
 
-Added rounded borders and drop shadows to #proselytizer with non-standards compliant CSS
+Added rounded borders and drop shadows to #proselytizer with non-standards
+compliant CSS
 
-Fixed JavaScript menus: Z-index only works on elements that are position:absolute
+Fixed JavaScript menus: Z-index only works on elements that are
+position:absolute
 
 Bugfix: Weird & character was showing in photoalbum lists
 
@@ -29,7 +44,8 @@ If available, try to use iconv //TRANSLIT for RSS feeds
 
 Reduce SQL queries when doing loginCheck()
 
-Changed the behavior of the <select> list to make it easier to initially train documents
+Changed the behavior of the <select> list to make it easier to initially train
+documents
 
 Changed the way we ignore indexes to be compatible with XAMPP and ~/user_dirs
 

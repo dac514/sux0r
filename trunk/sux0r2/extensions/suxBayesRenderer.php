@@ -58,7 +58,7 @@ class suxBayesRenderer extends suxRenderer {
         // <![CDATA[
 
         function suxTrain(placeholder, link, module, id, cat_id) {
-            var url = '{$GLOBALS['CONFIG']['URL']}/modules/bayes/train.php';
+            var url = '{$GLOBALS['CONFIG']['URL']}/modules/bayes/ajax.train.php';
             var pars = { link: link, module: module, id: id, cat_id: cat_id };
             new Effect.Highlight($(placeholder));
             new Ajax.Request(url, {

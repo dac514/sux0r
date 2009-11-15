@@ -17,7 +17,7 @@
     // Toggle subscription to a bookmark
     function toggleSubscription(bookmark_id) {
 
-        var url = '{/literal}{$r->url}/modules/bookmarks/toggle.php{literal}';
+        var url = '{/literal}{$r->url}/modules/bookmarks/ajax.toggle.php{literal}';
         var pars = { id: bookmark_id };
 
         new Ajax.Request(url, {

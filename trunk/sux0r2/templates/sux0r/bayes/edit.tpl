@@ -17,7 +17,7 @@
     function getDoc(doc_id) {
         if (doc_id) {
 
-            var url = '{/literal}{$r->url}/modules/bayes/getDoc.php{literal}';
+            var url = '{/literal}{$r->url}/modules/bayes/ajax.getDoc.php{literal}';
             var pars = { id: doc_id };
 
             new Ajax.Updater('placeholder1', url, {
@@ -40,7 +40,7 @@
     function getCat(document, vec_id) {
 
         {/literal}
-        var url = '{$r->url}/modules/bayes/getCat.php';
+        var url = '{$r->url}/modules/bayes/ajax.getCat.php';
         {literal}
         var pars = { document: document, id: vec_id };
 

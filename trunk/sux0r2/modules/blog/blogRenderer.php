@@ -320,7 +320,7 @@ class blogRenderer extends suxBayesRenderer {
         theme_advanced_statusbar_location : "bottom",
         entity_encoding : "raw",
         relative_urls : false,
-        external_image_list_url : "' . $GLOBALS['CONFIG']['URL'] . '/modules/photos/getImagesByUser.php",
+        external_image_list_url : "' . $GLOBALS['CONFIG']['URL'] . '/modules/photos/ajax.getImagesByUser.php",
         ';
         return $this->tinyMce($init);
 
