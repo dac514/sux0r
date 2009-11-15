@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------
-sux0r 2.0.x
+sux0r 2.1.0
 ------------------------------------------------------------------------------
 
 Refactoring:
@@ -18,6 +18,8 @@ instead
 Pre-pended 'ajax.' to all files that are called correspondingly
 
 Added a DEBUG mode to the advanced configuration file
+
+Updated documentation
 
 Updated symbionts: Scriptaculous 1.8.3, TinyMCE 3.2.7
 
