@@ -35,20 +35,10 @@ class globals extends component {
     */
     function banned() {
 
-        // Declare properties
-        $this->r->bool['analytics'] = true; // Turn on analytics
-
-        // Get nickname
-        if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
-        else $nn = 'nobody';
-
-        $cache_id = "$nn|globals";
         $this->tpl->caching = 1;
-
-        $this->tpl->display('banned.tpl', $cache_id);
+        $this->tpl->display('banned.tpl');
 
     }
-
 
 
     /**
@@ -56,17 +46,8 @@ class globals extends component {
     */
     function e404() {
 
-        // Declare properties
-        $this->r->bool['analytics'] = true; // Turn on analytics
-
-        // Get nickname
-        if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
-        else $nn = 'nobody';
-
-        $cache_id = "$nn|globals";
         $this->tpl->caching = 1;
-
-        $this->tpl->display('404.tpl', $cache_id);
+        $this->tpl->display('404.tpl');
 
     }
 
