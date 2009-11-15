@@ -321,7 +321,7 @@ function insert_lament($params) {
     if ($_SESSION['users_id'] != $params['users_id']) return null;
 
     $text = suxFunct::gtext('user');
-    $url = $GLOBALS['CONFIG']['URL'] . '/modules/user/lament.php';
+    $url = $GLOBALS['CONFIG']['URL'] . '/modules/user/ajax.lament.php';
 
     $html = "
         <div id='lament'>{$text['lament']}</div>

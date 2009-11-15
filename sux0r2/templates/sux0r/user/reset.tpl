@@ -67,8 +67,8 @@
 
 <p>
 <label>&nbsp;</label>
-<img src="{$r->url}/modules/captcha/getImage.php?sid={php}echo md5(uniqid(time()));{/php}" alt="Captcha" border="0" />
-<a href="{$r->url}/modules/captcha/getSound.php"><img src="{$r->url}/includes/symbionts/securimage/images/audio_icon.gif" alt="Audio Version"  border="0" /></a>
+<img src="{$r->url}/modules/captcha/ajax.getImage.php?sid={php}echo md5(uniqid(time()));{/php}" alt="Captcha" border="0" />
+<a href="{$r->url}/modules/captcha/ajax.getSound.php"><img src="{$r->url}/includes/symbionts/securimage/images/audio_icon.gif" alt="Audio Version"  border="0" /></a>
 </p>
 <div class="clearboth"></div>
 

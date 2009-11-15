@@ -57,7 +57,7 @@
     // <![CDATA[
     new Ajax.InPlaceEditor(
         'editme{/literal}{$foo.id}{literal}',
-        '{/literal}{$r->url}{literal}/modules/photos/describe.php', {
+        '{/literal}{$r->url}{literal}/modules/photos/ajax.describe.php', {
             rows: 5,
             cols: 80,
             clickToEditText: '{/literal}{$r->gtext.clickme}{literal}',

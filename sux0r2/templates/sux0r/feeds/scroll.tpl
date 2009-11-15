@@ -13,7 +13,7 @@
     // Toggle subscription to a feed
     function toggleSubscription(feed_id) {
 
-        var url = '{/literal}{$r->url}/modules/feeds/toggle.php{literal}';
+        var url = '{/literal}{$r->url}/modules/feeds/ajax.toggle.php{literal}';
         var pars = { id: feed_id };
 
         new Ajax.Request(url, {

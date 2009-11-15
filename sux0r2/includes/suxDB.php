@@ -94,10 +94,10 @@ class suxDB {
 
             }
             catch (Exception $e) {
-                $message = "suxDB Error: \n";
-                $message .= "There was a problem connecting to the database.\n";
+                $message = 'There was a problem connecting to the database. ';
                 $message .= $e->getMessage();
-                die("<pre>{$message}</pre>");
+                throw new Exception($message);
+                die();
             }
 
         }

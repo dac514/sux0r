@@ -8,7 +8,7 @@
     // Toggle subscription to a feed
     function togglePrivate(log_id) {
 
-        var url = '{/literal}{$r->url}/modules/admin/toggle.php{literal}';
+        var url = '{/literal}{$r->url}/modules/admin/ajax.toggle.php{literal}';
         var pars = { id: log_id };
 
         new Ajax.Request(url, {
