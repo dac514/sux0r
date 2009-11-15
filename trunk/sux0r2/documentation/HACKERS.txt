@@ -46,6 +46,8 @@ template files you don't care about. Default sux0r templates will be used
 instead. Conversely, every file in the sux0r media directory must be duplicated
 when creating a new partition.
 
+Code example available in: ./modules/example.form.php
+
 
 ### FUTURE ###
 
