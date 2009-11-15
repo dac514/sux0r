@@ -9,6 +9,22 @@ http://en.wikipedia.org/wiki/Hacker_ethic
 
 ### CONVENTIONS ###
 
+./includes   - Sux0r objects, used to code modules.
+
+./extensions - Not base objects, nor modules. The nebulous "middle ground"
+               of extended objects. Anything that can be swapped out for
+               3rd party solutions (example: OpenID) should go here, as well.
+
+./modules    - Web apps. Each folder is a stand-alone application.
+               * Files prefixed with 'ajax.' can be called directly.
+               * An optional file named 'menu.php' is used to build nav menus
+               * Everything else should be called by 'controller.php'
+
+./templates  - Smarty Templates (Sux0r "partitions")
+
+./media      - ImageS, CSS, and JavaScript
+
+
 Everything in and out of sux0r is UTF-8. Make sure your text editor correctly
 loads and saves UTF-8. Make sure your databases are UTF-8. Make sure your CVS
 client handles UTF-8. Make sure you use multi-byte UTF-8 compatible PHP
@@ -79,7 +95,7 @@ Optimizations. Patches welcome.
 
 ### IDEAS? ###
 
-Please discuss your ideas in the sux0r Developement forum, I monitor the forum
+Please discuss your ideas in the sux0r Development forum, I monitor the forum
 so your ideas will be read:
 
 @see: https://sourceforge.net/forum/forum.php?forum_id=447217
