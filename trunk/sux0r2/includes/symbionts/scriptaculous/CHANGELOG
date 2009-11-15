@@ -1,3 +1,19 @@
+*V1.8.3* (October 8, 2009)
+
+* Update to Prototype 1.6.1
+
+* Effect.toggle to return effect (to be able to do Effect.toggle(element, 'appear', {sync: true});)  [RStankov]
+
+* Use element.identify() for fetching element.id in Sortable.create  [RStankov]
+
+* Fix deprecated usage of Position.cumulativeOffset. [#182 state:resolved]  [James Wheare]
+
+* Make loader work for application/xhtml+xml served documents.  Closes #95.  [Pavel Sedek]
+
+* Check for Windows Media plugin and RealPlayer plugin in Firefox on Windows to allow sound playback.  Closes #36, #86.  [Alexander Gavazov et al.]
+
+* Remove dead code in effects.js.  Closes #125.  [Confusioner]
+
 *V1.8.2* (November 18, 2008)
 
 * Update to Prototype 1.6.0.3
@@ -552,11 +568,11 @@
 
 * Added Effect.toggle for slide, blind and appear/fade effects, fixes #2704 [thx Azad]
 
-* Added selective component loading to scriptaculous.js, see test/unit/loading_test.html for usage [thx David ZÃ¼lke]
+* Added selective component loading to scriptaculous.js, see test/unit/loading_test.html for usage [thx David Zülke]
 
-* Added local/scoped effect queues [thx David ZÃ¼lke]
+* Added local/scoped effect queues [thx David Zülke]
 
-* New core effect Effect.Move that can do absolute/relative movement [thx David ZÃ¼lke]
+* New core effect Effect.Move that can do absolute/relative movement [thx David Zülke]
 
 * Make default effects options modifyable globally by setting Effect.DefaultOptions
 
@@ -696,7 +712,7 @@
 
 * Make Effect position available to callbacks
 
-* Droppables.fire: send event to onDrop callback [FranÃ§ois Beausoleil], #2389
+* Droppables.fire: send event to onDrop callback [François Beausoleil], #2389
 
 * InPlaceEditor: Add disabling the field while loadTextURL loads and add a class while loading, plus fix various bugs with Internet Explorer and InPlaceEditor, [Jon Tirsen] #2302, #2303
 
@@ -908,7 +924,7 @@
 
 * Added special handling for style attributes to Builder [Michael Schuerig]
 
-* Changed opacity=1.0 check back to be inline with its original (pre 1.5) implementation to prevent flickering in Firefox < 1.1 on opacity-based effects (this also fixes flickering with drag-and-drop, sortable lists and autocompleting text fields). Note that this potentially breaks correct colors in some situations. [thx to David ZÃ¼lke]
+* Changed opacity=1.0 check back to be inline with its original (pre 1.5) implementation to prevent flickering in Firefox < 1.1 on opacity-based effects (this also fixes flickering with drag-and-drop, sortable lists and autocompleting text fields). Note that this potentially breaks correct colors in some situations. [thx to David Zülke]
 
 * Automatically deactivate browser built-in autocompletion on autocompleting textfields, fixes part of Rails #1824.
 
@@ -1012,7 +1028,7 @@
 
 * Changed Effect.Opacity to better handle 100% opacity
 
-* Various fixes to ghosting, improves compatiblity with Safari and IE. [thanks to David ZÃ¼lke]
+* Various fixes to ghosting, improves compatiblity with Safari and IE. [thanks to David Zülke]
 
 * Added experimental ghosting option to Sortables. See sortable_functional_ghosting.html for usage.
 
@@ -1024,7 +1040,7 @@
 
 *1.1beta1*
 
-* Fixed rendering of last frame of animation when from/to is not 0.0/1.0. [thanks to David ZÃ¼lke]
+* Fixed rendering of last frame of animation when from/to is not 0.0/1.0. [thanks to David Zülke]
 
 * Updated internal Prototype JavaScript framework to version 1.4.0_pre2 (patched w/ workaround for Ajax.Updater init bug)
 
@@ -1040,7 +1056,7 @@
 
 * Updated controls.js to allow multple matches in local localcompletion [Ivan Krstic]
 
-* Make version of prototype.js in lib have a nicer Event object [David ZÃ¼lke]
+* Make version of prototype.js in lib have a nicer Event object [David Zülke]
 
 * Added incremental and local autocompleting and loads of documentation to controls.js [Ivan Krstic]
 
@@ -1048,9 +1064,9 @@
 
 * Fixed a possible memory leak in dragdrop.js
 
-* Make version of prototype.js in lib compatible with some 3rd-party JavaScript libraries (like IE7) by refactoring to use Object.extend() for testing [David ZÃ¼lke]
+* Make version of prototype.js in lib compatible with some 3rd-party JavaScript libraries (like IE7) by refactoring to use Object.extend() for testing [David Zülke]
 
-* Make effects.js, dragdrop.js and controls.js compatible with some 3rd-party JavaScript libraries (like IE7) by refactoring to use Object.extend() [David ZÃ¼lke]
+* Make effects.js, dragdrop.js and controls.js compatible with some 3rd-party JavaScript libraries (like IE7) by refactoring to use Object.extend() [David Zülke]
 
 * Changed some tests to work better
 
