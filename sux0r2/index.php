@@ -8,27 +8,28 @@
 */
 
 require_once(dirname(__FILE__) . '/config.php'); // Configuration
-require_once(dirname(__FILE__) . '/initialize.php'); // Initialization
-
-// ---------------------------------------------------------------------------
-// Prepare
-// ---------------------------------------------------------------------------
-
-// Defaults
-$controller = 'home';
-$action = 'default';
-$params = array();
-
-// Get controller & params
-if (!empty($_GET['c'])) {
-    $params = explode('/', $_GET['c']);
-    $controller = array_shift($params);
-    $action = array_shift($params);
-}
 
 try {
 
-    // Pre-sanitize controller
+    require_once(dirname(__FILE__) . '/initialize.php'); // Initialization
+
+    // ------------------------------------------------------------------------
+    // Prepare
+    // ------------------------------------------------------------------------
+
+    // Defaults
+    $controller = 'home';
+    $action = 'default';
+    $params = array();
+
+    // Get controller & params
+    if (!empty($_GET['c'])) {
+        $params = explode('/', $_GET['c']);
+        $controller = array_shift($params);
+        $action = array_shift($params);
+    }
+
+    // Sanity check controller
     $controller = mb_strtolower($controller);
 
     if ($controller == 'banned') {
@@ -45,11 +46,11 @@ try {
         exit;
     }
 
-    // Pre-sanitize action
+    // Sanity check action
     $action = mb_strtolower($action);
     if (!preg_match('/^(\w|\-)+$/', $action)) $action = 'default';
 
-    // Pre-sanitize params
+    // Sanity check params
     foreach ($params as $key => $val) {
         if (!preg_match('/^(\w|\-)+$/', $val)) $params[$key] = null;
     }
@@ -60,6 +61,7 @@ try {
 
     include_once(dirname(__FILE__) . "/modules/{$controller}/controller.php");
     sux($action, $params);
+
 }
 catch (Exception $e) {
     require_once(dirname(__FILE__) . '/exception.php'); // Default exception handler

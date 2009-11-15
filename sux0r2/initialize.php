@@ -19,6 +19,15 @@ if (!isset($GLOBALS['CONFIG'])) {
     die("Something is wrong, can't initialize without configuration.");
 }
 
+// Set debug stuff
+if (isset($GLOBALS['CONFIG']['DEBUG']) && $GLOBALS['CONFIG']['DEBUG']) {
+    $GLOBALS['CONFIG']['DEBUG'] = true;
+    include_once(dirname(__FILE__)  . '/includes/symbionts/dBug.php');
+}
+else {
+    $GLOBALS['CONFIG']['DEBUG'] = false;
+}
+
 // Initialize suxDB
 require_once($GLOBALS['CONFIG']['PATH'] . '/includes/suxDB.php');
 suxDB::$dsn = $GLOBALS['CONFIG']['DSN'];

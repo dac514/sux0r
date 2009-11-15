@@ -5,9 +5,6 @@
 /* Don't modify these unless you know what you are doing */
 /* ------------------------------------------------------------------------- */
 
-// Debug mode
-$CONFIG['DEBUG'] = false;
-
 // Ability to disable features defined here, false = disabled
 
 $CONFIG['FEATURE'] = array(
