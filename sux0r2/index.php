@@ -26,35 +26,38 @@ if (!empty($_GET['c'])) {
     $action = array_shift($params);
 }
 
-// Pre-sanitize controller
-$controller = mb_strtolower($controller);
-
-if ($controller == 'banned') {
-    // Banned
-    echo suxFunct::getIncludeContents(dirname(__FILE__) . '/banned.php');
-    exit;
-}
-elseif (!preg_match('/^(\w|\-)+$/', $controller) || !is_file(dirname(__FILE__) . "/modules/{$controller}/controller.php")) {
-    // 404 Not Found
-    if (!headers_sent()) header('HTTP/1.0 404 Not Found');
-    echo suxFunct::getIncludeContents(dirname(__FILE__) . '/404.php');
-    exit;
-}
-
-// Pre-sanitize action
-$action = mb_strtolower($action);
-if (!preg_match('/^(\w|\-)+$/', $action)) $action = 'default';
-
-// Pre-sanitize params
-foreach ($params as $key => $val) {
-    if (!preg_match('/^(\w|\-)+$/', $val)) $params[$key] = null;
-}
-
-// ---------------------------------------------------------------------------
-// Go!
-// ---------------------------------------------------------------------------
-
 try {
+
+    // Pre-sanitize controller
+    $controller = mb_strtolower($controller);
+
+    if ($controller == 'banned') {
+        // Banned
+        include_once(dirname(__FILE__) . "/modules/globals/controller.php");
+        sux('banned');
+        exit;
+    }
+    elseif (!preg_match('/^(\w|\-)+$/', $controller) || !is_file(dirname(__FILE__) . "/modules/{$controller}/controller.php")) {
+        // 404 Not Found
+        if (!headers_sent()) header('HTTP/1.0 404 Not Found');
+        include_once(dirname(__FILE__) . "/modules/globals/controller.php");
+        sux('e404');
+        exit;
+    }
+
+    // Pre-sanitize action
+    $action = mb_strtolower($action);
+    if (!preg_match('/^(\w|\-)+$/', $action)) $action = 'default';
+
+    // Pre-sanitize params
+    foreach ($params as $key => $val) {
+        if (!preg_match('/^(\w|\-)+$/', $val)) $params[$key] = null;
+    }
+
+    // -----------------------------------------------------------------------
+    // Go!
+    // ------------------------------------------------------------------------
+
     include_once(dirname(__FILE__) . "/modules/{$controller}/controller.php");
     sux($action, $params);
 }
