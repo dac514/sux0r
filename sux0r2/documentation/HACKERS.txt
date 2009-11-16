@@ -9,20 +9,28 @@ http://en.wikipedia.org/wiki/Hacker_ethic
 
 ### CONVENTIONS ###
 
-./includes   - Sux0r objects, used to code modules.
+data/          - Uploads, user contributions
 
-./extensions - Not base objects, nor modules. The nebulous "middle ground"
-               of extended objects. Anything that can be swapped out for
-               3rd party solutions (example: OpenID) should go here, as well.
+documentation/ - Contains info such as the text you are currently reading
 
-./modules    - Web apps. Each folder is a stand-alone application.
-               * Files prefixed with 'ajax.' can be called directly.
-               * An optional file named 'menu.php' is used to build nav menus
-               * Everything else should be called by 'controller.php'
+extensions/    - Not base objects, nor modules. The nebulous "middle ground"
+                 of extended objects. Anything that can be swapped out for
+                 3rd party solutions (example: OpenID) should go here, as well.
 
-./templates  - Smarty Templates (Sux0r "partitions")
+includes/      - Sux0r objects, used to code modules.
 
-./media      - ImageS, CSS, and JavaScript
+media/         - Images, CSS, and JavaScript
+
+modules/       - Web apps. Each folder is a stand-alone application.
+                 * Files prefixed with 'ajax.' can be called directly.
+                 * An optional file named 'menu.php' is used to build nav menus
+                 * Everything else should be called by 'controller.php'
+
+supplemental/  - Scripts, cheap hacks, database dumps
+
+templates/     - Smarty Templates
+
+temporary/     - Cache files, Smarty _c files, whatever needs a tmp
 
 
 Everything in and out of sux0r is UTF-8. Make sure your text editor correctly
