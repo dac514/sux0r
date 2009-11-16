@@ -30,7 +30,7 @@ be dealt with according to their own licenses.
 
 * PHP 5.2.3 or higher with mb, gd, and PDO extensions
 * MySQL 5.0+ or PostgreSQL 8.3+, UTF enabled
-* Apache webserver (but it also works on IIS7, too)
+* Apache webserver (but it also works with IIS7, too)
 
 
 ### INSTALL ###
