@@ -1,0 +1,312 @@
+<HTML
+><HEAD
+><TITLE
+>register_block()</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Smarty Class Methods()"
+HREF="api.functions.html"><LINK
+REL="PREVIOUS"
+TITLE="load_filter()"
+HREF="api.load.filter.html"><LINK
+REL="NEXT"
+TITLE="register_compiler_function()"
+HREF="api.register.compiler.function.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="api.load.filter.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="api.register.compiler.function.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="api.register.block"
+></A
+>register_block()</H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN6142"
+></A
+>register_block()&nbsp;--&nbsp;dynamically register block functions plugins</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN6145"
+></A
+><H2
+>Description</H2
+>void <B
+CLASS="methodname"
+>register_block</B
+> ( string name, mixed impl, bool cacheable, mixed cache_attrs)<BR
+></BR
+><P
+>&#13;   Use this to dynamically register
+   <A
+HREF="plugins.block.functions.html"
+>block function plugins</A
+>.
+   Pass in the block function <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+>, followed by the PHP
+   function's name that implements it.
+  </P
+><P
+>&#13;   The php-function callback <TT
+CLASS="parameter"
+><I
+>function</I
+></TT
+> can be either:
+   <P
+></P
+><UL
+><LI
+><P
+>&#13;       A string containing the function <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+>
+       </P
+></LI
+><LI
+><P
+>&#13;       An array of the form <TT
+CLASS="literal"
+>array(&#38;$object, $method)</TT
+> with
+       <TT
+CLASS="literal"
+>&#38;$object</TT
+> being a reference to an
+       object and <TT
+CLASS="literal"
+>$method</TT
+> being a string
+       containing the method-name
+       </P
+></LI
+><LI
+><P
+>&#13;       An array of the form
+       <TT
+CLASS="literal"
+>array($class, $method)</TT
+> with
+       <TT
+CLASS="literal"
+>$class</TT
+> being the class name and
+       <TT
+CLASS="literal"
+>$method</TT
+> being a method of the class.
+       </P
+></LI
+></UL
+>
+  </P
+><P
+>&#13;   <TT
+CLASS="parameter"
+><I
+>cacheable</I
+></TT
+> and <TT
+CLASS="parameter"
+><I
+>cache_attrs</I
+></TT
+>
+   can be omitted in most cases. See <A
+HREF="caching.cacheable.html"
+>controlling cacheability of plugins' output</A
+>
+   section on how to implement them properly.
+  </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN6185"
+></A
+><P
+><B
+>Example 13-1. register_block()</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #FF8000">//&nbsp;function&nbsp;declaration<br /></span><span style="color: #007700">function&nbsp;</span><span style="color: #0000BB">do_translation&nbsp;</span><span style="color: #007700">(</span><span style="color: #0000BB">$params</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$content</span><span style="color: #007700">,&nbsp;&amp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">,&nbsp;&amp;</span><span style="color: #0000BB">$repeat</span><span style="color: #007700">)<br />{<br />&nbsp;&nbsp;if&nbsp;(isset(</span><span style="color: #0000BB">$content</span><span style="color: #007700">))&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$lang&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">$params</span><span style="color: #007700">[</span><span style="color: #DD0000">'lang'</span><span style="color: #007700">];<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #FF8000">//&nbsp;do&nbsp;some&nbsp;translation&nbsp;with&nbsp;$content<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">return&nbsp;</span><span style="color: #0000BB">$translation</span><span style="color: #007700">;<br />&nbsp;&nbsp;}<br />}<br /><br /></span><span style="color: #FF8000">//&nbsp;register&nbsp;with&nbsp;smarty<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">register_block</span><span style="color: #007700">(</span><span style="color: #DD0000">'translate'</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'do_translation'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+><P
+>&#13;    Where the template is:
+   </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{translate lang='br'}Hello, world!{/translate}</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;    See also
+    <A
+HREF="api.unregister.block.html"
+><TT
+CLASS="varname"
+>unregister_block()</TT
+></A
+>
+    and the
+    <A
+HREF="plugins.block.functions.html"
+>plugin block functions</A
+> page.
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="api.load.filter.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="api.register.compiler.function.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>load_filter()</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="api.functions.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>register_compiler_function()</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

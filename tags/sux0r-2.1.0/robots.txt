@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: includes/
+Disallow: modules/
+Disallow: supplemental/
+Disallow: templates/
+Disallow: temporary/

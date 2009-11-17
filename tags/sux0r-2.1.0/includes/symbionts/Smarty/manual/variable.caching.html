@@ -1,0 +1,315 @@
+<HTML
+><HEAD
+><TITLE
+>$caching</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Smarty Class Variables"
+HREF="api.variables.html"><LINK
+REL="PREVIOUS"
+TITLE="$force_compile"
+HREF="variable.force.compile.html"><LINK
+REL="NEXT"
+TITLE="$cache_dir"
+HREF="variable.cache.dir.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="variable.force.compile.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 12. Smarty Class Variables</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="variable.cache.dir.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="variable.caching"
+></A
+>$caching</H1
+><P
+>&#13;	   This tells Smarty whether or not to cache the output of the templates
+	   to the <A
+HREF="variable.cache.dir.html"
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$cache_dir</I
+></TT
+></A
+>.
+	   By default this is set to 0 ie disabled. If your templates generate
+	   redundant content, it is advisable to turn on
+       <TT
+CLASS="parameter"
+><I
+>$caching</I
+></TT
+>, as this  will result in significant
+       performance gains.
+	   </P
+><P
+>&#13;	   You can also have
+	   <A
+HREF="caching.multiple.caches.html"
+>multiple</A
+>
+	   caches for the same template.
+       </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;	   A value of 1 or 2 enables caching.
+       </P
+></LI
+><LI
+><P
+>&#13;       A value of 1 tells  Smarty to use the current
+	   <A
+HREF="variable.cache.lifetime.html"
+><TT
+CLASS="parameter"
+><I
+>$cache_lifetime</I
+></TT
+></A
+>
+	   variable to determine if the  cache has expired.
+       </P
+></LI
+><LI
+><P
+>A value of 2 tells Smarty to use the
+       <A
+HREF="variable.cache.lifetime.html"
+><TT
+CLASS="parameter"
+><I
+>$cache_lifetime</I
+></TT
+></A
+>
+	   value at the time the cache was generated.  This way you can set the
+      <A
+HREF="variable.cache.lifetime.html"
+> <TT
+CLASS="parameter"
+><I
+>$cache_lifetime</I
+></TT
+></A
+>
+   just before <A
+HREF="api.fetch.html"
+>fetching</A
+>
+   the template to have granular control over when that particular cache expires.
+	   See also <A
+HREF="api.is.cached.html"
+><TT
+CLASS="varname"
+>is_cached()</TT
+></A
+>.
+           </P
+></LI
+><LI
+><P
+>&#13;	   If <A
+HREF="variable.compile.check.html"
+><TT
+CLASS="parameter"
+><I
+>$compile_check</I
+></TT
+></A
+>
+	   is enabled, the cached content will be regenerated if
+	   any of the templates or config files that are part of this cache are
+	   changed.
+       </P
+></LI
+><LI
+><P
+>&#13;       If <A
+HREF="variable.force.compile.html"
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$force_compile</I
+></TT
+></A
+> is enabled, the cached
+       content will always be   regenerated.
+      </P
+></LI
+></UL
+><P
+>&#13;  See also
+  <A
+HREF="variable.cache.dir.html"
+><TT
+CLASS="parameter"
+><I
+>$cache_dir</I
+></TT
+></A
+>,
+  <A
+HREF="variable.cache.lifetime.html"
+><TT
+CLASS="parameter"
+><I
+>$cache_lifetime</I
+></TT
+></A
+>,
+  <A
+HREF="variable.cache.handler.func.html"
+><TT
+CLASS="parameter"
+><I
+>$cache_handler_func</I
+></TT
+></A
+>,
+  <A
+HREF="variable.cache.modified.check.html"
+><TT
+CLASS="parameter"
+><I
+>$cache_modified_check</I
+></TT
+></A
+>,
+  <A
+HREF="api.is.cached.html"
+><TT
+CLASS="varname"
+>is_cached()</TT
+></A
+>
+and the
+<A
+HREF="caching.html"
+>caching section</A
+>.
+</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="variable.force.compile.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="variable.cache.dir.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>$force_compile</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="api.variables.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>$cache_dir</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

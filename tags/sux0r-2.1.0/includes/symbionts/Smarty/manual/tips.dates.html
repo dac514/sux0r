@@ -1,0 +1,331 @@
+<HTML
+><HEAD
+><TITLE
+>Dates</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Tips & Tricks"
+HREF="tips.html"><LINK
+REL="PREVIOUS"
+TITLE="Passing variable title to header template"
+HREF="tips.passing.vars.html"><LINK
+REL="NEXT"
+TITLE="WAP/WML"
+HREF="tips.wap.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="tips.passing.vars.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 18. Tips &#38; Tricks</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="tips.wap.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="tips.dates"
+></A
+>Dates</H1
+><P
+>&#13;    As a rule of thumb, always pass dates to Smarty as
+    <A
+HREF="http://php.net/time"
+TARGET="_top"
+>timestamps</A
+>. This
+    allows template designers to use the <A
+HREF="language.modifier.date.format.html"
+><TT
+CLASS="varname"
+>date_format</TT
+>
+    </A
+> modifier for full control over date formatting, and also makes it
+    easy to compare dates if necessary.
+   </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN7737"
+></A
+><P
+><B
+>Example 18-4. Using date_format</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{$startDate|date_format}</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;     This will output:
+    </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>Jan 4, 2009</PRE
+></TD
+></TR
+></TABLE
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{$startDate|date_format:"%Y/%m/%d"}</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;     This will output:
+    </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>2009/01/04</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;     Dates can be compared in the template by timestamps with:
+    </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{if $order_date &#60; $invoice_date}
+   ...do something..
+{/if}</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;    When using <A
+HREF="language.function.html.select.date.html"
+>&#13;    <TT
+CLASS="varname"
+>{html_select_date}</TT
+></A
+> in a template, the programmer
+    will most likely want to convert the output from the form back into
+     timestamp format. Here is a function to help you with that.
+   </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN7750"
+></A
+><P
+><B
+>Example 18-5. Converting form date elements back to a timestamp</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /><br /></span><span style="color: #FF8000">//&nbsp;this&nbsp;assumes&nbsp;your&nbsp;form&nbsp;elements&nbsp;are&nbsp;named<br />//&nbsp;startDate_Day,&nbsp;startDate_Month,&nbsp;startDate_Year<br /><br /></span><span style="color: #0000BB">$startDate&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">makeTimeStamp</span><span style="color: #007700">(</span><span style="color: #0000BB">$startDate_Year</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$startDate_Month</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$startDate_Day</span><span style="color: #007700">);<br /><br />function&nbsp;</span><span style="color: #0000BB">makeTimeStamp</span><span style="color: #007700">(</span><span style="color: #0000BB">$year</span><span style="color: #007700">=</span><span style="color: #DD0000">''</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$month</span><span style="color: #007700">=</span><span style="color: #DD0000">''</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$day</span><span style="color: #007700">=</span><span style="color: #DD0000">''</span><span style="color: #007700">)<br />{<br />&nbsp;&nbsp;&nbsp;if(empty(</span><span style="color: #0000BB">$year</span><span style="color: #007700">))&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$year&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">strftime</span><span style="color: #007700">(</span><span style="color: #DD0000">'%Y'</span><span style="color: #007700">);<br />&nbsp;&nbsp;&nbsp;}<br />&nbsp;&nbsp;&nbsp;if(empty(</span><span style="color: #0000BB">$month</span><span style="color: #007700">))&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$month&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">strftime</span><span style="color: #007700">(</span><span style="color: #DD0000">'%m'</span><span style="color: #007700">);<br />&nbsp;&nbsp;&nbsp;}<br />&nbsp;&nbsp;&nbsp;if(empty(</span><span style="color: #0000BB">$day</span><span style="color: #007700">))&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$day&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">strftime</span><span style="color: #007700">(</span><span style="color: #DD0000">'%d'</span><span style="color: #007700">);<br />&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;return&nbsp;</span><span style="color: #0000BB">mktime</span><span style="color: #007700">(</span><span style="color: #0000BB">0</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">0</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">0</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$month</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$day</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$year</span><span style="color: #007700">);<br />}<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;   See also
+   <A
+HREF="language.function.html.select.date.html"
+>&#13;   <TT
+CLASS="varname"
+>{html_select_date}</TT
+></A
+>,
+   <A
+HREF="language.function.html.select.time.html"
+>&#13;   <TT
+CLASS="varname"
+>{html_select_time}</TT
+></A
+>,
+   <A
+HREF="language.modifier.date.format.html"
+>&#13;   <TT
+CLASS="varname"
+>date_format</TT
+></A
+>
+   and <A
+HREF="language.variables.smarty.html#language.variables.smarty.now"
+>&#13;   <TT
+CLASS="parameter"
+><I
+>$smarty.now</I
+></TT
+></A
+>,
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="tips.passing.vars.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="tips.wap.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Passing variable title to header template</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="tips.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>WAP/WML</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,31 @@
+### SPONSORS ###
+
+sux0r is hosted by Network Redux: http://www.networkredux.com/
+
+
+### TRANSLATIONS ###
+
+Chinese (zn) by Wang Zhenzhen: http://blog.csdn.net/tp906
+Dutch (nl) by Peter van Es: peteres@users.sourceforge.net
+Italian (it) by Gilberto Ficara: g.ficara@gmail.com
+German (de) by Niklas Pluem: l4nm4n@users.sourceforge.net
+
+
+### THANKS FOR THE HELP ###
+
+Shijie Xu: shijie.xu.work@gmail.com
+
+
+### THANKS FOR THE INSIGHT ###
+
+CJ Niemira: http://siege.org/projects/phpMyID/
+Jon Abernathy: http://www.chuggnutt.com/html2text.php
+Ken Williams: http://mathforum.org/~ken/bayes/bayes.html
+Loic d'Anterroches: http://www.xhtml.net/scripts/PHPNaiveBayesianFilter
+Vojtech Semecky: http://lastrss.oslab.net/
+
+
+### THIRD PARTY VENDORS ###
+
+Please read: ../includes/symbionts/README.txt
+

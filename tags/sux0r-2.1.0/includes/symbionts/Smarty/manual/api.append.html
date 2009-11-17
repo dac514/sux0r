@@ -1,0 +1,262 @@
+<HTML
+><HEAD
+><TITLE
+>append()</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Smarty Class Methods()"
+HREF="api.functions.html"><LINK
+REL="PREVIOUS"
+TITLE="Smarty Class Methods()"
+HREF="api.functions.html"><LINK
+REL="NEXT"
+TITLE="append_by_ref()"
+HREF="api.append.by.ref.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="api.functions.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="api.append.by.ref.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="api.append"
+></A
+>append()</H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN5465"
+></A
+>append()&nbsp;--&nbsp;append an element to an assigned array</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN5468"
+></A
+><H2
+>Description</H2
+>void <B
+CLASS="methodname"
+>append</B
+> ( mixed var)<BR
+></BR
+>void <B
+CLASS="methodname"
+>append</B
+> ( string varname, mixed var [, bool merge])<BR
+></BR
+><P
+>&#13;If you append
+   to a string value, it is converted to an array value and then
+   appended to. You can explicitly pass name/value pairs, or associative
+   arrays containing the name/value pairs. If you pass the optional third
+   parameter of <TT
+CLASS="constant"
+>TRUE</TT
+>, the value will be merged with the current array
+   instead of appended.
+  </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Technical Note: </B
+>
+  The <TT
+CLASS="parameter"
+><I
+>merge</I
+></TT
+> parameter respects array keys, so if
+  you merge two numerically indexed arrays, they may overwrite each other
+  or result in non-sequential keys. This is unlike the PHP
+  <A
+HREF="http://php.net/array_merge"
+TARGET="_top"
+>&#13;  <TT
+CLASS="varname"
+>array_merge()</TT
+></A
+> function
+   which wipes out numerical keys and renumbers them.
+ </P
+></BLOCKQUOTE
+></DIV
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN5496"
+></A
+><P
+><B
+>Example 13-1. append</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #FF8000">//&nbsp;This&nbsp;is&nbsp;effectively&nbsp;the&nbsp;same&nbsp;as&nbsp;assign()<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">append</span><span style="color: #007700">(</span><span style="color: #DD0000">'foo'</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'Fred'</span><span style="color: #007700">);<br /></span><span style="color: #FF8000">//&nbsp;After&nbsp;this&nbsp;line,&nbsp;foo&nbsp;will&nbsp;now&nbsp;be&nbsp;seen&nbsp;as&nbsp;an&nbsp;array&nbsp;in&nbsp;the&nbsp;template<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">append</span><span style="color: #007700">(</span><span style="color: #DD0000">'foo'</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'Albert'</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">$array&nbsp;</span><span style="color: #007700">=&nbsp;array(</span><span style="color: #0000BB">1&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'one'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">2&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'two'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">append</span><span style="color: #007700">(</span><span style="color: #DD0000">'X'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$array</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$array2&nbsp;</span><span style="color: #007700">=&nbsp;array(</span><span style="color: #0000BB">3&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'three'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">4&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'four'</span><span style="color: #007700">);<br /></span><span style="color: #FF8000">//&nbsp;The&nbsp;following&nbsp;line&nbsp;will&nbsp;add&nbsp;a&nbsp;second&nbsp;element&nbsp;to&nbsp;the&nbsp;X&nbsp;array<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">append</span><span style="color: #007700">(</span><span style="color: #DD0000">'X'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$array2</span><span style="color: #007700">);<br /><br /></span><span style="color: #FF8000">//&nbsp;passing&nbsp;an&nbsp;associative&nbsp;array<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">append</span><span style="color: #007700">(array(</span><span style="color: #DD0000">'city'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Lincoln'</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'state'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Nebraska'</span><span style="color: #007700">));<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>See also
+  <A
+HREF="api.append.by.ref.html"
+><TT
+CLASS="varname"
+>append_by_ref()</TT
+></A
+>,
+  <A
+HREF="api.assign.html"
+><TT
+CLASS="varname"
+>assign()</TT
+></A
+>
+  and
+  <A
+HREF="api.get.template.vars.html"
+><TT
+CLASS="varname"
+>get_template_vars()</TT
+></A
+>
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="api.functions.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="api.append.by.ref.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Smarty Class Methods()</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="api.functions.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>append_by_ref()</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
