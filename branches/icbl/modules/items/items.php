@@ -7,12 +7,12 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once('feedsRenderer.php');
+require_once('itemsRenderer.php');
 require_once(dirname(__FILE__) . '/../abstract.bayesComponent.php');
 require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
 
 
-class feeds extends bayesComponent {
+class items extends bayesComponent {
 
     // Module name
     protected $module = 'feeds';
@@ -26,6 +26,7 @@ class feeds extends bayesComponent {
     // Var: used by filter() method
     public $users_id;
 
+		public $doCategorisation=false;
 
     /**
     * Constructor
@@ -36,7 +37,7 @@ class feeds extends bayesComponent {
         // Declare objects
         $this->nb = new bayesUser();
         $this->rss = new suxRSS();
-        $this->r = new feedsRenderer($this->module); // Renderer
+        $this->r = new itemsRenderer($this->module); // Renderer
         parent::__construct(); // Let the parent do the rest
 
         // Declare properties
@@ -126,7 +127,7 @@ class feeds extends bayesComponent {
     */
     function userAPI($nickname) {
 
-		    $params = array();
+		    $params = $URLparams = array();
 		
         // Get users_id based on nickname
         $user = $this->user->getByNickname($nickname);
@@ -139,19 +140,45 @@ class feeds extends bayesComponent {
         $cache_id = false;
 
         $this->r->title .= " | {$this->r->gtext['feeds']} | $nickname";
+				
 
-        if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
+				$maxHits = 0;
+				$keywords = $threshold = $feed_id = $search = $vec_id = $cat_id = $start = '';
+				if(array_key_exists('vec_id',$_GET)) $vec_id=$_GET['vec_id'];
+				if(array_key_exists('amp;vec_id',$_GET)) $vec_id=$_GET['amp;vec_id'];
+				if(array_key_exists('cat_id',$_GET)) $cat_id=$_GET['cat_id'];
+				if(array_key_exists('amp;cat_id',$_GET)) $cat_id=$_GET['amp;cat_id'];
+				if(array_key_exists('threshold',$_GET)) $threshold=$_GET['threshold'];
+				if(array_key_exists('amp;threshold',$_GET)) $threshold=$_GET['amp;threshold'];
+				if(array_key_exists('feed_id',$_GET)) $feed_id=$_GET['feed_id'];
+				if(array_key_exists('amp;feed_id',$_GET)) $feed_id=$_GET['amp;feed_id'];
+				if(array_key_exists('keywords',$_GET)) $search=$_GET['keywords'];
+				if(array_key_exists('amp;keywords',$_GET)) $search=$_GET['amp;keywords'];
+				if(array_key_exists('maxHits',$_GET)) $maxHits=$_GET['maxHits'];
+				if(array_key_exists('amp;maxHits',$_GET)) $maxHits=$_GET['amp;maxHits'];
 
-				    //echo "$vec_id<br>\n $cat_id<br>\n $threshold<br>\n $start<br>\n $search<br>\n";
-				    //exit;
+				if($start=='') $start=0;
+				$this->doCategorisation = false;
+				if($vec_id >0 && $cat_id >0) {
+				   $this->doCategorisation = true;
+				   if($threshold<0 || $threshold>1) $threshold = false; 
+				}
+
+				if($search=='') $search = false;
+				
+				if($this->doCategorisation || $search) {
+
             // ---------------------------------------------------------------
             // Filtered results
             // ---------------------------------------------------------------
 
             // User has subscriptions, we need special JOIN queries
             $max = $this->countUserItems($this->users_id);
-            $eval = '$this->getUserItems($this->users_id, $this->pager->limit, $start)';
-            $this->r->arr['feeds']  = $this->filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search); // Important: $start is a reference
+						if($maxHits=='all') $maxHits = $max;
+
+						$eval = '$this->getUserItems($this->users_id, $max, $start)';  //today
+						
+						$this->r->arr['feeds']  = $this->filter($max, $vec_id, $cat_id, $threshold, $start, $eval, $search,$maxHits); // Important: $start is a reference
 
             if ($start < $max) {
                 if ($threshold !== false) $params = array('threshold' => $threshold, 'filter' => $cat_id);
@@ -179,29 +206,19 @@ class feeds extends bayesComponent {
             $cache_id = "$nn|user|$nickname|{$this->pager->start}";
             $this->tpl->caching = 1;
 
-				    //echo $this->users_id."<br>\n".$this->pager->limit."<br>\n".$this->pager->start."<br>\n";
-				    //exit;
+            $max = $this->countUserItems($this->users_id);
+						if($maxHits=='all') $maxHits = $max;
+
+						if($maxHits>0) $this->r->arr['feeds'] = $this->getUserItems($this->users_id, $maxHits, $this->pager->start);
+            else $this->r->arr['feeds'] = $this->getUserItems($this->users_id, $this->pager->limit, $this->pager->start);
 						
-						
-            if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
-
-                // User has subscriptions, we need special JOIN queries
-                $this->pager->setPages($this->countUserItems($this->users_id));
-                $this->r->arr['feeds'] = $this->getUserItems($this->users_id, $this->pager->limit, $this->pager->start);
-
-                $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/feeds/user/$nickname"));
-                if (!count($this->r->arr['feeds'])) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
-
-            }
 
         }
 
-        //$this->tpl->assign('users_id', $this->users_id);
-        //if ($cache_id) $this->tpl->display('scroll.tpl', $cache_id);
-        //else $this->tpl->display('scroll.tpl');
-				$this->r->arr['params'] = $params;
-        return $this->r->arr;
 
+				$this->r->arr['params'] = $params;
+
+				return $this->r->arr['feeds'];
     }
 
 		
@@ -334,23 +351,74 @@ class feeds extends bayesComponent {
         $db = suxDB::get();
 
         // Get Items
-        $query = "
-        SELECT rss_items.* FROM rss_items
-        INNER JOIN rss_feeds on rss_feeds.id = rss_items.rss_feeds_id
+				// rss_items.id, rss_items.rss_feeds_id, rss_items.url, rss_items.title, rss_items.body_html as bodyhtml, rss_items.body_plaintext as body_html, rss_items.published_on
+        // $query = " SELECT rss_items.* FROM rss_items
+        $query = " SELECT rss_items.id, rss_items.rss_feeds_id, rss_items.url, rss_items.title, rss_items.body_plaintext, rss_items.body_plaintext as body_html, rss_items.published_on FROM rss_items
+				INNER JOIN rss_feeds on rss_feeds.id = rss_items.rss_feeds_id
         INNER JOIN link__rss_feeds__users ON link__rss_feeds__users.rss_feeds_id = rss_feeds.id
         WHERE link__rss_feeds__users.users_id = ?
         ORDER BY rss_items.published_on DESC, rss_items.id DESC
         LIMIT {$limit} OFFSET {$start}
         ";
 
-        $st = $db->prepare($query);
+				$st = $db->prepare($query);
         $st->execute(array($users_id));
+
         return $st->fetchAll(PDO::FETCH_ASSOC);
 
     }
+		
 
+    public function getUserCategories($users_id, $cat_id=0) {
 
+        $db = suxDB::get();
+				// Get all the vectors & categories for an specific user:
+				// SELECT bayes_auth.bayes_vectors_id, vector, bayes_categories.id, category FROM bayes_auth, bayes_vectors, bayes_categories 
+				// WHERE bayes_auth.users_id=5 AND bayes_vectors.id=bayes_auth.bayes_vectors_id
+				// AND bayes_categories.bayes_vectors_id = bayes_auth.bayes_vectors_id
+				// AND bayes_categories.id=12 (if the category id is known)
+
+				$userid=0;
+				if(isset($users_id['users_id'])) $userid=$users_id['users_id'];	
+        else return array();				
+				$bayes_vectors_id = $id = $vector = $category = '';
+				$q = "SELECT bayes_auth.bayes_vectors_id, vector, bayes_categories.id, category
+				      FROM bayes_auth, bayes_vectors, bayes_categories WHERE bayes_auth.users_id = $userid
+							AND bayes_vectors.id = bayes_auth.bayes_vectors_id
+							AND bayes_categories.bayes_vectors_id = bayes_auth.bayes_vectors_id ";
+				if($cat_id>0) $q .= "AND bayes_categories.id=$cat_id";
+        $st = $db->query($q);
+				$array = array();
+				$i=0;
+        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
+           extract($row);
+					 $array[$i]['vec_id'] = $bayes_vectors_id;
+					 $array[$i]['vec_name'] = $vector;
+					 $array[$i]['cat_id'] = $id;
+					 $array[$i]['cat_name'] = $category;
+					 $i++;
+				}
+
+				return $array;
+    }
+		
+		
+    public function getURLparameters() {		
+				$arrayParam = array();
+				$array =array('vec_id' => 'vec_id', 'cat_id' => 'cat_id', 'threshold' => 'threshold', 'start' => 'start','search'=>'search','maxHits'=>'maxHits');
+				$vec_id = $cat_id = $threshold= $start = $search = $maxHits = '';
+
+				$arr = explode('/',$_GET['c']);
+				
+
+				foreach($array as $val) {
+					 $i = array_search($val,$arr);
+
+					 if(isset($arr[$i+1]) && $arr[$i+1]!='items') $arrayParam[$val] = $arr[$i+1];
+				}
+
+				return $arrayParam;
+    }
+				
 }
-
-
 ?>

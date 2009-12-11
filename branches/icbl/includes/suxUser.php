@@ -828,7 +828,6 @@ class suxUser {
             foreach ($mtx as $m)
                 $hdr[$m[1]] = $m[2] ? $m[2] : $m[3];
 
-
             if (isset($_SESSION['uniqid']) && ($hdr['nonce'] != $_SESSION['uniqid'] || $_SERVER['REQUEST_TIME'] - hexdec(substr($hdr['nonce'], 0, 8)) > 300)) {
                 $stale = true;
                 unset($_SESSION['uniqid']);
@@ -837,6 +836,28 @@ class suxUser {
             if (!isset($_SESSION['failures'])) $_SESSION['failures'] = 0;
 
             $auth_user = $this->getByNickname($hdr['username']);
+						
+						
+						
+						
+						
+						print_r($hdr);
+						print_r($auth_user);
+						
+                $a1 = mb_strtolower($auth_user['password']);
+                $a2 = $hdr['qop'] == 'auth-int'
+				? md5(implode(':', array($_SERVER['REQUEST_METHOD'], $hdr['uri'], md5($entity_body))))
+				: md5(implode(':', array($_SERVER['REQUEST_METHOD'], $hdr['uri'])));
+                $ok = md5(implode(':', array($a1, $hdr['nonce'], $hdr['nc'], $hdr['cnonce'], $hdr['qop'], $a2)));						
+						
+						echo "<p>a1: $a1 <br>\na2: $a2 <br>\nok: $ok \n</p>";
+						
+								exit;
+						
+						
+						
+						
+						
             if ($auth_user && !empty($auth_user['password']) && !$stale) {
 
                 // the entity body should always be null in this case

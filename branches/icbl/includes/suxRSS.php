@@ -289,10 +289,14 @@ class suxRSS extends DOMDocument {
         // Publish / Draft
         if (is_bool($this->published)) $query .= 'AND ' . $this->sqlPublished();
 
+				//echo "$query<br>";
+				
         $st = $this->db->prepare($query);
         $st->execute(array($id));
 
         $feed = $st->fetch(PDO::FETCH_ASSOC);
+				//$feed = $st->fetchAll(PDO::FETCH_ASSOC);
+				//print_r($feed);
         if ($feed) return $feed;
         else return false;
 
@@ -598,8 +602,9 @@ class suxRSS extends DOMDocument {
     * @param string $link the URL to the source of the RSS feed, i.e. the website home page
     * @param string $description the channel description
     */
-    function outputRSS($title, $link, $description) {
+    function outputRSS($title, $link, $description, $categories='') {
 
+				if(!isset($categories)) $categories='';
         $root = $this->appendChild($this->createElement('rss'));
         $root->setAttribute('version', '2.0');
 
@@ -608,6 +613,8 @@ class suxRSS extends DOMDocument {
         $channel->appendChild($this->createElement('title', htmlspecialchars($title, ENT_QUOTES, 'UTF-8', false)));
         $channel->appendChild($this->createElement('link', htmlspecialchars($link, ENT_QUOTES, 'UTF-8', false)));
         $channel->appendChild($this->createElement('description', htmlspecialchars($description, ENT_QUOTES, 'UTF-8', false)));
+				//if($categories!='') 
+				$channel->appendChild($this->createElement('category', 'category'));
 
         $this->channel = $channel;
 
@@ -621,17 +628,96 @@ class suxRSS extends DOMDocument {
     * @param string $link the URL to the source of the RSS item, i.e. the unique content
     * @param string $description the item description
     */
-    public function addOutputItem($title, $link, $description) {
+    public function addOutputItem($title, $link, $description, $pubDate='', $source='', $relevance='', $url = '') {
 
+		    if(!isset($relevance)) $relevance='';
+				if(!isset($pubDate)) $pubDate='';
+				if(!isset($source)) $source='';
+				if(!isset($url)) $url='';
         $item = $this->createElement('item');
         $item->appendChild($this->createElement('title', htmlspecialchars($title, ENT_QUOTES, 'UTF-8', false)));
         $item->appendChild($this->createElement('link', htmlspecialchars($link, ENT_QUOTES, 'UTF-8', false)));
+				$item->appendChild($this->createElement('guid', htmlspecialchars($link, ENT_QUOTES, 'UTF-8', false)));
         $item->appendChild($this->createElement('description', htmlspecialchars($description, ENT_QUOTES, 'UTF-8', false)));
+				if($pubDate!='') $item->appendChild($this->createElement('pubDate', date('D, d M Y H:i:s T',strtotime(htmlspecialchars($pubDate, ENT_QUOTES, 'UTF-8', false)))));
+				if($source!='') {
+				   //$item->appendChild($this->createElement('source', htmlspecialchars($source, ENT_QUOTES, 'UTF-8', false)));
+					 $source = $item->appendChild($this->createElement('source', htmlspecialchars($source, ENT_QUOTES, 'UTF-8', false)));
+					 if($url!='') {
+					    $source->setAttribute("url", $url);
+           }
+				}
+				if($relevance!='') $item->appendChild($this->createElement('api:relevance', htmlspecialchars($relevance, ENT_QUOTES, 'UTF-8', false)));
 
         $this->channel->appendChild($item);
     }
 
 
+
+
+		
+		
+    // --------------------------------------------------------------------
+    // XML API Output
+    // --------------------------------------------------------------------
+
+
+    /**
+    * Set XML Output, example usage:
+    *
+    * $rss = new suxRSS();
+    * $rss->outputRSSX('user nickName', 'channel name', 'Channel child name', 'Channel child value','item ID element', 'item name element', 'item ID value', 'item name value' );
+    * $rss->addOutputItemX('Item 1 element', 'Item 1 value', 'item 2 ID element', 'item 2 name element', 'item 2 ID value', 'item 2 name value', 'item 3 ID element', 'item 3 name element', 'item 3 ID value', 'item 3 name value', 'item URL element', 'item URL value');
+    * echo $rss->saveXML();
+    *
+    * @param string $title the channel title
+    * @param string $link the URL to the source of XML file, i.e. the website home page
+    * @param string $description the channel description
+    */
+    function outputRSSX($username='', $channel, $channelXtra='', $channelText='', $itemID='', $itemName='', $itemIDVal='', $itemNameVal='') {
+
+				if(!isset($categories)) $categories='';
+        $root = $this->appendChild($this->createElement('response'));
+        $root->setAttribute('xmlns:api', 'http://icbl.macs.hw.ac.uk/sux0rAPI/api/xmlns');
+        if($username!='') $root->appendChild($this->createElement('api:userNickname', htmlspecialchars($username, ENT_QUOTES, 'UTF-8', false)));
+				if($channelXtra!='' && $channelText!='') {
+				   $channelXtra = $root->appendChild($this->createElement($channelXtra, htmlspecialchars($channelText, ENT_QUOTES, 'UTF-8', false)));
+				   if($itemID!='' && $itemIDVal!='' && $itemName!='' && $itemNameVal!='') {
+					    $item = $channelXtra->createElement($itemID, htmlspecialchars($itemIDVal, ENT_QUOTES, 'UTF-8', false));
+							$channelXtra->appendChild($item);
+					 }  
+				}
+				$channel = $root->appendChild($this->createElement($channel));
+        $this->channel = $channel;
+
+    }
+
+    /**
+    * Add an item to the feed
+    *
+    * @param string $title the item title
+    * @param string $link the URL to the source of the RSS item, i.e. the unique content
+    * @param string $description the item description
+    */
+    public function addOutputItemX($item, $itemTxt='', $itemID='', $itemName='', $itemIDVal='', $itemNameVal='', $itemParentID='', $itemParentName='', $itemParentIDValue='', $itemParentNameValue='', $itemURL='', $itemURLValue = '') {
+
+		    //if(!isset($relevance)) $relevance='';
+				if($itemTxt!='') $item = $this->createElement($item, htmlspecialchars($itemTxt, ENT_QUOTES, 'UTF-8', false));
+        else {
+				   $item = $this->createElement($item);
+        	 if($itemID!='' && $itemIDVal!='') $item->appendChild($this->createElement($itemID, htmlspecialchars($itemIDVal, ENT_QUOTES, 'UTF-8', false)));
+           if($itemName!='' && $itemNameVal!='') $item->appendChild($this->createElement($itemName, htmlspecialchars($itemNameVal, ENT_QUOTES, 'UTF-8', false)));
+				   if($itemParentID!='' && $itemParentIDValue!='') $item->appendChild($this->createElement($itemParentID, htmlspecialchars($itemParentIDValue, ENT_QUOTES, 'UTF-8', false)));
+				   if($itemParentName!='' && $itemParentNameValue!='') $item->appendChild($this->createElement($itemParentName, htmlspecialchars($itemParentNameValue, ENT_QUOTES, 'UTF-8', false)));
+				   if($itemURL!='' && $itemURLValue!='') $item->appendChild($this->createElement($itemURL, htmlspecialchars($itemURLValue, ENT_QUOTES, 'UTF-8', false)));
+        }
+				$this->channel->appendChild($item);
+    }
+
+
+		
+				
+		
     // --------------------------------------------------------------------
     // RSS Retrieval
     // --------------------------------------------------------------------

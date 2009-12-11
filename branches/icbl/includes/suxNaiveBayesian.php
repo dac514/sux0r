@@ -853,9 +853,9 @@ class suxNaiveBayesian {
             if (empty($score[$cat_id])) return false;
             if (round($score[$cat_id]['score'] * 100, 2) < round($threshold *100, 2)) return false;
         }
-
-        return true;
-
+        if(isset($score[$cat_id]['score'])) return $score[$cat_id]['score'];
+				else return false;	
+				
     }
 
 

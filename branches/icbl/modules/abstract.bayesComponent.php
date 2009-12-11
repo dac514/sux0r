@@ -16,7 +16,6 @@ abstract class bayesComponent extends component {
     // Object: bayesUser()
     protected $nb;
 
-
     /**
     * Constructor
     */
@@ -42,7 +41,7 @@ abstract class bayesComponent extends component {
     * @param string $eval
     * @param string $search
     */
-    protected function filter($max, $vec_id, $cat_id, $threshold, &$start, $eval, $search) {
+    protected function filter($max, $vec_id, $cat_id, $threshold, &$start, $eval, $search, $maxHits = 0) {
 
         // -------------------------------------------------------------------
         // Get items based on score, variable paging
@@ -66,23 +65,33 @@ abstract class bayesComponent extends component {
 
         // Start filtering
         $i = 0;
-        $limit = $this->pager->limit;
+				if($maxHits<0 || !isset($maxHits)) $maxHits = $max;
+
+				if ($search) $limit = $max;
+				else $limit = $maxHits; //$this->pager->limit;
+
         $ok = array();
-        while ($i < $limit) {
 
             $tmp = array();
             eval('$tmp = ' . $eval . ';'); // results is transformed here, by $eval
             foreach ($tmp as $val) {
                 // array_merge renumbers, avoid this by appending in a foreach loop
                 $results[] = $val;
+								
             }
 
             foreach ($results as $key => $val) {
                 if (isset($ok[$key])) continue; // Don't recalculate
-                if (!$this->nb->passesThreshold($threshold, $vec_id, $cat_id, "{$val['title']} {$val['body_plaintext']}")) {
-                    unset($results[$key]);
-                    continue; // No good, skip it
+								$results[$key]['score'] = '';
+								if($this->doCategorisation) {
+								
+									 $score = $this->nb->passesThreshold($threshold, $vec_id, $cat_id, "{$val['title']} {$val['body_plaintext']}");
+									 if (!$score) {
+								       unset($results[$key]);
+                       continue; // No good, skip it
+                   } else $results[$key]['score'] = $score;
                 }
+								//$search=false;
                 if ($search) {
                     $found = 0;
                     foreach ($rawtokens as $token) {
@@ -100,22 +109,30 @@ abstract class bayesComponent extends component {
             $i = count($results);
             $start = $start + $this->pager->limit;
 
-            // new dBug("i: $i");
-            // new dBug("next start: $start");
-            // new dBug("limit: $limit");
-            // new dBug("max: $max");
-            // new dBug('---');
-
-            if ($i < $limit && $start < ($max) && ($timer + $timeout_max) > microtime(true)) {
+						if(sizeof($results)>$maxHits) {
+						if ($i < $limit && $start < ($maxHits) && ($timer + $timeout_max) > microtime(true)) {
                 // Not enough first posts, keep looping
                 $this->pager->limit = 1;
             }
-            else break;
 
-        }
-        $this->pager->limit = $limit; // Restore limit
+						}
 
-        return $results;
+            $this->pager->limit = $limit; // Restore limit
+
+				
+						$array = array();
+						$ii=0;
+						if(sizeof($results>$maxHits)) {
+						   foreach($results as $resu) {
+							    $array[$ii] = $resu;
+									$ii++;
+									if($ii==$maxHits) break;
+						   }
+							 $results = array();
+					  	 $results = $array;				
+				    }
+
+        		return $results;
 
     }
 
