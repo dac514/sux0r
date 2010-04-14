@@ -13,7 +13,7 @@
 <body>
     <h1>{$r->gtext.404_h1}</h1>
     <p>{$r->gtext.404_p1}</p>
-    <p><a href="{$r->url}">{$r->gtext.404_continue} &raquo;</a></p>
+    <p><a href="{$r->url}/">{$r->gtext.404_continue} &raquo;</a></p>
     <p><img src="{$r->url}/media/sux0r/assets/sewerhorse.jpg" alt="Sewer Horse Is Watching You" /></p>
 </body>
 </html>
