@@ -15,8 +15,10 @@ error_reporting(E_ALL | E_STRICT); // Development
 
 // Database parameters, PDO compatible, NB: first key is default
 $CONFIG['DSN'] =  array(
-    'sux0r' => array('mysql:host=localhost;dbname=sux0r', 'root', 'root'),
-    // 'sux0r' => array('pgsql:host=localhost;dbname=sux0r', 'postgres', 'root'),
+    // Mysql
+    'sux0r' => array('mysql:host=localhost;dbname=suxdbname', 'suxdbuser', 'suxdbpassword'),
+    // Postgres
+    // 'sux0r' => array('pgsql:host=localhost;dbname=suxdbname', 'suxdbuser', 'suxdbpassword'),
     );
 
 // Site title
@@ -32,7 +34,7 @@ $CONFIG['PATH'] = dirname(__FILE__);
 // http://domain.com/my/sux0r/ then '/my/sux0r' is the correct value.
 // No trailing slash!
 
-$CONFIG['URL'] = '/sux0r2';
+$CONFIG['URL'] = '/suxurl';
 
 // Default language for site, uses a 2 letter l10n ISO-CODE naming convention
 // See: http://www.loc.gov/standards/iso639-2/php/code_list.php
