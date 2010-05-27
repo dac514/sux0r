@@ -130,6 +130,18 @@
     />
   </parameter>
 
+  <parameter
+    name="Connection String 3"
+    defaultValue="Server={DbServer};Database={DbName};uid={DbAdminUsername};Pwd={DbAdminPassword};"
+    tags="Hidden,MySQLConnectionString,Validate,MySQL"
+    >
+    <parameterEntry
+    type="ProviderPath"
+    scope="dbmysql"
+    match="db-mysql-iis-extra.sql"
+    />
+  </parameter>
+
   <!-- Sux0r Parameters -->
 
   <parameter
