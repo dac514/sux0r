@@ -1,4 +1,4 @@
-﻿<parameters>
+<parameters>
 
   <!-- App -->
 
@@ -41,6 +41,11 @@
     <parameterEntry
     type="TextFile"
     scope="install.sql"
+    match="PlaceholderForDbName"
+    />
+    <parameterEntry
+    type="TextFile"
+    scope="sux0r\\supplemental\\sql\\db-mysql-iis-extra.sql"
     match="PlaceholderForDbName"
     />
     <parameterEntry
@@ -147,6 +152,7 @@
     name="Admin Password"
     description="Admin Password"
     defaultValue="root"
+    tags="New,Password"
     >
     <parameterEntry
       type="TextFile"
