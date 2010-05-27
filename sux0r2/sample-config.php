@@ -16,9 +16,9 @@ error_reporting(E_ALL | E_STRICT); // Development
 // Database parameters, PDO compatible, NB: first key is default
 $CONFIG['DSN'] =  array(
     // Mysql
-    'sux0r' => array('mysql:host=localhost;dbname=suxdbname', 'suxdbuser', 'suxdbpassword'),
+    'sux0r' => array('mysql:host=localhost;dbname=suxdbname', 'suxdbusername', 'suxdbpassword'),
     // Postgres
-    // 'sux0r' => array('pgsql:host=localhost;dbname=suxdbname', 'suxdbuser', 'suxdbpassword'),
+    // 'sux0r' => array('pgsql:host=localhost;dbname=suxdbname', 'suxdbusername', 'suxdbpassword'),
     );
 
 // Site title
