@@ -139,7 +139,7 @@
     <parameterEntry
       type="TextFile"
       scope="sux0r\\supplemental\\sql\\db-mysql-iis-extra.sql"
-      match="PlaceholderForAdmin"
+      match="PlaceholderForAdminUser"
     />
   </parameter>
 
