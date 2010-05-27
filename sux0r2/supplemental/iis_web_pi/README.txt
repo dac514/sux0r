@@ -18,11 +18,6 @@ More info about packaging for IIS Web PI:
 
 TODO, automate and fix:
 
-In addition to the Web Platform Installer, the following steps remain:
-
-1) Point your web browser to `http://YOURSITE/supplemental/root.php` and make
-   an admin user.
-
 2) Download wget, create a batch file, contents along the lines of:
    `c:/path/to/wget.exe -O C:/Windows/Temp/junk.txt "http:/YOURSITE/sux0r/modules/feeds/cron.php"`
    Add this batch file to "Task Scheduler"
@@ -31,5 +26,3 @@ In addition to the Web Platform Installer, the following steps remain:
    isn't enough. You will eventually run into an issue where you can't view large photos. Not
    sure what is going on here. If you manually set the permissions so that "Users" can
    "Modify" then it works.
-
-4) chnage 'iisdbuser' stuff in config to more generic implementation
