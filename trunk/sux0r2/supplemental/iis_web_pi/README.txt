@@ -6,7 +6,8 @@ The package should be a ZIP that looks like:
 ./manifest.xml
 ./parameters.xml
 ./sux0r/<regular sux0r files>
-./suxor/web.config
+./sux0r/web.config
+./sux0r/supplemental/sql/db-mysql-iis-extra.sql
 
 More info about packaging for IIS Web PI:
 
@@ -30,3 +31,5 @@ In addition to the Web Platform Installer, the following steps remain:
    isn't enough. You will eventually run into an issue where you can't view large photos. Not
    sure what is going on here. If you manually set the permissions so that "Users" can
    "Modify" then it works.
+
+4) chnage 'iisdbuser' stuff in config to more generic implementation
