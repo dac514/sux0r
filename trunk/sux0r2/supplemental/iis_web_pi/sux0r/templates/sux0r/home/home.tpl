@@ -24,7 +24,10 @@
         <td style="vertical-align:top;">
             <div id="leftside">
 
-            <p>Welcome IIS administrator, please see <a href="{$r->url}/documentation/README-IIS.txt">README-IIS.txt</a> for more info.</p>
+            <p>
+            Welcome IIS administrator, please see <a href="{$r->url}/documentation/README-IIS.txt">README-IIS.txt</a> for more info.
+            <a href="{$r->url}/modules/feeds/cron.php">Click here</a> to manually refresh RSS feeds.
+            </p>
 
             <p>
             <span class="highlight">sux0r {$version}</span> is a blogging package, an RSS aggregator, a bookmark repository,

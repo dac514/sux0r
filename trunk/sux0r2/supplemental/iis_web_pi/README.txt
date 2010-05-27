@@ -15,14 +15,3 @@ More info about packaging for IIS Web PI:
 * http://learn.iis.net/page.aspx/578/package-an-application-for-the-windows-web-application-gallery/
 * http://learn.iis.net/page.aspx/616/using-the-microsoft-web-platform-installer/
 * http://learn.iis.net/page.aspx/605/windows-web-application-gallery-principles/
-
-TODO, automate and fix:
-
-2) Download wget, create a batch file, contents along the lines of:
-   `c:/path/to/wget.exe -O C:/Windows/Temp/junk.txt "http:/YOURSITE/sux0r/modules/feeds/cron.php"`
-   Add this batch file to "Task Scheduler"
-
-3) The /data directory needs `chmod 777` permissions. setAclUser="anonymousAuthenticationUser"
-   isn't enough. You will eventually run into an issue where you can't view large photos. Not
-   sure what is going on here. If you manually set the permissions so that "Users" can
-   "Modify" then it works.
