@@ -45,11 +45,6 @@
     />
     <parameterEntry
     type="TextFile"
-    scope="sux0r\\supplemental\\sql\\db-mysql-iis-extra.sql"
-    match="PlaceholderForDbName"
-    />
-    <parameterEntry
-    type="TextFile"
     scope="sux0r\\config.php"
     match="suxdbname"
     />
@@ -106,6 +101,92 @@
     >
   </parameter>
 
+  <!-- Sux0r Parameters -->
+
+  <parameter
+    name="Admin User"
+    description="Admin User"
+    defaultValue="root"
+    >
+    <parameterValidation
+      type="RegularExpression"
+      validationString="^\w{1,16}$"
+    />
+    <parameterEntry
+      type="TextFile"
+      scope="db-mysql-iis-extra.sql"
+      match="PlaceholderForAdminUser"
+    />
+  </parameter>
+
+  <parameter
+    name="Admin Password"
+    description="Admin Password"
+    defaultValue="root"
+    tags="New,Password"
+    >
+    <parameterEntry
+      type="TextFile"
+      scope="db-mysql-iis-extra.sql"
+      match="PlaceholderForAdminPassword"
+    />
+  </parameter>
+
+  <parameter
+    name="Admin Email"
+    description="Admin Email"
+    defaultValue="change@me.com"
+    >
+    <parameterEntry
+      type="TextFile"
+      scope="db-mysql-iis-extra.sql"
+      match="PlaceholderForAdminEmail"
+    />
+  </parameter>
+
+  <parameter
+    name="Suffix"
+    description="Please specify the suffix to your site. For example, if your site is http://www.sux0r.org/ then leave this blank. If your site is http://domain.com/my/sux0r/ then '/my/sux0r' is the correct value. No trailing slash!"
+    defaultValue="/sux0r"
+    >
+    <parameterEntry
+      type="TextFile"
+      scope="sux0r\\config.php"
+      match="/suxurl"
+    />
+  </parameter>
+
+  <parameter
+    name="Realm"
+    description="Please specify the realm for Digest Access Authentication. The realm should contain at least the name of the host performing the authentication and might additionally indicate the collection of users who have access. An example might be: users@sux0r.org"
+    defaultValue="users@sux0r.org"
+    >
+    <parameterEntry
+      type="TextFile"
+      scope="db-mysql-iis-extra.sql"
+      match="PlaceholderForRealm"
+    />
+    <parameterEntry
+      type="TextFile"
+      scope="sux0r\\config.php"
+      match="users@sux0r.org"
+      />
+  </parameter>
+
+  <parameter
+    name="Salt"
+    description="Please specify the salt. A salt is used to create data verification hashes. Any random word will do."
+    defaultValue="flyingturtle"
+    >
+    <parameterEntry
+      type="TextFile"
+      scope="sux0r\\config.php"
+      match="flyingturtle"
+      />
+  </parameter>
+
+  <!-- Database Connections -->
+
   <parameter
     name="Connection String 1"
     defaultValue="Server={DbServer};Database={DbName};uid={DbAdminUsername};Pwd={DbAdminPassword};"
@@ -140,90 +221,6 @@
     scope="dbmysql"
     match="db-mysql-iis-extra.sql"
     />
-  </parameter>
-
-  <!-- Sux0r Parameters -->
-
-  <parameter
-    name="Admin User"
-    description="Admin User"
-    defaultValue="root"
-    >
-    <parameterValidation
-      type="RegularExpression"
-      validationString="^\w{1,16}$"
-    />
-    <parameterEntry
-      type="TextFile"
-      scope="sux0r\\supplemental\\sql\\db-mysql-iis-extra.sql"
-      match="PlaceholderForAdminUser"
-    />
-  </parameter>
-
-  <parameter
-    name="Admin Password"
-    description="Admin Password"
-    defaultValue="root"
-    tags="New,Password"
-    >
-    <parameterEntry
-      type="TextFile"
-      scope="sux0r\\supplemental\\sql\\db-mysql-iis-extra.sql"
-      match="PlaceholderForAdminPassword"
-    />
-  </parameter>
-
-  <parameter
-    name="Admin Email"
-    description="Admin Email"
-    defaultValue="change@me.com"
-    >
-    <parameterEntry
-      type="TextFile"
-      scope="sux0r\\supplemental\\sql\\db-mysql-iis-extra.sql"
-      match="PlaceholderForAdminEmail"
-    />
-  </parameter>
-
-  <parameter
-    name="Suffix"
-    description="Please specify the suffix to your site. For example, if your site is http://www.sux0r.org/ then leave this blank. If your site is http://domain.com/my/sux0r/ then '/my/sux0r' is the correct value. No trailing slash!"
-    defaultValue="/sux0r"
-    >
-    <parameterEntry
-      type="TextFile"
-      scope="sux0r\\config.php"
-      match="/suxurl"
-    />
-  </parameter>
-
-  <parameter
-    name="Realm"
-    description="Please specify the realm for Digest Access Authentication. The realm should contain at least the name of the host performing the authentication and might additionally indicate the collection of users who have access. An example might be: users@sux0r.org"
-    defaultValue="users@sux0r.org"
-    >
-    <parameterEntry
-      type="TextFile"
-      scope="sux0r\\supplemental\\sql\\db-mysql-iis-extra.sql"
-      match="PlaceholderForRealm"
-    />
-    <parameterEntry
-      type="TextFile"
-      scope="sux0r\\config.php"
-      match="users@sux0r.org"
-      />
-  </parameter>
-
-  <parameter
-    name="Salt"
-    description="Please specify the salt. A salt is used to create data verification hashes. Any random word will do."
-    defaultValue="flyingturtle"
-    >
-    <parameterEntry
-      type="TextFile"
-      scope="sux0r\\config.php"
-      match="flyingturtle"
-      />
   </parameter>
 
 </parameters>
