@@ -181,10 +181,16 @@ class photosUpload extends component {
 
             if (suxFunct::unzip($_FILES['image']['tmp_name'], $tmp_dir)) {
 
-                $files = scandir($tmp_dir);
                 $valid_formats = array('jpg', 'jpeg', 'png', 'gif');
 
-                foreach($files as $file) {
+                $files = array();
+                foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($tmp_dir)) as $file) {
+                    if (!$file->isFile()) continue;
+                    if (mb_strpos($file->getPathname(), '__MACOSX') !== false) continue;
+                    $files[$file->getPathname()] = $file->getFilename();
+                }
+
+                foreach($files as $filepath => $file) {
 
                     $format = explode('.', $file);
                     $format = strtolower(end($format));
@@ -194,15 +200,15 @@ class photosUpload extends component {
                     $photo['image'] = $resize; // Add image to $photo array
                     $resize =  $data_dir . "/{$resize}";
                     $fullsize = $data_dir . "/{$fullsize}";
-                    $md5 = md5_file("{$tmp_dir}/{$file}");
+                    $md5 = md5_file($filepath);
 
                     if (!$this->photo->isDupe($md5, $_SESSION['users_id'], $photo['photoalbums_id'])) {
 
-                        suxPhoto::resizeImage($format, "{$tmp_dir}/{$file}", $resize,
+                        suxPhoto::resizeImage($format, $filepath, $resize,
                             $this->tpl->get_config_vars('thumbnailWidth'),
                             $this->tpl->get_config_vars('thumbnailHeight')
                             );
-                        copy("{$tmp_dir}/{$file}", $fullsize);
+                        copy($filepath, $fullsize);
 
                         // Insert $photo into database
                         $photo['md5'] = $md5;
