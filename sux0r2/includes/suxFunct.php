@@ -466,7 +466,7 @@ class suxFunct {
         if (!is_readable($default)) return false; // no default, something is wrong
         else include($default);
 
-        if ($lang != 'en' && is_readable($requested)) include($requested);
+        if (is_readable($requested)) include($requested);
 
         if (!is_array($gtext) || !count($gtext)) return false; // something is wrong
         else {
