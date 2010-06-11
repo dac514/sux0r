@@ -339,7 +339,7 @@ class suxFunct {
         if ($skip == null) $skip = $GLOBALS['CONFIG']['PREV_SKIP'];
         elseif (!is_array($skip)) $skip = array($skip);
 
-		// Sanitize and transform array into regular expressions
+        // Sanitize and transform array into regular expressions
         foreach ($skip as $key => $val) {
             $val = str_replace('#', '', $val);
             $val = trim($val);
@@ -439,19 +439,21 @@ class suxFunct {
     /**
     * Get the user's language
     *
-    * @global string $CONFIG['PATH']
+    * @global string $CONFIG['PARTITION']
     * @global string $CONFIG['LANGUAGE']
+    * @global string $CONFIG['PATH']
     * @param string $module
-    * @param string $partition
     * @return array $gtext
     */
-    static function gtext($module = 'globals', $partition = 'sux0r') {
+    static function gtext($module = 'globals') {
 
         // Cache
         static $gtext_cache = array();
         if (isset($gtext_cache[$module])) return $gtext_cache[$module];
 
         $gtext = array();
+
+        $partition = $GLOBALS['CONFIG']['PARTITION'];
 
         if (!empty($_SESSION['language'])) $lang = $_SESSION['language'];
         else $lang = $GLOBALS['CONFIG']['LANGUAGE'];
