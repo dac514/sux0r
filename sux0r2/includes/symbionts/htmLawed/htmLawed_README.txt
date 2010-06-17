@@ -1,8 +1,8 @@
 /*
-htmLawed_README.txt, 23 April 2009
-htmLawed 1.1.8, 23 April 2009
+htmLawed_README.txt, 17 May 2010
+htmLawed 1.1.9.3, 17 May 2010
 Copyright Santosh Patnaik
-GPL v3 license
+LGPL v3 license
 A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed
 */
 
@@ -25,7 +25,7 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
   2.6  Use without modifying old 'kses()' code
   2.7  Tolerance for ill-written HTML
   2.8  Limitations & work-arounds
-  2.9  Examples
+  2.9  Examples of usage
 3  Details
   3.1  Invalid/dangerous characters
   3.2  Character references/entities
@@ -131,7 +131,7 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 
   *  remove *null* characters  *
   *  neutralize potentially dangerous proprietary Netscape *Javascript entities*  *
-  *  replace potentially dangerous *soft-hyphen* character in attribute values with spaces  *
+  *  replace potentially dangerous *soft-hyphen* character in URL-accepting attribute values with spaces  *
 
   *  remove common *invalid characters* not allowed in HTML or XML  ^`
   *  replace *characters from Microsoft applications* like 'Word' that are discouraged in HTML or XML  ^~`
@@ -171,7 +171,7 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 -- 1.4  License & copyright ----------------------------------------o
 
 
-  htmLawed is free and open-source software licensed under GPL license version 3:- http://www.gnu.org/licenses/gpl-3.0.txt, and copyrighted by Santosh Patnaik, MD, PhD.
+  htmLawed is free and open-source software licensed under LGPL license version 3:- http://www.gnu.org/licenses/lgpl-3.0.txt, and copyrighted by Santosh Patnaik, MD, PhD.
 
 
 -- 1.5  Terms used here --------------------------------------------o
@@ -203,6 +203,8 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
   htmLawed should work with PHP 4.3 and higher. Either 'include()' the 'htmLawed.php' file or copy-paste the entire code.
 
   To easily *test* htmLawed using a form-based interface, use the provided demo:- htmLawedTest.php ('htmLawed.php' and 'htmLawedTest.php' should be in the same directory on the web-server).
+  
+  *Note*: For code for usage of the htmLawed class (for htmLawed in OOP), please refer to the htmLawed:- http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed website; the filtering itself can be configured, etc., as described here.
 
 
 -- 2.1  Simple ------------------------------------------------------
@@ -618,8 +620,55 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
   *  Like any script using PHP's PCRE regex functions, PHP setup-specific low PCRE limit values can cause htmLawed to at least partially fail with very long input texts.
 
 
--- 2.9  Examples ---------------------------------------------------o
+-- 2.9  Examples of usage -------------------------------------------o
 
+
+  Safest, allowing only `safe` HTML markup --
+  
+    $config = array('safe'=>1);
+    $out = htmLawed($in);
+    
+  Simplest, allowing all valid HTML markup except 'javascript:' --
+  
+    $out = htmLawed($in);
+    
+  Allowing all valid HTML markup including 'javascript:' --
+  
+    $config = array('schemes'=>'*:*');
+    $out = htmLawed($in, $config);
+    
+  Allowing only 'safe' HTML and the elements 'a', 'em', and 'strong' --
+  
+    $config = array('safe'=>1, 'elements'=>'a, em, strong');
+    $out = htmLawed($in, $config);
+    
+  Not allowing elements 'script' and 'object' --
+  
+    $config = array('elements'=>'* -script -object');
+    $out = htmLawed($in, $config);
+    
+  Not allowing attributes 'id' and 'style' --
+  
+    $config = array('deny_attribute'=>'id, style');
+    $out = htmLawed($in, $config);
+    
+  Permitting only attributes 'title' and 'href' --
+  
+    $config = array('deny_attribute'=>'* -title -href');
+    $out = htmLawed($in, $config);
+    
+  Remove bad/disallowed tags altogether instead of converting them to entities --
+  
+    $config = array('keep_bad'=>0);
+    $out = htmLawed($in, $config);
+    
+  Allowing attribute 'title' only in 'a' and not allowing attributes 'id', 'style', or scriptable `on*` attributes like 'onclick' --
+  
+    $config = array('deny_attribute'=>'title, id, style, on*');
+    $spec = 'a=title';
+    $out = htmLawed($in, $config, $spec); 
+
+  Some case-studies are presented below.
 
   *1.* A blog administrator wants to allow only 'a', 'em', 'strike', 'strong' and 'u' in comments, but needs 'strike' and 'u' transformed to 'span' for better XHTML 1-strict compliance, and, he wants the 'a' links to be to 'http' or 'https' resources:
 
@@ -656,13 +705,13 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 
   The character values are replaced with entities/characters and not character values referred to by the entities/characters to keep this task independent of the character-encoding of input text.
 
-  The '$config["clean_ms_char"]' parameter need not be used if authors do not copy-paste Microsoft-created text or if the input text is not believed to use the 'Windows 1252' or a similar encoding. Further, the input form and the web-pages displaying it or its content should have the character encoding appropriately marked-up.
+  The '$config["clean_ms_char"]' parameter should not be used if authors do not copy-paste Microsoft-created text, or if the input text is not believed to use the 'Windows 1252' ('Cp-1252') or a similar encoding like 'Cp-1251'. Further, the input form and the web-pages displaying it or its content should have the character encoding appropriately marked-up.
 
 
 -- 3.2  Character references/entities ------------------------------o
 
 
-  Valid character entities take the form '&*;' where '*' is '#x' followed by a hexadecimal number (hexadecimal numeric entity; like '&#xA0;' for non-breaking space), or alphanumeric like 'gt' (external or named entity; like '&nbsp;' for non-breaking space), or '#' followed by a number (decimal numeric entity; like '&#160;' for non-breaking space). Character entities referring to the soft-hyphen character (the '&shy;' or '\xad' character; hexadecimal code-point 'ad' [decimal '173']) in attribute values are always replaced with spaces; soft-hyphens in attribute values introduce vulnerabilities in some older versions of the Opera and Mozilla [Firefox] browsers.
+  Valid character entities take the form '&*;' where '*' is '#x' followed by a hexadecimal number (hexadecimal numeric entity; like '&#xA0;' for non-breaking space), or alphanumeric like 'gt' (external or named entity; like '&nbsp;' for non-breaking space), or '#' followed by a number (decimal numeric entity; like '&#160;' for non-breaking space). Character entities referring to the soft-hyphen character (the '&shy;' or '\xad' character; hexadecimal code-point 'ad' [decimal '173']) in URL-accepting attribute values are always replaced with spaces; soft-hyphens in attribute values introduce vulnerabilities in some older versions of the Opera and Mozilla [Firefox] browsers.
 
   htmLawed (function 'hl_ent()'):
 
@@ -1241,6 +1290,16 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 
   `Version number - Release date. Notes`
   
+  1.1.9.3 - 17 May 2010. Checks for correct nesting of 'param'
+  
+  1.1.9.2 - 26 April 2010. Minor fix regarding rendering of denied URL schemes
+  
+  1.1.9.1 - 26 February 2010. htmLawed now uses the LGPL version 3 license; support for 'flashvars' attribute for 'embed'
+  
+  1.1.9 - 22 December 2009. Soft-hyphens are now removed only from URL-accepting attribute values
+
+  1.1.8.1 - 16 July 2009. Minor code-change to fix a PHP error notice
+
   1.1.8 - 23 April 2009. Parameter 'deny_attribute' now accepts the wild-card '*', making it simpler to specify its value when all but a few attributes are being denied; fixed a bug in interpreting '$spec'
 
   1.1.7 - 11-12 March 2009. Attributes globally denied through 'deny_attribute' can be allowed element-specifically through '$spec'; '$config["style_pass"]' allowing letting through any 'style' value introduced; altered logic to catch certain types of dynamic crafted CSS expressions
@@ -1291,7 +1350,7 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
 -- 4.6  Comparison with 'HTMLPurifier' -----------------------------o
 
 
-  The HTMLPurifier PHP library by Edward Yang is a very good HTML filtering script that uses object oriented PHP code. Compared to htmLawed, it:
+  The HTMLPurifier PHP library by Edward Yang is a very good HTML filtering script that uses object oriented PHP code. Compared to htmLawed, it (as of mid-2009):
 
   *  does not support PHP versions older than 5.0 (HTMLPurifier dropped PHP 4 support after version 2)
 
@@ -1395,6 +1454,7 @@ A PHP Labware internal utility - http://www.bioinformatics.org/phplabware/intern
   disabled - button, input, optgroup, option, select, textarea
   enctype - form
   face - font
+  flashvars* - embed
   for - label
   frame - table
   frameborder - iframe
