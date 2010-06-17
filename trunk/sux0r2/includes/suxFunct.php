@@ -84,9 +84,9 @@ class suxFunct {
             // Paranoid mode, i.e. only allow a small subset of elements to pass
             // Transform strike and u to span for better XHTML 1-strict compliance
             $config = array(
+                'safe' => 1,
                 'elements' => 'a,em,strike,strong,u,p,br,img,li,ol,ul',
                 'make_tag_strict' => 1,
-                'safe' => 1,
                 );
         }
         else {
@@ -94,6 +94,7 @@ class suxFunct {
             $config = array(
                 'safe' => 1,
                 'deny_attribute' => 'style,class',
+                'comment' => 1,
                 );
         }
 
