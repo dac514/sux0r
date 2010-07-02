@@ -1,0 +1,249 @@
+<HTML
+><HEAD
+><TITLE
+>$cache_lifetime</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Smarty Class Variables"
+HREF="api.variables.html"><LINK
+REL="PREVIOUS"
+TITLE="$cache_dir"
+HREF="variable.cache.dir.html"><LINK
+REL="NEXT"
+TITLE="$cache_handler_func"
+HREF="variable.cache.handler.func.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="variable.cache.dir.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 12. Smarty Class Variables</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="variable.cache.handler.func.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="variable.cache.lifetime"
+></A
+>$cache_lifetime</H1
+><P
+>&#13;     This is the length of time in seconds that a template cache is valid.
+     Once this time has expired, the cache will be regenerated.
+     </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;     <TT
+CLASS="parameter"
+><I
+>$caching</I
+></TT
+> must be turned on (either 1 or 2) for
+     <TT
+CLASS="parameter"
+><I
+>$cache_lifetime</I
+></TT
+> to have any purpose.
+     </P
+></LI
+><LI
+><P
+>&#13;     A value of -1 will force the cache to never expire.
+     </P
+></LI
+><LI
+><P
+>A value of 0 will cause
+     the cache to always regenerate (good for testing only, to disable caching
+     a more efficient method is to set <A
+HREF="variable.caching.html"
+><TT
+CLASS="parameter"
+><I
+>$caching</I
+></TT
+></A
+> = 0).
+    </P
+></LI
+><LI
+><P
+>&#13;      If you want to give certain templates their own cache lifetime, you could
+      do this by setting <A
+HREF="variable.caching.html"
+>&#13;      <TT
+CLASS="parameter"
+><I
+>$caching</I
+></TT
+></A
+> = 2,
+      then set <TT
+CLASS="parameter"
+><I
+>$cache_lifetime</I
+></TT
+> to a unique value just
+      before calling <A
+HREF="api.display.html"
+><TT
+CLASS="varname"
+>display()</TT
+>
+      </A
+> or <A
+HREF="api.fetch.html"
+><TT
+CLASS="varname"
+>fetch()</TT
+></A
+>.
+     </P
+></LI
+></UL
+><P
+>&#13;     If <A
+HREF="variable.force.compile.html"
+>&#13;     <TT
+CLASS="parameter"
+><I
+>$force_compile</I
+></TT
+></A
+> is
+     enabled, the cache files will be regenerated every time, effectively
+     disabling caching. You can clear all the cache files with the <A
+HREF="api.clear.all.cache.html"
+><TT
+CLASS="varname"
+>clear_all_cache()</TT
+></A
+>
+     function, or individual cache files (or groups) with the <A
+HREF="api.clear.cache.html"
+><TT
+CLASS="varname"
+>clear_cache()</TT
+></A
+> function.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="variable.cache.dir.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="variable.cache.handler.func.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>$cache_dir</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="api.variables.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>$cache_handler_func</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,275 @@
+<HTML
+><HEAD
+><TITLE
+>register_prefilter()</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Smarty Class Methods()"
+HREF="api.functions.html"><LINK
+REL="PREVIOUS"
+TITLE="register_postfilter()"
+HREF="api.register.postfilter.html"><LINK
+REL="NEXT"
+TITLE="register_resource()"
+HREF="api.register.resource.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="api.register.postfilter.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="api.register.resource.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="api.register.prefilter"
+></A
+>register_prefilter()</H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN6448"
+></A
+>register_prefilter()&nbsp;--&nbsp;dynamically register prefilters</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN6451"
+></A
+><H2
+>Description</H2
+>void <B
+CLASS="methodname"
+>register_prefilter</B
+> ( mixed function)<BR
+></BR
+><P
+>&#13;   Use this to dynamically register
+   <A
+HREF="advanced.features.prefilters.html"
+>prefilters</A
+>
+   to run templates through before they are compiled. See <A
+HREF="advanced.features.prefilters.html"
+>template prefilters</A
+> for
+   more information on how to setup a prefiltering function.
+  </P
+><P
+>&#13;   The php-function callback <TT
+CLASS="parameter"
+><I
+>function</I
+></TT
+> can be either:
+   <P
+></P
+><UL
+><LI
+><P
+>&#13;       A string containing the function <TT
+CLASS="parameter"
+><I
+>name</I
+></TT
+>
+       </P
+></LI
+><LI
+><P
+>&#13;       An array of the form <TT
+CLASS="literal"
+>array(&#38;$object, $method)</TT
+> with
+       <TT
+CLASS="literal"
+>&#38;$object</TT
+> being a reference to an
+       object and <TT
+CLASS="literal"
+>$method</TT
+> being a string
+       containing the method-name
+       </P
+></LI
+><LI
+><P
+>&#13;       An array of the form
+       <TT
+CLASS="literal"
+>array($class, $method)</TT
+> with
+       <TT
+CLASS="literal"
+>$class</TT
+> being the class name and
+       <TT
+CLASS="literal"
+>$method</TT
+> being a method of the class.
+       </P
+></LI
+></UL
+>
+  </P
+><P
+>&#13;    See also
+    <A
+HREF="api.unregister.prefilter.html"
+><TT
+CLASS="varname"
+>unregister_prefilter()</TT
+></A
+>,
+    <A
+HREF="api.register.postfilter.html"
+><TT
+CLASS="varname"
+>register_postfilter()</TT
+></A
+>,
+    <A
+HREF="api.register.outputfilter.html"
+><TT
+CLASS="varname"
+>register_ouputfilter()</TT
+></A
+>,
+    <A
+HREF="api.load.filter.html"
+><TT
+CLASS="varname"
+>load_filter()</TT
+></A
+>,
+    <A
+HREF="variable.autoload.filters.html"
+><TT
+CLASS="parameter"
+><I
+>$autoload_filters</I
+></TT
+></A
+>
+    and
+    <A
+HREF="advanced.features.outputfilters.html"
+>template output filters</A
+>
+    section.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="api.register.postfilter.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="api.register.resource.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>register_postfilter()</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="api.functions.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>register_resource()</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

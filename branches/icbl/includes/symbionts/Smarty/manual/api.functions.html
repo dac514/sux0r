@@ -1,0 +1,343 @@
+<HTML
+><HEAD
+><TITLE
+>Smarty Class Methods()</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Smarty For Programmers"
+HREF="smarty.for.programmers.html"><LINK
+REL="PREVIOUS"
+TITLE="$default_resource_type"
+HREF="variable.default.resource.type.html"><LINK
+REL="NEXT"
+TITLE="append()"
+HREF="api.append.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="variable.default.resource.type.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="api.append.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="api.functions"
+></A
+>Chapter 13. Smarty Class Methods()</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="api.append.html"
+>append()</A
+>&nbsp;--&nbsp;append an element to an assigned array</DT
+><DT
+><A
+HREF="api.append.by.ref.html"
+>append_by_ref()</A
+>&nbsp;--&nbsp;append values  by reference</DT
+><DT
+><A
+HREF="api.assign.html"
+>assign()</A
+>&nbsp;--&nbsp;assign values to the templates</DT
+><DT
+><A
+HREF="api.assign.by.ref.html"
+>assign_by_ref()</A
+>&nbsp;--&nbsp;assign values by reference</DT
+><DT
+><A
+HREF="api.clear.all.assign.html"
+>clear_all_assign()</A
+>&nbsp;--&nbsp;clears the values of all assigned variables</DT
+><DT
+><A
+HREF="api.clear.all.cache.html"
+>clear_all_cache()</A
+>&nbsp;--&nbsp;clears the entire template cache</DT
+><DT
+><A
+HREF="api.clear.assign.html"
+>clear_assign()</A
+>&nbsp;--&nbsp;clears the value of an assigned variable</DT
+><DT
+><A
+HREF="api.clear.cache.html"
+>clear_cache()</A
+>&nbsp;--&nbsp;clears the cache for a specific template</DT
+><DT
+><A
+HREF="api.clear.compiled.tpl.html"
+>clear_compiled_tpl()</A
+>&nbsp;--&nbsp;clears the compiled version of the specified template resource</DT
+><DT
+><A
+HREF="api.clear.config.html"
+>clear_config()</A
+>&nbsp;--&nbsp;clears assigned config variables</DT
+><DT
+><A
+HREF="api.config.load.html"
+>config_load()</A
+>&nbsp;--&nbsp; loads config file  data and assigns it to the template</DT
+><DT
+><A
+HREF="api.display.html"
+>display()</A
+>&nbsp;--&nbsp;displays the template</DT
+><DT
+><A
+HREF="api.fetch.html"
+>fetch()</A
+>&nbsp;--&nbsp;returns the template output</DT
+><DT
+><A
+HREF="api.get.config.vars.html"
+>get_config_vars()</A
+>&nbsp;--&nbsp;returns the given loaded config variable value</DT
+><DT
+><A
+HREF="api.get.registered.object.html"
+>get_registered_object()</A
+>&nbsp;--&nbsp;returns a reference to a registered object</DT
+><DT
+><A
+HREF="api.get.template.vars.html"
+>get_template_vars()</A
+>&nbsp;--&nbsp;returns  assigned variable value(s)</DT
+><DT
+><A
+HREF="api.is.cached.html"
+>is_cached()</A
+>&nbsp;--&nbsp;returns true if there is a valid cache for this template</DT
+><DT
+><A
+HREF="api.load.filter.html"
+>load_filter()</A
+>&nbsp;--&nbsp;load a filter plugin</DT
+><DT
+><A
+HREF="api.register.block.html"
+>register_block()</A
+>&nbsp;--&nbsp;dynamically register block functions plugins</DT
+><DT
+><A
+HREF="api.register.compiler.function.html"
+>register_compiler_function()</A
+>&nbsp;--&nbsp;dynamically register a compiler function plugin</DT
+><DT
+><A
+HREF="api.register.function.html"
+>register_function()</A
+>&nbsp;--&nbsp;dynamically register template function plugins</DT
+><DT
+><A
+HREF="api.register.modifier.html"
+>register_modifier()</A
+>&nbsp;--&nbsp;dynamically register modifier plugin</DT
+><DT
+><A
+HREF="api.register.object.html"
+>register_object()</A
+>&nbsp;--&nbsp;register an object for use in the templates</DT
+><DT
+><A
+HREF="api.register.outputfilter.html"
+>register_outputfilter()</A
+>&nbsp;--&nbsp;dynamically register outputfilters</DT
+><DT
+><A
+HREF="api.register.postfilter.html"
+>register_postfilter()</A
+>&nbsp;--&nbsp;dynamically register postfilters</DT
+><DT
+><A
+HREF="api.register.prefilter.html"
+>register_prefilter()</A
+>&nbsp;--&nbsp;dynamically register prefilters</DT
+><DT
+><A
+HREF="api.register.resource.html"
+>register_resource()</A
+>&nbsp;--&nbsp;dynamically register resources</DT
+><DT
+><A
+HREF="api.trigger.error.html"
+>trigger_error()</A
+>&nbsp;--&nbsp;output an error message</DT
+><DT
+><A
+HREF="api.template.exists.html"
+>template_exists()</A
+>&nbsp;--&nbsp;checks whether the specified template exists</DT
+><DT
+><A
+HREF="api.unregister.block.html"
+>unregister_block()</A
+>&nbsp;--&nbsp;dynamically unregister block function plugins</DT
+><DT
+><A
+HREF="api.unregister.compiler.function.html"
+>unregister_compiler_function()</A
+>&nbsp;--&nbsp;dynamically unregister a compiler function</DT
+><DT
+><A
+HREF="api.unregister.function.html"
+>unregister_function</A
+>&nbsp;--&nbsp;dynamically unregister template function plugin</DT
+><DT
+><A
+HREF="api.unregister.modifier.html"
+>unregister_modifier()</A
+>&nbsp;--&nbsp;dynamically unregister modifier plugin</DT
+><DT
+><A
+HREF="api.unregister.object.html"
+>unregister_object()</A
+>&nbsp;--&nbsp;dynamically unregister an object</DT
+><DT
+><A
+HREF="api.unregister.outputfilter.html"
+>unregister_outputfilter()</A
+>&nbsp;--&nbsp;dynamically unregister an output filter</DT
+><DT
+><A
+HREF="api.unregister.postfilter.html"
+>unregister_postfilter()</A
+>&nbsp;--&nbsp;dynamically unregister a postfilter</DT
+><DT
+><A
+HREF="api.unregister.prefilter.html"
+>unregister_prefilter()</A
+>&nbsp;--&nbsp;dynamically unregister a prefilter</DT
+><DT
+><A
+HREF="api.unregister.resource.html"
+>unregister_resource()</A
+>&nbsp;--&nbsp;dynamically unregister a resource plugin</DT
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="variable.default.resource.type.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="api.append.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>$default_resource_type</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="smarty.for.programmers.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>append()</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,623 @@
+<HTML
+><HEAD
+><TITLE
+>Caching</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Smarty For Programmers"
+HREF="smarty.for.programmers.html"><LINK
+REL="PREVIOUS"
+TITLE="unregister_resource()"
+HREF="api.unregister.resource.html"><LINK
+REL="NEXT"
+TITLE="Multiple Caches Per Page"
+HREF="caching.multiple.caches.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="api.unregister.resource.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="caching.multiple.caches.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="caching"
+></A
+>Chapter 14. Caching</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="caching.html#caching.setting.up"
+>Setting Up Caching</A
+></DT
+><DT
+><A
+HREF="caching.multiple.caches.html"
+>Multiple Caches Per Page</A
+></DT
+><DT
+><A
+HREF="caching.groups.html"
+>Cache Groups</A
+></DT
+><DT
+><A
+HREF="caching.cacheable.html"
+>Controlling Cacheability of Plugins' Output</A
+></DT
+></DL
+></DIV
+><P
+>&#13;   Caching is used to speed up a call to <A
+HREF="api.display.html"
+><TT
+CLASS="varname"
+>display()</TT
+></A
+> or <A
+HREF="api.fetch.html"
+><TT
+CLASS="varname"
+>fetch()</TT
+></A
+> by saving its output
+   to a file. If a
+   cached version of the call is available, that is displayed instead of
+   regenerating the output. Caching can speed things up tremendously,
+   especially templates with longer computation times. Since the output of
+   <A
+HREF="api.display.html"
+><TT
+CLASS="varname"
+>display()</TT
+></A
+> or
+   <A
+HREF="api.fetch.html"
+><TT
+CLASS="varname"
+>fetch()</TT
+></A
+> is cached,
+   one cache file could conceivably be made up
+   of several template files, config files, etc.
+   </P
+><P
+>&#13;   Since templates are dynamic, it is important to be careful what you are
+   caching and for how long. For instance, if you are displaying the front page
+   of your website that does not change its content very often, it might work
+   well to cache this page for an hour or more. On the other hand, if you are
+   displaying a page with a timetable containing new information by the
+   minute, it would not make sense to cache this page.
+   </P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="caching.setting.up"
+></A
+>Setting Up Caching</H1
+><P
+>&#13;    The first thing to do is enable caching by setting <A
+HREF="variable.caching.html"
+>&#13;    <TT
+CLASS="parameter"
+><I
+>$caching</I
+></TT
+></A
+><TT
+CLASS="literal"
+> = 1 (or 2)</TT
+>.
+   </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN6777"
+></A
+><P
+><B
+>Example 14-1. Enabling caching</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #007700">require(</span><span style="color: #DD0000">'Smarty.class.php'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$smarty&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">Smarty</span><span style="color: #007700">;<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">caching&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">1</span><span style="color: #007700">;<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;    With caching enabled, the function call to
+    <TT
+CLASS="literal"
+>display('index.tpl')</TT
+> will render
+    the template as usual, but also saves a copy of its output to a file (a
+    cached copy) in the
+    <A
+HREF="variable.cache.dir.html"
+><TT
+CLASS="parameter"
+><I
+>$cache_dir</I
+></TT
+></A
+>.
+    On the next call to <TT
+CLASS="literal"
+>display('index.tpl')</TT
+>, the cached copy
+    will be used instead of rendering the template again.
+   </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Technical Note: </B
+>
+     The files in the
+     <A
+HREF="variable.cache.dir.html"
+><TT
+CLASS="parameter"
+><I
+>$cache_dir</I
+></TT
+></A
+>
+     are named similar to the template name.
+     Although they end in the <TT
+CLASS="filename"
+>.php</TT
+> extention, they are not
+     intended to be directly executable. Do not edit these files!
+    </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;    Each cached page has a limited lifetime determined by <A
+HREF="variable.cache.lifetime.html"
+><TT
+CLASS="parameter"
+><I
+>$cache_lifetime</I
+></TT
+></A
+>.
+    The default value is 3600 seconds ie an hour. After that time expires, the
+    cache is regenerated. It is possible to give individual caches their own
+    expiration time by setting
+    <A
+HREF="variable.caching.html"
+><TT
+CLASS="parameter"
+><I
+>$caching</I
+></TT
+></A
+><TT
+CLASS="literal"
+>=2</TT
+>.
+    See <A
+HREF="variable.cache.lifetime.html"
+><TT
+CLASS="parameter"
+><I
+>$cache_lifetime</I
+></TT
+></A
+>
+    for more details.
+   </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN6799"
+></A
+><P
+><B
+>Example 14-2. Setting $cache_lifetime per cache</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #007700">require(</span><span style="color: #DD0000">'Smarty.class.php'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$smarty&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">Smarty</span><span style="color: #007700">;<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">caching&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">2</span><span style="color: #007700">;&nbsp;</span><span style="color: #FF8000">//&nbsp;lifetime&nbsp;is&nbsp;per&nbsp;cache<br /><br />//&nbsp;set&nbsp;the&nbsp;cache_lifetime&nbsp;for&nbsp;index.tpl&nbsp;to&nbsp;5&nbsp;minutes<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">cache_lifetime&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">300</span><span style="color: #007700">;<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">);<br /><br /></span><span style="color: #FF8000">//&nbsp;set&nbsp;the&nbsp;cache_lifetime&nbsp;for&nbsp;home.tpl&nbsp;to&nbsp;1&nbsp;hour<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">cache_lifetime&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">3600</span><span style="color: #007700">;<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'home.tpl'</span><span style="color: #007700">);<br /><br /></span><span style="color: #FF8000">//&nbsp;NOTE:&nbsp;the&nbsp;following&nbsp;$cache_lifetime&nbsp;setting&nbsp;will&nbsp;not&nbsp;work&nbsp;when&nbsp;$caching&nbsp;=&nbsp;2.<br />//&nbsp;The&nbsp;cache&nbsp;lifetime&nbsp;for&nbsp;home.tpl&nbsp;has&nbsp;already&nbsp;been&nbsp;set<br />//&nbsp;to&nbsp;1&nbsp;hour,&nbsp;and&nbsp;will&nbsp;no&nbsp;longer&nbsp;respect&nbsp;the&nbsp;value&nbsp;of&nbsp;$cache_lifetime.<br />//&nbsp;The&nbsp;home.tpl&nbsp;cache&nbsp;will&nbsp;still&nbsp;expire&nbsp;after&nbsp;1&nbsp;hour.<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">cache_lifetime&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">30</span><span style="color: #007700">;&nbsp;</span><span style="color: #FF8000">//&nbsp;30&nbsp;seconds<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'home.tpl'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;    If <A
+HREF="variable.compile.check.html"
+>&#13;    <TT
+CLASS="parameter"
+><I
+>$compile_check</I
+></TT
+></A
+> is enabled,
+    every template file and config file that is involved with the cache file is
+    checked for modification. If any of the files have been modified since the
+    cache was generated, the cache is immediately regenerated. This is a slight
+    overhead so for optimum performance, set
+    <A
+HREF="variable.compile.check.html"
+><TT
+CLASS="parameter"
+><I
+>$compile_check</I
+></TT
+>
+    </A
+> to <TT
+CLASS="constant"
+>FALSE</TT
+>.
+   </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN6808"
+></A
+><P
+><B
+>Example 14-3. Enabling $compile_check</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #007700">require(</span><span style="color: #DD0000">'Smarty.class.php'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$smarty&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">Smarty</span><span style="color: #007700">;<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">caching&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">1</span><span style="color: #007700">;<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">compile_check&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">true</span><span style="color: #007700">;<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;    If <A
+HREF="variable.force.compile.html"
+>&#13;    <TT
+CLASS="parameter"
+><I
+>$force_compile</I
+></TT
+></A
+> is enabled,
+    the cache files will always be regenerated. This effectively turns off
+    caching.
+    <A
+HREF="variable.force.compile.html"
+><TT
+CLASS="parameter"
+><I
+>$force_compile</I
+></TT
+>
+    </A
+> is usually for
+    <A
+HREF="chapter.debugging.console.html"
+>debugging</A
+>
+    purposes only, a more  efficient way of disabling caching is to set <A
+HREF="variable.caching.html"
+><TT
+CLASS="parameter"
+><I
+>$caching</I
+></TT
+>
+    </A
+><TT
+CLASS="literal"
+> = 0</TT
+>.
+   </P
+><P
+>&#13;    The <A
+HREF="api.is.cached.html"
+><TT
+CLASS="varname"
+>is_cached()</TT
+></A
+>
+    function
+    can be used to test if a template has a valid cache or not. If you have a
+    cached template that requires something like a database fetch, you can use
+    this to skip that process.
+   </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN6823"
+></A
+><P
+><B
+>Example 14-4. Using is_cached()</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #007700">require(</span><span style="color: #DD0000">'Smarty.class.php'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$smarty&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">Smarty</span><span style="color: #007700">;<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">caching&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">1</span><span style="color: #007700">;<br /><br />if(!</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">is_cached</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">))&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #FF8000">//&nbsp;No&nbsp;cache&nbsp;available,&nbsp;do&nbsp;variable&nbsp;assignments&nbsp;here.<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$contents&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">get_database_contents</span><span style="color: #007700">();<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #0000BB">$contents</span><span style="color: #007700">);<br />}<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;    You can keep parts of a page dynamic with the <A
+HREF="language.function.insert.html"
+><TT
+CLASS="varname"
+>{insert}</TT
+></A
+>
+    template function. Let's
+    say the whole page can be cached except for a banner that is displayed down
+    the side of the page. By using the
+    <A
+HREF="language.function.insert.html"
+><TT
+CLASS="varname"
+>{insert}</TT
+></A
+>
+    function for the banner, you
+    can keep this element dynamic within the cached content. See the
+    documentation on
+    <A
+HREF="language.function.insert.html"
+><TT
+CLASS="varname"
+>{insert}</TT
+></A
+>
+    for more details and examples.
+   </P
+><P
+>&#13;    You can clear all the cache files with the <A
+HREF="api.clear.all.cache.html"
+><TT
+CLASS="varname"
+>clear_all_cache()</TT
+></A
+>
+    function, or
+    individual cache files
+    <A
+HREF="caching.groups.html"
+>and groups</A
+>
+    with the <A
+HREF="api.clear.cache.html"
+><TT
+CLASS="varname"
+>clear_cache()</TT
+></A
+> function.
+   </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN6839"
+></A
+><P
+><B
+>Example 14-5. Clearing the cache</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #007700">require(</span><span style="color: #DD0000">'Smarty.class.php'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$smarty&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">Smarty</span><span style="color: #007700">;<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">caching&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">1</span><span style="color: #007700">;<br /><br /></span><span style="color: #FF8000">//&nbsp;clear&nbsp;only&nbsp;cache&nbsp;for&nbsp;index.tpl<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">clear_cache</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">);<br /><br /></span><span style="color: #FF8000">//&nbsp;clear&nbsp;out&nbsp;all&nbsp;cache&nbsp;files<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">clear_all_cache</span><span style="color: #007700">();<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="api.unregister.resource.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="caching.multiple.caches.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>unregister_resource()</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="smarty.for.programmers.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Multiple Caches Per Page</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

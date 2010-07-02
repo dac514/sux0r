@@ -1,0 +1,345 @@
+<HTML
+><HEAD
+><TITLE
+>Basic Syntax</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Smarty Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Smarty For Template Designers"
+HREF="smarty.for.designers.html"><LINK
+REL="PREVIOUS"
+TITLE="Smarty For Template Designers"
+HREF="smarty.for.designers.html"><LINK
+REL="NEXT"
+TITLE="Variables"
+HREF="language.syntax.variables.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Smarty Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="smarty.for.designers.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="language.syntax.variables.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="language.basic.syntax"
+></A
+>Chapter 3. Basic Syntax</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="language.basic.syntax.html#language.syntax.comments"
+>Comments</A
+></DT
+><DT
+><A
+HREF="language.syntax.variables.html"
+>Variables</A
+></DT
+><DT
+><A
+HREF="language.syntax.functions.html"
+>Functions</A
+></DT
+><DT
+><A
+HREF="language.syntax.attributes.html"
+>Attributes</A
+></DT
+><DT
+><A
+HREF="language.syntax.quotes.html"
+>Embedding Vars in Double Quotes</A
+></DT
+><DT
+><A
+HREF="language.math.html"
+>Math</A
+></DT
+><DT
+><A
+HREF="language.escaping.html"
+>Escaping Smarty Parsing</A
+></DT
+></DL
+></DIV
+><P
+>&#13;  All Smarty template tags are enclosed within delimiters. By
+  default these are <TT
+CLASS="literal"
+>{</TT
+> and
+  <TT
+CLASS="literal"
+>}</TT
+>, but they can be <A
+HREF="variable.left.delimiter.html"
+>changed</A
+>.
+ </P
+><P
+>&#13;  For the examples in this manual, we will assume that you are using the default
+  delimiters. In Smarty, all content outside of delimiters is displayed as
+  static content, or unchanged. When Smarty encounters template tags, it
+  attempts to interpret them, and displays the appropriate output in their
+  place.
+ </P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="language.syntax.comments"
+></A
+>Comments</H1
+><P
+>&#13;  Template comments are surrounded by asterisks, and that is surrounded
+  by the
+  <A
+HREF="variable.left.delimiter.html"
+>delimiter</A
+>
+  tags like so:
+  </P
+><DIV
+CLASS="informalexample"
+><A
+NAME="AEN291"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{* this is a comment *}</PRE
+></TD
+></TR
+></TABLE
+><P
+></P
+></DIV
+><P
+>&#13;  Smarty comments are NOT displayed in the final output of the template,
+  unlike <TT
+CLASS="literal"
+>&#60;!-- HTML comments --&#62;</TT
+>.
+  These are useful for making internal notes in the templates which no one will see ;-)
+ </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN295"
+></A
+><P
+><B
+>Example 3-1. Comments within a template</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>{* I am a Smarty comment, I don't exist in the compiled output  *}
+&#60;html&#62;
+&#60;head&#62;
+&#60;title&#62;{$title}&#60;/title&#62;
+&#60;/head&#62;
+&#60;body&#62;
+
+{* another single line smarty comment  *}
+&#60;!-- HTML comment that is sent to the browser --&#62;
+
+{* this multiline smarty
+   comment is
+   not sent to browser
+*}
+
+{*********************************************************
+Multi line comment block with credits block
+  @ author:         bg@example.com
+  @ maintainer:     support@example.com
+  @ para:           var that sets block style
+  @ css:            the style output
+**********************************************************}
+
+{* The header file with the main logo and stuff  *}
+{include file='header.tpl'}
+
+
+{* Dev note:  the $includeFile var is assigned in foo.php script  *}
+&#60;!-- Displays main content block --&#62;
+{include file=$includeFile}
+
+{* this &#60;select&#62; block is redundant *}
+{*
+&#60;select name="company"&#62;
+  {html_options options=$vals selected=$selected_id}
+&#60;/select&#62;
+*}
+
+&#60;!-- Show header from affiliate is disabled --&#62;
+{* $affiliate|upper *}
+
+{* you cannot nest comments *}
+{*
+&#60;select name="company"&#62;
+  {* &#60;option value="0"&#62;-- none -- &#60;/option&#62; *}
+  {html_options options=$vals selected=$selected_id}
+&#60;/select&#62;
+*}
+
+
+{* cvs tag for a template, below the 36 SHOULD be an american currency
+. however its converted in cvs.. *}
+{* &#38;#36;Id: Exp &#38;#36; *}
+{* $Id: *}
+&#60;/body&#62;
+&#60;/html&#62;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="smarty.for.designers.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="language.syntax.variables.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Smarty For Template Designers</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="smarty.for.designers.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Variables</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
