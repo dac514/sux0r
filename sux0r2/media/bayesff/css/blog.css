@@ -1,0 +1,80 @@
+#leftside {
+    margin: 10px;
+    width: 160px;
+}
+
+#leftside ul {
+    margin-left: 15px;
+    padding: 0;
+}
+
+#leftside li {
+    margin-bottom: 4px;
+}
+
+
+#rightside {
+    width: 738px;
+}
+
+.recent {
+    border: 1px dashed #666;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 4px;
+}
+
+.sideListTitle {
+    font-weight: bold;
+    background-color: #a7ffd0;
+    padding: 3px;
+}
+
+.flair img {
+    border: 0;
+    margin-right: 4px;
+}
+
+.flair a {
+    background: none;
+}
+
+.widerInput {
+    width: 350px;
+}
+
+.categoryContainer {
+    border: 1px dashed #ccc;
+    padding: 10px;
+}
+
+.comment {
+    border: 1px dashed #ccc;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.parentContainer {
+    height: 80px;
+    overflow: auto;
+    border: 1px solid #cccccc;
+    margin: 10px;
+    margin-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.edit {
+    margin-top: 4px;
+    text-align: right;
+    color: red;
+}
+
+.tagcloud{
+    text-align: center;
+    padding: 20px;
+}
+
+.blogItem {
+    margin-bottom: 2em;
+}
