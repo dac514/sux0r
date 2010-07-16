@@ -7,6 +7,44 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
+
+/**
+* Autoload function
+*/
+
+function __autoload($class_name) {
+
+    global $controller;
+    $found = false;
+    static $dirname; // Wimpy cache
+    if (empty($dirname)) $dirname = dirname(__FILE__);
+
+    $file[] = "$dirname/includes/$class_name.php";
+    $file[] = "$dirname/extensions/$class_name.php";
+    if (!empty($controller)) {
+        $file[] = "$dirname/modules/$controller/$class_name.php";
+    }
+    $file[] = "$dirname/modules/abstract.$class_name.php";
+    $file[] = "$class_name.php";
+
+    foreach ($file as $f) {
+        if (is_file($f)) {
+            require_once($f);
+            $found = true;
+            break;
+        }
+    }
+
+    if (!$found) {
+        throw new Exception('Class "' . $class_name . '" could not be autoloaded');
+    }
+}
+
+
+/**
+* Procedure
+*/
+
 // Get rid of register_globals
 if (ini_get('register_globals')) {
     foreach ($_REQUEST as $k => $v) {
