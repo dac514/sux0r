@@ -14,7 +14,6 @@ function sux($action, $params = null) {
 
     default:
 
-        include_once('bayesEdit.php');
         $reg = new bayesEdit();
         if ($reg->formValidate($_POST)) $reg->formProcess($_POST);
         $reg->formBuild($_POST);

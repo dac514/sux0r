@@ -7,8 +7,6 @@ if (isset($_POST['id']) && filter_var($_POST['id'], FILTER_VALIDATE_INT)) {
 
     require_once(dirname(__FILE__) . '/../../config.php');
     require_once(dirname(__FILE__) . '/../../initialize.php');
-    require_once(dirname(__FILE__) . '/../../includes/suxNaiveBayesian.php');
-    require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
 
     $nb = new suxNaiveBayesian();
     $doc = $nb->getDocument($_POST['id']);

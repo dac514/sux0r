@@ -9,7 +9,6 @@ require_once(dirname(__FILE__) . '/../../initialize.php');
 
 if (!isset($_SESSION['users_id'])) exit;
 
-require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
 $photo = new suxPhoto();
 $images = $photo->getPhotosByUser(null, 0, $_SESSION['users_id']);
 

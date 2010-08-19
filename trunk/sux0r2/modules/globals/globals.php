@@ -7,10 +7,6 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once('globalsRenderer.php');
-require_once(dirname(__FILE__) . '/../abstract.component.php');
-
-
 class globals extends component {
 
     // Module name

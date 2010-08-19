@@ -9,9 +9,7 @@
 
 function sux($action, $params = null) {
 
-    include_once('cropper.php');
     $cropper = new cropper();
-
 
     if ($cropper->formValidate($_POST)) {
         $cropper->formProcess($_POST);

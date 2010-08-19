@@ -11,7 +11,6 @@ Steps to add a new module to this trainer:
 
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/../../initialize.php');
-require_once(dirname(__FILE__) . '/../../includes/suxLog.php');
 
 // ---------------------------------------------------------------------------
 // Variables
@@ -29,19 +28,16 @@ function getBody($link, $id) {
     $body = false;
 
     if ($link == 'messages') {
-        require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
         $msg = new suxThreadedMessages();
         $body = $msg->getByID($id);
         $body = "{$body['title']} \n\n {$body['body_plaintext']}";
     }
     elseif ($link == 'rss_items') {
-        require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
         $rss = new suxRSS();
         $body = $rss->getItemByID($id);
         $body = "{$body['title']} \n\n {$body['body_plaintext']}";
     }
-    elseif ($link == 'bookmarks') {
-        require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
+    elseif ($link == 'bookmarks') {        
         $bm = new suxBookmarks();
         $body = $bm->getByID($id);
         $body = "{$body['title']} \n\n {$body['body_plaintext']}";
@@ -79,10 +75,6 @@ $cat_id = $_POST['cat_id'];
 // ---------------------------------------------------------------------------
 // Secondary error checking
 // ---------------------------------------------------------------------------
-
-require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
-require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
-require_once(dirname(__FILE__) . '/../../extensions/suxUserNaiveBayesian.php');
 
 $suxLink = new suxLink();
 $nb = new suxUserNaiveBayesian();
@@ -147,7 +139,6 @@ $log->write($_SESSION['users_id'], "sux0r::bayes::train() doc_id: $doc_id, cat_i
 // Clear template caches
 // ---------------------------------------------------------------------------
 
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 $tpl = new suxTemplate($module);
 $tpl->clear_cache(null, "{$_SESSION['nickname']}"); // clear all caches with "nickname" as the first cache_id group
 

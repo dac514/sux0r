@@ -18,7 +18,6 @@ function sux($action, $params = null) {
         // Admin
         // --------------------------------------------------------------------
 
-        include_once('feedsAdmin.php');
         $admin = new feedsAdmin();
 
         if ($admin->formValidate($_POST)) {
@@ -39,7 +38,6 @@ function sux($action, $params = null) {
         // Approve
         // --------------------------------------------------------------------
 
-        include_once('feedsApprove.php');
         $feeds = new feedsApprove();
 
         if ($feeds->formValidate($_POST)) {
@@ -61,7 +59,6 @@ function sux($action, $params = null) {
 
         $id = !empty($params[0]) ? $params[0]: null;
 
-        include_once('feedsEdit.php');
         $edit = new feedsEdit($id);
 
         if ($edit->formValidate($_POST)) {
@@ -81,7 +78,6 @@ function sux($action, $params = null) {
         // Suggest
         // --------------------------------------------------------------------
 
-        include_once('feedsSuggest.php');
         $feeds = new feedsSuggest();
 
         if ($feeds->formValidate($_POST)) {
@@ -101,7 +97,6 @@ function sux($action, $params = null) {
         // Manage
         // --------------------------------------------------------------------
 
-        include_once('feedsManage.php');
         $feeds = new feedsManage();
 
         if ($feeds->formValidate($_POST)) {
@@ -125,7 +120,6 @@ function sux($action, $params = null) {
             suxFunct::redirect(suxFunct::makeUrl('/feeds'));
         }
 
-        include_once('feeds.php');
         $feeds = new feeds();
         $feeds->user($params[0]);
 
@@ -138,7 +132,6 @@ function sux($action, $params = null) {
         // Purge feeds
         // --------------------------------------------------------------------
 
-        include_once('feedsPurge.php');
         $edit = new feedsPurge();
 
         if ($edit->formValidate($_POST)) {
@@ -159,7 +152,6 @@ function sux($action, $params = null) {
         // Default
         // --------------------------------------------------------------------
 
-        include_once('feeds.php');
         $feeds = new feeds();
 
         if (filter_var($action, FILTER_VALIDATE_INT) && $action > 0) $feeds->listing($action);

@@ -7,9 +7,6 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../extensions/suxBayesRenderer.php');
-require_once(dirname(__FILE__) . '/../../includes/suxSocialNetwork.php');
-
 class bayesRenderer extends suxBayesRenderer {
 
 

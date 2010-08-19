@@ -5,7 +5,6 @@
 
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/../../initialize.php');
-require_once(dirname(__FILE__) . '/../../includes/suxLog.php');
 
 // ---------------------------------------------------------------------------
 // Ajax Failure
@@ -30,9 +29,7 @@ $id = $_POST['id'];
 // Secondary error checking
 // ---------------------------------------------------------------------------
 
-require_once(dirname(__FILE__) . '/../../includes/suxBookmarks.php');
 $bm = new suxBookmarks();
-
 if (!$bm->getByID($id)) failure('Invalid bookmark ' . $id);
 
 // ---------------------------------------------------------------------------
@@ -44,7 +41,6 @@ $link = 'link__bookmarks__users';
 $col = 'bookmarks';
 
 // Get image names from template config
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 $tpl = new suxTemplate($module);
 $tpl->config_load('my.conf', $module);
 $image = $tpl->get_config_vars('imgUnsubscribed');
@@ -61,8 +57,7 @@ if ($st->fetchColumn() > 0) {
     $st->execute(array($id, $_SESSION['users_id']));
 }
 else {
-    // Insert
-    require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
+    // Insert    
     $suxLink = new suxLink();
     $suxLink->saveLink($link, 'users', $_SESSION['users_id'], $col, $id);
     $image = $tpl->get_config_vars('imgSubscribed');

@@ -7,13 +7,6 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-
-require_once('societyRenderer.php');
-require_once(dirname(__FILE__) . '/../abstract.component.php');
-require_once(dirname(__FILE__) . '/../../includes/suxSocialNetwork.php');
-require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
-
-
 class societyEdit extends component {
 
     // Module name

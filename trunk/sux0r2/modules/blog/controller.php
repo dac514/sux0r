@@ -18,7 +18,6 @@ function sux($action, $params = null) {
         // Admin
         // --------------------------------------------------------------------
 
-        include_once('blogAdmin.php');
         $admin = new blogAdmin();
 
         if ($admin->formValidate($_POST)) {
@@ -41,7 +40,6 @@ function sux($action, $params = null) {
 
         $id = !empty($params[0]) ? $params[0]: null;
 
-        include_once('blogEdit.php');
         $edit = new blogEdit($id);
 
         if ($edit->formValidate($_POST)) {
@@ -65,7 +63,6 @@ function sux($action, $params = null) {
             suxFunct::redirect(suxFunct::makeUrl('/blog'));
         }
 
-        include_once('blogBookmarks.php');
         $bm = new blogBookmarks($params[0]);
 
         if ($bm->formValidate($_POST)) {
@@ -89,7 +86,6 @@ function sux($action, $params = null) {
             suxFunct::redirect(suxFunct::makeUrl('/blog'));
         }
 
-        include_once('blogReply.php');
         $reply = new blogReply($params[0]);
 
         if ($reply->formValidate($_POST)) {
@@ -113,7 +109,6 @@ function sux($action, $params = null) {
             suxFunct::redirect(suxFunct::makeUrl('/blog'));
         }
 
-        include_once('blog.php');
         $blog = new blog();
         $blog->view($params[0]);
         break;
@@ -129,7 +124,6 @@ function sux($action, $params = null) {
             suxFunct::redirect(suxFunct::makeUrl('/blog'));
         }
 
-        include_once('blog.php');
         $blog = new blog();
         $blog->author($params[0]);
         break;
@@ -145,7 +139,6 @@ function sux($action, $params = null) {
             suxFunct::redirect(suxFunct::makeUrl('/blog'));
         }
 
-        include_once('blog.php');
         $blog = new blog();
 
         if ($params[0] == 'cloud') $blog->tagcloud();
@@ -164,7 +157,6 @@ function sux($action, $params = null) {
             suxFunct::redirect(suxFunct::makeUrl('/blog'));
         }
 
-        include_once('blog.php');
         $blog = new blog();
         $blog->category($params[0]);
         break;
@@ -178,7 +170,6 @@ function sux($action, $params = null) {
 
         $date = !empty($params[0]) ? $params[0]: date('Y-m-d');
 
-        include_once('blog.php');
         $blog = new blog();
         $blog->month($date);
         break;
@@ -190,7 +181,6 @@ function sux($action, $params = null) {
         // RSS
         // --------------------------------------------------------------------
 
-        include_once('blog.php');
         $blog = new blog();
         $blog->rss();
         break;
@@ -202,7 +192,6 @@ function sux($action, $params = null) {
         // Default
         // --------------------------------------------------------------------
 
-        include_once('blog.php');
         $blog = new blog();
         $blog->listing();
         break;

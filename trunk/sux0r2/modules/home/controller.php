@@ -14,7 +14,6 @@ function sux($action, $params = null) {
 
     default:
 
-        include_once('home.php');
         $home = new home();
         $home->display();
 

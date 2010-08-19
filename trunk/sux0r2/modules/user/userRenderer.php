@@ -7,11 +7,6 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxUser.php');
-require_once(dirname(__FILE__) . '/../../includes/suxSocialNetwork.php');
-require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
-
-
 class userRenderer extends suxRenderer {
 
     // Object: suxUser()

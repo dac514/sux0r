@@ -23,7 +23,6 @@ function sux($action, $params = null) {
             suxFunct::redirect(suxFunct::makeUrl('/admin'));
         }
 
-        include_once('adminAccess.php');
         $edit = new adminAccess($params[0]);
 
         if ($edit->formValidate($_POST)) {
@@ -46,7 +45,6 @@ function sux($action, $params = null) {
         $nickname = null;
         if (!empty($params[0])) $nickname = $params[0];
 
-        include_once('adminLog.php');
         $admin = new adminLog($nickname);
         $admin->display();
 
@@ -59,8 +57,6 @@ function sux($action, $params = null) {
         // Purge logs
         // --------------------------------------------------------------------
 
-
-        include_once('adminPurge.php');
         $edit = new adminPurge();
 
         if ($edit->formValidate($_POST)) {
@@ -81,7 +77,6 @@ function sux($action, $params = null) {
         // Default
         // --------------------------------------------------------------------
 
-        include_once('admin.php');
         $admin = new admin();
         $admin->userlist();
         break;

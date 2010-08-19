@@ -18,7 +18,6 @@ function sux($action, $params = null) {
         // Reset password
         // --------------------------------------------------------------------
 
-        include_once('userReset.php');
         $reset = new userReset();
 
         if ($reset->formValidate($_POST)) {
@@ -38,7 +37,6 @@ function sux($action, $params = null) {
         if (!empty($params[0]) && $params[0] == 'openid') {
 
             // Openid registration
-            include_once('userLoginOpenID.php');
             $auth = new userLoginOpenID();
 
             if ($auth->formValidate($_POST)) $auth->formHandoff($_POST);
@@ -48,7 +46,6 @@ function sux($action, $params = null) {
         else {
 
             // Regular login
-            include_once('userAuthenticate.php');
             $auth = new userAuthenticate();
             $auth->login();
         }
@@ -61,7 +58,6 @@ function sux($action, $params = null) {
         // Logout
         // --------------------------------------------------------------------
 
-        include_once('userAuthenticate.php');
         $auth = new userAuthenticate();
         $auth->logout();
         break;
@@ -76,7 +72,6 @@ function sux($action, $params = null) {
         if (!empty($params[0]) && $params[0] == 'openid') {
 
             // Openid registration
-            include_once('userRegisterOpenID.php');
             $reg = new userRegisterOpenID();
 
             if ($reg->formValidate($_POST)) $reg->formHandoff($_POST);
@@ -86,7 +81,6 @@ function sux($action, $params = null) {
         else {
 
             // Regular registration
-            include_once('userEdit.php');
             $reg = new userEdit();
 
             if ($reg->formValidate($_POST)) {
@@ -110,7 +104,6 @@ function sux($action, $params = null) {
         $user = !empty($params[0]) ? $params[0]: null;
 
         // Edit profile registration
-        include_once('userEdit.php');
         $reg = new userEdit('edit', $user);
 
         if ($reg->formValidate($_POST)) {
@@ -133,7 +126,6 @@ function sux($action, $params = null) {
         $user = !empty($params[0]) ? $params[0]: null;
 
         // Edit avatar
-        include_once('userAvatar.php');
         $reg = new userAvatar($user);
 
         if ($reg->formValidate($_POST)) {
@@ -156,7 +148,6 @@ function sux($action, $params = null) {
         $user = !empty($params[0]) ? $params[0]: null;
 
         // Edit avatar
-        include_once('userOpenID.php');
         $oid = new userOpenID($user);
 
         if ($oid->formValidate($_POST)) {
@@ -175,8 +166,6 @@ function sux($action, $params = null) {
         // --------------------------------------------------------------------
         // Show user profile
         // --------------------------------------------------------------------
-
-        include_once('userProfile.php');
 
         // Nickname
         if (empty($params[0])) {

@@ -7,10 +7,6 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/abstract.component.php');
-require_once(dirname(__FILE__) . '/../extensions/suxUserNaiveBayesian.php');
-
-
 abstract class bayesComponent extends component {
 
     // Object: suxUserNaiveBayesian()

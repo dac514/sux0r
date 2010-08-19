@@ -23,7 +23,6 @@ function sux($action, $params = null) {
         // Admin
         // --------------------------------------------------------------------
 
-        include_once('bookmarksAdmin.php');
         $admin = new bookmarksAdmin();
 
         if ($admin->formValidate($_POST)) {
@@ -44,7 +43,6 @@ function sux($action, $params = null) {
         // Approve
         // --------------------------------------------------------------------
 
-        include_once('bookmarksApprove.php');
         $bm = new bookmarksApprove();
 
         if ($bm->formValidate($_POST)) {
@@ -64,7 +62,6 @@ function sux($action, $params = null) {
         // Suggest
         // --------------------------------------------------------------------
 
-        include_once('bookmarksSuggest.php');
         $bm = new bookmarksSuggest();
 
         if ($bm->formValidate($_POST)) {
@@ -86,7 +83,6 @@ function sux($action, $params = null) {
 
         $id = !empty($params[0]) ? $params[0]: null;
 
-        include_once('bookmarksEdit.php');
         $edit = new bookmarksEdit($id);
 
         if ($edit->formValidate($_POST)) {
@@ -110,7 +106,6 @@ function sux($action, $params = null) {
             suxFunct::redirect(suxFunct::makeUrl('/bookmarks'));
         }
 
-        include_once('bookmarks.php');
         $bm = new bookmarks();
         $bm->user($params[0], $alphasort);
 
@@ -127,7 +122,6 @@ function sux($action, $params = null) {
             suxFunct::redirect(suxFunct::makeUrl('/bookmarks'));
         }
 
-        include_once('bookmarks.php');
         $bm = new bookmarks();
 
         if ($params[0] == 'cloud') $bm->tagcloud();
@@ -142,7 +136,6 @@ function sux($action, $params = null) {
         // RSS
         // --------------------------------------------------------------------
 
-        include_once('bookmarks.php');
         $bm = new bookmarks();
         $bm->rss();
         break;
@@ -154,7 +147,6 @@ function sux($action, $params = null) {
         // Default
         // --------------------------------------------------------------------
 
-        include_once('bookmarks.php');
         $bm = new bookmarks();
         $bm->listing($alphasort);
         break;

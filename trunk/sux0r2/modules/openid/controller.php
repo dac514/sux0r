@@ -11,8 +11,6 @@ function sux($action, $params = null) {
 
     unset($action, $params); // We don't use these here
 
-    require_once(dirname(__FILE__) . '/../../extensions/openid.php');
-
     $openID = new openid();
     // $openID->profile['debug'] = true;
 

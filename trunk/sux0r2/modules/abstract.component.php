@@ -7,13 +7,6 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../includes/suxUser.php');
-require_once(dirname(__FILE__) . '/../includes/suxLog.php');
-require_once(dirname(__FILE__) . '/../includes/suxLink.php');
-require_once(dirname(__FILE__) . '/../includes/suxPager.php');
-require_once(dirname(__FILE__) . '/../includes/suxTags.php');
-
 abstract class component {
 
     // object: suxRenderer()
