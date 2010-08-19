@@ -7,11 +7,6 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once('userRenderer.php');
-require_once(dirname(__FILE__) . '/../abstract.component.php');
-require_once(dirname(__FILE__) . '/../../includes/suxSocialNetwork.php');
-
-
 class userProfile extends component {
 
     // Module name
@@ -86,9 +81,7 @@ class userProfile extends component {
         if (!$this->tpl->is_cached('rss.tpl', $cache_id)) {
 
             $fp = $this->log->get(($this->minifeed_limit * 5), 0, $this->profile['users_id']);
-            if ($fp) {
-
-                require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
+            if ($fp) {                
                 $rss = new suxRSS();
                 $title = "{$this->r->title} | {$this->profile['nickname']}";
                 $url = suxFunct::makeUrl('/user/profile/' . $this->profile['nickname'], null, true);

@@ -7,14 +7,6 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once('blogRenderer.php');
-require_once(dirname(__FILE__) . '/../abstract.component.php');
-require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
-require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
-require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
-require_once(dirname(__FILE__) . '/../../extensions/suxUserNaiveBayesian.php');
-
-
 class blogEdit extends component {
 
     // Module name

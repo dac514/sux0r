@@ -4,7 +4,6 @@
 
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/../../initialize.php');
-require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
 
 try {
     $rss = new suxRSS();

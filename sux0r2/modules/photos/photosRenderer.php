@@ -7,9 +7,6 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
-require_once(dirname(__FILE__) . '/../../includes/suxRenderer.php');
-
 class photosRenderer extends suxRenderer {
 
     // Object: suxPhoto()

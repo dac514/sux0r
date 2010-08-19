@@ -7,8 +7,6 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../bayes/bayesRenderer.php');
-
 class societyRenderer extends suxRenderer {
 
     // Object: suxUser()

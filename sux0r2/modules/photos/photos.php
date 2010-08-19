@@ -7,11 +7,6 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once('photosRenderer.php');
-require_once(dirname(__FILE__) . '/../abstract.component.php');
-require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
-
-
 class photos extends component {
 
     // Module name
@@ -210,9 +205,7 @@ class photos extends component {
         if (!$this->tpl->is_cached('rss.tpl', $cache_id)) {
 
             $fp = $this->photo->getAlbums($this->pager->limit);
-            if ($fp) {
-
-                require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
+            if ($fp) {                
                 $rss = new suxRSS();
                 $title = "{$this->r->title} | {$this->r->gtext['photos']}";
                 $url = suxFunct::makeUrl('/photos', null, true);

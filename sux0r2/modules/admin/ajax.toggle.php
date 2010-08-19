@@ -5,7 +5,6 @@
 
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/../../initialize.php');
-require_once(dirname(__FILE__) . '/../../includes/suxLog.php');
 
 // ---------------------------------------------------------------------------
 // Ajax Failure

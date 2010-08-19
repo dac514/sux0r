@@ -20,7 +20,6 @@ function sux($action, $params = null) {
 
         if (empty($params[0])) suxFunct::redirect(suxFunct::makeUrl('/society'));
 
-        include_once('societyEdit.php');
         $soc = new societyEdit($params[0]);
 
         if ($soc->formValidate($_POST)) {

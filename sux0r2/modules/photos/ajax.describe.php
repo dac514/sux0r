@@ -18,9 +18,6 @@ if (!isset($_POST['description'])) exit;
 // Secondary error checking
 // ---------------------------------------------------------------------------
 
-require_once(dirname(__FILE__) . '/../../includes/suxLog.php');
-require_once(dirname(__FILE__) . '/../../includes/suxPhoto.php');
-
 $log = new suxLog();
 $photo = new suxPhoto();
 
@@ -51,7 +48,6 @@ catch (Exception $e) {
 // Clear template caches
 // ---------------------------------------------------------------------------
 
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 $tpl = new suxTemplate('photos');
 $tpl->clear_cache(null, $_SESSION['nickname']); // clear all user caches
 

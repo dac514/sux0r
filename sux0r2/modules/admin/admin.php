@@ -7,10 +7,6 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once('adminRenderer.php');
-require_once(dirname(__FILE__) . '/../abstract.component.php');
-
-
 class admin extends component {
 
     // Module name

@@ -18,7 +18,6 @@ function sux($action, $params = null) {
         // Admin
         // --------------------------------------------------------------------
 
-        include_once('photosAdmin.php');
         $admin = new photosAdmin();
 
         if ($admin->formValidate($_POST)) {
@@ -43,7 +42,6 @@ function sux($action, $params = null) {
             suxFunct::redirect(suxFunct::makeUrl('/photos'));
         }
 
-        include_once('photos.php');
         $photos = new photos();
         $photos->view($params[0]);
         break;
@@ -55,7 +53,6 @@ function sux($action, $params = null) {
         // Upload
         // --------------------------------------------------------------------
 
-        include_once('photosUpload.php');
         $edit = new photosUpload(@$params[0]);
 
         if ($edit->formValidate($_POST)) {
@@ -80,7 +77,6 @@ function sux($action, $params = null) {
 
             $id = !empty($params[1]) ? $params[1]: null;
 
-            include_once('photoalbumsEdit.php');
             $edit = new photoalbumsEdit($id);
 
             if ($edit->formValidate($_POST)) {
@@ -105,7 +101,6 @@ function sux($action, $params = null) {
                 suxFunct::redirect(suxFunct::makeUrl('/photos'));
             }
 
-            include_once('photosEdit.php');
             $edit = new photosEdit($params[1]);
 
             if ($edit->formValidate($_POST)) {
@@ -131,7 +126,6 @@ function sux($action, $params = null) {
                 suxFunct::redirect(suxFunct::makeUrl('/photos'));
             }
 
-            include_once('photos.php');
             $photos = new photos();
             $photos->album($params[0]);
             break;
@@ -149,7 +143,6 @@ function sux($action, $params = null) {
             suxFunct::redirect(suxFunct::makeUrl('/photos'));
         }
 
-        include_once('photos.php');
         $photos = new photos();
         $photos->listing($params[0]);
 
@@ -161,7 +154,6 @@ function sux($action, $params = null) {
         // RSS
         // --------------------------------------------------------------------
 
-        include_once('photos.php');
         $photos = new photos();
         $photos->rss();
         break;
@@ -169,7 +161,6 @@ function sux($action, $params = null) {
 
     default:
 
-        include_once('photos.php');
         $photos = new photos();
         $photos->listing();
         break;

@@ -5,7 +5,6 @@
 
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/../../initialize.php');
-require_once(dirname(__FILE__) . '/../../includes/suxLog.php');
 
 // ---------------------------------------------------------------------------
 // Ajax Failure
@@ -30,9 +29,7 @@ $id = $_POST['id'];
 // Secondary error checking
 // ---------------------------------------------------------------------------
 
-require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
 $feed = new suxRSS();
-
 if (!$feed->getFeedByID($id)) failure('Invalid feed');
 
 // ---------------------------------------------------------------------------
@@ -44,7 +41,6 @@ $link = 'link__rss_feeds__users';
 $col = 'rss_feeds';
 
 // Get image names from template config
-require_once(dirname(__FILE__) . '/../../includes/suxTemplate.php');
 $tpl = new suxTemplate($module);
 $tpl->config_load('my.conf', $module);
 $image = $tpl->get_config_vars('imgUnsubscribed');
@@ -62,7 +58,6 @@ if ($st->fetchColumn() > 0) {
 }
 else {
     // Insert
-    require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
     $suxLink = new suxLink();
     $suxLink->saveLink($link, 'users', $_SESSION['users_id'], $col, $id);
     $image = $tpl->get_config_vars('imgSubscribed');

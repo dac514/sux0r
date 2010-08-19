@@ -7,10 +7,6 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../../includes/suxLink.php');
-require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
-require_once(dirname(__FILE__) . '/../../extensions/suxBayesRenderer.php');
-
 class feedsRenderer extends suxBayesRenderer {
 
     // Object: suxRss()

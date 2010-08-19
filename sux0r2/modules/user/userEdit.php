@@ -7,11 +7,6 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once('userRenderer.php');
-require_once(dirname(__FILE__) . '/../abstract.component.php');
-require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
-
-
 class userEdit extends component {
 
     // Module name

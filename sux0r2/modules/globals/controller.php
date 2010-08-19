@@ -14,14 +14,12 @@ function sux($action, $params = null) {
 
     case'banned':
 
-        include_once('globals.php');
         $g = new globals();
         $g->banned();
         break;
 
     case'e404':
 
-        include_once('globals.php');
         $g = new globals();
         $g->e404();
         break;

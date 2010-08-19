@@ -11,11 +11,7 @@
 ### die is here to avoid activating the example, remove it
 die();
 
-### require_once('myRenderer.php'); ### Change me
-require_once(dirname(__FILE__) . '/../abstract.component.php');
-require_once(dirname(__FILE__) . '/../../includes/suxValidate.php');
-### require additional classes here
-
+### __autoload() handles requires and includes
 
 class myExample extends component {
 
@@ -148,7 +144,6 @@ class myExample extends component {
 /**
 * controller.php
 
-include_once('example.form.php');
 $foo = new myExample();
 if ($foo->formValidate($_POST)) {
 	$foo->formProcess($_POST);

@@ -7,11 +7,6 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once('blogRenderer.php');
-require_once(dirname(__FILE__) . '/../abstract.bayesComponent.php');
-require_once(dirname(__FILE__) . '/../../includes/suxThreadedMessages.php');
-
-
 class blog extends bayesComponent {
 
     // Module name
@@ -526,9 +521,7 @@ class blog extends bayesComponent {
         if (!$this->tpl->is_cached('rss.tpl', $cache_id)) {
 
             $fp = $this->blogs($this->msg->getFirstPosts($this->pager->limit, 0, 'blog'));
-            if ($fp) {
-
-                require_once(dirname(__FILE__) . '/../../includes/suxRSS.php');
+            if ($fp) {                
                 $rss = new suxRSS();
                 $title = "{$this->r->title} | {$this->r->gtext['blog']}";
                 $url = suxFunct::makeUrl('/blog', null, true);
