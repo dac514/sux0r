@@ -5,6 +5,8 @@ Remove <!-- comments --> when sanitizing HTML
 
 Fix: Language files were ignored when using a partition other than the default
 
+Recursively scan ZIP when uploading photos
+
 IIS WebPI efforts
 
 Fixed a redirect issue in 404 and banned templates
