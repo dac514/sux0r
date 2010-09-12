@@ -1,3 +1,16 @@
+
+Added __autoload() function, removed manually declared includes/requires
+
+Remove <!-- comments --> when sanitizing HTML
+
+Fix: Language files were ignored when using a partition other than the default
+
+IIS WebPI efforts
+
+Fixed a redirect issue in 404 and banned templates
+
+Updated symbionts: htmLawed 1.1.9.3
+
 ------------------------------------------------------------------------------
 sux0r 2.1.0
 ------------------------------------------------------------------------------
