@@ -462,12 +462,14 @@ class suxFunct {
         if ($module) {
             $default = $GLOBALS['CONFIG']['PATH'] . "/templates/sux0r/{$module}/languages/en.php";
             $requested = $GLOBALS['CONFIG']['PATH'] . "/templates/{$partition}/{$module}/languages/{$lang}.php";
+            $override = $GLOBALS['CONFIG']['PATH'] . "/templates/sux0r/{$module}/languages/_override.php";
         }
 
         if (!is_readable($default)) return false; // no default, something is wrong
         else include($default);
 
         if (is_readable($requested)) include($requested);
+        if (is_readable($override)) include($override);
 
         if (!is_array($gtext) || !count($gtext)) return false; // something is wrong
         else {

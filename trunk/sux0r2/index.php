@@ -34,12 +34,14 @@ try {
 
     if ($controller == 'banned') {
         // Banned
+        $controller = 'globals';
         include_once(dirname(__FILE__) . "/modules/globals/controller.php");
         sux('banned');
         exit;
     }
     elseif (!preg_match('/^(\w|\-)+$/', $controller) || !is_file(dirname(__FILE__) . "/modules/{$controller}/controller.php")) {
         // 404 Not Found
+        $controller = 'globals';
         if (!headers_sent()) header('HTTP/1.0 404 Not Found');
         include_once(dirname(__FILE__) . "/modules/globals/controller.php");
         sux('e404');
