@@ -1,4 +1,9 @@
 
+Fix: Set $controller to 'globals' when banned or 404.
+
+Added language _override feature. In cases where you want the same string used
+for all languages.
+
 Added __autoload() function, removed manually declared includes/requires
 
 Remove <!-- comments --> when sanitizing HTML
