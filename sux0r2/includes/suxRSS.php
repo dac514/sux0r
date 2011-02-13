@@ -20,7 +20,7 @@ class suxRSS extends DOMDocument {
     // --------------------------------------------------------------------
 
     // Cache interval in seconds
-	public $cache_time = 900;
+    public $cache_time = 900;
 
     // Folder in which cached data should be stored, set in constructor
     public $cache_dir = null;
@@ -28,20 +28,20 @@ class suxRSS extends DOMDocument {
     // Allows to set how to proceed CDATA information.
     // content = get CDATA content (without CDATA tag)
     // nochange = don't make any changes
-	public $CDATA = 'content';
+    public $CDATA = 'content';
 
     // Allows limit number of returned items. 0 (zero) means "no limit"
-	public $items_limit = 0;
+    public $items_limit = 0;
 
     // All pubDate and lastBuildDate data will be converted to specified
     // date/time format. The format is fully compatible with PHP function date()
-	public $date_format = 'Y-m-d H:i:s';
+    public $date_format = 'Y-m-d H:i:s';
 
     // RSS 2.0 Tags
     protected $channeltags = array('title', 'link', 'description', 'language', 'copyright', 'managingEditor', 'webMaster', 'lastBuildDate', 'rating', 'docs');
-	protected $itemtags = array('title', 'link', 'description', 'author', 'category', 'comments', 'enclosure', 'guid', 'pubDate', 'source');
-	protected $imagetags = array('title', 'url', 'link', 'width', 'height');
-	protected $textinputtags = array('title', 'description', 'name', 'link');
+    protected $itemtags = array('title', 'link', 'description', 'author', 'category', 'comments', 'enclosure', 'guid', 'pubDate', 'source');
+    protected $imagetags = array('title', 'url', 'link', 'width', 'height');
+    protected $textinputtags = array('title', 'description', 'name', 'link');
 
     // Atom 1.0 Tags
     // Map RSS elements to equivilant Atom elements
@@ -92,7 +92,7 @@ class suxRSS extends DOMDocument {
         $this->cache_dir = dirname(__FILE__)  . '/../temporary/rss_cache';
 
         // Db
-    	$this->db = suxDB::get();
+        $this->db = suxDB::get();
         $this->db_driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
         set_exception_handler(array($this, 'exceptionHandler'));
 
@@ -116,7 +116,7 @@ class suxRSS extends DOMDocument {
     /**
     * Set order property of object
     *
-	* @param string $col
+    * @param string $col
     * @param string $way
     */
     public function setOrder($col, $way = 'ASC') {
@@ -137,9 +137,9 @@ class suxRSS extends DOMDocument {
     */
     public function sqlPublished() {
 
-		// Published   : draft = FALSE
-		// Unpublished : draft = TRUE
-		// Null = SELECT ALL, not sure what the best way to represent this is, id = id?
+        // Published   : draft = FALSE
+        // Unpublished : draft = TRUE
+        // Null = SELECT ALL, not sure what the best way to represent this is, id = id?
 
         // PgSql / MySql
         if ($this->published === true) $query = "draft = false ";
@@ -637,13 +637,13 @@ class suxRSS extends DOMDocument {
     // --------------------------------------------------------------------
 
 
-	/**
-	* Fetch RSS feed
+    /**
+    * Fetch RSS feed
     *
     * @param string $rss_url a URL to an RSS Feed
     * @return array
-	*/
-	function fetchRSS($rss_url) {
+    */
+    function fetchRSS($rss_url) {
 
         // Sanity Check
         if (!$this->cache_dir || !is_dir($this->cache_dir) && !mkdir($this->cache_dir, 0777, true)) {
@@ -695,15 +695,15 @@ class suxRSS extends DOMDocument {
 
         }
 
-		return $result;
-	}
+        return $result;
+    }
 
 
-	/**
-	* Delete an RSS cache
+    /**
+    * Delete an RSS cache
     *
     * @param string $rss_url a URL to an RSS Feed
-	*/
+    */
     private function deleteCache($rss_url) {
 
         // Canonicalize Url
@@ -716,21 +716,21 @@ class suxRSS extends DOMDocument {
     }
 
 
-	/**
-	* Modification of preg_match(); return trimed field with index 1 from
+    /**
+    * Modification of preg_match(); return trimed field with index 1 from
     * 'classic' preg_match() array output
     *
     * @param string $pattern regular expression
     * @param string $subject subject
     * @return string
-	*/
-	private function myPregMatch($pattern, $subject) {
+    */
+    private function myPregMatch($pattern, $subject) {
 
         $out = array();
-		preg_match($pattern, $subject, $out);
+        preg_match($pattern, $subject, $out);
 
         // if there is NO result, return empty string
-		if(!isset($out[1])) return '';
+        if(!isset($out[1])) return '';
 
         // Otherwise, there is some result... process it and return it
         if ($this->CDATA == 'content') {
@@ -746,23 +746,23 @@ class suxRSS extends DOMDocument {
         // Return result
         return trim($out[1]);
 
-	}
+    }
 
 
-	/**
-	* Modification of preg_match_all(), see myPregMatch()
+    /**
+    * Modification of preg_match_all(), see myPregMatch()
     *
     * @param string $pattern regular expression
     * @param string $subject subject
     * @return string
-	*/
-	private function myPregMatchAll($pattern, $subject) {
+    */
+    private function myPregMatchAll($pattern, $subject) {
 
         $out = array();
-		preg_match_all($pattern, $subject, $out);
+        preg_match_all($pattern, $subject, $out);
 
-		// if there is NO result, return empty string
-		if(!isset($out[1])) return '';
+        // if there is NO result, return empty string
+        if(!isset($out[1])) return '';
 
         // Otherwise, there is some result... process it and return it
         $concat = '';
@@ -787,37 +787,37 @@ class suxRSS extends DOMDocument {
         // Return result
         return trim($concat);
 
-	}
+    }
 
 
-	/**
-	* Convert to UTF-8
+    /**
+    * Convert to UTF-8
     *
     * @param string $text
     * @return string
-	*/
-	private function convertToUTF8($text) {
+    */
+    private function convertToUTF8($text) {
 
-		if (function_exists('iconv')) {
-			$text = @iconv($this->rsscp, 'UTF-8//TRANSLIT', $text);
-		}
-		else {
-			$text = @mb_convert_encoding($text, 'UTF-8', $this->rsscp);
-		}
+        if (function_exists('iconv')) {
+            $text = @iconv($this->rsscp, 'UTF-8//TRANSLIT', $text);
+        }
+        else {
+            $text = @mb_convert_encoding($text, 'UTF-8', $this->rsscp);
+        }
 
-		return $text;
-	}
+        return $text;
+    }
 
 
-	/**
-	* Load and parse RSS file
+    /**
+    * Load and parse RSS file
     *
     * @global string $CONFIG['TIMEZONE']
     * @param string $rss_url
     * @param int $timestamp unix timestamp
     * @return array|false
-	*/
-	private function parse($rss_url, $timestamp = null) {
+    */
+    private function parse($rss_url, $timestamp = null) {
 
         // Sanity check
         if (!filter_var($rss_url, FILTER_VALIDATE_URL)) return false;
@@ -849,7 +849,7 @@ class suxRSS extends DOMDocument {
         // Backtrack_limit is too restrictive for complex feeds, boost it
         // --------------------------------------------------------------------
 
-        ini_set('pcre.backtrack_limit', 250000);
+        ini_set('pcre.backtrack_limit', 500000);
 
         // --------------------------------------------------------------------
         // Parse
@@ -878,15 +878,15 @@ class suxRSS extends DOMDocument {
 
         if ($rss_content) {
 
-			// Parse document encoding
-			$result['encoding'] = $this->myPregMatch("'encoding=[\'\"](.*?)[\'\"]'si", $rss_content);
+            // Parse document encoding
+            $result['encoding'] = $this->myPregMatch("'encoding=[\'\"](.*?)[\'\"]'si", $rss_content);
 
-			if ($result['encoding'] != '') {
+            if ($result['encoding'] != '') {
                 // if document codepage is specified, use it
                 // This is used in myPregMatch()
                 $this->rsscp = $result['encoding'];
             }
-			else {
+            else {
                 // otherwise use UTF-8
                 // This is used in myPregMatch()
                 $this->rsscp = 'UTF-8';
@@ -901,7 +901,7 @@ class suxRSS extends DOMDocument {
             $is_atom = false;
             $out_channel = array();
 
-			preg_match("'<channel.*?>(.*?)</channel>'si", $rss_content, $out_channel);
+            preg_match("'<channel.*?>(.*?)</channel>'si", $rss_content, $out_channel);
             if (!count($out_channel)) {
                 // Maybe this is an Atom feed? Parse FEED info
                 preg_match("'<feed.*?>(.*?)</feed>'si", $rss_content, $out_channel);
@@ -909,7 +909,7 @@ class suxRSS extends DOMDocument {
                 else return false; // This isn't an RSS/Atom feed, abort
             }
 
-			foreach($this->channeltags as $channeltag) {
+            foreach($this->channeltags as $channeltag) {
 
                 if ($is_atom && isset($this->channeltags_atom[$channeltag])) {
                     // Atom specific tag
@@ -923,7 +923,7 @@ class suxRSS extends DOMDocument {
                         $temp = $this->myPregMatch("'<{$this->channeltags_atom[$channeltag]}.*?>(.*?)</{$this->channeltags_atom[$channeltag]}>'si", @$out_channel[1]);
                     }
                 }
-				else {
+                else {
                     if ($is_atom && $channeltag == 'link') {
                         // Yet more Atom tom-fuckery
                         $temp = $this->myPregMatch('#<link[\s]+[^>]*?href[\s]?=[\s"\']+(.*?)["\']+.*?/>#si', @$out_channel[1]);
@@ -934,57 +934,57 @@ class suxRSS extends DOMDocument {
                     }
                 }
 
-				if (!empty($temp)) $result[$channeltag] = $temp; // Set only if not empty
-			}
+                if (!empty($temp)) $result[$channeltag] = $temp; // Set only if not empty
+            }
 
 
-			// If date_format is specified and lastBuildDate is valid
-			if ($this->date_format != '' && isset($result['lastBuildDate']) && ($timestamp = strtotime($result['lastBuildDate'])) !== -1) {
+            // If date_format is specified and lastBuildDate is valid
+            if ($this->date_format != '' && isset($result['lastBuildDate']) && ($timestamp = strtotime($result['lastBuildDate'])) !== -1) {
                 // convert lastBuildDate to specified date format
                 $result['lastBuildDate'] = date($this->date_format, $timestamp);
-			}
+            }
 
             // ---------------------------------------------------------------
-			// Parse TEXTINPUT info
+            // Parse TEXTINPUT info
             // ---------------------------------------------------------------
 
             $out_textinfo = array();
-			preg_match("'<textinput(|[^>]*[^/])>(.*?)</textinput>'si", $rss_content, $out_textinfo);
+            preg_match("'<textinput(|[^>]*[^/])>(.*?)</textinput>'si", $rss_content, $out_textinfo);
 
             // This a little strange regexp means:
             // Look for tag <textinput> with or without any attributes, but skip truncated version <textinput /> (it's not beggining tag)
-			if (isset($out_textinfo[2])) {
-				foreach($this->textinputtags as $textinputtag) {
-					$temp = $this->myPregMatch("'<$textinputtag.*?>(.*?)</$textinputtag>'si", $out_textinfo[2]);
-					if (!empty($temp)) $result['textinput_'.$textinputtag] = $temp; // Set only if not empty
-				}
-			}
+            if (isset($out_textinfo[2])) {
+                foreach($this->textinputtags as $textinputtag) {
+                    $temp = $this->myPregMatch("'<$textinputtag.*?>(.*?)</$textinputtag>'si", $out_textinfo[2]);
+                    if (!empty($temp)) $result['textinput_'.$textinputtag] = $temp; // Set only if not empty
+                }
+            }
 
             // ---------------------------------------------------------------
-			// Parse IMAGE info
+            // Parse IMAGE info
             // ---------------------------------------------------------------
 
             $out_imageinfo = array();
-			preg_match("'<image.*?>(.*?)</image>'si", $rss_content, $out_imageinfo);
-			if (isset($out_imageinfo[1])) {
-				foreach($this->imagetags as $imagetag) {
-					$temp = $this->myPregMatch("'<$imagetag.*?>(.*?)</$imagetag>'si", $out_imageinfo[1]);
-					if (!empty($temp)) $result['image_'.$imagetag] = $temp; // Set only if not empty
-				}
-			}
+            preg_match("'<image.*?>(.*?)</image>'si", $rss_content, $out_imageinfo);
+            if (isset($out_imageinfo[1])) {
+                foreach($this->imagetags as $imagetag) {
+                    $temp = $this->myPregMatch("'<$imagetag.*?>(.*?)</$imagetag>'si", $out_imageinfo[1]);
+                    if (!empty($temp)) $result['image_'.$imagetag] = $temp; // Set only if not empty
+                }
+            }
 
             // ---------------------------------------------------------------
-			// Parse ITEMS
+            // Parse ITEMS
             // ---------------------------------------------------------------
 
             $items = array();
             if ($is_atom) preg_match_all("'<entry(| .*?)>(.*?)</entry>'si", $rss_content, $items); // Atom
             else preg_match_all("'<item(| .*?)>(.*?)</item>'si", $rss_content, $items); // RSS
             $rss_items = $items[2];
-			$i = 0;
-			$result['items'] = array(); // create array even if there are no items
+            $i = 0;
+            $result['items'] = array(); // create array even if there are no items
 
-			foreach($rss_items as $rss_item) if ($i < $this->items_limit || $this->items_limit == 0) {
+            foreach($rss_items as $rss_item) if ($i < $this->items_limit || $this->items_limit == 0) {
 
                 // ---------------------------------------------------------------
                 // Go through each $itemtags and collect the data
@@ -1076,32 +1076,32 @@ class suxRSS extends DOMDocument {
                 // Item counter
                 $i++;
 
-			}
+            }
 
             // Don't trust data from external website, sanitize everything
             array_walk_recursive($result, array($this, 'sanitizeByReference'));
 
-			$result['items_count'] = $i;
+            $result['items_count'] = $i;
             // new dBug($result);
             // exit;
-			return $result;
+            return $result;
 
-		}
-		else {
+        }
+        else {
             // Error in opening return False
-			return false;
-		}
-	}
+            return false;
+        }
+    }
 
 
     /**
-	* array_walk_recursive wrapper to sanitizeHtml()
+    * array_walk_recursive wrapper to sanitizeHtml()
     *
     * array_walk needs to be working with the actual values of the array,
     * so the parameter of funcname is specified as a reference (i.e. &)
     *
     * @param string &$value
-	*/
+    */
     private function sanitizeByReference(&$value) {
 
         // Reverse htmlentities, we want usable html
