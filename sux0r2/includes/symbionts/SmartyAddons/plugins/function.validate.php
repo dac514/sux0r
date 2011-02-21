@@ -27,7 +27,7 @@
 
 function smarty_function_validate($params, &$smarty) {
 
-    $_init_params = $smarty->get_template_vars('validate_init');
+    $_init_params = $smarty->getTemplateVars('validate_init');
 
     if(isset($_init_params)) {
         $params = array_merge($_init_params, $params);
@@ -35,8 +35,10 @@ function smarty_function_validate($params, &$smarty) {
     
     static $_halt = array();
     static $_is_init = null;
-    static $_form = 'default';
+    static $_form = null;
 
+    $_form = SmartyValidate::$form;
+ 
     if(isset($params['form']))
     {
        if($params['form'] != $_form)
