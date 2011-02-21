@@ -1,612 +1,190 @@
-<HTML
-><HEAD
-><TITLE
->{mailto}</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Custom Functions"
-HREF="language.custom.functions.html"><LINK
-REL="PREVIOUS"
-TITLE="{html_table}"
-HREF="language.function.html.table.html"><LINK
-REL="NEXT"
-TITLE="{math}"
-HREF="language.function.math.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="language.function.html.table.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 8. Custom Functions</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="language.function.math.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="language.function.mailto"
-></A
->{mailto}</H1
-><P
->&#13;   <TT
-CLASS="varname"
->{mailto}</TT
-> automates the creation of a <TT
-CLASS="literal"
->mailto:</TT
->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{mailto}</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="language.custom.functions.html" title="Chapter 8. Custom Functions">
+<link rel="prev" href="language.function.html.table.html" title="{html_table}">
+<link rel="next" href="language.function.math.html" title="{math}">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">{mailto}</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="language.function.html.table.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 8. Custom Functions</th>
+<td width="20%" align="right"> <a accesskey="n" href="language.function.math.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="{mailto}">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="language.function.mailto"></a>{mailto}</h2></div></div></div>
+<p>
+   <code class="varname">{mailto}</code> automates the creation of a <code class="literal">mailto:</code>
    anchor links and optionally encodes them. Encoding emails makes it more
    difficult for web spiders to lift email addresses off of a site.
-  <DIV
-CLASS="note"
-><BLOCKQUOTE
-CLASS="note"
-><P
-><B
->Technical Note: </B
->
+  </p>
+<div class="note" title="Technical Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Technical Note</h3>
+<p>
    Javascript is probably the most thorough form of
    encoding, although you can use hex encoding too.
-  </P
-></BLOCKQUOTE
-></DIV
->
- </P
-><DIV
-CLASS="informaltable"
-><A
-NAME="AEN4083"
-></A
-><P
-></P
-><TABLE
-BORDER="1"
-CLASS="CALSTABLE"
-><THEAD
-><TR
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Attribute Name</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Type</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Required</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Default</TH
-><TH
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->Description</TH
-></TR
-></THEAD
-><TBODY
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->address</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Yes</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->n/a</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->The e-mail address</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->text</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->n/a</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->The text to display, default is the e-mail address</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->encode</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->none</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->How to encode the e-mail. Can be one of <TT
-CLASS="literal"
->none</TT
->,
-      <TT
-CLASS="literal"
->hex</TT
->, <TT
-CLASS="literal"
->javascript</TT
->
-      or <TT
-CLASS="literal"
->javascript_charcode</TT
->.</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->cc</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->n/a</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->Email addresses to carbon copy, separate entries by a comma.
-     </TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->bcc</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->n/a</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->Email addresses to blind carbon copy,
-      separate entries by a comma</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->subject</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->n/a</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->Email subject</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->newsgroups</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->n/a</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->Newsgroups to post to, separate entries by a comma.</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->followupto</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->n/a</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->Addresses to follow up to, separate entries by a comma.</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->extra</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->n/a</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->Any extra information you want passed to the link, such
-      as style sheet classes</TD
-></TR
-></TBODY
-></TABLE
-><P
-></P
-></DIV
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN4165"
-></A
-><P
-><B
->Example 8-23. {mailto} example lines followed by the result</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{mailto address="me@example.com"}
-&#60;a href="mailto:me@example.com" &#62;me@example.com&#60;/a&#62;
+  </p>
+</div>
+<p>
+ </p>
+<div class="informaltable"><table border="1">
+<colgroup>
+<col align="center">
+<col align="center">
+<col align="center">
+<col align="center">
+<col>
+</colgroup>
+<thead><tr>
+<th align="center">Attribute Name</th>
+<th align="center">Type</th>
+<th align="center">Required</th>
+<th align="center">Default</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="center">address</td>
+<td align="center">string</td>
+<td align="center">Yes</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>The e-mail address</td>
+</tr>
+<tr>
+<td align="center">text</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>The text to display, default is the e-mail address</td>
+</tr>
+<tr>
+<td align="center">encode</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>none</em></span></td>
+<td>How to encode the e-mail. Can be one of <code class="literal">none</code>,
+      <code class="literal">hex</code>, <code class="literal">javascript</code>
+      or <code class="literal">javascript_charcode</code>.</td>
+</tr>
+<tr>
+<td align="center">cc</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>Email addresses to carbon copy, separate entries by a comma.
+     </td>
+</tr>
+<tr>
+<td align="center">bcc</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>Email addresses to blind carbon copy,
+      separate entries by a comma</td>
+</tr>
+<tr>
+<td align="center">subject</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>Email subject</td>
+</tr>
+<tr>
+<td align="center">newsgroups</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>Newsgroups to post to, separate entries by a comma.</td>
+</tr>
+<tr>
+<td align="center">followupto</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>Addresses to follow up to, separate entries by a comma.</td>
+</tr>
+<tr>
+<td align="center">extra</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>Any extra information you want passed to the link, such
+      as style sheet classes</td>
+</tr>
+</tbody>
+</table></div>
+<div class="example">
+<a name="id3082969"></a><p class="title"><b>Example 8.20. {mailto} example lines followed by the result</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+{mailto address="me@example.com"}
+&lt;a href="mailto:me@example.com" &gt;me@example.com&lt;/a&gt;
 
 {mailto address="me@example.com" text="send me some mail"}
-&#60;a href="mailto:me@example.com" &#62;send me some mail&#60;/a&#62;
+&lt;a href="mailto:me@example.com" &gt;send me some mail&lt;/a&gt;
 
 {mailto address="me@example.com" encode="javascript"}
-&#60;script type="text/javascript" language="javascript"&#62;
+&lt;script type="text/javascript" language="javascript"&gt;
    eval(unescape('%64%6f% ... snipped ...%61%3e%27%29%3b'))
-&#60;/script&#62;
+&lt;/script&gt;
 
 {mailto address="me@example.com" encode="hex"}
-&#60;a href="mailto:%6d%65.. snipped..3%6f%6d"&#62;&#38;#x6d;&#38;..snipped...#x6f;&#38;#x6d;&#60;/a&#62;
+&lt;a href="mailto:%6d%65.. snipped..3%6f%6d"&gt;&amp;#x6d;&amp;..snipped...#x6f;&amp;#x6d;&lt;/a&gt;
 
 {mailto address="me@example.com" subject="Hello to you!"}
-&#60;a href="mailto:me@example.com?subject=Hello%20to%20you%21" &#62;me@example.com&#60;/a&#62;
+&lt;a href="mailto:me@example.com?subject=Hello%20to%20you%21" &gt;me@example.com&lt;/a&gt;
 
 {mailto address="me@example.com" cc="you@example.com,they@example.com"}
-&#60;a href="mailto:me@example.com?cc=you@example.com%2Cthey@example.com" &#62;me@example.com&#60;/a&#62;
+&lt;a href="mailto:me@example.com?cc=you@example.com%2Cthey@example.com" &gt;me@example.com&lt;/a&gt;
 
 {mailto address="me@example.com" extra='class="email"'}
-&#60;a href="mailto:me@example.com" class="email"&#62;me@example.com&#60;/a&#62;
+&lt;a href="mailto:me@example.com" class="email"&gt;me@example.com&lt;/a&gt;
 
 {mailto address="me@example.com" encode="javascript_charcode"}
-&#60;script type="text/javascript" language="javascript"&#62;
-    &#60;!--
+&lt;script type="text/javascript" language="javascript"&gt;
+    &lt;!--
     {document.write(String.fromCharCode(60,97, ... snipped ....60,47,97,62))}
-    //--&#62;
-&#60;/script&#62;</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13; See also
- <A
-HREF="language.modifier.escape.html"
-><TT
-CLASS="varname"
->escape</TT
-></A
->,
- <A
-HREF="language.function.textformat.html"
-><TT
-CLASS="varname"
->{textformat}</TT
-></A
->
+    //--&gt;
+&lt;/script&gt;
+
+</pre></div>
+</div>
+<br class="example-break"><p>
+ See also
+ <a class="link" href="language.modifier.escape.html" title="escape"><code class="varname">escape</code></a>,
+ <a class="link" href="language.function.textformat.html" title="{textformat}"><code class="varname">{textformat}</code></a>
  and
- <A
-HREF="tips.obfuscating.email.html"
->obfuscating email addresses</A
->.
- </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="language.function.html.table.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="language.function.math.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->{html_table}</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="language.custom.functions.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->{math}</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+ <a class="link" href="tips.obfuscating.email.html" title="Obfuscating E-mail Addresses">obfuscating email addresses</a>.
+ </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="language.function.html.table.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="language.custom.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="language.function.math.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">{html_table} </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> {math}</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

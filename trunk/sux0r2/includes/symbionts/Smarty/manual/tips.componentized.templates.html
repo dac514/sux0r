@@ -1,268 +1,115 @@
-<HTML
-><HEAD
-><TITLE
->Componentized Templates</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Tips & Tricks"
-HREF="tips.html"><LINK
-REL="PREVIOUS"
-TITLE="WAP/WML"
-HREF="tips.wap.html"><LINK
-REL="NEXT"
-TITLE="Obfuscating E-mail Addresses"
-HREF="tips.obfuscating.email.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="tips.wap.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 18. Tips &#38; Tricks</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="tips.obfuscating.email.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="tips.componentized.templates"
-></A
->Componentized Templates</H1
-><P
->&#13;    Traditionally, programming templates into your applications goes as
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Componentized Templates</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="tips.html" title="Chapter 18. Tips &amp; Tricks">
+<link rel="prev" href="tips.wap.html" title="WAP/WML">
+<link rel="next" href="tips.obfuscating.email.html" title="Obfuscating E-mail Addresses">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Componentized Templates</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="tips.wap.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 18. Tips &amp; Tricks</th>
+<td width="20%" align="right"> <a accesskey="n" href="tips.obfuscating.email.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="Componentized Templates">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="tips.componentized.templates"></a>Componentized Templates</h2></div></div></div>
+<p>
+    Traditionally, programming templates into your applications goes as
     follows: First, you accumulate your variables within your PHP
     application, (maybe with database queries.) Then, you instantiate your
-    Smarty object, <A
-HREF="api.assign.html"
-><TT
-CLASS="varname"
->assign()</TT
-></A
->
-    the variables and <A
-HREF="api.display.html"
-><TT
-CLASS="varname"
->display()</TT
->
-    </A
-> the template. So lets
+    Smarty object, <a class="link" href="api.assign.html" title="assign()"><code class="varname">assign()</code></a>
+    the variables and <a class="link" href="api.display.html" title="display()"><code class="varname">display()</code>
+    </a> the template. So lets
     say for example we have a stock ticker on our template. We would
     collect the stock data in our application, then assign these variables
     in the template and display it. Now wouldn't it be nice if you could
     add this stock ticker to any application by merely including the
     template, and not worry about fetching the data up front?
-   </P
-><P
->&#13;    You can do this by writing a custom plugin for fetching the content and
+   </p>
+<p>
+    You can do this by writing a custom plugin for fetching the content and
     assigning it to a template variable.
-   </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN7784"
-></A
-><P
-><B
->Example 18-7. componentized template</B
-></P
-><P
->&#13;      <TT
-CLASS="filename"
->function.load_ticker.php</TT
-> -
+   </p>
+<div class="example">
+<a name="id3140370"></a><p class="title"><b>Example 18.7. componentized template</b></p>
+<div class="example-contents">
+<p>
+      <code class="filename">function.load_ticker.php</code> -
       drop file in
-      <A
-HREF="variable.plugins.dir.html"
->&#13;      <TT
-CLASS="parameter"
-><I
->$plugins directory</I
-></TT
-></A
->
-    </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /><br /></span><span style="color: #FF8000">//&nbsp;setup&nbsp;our&nbsp;function&nbsp;for&nbsp;fetching&nbsp;stock&nbsp;data<br /></span><span style="color: #007700">function&nbsp;</span><span style="color: #0000BB">fetch_ticker</span><span style="color: #007700">(</span><span style="color: #0000BB">$symbol</span><span style="color: #007700">)<br />{<br />&nbsp;&nbsp;&nbsp;</span><span style="color: #FF8000">//&nbsp;put&nbsp;logic&nbsp;here&nbsp;that&nbsp;fetches&nbsp;$ticker_info<br />&nbsp;&nbsp;&nbsp;//&nbsp;from&nbsp;some&nbsp;ticker&nbsp;resource<br />&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">return&nbsp;</span><span style="color: #0000BB">$ticker_info</span><span style="color: #007700">;<br />}<br /><br />function&nbsp;</span><span style="color: #0000BB">smarty_function_load_ticker</span><span style="color: #007700">(</span><span style="color: #0000BB">$params</span><span style="color: #007700">,&nbsp;&amp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">)<br />{<br />&nbsp;&nbsp;&nbsp;</span><span style="color: #FF8000">//&nbsp;call&nbsp;the&nbsp;function<br />&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$ticker_info&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">fetch_ticker</span><span style="color: #007700">(</span><span style="color: #0000BB">$params</span><span style="color: #007700">[</span><span style="color: #DD0000">'symbol'</span><span style="color: #007700">]);<br /><br />&nbsp;&nbsp;&nbsp;</span><span style="color: #FF8000">//&nbsp;assign&nbsp;template&nbsp;variable<br />&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #0000BB">$params</span><span style="color: #007700">[</span><span style="color: #DD0000">'assign'</span><span style="color: #007700">],&nbsp;</span><span style="color: #0000BB">$ticker_info</span><span style="color: #007700">);<br />}<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-><P
->&#13;          <TT
-CLASS="filename"
->index.tpl</TT
->
-    </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{load_ticker symbol='SMARTY' assign='ticker'}
+      <a class="link" href="variable.plugins.dir.html" title="$plugins_dir">
+      <em class="parameter"><code>$plugins directory</code></em></a>
+    </p>
+<pre class="programlisting">
 
-Stock Name: {$ticker.name} Stock Price: {$ticker.price}</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13;    See also
-    <A
-HREF="language.function.include.php.html"
-><TT
-CLASS="varname"
->{include_php}</TT
-></A
->,
-    <A
-HREF="language.function.include.html"
-><TT
-CLASS="varname"
->{include}</TT
-></A
->
+&lt;?php
+
+// setup our function for fetching stock data
+function fetch_ticker($symbol)
+{
+   // put logic here that fetches $ticker_info
+   // from some ticker resource
+   return $ticker_info;
+}
+
+function smarty_function_load_ticker($params, $smarty)
+{
+   // call the function
+   $ticker_info = fetch_ticker($params['symbol']);
+
+   // assign template variable
+   $smarty-&gt;assign($params['assign'], $ticker_info);
+}
+?&gt;
+
+    </pre>
+<p>
+          <code class="filename">index.tpl</code>
+    </p>
+<pre class="programlisting">
+
+{load_ticker symbol='SMARTY' assign='ticker'}
+
+Stock Name: {$ticker.name} Stock Price: {$ticker.price}
+
+    </pre>
+</div>
+</div>
+<br class="example-break"><p>
+    See also
+    <a class="link" href="language.function.include.php.html" title="{include_php}"><code class="varname">{include_php}</code></a>,
+    <a class="link" href="language.function.include.html" title="{include}"><code class="varname">{include}</code></a>
     and
-    <A
-HREF="language.function.php.html"
-><TT
-CLASS="varname"
->{php}</TT
-></A
->.
-   </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="tips.wap.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="tips.obfuscating.email.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->WAP/WML</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="tips.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->Obfuscating E-mail Addresses</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+    <a class="link" href="language.function.php.html" title="{php}"><code class="varname">{php}</code></a>.
+   </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="tips.wap.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="tips.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="tips.obfuscating.email.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">WAP/WML </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Obfuscating E-mail Addresses</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

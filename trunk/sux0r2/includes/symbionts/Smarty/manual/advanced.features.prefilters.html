@@ -1,245 +1,93 @@
-<HTML
-><HEAD
-><TITLE
->Prefilters</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Advanced Features"
-HREF="advanced.features.html"><LINK
-REL="PREVIOUS"
-TITLE="Advanced Features"
-HREF="advanced.features.html"><LINK
-REL="NEXT"
-TITLE="Postfilters"
-HREF="advanced.features.postfilters.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="advanced.features.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 15. Advanced Features</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="advanced.features.postfilters.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="advanced.features.prefilters"
-></A
->Prefilters</H1
-><P
->&#13;  Template prefilters are PHP functions that your templates are ran through
-  <SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->before they are compiled</I
-></SPAN
->. This is good for preprocessing
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Prefilters</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="advanced.features.html" title="Chapter 15. Advanced Features">
+<link rel="prev" href="advanced.features.static.classes.html" title="Static Classes">
+<link rel="next" href="advanced.features.postfilters.html" title="Postfilters">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Prefilters</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="advanced.features.static.classes.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 15. Advanced Features</th>
+<td width="20%" align="right"> <a accesskey="n" href="advanced.features.postfilters.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="Prefilters">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="advanced.features.prefilters"></a>Prefilters</h2></div></div></div>
+<p>
+  Template prefilters are PHP functions that your templates are ran through
+  <span class="emphasis"><em>before they are compiled</em></span>. This is good for preprocessing
   your templates to remove unwanted comments, keeping an eye on what people are
   putting in their templates, etc.
- </P
-><P
->&#13;  Prefilters can be either <A
-HREF="api.register.prefilter.html"
->registered</A
-> or loaded from
-  the <A
-HREF="variable.plugins.dir.html"
->plugins directory</A
->
-  by using <A
-HREF="api.load.filter.html"
-><TT
-CLASS="varname"
->load_filter()</TT
-></A
-> function or
-  by setting the <A
-HREF="variable.autoload.filters.html"
->&#13;  <TT
-CLASS="parameter"
-><I
->$autoload_filters</I
-></TT
-></A
-> variable.
- </P
-><P
->&#13;  Smarty will pass the template source code as the first argument, and
+ </p>
+<p>
+  Prefilters can be either <a class="link" href="api.register.filter.html" title="registerFilter()">registered</a> or loaded from
+  the <a class="link" href="variable.plugins.dir.html" title="$plugins_dir">plugins directory</a>
+  by using <a class="link" href="api.load.filter.html" title="loadFilter()"><code class="varname">loadFilter()</code></a> function or
+  by setting the <a class="link" href="variable.autoload.filters.html" title="$autoload_filters">
+  <em class="parameter"><code>$autoload_filters</code></em></a> variable.
+ </p>
+<p>
+  Smarty will pass the template source code as the first argument, and
   expect the function to return the resulting template source code.
- </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN7020"
-></A
-><P
-><B
->Example 15-2. Using a template prefilter</B
-></P
-><P
->&#13;     This will remove all the html comments in the template source.
-  </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #FF8000">//&nbsp;put&nbsp;this&nbsp;in&nbsp;your&nbsp;application<br /></span><span style="color: #007700">function&nbsp;</span><span style="color: #0000BB">remove_dw_comments</span><span style="color: #007700">(</span><span style="color: #0000BB">$tpl_source</span><span style="color: #007700">,&nbsp;&amp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">)<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span style="color: #0000BB">preg_replace</span><span style="color: #007700">(</span><span style="color: #DD0000">"/&lt;!--#.*--&gt;/U"</span><span style="color: #007700">,</span><span style="color: #DD0000">''</span><span style="color: #007700">,</span><span style="color: #0000BB">$tpl_source</span><span style="color: #007700">);<br />}<br /><br /></span><span style="color: #FF8000">//&nbsp;register&nbsp;the&nbsp;prefilter<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">register_prefilter</span><span style="color: #007700">(</span><span style="color: #DD0000">'remove_dw_comments'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->See also
- <A
-HREF="api.register.prefilter.html"
-><TT
-CLASS="varname"
->register_prefilter()</TT
-></A
->,
- <A
-HREF="advanced.features.postfilters.html"
->postfilters</A
->
+ </p>
+<div class="example">
+<a name="id3126952"></a><p class="title"><b>Example 15.13. Using a template prefilter</b></p>
+<div class="example-contents">
+<p>
+     This will remove all the html comments in the template source.
+  </p>
+<pre class="programlisting">
+
+&lt;?php
+// put this in your application
+function remove_dw_comments($tpl_source, $smarty)
+{
+    return preg_replace("/&lt;!--#.*--&gt;/U",'',$tpl_source);
+}
+
+// register the prefilter
+$smarty-&gt;registerFilter('pre','remove_dw_comments');
+$smarty-&gt;display('index.tpl');
+?&gt;
+
+  </pre>
+</div>
+</div>
+<br class="example-break"><p>See also
+ <a class="link" href="api.register.filter.html" title="registerFilter()"><code class="varname">registerFilter()</code></a>,
+ <a class="link" href="advanced.features.postfilters.html" title="Postfilters">postfilters</a>
  and
- <A
-HREF="api.load.filter.html"
-><TT
-CLASS="varname"
->load_filter()</TT
-></A
->.
- </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="advanced.features.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="advanced.features.postfilters.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->Advanced Features</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="advanced.features.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->Postfilters</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+ <a class="link" href="api.load.filter.html" title="loadFilter()"><code class="varname">loadFilter()</code></a>.
+ </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="advanced.features.static.classes.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="advanced.features.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="advanced.features.postfilters.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Static Classes </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Postfilters</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

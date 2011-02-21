@@ -1,197 +1,63 @@
-<HTML
-><HEAD
-><TITLE
->$request_use_auto_globals</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Smarty Class Variables"
-HREF="api.variables.html"><LINK
-REL="PREVIOUS"
-TITLE="$request_vars_order"
-HREF="variable.request.vars.order.html"><LINK
-REL="NEXT"
-TITLE="$error_reporting"
-HREF="variable.error.reporting.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="variable.request.vars.order.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 12. Smarty Class Variables</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="variable.error.reporting.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="variable.request.use.auto.globals"
-></A
->$request_use_auto_globals</H1
-><P
->&#13;   Specifies if Smarty should use PHP's <TT
-CLASS="literal"
->$HTTP_*_VARS[]</TT
->
-   when <TT
-CLASS="constant"
->FALSE</TT
-> or <TT
-CLASS="literal"
->$_*[]</TT
-> when
-   <TT
-CLASS="constant"
->TRUE</TT
-> which is the default value. This affects templates that make use of
-   <A
-HREF="language.variables.smarty.html"
->&#13;   <TT
-CLASS="literal"
->{$smarty.request.*}, {$smarty.get.*}</TT
-></A
-> etc.
-      </P
-><DIV
-CLASS="note"
-><BLOCKQUOTE
-CLASS="note"
-><P
-><B
->Caution: </B
->
-       If you set <TT
-CLASS="literal"
->$request_use_auto_globals to true</TT
->,
-       <A
-HREF="variable.request.vars.order.html"
->&#13;       <TT
-CLASS="parameter"
-><I
->$request_vars_order</I
-></TT
-></A
-> has no effect but
-       PHP's configuration value  <TT
-CLASS="literal"
->gpc_order</TT
-> is used.
-   </P
-></BLOCKQUOTE
-></DIV
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="variable.request.vars.order.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="variable.error.reporting.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->$request_vars_order</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="api.variables.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->$error_reporting</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>$request_use_auto_globals</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="api.variables.html" title="Chapter 12. Smarty Class Variables">
+<link rel="prev" href="variable.request.vars.order.html" title="$request_vars_order">
+<link rel="next" href="variable.compile.id.html" title="$compile_id">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">$request_use_auto_globals</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="variable.request.vars.order.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 12. Smarty Class Variables</th>
+<td width="20%" align="right"> <a accesskey="n" href="variable.compile.id.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="$request_use_auto_globals">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="variable.request.use.auto.globals"></a>$request_use_auto_globals</h2></div></div></div>
+<p>
+   Specifies if Smarty should use PHP's <code class="literal">$HTTP_*_VARS[]</code>
+   when <code class="constant">FALSE</code> or <code class="literal">$_*[]</code> when
+   <code class="constant">TRUE</code> which is the default value. This affects templates that make use of
+   <a class="link" href="language.variables.smarty.html" title="{$smarty} reserved variable">
+   <code class="literal">{$smarty.request.*}, {$smarty.get.*}</code></a> etc.
+      </p>
+<div class="note" title="Caution" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Caution</h3>
+<p>
+       If you set <code class="literal">$request_use_auto_globals to true</code>,
+       <a class="link" href="variable.request.vars.order.html" title="$request_vars_order">
+       <em class="parameter"><code>$request_vars_order</code></em></a> has no effect but
+       PHP's configuration value  <code class="literal">gpc_order</code> is used.
+   </p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="variable.request.vars.order.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="api.variables.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="variable.compile.id.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">$request_vars_order </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> $compile_id</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

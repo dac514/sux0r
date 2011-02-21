@@ -1,657 +1,238 @@
-<HTML
-><HEAD
-><TITLE
->{html_radios}</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Custom Functions"
-HREF="language.custom.functions.html"><LINK
-REL="PREVIOUS"
-TITLE="{html_options}"
-HREF="language.function.html.options.html"><LINK
-REL="NEXT"
-TITLE="{html_select_date}"
-HREF="language.function.html.select.date.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="language.function.html.options.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 8. Custom Functions</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="language.function.html.select.date.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="language.function.html.radios"
-></A
->{html_radios}</H1
-><P
->&#13;   <TT
-CLASS="varname"
->{html_radios}</TT
-> is a
-   <A
-HREF="language.custom.functions.html"
->custom function</A
->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{html_radios}</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="language.custom.functions.html" title="Chapter 8. Custom Functions">
+<link rel="prev" href="language.function.html.options.html" title="{html_options}">
+<link rel="next" href="language.function.html.select.date.html" title="{html_select_date}">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">{html_radios}</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="language.function.html.options.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 8. Custom Functions</th>
+<td width="20%" align="right"> <a accesskey="n" href="language.function.html.select.date.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="{html_radios}">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="language.function.html.radios"></a>{html_radios}</h2></div></div></div>
+<p>
+   <code class="varname">{html_radios}</code> is a
+   <a class="link" href="language.custom.functions.html" title="Chapter 8. Custom Functions">custom function</a>
    that creates a HTML radio button group.
    It also takes care of which item is selected by default as well.
-   </P
-><DIV
-CLASS="informaltable"
-><A
-NAME="AEN3495"
-></A
-><P
-></P
-><TABLE
-BORDER="1"
-CLASS="CALSTABLE"
-><THEAD
-><TR
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Attribute Name</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Type</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Required</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Default</TH
-><TH
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->Description</TH
-></TR
-></THEAD
-><TBODY
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->name</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->radio</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->Name of radio list</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->values</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->array</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Yes, unless using options attribute</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->n/a</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->An array of values for radio buttons</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->output</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->array</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Yes, unless using options attribute</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->n/a</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->An array of output for radio buttons</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->selected</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->empty</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->The selected radio element</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->options</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->associative array</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Yes, unless using values and output</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->n/a</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->An associative array of values and output</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->separator</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->empty</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->String of text to separate each radio item</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->assign</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->empty</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->Assign radio tags to an array instead of output</TD
-></TR
-></TBODY
-></TABLE
-><P
-></P
-></DIV
-><P
-></P
-><UL
-><LI
-><P
->&#13;    Required attributes are <TT
-CLASS="parameter"
-><I
->values</I
-></TT
-> and
-    <TT
-CLASS="parameter"
-><I
->output</I
-></TT
->,  unless you use <TT
-CLASS="parameter"
-><I
->options</I
-></TT
->
+   </p>
+<div class="informaltable"><table border="1">
+<colgroup>
+<col align="center">
+<col align="center">
+<col align="center">
+<col align="center">
+<col>
+</colgroup>
+<thead><tr>
+<th align="center">Attribute Name</th>
+<th align="center">Type</th>
+<th align="center">Required</th>
+<th align="center">Default</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="center">name</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>radio</em></span></td>
+<td>Name of radio list</td>
+</tr>
+<tr>
+<td align="center">values</td>
+<td align="center">array</td>
+<td align="center">Yes, unless using options attribute</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>An array of values for radio buttons</td>
+</tr>
+<tr>
+<td align="center">output</td>
+<td align="center">array</td>
+<td align="center">Yes, unless using options attribute</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>An array of output for radio buttons</td>
+</tr>
+<tr>
+<td align="center">selected</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>empty</em></span></td>
+<td>The selected radio element</td>
+</tr>
+<tr>
+<td align="center">options</td>
+<td align="center">associative array</td>
+<td align="center">Yes, unless using values and output</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>An associative array of values and output</td>
+</tr>
+<tr>
+<td align="center">separator</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>empty</em></span></td>
+<td>String of text to separate each radio item</td>
+</tr>
+<tr>
+<td align="center">assign</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>empty</em></span></td>
+<td>Assign radio tags to an array instead of output</td>
+</tr>
+</tbody>
+</table></div>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><p>
+    Required attributes are <em class="parameter"><code>values</code></em> and
+    <em class="parameter"><code>output</code></em>,  unless you use <em class="parameter"><code>options</code></em>
     instead.
-    </P
-></LI
-><LI
-><P
->&#13;    All output is XHTML compliant.
-    </P
-></LI
-><LI
-><P
->&#13;      All parameters that are not in the list above are output as
+    </p></li>
+<li class="listitem"><p>
+    All output is XHTML compliant.
+    </p></li>
+<li class="listitem"><p>
+      All parameters that are not in the list above are output as
       name/value-pairs inside each of the created
-      <TT
-CLASS="literal"
->&#60;input&#62;</TT
->-tags.
-     </P
-></LI
-></UL
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN3570"
-></A
-><P
-><B
->Example 8-16. {html_radios} first example</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /><br />$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'cust_ids'</span><span style="color: #007700">,&nbsp;array(</span><span style="color: #0000BB">1000</span><span style="color: #007700">,</span><span style="color: #0000BB">1001</span><span style="color: #007700">,</span><span style="color: #0000BB">1002</span><span style="color: #007700">,</span><span style="color: #0000BB">1003</span><span style="color: #007700">));<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'cust_names'</span><span style="color: #007700">,&nbsp;array(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'Joe&nbsp;Schmoe'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'Jack&nbsp;Smith'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'Jane&nbsp;Johnson'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'Charlie&nbsp;Brown'</span><span style="color: #007700">)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'customer_id'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">1001</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-><P
->&#13;   Where template is:
-  </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{html_radios name='id' values=$cust_ids output=$cust_names
-       selected=$customer_id separator='&#60;br /&#62;'}</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN3575"
-></A
-><P
-><B
->Example 8-17. {html_radios} second example</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /><br />$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'cust_radios'</span><span style="color: #007700">,&nbsp;array(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">1000&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Joe&nbsp;Schmoe'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">1001&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Jack&nbsp;Smith'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">1002&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Jane&nbsp;Johnson'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">1003&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Charlie&nbsp;Brown'</span><span style="color: #007700">));<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'customer_id'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">1001</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-><P
->&#13;   Where template is:
-  </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{html_radios name='id' options=$cust_radios
-     selected=$customer_id separator='&#60;br /&#62;'}</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;   Both examples will output:
-  </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="screen"
->&#60;label for="id_1000"&#62;
-&#60;input type="radio" name="id" value="1000" id="id_1000" /&#62;Joe Schmoe&#60;/label&#62;&#60;br /&#62;
-&#60;label for="id_1001"&#62;&#60;input type="radio" name="id" value="1001" id="id_1001" checked="checked" /&#62;Jack Smith&#60;/label&#62;&#60;br /&#62;
-&#60;label for="id_1002"&#62;&#60;input type="radio" name="id" value="1002" id="id_1002" /&#62;Jane Johnson&#60;/label&#62;&#60;br /&#62;
-&#60;label for="id_1003"&#62;&#60;input type="radio" name="id" value="1003" id="id_1003" /&#62;Charlie Brown&#60;/label&#62;&#60;br /&#62;</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN3582"
-></A
-><P
-><B
->Example 8-18. {html_radios} - Database example (eg PEAR or ADODB):</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /><br />$sql&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'select&nbsp;type_id,&nbsp;types&nbsp;from&nbsp;contact_types&nbsp;order&nbsp;by&nbsp;type'</span><span style="color: #007700">;<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'contact_types'</span><span style="color: #007700">,</span><span style="color: #0000BB">$db</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getAssoc</span><span style="color: #007700">(</span><span style="color: #0000BB">$sql</span><span style="color: #007700">));<br /><br /></span><span style="color: #0000BB">$sql&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'select&nbsp;contact_id,&nbsp;name,&nbsp;email,&nbsp;contact_type_id&nbsp;'<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">.</span><span style="color: #DD0000">'from&nbsp;contacts&nbsp;where&nbsp;contact_id='</span><span style="color: #007700">.</span><span style="color: #0000BB">$contact_id</span><span style="color: #007700">;<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'contact'</span><span style="color: #007700">,</span><span style="color: #0000BB">$db</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getRow</span><span style="color: #007700">(</span><span style="color: #0000BB">$sql</span><span style="color: #007700">));<br /><br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-><P
->&#13;   The variable assigned from the database above
+      <code class="literal">&lt;input&gt;</code>-tags.
+     </p></li>
+</ul></div>
+<div class="example">
+<a name="id3077952"></a><p class="title"><b>Example 8.13. {html_radios} first example</b></p>
+<div class="example-contents">
+<pre class="programlisting">
+
+&lt;?php
+
+$smarty-&gt;assign('cust_ids', array(1000,1001,1002,1003));
+$smarty-&gt;assign('cust_names', array(
+                              'Joe Schmoe',
+                              'Jack Smith',
+                              'Jane Johnson',
+                              'Charlie Brown')
+                              );
+$smarty-&gt;assign('customer_id', 1001);
+
+?&gt;
+
+  </pre>
+<p>
+   Where template is:
+  </p>
+<pre class="programlisting">
+
+{html_radios name='id' values=$cust_ids output=$cust_names
+       selected=$customer_id separator='&lt;br /&gt;'}
+   
+  </pre>
+</div>
+</div>
+<br class="example-break"><div class="example">
+<a name="id3077988"></a><p class="title"><b>Example 8.14. {html_radios} second example</b></p>
+<div class="example-contents">
+<pre class="programlisting">
+
+&lt;?php
+
+$smarty-&gt;assign('cust_radios', array(
+                               1000 =&gt; 'Joe Schmoe',
+                               1001 =&gt; 'Jack Smith',
+                               1002 =&gt; 'Jane Johnson',
+                               1003 =&gt; 'Charlie Brown'));
+$smarty-&gt;assign('customer_id', 1001);
+
+?&gt;
+
+  </pre>
+<p>
+   Where template is:
+  </p>
+<pre class="programlisting">
+
+{html_radios name='id' options=$cust_radios
+     selected=$customer_id separator='&lt;br /&gt;'}
+
+  </pre>
+<p>
+   Both examples will output:
+  </p>
+<pre class="screen">
+
+&lt;label for="id_1000"&gt;
+&lt;input type="radio" name="id" value="1000" id="id_1000" /&gt;Joe Schmoe&lt;/label&gt;&lt;br /&gt;
+&lt;label for="id_1001"&gt;&lt;input type="radio" name="id" value="1001" id="id_1001" checked="checked" /&gt;Jack Smith&lt;/label&gt;&lt;br /&gt;
+&lt;label for="id_1002"&gt;&lt;input type="radio" name="id" value="1002" id="id_1002" /&gt;Jane Johnson&lt;/label&gt;&lt;br /&gt;
+&lt;label for="id_1003"&gt;&lt;input type="radio" name="id" value="1003" id="id_1003" /&gt;Charlie Brown&lt;/label&gt;&lt;br /&gt;
+
+  </pre>
+</div>
+</div>
+<br class="example-break"><div class="example">
+<a name="id3078039"></a><p class="title"><b>Example 8.15. {html_radios} - Database example (eg PEAR or ADODB):</b></p>
+<div class="example-contents">
+<pre class="programlisting">
+
+&lt;?php
+
+$sql = 'select type_id, types from contact_types order by type';
+$smarty-&gt;assign('contact_types',$db-&gt;getAssoc($sql));
+
+$sql = 'select contact_id, name, email, contact_type_id '
+        .'from contacts where contact_id='.$contact_id;
+$smarty-&gt;assign('contact',$db-&gt;getRow($sql));
+
+?&gt;
+
+  </pre>
+<p>
+   The variable assigned from the database above
    would be output with the template:
-  </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{html_radios name='contact_type_id' options=$contact_types
-     selected=$contact.contact_type_id separator='&#60;br /&#62;'}</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13;  See also <A
-HREF="language.function.html.checkboxes.html"
-><TT
-CLASS="varname"
->{html_checkboxes}</TT
-></A
->
-  and <A
-HREF="language.function.html.options.html"
-><TT
-CLASS="varname"
->{html_options}</TT
-></A
->
- </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="language.function.html.options.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="language.function.html.select.date.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->{html_options}</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="language.custom.functions.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->{html_select_date}</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+  </p>
+<pre class="programlisting">
+
+{html_radios name='contact_type_id' options=$contact_types
+     selected=$contact.contact_type_id separator='&lt;br /&gt;'}
+
+  </pre>
+</div>
+</div>
+<br class="example-break"><p>
+  See also <a class="link" href="language.function.html.checkboxes.html" title="{html_checkboxes}"><code class="varname">{html_checkboxes}</code></a>
+  and <a class="link" href="language.function.html.options.html" title="{html_options}"><code class="varname">{html_options}</code></a>
+ </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="language.function.html.options.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="language.custom.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="language.function.html.select.date.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">{html_options} </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> {html_select_date}</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

@@ -1,246 +1,85 @@
-<HTML
-><HEAD
-><TITLE
->Constants</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Smarty For Programmers"
-HREF="smarty.for.programmers.html"><LINK
-REL="PREVIOUS"
-TITLE="Smarty For Programmers"
-HREF="smarty.for.programmers.html"><LINK
-REL="NEXT"
-TITLE="SMARTY_CORE_DIR"
-HREF="constant.smarty.core.dir.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="chapter"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="smarty.for.programmers.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
-></TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="constant.smarty.core.dir.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="chapter"
-><H1
-><A
-NAME="smarty.constants"
-></A
->Chapter 11. Constants</H1
-><DIV
-CLASS="TOC"
-><DL
-><DT
-><B
->Table of Contents</B
-></DT
-><DT
-><A
-HREF="smarty.constants.html#constant.smarty.dir"
->SMARTY_DIR</A
-></DT
-><DT
-><A
-HREF="constant.smarty.core.dir.html"
->SMARTY_CORE_DIR</A
-></DT
-></DL
-></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="constant.smarty.dir"
-></A
->SMARTY_DIR</H1
-><P
->&#13;     This is the <SPAN
-CLASS="bold"
-><B
-CLASS="emphasis"
->full system path</B
-></SPAN
->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Chapter 11. Constants</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="smarty.for.programmers.html" title="Part III. Smarty For Programmers">
+<link rel="prev" href="smarty.for.programmers.html" title="Part III. Smarty For Programmers">
+<link rel="next" href="api.variables.html" title="Chapter 12. Smarty Class Variables">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Chapter 11. Constants</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="smarty.for.programmers.html">Prev</a> </td>
+<th width="60%" align="center">Part III. Smarty For Programmers</th>
+<td width="20%" align="right"> <a accesskey="n" href="api.variables.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="chapter" title="Chapter 11. Constants">
+<div class="titlepage"><div><div><h2 class="title">
+<a name="smarty.constants"></a>Chapter 11. Constants</h2></div></div></div>
+<div class="toc">
+<p><b>Table of Contents</b></p>
+<dl><dt><span class="sect1"><a href="smarty.constants.html#constant.smarty.dir">SMARTY_DIR</a></span></dt></dl>
+</div>
+<div class="sect1" title="SMARTY_DIR">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="constant.smarty.dir"></a>SMARTY_DIR</h2></div></div></div>
+<p>
+     This is the <span class="bold"><strong>full system path</strong></span>
      to the location of the Smarty
      class files. If this is not defined in your script, then Smarty will attempt to
      determine the appropriate value automatically. If defined, the path
-     <SPAN
-CLASS="bold"
-><B
-CLASS="emphasis"
->must end with a trailing slash/</B
-></SPAN
->.
-    </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN4866"
-></A
-><P
-><B
->Example 11-1. SMARTY_DIR</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #FF8000">//&nbsp;set&nbsp;path&nbsp;to&nbsp;Smarty&nbsp;directory&nbsp;*nix&nbsp;style<br /></span><span style="color: #0000BB">define</span><span style="color: #007700">(</span><span style="color: #DD0000">'SMARTY_DIR'</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'/usr/local/lib/php/Smarty-v.e.r/libs/'</span><span style="color: #007700">);<br /><br /></span><span style="color: #FF8000">//&nbsp;path&nbsp;to&nbsp;Smarty&nbsp;windows&nbsp;style<br /></span><span style="color: #0000BB">define</span><span style="color: #007700">(</span><span style="color: #DD0000">'SMARTY_DIR'</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'c:/webroot/libs/Smarty-v.e.r/libs/'</span><span style="color: #007700">);<br /><br /></span><span style="color: #FF8000">//&nbsp;include&nbsp;the&nbsp;smarty&nbsp;class,&nbsp;note&nbsp;'S'&nbsp;is&nbsp;upper&nbsp;case<br /></span><span style="color: #007700">require_once(</span><span style="color: #0000BB">SMARTY_DIR&nbsp;</span><span style="color: #007700">.&nbsp;</span><span style="color: #DD0000">'Smarty.class.php'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13;  See also
-  <A
-HREF="language.variables.smarty.html#language.variables.smarty.const"
-><TT
-CLASS="parameter"
-><I
->$smarty.const</I
-></TT
-></A
->
+     <span class="bold"><strong>must end with a trailing slash/</strong></span>.
+    </p>
+<div class="example">
+<a name="id3091072"></a><p class="title"><b>Example 11.1. SMARTY_DIR</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+// set path to Smarty directory *nix style
+define('SMARTY_DIR', '/usr/local/lib/php/Smarty-v.e.r/libs/');
+
+// path to Smarty windows style
+define('SMARTY_DIR', 'c:/webroot/libs/Smarty-v.e.r/libs/');
+
+// include the smarty class, note 'S' is upper case
+require_once(SMARTY_DIR . 'Smarty.class.php');
+?&gt;
+
+     </pre></div>
+</div>
+<br class="example-break"><p>
+  See also
+  <a class="link" href="language.variables.smarty.html#language.variables.smarty.const" title="{$smarty.const}"><em class="parameter"><code>$smarty.const</code></em></a>
   and
-  <A
-HREF="variable.php.handling.html"
-><TT
-CLASS="parameter"
-><I
->$php_handling constants</I
-></TT
-></A
->
-  </P
-></DIV
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="smarty.for.programmers.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="constant.smarty.core.dir.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->Smarty For Programmers</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="smarty.for.programmers.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->SMARTY_CORE_DIR</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+  <a class="link" href="variable.php.handling.html" title="$php_handling"><em class="parameter"><code>$php_handling constants</code></em></a>
+  </p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="smarty.for.programmers.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="smarty.for.programmers.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="api.variables.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Part III. Smarty For Programmers </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Chapter 12. Smarty Class Variables</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

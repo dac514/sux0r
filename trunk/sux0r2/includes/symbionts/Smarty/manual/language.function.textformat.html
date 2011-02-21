@@ -1,443 +1,121 @@
-<HTML
-><HEAD
-><TITLE
->{textformat}</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Custom Functions"
-HREF="language.custom.functions.html"><LINK
-REL="PREVIOUS"
-TITLE="{popup_init}"
-HREF="language.function.popup.init.html"><LINK
-REL="NEXT"
-TITLE="Config Files"
-HREF="config.files.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="language.function.popup.init.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 8. Custom Functions</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="config.files.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="language.function.textformat"
-></A
->{textformat}</H1
-><P
->&#13;   <TT
-CLASS="varname"
->{textformat}</TT
-> is a
-   <A
-HREF="plugins.block.functions.html"
->block function</A
->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{textformat}</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="language.custom.functions.html" title="Chapter 8. Custom Functions">
+<link rel="prev" href="language.function.math.html" title="{math}">
+<link rel="next" href="config.files.html" title="Chapter 9. Config Files">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">{textformat}</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="language.function.math.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 8. Custom Functions</th>
+<td width="20%" align="right"> <a accesskey="n" href="config.files.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="{textformat}">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="language.function.textformat"></a>{textformat}</h2></div></div></div>
+<p>
+   <code class="varname">{textformat}</code> is a
+   <a class="link" href="plugins.block.functions.html" title="Block Functions">block function</a>
    used to format text. It basically  cleans up spaces and special characters,
    and formats paragraphs by  wrapping at a boundary and indenting lines.
-  </P
-><P
->&#13;   You can set the parameters explicitly, or use a preset style.
-   Currently <SPAN
-CLASS="QUOTE"
->"email"</SPAN
-> is the only available style.
- </P
-><DIV
-CLASS="informaltable"
-><A
-NAME="AEN4691"
-></A
-><P
-></P
-><TABLE
-BORDER="1"
-CLASS="CALSTABLE"
-><THEAD
-><TR
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Attribute Name</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Type</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Required</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Default</TH
-><TH
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->Description</TH
-></TR
-></THEAD
-><TBODY
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->style</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->n/a</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->Preset style</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->indent</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->number</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->0</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->The number of chars to indent every line</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->indent_first</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->number</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->0</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->The number of chars to indent the first line</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->indent_char</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->(single space)</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->The character (or string of chars) to indent with</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->wrap</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->number</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->80</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->How many characters to wrap each line to</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->wrap_char</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->\n</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->The character (or string of chars) to break each line with</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->wrap_cut</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->boolean</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
-><TT
-CLASS="constant"
->FALSE</TT
-></I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->If <TT
-CLASS="constant"
->TRUE</TT
->, wrap will break the line at the exact
-      character instead of at a word boundary</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->assign</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->n/a</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->The template variable the output will be assigned to</TD
-></TR
-></TBODY
-></TABLE
-><P
-></P
-></DIV
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN4764"
-></A
-><P
-><B
->Example 8-27. {textformat}</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{textformat wrap=40}
+  </p>
+<p>
+   You can set the parameters explicitly, or use a preset style.
+   Currently <span class="quote">“<span class="quote">email</span>”</span> is the only available style.
+ </p>
+<div class="informaltable"><table border="1">
+<colgroup>
+<col align="center">
+<col align="center">
+<col align="center">
+<col align="center">
+<col>
+</colgroup>
+<thead><tr>
+<th align="center">Attribute Name</th>
+<th align="center">Type</th>
+<th align="center">Required</th>
+<th align="center">Default</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="center">style</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>Preset style</td>
+</tr>
+<tr>
+<td align="center">indent</td>
+<td align="center">number</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>0</em></span></td>
+<td>The number of chars to indent every line</td>
+</tr>
+<tr>
+<td align="center">indent_first</td>
+<td align="center">number</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>0</em></span></td>
+<td>The number of chars to indent the first line</td>
+</tr>
+<tr>
+<td align="center">indent_char</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>(single space)</em></span></td>
+<td>The character (or string of chars) to indent with</td>
+</tr>
+<tr>
+<td align="center">wrap</td>
+<td align="center">number</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>80</em></span></td>
+<td>How many characters to wrap each line to</td>
+</tr>
+<tr>
+<td align="center">wrap_char</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>\n</em></span></td>
+<td>The character (or string of chars) to break each line with</td>
+</tr>
+<tr>
+<td align="center">wrap_cut</td>
+<td align="center">boolean</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em><code class="constant">FALSE</code></em></span></td>
+<td>If <code class="constant">TRUE</code>, wrap will break the line at the exact
+      character instead of at a word boundary</td>
+</tr>
+<tr>
+<td align="center">assign</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>The template variable the output will be assigned to</td>
+</tr>
+</tbody>
+</table></div>
+<div class="example">
+<a name="id3084640"></a><p class="title"><b>Example 8.22. {textformat}</b></p>
+<div class="example-contents">
+<pre class="programlisting">
+
+   {textformat wrap=40}
 
    This is foo.
    This is foo.
@@ -456,22 +134,17 @@ CLASS="programlisting"
    bar foo bar foo     foo.
    bar foo bar foo     foo.
 
-   {/textformat}</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;   The above example will output:
-  </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="screen"
->This is foo. This is foo. This is foo.
+   {/textformat}
+
+
+  </pre>
+<p>
+   The above example will output:
+  </p>
+<pre class="screen">
+
+
+   This is foo. This is foo. This is foo.
    This is foo. This is foo. This is foo.
 
    This is bar.
@@ -479,19 +152,12 @@ CLASS="screen"
    bar foo bar foo foo. bar foo bar foo
    foo. bar foo bar foo foo. bar foo bar
    foo foo. bar foo bar foo foo. bar foo
-   bar foo foo. bar foo bar foo foo.</PRE
-></TD
-></TR
-></TABLE
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{textformat wrap=40 indent=4}
+   bar foo foo. bar foo bar foo foo.
+
+  </pre>
+<pre class="programlisting">
+
+   {textformat wrap=40 indent=4}
 
    This is foo.
    This is foo.
@@ -510,22 +176,17 @@ CLASS="programlisting"
    bar foo bar foo     foo.
    bar foo bar foo     foo.
 
-   {/textformat}</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;   The above example will output:
-  </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="screen"
->This is foo. This is foo. This is
+   {/textformat}
+
+
+  </pre>
+<p>
+   The above example will output:
+  </p>
+<pre class="screen">
+
+
+   This is foo. This is foo. This is
    foo. This is foo. This is foo. This
    is foo.
 
@@ -535,19 +196,12 @@ CLASS="screen"
    foo. bar foo bar foo foo. bar foo
    bar foo foo. bar foo bar foo foo.
    bar foo bar foo foo. bar foo bar
-   foo foo.</PRE
-></TD
-></TR
-></TABLE
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{textformat wrap=40 indent=4 indent_first=4}
+   foo foo.
+
+  </pre>
+<pre class="programlisting">
+
+   {textformat wrap=40 indent=4 indent_first=4}
 
    This is foo.
    This is foo.
@@ -566,22 +220,16 @@ CLASS="programlisting"
    bar foo bar foo     foo.
    bar foo bar foo     foo.
 
-   {/textformat}</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;   The above example will output:
-  </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="screen"
->This is foo. This is foo. This
+   {/textformat}
+
+  </pre>
+<p>
+   The above example will output:
+  </p>
+<pre class="screen">
+
+
+   This is foo. This is foo. This
    is foo. This is foo. This is foo.
    This is foo.
 
@@ -591,19 +239,12 @@ CLASS="screen"
    foo foo. bar foo bar foo foo. bar
    foo bar foo foo. bar foo bar foo
    foo. bar foo bar foo foo. bar foo
-   bar foo foo.</PRE
-></TD
-></TR
-></TABLE
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{textformat style="email"}
+   bar foo foo.
+
+  </pre>
+<pre class="programlisting">
+
+   {textformat style="email"}
 
    This is foo.
    This is foo.
@@ -622,117 +263,52 @@ CLASS="programlisting"
    bar foo bar foo     foo.
    bar foo bar foo     foo.
 
-   {/textformat}</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;   The above example will output:
-  </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="screen"
->This is foo. This is foo. This is foo. This is foo. This is foo. This is
+   {/textformat}
+
+
+  </pre>
+<p>
+   The above example will output:
+  </p>
+<pre class="screen">
+
+
+   This is foo. This is foo. This is foo. This is foo. This is foo. This is
    foo.
 
    This is bar.
 
    bar foo bar foo foo. bar foo bar foo foo. bar foo bar foo foo. bar foo
    bar foo foo. bar foo bar foo foo. bar foo bar foo foo. bar foo bar foo
-   foo.</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13;  See also
-  <A
-HREF="language.function.strip.html"
-><TT
-CLASS="varname"
->{strip}</TT
-></A
->
+   foo.
+
+
+  </pre>
+</div>
+</div>
+<br class="example-break"><p>
+  See also
+  <a class="link" href="language.function.strip.html" title="{strip}"><code class="varname">{strip}</code></a>
   and
-  <A
-HREF="language.modifier.wordwrap.html"
-><TT
-CLASS="varname"
->wordwrap</TT
-></A
->.
- </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="language.function.popup.init.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="config.files.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->{popup_init}</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="language.custom.functions.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->Config Files</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+  <a class="link" href="language.modifier.wordwrap.html" title="wordwrap"><code class="varname">wordwrap</code></a>.
+ </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="language.function.math.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="language.custom.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="config.files.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">{math} </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Chapter 9. Config Files</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

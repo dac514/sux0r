@@ -1,217 +1,76 @@
-<HTML
-><HEAD
-><TITLE
->$compile_dir</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Smarty Class Variables"
-HREF="api.variables.html"><LINK
-REL="PREVIOUS"
-TITLE="Smarty Class Variables"
-HREF="api.variables.html"><LINK
-REL="NEXT"
-TITLE="$config_dir"
-HREF="variable.config.dir.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="api.variables.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 12. Smarty Class Variables</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="variable.config.dir.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="variable.compile.dir"
-></A
->$compile_dir</H1
-><P
->&#13;     This is the name of the directory where compiled templates are
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>$compile_dir</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="api.variables.html" title="Chapter 12. Smarty Class Variables">
+<link rel="prev" href="api.variables.html" title="Chapter 12. Smarty Class Variables">
+<link rel="next" href="variable.config.dir.html" title="$config_dir">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">$compile_dir</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="api.variables.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 12. Smarty Class Variables</th>
+<td width="20%" align="right"> <a accesskey="n" href="variable.config.dir.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="$compile_dir">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="variable.compile.dir"></a>$compile_dir</h2></div></div></div>
+<p>
+     This is the name of the directory where compiled templates are
      located. By default this is
-     <TT
-CLASS="filename"
->./templates_c</TT
->, meaning that Smarty
-     will look for the <TT
-CLASS="filename"
->templates_c/</TT
->
+     <code class="filename">./templates_c</code>, meaning that Smarty
+     will look for the <code class="filename">templates_c/</code>
       directory in the same directory as
-     the executing php script. <SPAN
-CLASS="bold"
-><B
-CLASS="emphasis"
->This directory must
-     be writeable by the web server</B
-></SPAN
->,
-     <A
-HREF="installing.smarty.basic.html"
->see install</A
-> for more info.
-    </P
-><DIV
-CLASS="note"
-><BLOCKQUOTE
-CLASS="note"
-><P
-><B
->Technical Note: </B
->
+     the executing php script. <span class="bold"><strong>This directory must
+     be writeable by the web server</strong></span>,
+     <a class="link" href="installing.smarty.basic.html" title="Basic Installation">see install</a> for more info.
+    </p>
+<div class="note" title="Technical Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Technical Note</h3>
+<p>
        This setting must be either a relative or
        absolute path. include_path is not used for writing files.
-      </P
-></BLOCKQUOTE
-></DIV
-><DIV
-CLASS="note"
-><BLOCKQUOTE
-CLASS="note"
-><P
-><B
->Technical Note: </B
->
+      </p>
+</div>
+<div class="note" title="Technical Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Technical Note</h3>
+<p>
        It is not recommended to put this directory under
        the web server document root.
-      </P
-></BLOCKQUOTE
-></DIV
-><P
->&#13;     See also <A
-HREF="variable.compile.id.html"
-><TT
-CLASS="parameter"
-><I
->$compile_id</I
-></TT
-></A
->
+      </p>
+</div>
+<p>
+     See also <a class="link" href="variable.compile.id.html" title="$compile_id"><em class="parameter"><code>$compile_id</code></em></a>
      and
-     <A
-HREF="variable.use.sub.dirs.html"
-><TT
-CLASS="parameter"
-><I
->$use_sub_dirs</I
-></TT
-></A
->.
-     </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="api.variables.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="variable.config.dir.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->Smarty Class Variables</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="api.variables.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->$config_dir</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+     <a class="link" href="variable.use.sub.dirs.html" title="$use_sub_dirs"><em class="parameter"><code>$use_sub_dirs</code></em></a>.
+     </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="api.variables.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="api.variables.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="variable.config.dir.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Chapter 12. Smarty Class Variables </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> $config_dir</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

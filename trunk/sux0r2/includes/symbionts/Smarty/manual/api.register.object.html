@@ -1,186 +1,70 @@
-<HTML
-><HEAD
-><TITLE
->register_object()</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Smarty Class Methods()"
-HREF="api.functions.html"><LINK
-REL="PREVIOUS"
-TITLE="register_modifier()"
-HREF="api.register.modifier.html"><LINK
-REL="NEXT"
-TITLE="register_outputfilter()"
-HREF="api.register.outputfilter.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="refentry"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="api.register.modifier.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
-></TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="api.register.outputfilter.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><H1
-><A
-NAME="api.register.object"
-></A
->register_object()</H1
-><DIV
-CLASS="refnamediv"
-><A
-NAME="AEN6336"
-></A
->register_object()&nbsp;--&nbsp;register an object for use in the templates</DIV
-><DIV
-CLASS="refsect1"
-><A
-NAME="AEN6339"
-></A
-><H2
->Description</H2
->void <B
-CLASS="methodname"
->register_object</B
-> ( string object_name, object object, array allowed_methods_properties, boolean format, array block_methods)<BR
-></BR
-><P
->&#13;   See the
-   <A
-HREF="advanced.features.html#advanced.features.objects"
->objects section</A
->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>registerObject()</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="api.functions.html" title="Chapter 13. Smarty Class Methods()">
+<link rel="prev" href="api.register.plugin.html" title="registerPlugin()">
+<link rel="next" href="api.register.resource.html" title="registerResource()">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">registerObject()</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="api.register.plugin.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 13. Smarty Class Methods()</th>
+<td width="20%" align="right"> <a accesskey="n" href="api.register.resource.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="refentry" title="registerObject()">
+<a name="api.register.object"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2>Name</h2>
+<p>registerObject() — register an object for use in the templates</p>
+</div>
+<div class="refsect1" title="Description">
+<a name="id3111989"></a><h2>Description</h2>
+<code class="methodsynopsis"><span class="type">void </span><span class="methodname">registerObject</span>(<span class="methodparam"><span class="type">string </span><span class="parameter">object_name</span></span>,<br>                    <span class="methodparam"><span class="type">object </span><span class="parameter">object</span></span>,<br>                    <span class="methodparam"><span class="type">array </span><span class="parameter">allowed_methods_properties</span></span>,<br>                    <span class="methodparam"><span class="type">boolean </span><span class="parameter">format</span></span>,<br>                    <span class="methodparam"><span class="type">array </span><span class="parameter">block_methods</span></span>);</code><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+    When you register/assign objects to templates, be sure that all properties and methods accessed from the template are for presentation purposes only. It is very easy to inject application logic through objects, and this leads to poor designs that are difficult to manage. See the Best Practices section of the Smarty website.
+  </p>
+</div>
+<p>
+   See the
+   <a class="link" href="advanced.features.objects.html" title="Objects">objects section</a>
    for more information.
-  </P
-><P
->&#13;   See also
-   <A
-HREF="api.get.registered.object.html"
-><TT
-CLASS="varname"
->get_registered_object()</TT
-></A
->,
+  </p>
+<p>
+   See also
+   <a class="link" href="api.get.registered.object.html" title="getRegisteredObject()"><code class="varname">getRegisteredObject()</code></a>,
    and
-   <A
-HREF="api.unregister.object.html"
-><TT
-CLASS="varname"
->unregister_object()</TT
-></A
->.
-  </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="api.register.modifier.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="api.register.outputfilter.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->register_modifier()</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="api.functions.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->register_outputfilter()</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+   <a class="link" href="api.unregister.object.html" title="unregisterObject()"><code class="varname">unregisterObject()</code></a>.
+  </p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="api.register.plugin.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="api.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="api.register.resource.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">registerPlugin() </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> registerResource()</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

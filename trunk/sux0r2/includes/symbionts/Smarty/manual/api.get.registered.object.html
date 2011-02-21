@@ -1,227 +1,83 @@
-<HTML
-><HEAD
-><TITLE
->get_registered_object()</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Smarty Class Methods()"
-HREF="api.functions.html"><LINK
-REL="PREVIOUS"
-TITLE="get_config_vars()"
-HREF="api.get.config.vars.html"><LINK
-REL="NEXT"
-TITLE="get_template_vars()"
-HREF="api.get.template.vars.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="refentry"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="api.get.config.vars.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
-></TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="api.get.template.vars.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><H1
-><A
-NAME="api.get.registered.object"
-></A
->get_registered_object()</H1
-><DIV
-CLASS="refnamediv"
-><A
-NAME="AEN5985"
-></A
->get_registered_object()&nbsp;--&nbsp;returns a reference to a registered object</DIV
-><DIV
-CLASS="refsect1"
-><A
-NAME="AEN5988"
-></A
-><H2
->Description</H2
->array <B
-CLASS="methodname"
->get_registered_object</B
-> ( string object_name)<BR
-></BR
-><P
->&#13;   This is useful
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>getRegisteredObject()</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="api.functions.html" title="Chapter 13. Smarty Class Methods()">
+<link rel="prev" href="api.get.config.vars.html" title="getConfigVars()">
+<link rel="next" href="api.get.tags.html" title="getTags()">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">getRegisteredObject()</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="api.get.config.vars.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 13. Smarty Class Methods()</th>
+<td width="20%" align="right"> <a accesskey="n" href="api.get.tags.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="refentry" title="getRegisteredObject()">
+<a name="api.get.registered.object"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2>Name</h2>
+<p>getRegisteredObject() — returns a reference to a registered object</p>
+</div>
+<div class="refsect1" title="Description">
+<a name="id3108749"></a><h2>Description</h2>
+<code class="methodsynopsis"><span class="type">array </span><span class="methodname">getRegisteredObject</span>(<span class="methodparam"><span class="type">string </span><span class="parameter">object_name</span></span>);</code><p>
+   This is useful
    from within a custom function when you need direct access to a
-   <A
-HREF="api.register.object.html"
->registered object</A
->. See the
-   <A
-HREF="advanced.features.html#advanced.features.objects"
->objects</A
-> page for more info.
-  </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN5999"
-></A
-><P
-><B
->Example 13-1. get_registered_object()</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #007700">function&nbsp;</span><span style="color: #0000BB">smarty_block_foo</span><span style="color: #007700">(</span><span style="color: #0000BB">$params</span><span style="color: #007700">,&nbsp;&amp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">)<br />{<br />&nbsp;&nbsp;if&nbsp;(isset(</span><span style="color: #0000BB">$params</span><span style="color: #007700">[</span><span style="color: #DD0000">'object'</span><span style="color: #007700">]))&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #FF8000">//&nbsp;get&nbsp;reference&nbsp;to&nbsp;registered&nbsp;object<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$obj_ref&nbsp;</span><span style="color: #007700">=&nbsp;&amp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">get_registered_object</span><span style="color: #007700">(</span><span style="color: #0000BB">$params</span><span style="color: #007700">[</span><span style="color: #DD0000">'object'</span><span style="color: #007700">]);<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #FF8000">//&nbsp;use&nbsp;$obj_ref&nbsp;is&nbsp;now&nbsp;a&nbsp;reference&nbsp;to&nbsp;the&nbsp;object<br />&nbsp;&nbsp;</span><span style="color: #007700">}<br />}<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13;  See also
-  <A
-HREF="api.register.object.html"
-><TT
-CLASS="varname"
->register_object()</TT
-></A
->,
-  <A
-HREF="api.unregister.object.html"
-><TT
-CLASS="varname"
->unregister_object()</TT
-></A
->
+   <a class="link" href="api.register.object.html" title="registerObject()">registered object</a>. See the
+   <a class="link" href="advanced.features.objects.html" title="Objects">objects</a> page for more info.
+  </p>
+<div class="example">
+<a name="id3109739"></a><p class="title"><b>Example 13.21. getRegisteredObject()</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+function smarty_block_foo($params, $smarty)
+{
+  if (isset($params['object'])) {
+    // get reference to registered object
+    $obj_ref = $smarty-&gt;getRegisteredObject($params['object']);
+    // use $obj_ref is now a reference to the object
+  }
+}
+?&gt;
+
+   </pre></div>
+</div>
+<br class="example-break"><p>
+  See also
+  <a class="link" href="api.register.object.html" title="registerObject()"><code class="varname">registerObject()</code></a>,
+  <a class="link" href="api.unregister.object.html" title="unregisterObject()"><code class="varname">unregisterObject()</code></a>
   and
-  <A
-HREF="advanced.features.html#advanced.features.objects"
->objects page</A
->
-  </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="api.get.config.vars.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="api.get.template.vars.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->get_config_vars()</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="api.functions.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->get_template_vars()</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+  <a class="link" href="advanced.features.objects.html" title="Objects">objects page</a>
+  </p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="api.get.config.vars.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="api.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="api.get.tags.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">getConfigVars() </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> getTags()</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

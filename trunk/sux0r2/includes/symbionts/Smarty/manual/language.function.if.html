@@ -1,624 +1,172 @@
-<HTML
-><HEAD
-><TITLE
->{if},{elseif},{else}</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Built-in Functions"
-HREF="language.builtin.functions.html"><LINK
-REL="PREVIOUS"
-TITLE="{foreach},{foreachelse}"
-HREF="language.function.foreach.html"><LINK
-REL="NEXT"
-TITLE="{include}"
-HREF="language.function.include.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="language.function.foreach.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 7. Built-in Functions</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="language.function.include.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="language.function.if"
-></A
->{if},{elseif},{else}</H1
-><P
->&#13;  <TT
-CLASS="varname"
->{if}</TT
-> statements in Smarty have much the same flexibility as PHP
-  <A
-HREF="http://php.net/if"
-TARGET="_top"
->if</A
->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{if},{elseif},{else}</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="language.builtin.functions.html" title="Chapter 7. Built-in Functions">
+<link rel="prev" href="language.function.function.html" title="{function}">
+<link rel="next" href="language.function.include.html" title="{include}">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">{if},{elseif},{else}</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="language.function.function.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 7. Built-in Functions</th>
+<td width="20%" align="right"> <a accesskey="n" href="language.function.include.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="{if},{elseif},{else}">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="language.function.if"></a>{if},{elseif},{else}</h2></div></div></div>
+<p>
+  <code class="varname">{if}</code> statements in Smarty have much the same flexibility as PHP
+  <a class="ulink" href="http://php.net/if" target="_top">if</a>
   statements, with a few added features for the template engine.
-  Every <TT
-CLASS="varname"
->{if}</TT
-> must be paired with a matching
-  <TT
-CLASS="varname"
->{/if}</TT
->. <TT
-CLASS="varname"
->{else}</TT
-> and
-  <TT
-CLASS="varname"
->{elseif}</TT
-> are also permitted. All PHP conditionals
+  Every <code class="varname">{if}</code> must be paired with a matching
+  <code class="varname">{/if}</code>. <code class="varname">{else}</code> and
+  <code class="varname">{elseif}</code> are also permitted. All PHP conditionals
   and functions
-  are recognized, such as <SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->||</I
-></SPAN
->, <SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->or</I
-></SPAN
->,
-  <SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->&#38;&#38;</I
-></SPAN
->, <SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->and</I
-></SPAN
->,
-  <SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->is_array()</I
-></SPAN
->, etc.
- </P
-><P
->&#13;  If <A
-HREF="variable.security.html"
-><TT
-CLASS="parameter"
-><I
->$security</I
-></TT
-></A
-> is enabled,
-  only PHP functions from the <SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->IF_FUNCS</I
-></SPAN
-> array from <A
-HREF="variable.security.settings.html"
-><TT
-CLASS="parameter"
-><I
->$security_settings</I
-></TT
-></A
->
-  are allowed.
- </P
-><P
->&#13;  The following is a list of recognized qualifiers, which must be
+  are recognized, such as <span class="emphasis"><em>||</em></span>, <span class="emphasis"><em>or</em></span>,
+  <span class="emphasis"><em>&amp;&amp;</em></span>, <span class="emphasis"><em>and</em></span>,
+  <span class="emphasis"><em>is_array()</em></span>, etc.
+ </p>
+<p>
+  If securty is enabled, only PHP functions from <em class="parameter"><code>$php_functions</code></em> property of the securty policy are allowed. 
+  See the <a class="link" href="advanced.features.html#advanced.features.security" title="Security">Security</a> section for details.
+ </p>
+<p>
+  The following is a list of recognized qualifiers, which must be
   separated from surrounding elements by spaces. Note that items listed
   in [brackets] are optional. PHP equivalents are shown where applicable.
- </P
-><DIV
-CLASS="informaltable"
-><A
-NAME="AEN1954"
-></A
-><P
-></P
-><TABLE
-BORDER="1"
-CLASS="CALSTABLE"
-><THEAD
-><TR
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Qualifier</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Alternates</TH
-><TH
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->Syntax Example</TH
-><TH
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->Meaning</TH
-><TH
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->PHP Equivalent</TH
-></TR
-></THEAD
-><TBODY
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->==</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->eq</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->$a eq $b</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->equals</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->==</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->!=</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->ne, neq</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->$a neq $b</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->not equals</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->!=</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->&#62;</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->gt</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->$a gt $b</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->greater than</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->&#62;</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->&#60;</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->lt</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->$a lt $b</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->less than</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->&#60;</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->&#62;=</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->gte, ge</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->$a ge $b</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->greater than or equal</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->&#62;=</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->&#60;=</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->lte, le</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->$a le $b</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->less than or equal</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->&#60;=</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->===</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->&nbsp;</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->$a === 0</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->check for identity</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->===</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->!</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->not</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->not $a</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->negation (unary)</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->!</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->%</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->mod</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->$a mod $b</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->modulous</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->%</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->is [not] div by</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->&nbsp;</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->$a is not div by 4</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->divisible by</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->$a % $b == 0</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->is [not] even</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->&nbsp;</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->$a is not even</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->[not] an even number (unary)</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->$a % 2 == 0</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->is [not] even by</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->&nbsp;</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->$a is not even by $b</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->grouping level [not] even</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->($a / $b) % 2 == 0</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->is [not] odd</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->&nbsp;</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->$a is not odd</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->[not] an odd number (unary)</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->$a % 2 != 0</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->is [not] odd by</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->&nbsp;</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->$a is not odd by $b</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->[not] an odd grouping</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->($a / $b) % 2 != 0</TD
-></TR
-></TBODY
-></TABLE
-><P
-></P
-></DIV
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN2053"
-></A
-><P
-><B
->Example 7-15. {if} statements</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{if $name eq 'Fred'}
+ </p>
+<div class="informaltable"><table border="1">
+<colgroup>
+<col align="center">
+<col align="center">
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th align="center">Qualifier</th>
+<th align="center">Alternates</th>
+<th>Syntax Example</th>
+<th>Meaning</th>
+<th>PHP Equivalent</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="center">==</td>
+<td align="center">eq</td>
+<td>$a eq $b</td>
+<td>equals</td>
+<td>==</td>
+</tr>
+<tr>
+<td align="center">!=</td>
+<td align="center">ne, neq</td>
+<td>$a neq $b</td>
+<td>not equals</td>
+<td>!=</td>
+</tr>
+<tr>
+<td align="center">&gt;</td>
+<td align="center">gt</td>
+<td>$a gt $b</td>
+<td>greater than</td>
+<td>&gt;</td>
+</tr>
+<tr>
+<td align="center">&lt;</td>
+<td align="center">lt</td>
+<td>$a lt $b</td>
+<td>less than</td>
+<td>&lt;</td>
+</tr>
+<tr>
+<td align="center">&gt;=</td>
+<td align="center">gte, ge</td>
+<td>$a ge $b</td>
+<td>greater than or equal</td>
+<td>&gt;=</td>
+</tr>
+<tr>
+<td align="center">&lt;=</td>
+<td align="center">lte, le</td>
+<td>$a le $b</td>
+<td>less than or equal</td>
+<td>&lt;=</td>
+</tr>
+<tr>
+<td align="center">===</td>
+<td align="center"> </td>
+<td>$a === 0</td>
+<td>check for identity</td>
+<td>===</td>
+</tr>
+<tr>
+<td align="center">!</td>
+<td align="center">not</td>
+<td>not $a</td>
+<td>negation (unary)</td>
+<td>!</td>
+</tr>
+<tr>
+<td align="center">%</td>
+<td align="center">mod</td>
+<td>$a mod $b</td>
+<td>modulous</td>
+<td>%</td>
+</tr>
+<tr>
+<td align="center">is [not] div by</td>
+<td align="center"> </td>
+<td>$a is not div by 4</td>
+<td>divisible by</td>
+<td>$a % $b == 0</td>
+</tr>
+<tr>
+<td align="center">is [not] even</td>
+<td align="center"> </td>
+<td>$a is not even</td>
+<td>[not] an even number (unary)</td>
+<td>$a % 2 == 0</td>
+</tr>
+<tr>
+<td align="center">is [not] even by</td>
+<td align="center"> </td>
+<td>$a is not even by $b</td>
+<td>grouping level [not] even</td>
+<td>($a / $b) % 2 == 0</td>
+</tr>
+<tr>
+<td align="center">is [not] odd</td>
+<td align="center"> </td>
+<td>$a is not odd</td>
+<td>[not] an odd number (unary)</td>
+<td>$a % 2 != 0</td>
+</tr>
+<tr>
+<td align="center">is [not] odd by</td>
+<td align="center"> </td>
+<td>$a is not odd by $b</td>
+<td>[not] an odd grouping</td>
+<td>($a / $b) % 2 != 0</td>
+</tr>
+</tbody>
+</table></div>
+<div class="example">
+<a name="id3052436"></a><p class="title"><b>Example 7.42. {if} statements</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+{if $name eq 'Fred'}
     Welcome Sir.
 {elseif $name eq 'Wilma'}
     Welcome Ma'am.
@@ -638,7 +186,7 @@ CLASS="programlisting"
 
 
 {* parenthesis are allowed *}
-{if ( $amount &#60; 0 or $amount &#62; 1000 ) and $volume &#62;= #minVolAmt#}
+{if ( $amount &lt; 0 or $amount &gt; 1000 ) and $volume &gt;= #minVolAmt#}
    ...
 {/if}
 
@@ -688,118 +236,44 @@ CLASS="programlisting"
 {* 0=even, 1=even, 2=even, 3=odd, 4=odd, 5=odd, etc. *}
 {if $var is even by 3}
    ...
-{/if}</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN2056"
-></A
-><P
-><B
->Example 7-16. {if} with more examples</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{if isset($name) &#38;&#38; $name == 'Blog'}
+{/if}
+
+  </pre></div>
+</div>
+<br class="example-break"><div class="example">
+<a name="id3052448"></a><p class="title"><b>Example 7.43. {if} with more examples</b></p>
+<div class="example-contents"><pre class="programlisting">
+ 
+{if isset($name) &amp;&amp; $name == 'Blog'}
      {* do something *}
 {elseif $name == $foo}
     {* do something *}
 {/if}
 
-{if is_array($foo) &#38;&#38; count($foo) &#62; 0)
+{if is_array($foo) &amp;&amp; count($foo) &gt; 0}
     {* do a foreach loop *}
-{/if}</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="language.function.foreach.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="language.function.include.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->{foreach},{foreachelse}</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="language.builtin.functions.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->{include}</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+{/if}
+  
+</pre></div>
+</div>
+<br class="example-break">
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="language.function.function.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="language.builtin.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="language.function.include.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">{function} </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> {include}</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

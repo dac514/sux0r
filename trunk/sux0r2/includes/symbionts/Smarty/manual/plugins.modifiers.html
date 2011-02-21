@@ -1,280 +1,151 @@
-<HTML
-><HEAD
-><TITLE
->Modifiers</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Extending Smarty With Plugins"
-HREF="plugins.html"><LINK
-REL="PREVIOUS"
-TITLE="Template Functions"
-HREF="plugins.functions.html"><LINK
-REL="NEXT"
-TITLE="Block Functions"
-HREF="plugins.block.functions.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="plugins.functions.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 16. Extending Smarty With Plugins</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="plugins.block.functions.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="plugins.modifiers"
-></A
->Modifiers</H1
-><P
->&#13;     <A
-HREF="language.modifiers.html"
->Modifiers</A
-> are little functions
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Modifiers</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="plugins.html" title="Chapter 16. Extending Smarty With Plugins">
+<link rel="prev" href="plugins.functions.html" title="Template Functions">
+<link rel="next" href="plugins.block.functions.html" title="Block Functions">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Modifiers</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="plugins.functions.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 16. Extending Smarty With Plugins</th>
+<td width="20%" align="right"> <a accesskey="n" href="plugins.block.functions.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="Modifiers">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="plugins.modifiers"></a>Modifiers</h2></div></div></div>
+<p>
+     <a class="link" href="language.modifiers.html" title="Chapter 5. Variable Modifiers">Modifiers</a> are little functions
      that are applied to a variable in the template before it is displayed or
      used in some other context. Modifiers can be chained together.
-    </P
-><DIV
-CLASS="funcsynopsis"
-><A
-NAME="AEN7323"
-></A
-><P
-></P
-><P
-><CODE
-><CODE
-CLASS="FUNCDEF"
->mixed <B
-CLASS="function"
->smarty_modifier_<TT
-CLASS="replaceable"
-><I
->name</I
-></TT
-></B
-></CODE
-> (mixed $value, [mixed $param1, ...])</CODE
-></P
-><P
-></P
-></DIV
-><P
->&#13;     The first parameter to the modifier plugin is the value on which
+    </p>
+<div class="funcsynopsis">
+<table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table">
+<tr>
+<td><code class="funcdef">mixed <b class="fsfunc">smarty_modifier_name</b>(</code></td>
+<td>
+<var class="pdparam">$value</var>, </td>
+<td> </td>
+</tr>
+<tr>
+<td> </td>
+<td>
+<var class="pdparam">$param1</var><code>)</code>;</td>
+<td> </td>
+</tr>
+</table>
+<div class="paramdef-list">
+<code>mixed <var class="pdparam">$value</var></code>;<br><code>[mixed <var class="pdparam">$param1</var>, ...]</code>;</div>
+<div class="funcprototype-spacer"> </div>
+</div>
+<p>
+     The first parameter to the modifier plugin is the value on which
      the modifier is to operate. The rest of the parameters are optional,
      depending on what kind of operation is to be  performed.
-    </P
-><P
->&#13;     The modifier has to <A
-HREF="http://php.net/return"
-TARGET="_top"
->return</A
->
+    </p>
+<p>
+     The modifier has to <a class="ulink" href="http://php.net/return" target="_top">return</a>
      the result of its processing.
-    </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN7335"
-></A
-><P
-><B
->Example 16-3. A simple modifier plugin</B
-></P
-><P
->&#13;      This plugin basically aliases one of the built-in PHP functions. It
+    </p>
+<div class="example">
+<a name="id3133086"></a><p class="title"><b>Example 16.3. A simple modifier plugin</b></p>
+<div class="example-contents">
+<p>
+      This plugin basically aliases one of the built-in PHP functions. It
       does not have any additional parameters.
-     </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #FF8000">/*<br />&nbsp;*&nbsp;Smarty&nbsp;plugin<br />&nbsp;*&nbsp;-------------------------------------------------------------<br />&nbsp;*&nbsp;File:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modifier.capitalize.php<br />&nbsp;*&nbsp;Type:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modifier<br />&nbsp;*&nbsp;Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;capitalize<br />&nbsp;*&nbsp;Purpose:&nbsp;&nbsp;capitalize&nbsp;words&nbsp;in&nbsp;the&nbsp;string<br />&nbsp;*&nbsp;-------------------------------------------------------------<br />&nbsp;*/<br /></span><span style="color: #007700">function&nbsp;</span><span style="color: #0000BB">smarty_modifier_capitalize</span><span style="color: #007700">(</span><span style="color: #0000BB">$string</span><span style="color: #007700">)<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span style="color: #0000BB">ucwords</span><span style="color: #007700">(</span><span style="color: #0000BB">$string</span><span style="color: #007700">);<br />}<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
-></P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN7340"
-></A
-><P
-><B
->Example 16-4. More complex modifier plugin</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #FF8000">/*<br />&nbsp;*&nbsp;Smarty&nbsp;plugin<br />&nbsp;*&nbsp;-------------------------------------------------------------<br />&nbsp;*&nbsp;File:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modifier.truncate.php<br />&nbsp;*&nbsp;Type:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modifier<br />&nbsp;*&nbsp;Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;truncate<br />&nbsp;*&nbsp;Purpose:&nbsp;&nbsp;Truncate&nbsp;a&nbsp;string&nbsp;to&nbsp;a&nbsp;certain&nbsp;length&nbsp;if&nbsp;necessary,<br />&nbsp;*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;optionally&nbsp;splitting&nbsp;in&nbsp;the&nbsp;middle&nbsp;of&nbsp;a&nbsp;word,&nbsp;and<br />&nbsp;*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;appending&nbsp;the&nbsp;$etc&nbsp;string.<br />&nbsp;*&nbsp;-------------------------------------------------------------<br />&nbsp;*/<br /></span><span style="color: #007700">function&nbsp;</span><span style="color: #0000BB">smarty_modifier_truncate</span><span style="color: #007700">(</span><span style="color: #0000BB">$string</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$length&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">80</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$etc&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'...'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$break_words&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">false</span><span style="color: #007700">)<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(</span><span style="color: #0000BB">$length&nbsp;</span><span style="color: #007700">==&nbsp;</span><span style="color: #0000BB">0</span><span style="color: #007700">)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span style="color: #DD0000">''</span><span style="color: #007700">;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(</span><span style="color: #0000BB">strlen</span><span style="color: #007700">(</span><span style="color: #0000BB">$string</span><span style="color: #007700">)&nbsp;&gt;&nbsp;</span><span style="color: #0000BB">$length</span><span style="color: #007700">)&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$length&nbsp;</span><span style="color: #007700">-=&nbsp;</span><span style="color: #0000BB">strlen</span><span style="color: #007700">(</span><span style="color: #0000BB">$etc</span><span style="color: #007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$fragment&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">substr</span><span style="color: #007700">(</span><span style="color: #0000BB">$string</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">0</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$length</span><span style="color: #007700">+</span><span style="color: #0000BB">1</span><span style="color: #007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(</span><span style="color: #0000BB">$break_words</span><span style="color: #007700">)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$fragment&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">substr</span><span style="color: #007700">(</span><span style="color: #0000BB">$fragment</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">0</span><span style="color: #007700">,&nbsp;-</span><span style="color: #0000BB">1</span><span style="color: #007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$fragment&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">preg_replace</span><span style="color: #007700">(</span><span style="color: #DD0000">'/\s+(\S+)?$/'</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">''</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$fragment</span><span style="color: #007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span style="color: #0000BB">$fragment</span><span style="color: #007700">.</span><span style="color: #0000BB">$etc</span><span style="color: #007700">;<br />&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;else<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span style="color: #0000BB">$string</span><span style="color: #007700">;<br />}<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13;     See also
-     <A
-HREF="api.register.modifier.html"
-><TT
-CLASS="varname"
->register_modifier()</TT
-></A
->,
-     <A
-HREF="api.unregister.modifier.html"
-><TT
-CLASS="varname"
->unregister_modifier()</TT
-></A
->.
-    </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="plugins.functions.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="plugins.block.functions.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->Template Functions</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="plugins.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->Block Functions</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+     </p>
+<pre class="programlisting">
+
+&lt;?php
+/*
+ * Smarty plugin
+ * -------------------------------------------------------------
+ * File:     modifier.capitalize.php
+ * Type:     modifier
+ * Name:     capitalize
+ * Purpose:  capitalize words in the string
+ * -------------------------------------------------------------
+ */
+function smarty_modifier_capitalize($string)
+{
+    return ucwords($string);
+}
+?&gt;
+
+</pre>
+</div>
+</div>
+<br class="example-break"><p></p>
+<div class="example">
+<a name="id3134611"></a><p class="title"><b>Example 16.4. More complex modifier plugin</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+/*
+ * Smarty plugin
+ * -------------------------------------------------------------
+ * File:     modifier.truncate.php
+ * Type:     modifier
+ * Name:     truncate
+ * Purpose:  Truncate a string to a certain length if necessary,
+ *           optionally splitting in the middle of a word, and
+ *           appending the $etc string.
+ * -------------------------------------------------------------
+ */
+function smarty_modifier_truncate($string, $length = 80, $etc = '...',
+                                  $break_words = false)
+{
+    if ($length == 0)
+        return '';
+
+    if (strlen($string) &gt; $length) {
+        $length -= strlen($etc);
+        $fragment = substr($string, 0, $length+1);
+        if ($break_words)
+            $fragment = substr($fragment, 0, -1);
+        else
+            $fragment = preg_replace('/\s+(\S+)?$/', '', $fragment);
+        return $fragment.$etc;
+    } else
+        return $string;
+}
+?&gt;
+
+     </pre></div>
+</div>
+<br class="example-break"><p>
+     See also
+     <a class="link" href="api.register.plugin.html" title="registerPlugin()"><code class="varname">registerPlugin()</code></a>,
+     <a class="link" href="api.unregister.plugin.html" title="unregisterPlugin"><code class="varname">unregisterPlugin()</code></a>.
+    </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="plugins.functions.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="plugins.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="plugins.block.functions.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Template Functions </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Block Functions</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

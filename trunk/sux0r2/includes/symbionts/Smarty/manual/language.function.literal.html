@@ -1,320 +1,87 @@
-<HTML
-><HEAD
-><TITLE
->{literal}</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Built-in Functions"
-HREF="language.builtin.functions.html"><LINK
-REL="PREVIOUS"
-TITLE="{ldelim},{rdelim}"
-HREF="language.function.ldelim.html"><LINK
-REL="NEXT"
-TITLE="{php}"
-HREF="language.function.php.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="language.function.ldelim.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 7. Built-in Functions</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="language.function.php.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="language.function.literal"
-></A
->{literal}</H1
-><P
->&#13;  <TT
-CLASS="varname"
->{literal}</TT
-> tags allow a block of data to be taken literally. This is typically
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{literal}</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="language.builtin.functions.html" title="Chapter 7. Built-in Functions">
+<link rel="prev" href="language.function.ldelim.html" title="{ldelim},{rdelim}">
+<link rel="next" href="language.function.nocache.html" title="{nocache}">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">{literal}</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="language.function.ldelim.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 7. Built-in Functions</th>
+<td width="20%" align="right"> <a accesskey="n" href="language.function.nocache.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="{literal}">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="language.function.literal"></a>{literal}</h2></div></div></div>
+<p>
+  <code class="varname">{literal}</code> tags allow a block of data to be taken literally. This is typically
   used around Javascript or stylesheet blocks where {curly braces} would
-  interfere with the template
-  <A
-HREF="variable.left.delimiter.html"
->delimiter</A
->
-  syntax. Anything within
-  <TT
-CLASS="varname"
->{literal}{/literal}</TT
-> tags is not interpreted, but displayed as-is.
-  If you  need template tags embedded in a <TT
-CLASS="varname"
->{literal}</TT
-> block, consider using
-  <A
-HREF="language.function.ldelim.html"
-><TT
-CLASS="varname"
->{ldelim}{rdelim}</TT
-></A
-> to escape the
+  interfere with the template <a class="link" href="variable.left.delimiter.html" title="$left_delimiter">delimiter</a> syntax. Anything within
+  <code class="varname">{literal}{/literal}</code> tags is not interpreted, but displayed as-is.
+  If you  need template tags embedded in a <code class="varname">{literal}</code> block, consider using
+  <a class="link" href="language.function.ldelim.html" title="{ldelim},{rdelim}"><code class="varname">{ldelim}{rdelim}</code></a> to escape the
   individual delimiters instead.
- </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN2358"
-></A
-><P
-><B
->Example 7-25. {literal} tags</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{literal}
-&#60;script type="text/javascript"&#62;
-&#60;!--
-  function isblank(field) {
-    if (field.value == '')
-      { return false; }
-    else
-      {
-      document.loginform.submit();
-      return true;
-    }
-  }
-// --&#62;
-&#60;/script&#62;
-{/literal}</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN2361"
-></A
-><P
-><B
->Example 7-26. Javascript function example</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#60;script language="JavaScript" type="text/javascript"&#62;
-{literal}
-function myJsFunction(name, ip){
-   alert("The server name\n" + name + "\n" + ip);
-}
-{/literal}
-&#60;/script&#62;
-&#60;a href="javascript:myJsFunction('{$smarty.server.SERVER_NAME}','{$smarty.server.SERVER_ADDR}')"&#62;Click here for the Server Info&#60;/a&#62;</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN2364"
-></A
-><P
-><B
->Example 7-27. Some css style in a template</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{* included this style .. as an experiment *}
-&#60;style type="text/css"&#62;
-{literal}
-/* this is an intersting idea for this section */
-.madIdea{
-    border: 3px outset #ffffff;
-    margin: 2 3 4 5px;
-    background-color: #001122;
-}
-{/literal}
-&#60;/style&#62;
-&#60;div class="madIdea"&#62;With smarty you can embed CSS in the template&#60;/div&#62;</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13;  See also
-  <A
-HREF="language.function.ldelim.html"
-><TT
-CLASS="varname"
->{ldelim} {rdelim}</TT
-></A
->
+ </p>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+   <code class="varname">{literal}{/literal}</code> tags are normally not necessary, as Smarty ignores delimiters that are surrounded by whitespace.
+   Be sure your javascript and CSS curly braces are surrounded by whitespace. This is new behavior to Smarty 3.
+ </p>
+</div>
+<div class="example">
+<a name="id3056257"></a><p class="title"><b>Example 7.56. {literal} tags</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;script&gt;
+   // the following braces are ignored by Smarty
+   // since they are surrounded by whitespace
+   function myFoo {
+     alert('Foo!');
+   }
+   // this one will need literal escapement
+   {literal}
+     function myBar {alert('Bar!');}
+   {/literal}
+&lt;/script&gt;
+
+  </pre></div>
+</div>
+<br class="example-break"><p>
+  See also
+  <a class="link" href="language.function.ldelim.html" title="{ldelim},{rdelim}"><code class="varname">{ldelim} {rdelim}</code></a>
   and the
-  <A
-HREF="language.escaping.html"
->escaping Smarty parsing</A
-> page.
- </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="language.function.ldelim.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="language.function.php.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->{ldelim},{rdelim}</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="language.builtin.functions.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->{php}</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+  <a class="link" href="language.escaping.html" title="Escaping Smarty Parsing">escaping Smarty parsing</a> page.
+ </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="language.function.ldelim.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="language.builtin.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="language.function.nocache.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">{ldelim},{rdelim} </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> {nocache}</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

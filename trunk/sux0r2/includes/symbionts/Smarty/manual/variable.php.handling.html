@@ -1,217 +1,77 @@
-<HTML
-><HEAD
-><TITLE
->$php_handling</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Smarty Class Variables"
-HREF="api.variables.html"><LINK
-REL="PREVIOUS"
-TITLE="$default_template_handler_func"
-HREF="variable.default.template.handler.func.html"><LINK
-REL="NEXT"
-TITLE="$security"
-HREF="variable.security.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="variable.default.template.handler.func.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 12. Smarty Class Variables</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="variable.security.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="variable.php.handling"
-></A
->$php_handling</H1
-><P
->&#13;       This tells Smarty how to handle PHP code embedded in the
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>$php_handling</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="api.variables.html" title="Chapter 12. Smarty Class Variables">
+<link rel="prev" href="variable.default.template.handler.func.html" title="$default_template_handler_func">
+<link rel="next" href="variable.trusted.dir.html" title="$trusted_dir">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">$php_handling</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="variable.default.template.handler.func.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 12. Smarty Class Variables</th>
+<td width="20%" align="right"> <a accesskey="n" href="variable.trusted.dir.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="$php_handling">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="variable.php.handling"></a>$php_handling</h2></div></div></div>
+<p>
+       This tells Smarty how to handle PHP code embedded in the
        templates. There are four possible settings, the default being
-       <TT
-CLASS="constant"
->SMARTY_PHP_PASSTHRU</TT
->. Note that this does NOT affect
-       php code within <A
-HREF="language.function.php.html"
->&#13;       <TT
-CLASS="varname"
->{php}{/php}</TT
-></A
-> tags in the template.
-      </P
-><P
-></P
-><UL
-><LI
-><P
->&#13;       <TT
-CLASS="constant"
->SMARTY_PHP_PASSTHRU</TT
-> - Smarty echos tags as-is.
-       </P
-></LI
-><LI
-><P
->&#13;       <TT
-CLASS="constant"
->SMARTY_PHP_QUOTE</TT
-> - Smarty quotes the tags as
+       <code class="constant">Smarty::PHP_PASSTHRU</code>. Note that this does NOT affect
+       php code within <a class="link" href="language.function.php.html" title="{php}">
+       <code class="varname">{php}{/php}</code></a> tags in the template.
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><p>
+       <code class="constant">Smarty::PHP_PASSTHRU</code> - Smarty echos tags as-is.
+       </p></li>
+<li class="listitem"><p>
+       <code class="constant">Smarty::PHP_QUOTE</code> - Smarty quotes the tags as
          html entities.
-         </P
-></LI
-><LI
-><P
->&#13;       <TT
-CLASS="constant"
->SMARTY_PHP_REMOVE</TT
-> - Smarty removes the tags from
-         the templates.</P
-></LI
-><LI
-><P
->&#13;       <TT
-CLASS="constant"
->SMARTY_PHP_ALLOW</TT
-> - Smarty will execute the tags
-         as PHP code.</P
-></LI
-></UL
-><DIV
-CLASS="note"
-><BLOCKQUOTE
-CLASS="note"
-><P
-><B
->Note: </B
->
+         </p></li>
+<li class="listitem"><p>
+       <code class="constant">Smarty::PHP_REMOVE</code> - Smarty removes the tags from
+         the templates.</p></li>
+<li class="listitem"><p>
+       <code class="constant">Smarty::PHP_ALLOW</code> - Smarty will execute the tags
+         as PHP code.</p></li>
+</ul></div>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
         Embedding PHP code into templates is highly discouraged.
-        Use <A
-HREF="plugins.functions.html"
->custom functions</A
-> or
-        <A
-HREF="plugins.modifiers.html"
->modifiers</A
-> instead.
-       </P
-></BLOCKQUOTE
-></DIV
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="variable.default.template.handler.func.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="variable.security.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->$default_template_handler_func</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="api.variables.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->$security</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+        Use <a class="link" href="plugins.functions.html" title="Template Functions">custom functions</a> or
+        <a class="link" href="plugins.modifiers.html" title="Modifiers">modifiers</a> instead.
+       </p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="variable.default.template.handler.func.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="api.variables.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="variable.trusted.dir.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">$default_template_handler_func </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> $trusted_dir</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

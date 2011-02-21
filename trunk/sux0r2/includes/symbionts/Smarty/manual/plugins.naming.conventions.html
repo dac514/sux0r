@@ -1,330 +1,113 @@
-<HTML
-><HEAD
-><TITLE
->Naming Conventions</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Extending Smarty With Plugins"
-HREF="plugins.html"><LINK
-REL="PREVIOUS"
-TITLE="Extending Smarty With Plugins"
-HREF="plugins.html"><LINK
-REL="NEXT"
-TITLE="Writing Plugins"
-HREF="plugins.writing.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="plugins.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 16. Extending Smarty With Plugins</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="plugins.writing.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="plugins.naming.conventions"
-></A
->Naming Conventions</H1
-><P
->&#13;     Plugin files and functions must follow a very specific naming
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Naming Conventions</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="plugins.html" title="Chapter 16. Extending Smarty With Plugins">
+<link rel="prev" href="plugins.html" title="Chapter 16. Extending Smarty With Plugins">
+<link rel="next" href="plugins.writing.html" title="Writing Plugins">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Naming Conventions</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="plugins.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 16. Extending Smarty With Plugins</th>
+<td width="20%" align="right"> <a accesskey="n" href="plugins.writing.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="Naming Conventions">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="plugins.naming.conventions"></a>Naming Conventions</h2></div></div></div>
+<p>
+     Plugin files and functions must follow a very specific naming
      convention in order to be located by Smarty.
-    </P
-><P
->&#13;     <SPAN
-CLASS="bold"
-><B
-CLASS="emphasis"
->plugin files</B
-></SPAN
-> must be named as follows:
-     <A
-NAME="AEN7215"
-></A
-><BLOCKQUOTE
-CLASS="BLOCKQUOTE"
-><P
->&#13;       <TT
-CLASS="filename"
->&#13;        <TT
-CLASS="replaceable"
-><I
->type</I
-></TT
->.<TT
-CLASS="replaceable"
-><I
->name</I
-></TT
->.php
-       </TT
->
-      </P
-></BLOCKQUOTE
->
-    </P
-><P
-></P
-><UL
-><LI
-><P
->&#13;     Where <TT
-CLASS="literal"
->type</TT
-> is one of these plugin types:
-     <P
-></P
-><UL
-COMPACT="COMPACT"
-><LI
-><SPAN
->function</SPAN
-></LI
-><LI
-><SPAN
->modifier</SPAN
-></LI
-><LI
-><SPAN
->block</SPAN
-></LI
-><LI
-><SPAN
->compiler</SPAN
-></LI
-><LI
-><SPAN
->prefilter</SPAN
-></LI
-><LI
-><SPAN
->postfilter</SPAN
-></LI
-><LI
-><SPAN
->outputfilter</SPAN
-></LI
-><LI
-><SPAN
->resource</SPAN
-></LI
-><LI
-><SPAN
->insert</SPAN
-></LI
-></UL
->
-    </P
-></LI
-><LI
-><P
->&#13;     And <TT
-CLASS="literal"
->name</TT
-> should be a valid identifier; letters,
+    </p>
+<p>
+     <span class="bold"><strong>plugin files</strong></span> must be named as follows:
+     </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+       <code class="filename">
+        <em class="replaceable"><code>type</code></em>.<em class="replaceable"><code>name</code></em>.php
+       </code>
+      </p></blockquote></div>
+<p>
+    </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+<p>
+     Where <code class="literal">type</code> is one of these plugin types:
+     </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="circle" compact>
+<li class="listitem">function</li>
+<li class="listitem">modifier</li>
+<li class="listitem">block</li>
+<li class="listitem">compiler</li>
+<li class="listitem">prefilter</li>
+<li class="listitem">postfilter</li>
+<li class="listitem">outputfilter</li>
+<li class="listitem">resource</li>
+<li class="listitem">insert</li>
+</ul></div>
+<p>
+    </p>
+</li>
+<li class="listitem"><p>
+     And <code class="literal">name</code> should be a valid identifier; letters,
      numbers, and underscores only, see
-     <A
-HREF="http://php.net/language.variables"
-TARGET="_top"
->php variables</A
->.
-    </P
-></LI
-><LI
-><P
->&#13;     Some examples: <TT
-CLASS="filename"
->function.html_select_date.php</TT
->,
-     <TT
-CLASS="filename"
->resource.db.php</TT
->,
-     <TT
-CLASS="filename"
->modifier.spacify.php</TT
->.
-    </P
-></LI
-></UL
-><P
->&#13;     <SPAN
-CLASS="bold"
-><B
-CLASS="emphasis"
->plugin functions</B
-></SPAN
-> inside the PHP files must be named as follows:
-     <A
-NAME="AEN7254"
-></A
-><BLOCKQUOTE
-CLASS="BLOCKQUOTE"
-><P
->&#13;       <B
-CLASS="function"
->smarty_<TT
-CLASS="replaceable"
-><I
->type</I
-></TT
->_<TT
-CLASS="replaceable"
-><I
->name</I
-></TT
->()</B
->
-      </P
-></BLOCKQUOTE
->
-    </P
-><P
-></P
-><UL
-><LI
-><P
->&#13;     The meanings of <TT
-CLASS="literal"
->type</TT
-> and <TT
-CLASS="literal"
->name</TT
-> are
+     <a class="ulink" href="http://php.net/language.variables" target="_top">php variables</a>.
+    </p></li>
+<li class="listitem"><p>
+     Some examples: <code class="filename">function.html_select_date.php</code>,
+     <code class="filename">resource.db.php</code>,
+     <code class="filename">modifier.spacify.php</code>.
+    </p></li>
+</ul></div>
+<p>
+     <span class="bold"><strong>plugin functions</strong></span> inside the PHP files must be named as follows:
+     </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+       <code class="function">smarty_<em class="replaceable"><code>type</code></em>, _<em class="replaceable"><code>name</code></em></code>
+      </p></blockquote></div>
+<p>
+    </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><p>
+     The meanings of <code class="literal">type</code> and <code class="literal">name</code> are
      the same as above.
-    </P
-></LI
-><LI
-><P
->&#13;     An example modifier name <TT
-CLASS="varname"
->foo</TT
-> would be <TT
-CLASS="literal"
->function smarty_modifier_foo()</TT
->.
-    </P
-></LI
-></UL
-><P
->&#13;     Smarty will output appropriate error messages if the plugin file it
+    </p></li>
+<li class="listitem"><p>
+     An example modifier name <code class="varname">foo</code> would be <code class="literal">function smarty_modifier_foo()</code>.
+    </p></li>
+</ul></div>
+<p>
+     Smarty will output appropriate error messages if the plugin file it
      needs is not found, or if the file or the plugin function are named
      improperly.
-    </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="plugins.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="plugins.writing.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->Extending Smarty With Plugins</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="plugins.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->Writing Plugins</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+    </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="plugins.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="plugins.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="plugins.writing.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Chapter 16. Extending Smarty With Plugins </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Writing Plugins</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

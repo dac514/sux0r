@@ -1,417 +1,151 @@
-<HTML
-><HEAD
-><TITLE
->truncate</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Variable Modifiers"
-HREF="language.modifiers.html"><LINK
-REL="PREVIOUS"
-TITLE="strip_tags"
-HREF="language.modifier.strip.tags.html"><LINK
-REL="NEXT"
-TITLE="upper"
-HREF="language.modifier.upper.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="language.modifier.strip.tags.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 5. Variable Modifiers</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="language.modifier.upper.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="language.modifier.truncate"
-></A
->truncate</H1
-><P
->&#13;     This truncates a variable to a character length, the default is 80.
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>truncate</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="language.modifiers.html" title="Chapter 5. Variable Modifiers">
+<link rel="prev" href="language.modifier.strip.tags.html" title="strip_tags">
+<link rel="next" href="language.modifier.upper.html" title="upper">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">truncate</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="language.modifier.strip.tags.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 5. Variable Modifiers</th>
+<td width="20%" align="right"> <a accesskey="n" href="language.modifier.upper.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="truncate">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="language.modifier.truncate"></a>truncate</h2></div></div></div>
+<p>
+     This truncates a variable to a character length, the default is 80.
      As an optional second parameter, you can specify a string of text
      to display at the end if the variable was truncated. The
      characters in the string are included with the original truncation length.
-     By default, <TT
-CLASS="varname"
->truncate</TT
-> will attempt to cut off at a
+     By default, <code class="varname">truncate</code> will attempt to cut off at a
      word boundary. If you want to cut off at the exact character length,
-     pass the optional third parameter of <TT
-CLASS="constant"
->TRUE</TT
->.
-  </P
-><DIV
-CLASS="informaltable"
-><A
-NAME="AEN1409"
-></A
-><P
-></P
-><TABLE
-BORDER="1"
-CLASS="CALSTABLE"
-><THEAD
-><TR
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Parameter Position</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Type</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Required</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Default</TH
-><TH
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->Description</TH
-></TR
-></THEAD
-><TBODY
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->1</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->integer</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->80</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->This determines how many characters to truncate
-       to.</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->2</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->...</TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->This is a text string that replaces the truncated text. Its length
-      is included in the truncation length setting.</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->3</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->boolean</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><TT
-CLASS="constant"
->FALSE</TT
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->This determines whether or not to truncate at a
-       word boundary with <TT
-CLASS="constant"
->FALSE</TT
->, or at the exact character with <TT
-CLASS="constant"
->TRUE</TT
->.</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->4</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->boolean</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><TT
-CLASS="constant"
->FALSE</TT
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->This determines whether the truncation happens at the end of the
-      string with <TT
-CLASS="constant"
->FALSE</TT
->, or in the middle of the string with <TT
-CLASS="constant"
->TRUE</TT
->.
-      Note that if this setting is <TT
-CLASS="constant"
->TRUE</TT
->, then word boundaries are ignored.
-      </TD
-></TR
-></TBODY
-></TABLE
-><P
-></P
-></DIV
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN1455"
-></A
-><P
-><B
->Example 5-21. truncate</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br />$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'articleTitle'</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'Two&nbsp;Sisters&nbsp;Reunite&nbsp;after&nbsp;Eighteen&nbsp;Years&nbsp;at&nbsp;Checkout&nbsp;Counter.'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-><P
->&#13;    where template is:
-   </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{$articleTitle}
+     pass the optional third parameter of <code class="constant">TRUE</code>.
+  </p>
+<div class="informaltable"><table border="1">
+<colgroup>
+<col align="center">
+<col align="center">
+<col align="center">
+<col align="center">
+<col>
+</colgroup>
+<thead><tr>
+<th align="center">Parameter Position</th>
+<th align="center">Type</th>
+<th align="center">Required</th>
+<th align="center">Default</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="center">1</td>
+<td align="center">integer</td>
+<td align="center">No</td>
+<td align="center">80</td>
+<td>This determines how many characters to truncate
+       to.</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center">...</td>
+<td>This is a text string that replaces the truncated text. Its length
+      is included in the truncation length setting.</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">boolean</td>
+<td align="center">No</td>
+<td align="center"><code class="constant">FALSE</code></td>
+<td>This determines whether or not to truncate at a
+       word boundary with <code class="constant">FALSE</code>, or at the exact character with <code class="constant">TRUE</code>.</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">boolean</td>
+<td align="center">No</td>
+<td align="center"><code class="constant">FALSE</code></td>
+<td>This determines whether the truncation happens at the end of the
+      string with <code class="constant">FALSE</code>, or in the middle of the string with <code class="constant">TRUE</code>.
+      Note that if this setting is <code class="constant">TRUE</code>, then word boundaries are ignored.
+      </td>
+</tr>
+</tbody>
+</table></div>
+<div class="example">
+<a name="id3036351"></a><p class="title"><b>Example 5.21. truncate</b></p>
+<div class="example-contents">
+<pre class="programlisting">
+
+&lt;?php
+$smarty-&gt;assign('articleTitle', 'Two Sisters Reunite after Eighteen Years at Checkout Counter.');
+?&gt;
+
+   </pre>
+<p>
+    where template is:
+   </p>
+<pre class="programlisting">
+
+{$articleTitle}
 {$articleTitle|truncate}
 {$articleTitle|truncate:30}
 {$articleTitle|truncate:30:""}
 {$articleTitle|truncate:30:"---"}
 {$articleTitle|truncate:30:"":true}
 {$articleTitle|truncate:30:"...":true}
-{$articleTitle|truncate:30:'..':true:true}</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;    This will output:
-   </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="screen"
->Two Sisters Reunite after Eighteen Years at Checkout Counter.
+{$articleTitle|truncate:30:'..':true:true}
+
+   </pre>
+<p>
+    This will output:
+   </p>
+<pre class="screen">
+
+Two Sisters Reunite after Eighteen Years at Checkout Counter.
 Two Sisters Reunite after Eighteen Years at Checkout Counter.
 Two Sisters Reunite after...
 Two Sisters Reunite after
 Two Sisters Reunite after---
 Two Sisters Reunite after Eigh
 Two Sisters Reunite after E...
-Two Sisters Re..ckout Counter.</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="language.modifier.strip.tags.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="language.modifier.upper.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->strip_tags</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="language.modifiers.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->upper</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+Two Sisters Re..ckout Counter.
+
+   </pre>
+</div>
+</div>
+<br class="example-break">
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="language.modifier.strip.tags.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="language.modifiers.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="language.modifier.upper.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">strip_tags </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> upper</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

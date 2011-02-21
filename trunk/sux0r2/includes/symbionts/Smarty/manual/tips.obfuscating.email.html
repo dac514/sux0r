@@ -1,226 +1,80 @@
-<HTML
-><HEAD
-><TITLE
->Obfuscating E-mail Addresses</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Tips & Tricks"
-HREF="tips.html"><LINK
-REL="PREVIOUS"
-TITLE="Componentized Templates"
-HREF="tips.componentized.templates.html"><LINK
-REL="NEXT"
-TITLE="Resources"
-HREF="resources.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="tips.componentized.templates.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 18. Tips &#38; Tricks</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="resources.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="tips.obfuscating.email"
-></A
->Obfuscating E-mail Addresses</H1
-><P
->&#13;    Do you ever wonder how your email address gets on so many spam mailing
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Obfuscating E-mail Addresses</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="tips.html" title="Chapter 18. Tips &amp; Tricks">
+<link rel="prev" href="tips.componentized.templates.html" title="Componentized Templates">
+<link rel="next" href="resources.html" title="Chapter 19. Resources">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Obfuscating E-mail Addresses</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="tips.componentized.templates.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 18. Tips &amp; Tricks</th>
+<td width="20%" align="right"> <a accesskey="n" href="resources.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="Obfuscating E-mail Addresses">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="tips.obfuscating.email"></a>Obfuscating E-mail Addresses</h2></div></div></div>
+<p>
+    Do you ever wonder how your email address gets on so many spam mailing
     lists? One way spammers collect email addresses is from web pages. To
     help combat this problem, you can make your email address show up in
     scrambled javascript in the HTML source, yet it it will look and work
     correctly in the browser. This is done with the
-    <A
-HREF="language.function.mailto.html"
->&#13;    <TT
-CLASS="varname"
->{mailto}</TT
-></A
-> plugin.
-   </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN7806"
-></A
-><P
-><B
->Example 18-8. Example of template the Obfuscating an email address</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#60;div id="contact"&#62;Send inquiries to
+    <a class="link" href="language.function.mailto.html" title="{mailto}">
+    <code class="varname">{mailto}</code></a> plugin.
+   </p>
+<div class="example">
+<a name="id3140498"></a><p class="title"><b>Example 18.8. Example of template the Obfuscating an email address</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;div id="contact"&gt;Send inquiries to
 {mailto address=$EmailAddress encode='javascript' subject='Hello'}
-&#60;/div&#62;</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><DIV
-CLASS="note"
-><BLOCKQUOTE
-CLASS="note"
-><P
-><B
->Technical Note: </B
->
+&lt;/div&gt;
+
+    </pre></div>
+</div>
+<br class="example-break"><div class="note" title="Technical Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Technical Note</h3>
+<p>
      This method isn't 100% foolproof. A spammer could conceivably program his
      e-mail collector to decode these values, but not likely....
      hopefully..yet ...  wheres that quantum computer :-?.
-    </P
-></BLOCKQUOTE
-></DIV
-><P
->&#13;    See also
-    <A
-HREF="language.modifier.escape.html"
-><TT
-CLASS="varname"
->escape</TT
-></A
->
+    </p>
+</div>
+<p>
+    See also
+    <a class="link" href="language.modifier.escape.html" title="escape"><code class="varname">escape</code></a>
     modifier and
-    <A
-HREF="language.function.mailto.html"
-><TT
-CLASS="varname"
->{mailto}</TT
-></A
->.
-   </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="tips.componentized.templates.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="resources.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->Componentized Templates</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="tips.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->Resources</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+    <a class="link" href="language.function.mailto.html" title="{mailto}"><code class="varname">{mailto}</code></a>.
+   </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="tips.componentized.templates.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="tips.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="resources.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Componentized Templates </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Chapter 19. Resources</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

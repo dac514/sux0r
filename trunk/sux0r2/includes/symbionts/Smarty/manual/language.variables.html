@@ -1,596 +1,295 @@
-<HTML
-><HEAD
-><TITLE
->Variables</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Smarty For Template Designers"
-HREF="smarty.for.designers.html"><LINK
-REL="PREVIOUS"
-TITLE="Escaping Smarty Parsing"
-HREF="language.escaping.html"><LINK
-REL="NEXT"
-TITLE="Variables loaded from config files"
-HREF="language.config.variables.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="chapter"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="language.escaping.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
-></TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="language.config.variables.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="chapter"
-><H1
-><A
-NAME="language.variables"
-></A
->Chapter 4. Variables</H1
-><DIV
-CLASS="TOC"
-><DL
-><DT
-><B
->Table of Contents</B
-></DT
-><DT
-><A
-HREF="language.variables.html#language.assigned.variables"
->Variables assigned from PHP</A
-></DT
-><DT
-><A
-HREF="language.config.variables.html"
->Variables loaded from config files</A
-></DT
-><DT
-><A
-HREF="language.variables.smarty.html"
->{$smarty} reserved variable</A
-></DT
-></DL
-></DIV
-><P
->&#13;  Smarty has several different types of variables. The type of the variable
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Chapter 4. Variables</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="smarty.for.designers.html" title="Part II. Smarty For Template Designers">
+<link rel="prev" href="language.escaping.html" title="Escaping Smarty Parsing">
+<link rel="next" href="language.variable.scopes.html" title="Variable scopes">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Chapter 4. Variables</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="language.escaping.html">Prev</a> </td>
+<th width="60%" align="center">Part II. Smarty For Template Designers</th>
+<td width="20%" align="right"> <a accesskey="n" href="language.variable.scopes.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="chapter" title="Chapter 4. Variables">
+<div class="titlepage"><div><div><h2 class="title">
+<a name="language.variables"></a>Chapter 4. Variables</h2></div></div></div>
+<div class="toc">
+<p><b>Table of Contents</b></p>
+<dl>
+<dt><span class="sect1"><a href="language.variables.html#language.assigned.variables">Variables assigned from PHP</a></span></dt>
+<dd><dl>
+<dt><span class="sect2"><a href="language.variables.html#language.variables.assoc.arrays">Associative arrays</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.html#language.variables.array.indexes">Array indexes</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.html#language.variables.objects">Objects</a></span></dt>
+</dl></dd>
+<dt><span class="sect1"><a href="language.variable.scopes.html">Variable scopes</a></span></dt>
+<dt><span class="sect1"><a href="language.config.variables.html">Variables loaded from config files</a></span></dt>
+<dt><span class="sect1"><a href="language.variables.smarty.html">{$smarty} reserved variable</a></span></dt>
+<dd><dl>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.request">Request variables</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.now">{$smarty.now}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.const">{$smarty.const}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.capture">{$smarty.capture}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.config">{$smarty.config}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.loops">{$smarty.section}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.template">{$smarty.template}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.current_dir">{$smarty.current_dir}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.version">{$smarty.version}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.block.child">{$smarty.block.child}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.block.parent">{$smarty.block.parent}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.ldelim">{$smarty.ldelim}, {$smarty.rdelim}</a></span></dt>
+</dl></dd>
+</dl>
+</div>
+<p>
+  Smarty has several different types of variables. The type of the variable
   depends on what symbol it is prefixed or enclosed within.
- </P
-><P
->&#13;  Variables in Smarty can be either displayed directly or used as arguments
-  for <A
-HREF="language.syntax.functions.html"
->functions</A
->,
-  <A
-HREF="language.syntax.attributes.html"
->attributes</A
-> and
-  <A
-HREF="language.modifiers.html"
->modifiers</A
->, inside conditional expressions,
+ </p>
+<p>
+  Variables in Smarty can be either displayed directly or used as arguments
+  for <a class="link" href="language.syntax.functions.html" title="Functions">functions</a>,
+  <a class="link" href="language.syntax.attributes.html" title="Attributes">attributes</a> and
+  <a class="link" href="language.modifiers.html" title="Chapter 5. Variable Modifiers">modifiers</a>, inside conditional expressions,
   etc. To print a variable, simply enclose it in the
-  <A
-HREF="variable.left.delimiter.html"
->delimiters</A
-> so that it
+  <a class="link" href="variable.left.delimiter.html" title="$left_delimiter">delimiters</a> so that it
   is the only thing contained between them.
-<TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN439"
-></A
-><P
-><B
->Example 4-1. Example variables</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{$Name}
+</p>
+<div class="example">
+<a name="id3024697"></a><p class="title"><b>Example 4.1. Example variables</b></p>
+<div class="example-contents"><pre class="programlisting">
 
-{$product.part_no} &#60;b&#62;{$product.description}&#60;/b&#62;
+{$Name}
+
+{$product.part_no} &lt;b&gt;{$product.description}&lt;/b&gt;
 
 {$Contacts[row].Phone}
 
-&#60;body bgcolor="{#bgcolor#}"&#62;</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
->
-<DIV
-CLASS="note"
-><BLOCKQUOTE
-CLASS="note"
-><P
-><B
->Top Tip: </B
->An easy way to examine Smarty variables is with the
-<A
-HREF="chapter.debugging.console.html"
->debugging console</A
->.
-</P
-></BLOCKQUOTE
-></DIV
->
- </P
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="language.assigned.variables"
-></A
->Variables assigned from PHP</H1
-><P
->&#13;  Variables that are
-  <A
-HREF="api.assign.html"
->assigned</A
-> from PHP are referenced by
-  preceding them with a dollar sign <TT
-CLASS="literal"
->$</TT
-> (like php).
-  Variables assigned from within a  template with the
-  <A
-HREF="language.custom.functions.html#language.function.assign"
-><TT
-CLASS="varname"
->{assign}</TT
-></A
->
-  function are also displayed this way.
- </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN453"
-></A
-><P
-><B
->Example 4-2. Assigned variables</B
-></P
-><P
-> php script</P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /><br />$smarty&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">Smarty</span><span style="color: #007700">();<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'firstname'</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'Doug'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'lastname'</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'Evans'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'meetingPlace'</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'New&nbsp;York'</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-><P
->&#13;      where the content of <TT
-CLASS="filename"
->index.tpl</TT
-> is:
-     </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->Hello {$firstname} {$lastname}, glad to see you can make it.
-&#60;br /&#62;
+&lt;body bgcolor="{#bgcolor#}"&gt;
+
+  </pre></div>
+</div>
+<p><br class="example-break">
+</p>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>An easy way to examine assigned Smarty variables is with the
+<a class="link" href="chapter.debugging.console.html" title="Chapter 10. Debugging Console">debugging console</a>.
+</p>
+</div>
+<p>
+ </p>
+<div class="sect1" title="Variables assigned from PHP">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="language.assigned.variables"></a>Variables assigned from PHP</h2></div></div></div>
+<p>
+  Assigned variables that are referenced by
+  preceding them with a dollar (<code class="literal">$</code>) sign.
+ </p>
+<div class="example">
+<a name="id3024747"></a><p class="title"><b>Example 4.2. Assigned variables</b></p>
+<div class="example-contents">
+<p>PHP code</p>
+<pre class="programlisting">
+
+&lt;?php
+
+$smarty = new Smarty();
+
+$smarty-&gt;assign('firstname', 'Doug');
+$smarty-&gt;assign('lastname', 'Evans');
+$smarty-&gt;assign('meetingPlace', 'New York');
+
+$smarty-&gt;display('index.tpl');
+
+?&gt;
+
+</pre>
+<p>
+      <code class="filename">index.tpl</code> source:
+     </p>
+<pre class="programlisting">
+
+Hello {$firstname} {$lastname}, glad to see you can make it.
+&lt;br /&gt;
 {* this will not work as $variables are case sensitive *}
 This weeks meeting is in {$meetingplace}.
 {* this will work *}
-This weeks meeting is in {$meetingPlace}.</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;   This above would output:
-  </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="screen"
->Hello Doug Evans, glad to see you can make it.
-&#60;br /&#62;
+This weeks meeting is in {$meetingPlace}.
+
+   </pre>
+<p>
+   This above would output:
+  </p>
+<pre class="screen">
+
+Hello Doug Evans, glad to see you can make it.
+&lt;br /&gt;
 This weeks meeting is in .
-This weeks meeting is in New York.</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><DIV
-CLASS="sect2"
-><H2
-CLASS="sect2"
-><A
-NAME="language.variables.assoc.arrays"
-></A
->Associative arrays</H2
-><P
->&#13;   You can also reference associative array variables that are
-   assigned from PHP by specifying the key after the '.' (period)
+This weeks meeting is in New York.
+
+  </pre>
+</div>
+</div>
+<br class="example-break"><div class="sect2" title="Associative arrays">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="language.variables.assoc.arrays"></a>Associative arrays</h3></div></div></div>
+<p>
+   You can also reference associative array variables by specifying the key after a dot "."
    symbol.
-  </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN465"
-></A
-><P
-><B
->Example 4-3. Accessing associative array variables</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br />$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'Contacts'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;array(</span><span style="color: #DD0000">'fax'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'555-222-9876'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'email'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'zaphod@slartibartfast.example.com'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'phone'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;array(</span><span style="color: #DD0000">'home'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'555-444-3333'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'cell'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'555-111-1234'</span><span style="color: #007700">)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-><P
->&#13;    where the content of <TT
-CLASS="filename"
->index.tpl</TT
-> is:
-   </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{$Contacts.fax}&#60;br /&#62;
-{$Contacts.email}&#60;br /&#62;
+  </p>
+<div class="example">
+<a name="id3025434"></a><p class="title"><b>Example 4.3. Accessing associative array variables</b></p>
+<div class="example-contents">
+<pre class="programlisting">
+
+&lt;?php
+$smarty-&gt;assign('Contacts',
+    array('fax' =&gt; '555-222-9876',
+          'email' =&gt; 'zaphod@slartibartfast.example.com',
+          'phone' =&gt; array('home' =&gt; '555-444-3333',
+                           'cell' =&gt; '555-111-1234')
+                           )
+         );
+$smarty-&gt;display('index.tpl');
+?&gt;
+
+   </pre>
+<p>
+    <code class="filename">index.tpl</code> source:
+   </p>
+<pre class="programlisting">
+
+{$Contacts.fax}&lt;br /&gt;
+{$Contacts.email}&lt;br /&gt;
 {* you can print arrays of arrays as well *}
-{$Contacts.phone.home}&#60;br /&#62;
-{$Contacts.phone.cell}&#60;br /&#62;</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;    this will output:
-   </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="screen"
->555-222-9876&#60;br /&#62;
-zaphod@slartibartfast.example.com&#60;br /&#62;
-555-444-3333&#60;br /&#62;
-555-111-1234&#60;br /&#62;</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-></DIV
-><DIV
-CLASS="sect2"
-><H2
-CLASS="sect2"
-><A
-NAME="language.variables.array.indexes"
-></A
->Array indexes</H2
-><P
->&#13;   You can reference arrays by their index, much like native PHP syntax.
-  </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN476"
-></A
-><P
-><B
->Example 4-4. Accessing arrays by index</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br />$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'Contacts'</span><span style="color: #007700">,&nbsp;array(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'555-222-9876'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'zaphod@slartibartfast.example.com'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array(</span><span style="color: #DD0000">'555-444-3333'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'555-111-1234'</span><span style="color: #007700">)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;));<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-><P
->&#13;    where <TT
-CLASS="filename"
->index.tpl</TT
-> is:
-   </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{$Contacts[0]}&#60;br /&#62;
-{$Contacts[1]}&#60;br /&#62;
+{$Contacts.phone.home}&lt;br /&gt;
+{$Contacts.phone.cell}&lt;br /&gt;
+
+   </pre>
+<p>
+    this will output:
+   </p>
+<pre class="screen">
+
+555-222-9876&lt;br /&gt;
+zaphod@slartibartfast.example.com&lt;br /&gt;
+555-444-3333&lt;br /&gt;
+555-111-1234&lt;br /&gt;
+
+   </pre>
+</div>
+</div>
+<br class="example-break">
+</div>
+<div class="sect2" title="Array indexes">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="language.variables.array.indexes"></a>Array indexes</h3></div></div></div>
+<p>
+   You can reference arrays by their index, much like native PHP syntax.
+  </p>
+<div class="example">
+<a name="id3025504"></a><p class="title"><b>Example 4.4. Accessing arrays by index</b></p>
+<div class="example-contents">
+<pre class="programlisting">
+
+&lt;?php
+$smarty-&gt;assign('Contacts', array(
+                           '555-222-9876',
+                           'zaphod@slartibartfast.example.com',
+                            array('555-444-3333',
+                                  '555-111-1234')
+                            ));
+$smarty-&gt;display('index.tpl');
+?&gt;
+
+   </pre>
+<p>
+    <code class="filename">index.tpl</code> source:
+   </p>
+<pre class="programlisting">
+
+{$Contacts[0]}&lt;br /&gt;
+{$Contacts[1]}&lt;br /&gt;
 {* you can print arrays of arrays as well *}
-{$Contacts[2][0]}&#60;br /&#62;
-{$Contacts[2][1]}&#60;br /&#62;</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;    This will output:
-   </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="screen"
->555-222-9876&#60;br /&#62;
-zaphod@slartibartfast.example.com&#60;br /&#62;
-555-444-3333&#60;br /&#62;
-555-111-1234&#60;br /&#62;</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-></DIV
-><DIV
-CLASS="sect2"
-><H2
-CLASS="sect2"
-><A
-NAME="language.variables.objects"
-></A
->Objects</H2
-><P
->&#13;   Properties of <A
-HREF="advanced.features.html#advanced.features.objects"
->objects</A
->
+{$Contacts[2][0]}&lt;br /&gt;
+{$Contacts[2][1]}&lt;br /&gt;
+
+   </pre>
+<p>
+    This will output:
+   </p>
+<pre class="screen">
+
+555-222-9876&lt;br /&gt;
+zaphod@slartibartfast.example.com&lt;br /&gt;
+555-444-3333&lt;br /&gt;
+555-111-1234&lt;br /&gt;
+
+   </pre>
+</div>
+</div>
+<br class="example-break">
+</div>
+<div class="sect2" title="Objects">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="language.variables.objects"></a>Objects</h3></div></div></div>
+<p>
+   Properties of <a class="link" href="advanced.features.objects.html" title="Objects">objects</a>
    assigned from PHP can be referenced by specifying the property
-   name after the <TT
-CLASS="literal"
->-&#62;</TT
-> symbol.
-  </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN489"
-></A
-><P
-><B
->Example 4-5. Accessing object properties</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->name:  {$person-&#62;name}&#60;br /&#62;
-email: {$person-&#62;email}&#60;br /&#62;</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;    this will output:
-   </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="screen"
->name:  Zaphod Beeblebrox&#60;br /&#62;
-email: zaphod@slartibartfast.example.com&#60;br /&#62;</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-></DIV
-></DIV
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="language.escaping.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="language.config.variables.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->Escaping Smarty Parsing</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="smarty.for.designers.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->Variables loaded from config files</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+   name after the <code class="literal">-&gt;</code> symbol.
+  </p>
+<div class="example">
+<a name="id3025583"></a><p class="title"><b>Example 4.5. Accessing object properties</b></p>
+<div class="example-contents">
+<pre class="programlisting">
+
+name:  {$person-&gt;name}&lt;br /&gt;
+email: {$person-&gt;email}&lt;br /&gt;
+
+   </pre>
+<p>
+    this will output:
+   </p>
+<pre class="screen">
+
+name:  Zaphod Beeblebrox&lt;br /&gt;
+email: zaphod@slartibartfast.example.com&lt;br /&gt;
+
+   </pre>
+</div>
+</div>
+<br class="example-break">
+</div>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="language.escaping.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="smarty.for.designers.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="language.variable.scopes.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Escaping Smarty Parsing </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Variable scopes</td>
+</tr>
+</table>
+</div>
+</body>
+</html>
