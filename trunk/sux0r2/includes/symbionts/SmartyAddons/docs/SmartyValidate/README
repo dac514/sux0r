@@ -7,10 +7,12 @@ AUTHOR:
     Monte Ohrt (monte [AT] ohrt [DOT] com)
 
 VERSION:
-    2.9-dev
+    3.0.2
+
+NOTE: As of version 3.0, SmartyValidate requires Smarty 3.0 or higher.
     
 DATE:
-    February 7th, 2005
+    February 17th, 2011
 
 WEBSITE:
     http://www.phpinsider.com/php/code/SmartyValidate/
@@ -18,10 +20,6 @@ WEBSITE:
 DOWNLOAD:
     http://www.phpinsider.com/php/code/SmartyValidate/SmartyValidate-current.tar.gz   
     
-ANONYMOUS CVS: (leave password empty)
-    cvs -d :pserver:anonymous@cvs.phpinsider.com:/export/CVS login
-    cvs -d :pserver:anonymous@cvs.phpinsider.com:/export/CVS checkout SmartyValidate
-
 SYNOPSIS:
 
     index.php
@@ -256,6 +254,14 @@ PUBLIC METHODS:
     completely finished with SmartyValidate (eg. do NOT call between form
     submissions.)
 
+    function set_form($form_name)
+    -----------------------------
+
+    examples:
+    SmartyValidate::set_form('myfoo');
+
+    This sets the form name for the current session. Setting this omits the
+    need to supply this formname to other functions thereafter.
 
     function register_object($obj_name,&$object)
     --------------------------------------------

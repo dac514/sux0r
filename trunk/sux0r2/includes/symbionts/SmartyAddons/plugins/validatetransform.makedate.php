@@ -58,7 +58,7 @@ function smarty_validate_transform_makeDate($value, $params, &$formvars) {
         return $value;
     } else {
         return $formvars[$_year] . '-' . $formvars[$_month] . '-' . $formvars[$_day];
-    }
+    }           
 }
 
 ?>
