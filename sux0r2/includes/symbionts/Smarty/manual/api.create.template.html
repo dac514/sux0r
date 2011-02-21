@@ -1,0 +1,121 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>createTemplate()</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="api.functions.html" title="Chapter 13. Smarty Class Methods()">
+<link rel="prev" href="api.create.data.html" title="createData()">
+<link rel="next" href="api.disable.security.html" title="disableSecurity()">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">createTemplate()</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="api.create.data.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 13. Smarty Class Methods()</th>
+<td width="20%" align="right"> <a accesskey="n" href="api.disable.security.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="refentry" title="createTemplate()">
+<a name="api.create.template"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2>Name</h2>
+<p>createTemplate() — returns a template object</p>
+</div>
+<div class="refsect1" title="Description">
+<a name="id3105999"></a><h2>Description</h2>
+<code class="methodsynopsis"><span class="type">string </span><span class="methodname">createTemplate</span>(<span class="methodparam"><span class="type">string </span><span class="parameter">template</span></span>,<br>                      <span class="methodparam"><span class="type">object </span><span class="parameter">parent</span></span>);</code><br><code class="methodsynopsis"><span class="type">string </span><span class="methodname">createTemplate</span>(<span class="methodparam"><span class="type">string </span><span class="parameter">template</span></span>,<br>                      <span class="methodparam"><span class="type">array </span><span class="parameter">data</span></span>);</code><br><code class="methodsynopsis"><span class="type">string </span><span class="methodname">createTemplate</span>(<span class="methodparam"><span class="type">string </span><span class="parameter">template</span></span>,<br>                      <span class="methodparam"><span class="type">string </span><span class="parameter">cache_id</span></span>,<br>                      <span class="methodparam"><span class="type">string </span><span class="parameter">compile_id</span></span>,<br>                      <span class="methodparam"><span class="type">object </span><span class="parameter">parent</span></span>);</code><br><code class="methodsynopsis"><span class="type">string </span><span class="methodname">createTemplate</span>(<span class="methodparam"><span class="type">string </span><span class="parameter">template</span></span>,<br>                      <span class="methodparam"><span class="type">string </span><span class="parameter">cache_id</span></span>,<br>                      <span class="methodparam"><span class="type">string </span><span class="parameter">compile_id</span></span>,<br>                      <span class="methodparam"><span class="type">array </span><span class="parameter">data</span></span>);</code><p>
+   This creates a template object which later can be rendered by the
+    <a class="link" href="api.display.html" title="display()">display</a> or <a class="link" href="api.fetch.html" title="fetch()">fetch</a> method.
+    It uses the following parameters:
+    </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><p>
+       <em class="parameter"><code>template</code></em> must be a valid 
+       <a class="link" href="template.resources.html" title="Resources">template resource</a> type and path. 
+      </p></li>
+<li class="listitem"><p>
+<em class="parameter"><code>cache_id</code></em> is an optional parameter. You can
+ also set the <a class="link" href="variable.cache.id.html" title="$cache_id">
+ <em class="parameter"><code>$cache_id</code></em></a> variable once instead of passing
+  this to each call to this function. It is used in the event that you want to 
+  cache different content of the same template, such as pages for displaying different products. See also the <a class="link" href="caching.html" title="Chapter 14. Caching">caching
+   section</a> for more information.
+</p></li>
+<li class="listitem"><p>
+<em class="parameter"><code>compile_id</code></em> is an optional parameter. You can
+ also set the <a class="link" href="variable.compile.id.html" title="$compile_id">
+ <em class="parameter"><code>$compile_id</code></em></a> variable once instead of passing
+  this to each call to this function. It is used in the event that you want to compile different versions of
+ the same template, such as having separate templates compiled
+ for different languages.
+</p></li>
+<li class="listitem"><p>
+<em class="parameter"><code>parent</code></em> is an optional parameter. It is an uplink to the main Smarty object, 
+a user-created data object or to another user-created template object. These objects can be chained.
+The template can access only variables assigned to any of the objects in the parent chain.
+</p></li>
+<li class="listitem"><p>
+<em class="parameter"><code>data</code></em> is an optional parameter. It is an associative array
+   containing the name/value pairs of variables which get assigned to the object.
+</p></li>
+</ul></div>
+<p>
+  </p>
+<p>
+   </p>
+<div class="example">
+<a name="id3107162"></a><p class="title"><b>Example 13.15. createTemplate()</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+include('Smarty.class.php');
+$smarty = new Smarty;
+
+// create template object with its private variable scope
+$tpl = $smarty-&gt;createTemplate('index.tpl');
+
+// assign variable to template scope
+$tpl-&gt;assign('foo','bar');
+
+// display the template
+$tpl-&gt;display();
+?&gt;
+
+    </pre></div>
+</div>
+<p><br class="example-break">
+  </p>
+<p>
+   See also
+   <a class="link" href="api.display.html" title="display()"><code class="varname">display()</code></a>,
+    and
+   <a class="link" href="api.template.exists.html" title="templateExists()"><code class="varname">templateExists()</code></a>.
+  </p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="api.create.data.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="api.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="api.disable.security.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">createData() </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> disableSecurity()</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

@@ -1,199 +1,73 @@
-<HTML
-><HEAD
-><TITLE
->Multiple Caches Per Page</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Caching"
-HREF="caching.html"><LINK
-REL="PREVIOUS"
-TITLE="Caching"
-HREF="caching.html"><LINK
-REL="NEXT"
-TITLE="Cache Groups"
-HREF="caching.groups.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="caching.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 14. Caching</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="caching.groups.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="caching.multiple.caches"
-></A
->Multiple Caches Per Page</H1
-><P
->&#13;     You can have multiple cache files for a single call to
-     <A
-HREF="api.display.html"
-><TT
-CLASS="varname"
->display()</TT
-></A
->
-     or <A
-HREF="api.fetch.html"
-><TT
-CLASS="varname"
->fetch()</TT
-></A
->.
-     Let's say that a call to <TT
-CLASS="literal"
->display('index.tpl')</TT
-> may have
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Multiple Caches Per Page</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="caching.html" title="Chapter 14. Caching">
+<link rel="prev" href="caching.html" title="Chapter 14. Caching">
+<link rel="next" href="caching.groups.html" title="Cache Groups">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Multiple Caches Per Page</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="caching.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 14. Caching</th>
+<td width="20%" align="right"> <a accesskey="n" href="caching.groups.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="Multiple Caches Per Page">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="caching.multiple.caches"></a>Multiple Caches Per Page</h2></div></div></div>
+<p>
+     You can have multiple cache files for a single call to
+     <a class="link" href="api.display.html" title="display()"><code class="varname">display()</code></a>
+     or <a class="link" href="api.fetch.html" title="fetch()"><code class="varname">fetch()</code></a>.
+     Let's say that a call to <code class="literal">display('index.tpl')</code> may have
      several different output contents depending on some condition, and you want
      separate caches for each one. You can do this by passing a
-     <TT
-CLASS="parameter"
-><I
->$cache_id</I
-></TT
-> as the second parameter to the
+     <em class="parameter"><code>$cache_id</code></em> as the second parameter to the
      function call.
-    </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN6851"
-></A
-><P
-><B
->Example 14-6. Passing a $cache_id to display()</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #007700">require(</span><span style="color: #DD0000">'Smarty.class.php'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$smarty&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">Smarty</span><span style="color: #007700">;<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">caching&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">1</span><span style="color: #007700">;<br /><br /></span><span style="color: #0000BB">$my_cache_id&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">$_GET</span><span style="color: #007700">[</span><span style="color: #DD0000">'article_id'</span><span style="color: #007700">];<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$my_cache_id</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13;     Above, we are passing the variable <TT
-CLASS="literal"
->$my_cache_id</TT
-> to
-     <A
-HREF="api.display.html"
-><TT
-CLASS="varname"
->display()</TT
-></A
->
-     as the <TT
-CLASS="parameter"
-><I
->$cache_id</I
-></TT
->. For each unique value of
-     <TT
-CLASS="literal"
->$my_cache_id</TT
->, a separate cache will be
-     generated for <TT
-CLASS="filename"
->index.tpl</TT
->. In this example,
-     <TT
-CLASS="literal"
->article_id</TT
-> was passed in the
-     URL and is used as the <TT
-CLASS="parameter"
-><I
->$cache_id</I
-></TT
->.
-    </P
-><DIV
-CLASS="note"
-><BLOCKQUOTE
-CLASS="note"
-><P
-><B
->Technical Note: </B
->
+    </p>
+<div class="example">
+<a name="id3121688"></a><p class="title"><b>Example 14.6. Passing a $cache_id to display()</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+require('Smarty.class.php');
+$smarty = new Smarty;
+
+$smarty-&gt;caching = Smarty::CACHING_LIFETIME_CURRENT;
+
+$my_cache_id = $_GET['article_id'];
+
+$smarty-&gt;display('index.tpl', $my_cache_id);
+?&gt;
+
+     </pre></div>
+</div>
+<br class="example-break"><p>
+     Above, we are passing the variable <code class="literal">$my_cache_id</code> to
+     <a class="link" href="api.display.html" title="display()"><code class="varname">display()</code></a>
+     as the <em class="parameter"><code>$cache_id</code></em>. For each unique value of
+     <code class="literal">$my_cache_id</code>, a separate cache will be
+     generated for <code class="filename">index.tpl</code>. In this example,
+     <code class="literal">article_id</code> was passed in the
+     URL and is used as the <em class="parameter"><code>$cache_id</code></em>.
+    </p>
+<div class="note" title="Technical Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Technical Note</h3>
+<p>
       Be very cautious when passing values from a client (web browser) into
       Smarty or any PHP application. Although the above example of using the
       article_id from the URL looks handy, it could have bad consequences. The
-      <TT
-CLASS="parameter"
-><I
->$cache_id</I
-></TT
-> is used to create a directory on the file
+      <em class="parameter"><code>$cache_id</code></em> is used to create a directory on the file
       system, so if the user
       decided to pass an extremely large value for article_id, or write a script
       that sends random article_id's at a rapid pace, this could possibly cause
@@ -201,193 +75,82 @@ CLASS="parameter"
       using it. In this instance, maybe you know the article_id has a length of
       ten characters and is made up of alpha-numerics only, and must be a valid
       article_id in the database. Check for this!
-     </P
-></BLOCKQUOTE
-></DIV
-><P
->&#13;     Be sure to pass the same <TT
-CLASS="parameter"
-><I
->$cache_id</I
-></TT
-> as the
+     </p>
+</div>
+<p>
+     Be sure to pass the same <em class="parameter"><code>$cache_id</code></em> as the
      second parameter to
-     <A
-HREF="api.is.cached.html"
-><TT
-CLASS="varname"
->is_cached()</TT
-></A
-> and
-     <A
-HREF="api.clear.cache.html"
-><TT
-CLASS="varname"
->clear_cache()</TT
-></A
->.
-    </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN6873"
-></A
-><P
-><B
->Example 14-7. Passing a cache_id to is_cached()</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #007700">require(</span><span style="color: #DD0000">'Smarty.class.php'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$smarty&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">Smarty</span><span style="color: #007700">;<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">caching&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">1</span><span style="color: #007700">;<br /><br /></span><span style="color: #0000BB">$my_cache_id&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">$_GET</span><span style="color: #007700">[</span><span style="color: #DD0000">'article_id'</span><span style="color: #007700">];<br /><br />if(!</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">is_cached</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">,</span><span style="color: #0000BB">$my_cache_id</span><span style="color: #007700">))&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #FF8000">//&nbsp;No&nbsp;cache&nbsp;available,&nbsp;do&nbsp;variable&nbsp;assignments&nbsp;here.<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$contents&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">get_database_contents</span><span style="color: #007700">();<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #0000BB">$contents</span><span style="color: #007700">);<br />}<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">,</span><span style="color: #0000BB">$my_cache_id</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13;     You can clear all caches for a particular <TT
-CLASS="parameter"
-><I
->$cache_id</I
-></TT
->
-     by passing <TT
-CLASS="constant"
->NULL</TT
-> as the
+     <a class="link" href="api.is.cached.html" title="isCached()"><code class="varname">is_cached()</code></a> and
+     <a class="link" href="api.clear.cache.html" title="clearCache()"><code class="varname">clear_cache()</code></a>.
+    </p>
+<div class="example">
+<a name="id3122991"></a><p class="title"><b>Example 14.7. Passing a cache_id to is_cached()</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+require('Smarty.class.php');
+$smarty = new Smarty;
+
+$smarty-&gt;caching = Smarty::CACHING_LIFETIME_CURRENT;
+
+$my_cache_id = $_GET['article_id'];
+
+if(!$smarty-&gt;is_cached('index.tpl',$my_cache_id)) {
+    // No cache available, do variable assignments here.
+    $contents = get_database_contents();
+    $smarty-&gt;assign($contents);
+}
+
+$smarty-&gt;display('index.tpl',$my_cache_id);
+?&gt;
+
+     </pre></div>
+</div>
+<br class="example-break"><p>
+     You can clear all caches for a particular <em class="parameter"><code>$cache_id</code></em>
+     by passing <code class="constant">NULL</code> as the
      first parameter to
-     <A
-HREF="api.clear.cache.html"
-><TT
-CLASS="varname"
->clear_cache()</TT
-></A
->.
-    </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN6881"
-></A
-><P
-><B
->Example 14-8. Clearing all caches for a particular $cache_id</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #007700">require(</span><span style="color: #DD0000">'Smarty.class.php'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$smarty&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">Smarty</span><span style="color: #007700">;<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">caching&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">1</span><span style="color: #007700">;<br /><br /></span><span style="color: #FF8000">//&nbsp;clear&nbsp;all&nbsp;caches&nbsp;with&nbsp;"sports"&nbsp;as&nbsp;the&nbsp;$cache_id<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">clear_cache</span><span style="color: #007700">(</span><span style="color: #0000BB">null</span><span style="color: #007700">,</span><span style="color: #DD0000">'sports'</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">,</span><span style="color: #DD0000">'sports'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13;     In this manner, you can <SPAN
-CLASS="QUOTE"
->"group"</SPAN
-> your caches together by giving
-     them the same <TT
-CLASS="parameter"
-><I
->$cache_id</I
-></TT
->.
-    </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="caching.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="caching.groups.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->Caching</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="caching.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->Cache Groups</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+     <a class="link" href="api.clear.cache.html" title="clearCache()"><code class="varname">clear_cache()</code></a>.
+    </p>
+<div class="example">
+<a name="id3123042"></a><p class="title"><b>Example 14.8. Clearing all caches for a particular $cache_id</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+require('Smarty.class.php');
+$smarty = new Smarty;
+
+$smarty-&gt;caching = Smarty::CACHING_LIFETIME_CURRENT;
+
+// clear all caches with "sports" as the $cache_id
+$smarty-&gt;clear_cache(null,'sports');
+
+$smarty-&gt;display('index.tpl','sports');
+?&gt;
+
+     </pre></div>
+</div>
+<br class="example-break"><p>
+     In this manner, you can <span class="quote">“<span class="quote">group</span>”</span> your caches together by giving
+     them the same <em class="parameter"><code>$cache_id</code></em>.
+    </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="caching.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="caching.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="caching.groups.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Chapter 14. Caching </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Cache Groups</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

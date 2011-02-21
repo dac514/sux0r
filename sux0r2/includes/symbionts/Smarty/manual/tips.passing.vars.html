@@ -1,300 +1,115 @@
-<HTML
-><HEAD
-><TITLE
->Passing variable title to header template</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Tips & Tricks"
-HREF="tips.html"><LINK
-REL="PREVIOUS"
-TITLE="Default Variable Handling"
-HREF="tips.default.var.handling.html"><LINK
-REL="NEXT"
-TITLE="Dates"
-HREF="tips.dates.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="tips.default.var.handling.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 18. Tips &#38; Tricks</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="tips.dates.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="tips.passing.vars"
-></A
->Passing variable title to header template</H1
-><P
->&#13;    When the majority of your templates use the same headers and footers, it
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Passing variable title to header template</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="tips.html" title="Chapter 18. Tips &amp; Tricks">
+<link rel="prev" href="tips.default.var.handling.html" title="Default Variable Handling">
+<link rel="next" href="tips.dates.html" title="Dates">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Passing variable title to header template</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="tips.default.var.handling.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 18. Tips &amp; Tricks</th>
+<td width="20%" align="right"> <a accesskey="n" href="tips.dates.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="Passing variable title to header template">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="tips.passing.vars"></a>Passing variable title to header template</h2></div></div></div>
+<p>
+    When the majority of your templates use the same headers and footers, it
     is common to split those out into their own templates and
-    <A
-HREF="language.function.include.html"
->&#13;    <TT
-CLASS="varname"
->{include}</TT
-></A
-> them.
+    <a class="link" href="language.function.include.html" title="{include}">
+    <code class="varname">{include}</code></a> them.
     But what if the header needs to have a different title, depending on
     what page you are coming from? You can pass the title to the header
-    as an <A
-HREF="language.syntax.attributes.html"
->attribute</A
-> when
+    as an <a class="link" href="language.syntax.attributes.html" title="Attributes">attribute</a> when
     it is included.
-   </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN7709"
-></A
-><P
-><B
->Example 18-3. Passing the title variable to the header template</B
-></P
-><P
->&#13;    <TT
-CLASS="filename"
->mainpage.tpl</TT
-> - When the main page is drawn,
-    the title of <SPAN
-CLASS="QUOTE"
->"Main Page"</SPAN
-> is passed to the
-    <TT
-CLASS="filename"
->header.tpl</TT
->, and will subsequently be used as the title.
-    </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{include file='header.tpl' title='Main Page'}
+   </p>
+<div class="example">
+<a name="id3139920"></a><p class="title"><b>Example 18.3. Passing the title variable to the header template</b></p>
+<div class="example-contents">
+<p>
+    <code class="filename">mainpage.tpl</code> - When the main page is drawn,
+    the title of <span class="quote">“<span class="quote">Main Page</span>”</span> is passed to the
+    <code class="filename">header.tpl</code>, and will subsequently be used as the title.
+    </p>
+<pre class="programlisting">
+
+{include file='header.tpl' title='Main Page'}
 {* template body goes here *}
-{include file='footer.tpl'}</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;    <TT
-CLASS="filename"
->archives.tpl</TT
-> - When the
-    archives page is drawn, the title will be <SPAN
-CLASS="QUOTE"
->"Archives"</SPAN
->.
+{include file='footer.tpl'}
+
+    </pre>
+<p>
+    <code class="filename">archives.tpl</code> - When the
+    archives page is drawn, the title will be <span class="quote">“<span class="quote">Archives</span>”</span>.
     Notice in the  archive example, we are using a variable from the
-    <TT
-CLASS="filename"
->archives_page.conf</TT
->
+    <code class="filename">archives_page.conf</code>
     file instead of a hard coded variable.
-    </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{config_load file='archive_page.conf'}
+    </p>
+<pre class="programlisting">
+
+{config_load file='archive_page.conf'}
 
 {include file='header.tpl' title=#archivePageTitle#}
 {* template body goes here *}
-{include file='footer.tpl'}</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;    <TT
-CLASS="filename"
->header.tpl</TT
-> - Notice that <SPAN
-CLASS="QUOTE"
->"Smarty News"</SPAN
-> is
-    printed if the <TT
-CLASS="literal"
->$title</TT
-> variable is not set, using the
-    <A
-HREF="language.modifier.default.html"
-><TT
-CLASS="varname"
->default</TT
-></A
->
+{include file='footer.tpl'}
+
+    </pre>
+<p>
+    <code class="filename">header.tpl</code> - Notice that <span class="quote">“<span class="quote">Smarty News</span>”</span> is
+    printed if the <code class="literal">$title</code> variable is not set, using the
+    <a class="link" href="language.modifier.default.html" title="default"><code class="varname">default</code></a>
     variable modifier.
-    </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#60;html&#62;
-&#60;head&#62;
-&#60;title&#62;{$title|default:'Smarty News'}&#60;/title&#62;
-&#60;/head&#62;
-&#60;body&#62;</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;    <TT
-CLASS="filename"
->footer.tpl</TT
->
-    </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#60;/body&#62;
-&#60;/html&#62;</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="tips.default.var.handling.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="tips.dates.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->Default Variable Handling</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="tips.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->Dates</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+    </p>
+<pre class="programlisting">
+
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;{$title|default:'Smarty News'}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+    </pre>
+<p>
+    <code class="filename">footer.tpl</code>
+    </p>
+<pre class="programlisting">
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+    </pre>
+</div>
+</div>
+<br class="example-break">
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="tips.default.var.handling.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="tips.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="tips.dates.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Default Variable Handling </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Dates</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

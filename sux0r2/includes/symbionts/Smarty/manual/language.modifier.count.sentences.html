@@ -1,238 +1,92 @@
-<HTML
-><HEAD
-><TITLE
->count_sentences</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Variable Modifiers"
-HREF="language.modifiers.html"><LINK
-REL="PREVIOUS"
-TITLE="count_paragraphs"
-HREF="language.modifier.count.paragraphs.html"><LINK
-REL="NEXT"
-TITLE="count_words"
-HREF="language.modifier.count.words.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="language.modifier.count.paragraphs.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 5. Variable Modifiers</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="language.modifier.count.words.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="language.modifier.count.sentences"
-></A
->count_sentences</H1
-><P
->&#13;   This is used to count the number of sentences in a variable.
-  </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN795"
-></A
-><P
-><B
->Example 5-6. count_sentences</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /><br />$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'articleTitle'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'Two&nbsp;Soviet&nbsp;Ships&nbsp;Collide&nbsp;-&nbsp;One&nbsp;Dies.<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Enraged&nbsp;Cow&nbsp;Injures&nbsp;Farmer&nbsp;with&nbsp;Axe.'<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-><P
->&#13;    Where template is:
-   </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{$articleTitle}
-{$articleTitle|count_sentences}</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;    Will output:
-   </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="screen"
->Two Soviet Ships Collide - One Dies. Enraged Cow Injures Farmer with Axe.
-2</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13;   See also
-   <A
-HREF="language.modifier.count.characters.html"
-><TT
-CLASS="varname"
->count_characters</TT
-></A
->,
-   <A
-HREF="language.modifier.count.paragraphs.html"
-><TT
-CLASS="varname"
->count_paragraphs</TT
-></A
->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>count_sentences</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="language.modifiers.html" title="Chapter 5. Variable Modifiers">
+<link rel="prev" href="language.modifier.count.paragraphs.html" title="count_paragraphs">
+<link rel="next" href="language.modifier.count.words.html" title="count_words">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">count_sentences</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="language.modifier.count.paragraphs.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 5. Variable Modifiers</th>
+<td width="20%" align="right"> <a accesskey="n" href="language.modifier.count.words.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="count_sentences">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="language.modifier.count.sentences"></a>count_sentences</h2></div></div></div>
+<p>
+   This is used to count the number of sentences in a variable.
+  </p>
+<div class="example">
+<a name="id3029738"></a><p class="title"><b>Example 5.6. count_sentences</b></p>
+<div class="example-contents">
+<pre class="programlisting">
+
+&lt;?php
+
+$smarty-&gt;assign('articleTitle',
+                 'Two Soviet Ships Collide - One Dies.
+                 Enraged Cow Injures Farmer with Axe.'
+                 );
+
+?&gt;
+
+   </pre>
+<p>
+    Where template is:
+   </p>
+<pre class="programlisting">
+
+{$articleTitle}
+{$articleTitle|count_sentences}
+
+   </pre>
+<p>
+    Will output:
+   </p>
+<pre class="screen">
+
+Two Soviet Ships Collide - One Dies. Enraged Cow Injures Farmer with Axe.
+2
+
+   </pre>
+</div>
+</div>
+<br class="example-break"><p>
+   See also
+   <a class="link" href="language.modifier.count.characters.html" title="count_characters"><code class="varname">count_characters</code></a>,
+   <a class="link" href="language.modifier.count.paragraphs.html" title="count_paragraphs"><code class="varname">count_paragraphs</code></a>
    and
-   <A
-HREF="language.modifier.count.words.html"
-><TT
-CLASS="varname"
->count_words</TT
-></A
->.
-  </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="language.modifier.count.paragraphs.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="language.modifier.count.words.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->count_paragraphs</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="language.modifiers.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->count_words</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+   <a class="link" href="language.modifier.count.words.html" title="count_words"><code class="varname">count_words</code></a>.
+  </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="language.modifier.count.paragraphs.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="language.modifiers.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="language.modifier.count.words.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">count_paragraphs </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> count_words</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

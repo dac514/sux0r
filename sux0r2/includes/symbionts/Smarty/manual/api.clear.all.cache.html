@@ -1,220 +1,79 @@
-<HTML
-><HEAD
-><TITLE
->clear_all_cache()</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Smarty Class Methods()"
-HREF="api.functions.html"><LINK
-REL="PREVIOUS"
-TITLE="clear_all_assign()"
-HREF="api.clear.all.assign.html"><LINK
-REL="NEXT"
-TITLE="clear_assign()"
-HREF="api.clear.assign.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="refentry"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="api.clear.all.assign.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
-></TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="api.clear.assign.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><H1
-><A
-NAME="api.clear.all.cache"
-></A
->clear_all_cache()</H1
-><DIV
-CLASS="refnamediv"
-><A
-NAME="AEN5651"
-></A
->clear_all_cache()&nbsp;--&nbsp;clears the entire template cache</DIV
-><DIV
-CLASS="refsect1"
-><A
-NAME="AEN5654"
-></A
-><H2
->Description</H2
->void <B
-CLASS="methodname"
->clear_all_cache</B
-> ( [int expire_time])<BR
-></BR
-><P
->&#13;   As an optional
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>clearAllCache()</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="api.functions.html" title="Chapter 13. Smarty Class Methods()">
+<link rel="prev" href="api.clear.all.assign.html" title="clearAllAssign()">
+<link rel="next" href="api.clear.assign.html" title="clearAssign()">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">clearAllCache()</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="api.clear.all.assign.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 13. Smarty Class Methods()</th>
+<td width="20%" align="right"> <a accesskey="n" href="api.clear.assign.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="refentry" title="clearAllCache()">
+<a name="api.clear.all.cache"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2>Name</h2>
+<p>clearAllCache() — clears the entire template cache</p>
+</div>
+<div class="refsect1" title="Description">
+<a name="id3103023"></a><h2>Description</h2>
+<code class="methodsynopsis"><span class="type">void </span><span class="methodname">clearAllCache</span>(<span class="methodparam"><span class="type">int </span><span class="parameter">expire_time</span></span>);</code><p>
+   As an optional
    parameter, you can supply a minimum age in seconds the cache
    files must be before they will get cleared.
-  </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN5663"
-></A
-><P
-><B
->Example 13-1. clear_all_cache</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #FF8000">//&nbsp;clear&nbsp;the&nbsp;entire&nbsp;cache<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">clear_all_cache</span><span style="color: #007700">();<br /><br /></span><span style="color: #FF8000">//&nbsp;clears&nbsp;all&nbsp;files&nbsp;over&nbsp;one&nbsp;hour&nbsp;old<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">clear_all_cache</span><span style="color: #007700">(</span><span style="color: #0000BB">3600</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13;  See also
-  <A
-HREF="api.clear.cache.html"
-><TT
-CLASS="varname"
->clear_cache()</TT
-></A
->,
-  <A
-HREF="api.is.cached.html"
-><TT
-CLASS="varname"
->is_cached()</TT
-></A
->
+  </p>
+<div class="example">
+<a name="id3103056"></a><p class="title"><b>Example 13.6. clearAllCache</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+// clear the entire cache
+$smarty-&gt;cache-&gt;clearAll();
+
+// clears all files over one hour old
+$smarty-&gt;cache-&gt;clearAll(3600);
+?&gt;
+
+   </pre></div>
+</div>
+<br class="example-break"><p>
+  See also
+  <a class="link" href="api.clear.cache.html" title="clearCache()"><code class="varname">clearCache()</code></a>,
+  <a class="link" href="api.is.cached.html" title="isCached()"><code class="varname">isCached()</code></a>
   and the
-  <A
-HREF="caching.html"
->caching</A
-> page.
-  </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="api.clear.all.assign.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="api.clear.assign.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->clear_all_assign()</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="api.functions.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->clear_assign()</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+  <a class="link" href="caching.html" title="Chapter 14. Caching">caching</a> page.
+  </p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="api.clear.all.assign.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="api.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="api.clear.assign.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">clearAllAssign() </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> clearAssign()</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

@@ -1,262 +1,89 @@
-<HTML
-><HEAD
-><TITLE
->$compile_id</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Smarty Class Variables"
-HREF="api.variables.html"><LINK
-REL="PREVIOUS"
-TITLE="$error_reporting"
-HREF="variable.error.reporting.html"><LINK
-REL="NEXT"
-TITLE="$use_sub_dirs"
-HREF="variable.use.sub.dirs.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="variable.error.reporting.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 12. Smarty Class Variables</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="variable.use.sub.dirs.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="variable.compile.id"
-></A
->$compile_id</H1
-><P
->&#13;  Persistant compile identifier. As an alternative to passing the same
-  <TT
-CLASS="parameter"
-><I
->$compile_id</I
-></TT
-> to each and every function call, you can set this
-  <TT
-CLASS="parameter"
-><I
->$compile_id</I
-></TT
-> and it will be used implicitly thereafter.
- </P
-><P
->&#13;  With a <TT
-CLASS="parameter"
-><I
->$compile_id</I
-></TT
-> you can work around the limitation
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>$compile_id</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="api.variables.html" title="Chapter 12. Smarty Class Variables">
+<link rel="prev" href="variable.request.use.auto.globals.html" title="$request_use_auto_globals">
+<link rel="next" href="variable.use.sub.dirs.html" title="$use_sub_dirs">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">$compile_id</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="variable.request.use.auto.globals.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 12. Smarty Class Variables</th>
+<td width="20%" align="right"> <a accesskey="n" href="variable.use.sub.dirs.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="$compile_id">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="variable.compile.id"></a>$compile_id</h2></div></div></div>
+<p>
+  Persistant compile identifier. As an alternative to passing the same
+  <em class="parameter"><code>$compile_id</code></em> to each and every function call, you can set this
+  <em class="parameter"><code>$compile_id</code></em> and it will be used implicitly thereafter.
+ </p>
+<p>
+  With a <em class="parameter"><code>$compile_id</code></em> you can work around the limitation
   that you cannot use the same
-  <A
-HREF="variable.compile.dir.html"
-><TT
-CLASS="parameter"
-><I
->$compile_dir</I
-></TT
-></A
->
-  for different <A
-HREF="api.variables.html#variable.template.dir"
->&#13;  <TT
-CLASS="parameter"
-><I
->$template_dirs</I
-></TT
-></A
->.  If you set a distinct
-  <TT
-CLASS="parameter"
-><I
->$compile_id</I
-></TT
-> for each
-  <A
-HREF="api.variables.html#variable.template.dir"
-><TT
-CLASS="parameter"
-><I
->$template_dir</I
-></TT
->
-  </A
-> then Smarty can tell the compiled templates apart by their
-  <TT
-CLASS="parameter"
-><I
->$compile_id</I
-></TT
->.
- </P
-><P
->&#13;  If you have for example a
-  <A
-HREF="plugins.prefilters.postfilters.html"
->prefilter</A
->
+  <a class="link" href="variable.compile.dir.html" title="$compile_dir"><em class="parameter"><code>$compile_dir</code></em></a>
+  for different <a class="link" href="api.variables.html#variable.template.dir" title="$template_dir">
+  <em class="parameter"><code>$template_dirs</code></em></a>.  If you set a distinct
+  <em class="parameter"><code>$compile_id</code></em> for each
+  <a class="link" href="api.variables.html#variable.template.dir" title="$template_dir"><em class="parameter"><code>$template_dir</code></em>
+  </a> then Smarty can tell the compiled templates apart by their
+  <em class="parameter"><code>$compile_id</code></em>.
+ </p>
+<p>
+  If you have for example a
+  <a class="link" href="plugins.prefilters.postfilters.html" title="Prefilters/Postfilters">prefilter</a>
   that localizes your templates
   (that is: translates language dependend parts) at compile time, then
-  you could use the current language as <TT
-CLASS="parameter"
-><I
->$compile_id</I
-></TT
-> and
+  you could use the current language as <em class="parameter"><code>$compile_id</code></em> and
   you will get a  set of compiled templates for each language you use.
- </P
-><P
->&#13;  Another application would be to use the same compile directory across
+ </p>
+<p>
+  Another application would be to use the same compile directory across
   multiple domains / multiple virtual hosts.
- </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN5417"
-></A
-><P
-><B
->Example 12-6. $compile_id in a virtual host enviroment</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /><br />$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">compile_id&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">$_SERVER</span><span style="color: #007700">[</span><span style="color: #DD0000">'SERVER_NAME'</span><span style="color: #007700">];<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">compile_dir&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'/path/to/shared_compile_dir'</span><span style="color: #007700">;<br /><br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="variable.error.reporting.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="variable.use.sub.dirs.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->$error_reporting</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="api.variables.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->$use_sub_dirs</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+ </p>
+<div class="example">
+<a name="id3098233"></a><p class="title"><b>Example 12.5. $compile_id in a virtual host environment</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+
+$smarty-&gt;compile_id = $_SERVER['SERVER_NAME'];
+$smarty-&gt;compile_dir = '/path/to/shared_compile_dir';
+
+?&gt;
+
+  </pre></div>
+</div>
+<br class="example-break">
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="variable.request.use.auto.globals.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="api.variables.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="variable.use.sub.dirs.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">$request_use_auto_globals </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> $use_sub_dirs</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

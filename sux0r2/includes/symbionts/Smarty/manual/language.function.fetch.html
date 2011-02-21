@@ -1,319 +1,113 @@
-<HTML
-><HEAD
-><TITLE
->{fetch}</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Custom Functions"
-HREF="language.custom.functions.html"><LINK
-REL="PREVIOUS"
-TITLE="{eval}"
-HREF="language.function.eval.html"><LINK
-REL="NEXT"
-TITLE="{html_checkboxes}"
-HREF="language.function.html.checkboxes.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="language.function.eval.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 8. Custom Functions</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="language.function.html.checkboxes.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="language.function.fetch"
-></A
->{fetch}</H1
-><P
->&#13;   <TT
-CLASS="varname"
->{fetch}</TT
-> is used to retrieve files from the
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{fetch}</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="language.custom.functions.html" title="Chapter 8. Custom Functions">
+<link rel="prev" href="language.function.eval.html" title="{eval}">
+<link rel="next" href="language.function.html.checkboxes.html" title="{html_checkboxes}">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">{fetch}</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="language.function.eval.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 8. Custom Functions</th>
+<td width="20%" align="right"> <a accesskey="n" href="language.function.html.checkboxes.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="{fetch}">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="language.function.fetch"></a>{fetch}</h2></div></div></div>
+<p>
+   <code class="varname">{fetch}</code> is used to retrieve files from the
    local file system, http, or ftp and display the contents.
-   </P
-><P
-></P
-><UL
-><LI
-><P
->&#13;   If the file name begins with
-   <TT
-CLASS="parameter"
-><I
->http://</I
-></TT
->, the web site page will be fetched and displayed.
-	<DIV
-CLASS="note"
-><BLOCKQUOTE
-CLASS="note"
-><P
-><B
->Note: </B
->
+   </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+<p>
+   If the file name begins with
+   <em class="parameter"><code>http://</code></em>, the web site page will be fetched and displayed.
+	</p>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
 	   This will not support http redirects, be sure to
 	   include a trailing slash on your web page fetches where necessary.
-	  </P
-></BLOCKQUOTE
-></DIV
->
-	</P
-></LI
-><LI
-><P
->&#13;   If the  file name begins with <TT
-CLASS="parameter"
-><I
->ftp://</I
-></TT
->, the file will
+	  </p>
+</div>
+<p>
+	</p>
+</li>
+<li class="listitem"><p>
+   If the  file name begins with <em class="parameter"><code>ftp://</code></em>, the file will
    be downloaded from the ftp server and displayed.
-   </P
-></LI
-><LI
-><P
->&#13;   For local files, either a full system file path
+   </p></li>
+<li class="listitem">
+<p>
+   For local files, either a full system file path
     must be given, or a path relative to the executed php script.
-	 <DIV
-CLASS="note"
-><BLOCKQUOTE
-CLASS="note"
-><P
-><B
->Note: </B
->
-	   If template <A
-HREF="variable.security.html"
->&#13;       <TT
-CLASS="parameter"
-><I
->$security</I
-></TT
-></A
->
-	   is enabled and you are
-	   fetching a file from the local file system, <TT
-CLASS="varname"
->{fetch}</TT
->
-       will only allow  files from within one of the defined
-	   <A
-HREF="variable.secure.dir.html"
->secure directories</A
->.
-	  </P
-></BLOCKQUOTE
-></DIV
->
-  </P
-></LI
-><LI
-><P
->&#13;   If the <TT
-CLASS="parameter"
-><I
->assign</I
-></TT
-> attribute is set, the output of the
-   <TT
-CLASS="varname"
->{fetch}</TT
-> function will be assigned to this template
+	 </p>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>If security is enabled and you are fetching a file from the local file system, <code class="varname">{fetch}</code>
+	   will only allow files from within the <em class="parameter"><code>$secure_dir</code></em> path of the securty policy.
+	   See the <a class="link" href="advanced.features.html#advanced.features.security" title="Security">Security</a> section for details.
+	  </p>
+</div>
+<p>
+  </p>
+</li>
+<li class="listitem"><p>
+   If the <em class="parameter"><code>assign</code></em> attribute is set, the output of the
+   <code class="varname">{fetch}</code> function will be assigned to this template
    variable instead of being output to the template.
-   </P
-></LI
-></UL
-><DIV
-CLASS="informaltable"
-><A
-NAME="AEN3115"
-></A
-><P
-></P
-><TABLE
-BORDER="1"
-CLASS="CALSTABLE"
-><THEAD
-><TR
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Attribute Name</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Type</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Required</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Default</TH
-><TH
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->Description</TH
-></TR
-></THEAD
-><TBODY
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->file</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Yes</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->n/a</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->The file, http or ftp site to fetch</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->assign</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->n/a</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->The template variable the output will be assigned
-      to</TD
-></TR
-></TBODY
-></TABLE
-><P
-></P
-></DIV
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN3144"
-></A
-><P
-><B
->Example 8-8. {fetch} examples</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{* include some javascript in your template *}
+   </p></li>
+</ul></div>
+<div class="informaltable"><table border="1">
+<colgroup>
+<col align="center">
+<col align="center">
+<col align="center">
+<col align="center">
+<col>
+</colgroup>
+<thead><tr>
+<th align="center">Attribute Name</th>
+<th align="center">Type</th>
+<th align="center">Required</th>
+<th align="center">Default</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="center">file</td>
+<td align="center">string</td>
+<td align="center">Yes</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>The file, http or ftp site to fetch</td>
+</tr>
+<tr>
+<td align="center">assign</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>The template variable the output will be assigned
+      to</td>
+</tr>
+</tbody>
+</table></div>
+<div class="example">
+<a name="id3074291"></a><p class="title"><b>Example 8.5. {fetch} examples</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+{* include some javascript in your template *}
 {fetch file='/export/httpd/www.example.com/docs/navbar.js'}
 
 {* embed some weather text in your template from another web site *}
@@ -327,110 +121,36 @@ CLASS="programlisting"
 {* assign the fetched contents to a template variable *}
 {fetch file='http://www.myweather.com/68502/' assign='weather'}
 {if $weather ne ''}
-  &#60;div id="weather"&#62;{$weather}&#60;/div&#62;
-{/if}</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13; See also
- <A
-HREF="language.builtin.functions.html#language.function.capture"
-><TT
-CLASS="varname"
->{capture}</TT
-></A
->,
- <A
-HREF="language.function.eval.html"
-><TT
-CLASS="varname"
->{eval}</TT
-></A
->,
- <A
-HREF="language.custom.functions.html#language.function.assign"
-><TT
-CLASS="varname"
->{assign}</TT
-></A
->
+  &lt;div id="weather"&gt;{$weather}&lt;/div&gt;
+{/if}
+
+  </pre></div>
+</div>
+<br class="example-break"><p>
+ See also
+ <a class="link" href="language.function.capture.html" title="{capture}"><code class="varname">{capture}</code></a>,
+ <a class="link" href="language.function.eval.html" title="{eval}"><code class="varname">{eval}</code></a>,
+ <a class="link" href="language.function.assign.html" title="{assign}"><code class="varname">{assign}</code></a>
  and
- <A
-HREF="api.fetch.html"
-><TT
-CLASS="varname"
->fetch()</TT
-></A
->.
- </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="language.function.eval.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="language.function.html.checkboxes.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->{eval}</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="language.custom.functions.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->{html_checkboxes}</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+ <a class="link" href="api.fetch.html" title="fetch()"><code class="varname">fetch()</code></a>.
+ </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="language.function.eval.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="language.custom.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="language.function.html.checkboxes.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">{eval} </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> {html_checkboxes}</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

@@ -1,278 +1,97 @@
-<HTML
-><HEAD
-><TITLE
->$config_overwrite</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Smarty Class Variables"
-HREF="api.variables.html"><LINK
-REL="PREVIOUS"
-TITLE="$cache_modified_check"
-HREF="variable.cache.modified.check.html"><LINK
-REL="NEXT"
-TITLE="$config_booleanize"
-HREF="variable.config.booleanize.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="variable.cache.modified.check.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 12. Smarty Class Variables</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="variable.config.booleanize.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="variable.config.overwrite"
-></A
->$config_overwrite</H1
-><P
->&#13;    If set to <TT
-CLASS="constant"
->TRUE</TT
->, the default then variables read in from
-    <A
-HREF="config.files.html"
->config files</A
-> will overwrite each
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>$config_overwrite</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="api.variables.html" title="Chapter 12. Smarty Class Variables">
+<link rel="prev" href="variable.cache.modified.check.html" title="$cache_modified_check">
+<link rel="next" href="variable.config.booleanize.html" title="$config_booleanize">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">$config_overwrite</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="variable.cache.modified.check.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 12. Smarty Class Variables</th>
+<td width="20%" align="right"> <a accesskey="n" href="variable.config.booleanize.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="$config_overwrite">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="variable.config.overwrite"></a>$config_overwrite</h2></div></div></div>
+<p>
+    If set to <code class="constant">TRUE</code>, the default then variables read in from
+    <a class="link" href="config.files.html" title="Chapter 9. Config Files">config files</a> will overwrite each
     other. Otherwise, the variables will be pushed onto an array. This is
     helpful if you want to store arrays of data in config files, just list
   each element multiple times.
-  </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN5158"
-></A
-><P
-><B
->Example 12-4. Array of config #variables#</B
-></P
-><P
->&#13;      This examples uses
-      <A
-HREF="language.function.cycle.html"
-><TT
-CLASS="varname"
->{cycle}</TT
-></A
->
+  </p>
+<div class="example">
+<a name="id3095825"></a><p class="title"><b>Example 12.4. Array of config #variables#</b></p>
+<div class="example-contents">
+<p>
+      This examples uses
+      <a class="link" href="language.function.cycle.html" title="{cycle}"><code class="varname">{cycle}</code></a>
       to output a table with alternating red/green/blue row colors
-      with <TT
-CLASS="parameter"
-><I
->$config_overwrite</I
-></TT
-> = <TT
-CLASS="constant"
->FALSE</TT
->.
-    </P
-><P
->The config file.</P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
-># row colors
+      with <em class="parameter"><code>$config_overwrite</code></em> = <code class="constant">FALSE</code>.
+    </p>
+<p>The config file.</p>
+<pre class="programlisting">
+
+# row colors
 rowColors = #FF0000
 rowColors = #00FF00
-rowColors = #0000FF</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;      The template with a <A
-HREF="language.function.section.html"
->&#13;      <TT
-CLASS="varname"
->{section}</TT
-></A
-> loop.
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#60;table&#62;
+rowColors = #0000FF
+
+    </pre>
+<p>
+      The template with a <a class="link" href="language.function.section.html" title="{section},{sectionelse}">
+      <code class="varname">{section}</code></a> loop.
+      </p>
+<pre class="programlisting">
+
+&lt;table&gt;
   {section name=r loop=$rows}
-  &#60;tr bgcolor="{cycle values=#rowColors#}"&#62;
-    &#60;td&#62; ....etc.... &#60;/td&#62;
-  &#60;/tr&#62;
+  &lt;tr bgcolor="{cycle values=#rowColors#}"&gt;
+    &lt;td&gt; ....etc.... &lt;/td&gt;
+  &lt;/tr&gt;
   {/section}
-&#60;/table&#62;</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13;    See also
-    <A
-HREF="language.function.config.load.html"
-><TT
-CLASS="varname"
->{config_load}</TT
-></A
->,
-    <A
-HREF="api.get.config.vars.html"
-><TT
-CLASS="varname"
->get_config_vars()</TT
-></A
->,
-    <A
-HREF="api.clear.config.html"
-><TT
-CLASS="varname"
->clear_config()</TT
-></A
->,
-    <A
-HREF="api.config.load.html"
-><TT
-CLASS="varname"
->config_load()</TT
-></A
->
-    and the <A
-HREF="config.files.html"
->config files section</A
->.
-  </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="variable.cache.modified.check.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="variable.config.booleanize.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->$cache_modified_check</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="api.variables.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->$config_booleanize</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+&lt;/table&gt;
+
+    </pre>
+</div>
+</div>
+<br class="example-break"><p>
+    See also
+    <a class="link" href="language.function.config.load.html" title="{config_load}"><code class="varname">{config_load}</code></a>,
+    <a class="link" href="api.get.config.vars.html" title="getConfigVars()"><code class="varname">get_config_vars()</code></a>,
+    <a class="link" href="api.clear.config.html" title="clearConfig()"><code class="varname">clear_config()</code></a>,
+    <a class="link" href="api.config.load.html" title="configLoad()"><code class="varname">config_load()</code></a>
+    and the <a class="link" href="config.files.html" title="Chapter 9. Config Files">config files section</a>.
+  </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="variable.cache.modified.check.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="api.variables.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="variable.config.booleanize.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">$cache_modified_check </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> $config_booleanize</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

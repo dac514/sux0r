@@ -1,0 +1,198 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{while}</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="language.builtin.functions.html" title="Chapter 7. Built-in Functions">
+<link rel="prev" href="language.function.strip.html" title="{strip}">
+<link rel="next" href="language.custom.functions.html" title="Chapter 8. Custom Functions">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">{while}</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="language.function.strip.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 7. Built-in Functions</th>
+<td width="20%" align="right"> <a accesskey="n" href="language.custom.functions.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="{while}">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="language.function.while"></a>{while}</h2></div></div></div>
+<p>
+  <code class="varname">{while}</code> loopss in Smarty have much the same flexibility as PHP
+  <a class="ulink" href="http://php.net/while" target="_top">while</a>
+  statements, with a few added features for the template engine.
+  Every <code class="varname">{while}</code> must be paired with a matching
+  <code class="varname">{/while}</code>.  All PHP conditionals and functions
+  are recognized, such as <span class="emphasis"><em>||</em></span>, <span class="emphasis"><em>or</em></span>,
+  <span class="emphasis"><em>&amp;&amp;</em></span>, <span class="emphasis"><em>and</em></span>,
+  <span class="emphasis"><em>is_array()</em></span>, etc.
+ </p>
+<p>
+  The following is a list of recognized qualifiers, which must be
+  separated from surrounding elements by spaces. Note that items listed
+  in [brackets] are optional. PHP equivalents are shown where applicable.
+  </p>
+<div class="informaltable"><table border="1">
+<colgroup>
+<col align="center">
+<col align="center">
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th align="center">Qualifier</th>
+<th align="center">Alternates</th>
+<th>Syntax Example</th>
+<th>Meaning</th>
+<th>PHP Equivalent</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="center">==</td>
+<td align="center">eq</td>
+<td>$a eq $b</td>
+<td>equals</td>
+<td>==</td>
+</tr>
+<tr>
+<td align="center">!=</td>
+<td align="center">ne, neq</td>
+<td>$a neq $b</td>
+<td>not equals</td>
+<td>!=</td>
+</tr>
+<tr>
+<td align="center">&gt;</td>
+<td align="center">gt</td>
+<td>$a gt $b</td>
+<td>greater than</td>
+<td>&gt;</td>
+</tr>
+<tr>
+<td align="center">&lt;</td>
+<td align="center">lt</td>
+<td>$a lt $b</td>
+<td>less than</td>
+<td>&lt;</td>
+</tr>
+<tr>
+<td align="center">&gt;=</td>
+<td align="center">gte, ge</td>
+<td>$a ge $b</td>
+<td>greater than or equal</td>
+<td>&gt;=</td>
+</tr>
+<tr>
+<td align="center">&lt;=</td>
+<td align="center">lte, le</td>
+<td>$a le $b</td>
+<td>less than or equal</td>
+<td>&lt;=</td>
+</tr>
+<tr>
+<td align="center">===</td>
+<td align="center"> </td>
+<td>$a === 0</td>
+<td>check for identity</td>
+<td>===</td>
+</tr>
+<tr>
+<td align="center">!</td>
+<td align="center">not</td>
+<td>not $a</td>
+<td>negation (unary)</td>
+<td>!</td>
+</tr>
+<tr>
+<td align="center">%</td>
+<td align="center">mod</td>
+<td>$a mod $b</td>
+<td>modulous</td>
+<td>%</td>
+</tr>
+<tr>
+<td align="center">is [not] div by</td>
+<td align="center"> </td>
+<td>$a is not div by 4</td>
+<td>divisible by</td>
+<td>$a % $b == 0</td>
+</tr>
+<tr>
+<td align="center">is [not] even</td>
+<td align="center"> </td>
+<td>$a is not even</td>
+<td>[not] an even number (unary)</td>
+<td>$a % 2 == 0</td>
+</tr>
+<tr>
+<td align="center">is [not] even by</td>
+<td align="center"> </td>
+<td>$a is not even by $b</td>
+<td>grouping level [not] even</td>
+<td>($a / $b) % 2 == 0</td>
+</tr>
+<tr>
+<td align="center">is [not] odd</td>
+<td align="center"> </td>
+<td>$a is not odd</td>
+<td>[not] an odd number (unary)</td>
+<td>$a % 2 != 0</td>
+</tr>
+<tr>
+<td align="center">is [not] odd by</td>
+<td align="center"> </td>
+<td>$a is not odd by $b</td>
+<td>[not] an odd grouping</td>
+<td>($a / $b) % 2 != 0</td>
+</tr>
+</tbody>
+</table></div>
+<div class="example">
+<a name="id3061544"></a><p class="title"><b>Example 7.75. {while} loop</b></p>
+<div class="example-contents">
+<pre class="programlisting">
+
+
+{while $foo &gt; 0}
+  {$foo--}
+{/while}
+
+  </pre>
+<p>
+ The above example will count down the value of $foo until 1 is reached. 
+ </p>
+</div>
+</div>
+<br class="example-break"><p>
+  See also <a class="link" href="language.function.foreach.html" title="{foreach},{foreachelse}"><code class="varname">{foreach}</code></a> and
+  <a class="link" href="language.function.for.html" title="{for}"><code class="varname">{for}</code></a>.
+ </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="language.function.strip.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="language.builtin.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="language.custom.functions.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">{strip} </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Chapter 8. Custom Functions</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

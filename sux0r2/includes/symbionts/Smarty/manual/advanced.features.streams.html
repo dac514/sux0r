@@ -1,0 +1,101 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Streams</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="advanced.features.html" title="Chapter 15. Advanced Features">
+<link rel="prev" href="advanced.features.template.inheritance.html" title="Template Inheritance">
+<link rel="next" href="advanced.features.objects.html" title="Objects">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Streams</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="advanced.features.template.inheritance.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 15. Advanced Features</th>
+<td width="20%" align="right"> <a accesskey="n" href="advanced.features.objects.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="Streams">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="advanced.features.streams"></a>Streams</h2></div></div></div>
+<p>
+  Streams allow you to use PHP streams as a template resource or a variable resource.
+  The syntax is much the same a traditional template resource names.
+ </p>
+<p>
+   Smarty will first look for a registered template resource. If nothing is found, it will check if a PHP stream is available.
+   If a stream is available, Smarty will use it to fetch the template.
+   </p>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>You can further define allowed streams with security enabled.</p>
+</div>
+<p>
+ </p>
+<div class="example">
+<a name="id3126019"></a><p class="title"><b>Example 15.8. Stream from PHP</b></p>
+<div class="example-contents">
+<p>Using a PHP stream for a template resource from the display() function.</p>
+<pre class="programlisting">
+
+$smarty-&gt;display('foo:bar.tpl');
+
+  </pre>
+</div>
+</div>
+<br class="example-break"><div class="example">
+<a name="id3127194"></a><p class="title"><b>Example 15.9. Stream from Template</b></p>
+<div class="example-contents">
+<p>Using a PHP stream for a template resource from within a template.</p>
+<pre class="programlisting">
+
+{include file="foo:bar.tpl"}
+
+  </pre>
+</div>
+</div>
+<br class="example-break"><p>
+You can also use streams to call variables. <span class="emphasis"><em>{$foo:bar}</em></span> will use the <span class="emphasis"><em>foo://bar</em></span> stream to get the template variable.
+</p>
+<div class="example">
+<a name="id3127222"></a><p class="title"><b>Example 15.10. Stream Variable</b></p>
+<div class="example-contents">
+<p>Using a PHP stream for a template variable resource from within a template.</p>
+<pre class="programlisting">
+
+{$foo:bar}
+
+  </pre>
+</div>
+</div>
+<br class="example-break"><p>
+  See also
+  <a class="link" href="template.resources.html" title="Resources"><code class="varname">Template Resources</code></a>
+ </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="advanced.features.template.inheritance.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="advanced.features.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="advanced.features.objects.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Template Inheritance </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Objects</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

@@ -1,265 +1,128 @@
-<HTML
-><HEAD
-><TITLE
->Extended Setup</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Installation"
-HREF="installation.html"><LINK
-REL="PREVIOUS"
-TITLE="Basic Installation"
-HREF="installing.smarty.basic.html"><LINK
-REL="NEXT"
-TITLE="Smarty For Template Designers"
-HREF="smarty.for.designers.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="installing.smarty.basic.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 2. Installation</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="smarty.for.designers.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="installing.smarty.extended"
-></A
->Extended Setup</H1
-><P
->&#13;    This is a continuation of the <A
-HREF="installing.smarty.basic.html"
->basic installation</A
->, please read
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Extended Setup</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="installation.html" title="Chapter 2. Installation">
+<link rel="prev" href="installing.smarty.basic.html" title="Basic Installation">
+<link rel="next" href="smarty.for.designers.html" title="Part II. Smarty For Template Designers">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Extended Setup</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="installing.smarty.basic.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 2. Installation</th>
+<td width="20%" align="right"> <a accesskey="n" href="smarty.for.designers.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="Extended Setup">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="installing.smarty.extended"></a>Extended Setup</h2></div></div></div>
+<p>
+    This is a continuation of the <a class="link" href="installing.smarty.basic.html" title="Basic Installation">basic installation</a>, please read
     that first!
-   </P
-><P
->&#13;    A slightly more flexible way to setup Smarty is to
-    <A
-HREF="http://php.net/ref.classobj"
-TARGET="_top"
->extend the class</A
-> and
+   </p>
+<p>
+    A slightly more flexible way to setup Smarty is to
+    <a class="ulink" href="http://php.net/ref.classobj" target="_top">extend the class</a> and
     initialize your Smarty environment. So instead of repeatedly setting
     directory paths, assigning the same vars, etc., we can do that in one place.
-    </P
-><P
->&#13;    Lets create a new directory <TT
-CLASS="filename"
->/php/includes/guestbook/</TT
->
-     and make a new file called <TT
-CLASS="filename"
->setup.php</TT
->. In our example
-     environment, <TT
-CLASS="filename"
->/php/includes</TT
-> is in our
-     <TT
-CLASS="literal"
->include_path</TT
->.
+    </p>
+<p>
+    Lets create a new directory <code class="filename">/php/includes/guestbook/</code>
+     and make a new file called <code class="filename">setup.php</code>. In our example
+     environment, <code class="filename">/php/includes</code> is in our
+     <code class="literal">include_path</code>.
      Be sure you set this up too, or use absolute file paths.
-   </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN267"
-></A
-><P
-><B
->Example 2-10. /php/includes/guestbook/setup.php</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /><br /></span><span style="color: #FF8000">//&nbsp;load&nbsp;Smarty&nbsp;library<br /></span><span style="color: #007700">require(</span><span style="color: #DD0000">'Smarty.class.php'</span><span style="color: #007700">);<br /><br /></span><span style="color: #FF8000">//&nbsp;The&nbsp;setup.php&nbsp;file&nbsp;is&nbsp;a&nbsp;good&nbsp;place&nbsp;to&nbsp;load<br />//&nbsp;required&nbsp;application&nbsp;library&nbsp;files,&nbsp;and&nbsp;you<br />//&nbsp;can&nbsp;do&nbsp;that&nbsp;right&nbsp;here.&nbsp;An&nbsp;example:<br />//&nbsp;require('guestbook/guestbook.lib.php');<br /><br /></span><span style="color: #007700">class&nbsp;</span><span style="color: #0000BB">Smarty_GuestBook&nbsp;</span><span style="color: #007700">extends&nbsp;</span><span style="color: #0000BB">Smarty&nbsp;</span><span style="color: #007700">{<br /><br />&nbsp;&nbsp;&nbsp;function&nbsp;</span><span style="color: #0000BB">Smarty_GuestBook</span><span style="color: #007700">()<br />&nbsp;&nbsp;&nbsp;{<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #FF8000">//&nbsp;Class&nbsp;Constructor.<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;These&nbsp;automatically&nbsp;get&nbsp;set&nbsp;with&nbsp;each&nbsp;new&nbsp;instance.<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">Smarty</span><span style="color: #007700">();<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">template_dir&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'/web/www.example.com/guestbook/templates/'</span><span style="color: #007700">;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">compile_dir&nbsp;&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'/web/www.example.com/guestbook/templates_c/'</span><span style="color: #007700">;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">config_dir&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'/web/www.example.com/guestbook/configs/'</span><span style="color: #007700">;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">cache_dir&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'/web/www.example.com/guestbook/cache/'</span><span style="color: #007700">;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">caching&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">true</span><span style="color: #007700">;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'app_name'</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'Guest&nbsp;Book'</span><span style="color: #007700">);<br />&nbsp;&nbsp;&nbsp;}<br /><br />}<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13;   Now lets alter the <TT
-CLASS="filename"
->index.php</TT
-> file to use
-   <TT
-CLASS="filename"
->setup.php</TT
->:
-  </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN273"
-></A
-><P
-><B
->Example 2-11. /web/www.example.com/guestbook/htdocs/index.php</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /><br /></span><span style="color: #007700">require(</span><span style="color: #DD0000">'guestbook/setup.php'</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">$smarty&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">Smarty_GuestBook</span><span style="color: #007700">();<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'name'</span><span style="color: #007700">,</span><span style="color: #DD0000">'Ned'</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13;   Now you see it is quite simple to bring up an instance of Smarty, just use
-   <TT
-CLASS="literal"
->Smarty_GuestBook()</TT
-> which automatically initializes everything for our
+   </p>
+<div class="example">
+<a name="id3020226"></a><p class="title"><b>Example 2.10. /php/includes/guestbook/setup.php</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+
+// load Smarty library
+require('Smarty.class.php');
+
+// The setup.php file is a good place to load
+// required application library files, and you
+// can do that right here. An example:
+// require('guestbook/guestbook.lib.php');
+
+class Smarty_GuestBook extends Smarty {
+
+   function Smarty_GuestBook()
+   {
+
+        // Class Constructor.
+        // These automatically get set with each new instance.
+
+        parent::__construct();
+
+        $this-&gt;template_dir = '/web/www.example.com/guestbook/templates/';
+        $this-&gt;compile_dir  = '/web/www.example.com/guestbook/templates_c/';
+        $this-&gt;config_dir   = '/web/www.example.com/guestbook/configs/';
+        $this-&gt;cache_dir    = '/web/www.example.com/guestbook/cache/';
+
+        $this-&gt;caching = Smarty::CACHING_LIFETIME_CURRENT;
+        $this-&gt;assign('app_name', 'Guest Book');
+   }
+
+}
+?&gt;
+
+    </pre></div>
+</div>
+<br class="example-break"><p>
+   Now lets alter the <code class="filename">index.php</code> file to use
+   <code class="filename">setup.php</code>:
+  </p>
+<div class="example">
+<a name="id3020255"></a><p class="title"><b>Example 2.11. /web/www.example.com/guestbook/htdocs/index.php</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+
+require('guestbook/setup.php');
+
+$smarty = new Smarty_GuestBook();
+
+$smarty-&gt;assign('name','Ned');
+
+$smarty-&gt;display('index.tpl');
+?&gt;
+
+   </pre></div>
+</div>
+<br class="example-break"><p>
+   Now you see it is quite simple to bring up an instance of Smarty, just use
+   <code class="literal">Smarty_GuestBook()</code> which automatically initializes everything for our
    application.
-  </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="installing.smarty.basic.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="smarty.for.designers.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->Basic Installation</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="installation.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->Smarty For Template Designers</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+  </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="installing.smarty.basic.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="installation.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="smarty.for.designers.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Basic Installation </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Part II. Smarty For Template Designers</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

@@ -1,169 +1,54 @@
-<HTML
-><HEAD
-><TITLE
->{$smarty} reserved variable</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Variables"
-HREF="language.variables.html"><LINK
-REL="PREVIOUS"
-TITLE="Variables loaded from config files"
-HREF="language.config.variables.html"><LINK
-REL="NEXT"
-TITLE="Variable Modifiers"
-HREF="language.modifiers.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="language.config.variables.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 4. Variables</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="language.modifiers.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="language.variables.smarty"
-></A
->{$smarty} reserved variable</H1
-><P
->&#13;  The PHP reserved <TT
-CLASS="parameter"
-><I
->{$smarty}</I
-></TT
-> variable can be used to
-  access several enviroment and request variables.
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{$smarty} reserved variable</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="language.variables.html" title="Chapter 4. Variables">
+<link rel="prev" href="language.config.variables.html" title="Variables loaded from config files">
+<link rel="next" href="language.modifiers.html" title="Chapter 5. Variable Modifiers">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">{$smarty} reserved variable</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="language.config.variables.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 4. Variables</th>
+<td width="20%" align="right"> <a accesskey="n" href="language.modifiers.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="{$smarty} reserved variable">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="language.variables.smarty"></a>{$smarty} reserved variable</h2></div></div></div>
+<p>
+  The PHP reserved <em class="parameter"><code>{$smarty}</code></em> variable can be used to
+  access several environment and request variables.
   The full list of them follows.
- </P
-><DIV
-CLASS="sect2"
-><H2
-CLASS="sect2"
-><A
-NAME="language.variables.smarty.request"
-></A
->Request variables</H2
-><P
->&#13;   The <A
-HREF="http://php.net/reserved.variables"
-TARGET="_top"
->request variables
-   </A
-> such as <TT
-CLASS="literal"
->$_GET</TT
->, <TT
-CLASS="literal"
->$_POST</TT
->,
-   <TT
-CLASS="literal"
->$_COOKIE</TT
->, <TT
-CLASS="literal"
->$_SERVER</TT
->,
-   <TT
-CLASS="literal"
->$_ENV</TT
-> and <TT
-CLASS="literal"
->$_SESSION</TT
->
-   (see <A
-HREF="variable.request.vars.order.html"
->&#13;   <TT
-CLASS="varname"
->$request_vars_order</TT
-></A
->
-   and <A
-HREF="variable.request.use.auto.globals.html"
->&#13;   <TT
-CLASS="varname"
->$request_use_auto_globals</TT
-></A
->)
+ </p>
+<div class="sect2" title="Request variables">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="language.variables.smarty.request"></a>Request variables</h3></div></div></div>
+<p>
+   The <a class="ulink" href="http://php.net/reserved.variables" target="_top">request variables
+   </a> such as <code class="literal">$_GET</code>, <code class="literal">$_POST</code>,
+   <code class="literal">$_COOKIE</code>, <code class="literal">$_SERVER</code>,
+   <code class="literal">$_ENV</code> and <code class="literal">$_SESSION</code>
+   (see <a class="link" href="variable.request.vars.order.html" title="$request_vars_order">
+   <code class="varname">$request_vars_order</code></a>
+   and <a class="link" href="variable.request.use.auto.globals.html" title="$request_use_auto_globals">
+   <code class="varname">$request_use_auto_globals</code></a>)
    can be accessed as demonstrated in the examples below:
-  </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN539"
-></A
-><P
-><B
->Example 4-7. Displaying request variables</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{* display value of page from URL ($_GET) http://www.example.com/index.php?page=foo *}
+  </p>
+<div class="example">
+<a name="id3025878"></a><p class="title"><b>Example 4.8. Displaying request variables</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+{* display value of page from URL ($_GET) http://www.example.com/index.php?page=foo *}
 {$smarty.get.page}
 
 {* display the variable "page" from a form ($_POST['page']) *}
@@ -182,474 +67,203 @@ CLASS="programlisting"
 {$smarty.session.id}
 
 {* display the variable "username" from merged get/post/cookies/server/env *}
-{$smarty.request.username}</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><DIV
-CLASS="note"
-><BLOCKQUOTE
-CLASS="note"
-><P
-><B
->Note: </B
->
-    For historical reasons <TT
-CLASS="parameter"
-><I
->{$SCRIPT_NAME}</I
-></TT
-> can be accessed
-    directly, although <TT
-CLASS="parameter"
-><I
->{$smarty.server.SCRIPT_NAME}</I
-></TT
-> is the
-    proposed way to access this value.
-   </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#60;a href="{$SCRIPT_NAME}?page=smarty"&#62;click me&#60;/a&#62;
-&#60;a href="{$smarty.server.SCRIPT_NAME}?page=smarty"&#62;click me&#60;/a&#62;</PRE
-></TD
-></TR
-></TABLE
-></BLOCKQUOTE
-></DIV
-></DIV
-><DIV
-CLASS="sect2"
-><H2
-CLASS="sect2"
-><A
-NAME="language.variables.smarty.now"
-></A
->{$smarty.now}</H2
-><P
->&#13;   The current <A
-HREF="http://php.net/function.time"
-TARGET="_top"
->timestamp</A
->
-   can be accessed with <TT
-CLASS="parameter"
-><I
->{$smarty.now}</I
-></TT
->.
+{$smarty.request.username}
+
+   </pre></div>
+</div>
+<br class="example-break"><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+    For historical reasons <em class="parameter"><code>{$SCRIPT_NAME}</code></em> is
+    short-hand for <em class="parameter"><code>{$smarty.server.SCRIPT_NAME}</code></em>.
+   </p>
+<pre class="programlisting">
+
+&lt;a href="{$SCRIPT_NAME}?page=smarty"&gt;click me&lt;/a&gt;
+&lt;a href="{$smarty.server.SCRIPT_NAME}?page=smarty"&gt;click me&lt;/a&gt;
+
+</pre>
+</div>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+    Although Smarty provides direct access to PHP super globals for convenience,
+    it should be used with caution. Specifically, GET and POST and REQUEST are commonly used
+    for presentation purposes, but directly accessing SERVER, ENV, COOKIE and SESSION vars is
+    typically avoided, as this is mixing underlying application code structure into the templates.
+    A good practice is to assign specific needed values to template vars.
+  </p>
+</div>
+</div>
+<div class="sect2" title="{$smarty.now}">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="language.variables.smarty.now"></a>{$smarty.now}</h3></div></div></div>
+<p>
+   The current <a class="ulink" href="http://php.net/function.time" target="_top">timestamp</a>
+   can be accessed with <em class="parameter"><code>{$smarty.now}</code></em>.
    The  value reflects the number of
    seconds passed since the so-called Epoch on January 1, 1970,
    and can be passed directly to the
-   <A
-HREF="language.modifier.date.format.html"
-><TT
-CLASS="varname"
->date_format</TT
->
-   </A
-> modifier for display. Note that
-   <A
-HREF="http://php.net/function.time"
-TARGET="_top"
-><TT
-CLASS="varname"
->time()</TT
-></A
->
+   <a class="link" href="language.modifier.date.format.html" title="date_format"><code class="varname">date_format</code>
+   </a> modifier for display. Note that
+   <a class="ulink" href="http://php.net/function.time" target="_top"><code class="varname">time()</code></a>
     is called on each invocation; eg a script that takes three seconds to execute
-    with a call to <TT
-CLASS="parameter"
-><I
->$smarty.now</I
-></TT
-> at start and end
+    with a call to <em class="parameter"><code>$smarty.now</code></em> at start and end
     will show the three second difference.
-  <DIV
-CLASS="informalexample"
-><A
-NAME="AEN557"
-></A
-><P
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{* use the date_format modifier to show current date and time *}
-{$smarty.now|date_format:'%Y-%m-%d %H:%M:%S'}</PRE
-></TD
-></TR
-></TABLE
-><P
-></P
-></DIV
->
-  </P
-></DIV
-><DIV
-CLASS="sect2"
-><H2
-CLASS="sect2"
-><A
-NAME="language.variables.smarty.const"
-></A
->{$smarty.const}</H2
-><P
->&#13;   You can access PHP constant values directly. See also <A
-HREF="smarty.constants.html"
->smarty constants</A
->.
-   </P
-><DIV
-CLASS="informalexample"
-><A
-NAME="AEN563"
-></A
-><P
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #FF8000">//&nbsp;the&nbsp;constant&nbsp;defined&nbsp;in&nbsp;php<br /></span><span style="color: #0000BB">define</span><span style="color: #007700">(</span><span style="color: #DD0000">'MY_CONST_VAL'</span><span style="color: #007700">,</span><span style="color: #DD0000">'CHERRIES'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-><P
-></P
-></DIV
-><P
->Output the constant in a template with</P
-><DIV
-CLASS="informalexample"
-><A
-NAME="AEN566"
-></A
-><P
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{$smarty.const.MY_CONST_VAL}</PRE
-></TD
-></TR
-></TABLE
-><P
-></P
-></DIV
-></DIV
-><DIV
-CLASS="sect2"
-><H2
-CLASS="sect2"
-><A
-NAME="language.variables.smarty.capture"
-></A
->{$smarty.capture}</H2
-><P
->&#13;   Template output captured via the built-in
-   <A
-HREF="language.builtin.functions.html#language.function.capture"
->&#13;   <TT
-CLASS="varname"
->{capture}..{/capture}</TT
-></A
-> function can be accessed
-   using the <TT
-CLASS="parameter"
-><I
->{$smarty.capture}</I
-></TT
-> variable.
-    See the <A
-HREF="language.builtin.functions.html#language.function.capture"
->&#13;    <TT
-CLASS="varname"
->{capture}</TT
-></A
-> page for more information.
-  </P
-></DIV
-><DIV
-CLASS="sect2"
-><H2
-CLASS="sect2"
-><A
-NAME="language.variables.smarty.config"
-></A
->{$smarty.config}</H2
-><P
->&#13;   <TT
-CLASS="parameter"
-><I
->{$smarty.config}</I
-></TT
-> variable can be used to refer
-   to loaded <A
-HREF="language.config.variables.html"
->config variables</A
->.
-   <TT
-CLASS="parameter"
-><I
->{$smarty.config.foo}</I
-></TT
-> is a synonym for
-   <TT
-CLASS="parameter"
-><I
->{#foo#}</I
-></TT
->. See the
-   <A
-HREF="language.function.config.load.html"
->{config_load}</A
-> page
+  </p>
+<div class="informalexample"><pre class="programlisting">
+
+{* use the date_format modifier to show current date and time *}
+{$smarty.now|date_format:'%Y-%m-%d %H:%M:%S'}
+
+   </pre></div>
+<p>
+  </p>
+</div>
+<div class="sect2" title="{$smarty.const}">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="language.variables.smarty.const"></a>{$smarty.const}</h3></div></div></div>
+<p>
+   You can access PHP constant values directly. See also <a class="link" href="smarty.constants.html" title="Chapter 11. Constants">smarty constants</a>.
+   </p>
+<div class="informalexample"><pre class="programlisting">
+
+&lt;?php
+// the constant defined in php
+define('MY_CONST_VAL','CHERRIES');
+?&gt;
+
+</pre></div>
+<p>Output the constant in a template with</p>
+<div class="informalexample"><pre class="programlisting">
+
+{$smarty.const.MY_CONST_VAL}
+
+</pre></div>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+  Although Smarty provides direct access to PHP constants for convenience,
+  it is typically avoided as this is mixing underlying application
+  code structure into the templates.
+  A good practice is to assign specific needed values to template vars.  
+</p>
+</div>
+</div>
+<div class="sect2" title="{$smarty.capture}">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="language.variables.smarty.capture"></a>{$smarty.capture}</h3></div></div></div>
+<p>
+   Template output captured via the built-in
+   <a class="link" href="language.function.capture.html" title="{capture}">
+   <code class="varname">{capture}..{/capture}</code></a> function can be accessed
+   using the <em class="parameter"><code>{$smarty.capture}</code></em> variable.
+    See the <a class="link" href="language.function.capture.html" title="{capture}">
+    <code class="varname">{capture}</code></a> page for more information.
+  </p>
+</div>
+<div class="sect2" title="{$smarty.config}">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="language.variables.smarty.config"></a>{$smarty.config}</h3></div></div></div>
+<p>
+   <em class="parameter"><code>{$smarty.config}</code></em> variable can be used to refer
+   to loaded <a class="link" href="language.config.variables.html" title="Variables loaded from config files">config variables</a>.
+   <em class="parameter"><code>{$smarty.config.foo}</code></em> is a synonym for
+   <em class="parameter"><code>{#foo#}</code></em>. See the
+   <a class="link" href="language.function.config.load.html" title="{config_load}">{config_load}</a> page
    for more info.
-  </P
-></DIV
-><DIV
-CLASS="sect2"
-><H2
-CLASS="sect2"
-><A
-NAME="language.variables.smarty.loops"
-></A
->{$smarty.section}, {$smarty.foreach}</H2
-><P
->&#13;   The <TT
-CLASS="parameter"
-><I
->{$smarty.section}</I
-></TT
-> and
-   <TT
-CLASS="parameter"
-><I
->{$smarty.foreach}</I
-></TT
-> variables can be used to refer to
-   <A
-HREF="language.function.section.html"
-><TT
-CLASS="varname"
->{section}</TT
-></A
->
-   and
-   <A
-HREF="language.function.foreach.html"
-><TT
-CLASS="varname"
->{foreach}</TT
-></A
->
-   loop properties respectfully. These have some very useful values such as
-   <TT
-CLASS="varname"
->.first</TT
->, <TT
-CLASS="varname"
->.index</TT
->, etc.
-  </P
-></DIV
-><DIV
-CLASS="sect2"
-><H2
-CLASS="sect2"
-><A
-NAME="language.variables.smarty.template"
-></A
->{$smarty.template}</H2
-><P
->&#13;   Returns the name of the current template being  processed.
-   The following example shows the <TT
-CLASS="filename"
->container.tpl</TT
-> and the
-   included <TT
-CLASS="filename"
->banner.tpl</TT
-> with
-   <TT
-CLASS="parameter"
-><I
->{$smarty.template}</I
-></TT
-> within both.
-  </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#60;b&#62;Main container is {$smarty.template}&#60;/b&#62;
-{include file='banner.tpl'}</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;    will output
-    </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#60;b&#62;Main page is container.tpl&#60;/b&#62;
-banner.tpl</PRE
-></TD
-></TR
-></TABLE
-></DIV
-><DIV
-CLASS="sect2"
-><H2
-CLASS="sect2"
-><A
-NAME="language.variables.smarty.version"
-></A
->{$smarty.version}</H2
-><P
->&#13;   Returns the version of Smarty the template was compiled with.
-  </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#60;div id="footer"&#62;Powered by Smarty {$smarty.version}&#60;/div&#62;</PRE
-></TD
-></TR
-></TABLE
-></DIV
-><DIV
-CLASS="sect2"
-><H2
-CLASS="sect2"
-><A
-NAME="language.variables.smarty.ldelim"
-></A
->{$smarty.ldelim}, {$smarty.rdelim}</H2
-><P
->&#13;   These variables are used for printing the left-delimiter and right-delimiter
-   value literally, the same as <A
-HREF="language.function.ldelim.html"
->&#13;   <TT
-CLASS="varname"
->{ldelim},{rdelim}</TT
-></A
->.
-  </P
-><P
->&#13;   See also
-   <A
-HREF="language.variables.html#language.assigned.variables"
->assigned variables</A
-> and
-   <A
-HREF="language.config.variables.html"
->config variables</A
->
-  </P
-></DIV
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="language.config.variables.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="language.modifiers.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->Variables loaded from config files</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="language.variables.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->Variable Modifiers</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+  </p>
+</div>
+<div class="sect2" title="{$smarty.section}">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="language.variables.smarty.loops"></a>{$smarty.section}</h3></div></div></div>
+<p>
+   The <em class="parameter"><code>{$smarty.section}</code></em> variables can be used to refer to
+   <a class="link" href="language.function.section.html" title="{section},{sectionelse}"><code class="varname">{section}</code></a>
+   loop properties. These have some very useful values such as
+   <code class="varname">.first</code>, <code class="varname">.index</code>, etc.
+  </p>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+    The <code class="varname">{$smarty.foreach}</code> variable is no longer used with the new <a class="link" href="language.function.foreach.html" title="{foreach},{foreachelse}"><code class="varname">{foreach}</code></a> syntax,
+    but is still supported with Smarty 2.x style foreach syntax.
+  </p>
+</div>
+</div>
+<div class="sect2" title="{$smarty.template}">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="language.variables.smarty.template"></a>{$smarty.template}</h3></div></div></div>
+<p>
+   Returns the name of the current template being  processed (without the directory.)
+  </p>
+</div>
+<div class="sect2" title="{$smarty.current_dir}">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="language.variables.smarty.current_dir"></a>{$smarty.current_dir}</h3></div></div></div>
+<p>
+    Returns the name of the directory for the current template being processed.
+   </p>
+</div>
+<div class="sect2" title="{$smarty.version}">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="language.variables.smarty.version"></a>{$smarty.version}</h3></div></div></div>
+<p>
+   Returns the version of Smarty the template was compiled with.
+  </p>
+<pre class="programlisting">
+
+&lt;div id="footer"&gt;Powered by Smarty {$smarty.version}&lt;/div&gt;
+
+</pre>
+</div>
+<div class="sect2" title="{$smarty.block.child}">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="language.variables.smarty.block.child"></a>{$smarty.block.child}</h3></div></div></div>
+<p>
+   Returns block text from child template.
+   See <a class="link" href="advanced.features.template.inheritance.html" title="Template Inheritance">Template interitance</a>.
+  </p>
+</div>
+<div class="sect2" title="{$smarty.block.parent}">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="language.variables.smarty.block.parent"></a>{$smarty.block.parent}</h3></div></div></div>
+<p>
+   Returns block text from parent template.
+   See <a class="link" href="advanced.features.template.inheritance.html" title="Template Inheritance">Template interitance</a>
+  </p>
+</div>
+<div class="sect2" title="{$smarty.ldelim}, {$smarty.rdelim}">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="language.variables.smarty.ldelim"></a>{$smarty.ldelim}, {$smarty.rdelim}</h3></div></div></div>
+<p>
+   These variables are used for printing the left-delimiter and right-delimiter
+   value literally, the same as <a class="link" href="language.function.ldelim.html" title="{ldelim},{rdelim}">
+   <code class="varname">{ldelim},{rdelim}</code></a>.
+  </p>
+<p>
+   See also
+   <a class="link" href="language.variables.html#language.assigned.variables" title="Variables assigned from PHP">assigned variables</a> and
+   <a class="link" href="language.config.variables.html" title="Variables loaded from config files">config variables</a>
+  </p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="language.config.variables.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="language.variables.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="language.modifiers.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Variables loaded from config files </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Chapter 5. Variable Modifiers</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

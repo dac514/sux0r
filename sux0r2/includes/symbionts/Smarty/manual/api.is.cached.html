@@ -1,403 +1,136 @@
-<HTML
-><HEAD
-><TITLE
->is_cached()</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Smarty Class Methods()"
-HREF="api.functions.html"><LINK
-REL="PREVIOUS"
-TITLE="get_template_vars()"
-HREF="api.get.template.vars.html"><LINK
-REL="NEXT"
-TITLE="load_filter()"
-HREF="api.load.filter.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="refentry"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="api.get.template.vars.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
-></TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="api.load.filter.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><H1
-><A
-NAME="api.is.cached"
-></A
->is_cached()</H1
-><DIV
-CLASS="refnamediv"
-><A
-NAME="AEN6039"
-></A
->is_cached()&nbsp;--&nbsp;returns true if there is a valid cache for this template</DIV
-><DIV
-CLASS="refsect1"
-><A
-NAME="AEN6042"
-></A
-><H2
->Description</H2
->bool <B
-CLASS="methodname"
->is_cached</B
-> ( string template [, string cache_id [, string compile_id]])<BR
-></BR
-><P
-></P
-><UL
-><LI
-><P
->&#13;   This only works if <A
-HREF="variable.caching.html"
->&#13;   <TT
-CLASS="parameter"
-><I
->$caching</I
-></TT
-></A
-> is set to <TT
-CLASS="constant"
->TRUE</TT
->, see the
-   <A
-HREF="caching.html"
->caching section</A
-> for more info.
-  </P
-></LI
-><LI
-><P
->&#13;   You can also pass a <TT
-CLASS="parameter"
-><I
->$cache_id</I
-></TT
-> as an optional second
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>isCached()</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="api.functions.html" title="Chapter 13. Smarty Class Methods()">
+<link rel="prev" href="api.get.template.vars.html" title="getTemplateVars()">
+<link rel="next" href="api.load.filter.html" title="loadFilter()">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">isCached()</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="api.get.template.vars.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 13. Smarty Class Methods()</th>
+<td width="20%" align="right"> <a accesskey="n" href="api.load.filter.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="refentry" title="isCached()">
+<a name="api.is.cached"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2>Name</h2>
+<p>isCached() — returns true if there is a valid cache for this template</p>
+</div>
+<div class="refsect1" title="Description">
+<a name="id3110163"></a><h2>Description</h2>
+<code class="methodsynopsis"><span class="type">bool </span><span class="methodname">isCached</span>(<span class="methodparam"><span class="type">string </span><span class="parameter">template</span></span>,<br>              <span class="methodparam"><span class="type">string </span><span class="parameter">cache_id</span></span>,<br>              <span class="methodparam"><span class="type">string </span><span class="parameter">compile_id</span></span>);</code><div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><p>
+   This only works if <a class="link" href="variable.caching.html" title="$caching">
+   <em class="parameter"><code>$caching</code></em></a> is set to <code class="constant">TRUE</code>, see the
+   <a class="link" href="caching.html" title="Chapter 14. Caching">caching section</a> for more info.
+  </p></li>
+<li class="listitem"><p>
+   You can also pass a <em class="parameter"><code>$cache_id</code></em> as an optional second
    parameter in case you want
-   <A
-HREF="caching.multiple.caches.html"
->multiple caches</A
->
+   <a class="link" href="caching.multiple.caches.html" title="Multiple Caches Per Page">multiple caches</a>
    for the given template.
-  </P
-></LI
-><LI
-><P
->&#13;   You can supply a
-   <A
-HREF="variable.compile.id.html"
-><TT
-CLASS="parameter"
-><I
->$compile id</I
-></TT
-></A
->
+  </p></li>
+<li class="listitem"><p>
+   You can supply a
+   <a class="link" href="variable.compile.id.html" title="$compile_id"><em class="parameter"><code>$compile id</code></em></a>
    as an optional third parameter. If you omit that parameter the persistent
-   <A
-HREF="variable.compile.id.html"
->&#13;   <TT
-CLASS="parameter"
-><I
->$compile_id</I
-></TT
-></A
-> is used if its set.
-  </P
-></LI
-><LI
-><P
->&#13;   If you do not want to pass a <TT
-CLASS="parameter"
-><I
->$cache_id</I
-></TT
-> but want to
-   pass a <A
-HREF="variable.compile.id.html"
->&#13;   <TT
-CLASS="parameter"
-><I
->$compile_id</I
-></TT
-></A
-> you have to pass
-   <TT
-CLASS="constant"
->NULL</TT
-> as a <TT
-CLASS="parameter"
-><I
->$cache_id</I
-></TT
->.
-  </P
-></LI
-></UL
-><DIV
-CLASS="note"
-><BLOCKQUOTE
-CLASS="note"
-><P
-><B
->Technical Note: </B
->
-   If <TT
-CLASS="varname"
->is_cached()</TT
-> returns <TT
-CLASS="constant"
->TRUE</TT
-> it actually loads the
+   <a class="link" href="variable.compile.id.html" title="$compile_id">
+   <em class="parameter"><code>$compile_id</code></em></a> is used if its set.
+  </p></li>
+<li class="listitem"><p>
+   If you do not want to pass a <em class="parameter"><code>$cache_id</code></em> but want to
+   pass a <a class="link" href="variable.compile.id.html" title="$compile_id">
+   <em class="parameter"><code>$compile_id</code></em></a> you have to pass
+   <code class="constant">NULL</code> as a <em class="parameter"><code>$cache_id</code></em>.
+  </p></li>
+</ul></div>
+<div class="note" title="Technical Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Technical Note</h3>
+<p>
+   If <code class="varname">isCached()</code> returns <code class="constant">TRUE</code> it actually loads the
    cached output and stores it internally. Any subsequent call to
-   <A
-HREF="api.display.html"
-><TT
-CLASS="varname"
->display()</TT
-></A
-> or
-   <A
-HREF="api.fetch.html"
-><TT
-CLASS="varname"
->fetch()</TT
-></A
->
+   <a class="link" href="api.display.html" title="display()"><code class="varname">display()</code></a> or
+   <a class="link" href="api.fetch.html" title="fetch()"><code class="varname">fetch()</code></a>
    will return this internally stored output and does not try to reload
    the cache file. This prevents a race condition that may occur when a
    second process clears the cache between the calls to
-   <TT
-CLASS="varname"
->is_cached()</TT
-> and to
-   <A
-HREF="api.display.html"
-><TT
-CLASS="varname"
->display()</TT
-></A
->
+   <code class="varname">isCached()</code> and to
+   <a class="link" href="api.display.html" title="display()"><code class="varname">display()</code></a>
    in the example above. This also means calls to
-   <A
-HREF="api.clear.cache.html"
-><TT
-CLASS="varname"
->clear_cache()</TT
-></A
->
+   <a class="link" href="api.clear.cache.html" title="clearCache()"><code class="varname">clearCache()</code></a>
    and other changes of the cache-settings may have no effect after
-   <TT
-CLASS="varname"
->is_cached()</TT
-> returned <TT
-CLASS="constant"
->TRUE</TT
->.
-  </P
-></BLOCKQUOTE
-></DIV
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN6096"
-></A
-><P
-><B
->Example 13-1. is_cached()</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br />$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">caching&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">true</span><span style="color: #007700">;<br /><br />if(!</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">is_cached</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">))&nbsp;{<br /></span><span style="color: #FF8000">//&nbsp;do&nbsp;database&nbsp;calls,&nbsp;assign&nbsp;vars&nbsp;here<br /></span><span style="color: #007700">}<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN6099"
-></A
-><P
-><B
->Example 13-2. is_cached() with multiple-cache template</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br />$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">caching&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">true</span><span style="color: #007700">;<br /><br />if(!</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">is_cached</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'FrontPage'</span><span style="color: #007700">))&nbsp;{<br />&nbsp;&nbsp;</span><span style="color: #FF8000">//&nbsp;do&nbsp;database&nbsp;calls,&nbsp;assign&nbsp;vars&nbsp;here<br /></span><span style="color: #007700">}<br /><br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'FrontPage'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13;    See also
-    <A
-HREF="api.clear.cache.html"
-><TT
-CLASS="varname"
->clear_cache()</TT
-></A
->,
-    <A
-HREF="api.clear.all.cache.html"
-><TT
-CLASS="varname"
->clear_all_cache()</TT
-></A
->,
+   <code class="varname">isCached()</code> returned <code class="constant">TRUE</code>.
+  </p>
+</div>
+<div class="example">
+<a name="id3110703"></a><p class="title"><b>Example 13.24. isCached()</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+$smarty-&gt;caching = Smarty::CACHING_LIFETIME_CURRENT;
+
+if(!$smarty-&gt;is_cached('index.tpl')) {
+// do database calls, assign vars here
+}
+
+$smarty-&gt;display('index.tpl');
+?&gt;
+
+   </pre></div>
+</div>
+<br class="example-break"><div class="example">
+<a name="id3110718"></a><p class="title"><b>Example 13.25. isCached() with multiple-cache template</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+$smarty-&gt;caching = Smarty::CACHING_LIFETIME_CURRENT;
+
+if(!$smarty-&gt;is_cached('index.tpl', 'FrontPage')) {
+  // do database calls, assign vars here
+}
+
+$smarty-&gt;display('index.tpl', 'FrontPage');
+?&gt;
+
+   </pre></div>
+</div>
+<br class="example-break"><p>
+    See also
+    <a class="link" href="api.clear.cache.html" title="clearCache()"><code class="varname">clearCache()</code></a>,
+    <a class="link" href="api.clear.all.cache.html" title="clearAllCache()"><code class="varname">clearAllCache()</code></a>,
     and
-    <A
-HREF="caching.html"
->caching section</A
->.
-  </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="api.get.template.vars.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="api.load.filter.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->get_template_vars()</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="api.functions.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->load_filter()</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+    <a class="link" href="caching.html" title="Chapter 14. Caching">caching section</a>.
+  </p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="api.get.template.vars.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="api.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="api.load.filter.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">getTemplateVars() </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> loadFilter()</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

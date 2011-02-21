@@ -1,248 +1,64 @@
-<HTML
-><HEAD
-><TITLE
->{debug}</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Custom Functions"
-HREF="language.custom.functions.html"><LINK
-REL="PREVIOUS"
-TITLE="{cycle}"
-HREF="language.function.cycle.html"><LINK
-REL="NEXT"
-TITLE="{eval}"
-HREF="language.function.eval.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="language.function.cycle.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 8. Custom Functions</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="language.function.eval.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="language.function.debug"
-></A
->{debug}</H1
-><P
->&#13;  <TT
-CLASS="varname"
->{debug}</TT
-> dumps the debug console to the page. This works
-  regardless of the <A
-HREF="chapter.debugging.console.html"
->debug</A
->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{debug}</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="language.builtin.functions.html" title="Chapter 7. Built-in Functions">
+<link rel="prev" href="language.function.config.load.html" title="{config_load}">
+<link rel="next" href="language.function.extends.html" title="{extends}">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">{debug}</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="language.function.config.load.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 7. Built-in Functions</th>
+<td width="20%" align="right"> <a accesskey="n" href="language.function.extends.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="{debug}">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="language.function.debug"></a>{debug}</h2></div></div></div>
+<p>
+  <code class="varname">{debug}</code> dumps the debug console to the page. This works
+  regardless of the <a class="link" href="chapter.debugging.console.html" title="Chapter 10. Debugging Console">debug</a>
   settings in the php script. Since this gets executed at runtime, this is
-  only able to show the <A
-HREF="api.assign.html"
->assigned</A
->
+  only able to show the <a class="link" href="api.assign.html" title="assign()">assigned</a>
   variables; not the templates that
   are in use. However, you can see all the currently available variables
   within the scope of a template.
- </P
-><DIV
-CLASS="informaltable"
-><A
-NAME="AEN3005"
-></A
-><P
-></P
-><TABLE
-BORDER="1"
-CLASS="CALSTABLE"
-><THEAD
-><TR
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Attribute Name</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Type</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Required</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Default</TH
-><TH
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->Description</TH
-></TR
-></THEAD
-><TBODY
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->output</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->javascript</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->output type, html or javascript</TD
-></TR
-></TBODY
-></TABLE
-><P
-></P
-></DIV
-><P
->&#13; See also the
- <A
-HREF="chapter.debugging.console.html"
->debugging console page</A
->.
- </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="language.function.cycle.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="language.function.eval.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->{cycle}</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="language.custom.functions.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->{eval}</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+ </p>
+<p>
+ 	If caching is enabled and a page is loaded from cache <code class="varname">{debug}</code>
+ 	does show only the variables which assigned for the cached page.
+ </p>
+<p>
+ See also the
+ <a class="link" href="chapter.debugging.console.html" title="Chapter 10. Debugging Console">debugging console page</a>.
+ </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="language.function.config.load.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="language.builtin.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="language.function.extends.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">{config_load} </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> {extends}</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

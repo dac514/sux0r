@@ -1,305 +1,105 @@
-<HTML
-><HEAD
-><TITLE
->Tips &#38; Tricks</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Appendixes"
-HREF="appendixes.html"><LINK
-REL="PREVIOUS"
-TITLE="Troubleshooting"
-HREF="troubleshooting.html"><LINK
-REL="NEXT"
-TITLE="Default Variable Handling"
-HREF="tips.default.var.handling.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="chapter"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="troubleshooting.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
-></TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="tips.default.var.handling.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="chapter"
-><H1
-><A
-NAME="tips"
-></A
->Chapter 18. Tips &#38; Tricks</H1
-><DIV
-CLASS="TOC"
-><DL
-><DT
-><B
->Table of Contents</B
-></DT
-><DT
-><A
-HREF="tips.html#tips.blank.var.handling"
->Blank Variable Handling</A
-></DT
-><DT
-><A
-HREF="tips.default.var.handling.html"
->Default Variable Handling</A
-></DT
-><DT
-><A
-HREF="tips.passing.vars.html"
->Passing variable title to header template</A
-></DT
-><DT
-><A
-HREF="tips.dates.html"
->Dates</A
-></DT
-><DT
-><A
-HREF="tips.wap.html"
->WAP/WML</A
-></DT
-><DT
-><A
-HREF="tips.componentized.templates.html"
->Componentized Templates</A
-></DT
-><DT
-><A
-HREF="tips.obfuscating.email.html"
->Obfuscating E-mail Addresses</A
-></DT
-></DL
-></DIV
-><P
->&#13;  </P
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="tips.blank.var.handling"
-></A
->Blank Variable Handling</H1
-><P
->&#13;    There may be times when you want to print a default value for an empty
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Chapter 18. Tips &amp; Tricks</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="appendixes.html" title="Part IV. Appendixes">
+<link rel="prev" href="troubleshooting.html" title="Chapter 17. Troubleshooting">
+<link rel="next" href="tips.default.var.handling.html" title="Default Variable Handling">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Chapter 18. Tips &amp; Tricks</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="troubleshooting.html">Prev</a> </td>
+<th width="60%" align="center">Part IV. Appendixes</th>
+<td width="20%" align="right"> <a accesskey="n" href="tips.default.var.handling.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="chapter" title="Chapter 18. Tips &amp; Tricks">
+<div class="titlepage"><div><div><h2 class="title">
+<a name="tips"></a>Chapter 18. Tips &amp; Tricks</h2></div></div></div>
+<div class="toc">
+<p><b>Table of Contents</b></p>
+<dl>
+<dt><span class="sect1"><a href="tips.html#tips.blank.var.handling">Blank Variable Handling</a></span></dt>
+<dt><span class="sect1"><a href="tips.default.var.handling.html">Default Variable Handling</a></span></dt>
+<dt><span class="sect1"><a href="tips.passing.vars.html">Passing variable title to header template</a></span></dt>
+<dt><span class="sect1"><a href="tips.dates.html">Dates</a></span></dt>
+<dt><span class="sect1"><a href="tips.wap.html">WAP/WML</a></span></dt>
+<dt><span class="sect1"><a href="tips.componentized.templates.html">Componentized Templates</a></span></dt>
+<dt><span class="sect1"><a href="tips.obfuscating.email.html">Obfuscating E-mail Addresses</a></span></dt>
+</dl>
+</div>
+<p>
+  </p>
+<div class="sect1" title="Blank Variable Handling">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="tips.blank.var.handling"></a>Blank Variable Handling</h2></div></div></div>
+<p>
+    There may be times when you want to print a default value for an empty
     variable instead of printing nothing, such as printing
-    <TT
-CLASS="literal"
->&#38;nbsp;</TT
-> so that
+    <code class="literal">&amp;nbsp;</code> so that
     html table backgrounds work properly. Many would use an
-    <A
-HREF="language.function.if.html"
-><TT
-CLASS="varname"
->{if}</TT
-></A
->
+    <a class="link" href="language.function.if.html" title="{if},{elseif},{else}"><code class="varname">{if}</code></a>
     statement to  handle this, but there is a shorthand way with Smarty, using
-    the <A
-HREF="language.modifier.default.html"
-><TT
-CLASS="varname"
->default</TT
->
-    </A
-> variable modifier.
-    <DIV
-CLASS="note"
-><BLOCKQUOTE
-CLASS="note"
-><P
-><B
->Note: </B
-><SPAN
-CLASS="QUOTE"
->"Undefined variable"</SPAN
-> errors will show if PHP
-    <A
-HREF="http://php.net/error_reporting"
-TARGET="_top"
->&#13;    <TT
-CLASS="varname"
->error_reporting()</TT
-></A
-> is <TT
-CLASS="constant"
->E_ALL</TT
->
+    the <a class="link" href="language.modifier.default.html" title="default"><code class="varname">default</code>
+    </a> variable modifier.
+    </p>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p><span class="quote">“<span class="quote">Undefined variable</span>”</span> errors will show if PHP
+   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
      and a variable had not been assigned to Smarty.
-    </P
-></BLOCKQUOTE
-></DIV
->
-   </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN7682"
-></A
-><P
-><B
->Example 18-1. Printing &#38;nbsp; when a variable is empty</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{* the long way *}
+    </p>
+</div>
+<p>
+   </p>
+<div class="example">
+<a name="id3139768"></a><p class="title"><b>Example 18.1. Printing &amp;nbsp; when a variable is empty</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+{* the long way *}
 {if $title eq ''}
-   &#38;nbsp;
+   &amp;nbsp;
 {else}
    {$title}
 {/if}
 
 {* the short way *}
-{$title|default:'&#38;nbsp;'}</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13;See also <A
-HREF="language.modifier.default.html"
->&#13;<TT
-CLASS="varname"
->default</TT
-></A
-> modifier and
-<A
-HREF="tips.default.var.handling.html"
->default variable handling</A
->.
-</P
-></DIV
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="troubleshooting.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="tips.default.var.handling.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->Troubleshooting</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="appendixes.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->Default Variable Handling</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+{$title|default:'&amp;nbsp;'}
+
+    </pre></div>
+</div>
+<br class="example-break"><p>
+See also <a class="link" href="language.modifier.default.html" title="default">
+<code class="varname">default</code></a> modifier and
+<a class="link" href="tips.default.var.handling.html" title="Default Variable Handling">default variable handling</a>.
+</p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="troubleshooting.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="appendixes.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="tips.default.var.handling.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Chapter 17. Troubleshooting </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Default Variable Handling</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

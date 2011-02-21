@@ -1,346 +1,142 @@
-<HTML
-><HEAD
-><TITLE
->display()</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Smarty Class Methods()"
-HREF="api.functions.html"><LINK
-REL="PREVIOUS"
-TITLE="config_load()"
-HREF="api.config.load.html"><LINK
-REL="NEXT"
-TITLE="fetch()"
-HREF="api.fetch.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="refentry"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="api.config.load.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
-></TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="api.fetch.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><H1
-><A
-NAME="api.display"
-></A
->display()</H1
-><DIV
-CLASS="refnamediv"
-><A
-NAME="AEN5845"
-></A
->display()&nbsp;--&nbsp;displays the template</DIV
-><DIV
-CLASS="refsect1"
-><A
-NAME="AEN5848"
-></A
-><H2
->Description</H2
->void <B
-CLASS="methodname"
->display</B
-> ( string template [, string cache_id [, string compile_id]])<BR
-></BR
-><P
->&#13;   This displays the template unlike
-   <A
-HREF="api.fetch.html"
-><TT
-CLASS="varname"
->fetch()</TT
-></A
->.
-   Supply a valid <A
-HREF="template.resources.html"
->template resource</A
->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>display()</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="api.functions.html" title="Chapter 13. Smarty Class Methods()">
+<link rel="prev" href="api.disable.security.html" title="disableSecurity()">
+<link rel="next" href="api.enable.security.html" title="enableSecurity()">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">display()</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="api.disable.security.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 13. Smarty Class Methods()</th>
+<td width="20%" align="right"> <a accesskey="n" href="api.enable.security.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="refentry" title="display()">
+<a name="api.display"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2>Name</h2>
+<p>display() — displays the template</p>
+</div>
+<div class="refsect1" title="Description">
+<a name="id3106920"></a><h2>Description</h2>
+<code class="methodsynopsis"><span class="type">void </span><span class="methodname">display</span>(<span class="methodparam"><span class="type">string </span><span class="parameter">template</span></span>,<br>             <span class="methodparam"><span class="type">string </span><span class="parameter">cache_id</span></span>,<br>             <span class="methodparam"><span class="type">string </span><span class="parameter">compile_id</span></span>);</code><p>
+   This displays the template unlike
+   <a class="link" href="api.fetch.html" title="fetch()"><code class="varname">fetch()</code></a>.
+   Supply a valid <a class="link" href="template.resources.html" title="Resources">template resource</a>
    type and path. As an optional second parameter, you can pass a
-   <TT
-CLASS="parameter"
-><I
->$cache id</I
-></TT
->, see the
-   <A
-HREF="caching.html"
->caching section</A
-> for more information.
-  </P
-><P
->&#13; As an optional third parameter, you can pass a
- <TT
-CLASS="parameter"
-><I
->$compile_id</I
-></TT
->.
+   <em class="parameter"><code>$cache id</code></em>, see the
+   <a class="link" href="caching.html" title="Chapter 14. Caching">caching section</a> for more information.
+  </p>
+<p>
+ As an optional third parameter, you can pass a
+ <em class="parameter"><code>$compile_id</code></em>.
  This is in the event that you want to compile different versions of
  the same template, such as having separate templates compiled
  for different languages. Another use for
- <TT
-CLASS="parameter"
-><I
->$compile_id</I
-></TT
-> is when you use more than one
- <A
-HREF="api.variables.html#variable.template.dir"
-><TT
-CLASS="parameter"
-><I
->$template_dir</I
-></TT
-></A
->
+ <em class="parameter"><code>$compile_id</code></em> is when you use more than one
+ <a class="link" href="api.variables.html#variable.template.dir" title="$template_dir"><em class="parameter"><code>$template_dir</code></em></a>
  but only one
- <A
-HREF="variable.compile.dir.html"
-><TT
-CLASS="parameter"
-><I
->$compile_dir</I
-></TT
-></A
->.
- Set a separate <TT
-CLASS="parameter"
-><I
->$compile_id</I
-></TT
-> for each
- <A
-HREF="api.variables.html#variable.template.dir"
-><TT
-CLASS="parameter"
-><I
->$template_dir</I
-></TT
-></A
->,
+ <a class="link" href="variable.compile.dir.html" title="$compile_dir"><em class="parameter"><code>$compile_dir</code></em></a>.
+ Set a separate <em class="parameter"><code>$compile_id</code></em> for each
+ <a class="link" href="api.variables.html#variable.template.dir" title="$template_dir"><em class="parameter"><code>$template_dir</code></em></a>,
  otherwise templates of the same name will overwrite each other. You can
- also set the <A
-HREF="variable.compile.id.html"
->&#13; <TT
-CLASS="parameter"
-><I
->$compile_id</I
-></TT
-></A
-> variable once instead of passing
+ also set the <a class="link" href="variable.compile.id.html" title="$compile_id">
+ <em class="parameter"><code>$compile_id</code></em></a> variable once instead of passing
   this to each call to this function.
-</P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN5880"
-></A
-><P
-><B
->Example 13-1. display()</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #007700">include(</span><span style="color: #0000BB">SMARTY_DIR</span><span style="color: #007700">.</span><span style="color: #DD0000">'Smarty.class.php'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$smarty&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">Smarty</span><span style="color: #007700">();<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">caching&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">true</span><span style="color: #007700">;<br /><br /></span><span style="color: #FF8000">//&nbsp;only&nbsp;do&nbsp;db&nbsp;calls&nbsp;if&nbsp;cache&nbsp;doesn't&nbsp;exist<br /></span><span style="color: #007700">if(!</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">is_cached</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">))&nbsp;{<br /><br />&nbsp;&nbsp;</span><span style="color: #FF8000">//&nbsp;dummy&nbsp;up&nbsp;some&nbsp;data<br />&nbsp;&nbsp;</span><span style="color: #0000BB">$address&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'245&nbsp;N&nbsp;50th'</span><span style="color: #007700">;<br />&nbsp;&nbsp;</span><span style="color: #0000BB">$db_data&nbsp;</span><span style="color: #007700">=&nbsp;array(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'City'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Lincoln'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'State'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Nebraska'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'Zip'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'68502'<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">);<br /><br />&nbsp;&nbsp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'Name'</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'Fred'</span><span style="color: #007700">);<br />&nbsp;&nbsp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'Address'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$address</span><span style="color: #007700">);<br />&nbsp;&nbsp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">assign</span><span style="color: #007700">(</span><span style="color: #DD0000">'data'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$db_data</span><span style="color: #007700">);<br /><br />}<br /><br /></span><span style="color: #FF8000">//&nbsp;display&nbsp;the&nbsp;output<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.tpl'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN5883"
-></A
-><P
-><B
->Example 13-2. Other display() template resource examples</B
-></P
-><P
->&#13;   Use the syntax for <A
-HREF="template.resources.html"
->template resources</A
-> to
+</p>
+<div class="example">
+<a name="id3107912"></a><p class="title"><b>Example 13.16. display()</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+include(SMARTY_DIR.'Smarty.class.php');
+$smarty = new Smarty();
+$smarty-&gt;setCaching(true);
+
+// only do db calls if cache doesn't exist
+if(!$smarty-&gt;isCached('index.tpl')) {
+
+  // dummy up some data
+  $address = '245 N 50th';
+  $db_data = array(
+               'City' =&gt; 'Lincoln',
+               'State' =&gt; 'Nebraska',
+               'Zip' =&gt; '68502'
+             );
+
+  $smarty-&gt;assign('Name', 'Fred');
+  $smarty-&gt;assign('Address', $address);
+  $smarty-&gt;assign('data', $db_data);
+
+}
+
+// display the output
+$smarty-&gt;display('index.tpl');
+?&gt;
+
+   </pre></div>
+</div>
+<br class="example-break"><div class="example">
+<a name="id3107958"></a><p class="title"><b>Example 13.17. Other display() template resource examples</b></p>
+<div class="example-contents">
+<p>
+   Use the syntax for <a class="link" href="template.resources.html" title="Resources">template resources</a> to
    display files outside of the
-   <A
-HREF="api.variables.html#variable.template.dir"
->&#13;   <TT
-CLASS="parameter"
-><I
->$template_dir</I
-></TT
-></A
-> directory.
-  </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #FF8000">//&nbsp;absolute&nbsp;filepath<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'/usr/local/include/templates/header.tpl'</span><span style="color: #007700">);<br /><br /></span><span style="color: #FF8000">//&nbsp;absolute&nbsp;filepath&nbsp;(same&nbsp;thing)<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'file:/usr/local/include/templates/header.tpl'</span><span style="color: #007700">);<br /><br /></span><span style="color: #FF8000">//&nbsp;windows&nbsp;absolute&nbsp;filepath&nbsp;(MUST&nbsp;use&nbsp;"file:"&nbsp;prefix)<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'file:C:/www/pub/templates/header.tpl'</span><span style="color: #007700">);<br /><br /></span><span style="color: #FF8000">//&nbsp;include&nbsp;from&nbsp;template&nbsp;resource&nbsp;named&nbsp;"db"<br /></span><span style="color: #0000BB">$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">display</span><span style="color: #007700">(</span><span style="color: #DD0000">'db:header.tpl'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13;   See also <A
-HREF="api.fetch.html"
-><TT
-CLASS="varname"
->fetch()</TT
-></A
-> and
-   <A
-HREF="api.template.exists.html"
-><TT
-CLASS="varname"
->template_exists()</TT
-></A
->.
-  </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="api.config.load.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="api.fetch.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->config_load()</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="api.functions.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->fetch()</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+   <a class="link" href="api.variables.html#variable.template.dir" title="$template_dir">
+   <em class="parameter"><code>$template_dir</code></em></a> directory.
+  </p>
+<pre class="programlisting">
+
+&lt;?php
+// absolute filepath
+$smarty-&gt;display('/usr/local/include/templates/header.tpl');
+
+// absolute filepath (same thing)
+$smarty-&gt;display('file:/usr/local/include/templates/header.tpl');
+
+// windows absolute filepath (MUST use "file:" prefix)
+$smarty-&gt;display('file:C:/www/pub/templates/header.tpl');
+
+// include from template resource named "db"
+$smarty-&gt;display('db:header.tpl');
+?&gt;
+
+   </pre>
+</div>
+</div>
+<br class="example-break"><p>
+   See also <a class="link" href="api.fetch.html" title="fetch()"><code class="varname">fetch()</code></a> and
+   <a class="link" href="api.template.exists.html" title="templateExists()"><code class="varname">templateExists()</code></a>.
+  </p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="api.disable.security.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="api.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="api.enable.security.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">disableSecurity() </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> enableSecurity()</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

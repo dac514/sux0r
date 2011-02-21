@@ -1,207 +1,68 @@
-<HTML
-><HEAD
-><TITLE
->$compile_check</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Smarty Class Variables"
-HREF="api.variables.html"><LINK
-REL="PREVIOUS"
-TITLE="$autoload_filters"
-HREF="variable.autoload.filters.html"><LINK
-REL="NEXT"
-TITLE="$force_compile"
-HREF="variable.force.compile.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="variable.autoload.filters.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 12. Smarty Class Variables</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="variable.force.compile.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="variable.compile.check"
-></A
->$compile_check</H1
-><P
->&#13;	   Upon each invocation of the PHP application, Smarty tests to see if the
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>$compile_check</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="api.variables.html" title="Chapter 12. Smarty Class Variables">
+<link rel="prev" href="variable.autoload.filters.html" title="$autoload_filters">
+<link rel="next" href="variable.force.compile.html" title="$force_compile">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">$compile_check</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="variable.autoload.filters.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 12. Smarty Class Variables</th>
+<td width="20%" align="right"> <a accesskey="n" href="variable.force.compile.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="$compile_check">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="variable.compile.check"></a>$compile_check</h2></div></div></div>
+<p>
+	   Upon each invocation of the PHP application, Smarty tests to see if the
 	   current template has changed (different time stamp) since the last time
 	   it was compiled. If it has changed, it recompiles that template. If the
 	   template has not been compiled, it will compile regardless of this
-	   setting. By default this variable is set to <TT
-CLASS="constant"
->TRUE</TT
->.
-      </P
-><P
->Once an application is
+	   setting. By default this variable is set to <code class="constant">TRUE</code>.
+      </p>
+<p>Once an application is
 	   put into production (ie the templates won't be changing),
        the compile check step is no longer needed. Be sure to set
-       <TT
-CLASS="parameter"
-><I
->$compile_check</I
-></TT
-> to <TT
-CLASS="constant"
->FALSE</TT
-> for
-	   maximal performance. Note that if you change this to <TT
-CLASS="constant"
->FALSE</TT
-> and a
+       <em class="parameter"><code>$compile_check</code></em> to <code class="constant">FALSE</code> for
+	   maximal performance. Note that if you change this to <code class="constant">FALSE</code> and a
 	   template file is changed, you will *not* see the change since the
 	   template will not get recompiled. If
-	   <A
-HREF="variable.caching.html"
-><TT
-CLASS="parameter"
-><I
->$caching</I
-></TT
-></A
->
-	   is enabled and <TT
-CLASS="parameter"
-><I
->$compile_check</I
-></TT
-> is enabled, then
+	   <a class="link" href="variable.caching.html" title="$caching"><em class="parameter"><code>$caching</code></em></a>
+	   is enabled and <em class="parameter"><code>$compile_check</code></em> is enabled, then
        the cache files will get regenerated if
-	   an involved template file or config file was updated. See <A
-HREF="variable.force.compile.html"
->&#13;       <TT
-CLASS="parameter"
-><I
->$force_compile</I
-></TT
-></A
-> and <A
-HREF="api.clear.compiled.tpl.html"
-><TT
-CLASS="varname"
->clear_compiled_tpl()</TT
->
-       </A
->.
-      </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="variable.autoload.filters.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="variable.force.compile.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->$autoload_filters</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="api.variables.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->$force_compile</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+	   an involved template file or config file was updated. See <a class="link" href="variable.force.compile.html" title="$force_compile">
+       <em class="parameter"><code>$force_compile</code></em></a> and <a class="link" href="api.clear.compiled.tpl.html" title="clearCompiledTemplate()"><code class="varname">clear_compiled_tpl()</code>
+       </a>.
+      </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="variable.autoload.filters.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="api.variables.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="variable.force.compile.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">$autoload_filters </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> $force_compile</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

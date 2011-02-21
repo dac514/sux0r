@@ -1,624 +1,219 @@
-<HTML
-><HEAD
-><TITLE
->{math}</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Custom Functions"
-HREF="language.custom.functions.html"><LINK
-REL="PREVIOUS"
-TITLE="{mailto}"
-HREF="language.function.mailto.html"><LINK
-REL="NEXT"
-TITLE="{popup}"
-HREF="language.function.popup.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="language.function.mailto.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 8. Custom Functions</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="language.function.popup.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="language.function.math"
-></A
->{math}</H1
-><P
->&#13;   <TT
-CLASS="varname"
->{math}</TT
-> allows the template designer to do math equations
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{math}</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="language.custom.functions.html" title="Chapter 8. Custom Functions">
+<link rel="prev" href="language.function.mailto.html" title="{mailto}">
+<link rel="next" href="language.function.textformat.html" title="{textformat}">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">{math}</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="language.function.mailto.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 8. Custom Functions</th>
+<td width="20%" align="right"> <a accesskey="n" href="language.function.textformat.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="{math}">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="language.function.math"></a>{math}</h2></div></div></div>
+<p>
+   <code class="varname">{math}</code> allows the template designer to do math equations
    in the template.
-   </P
-><P
-></P
-><UL
-><LI
-><P
->&#13;   Any numeric template variables may be used in the
+   </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><p>
+   Any numeric template variables may be used in the
    equations, and the result is printed in place of the tag.
-   </P
-></LI
-><LI
-><P
->&#13;   The variables used in the equation are passed as parameters,
+   </p></li>
+<li class="listitem"><p>
+   The variables used in the equation are passed as parameters,
    which can  be template variables or static values.
-   </P
-></LI
-><LI
-><P
->+, -, /, *, abs, ceil, cos,  exp, floor, log, log10, max, min,
+   </p></li>
+<li class="listitem"><p>+, -, /, *, abs, ceil, cos,  exp, floor, log, log10, max, min,
    pi, pow, rand, round, sin, sqrt, srans and tan are all valid operators.
    Check the PHP documentation  for further information on these
-   <A
-HREF="http://php.net/eval"
-TARGET="_top"
->math</A
-> functions.
-  </P
-></LI
-><LI
-><P
->&#13;   If you supply the <TT
-CLASS="parameter"
-><I
->assign</I
-></TT
-> attribute, the output of the
-   <TT
-CLASS="varname"
->{math}</TT
-> function will be assigned to this template
+   <a class="ulink" href="http://php.net/eval" target="_top">math</a> functions.
+  </p></li>
+<li class="listitem"><p>
+   If you supply the <em class="parameter"><code>assign</code></em> attribute, the output of the
+   <code class="varname">{math}</code> function will be assigned to this template
    variable instead of  being output to the template.
-   </P
-></LI
-></UL
-><DIV
-CLASS="note"
-><BLOCKQUOTE
-CLASS="note"
-><P
-><B
->Technical Note: </B
->
-   <TT
-CLASS="varname"
->{math}</TT
-> is an expensive function in performance due to
-   its use of the php <A
-HREF="http://php.net/eval"
-TARGET="_top"
->&#13;   <TT
-CLASS="varname"
->eval()</TT
-></A
-> function. Doing the math in PHP is much
+   </p></li>
+</ul></div>
+<div class="note" title="Technical Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Technical Note</h3>
+<p>
+   <code class="varname">{math}</code> is an expensive function in performance due to
+   its use of the php <a class="ulink" href="http://php.net/eval" target="_top">
+   <code class="varname">eval()</code></a> function. Doing the math in PHP is much
    more  efficient, so whenever possible do the math calculations in the script
-   and <A
-HREF="api.assign.html"
-><TT
-CLASS="varname"
->assign()</TT
-></A
->
+   and <a class="link" href="api.assign.html" title="assign()"><code class="varname">assign()</code></a>
    the results to the template. Definitely avoid  repetitive
-   <TT
-CLASS="varname"
->{math}</TT
-> function calls, eg within
-    <A
-HREF="language.function.section.html"
->&#13;    <TT
-CLASS="varname"
->{section}</TT
-></A
-> loops.
-  </P
-></BLOCKQUOTE
-></DIV
-><DIV
-CLASS="informaltable"
-><A
-NAME="AEN4201"
-></A
-><P
-></P
-><TABLE
-BORDER="1"
-CLASS="CALSTABLE"
-><THEAD
-><TR
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Attribute Name</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Type</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Required</TH
-><TH
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Default</TH
-><TH
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->Description</TH
-></TR
-></THEAD
-><TBODY
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->equation</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Yes</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->n/a</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->The equation to execute</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->format</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->n/a</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->The format of the result (sprintf)</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->var</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->numeric</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Yes</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->n/a</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->Equation variable value</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->assign</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->string</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->No</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->n/a</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->Template variable the output will be assigned to</TD
-></TR
-><TR
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->[var ...]</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->numeric</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
->Yes</TD
-><TD
-WIDTH="20%"
-ALIGN="CENTER"
-VALIGN="MIDDLE"
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="emphasis"
->n/a</I
-></SPAN
-></TD
-><TD
-WIDTH="20%"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
->Equation variable value</TD
-></TR
-></TBODY
-></TABLE
-><P
-></P
-></DIV
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN4251"
-></A
-><P
-><B
->Example 8-24. {math}</B
-></P
-><P
->&#13;  <SPAN
-CLASS="bold"
-><B
-CLASS="emphasis"
->Example a:</B
-></SPAN
->
-  </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{* $height=4, $width=5 *}
+   <code class="varname">{math}</code> function calls, eg within
+    <a class="link" href="language.function.section.html" title="{section},{sectionelse}">
+    <code class="varname">{section}</code></a> loops.
+  </p>
+</div>
+<div class="informaltable"><table border="1">
+<colgroup>
+<col align="center">
+<col align="center">
+<col align="center">
+<col align="center">
+<col>
+</colgroup>
+<thead><tr>
+<th align="center">Attribute Name</th>
+<th align="center">Type</th>
+<th align="center">Required</th>
+<th align="center">Default</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="center">equation</td>
+<td align="center">string</td>
+<td align="center">Yes</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>The equation to execute</td>
+</tr>
+<tr>
+<td align="center">format</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>The format of the result (sprintf)</td>
+</tr>
+<tr>
+<td align="center">var</td>
+<td align="center">numeric</td>
+<td align="center">Yes</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>Equation variable value</td>
+</tr>
+<tr>
+<td align="center">assign</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>Template variable the output will be assigned to</td>
+</tr>
+<tr>
+<td align="center">[var ...]</td>
+<td align="center">numeric</td>
+<td align="center">Yes</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>Equation variable value</td>
+</tr>
+</tbody>
+</table></div>
+<div class="example">
+<a name="id3083778"></a><p class="title"><b>Example 8.21. {math}</b></p>
+<div class="example-contents">
+<p>
+  <span class="bold"><strong>Example a:</strong></span>
+  </p>
+<pre class="programlisting">
 
-   {math equation="x + y" x=$height y=$width}</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;   The above example will output:
-  </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="screen"
->9</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;    <SPAN
-CLASS="bold"
-><B
-CLASS="emphasis"
->Example b:</B
-></SPAN
->
-  </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{* $row_height = 10, $row_width = 20, #col_div# = 2, assigned in template *}
+   {* $height=4, $width=5 *}
+
+   {math equation="x + y" x=$height y=$width}
+
+  </pre>
+<p>
+   The above example will output:
+  </p>
+<pre class="screen">
+
+   9
+
+  </pre>
+<p>
+    <span class="bold"><strong>Example b:</strong></span>
+  </p>
+<pre class="programlisting">
+
+   {* $row_height = 10, $row_width = 20, #col_div# = 2, assigned in template *}
 
    {math equation="height * width / division"
    height=$row_height
    width=$row_width
-   division=#col_div#}</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;   The above example will output:
-  </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="screen"
->100</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;  <SPAN
-CLASS="bold"
-><B
-CLASS="emphasis"
->Example c:</B
-></SPAN
->
-  </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{* you can use parenthesis *}
+   division=#col_div#}
 
-   {math equation="(( x + y ) / z )" x=2 y=10 z=2}</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;   The above example will output:
-  </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="screen"
->6</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;    <SPAN
-CLASS="bold"
-><B
-CLASS="emphasis"
->Example d:</B
-></SPAN
->
-  </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->{* you can supply a format parameter in sprintf format *}
+  </pre>
+<p>
+   The above example will output:
+  </p>
+<pre class="screen">
 
-   {math equation="x + y" x=4.4444 y=5.0000 format="%.2f"}</PRE
-></TD
-></TR
-></TABLE
-><P
->&#13;   The above example will output:
-  </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><PRE
-CLASS="screen"
->9.44</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="language.function.mailto.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="language.function.popup.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->{mailto}</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="language.custom.functions.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->{popup}</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+   100
+
+  </pre>
+<p>
+  <span class="bold"><strong>Example c:</strong></span>
+  </p>
+<pre class="programlisting">
+
+   {* you can use parenthesis *}
+
+   {math equation="(( x + y ) / z )" x=2 y=10 z=2}
+
+  </pre>
+<p>
+   The above example will output:
+  </p>
+<pre class="screen">
+
+   6
+
+  </pre>
+<p>
+    <span class="bold"><strong>Example d:</strong></span>
+  </p>
+<pre class="programlisting">
+
+   {* you can supply a format parameter in sprintf format *}
+
+   {math equation="x + y" x=4.4444 y=5.0000 format="%.2f"}
+   
+  </pre>
+<p>
+   The above example will output:
+  </p>
+<pre class="screen">
+
+   9.44
+
+  </pre>
+</div>
+</div>
+<br class="example-break">
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="language.function.mailto.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="language.custom.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="language.function.textformat.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">{mailto} </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> {textformat}</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

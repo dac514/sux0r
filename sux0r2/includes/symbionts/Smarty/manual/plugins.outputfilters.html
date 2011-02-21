@@ -1,230 +1,107 @@
-<HTML
-><HEAD
-><TITLE
->Output Filters</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Extending Smarty With Plugins"
-HREF="plugins.html"><LINK
-REL="PREVIOUS"
-TITLE="Prefilters/Postfilters"
-HREF="plugins.prefilters.postfilters.html"><LINK
-REL="NEXT"
-TITLE="Resources"
-HREF="plugins.resources.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="sect1"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="plugins.prefilters.postfilters.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
->Chapter 16. Extending Smarty With Plugins</TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="plugins.resources.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="plugins.outputfilters"
-></A
->Output Filters</H1
-><P
->&#13;     Output filter plugins operate on a template's output, after the
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Output Filters</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="plugins.html" title="Chapter 16. Extending Smarty With Plugins">
+<link rel="prev" href="plugins.prefilters.postfilters.html" title="Prefilters/Postfilters">
+<link rel="next" href="plugins.resources.html" title="Resources">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Output Filters</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="plugins.prefilters.postfilters.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 16. Extending Smarty With Plugins</th>
+<td width="20%" align="right"> <a accesskey="n" href="plugins.resources.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="Output Filters">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="plugins.outputfilters"></a>Output Filters</h2></div></div></div>
+<p>
+     Output filter plugins operate on a template's output, after the
      template is loaded and executed, but before the output is displayed.
-    </P
-><DIV
-CLASS="funcsynopsis"
-><A
-NAME="AEN7470"
-></A
-><P
-></P
-><P
-><CODE
-><CODE
-CLASS="FUNCDEF"
->string <B
-CLASS="function"
->smarty_outputfilter_<TT
-CLASS="replaceable"
-><I
->name</I
-></TT
-></B
-></CODE
-> (string $template_output, object &#38;$smarty)</CODE
-></P
-><P
-></P
-></DIV
-><P
->&#13;     The first parameter to the output filter function is the template
+    </p>
+<div class="funcsynopsis">
+<table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table">
+<tr>
+<td><code class="funcdef">string <b class="fsfunc">smarty_outputfilter_name</b>(</code></td>
+<td>
+<var class="pdparam">$template_output</var>, </td>
+<td> </td>
+</tr>
+<tr>
+<td> </td>
+<td>
+<var class="pdparam">&amp;$smarty</var><code>)</code>;</td>
+<td> </td>
+</tr>
+</table>
+<div class="paramdef-list">
+<code>string <var class="pdparam">$template_output</var></code>;<br><code>object <var class="pdparam">&amp;$smarty</var></code>;</div>
+<div class="funcprototype-spacer"> </div>
+</div>
+<p>
+     The first parameter to the output filter function is the template
      output that needs to be processed, and the second parameter is the
      instance of Smarty invoking the plugin. The plugin is supposed to do
      the processing and return the results.
-    </P
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN7480"
-></A
-><P
-><B
->Example 16-9. An output filter plugin</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br /></span><span style="color: #FF8000">/*<br />&nbsp;*&nbsp;Smarty&nbsp;plugin<br />&nbsp;*&nbsp;-------------------------------------------------------------<br />&nbsp;*&nbsp;File:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outputfilter.protect_email.php<br />&nbsp;*&nbsp;Type:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outputfilter<br />&nbsp;*&nbsp;Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;protect_email<br />&nbsp;*&nbsp;Purpose:&nbsp;&nbsp;Converts&nbsp;@&nbsp;sign&nbsp;in&nbsp;email&nbsp;addresses&nbsp;to&nbsp;%40&nbsp;as<br />&nbsp;*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a&nbsp;simple&nbsp;protection&nbsp;against&nbsp;spambots<br />&nbsp;*&nbsp;-------------------------------------------------------------<br />&nbsp;*/<br />&nbsp;</span><span style="color: #007700">function&nbsp;</span><span style="color: #0000BB">smarty_outputfilter_protect_email</span><span style="color: #007700">(</span><span style="color: #0000BB">$output</span><span style="color: #007700">,&nbsp;&amp;</span><span style="color: #0000BB">$smarty</span><span style="color: #007700">)<br />&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span style="color: #0000BB">preg_replace</span><span style="color: #007700">(</span><span style="color: #DD0000">'!(\S+)@([a-zA-Z0-9\.\-]+\.([a-zA-Z]{2,3}|[0-9]{1,3}))!'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'$1%40$2'</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$output</span><span style="color: #007700">);<br />&nbsp;}<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13;     See also
-     <A
-HREF="api.register.outputfilter.html"
->&#13;     <TT
-CLASS="varname"
->register_outputfilter()</TT
-></A
->,
-     <A
-HREF="api.unregister.outputfilter.html"
->&#13;     <TT
-CLASS="varname"
->unregister_outputfilter()</TT
-></A
->.
-     </P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="plugins.prefilters.postfilters.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="plugins.resources.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->Prefilters/Postfilters</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="plugins.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->Resources</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+    </p>
+<div class="example">
+<a name="id3135439"></a><p class="title"><b>Example 16.9. An output filter plugin</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+/*
+ * Smarty plugin
+ * -------------------------------------------------------------
+ * File:     outputfilter.protect_email.php
+ * Type:     outputfilter
+ * Name:     protect_email
+ * Purpose:  Converts @ sign in email addresses to %40 as
+ *           a simple protection against spambots
+ * -------------------------------------------------------------
+ */
+ function smarty_outputfilter_protect_email($output, $smarty)
+ {
+     return preg_replace('!(\S+)@([a-zA-Z0-9\.\-]+\.([a-zA-Z]{2,3}|[0-9]{1,3}))!',
+                         '$1%40$2', $output);
+ }
+?&gt;
+
+     </pre></div>
+</div>
+<br class="example-break"><p>
+     See also
+     <a class="link" href="api.register.filter.html" title="registerFilter()">
+     <code class="varname">registerFilter()</code></a>,
+     <a class="link" href="api.unregister.filter.html" title="unregisterFilter()">
+     <code class="varname">unregisterFilter()</code></a>.
+     </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="plugins.prefilters.postfilters.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="plugins.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="plugins.resources.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Prefilters/Postfilters </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Resources</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

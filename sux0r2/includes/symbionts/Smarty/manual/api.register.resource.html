@@ -1,304 +1,114 @@
-<HTML
-><HEAD
-><TITLE
->register_resource()</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Smarty Class Methods()"
-HREF="api.functions.html"><LINK
-REL="PREVIOUS"
-TITLE="register_prefilter()"
-HREF="api.register.prefilter.html"><LINK
-REL="NEXT"
-TITLE="trigger_error()"
-HREF="api.trigger.error.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="refentry"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="api.register.prefilter.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
-></TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="api.trigger.error.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><H1
-><A
-NAME="api.register.resource"
-></A
->register_resource()</H1
-><DIV
-CLASS="refnamediv"
-><A
-NAME="AEN6491"
-></A
->register_resource()&nbsp;--&nbsp;dynamically register resources</DIV
-><DIV
-CLASS="refsect1"
-><A
-NAME="AEN6494"
-></A
-><H2
->Description</H2
->void <B
-CLASS="methodname"
->register_resource</B
-> ( string name, array resource_funcs)<BR
-></BR
-><P
->&#13;   Use this to dynamically register a
-   <A
-HREF="template.resources.html"
->resource plugin</A
->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>registerResource()</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="api.functions.html" title="Chapter 13. Smarty Class Methods()">
+<link rel="prev" href="api.register.object.html" title="registerObject()">
+<link rel="next" href="api.template.exists.html" title="templateExists()">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">registerResource()</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="api.register.object.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 13. Smarty Class Methods()</th>
+<td width="20%" align="right"> <a accesskey="n" href="api.template.exists.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="refentry" title="registerResource()">
+<a name="api.register.resource"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2>Name</h2>
+<p>registerResource() — dynamically register resources</p>
+</div>
+<div class="refsect1" title="Description">
+<a name="id3112522"></a><h2>Description</h2>
+<code class="methodsynopsis"><span class="type">void </span><span class="methodname">registerResource</span>(<span class="methodparam"><span class="type">string </span><span class="parameter">name</span></span>,<br>                      <span class="methodparam"><span class="type">array </span><span class="parameter">resource_funcs</span></span>);</code><p>
+   Use this to dynamically register a
+   <a class="link" href="template.resources.html" title="Resources">resource plugin</a>
    with Smarty.
-   Pass in the <TT
-CLASS="parameter"
-><I
->name</I
-></TT
-> of the resource and the array of
+   Pass in the <em class="parameter"><code>name</code></em> of the resource and the array of
    PHP functions implementing it. See
-   <A
-HREF="template.resources.html"
->template resources</A
->
+   <a class="link" href="template.resources.html" title="Resources">template resources</a>
    for more information on how to setup a function for fetching templates.
-     <DIV
-CLASS="note"
-><BLOCKQUOTE
-CLASS="note"
-><P
-><B
->Technical Note: </B
->
+     </p>
+<div class="note" title="Technical Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Technical Note</h3>
+<p>
     A resource name must be at least two characters in length. One
     character resource names will be ignored and used as part of the file
-    path, such as <TT
-CLASS="literal"
->$smarty-&#62;display('c:/path/to/index.tpl');</TT
->
-   </P
-></BLOCKQUOTE
-></DIV
->
+    path, such as <code class="literal">$smarty-&gt;display('c:/path/to/index.tpl');</code>
+   </p>
+</div>
+<p>
 
-   </P
-><P
-></P
-><UL
-><LI
-><P
->&#13;   The php-function-array <TT
-CLASS="parameter"
-><I
->resource_funcs</I
-></TT
->
+   </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><p>
+   The php-function-array <em class="parameter"><code>resource_funcs</code></em>
    must have 4 or 5 elements.
-   </P
-></LI
-><LI
-><P
->&#13;   With 4 elements the elements are
-   the functions-callbacks for the respective <TT
-CLASS="literal"
->source</TT
->,
-   <TT
-CLASS="literal"
->timestamp</TT
->, <TT
-CLASS="literal"
->secure</TT
-> and
-   <TT
-CLASS="literal"
->trusted</TT
-> functions of the resource.
-   </P
-></LI
-><LI
-><P
->&#13;   With 5 elements the first element has to be an
+   </p></li>
+<li class="listitem"><p>
+   With 4 elements the elements are
+   the functions-callbacks for the respective <code class="literal">source</code>,
+   <code class="literal">timestamp</code>, <code class="literal">secure</code> and
+   <code class="literal">trusted</code> functions of the resource.
+   </p></li>
+<li class="listitem"><p>
+   With 5 elements the first element has to be an
    object reference or a class name of the object or class
    implementing the resource and the 4 following elements have
-   to be the method names implementing <TT
-CLASS="literal"
->source</TT
->,
-   <TT
-CLASS="literal"
->timestamp</TT
->, <TT
-CLASS="literal"
->secure</TT
->
-   and <TT
-CLASS="literal"
->trusted</TT
->.
-  </P
-></LI
-></UL
-><TABLE
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-CLASS="EXAMPLE"
-><TR
-><TD
-><DIV
-CLASS="example"
-><A
-NAME="AEN6529"
-></A
-><P
-><B
->Example 13-1. register_resource()</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLPADDING="5"
-><TR
-><TD
-><code><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br />$smarty</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">register_resource</span><span style="color: #007700">(</span><span style="color: #DD0000">'db'</span><span style="color: #007700">,&nbsp;array(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'db_get_template'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'db_get_timestamp'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'db_get_secure'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'db_get_trusted'</span><span style="color: #007700">)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br /></span><span style="color: #0000BB">?&gt;</span>
-</span>
-</code></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-><P
->&#13;  See also
-  <A
-HREF="api.unregister.resource.html"
-><TT
-CLASS="varname"
->unregister_resource()</TT
-></A
->
+   to be the method names implementing <code class="literal">source</code>,
+   <code class="literal">timestamp</code>, <code class="literal">secure</code>
+   and <code class="literal">trusted</code>.
+  </p></li>
+</ul></div>
+<div class="example">
+<a name="id3113416"></a><p class="title"><b>Example 13.30. registerResource()</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+$smarty-&gt;register-&gt;resource('db', array(
+                                'db_get_template',
+                                'db_get_timestamp',
+                                'db_get_secure',
+                                'db_get_trusted')
+                                );
+?&gt;
+
+   </pre></div>
+</div>
+<br class="example-break"><p>
+  See also
+  <a class="link" href="api.unregister.resource.html" title="unregisterResource()"><code class="varname">unregisterResource()</code></a>
   and the
-  <A
-HREF="template.resources.html"
->template resources</A
-> section.
-</P
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="api.register.prefilter.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="api.trigger.error.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->register_prefilter()</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="api.functions.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->trigger_error()</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+  <a class="link" href="template.resources.html" title="Resources">template resources</a> section.
+</p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="api.register.object.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="api.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="api.template.exists.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">registerObject() </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> templateExists()</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

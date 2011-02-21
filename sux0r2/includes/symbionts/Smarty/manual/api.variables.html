@@ -1,366 +1,126 @@
-<HTML
-><HEAD
-><TITLE
->Smarty Class Variables</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
-REL="HOME"
-TITLE="Smarty Manual"
-HREF="index.html"><LINK
-REL="UP"
-TITLE="Smarty For Programmers"
-HREF="smarty.for.programmers.html"><LINK
-REL="PREVIOUS"
-TITLE="SMARTY_CORE_DIR"
-HREF="constant.smarty.core.dir.html"><LINK
-REL="NEXT"
-TITLE="$compile_dir"
-HREF="variable.compile.dir.html"><META
-HTTP-EQUIV="Content-type"
-CONTENT="text/html; charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="chapter"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Smarty Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="constant.smarty.core.dir.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
-></TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="variable.compile.dir.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="chapter"
-><H1
-><A
-NAME="api.variables"
-></A
->Chapter 12. Smarty Class Variables</H1
-><DIV
-CLASS="TOC"
-><DL
-><DT
-><B
->Table of Contents</B
-></DT
-><DT
-><A
-HREF="api.variables.html#variable.template.dir"
->$template_dir</A
-></DT
-><DT
-><A
-HREF="variable.compile.dir.html"
->$compile_dir</A
-></DT
-><DT
-><A
-HREF="variable.config.dir.html"
->$config_dir</A
-></DT
-><DT
-><A
-HREF="variable.plugins.dir.html"
->$plugins_dir</A
-></DT
-><DT
-><A
-HREF="variable.debugging.html"
->$debugging</A
-></DT
-><DT
-><A
-HREF="variable.debug.tpl.html"
->$debug_tpl</A
-></DT
-><DT
-><A
-HREF="variable.debugging.ctrl.html"
->$debugging_ctrl</A
-></DT
-><DT
-><A
-HREF="variable.autoload.filters.html"
->$autoload_filters</A
-></DT
-><DT
-><A
-HREF="variable.compile.check.html"
->$compile_check</A
-></DT
-><DT
-><A
-HREF="variable.force.compile.html"
->$force_compile</A
-></DT
-><DT
-><A
-HREF="variable.caching.html"
->$caching</A
-></DT
-><DT
-><A
-HREF="variable.cache.dir.html"
->$cache_dir</A
-></DT
-><DT
-><A
-HREF="variable.cache.lifetime.html"
->$cache_lifetime</A
-></DT
-><DT
-><A
-HREF="variable.cache.handler.func.html"
->$cache_handler_func</A
-></DT
-><DT
-><A
-HREF="variable.cache.modified.check.html"
->$cache_modified_check</A
-></DT
-><DT
-><A
-HREF="variable.config.overwrite.html"
->$config_overwrite</A
-></DT
-><DT
-><A
-HREF="variable.config.booleanize.html"
->$config_booleanize</A
-></DT
-><DT
-><A
-HREF="variable.config.read.hidden.html"
->$config_read_hidden</A
-></DT
-><DT
-><A
-HREF="variable.config.fix.newlines.html"
->$config_fix_newlines</A
-></DT
-><DT
-><A
-HREF="variable.default.template.handler.func.html"
->$default_template_handler_func</A
-></DT
-><DT
-><A
-HREF="variable.php.handling.html"
->$php_handling</A
-></DT
-><DT
-><A
-HREF="variable.security.html"
->$security</A
-></DT
-><DT
-><A
-HREF="variable.secure.dir.html"
->$secure_dir</A
-></DT
-><DT
-><A
-HREF="variable.security.settings.html"
->$security_settings</A
-></DT
-><DT
-><A
-HREF="variable.trusted.dir.html"
->$trusted_dir</A
-></DT
-><DT
-><A
-HREF="variable.left.delimiter.html"
->$left_delimiter</A
-></DT
-><DT
-><A
-HREF="variable.right.delimiter.html"
->$right_delimiter</A
-></DT
-><DT
-><A
-HREF="variable.compiler.class.html"
->$compiler_class</A
-></DT
-><DT
-><A
-HREF="variable.request.vars.order.html"
->$request_vars_order</A
-></DT
-><DT
-><A
-HREF="variable.request.use.auto.globals.html"
->$request_use_auto_globals</A
-></DT
-><DT
-><A
-HREF="variable.error.reporting.html"
->$error_reporting</A
-></DT
-><DT
-><A
-HREF="variable.compile.id.html"
->$compile_id</A
-></DT
-><DT
-><A
-HREF="variable.use.sub.dirs.html"
->$use_sub_dirs</A
-></DT
-><DT
-><A
-HREF="variable.default.modifiers.html"
->$default_modifiers</A
-></DT
-><DT
-><A
-HREF="variable.default.resource.type.html"
->$default_resource_type</A
-></DT
-></DL
-></DIV
-><DIV
-CLASS="sect1"
-><H1
-CLASS="sect1"
-><A
-NAME="variable.template.dir"
-></A
->$template_dir</H1
-><P
->&#13;     This is the name of the default template directory. If you do
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Chapter 12. Smarty Class Variables</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="smarty.for.programmers.html" title="Part III. Smarty For Programmers">
+<link rel="prev" href="smarty.constants.html" title="Chapter 11. Constants">
+<link rel="next" href="variable.compile.dir.html" title="$compile_dir">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Chapter 12. Smarty Class Variables</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="smarty.constants.html">Prev</a> </td>
+<th width="60%" align="center">Part III. Smarty For Programmers</th>
+<td width="20%" align="right"> <a accesskey="n" href="variable.compile.dir.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="chapter" title="Chapter 12. Smarty Class Variables">
+<div class="titlepage"><div><div><h2 class="title">
+<a name="api.variables"></a>Chapter 12. Smarty Class Variables</h2></div></div></div>
+<div class="toc">
+<p><b>Table of Contents</b></p>
+<dl>
+<dt><span class="sect1"><a href="api.variables.html#variable.template.dir">$template_dir</a></span></dt>
+<dt><span class="sect1"><a href="variable.compile.dir.html">$compile_dir</a></span></dt>
+<dt><span class="sect1"><a href="variable.config.dir.html">$config_dir</a></span></dt>
+<dt><span class="sect1"><a href="variable.plugins.dir.html">$plugins_dir</a></span></dt>
+<dt><span class="sect1"><a href="variable.debugging.html">$debugging</a></span></dt>
+<dt><span class="sect1"><a href="variable.debug_template.html">$debug_tpl</a></span></dt>
+<dt><span class="sect1"><a href="variable.debugging.ctrl.html">$debugging_ctrl</a></span></dt>
+<dt><span class="sect1"><a href="variable.auto.literal.html">$auto_literal</a></span></dt>
+<dt><span class="sect1"><a href="variable.autoload.filters.html">$autoload_filters</a></span></dt>
+<dt><span class="sect1"><a href="variable.compile.check.html">$compile_check</a></span></dt>
+<dt><span class="sect1"><a href="variable.force.compile.html">$force_compile</a></span></dt>
+<dt><span class="sect1"><a href="variable.caching.html">$caching</a></span></dt>
+<dt><span class="sect1"><a href="variable.cache.id.html">$cache_id</a></span></dt>
+<dt><span class="sect1"><a href="variable.cache.dir.html">$cache_dir</a></span></dt>
+<dt><span class="sect1"><a href="variable.cache.lifetime.html">$cache_lifetime</a></span></dt>
+<dt><span class="sect1"><a href="variable.cache.handler.func.html">$cache_handler_func</a></span></dt>
+<dt><span class="sect1"><a href="variable.cache.modified.check.html">$cache_modified_check</a></span></dt>
+<dt><span class="sect1"><a href="variable.config.overwrite.html">$config_overwrite</a></span></dt>
+<dt><span class="sect1"><a href="variable.config.booleanize.html">$config_booleanize</a></span></dt>
+<dt><span class="sect1"><a href="variable.config.read.hidden.html">$config_read_hidden</a></span></dt>
+<dt><span class="sect1"><a href="variable.config.fix.newlines.html">$config_fix_newlines</a></span></dt>
+<dt><span class="sect1"><a href="variable.default.template.handler.func.html">$default_template_handler_func</a></span></dt>
+<dt><span class="sect1"><a href="variable.php.handling.html">$php_handling</a></span></dt>
+<dt><span class="sect1"><a href="variable.trusted.dir.html">$trusted_dir</a></span></dt>
+<dt><span class="sect1"><a href="variable.left.delimiter.html">$left_delimiter</a></span></dt>
+<dt><span class="sect1"><a href="variable.right.delimiter.html">$right_delimiter</a></span></dt>
+<dt><span class="sect1"><a href="variable.compiler.class.html">$compiler_class</a></span></dt>
+<dt><span class="sect1"><a href="variable.request.vars.order.html">$request_vars_order</a></span></dt>
+<dt><span class="sect1"><a href="variable.request.use.auto.globals.html">$request_use_auto_globals</a></span></dt>
+<dt><span class="sect1"><a href="variable.compile.id.html">$compile_id</a></span></dt>
+<dt><span class="sect1"><a href="variable.use.sub.dirs.html">$use_sub_dirs</a></span></dt>
+<dt><span class="sect1"><a href="variable.default.modifiers.html">$default_modifiers</a></span></dt>
+<dt><span class="sect1"><a href="variable.default.resource.type.html">$default_resource_type</a></span></dt>
+</dl>
+</div>
+<p>
+      These are all of the available Smarty class variables. You can access them directly,
+      or use the corresponding setter/getter methods.
+   </p>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+  All class variables have magic setter/getter methods available. setter/getter methods
+  are camelCaseFormat, unlike the variable itself. So for example, you can set and get the
+  $smarty-&gt;template_dir variable
+  with $smarty-&gt;setTemplateDir($dir) and $dir = $smarty-&gt;getTemplateDir() respectively.
+</p>
+</div>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+    See <a class="link" href="advanced.features.template.settings.html" title="Changing settings by template"><code class="varname">Changing settings by template</code></a> section 
+    for how to change Smarty class variables for individual templates.
+ </p>
+</div>
+<div class="sect1" title="$template_dir">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="variable.template.dir"></a>$template_dir</h2></div></div></div>
+<p>
+     This is the name of the default template directory. If you do
      not supply a resource type when including files, they will be
      found here. By default this is
-     <TT
-CLASS="filename"
->./templates</TT
->,
+     <code class="filename">./templates</code>,
      meaning that Smarty
      will look for the
-     <TT
-CLASS="filename"
->templates/</TT
-> directory in
+     <code class="filename">templates/</code> directory in
      the same directory as the executing php script.
-    </P
-><DIV
-CLASS="note"
-><BLOCKQUOTE
-CLASS="note"
-><P
-><B
->Technical Note: </B
->
+    </p>
+<div class="note" title="Technical Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Technical Note</h3>
+<p>
       It is not recommended to put this directory under
       the web server document root.
-     </P
-></BLOCKQUOTE
-></DIV
-></DIV
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="constant.smarty.core.dir.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="variable.compile.dir.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->SMARTY_CORE_DIR</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="smarty.for.programmers.html"
-ACCESSKEY="U"
->Up</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->$compile_dir</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+     </p>
+</div>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="smarty.constants.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="smarty.for.programmers.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="variable.compile.dir.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Chapter 11. Constants </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> $compile_dir</td>
+</tr>
+</table>
+</div>
+</body>
+</html>
