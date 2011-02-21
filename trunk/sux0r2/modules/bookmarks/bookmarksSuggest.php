@@ -12,6 +12,9 @@ class bookmarksSuggest extends component  {
     // Module name
     protected $module = 'bookmarks';
 
+    // Form name
+    protected $form_name = 'bookmarksSuggest';
+
     // Object: suxBookmarks
     protected $bm;
 

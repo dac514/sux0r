@@ -12,6 +12,9 @@ class feedsManage extends component  {
     // Module name
     protected $module = 'feeds';
 
+    // Form name
+    protected $form_name = 'feedsManage';
+
     // Object: suxRss()
     protected $rss;
 
@@ -114,7 +117,7 @@ class feedsManage extends component  {
     function formSuccess() {
 
         // clear all caches with "nickname" as the first cache_id group
-        $this->tpl->clear_cache(null, "{$_SESSION['nickname']}");
+        $this->tpl->clearCache(null, "{$_SESSION['nickname']}");
 
         // Redirect
         suxFunct::redirect(suxFunct::getPreviousURL());

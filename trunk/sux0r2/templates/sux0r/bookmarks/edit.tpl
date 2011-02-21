@@ -20,7 +20,7 @@
 <fieldset>
 <legend>{if $id}{$r->gtext.edit_2}{else}{$r->gtext.new}{/if}</legend>
 
-<form action="{$r->text.form_url}" name="default" method="post" enctype="multipart/form-data" accept-charset="utf-8" >
+<form action="{$r->text.form_url}" name="{$form_name}" method="post" enctype="multipart/form-data" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />
 
 {if $id}
@@ -29,7 +29,7 @@
 {validate id="integrity" message="integrity failure"}
 {/if}
 
-{if $validate.default.is_error !== false}
+{if $validate.$form_name.is_error !== false}
 <p class="errorWarning">{$r->gtext.form_error} :</p>
 {elseif $r->detectPOST()}
 <p class="errorWarning">{$r->gtext.form_problem} :</p>
@@ -87,7 +87,7 @@
 {/strip}
 <label {if $smarty.capture.error}class="error"{/if} >{$r->gtext.date} :</label>
 <span class="htmlSelect">
-{html_select_date time="$Date_Year-$Date_Month-$Date_Day" field_order='YMD'  start_year='-5' end_year='+1' }
+{html_select_date time="$Date_Year-$Date_Month-$Date_Day" field_order='YMD'  start_year='-5' end_year='+1'}
 </span>
 {$smarty.capture.error}
 </p>

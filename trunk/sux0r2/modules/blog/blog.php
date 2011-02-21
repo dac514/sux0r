@@ -90,7 +90,7 @@ class blog extends bayesComponent {
             $cache_id = $nn . '|author|' . $author . '|' . $this->pager->start;
             $this->tpl->caching = 1;
 
-            if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
+            if (!$this->tpl->isCached('scroll.tpl', $cache_id)) {
 
                 $this->pager->setPages($this->msg->countFirstPostsByUser($u['users_id'], 'blog'));
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/author/' . $author));
@@ -106,7 +106,7 @@ class blog extends bayesComponent {
         // Sidelist
         // ---------------------------------------------------------------
 
-        if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
+        if (!$this->tpl->isCached('scroll.tpl', $cache_id)) {
 
             $this->r->arr['sidelist'] = $this->msg->getFirstPostsByUser($u['users_id'], null, 0, 'blog'); // TODO: Too many blogs?
             $this->r->text['sidelist'] = ucwords($author);
@@ -169,7 +169,7 @@ class blog extends bayesComponent {
             $cache_id = $nn . '|tag|' . $this->tag_id . '|' . $this->pager->start;
             $this->tpl->caching = 1;
 
-            if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
+            if (!$this->tpl->isCached('scroll.tpl', $cache_id)) {
 
                 $this->pager->setPages($count);
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/tag/' . $this->tag_id));
@@ -185,7 +185,7 @@ class blog extends bayesComponent {
         // Sidelist
         // ---------------------------------------------------------------
 
-        if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
+        if (!$this->tpl->isCached('scroll.tpl', $cache_id)) {
 
             $this->r->arr['sidelist'] = $this->getTaggedSidelist($this->tag_id);
             $this->r->text['sidelist'] = $tag['tag'];
@@ -213,7 +213,7 @@ class blog extends bayesComponent {
         $cache_id = "$nn|tagcloud";
         $this->tpl->caching = 1;
 
-        if (!$this->tpl->is_cached('cloud.tpl', $cache_id)) {
+        if (!$this->tpl->isCached('cloud.tpl', $cache_id)) {
 
             $link = $this->link->buildTableName('messages', 'tags');
             $query = "
@@ -286,7 +286,7 @@ class blog extends bayesComponent {
             $cache_id = $nn . '|category|' . $this->cat_id . '|' . $this->pager->start;
             $this->tpl->caching = 1;
 
-            if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
+            if (!$this->tpl->isCached('scroll.tpl', $cache_id)) {
 
                 $this->pager->setPages($count);
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/category/' . $this->cat_id));
@@ -301,7 +301,7 @@ class blog extends bayesComponent {
         // Sidelist
         // ---------------------------------------------------------------
 
-        if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
+        if (!$this->tpl->isCached('scroll.tpl', $cache_id)) {
 
             $this->r->arr['sidelist'] = $this->getCategorizedSidelist($this->cat_id);
             $this->r->text['sidelist'] = $c['category'];
@@ -366,7 +366,7 @@ class blog extends bayesComponent {
             $cache_id = $nn . '|month|' . date('Y-m', strtotime($date)) . '|' . $this->pager->start;
             $this->tpl->caching = 1;
 
-            if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
+            if (!$this->tpl->isCached('scroll.tpl', $cache_id)) {
 
                 $this->pager->setPages($this->msg->countFirstPostsByMonth($datetime, 'blog'));
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog/month/' . $date));
@@ -382,7 +382,7 @@ class blog extends bayesComponent {
         // Sidelist
         // ---------------------------------------------------------------
 
-        if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
+        if (!$this->tpl->isCached('scroll.tpl', $cache_id)) {
 
             $this->r->arr['sidelist'] = $this->msg->getFirstPostsByMonth($datetime, null, 0, 'blog');
             $this->r->text['sidelist'] = date('F Y', strtotime($date));
@@ -440,7 +440,7 @@ class blog extends bayesComponent {
             $cache_id = $nn . '|listing|' . $this->pager->start;
             $this->tpl->caching = 1;
 
-            if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
+            if (!$this->tpl->isCached('scroll.tpl', $cache_id)) {
 
                 $this->pager->setPages($this->msg->countFirstPosts('blog'));
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/blog'));
@@ -475,7 +475,7 @@ class blog extends bayesComponent {
         $cache_id = $nn . "|{$thread_id}|" . $this->pager->start;
         $this->tpl->caching = 1;
 
-        if (!$this->tpl->is_cached('view.tpl', $cache_id)) {
+        if (!$this->tpl->isCached('view.tpl', $cache_id)) {
 
             $fp[] = $this->msg->getFirstPost($thread_id);
 
@@ -518,7 +518,7 @@ class blog extends bayesComponent {
         $cache_id = 'rss';
         $this->tpl->caching = 1;
 
-        if (!$this->tpl->is_cached('rss.tpl', $cache_id)) {
+        if (!$this->tpl->isCached('rss.tpl', $cache_id)) {
 
             $fp = $this->blogs($this->msg->getFirstPosts($this->pager->limit, 0, 'blog'));
             if ($fp) {                

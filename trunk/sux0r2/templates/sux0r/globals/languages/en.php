@@ -5,29 +5,29 @@
 $gtext['navcontainer'] = array(
     'Home' => suxFunct::makeUrl('/home'),
     'Blog' => array(
-		suxFunct::makeUrl('/blog'),
+        suxFunct::makeUrl('/blog'),
         suxFunct::getModuleMenu('blog'),
-		),
+        ),
     'Feeds' => array(
-		suxFunct::makeUrl('/feeds'),
+        suxFunct::makeUrl('/feeds'),
         suxFunct::getModuleMenu('feeds'),
-		),
+        ),
     'Bookmarks' => array(
-		suxFunct::makeUrl('/bookmarks'),
+        suxFunct::makeUrl('/bookmarks'),
         suxFunct::getModuleMenu('bookmarks'),
-		),
+        ),
     'Photos' => array(
-		suxFunct::makeUrl('/photos'),
+        suxFunct::makeUrl('/photos'),
         suxFunct::getModuleMenu('photos'),
-		),
+        ),
     'Source Code' => 'http://sourceforge.net/projects/sux0r/',
-	);
+    );
 
 
 /* Copyright */
 
 $gtext['copyright'] = '<a href="http://www.sux0r.org/">sux0r</a> is copyleft &copy;
-<a href="http://www.trotch.com/">Trotch Inc</a> ' . date('Y') . ' and is distributed under
+<a href="http://www.trotch.com/">Trotch.com</a> ' . date('Y') . ' and is distributed under
 the <a href="http://www.fsf.org/licensing/licenses/gpl-3.0.html">GNU General Public License</a>.
 Hosting by <a href="http://www.networkredux.com/">Network Redux</a>.';
 

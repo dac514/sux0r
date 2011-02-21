@@ -42,8 +42,8 @@ $col = 'rss_feeds';
 
 // Get image names from template config
 $tpl = new suxTemplate($module);
-$tpl->config_load('my.conf', $module);
-$image = $tpl->get_config_vars('imgUnsubscribed');
+$tpl->configLoad('my.conf', $module);
+$image = $tpl->getConfigVars('imgUnsubscribed');
 
 $db = suxDB::get();
 $query = "SELECT COUNT(*) FROM {$link} WHERE {$col}_id = ? AND users_id = ? ";
@@ -60,7 +60,7 @@ else {
     // Insert
     $suxLink = new suxLink();
     $suxLink->saveLink($link, 'users', $_SESSION['users_id'], $col, $id);
-    $image = $tpl->get_config_vars('imgSubscribed');
+    $image = $tpl->getConfigVars('imgSubscribed');
 }
 
 // Log
@@ -71,7 +71,7 @@ $log->write($_SESSION['users_id'], "sux0r::feeds::toggle() bookmarks_id: {$id}",
 // Clear template caches
 // ---------------------------------------------------------------------------
 
-$tpl->clear_cache(null, "{$_SESSION['nickname']}"); // clear all caches with "nickname" as the first cache_id group
+$tpl->clearCache(null, "{$_SESSION['nickname']}"); // clear all caches with "nickname" as the first cache_id group
 
 // ---------------------------------------------------------------------------
 // Return image string to Ajax request

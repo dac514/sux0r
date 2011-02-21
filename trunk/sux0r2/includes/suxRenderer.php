@@ -14,7 +14,7 @@ object.
 
 Example:
 $r = new suxRenderer('module');
-$smarty->assign_by_ref('r', $r);
+$smarty->assignByRef('r', $r);
 
 PHP pages are procedural in the sense that a page will be rendered once, from
 top to bottom, then PHP will exit. Additionally, template rendering happens
@@ -132,7 +132,19 @@ class suxRenderer {
         return md5($v1 . $v2 . $v3 . $v4 . $v5 . $v6 . $GLOBALS['CONFIG']['SALT']);
 
     }
+    
+    
+    /**
+    * Return a unique id
+    *
+    * @return string random md5
+    */
+    function uniqueId() {
 
+        return md5(uniqid(time()));
+
+    }
+    
 
     /**
     * Detect $_POST
@@ -213,7 +225,7 @@ class suxRenderer {
 
         // Template
         $tpl = new suxTemplate('globals');
-        $tpl->assign_by_ref('r', $r);
+        $tpl->assignByRef('r', $r);
 
 
         return $tpl->fetch('widget.tpl');
@@ -302,18 +314,18 @@ class suxRenderer {
             else $compare = ltrim($GLOBALS['CONFIG']['URL'] . "/$compare", '/');
 
             $selected = null;
-			if ($compare) {
-				foreach ($list as $key => $val) {
-					if (is_array($val) && mb_strpos($val[0], $compare)) { // Sub-menu
-						$selected = $key;
-						break;
-					}
-					elseif (is_string($val) && mb_strpos($val, $compare)) { // No sub-menu
-						$selected = $key;
-						break;
-					}
-				}
-			}
+            if ($compare) {
+                foreach ($list as $key => $val) {
+                    if (is_array($val) && mb_strpos($val[0], $compare)) { // Sub-menu
+                        $selected = $key;
+                        break;
+                    }
+                    elseif (is_string($val) && mb_strpos($val, $compare)) { // No sub-menu
+                        $selected = $key;
+                        break;
+                    }
+                }
+            }
         }
 
         // Makeshift renderer object
@@ -323,7 +335,7 @@ class suxRenderer {
 
         // Template
         $tpl = new suxTemplate('globals');
-        $tpl->assign_by_ref('r', $r);
+        $tpl->assignByRef('r', $r);
 
         return $tpl->fetch('navlist.tpl');
 
@@ -386,7 +398,8 @@ class suxRenderer {
         if (!is_file($test)) $lang = 'en'; // Revert back to english
 
         // Javascript
-        $js = '<script type="text/javascript" src="' . $path . '"></script>
+        $js = '
+        <script type="text/javascript" src="' . $path . '"></script>
         <script language="javascript" type="text/javascript">
         // <![CDATA[
 
@@ -442,11 +455,11 @@ class suxRenderer {
 * @param array $params smarty {insert} parameters
 * @return string html
 */
-function insert_navlist() {
+function insert_navlist($params) {
 
     unset($params); // Not used
 
-	return suxRenderer::navlist();
+    return suxRenderer::navlist();
 
 }
 
@@ -465,7 +478,7 @@ function insert_userInfo($params) {
 
     $tpl = new suxTemplate('globals');
     $r = new suxRenderer('globals'); // Renderer
-    $tpl->assign_by_ref('r', $r); // Renderer referenced in template
+    $tpl->assignByRef('r', $r); // Renderer referenced in template
 
 
     if (!empty($_SESSION['nickname'])) {

@@ -37,20 +37,20 @@
 {include file=$r->xhtml_header}{/strip}
 
 <table id="proselytizer" >
-	<tr>
-		<td colspan="2" style="vertical-align:top;">
-			<div id="header">
+    <tr>
+        <td colspan="2" style="vertical-align:top;">
+            <div id="header">
 
                 <h1>{$r->gtext.header|lower}</h1>
                 {insert name="userInfo"}
-				{insert name="navlist"}
+                {insert name="navlist"}
 
-			</div>
-		</td>
-	</tr>
-	<tr>
+            </div>
+        </td>
+    </tr>
+    <tr>
         <td style="vertical-align:top;">
-			<div id="leftside">
+            <div id="leftside">
 
                 {if $r->arr.sidelist}
                 <div class="sidelist">
@@ -104,10 +104,10 @@
                 {/if}
 
 
-			</div>
-		</td>
-		<td style="vertical-align:top;">
-			<div id="rightside">
+            </div>
+        </td>
+        <td style="vertical-align:top;">
+            <div id="rightside">
 
             <!-- Category filters -->
             {insert name="bayesFilters" form_url=$r->text.form_url}
@@ -177,16 +177,16 @@
 
             {$r->text.pager}
 
-			</div>
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2" style="vertical-align:bottom;">
-			<div id="footer">
-			{$r->copyright()}
-			</div>
-		</td>
-	</tr>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="vertical-align:bottom;">
+            <div id="footer">
+            {$r->copyright()}
+            </div>
+        </td>
+    </tr>
 </table>
 
 {insert name="bayesFilterScript"}

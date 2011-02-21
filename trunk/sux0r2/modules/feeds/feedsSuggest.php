@@ -12,6 +12,9 @@ class feedsSuggest extends component {
     // Module name
     protected $module = 'feeds';
 
+    // Form name
+    protected $form_name = 'feedsSuggest';
+
     // Object: suxRss()
     protected $rss;
 

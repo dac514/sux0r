@@ -5,6 +5,11 @@
 /* Don't modify these unless you know what you are doing */
 /* ------------------------------------------------------------------------- */
 
+// Smarty Error Reporting
+// @see: http://ca2.php.net/manual/en/errorfunc.constants.php
+
+$CONFIG['SMARTY_ERROR_REPORTING'] = 0;
+
 // Ability to disable features defined here, false = disabled
 
 $CONFIG['FEATURE'] = array(

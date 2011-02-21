@@ -12,6 +12,9 @@ class cropper extends component {
     // Module name
     protected $module = 'cropper';
 
+    // Form name
+    protected $form_name = 'cropper';
+
 
     /**
     * Constructor
@@ -112,12 +115,12 @@ class cropper extends component {
         if ($image && $width && $height) {
 
             // Get config variables
-            $this->tpl->config_load('my.conf', $module);
+            $this->tpl->configLoad('my.conf', $module);
 
             $this->tpl->assign('module', $module);
             $this->tpl->assign('id', $id);
-            $this->tpl->assign('x2', $this->tpl->get_config_vars('thumbnailWidth')); // Pavatar
-            $this->tpl->assign('y2', $this->tpl->get_config_vars('thumbnailHeight'));
+            $this->tpl->assign('x2', $this->tpl->getConfigVars('thumbnailWidth')); // Pavatar
+            $this->tpl->assign('y2', $this->tpl->getConfigVars('thumbnailHeight'));
             $this->tpl->assign('url_to_source', $image);
             $this->tpl->assign('width', $width);
             $this->tpl->assign('height', $height);

@@ -12,6 +12,9 @@ class feedsApprove extends component  {
     // Module name
     protected $module = 'feeds';
 
+    // Form name
+    protected $form_name = 'feedsApprove';
+
     // Object: suxRss()
     protected $rss;
 
@@ -118,7 +121,7 @@ class feedsApprove extends component  {
         }
 
         // clear all caches,cheap and easy
-        $this->tpl->clear_all_cache();
+        $this->tpl->clearAllCache();
 
     }
 

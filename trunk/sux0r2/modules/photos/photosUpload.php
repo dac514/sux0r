@@ -12,6 +12,9 @@ class photosUpload extends component {
     // Module name
     protected $module = 'photos';
 
+    // Form name
+    protected $form_name = 'photosUpload';
+
     // Object: suxPhoto()
     protected $photo;
 
@@ -153,8 +156,8 @@ class photosUpload extends component {
             if (!$this->photo->isDupe($md5, $_SESSION['users_id'], $photo['photoalbums_id'])) {
 
                 suxPhoto::resizeImage($format, $_FILES['image']['tmp_name'], $resize,
-                    $this->tpl->get_config_vars('thumbnailWidth'),
-                    $this->tpl->get_config_vars('thumbnailHeight')
+                    $this->tpl->getConfigVars('thumbnailWidth'),
+                    $this->tpl->getConfigVars('thumbnailHeight')
                     );
                 move_uploaded_file($_FILES['image']['tmp_name'], $fullsize);
 
@@ -199,8 +202,8 @@ class photosUpload extends component {
                     if (!$this->photo->isDupe($md5, $_SESSION['users_id'], $photo['photoalbums_id'])) {
 
                         suxPhoto::resizeImage($format, $filepath, $resize,
-                            $this->tpl->get_config_vars('thumbnailWidth'),
-                            $this->tpl->get_config_vars('thumbnailHeight')
+                            $this->tpl->getConfigVars('thumbnailWidth'),
+                            $this->tpl->getConfigVars('thumbnailHeight')
                             );
                         copy($filepath, $fullsize);
 
@@ -226,7 +229,7 @@ class photosUpload extends component {
         if ($tmp) {
 
             // Clear all caches, cheap and easy
-            $this->tpl->clear_all_cache();
+            $this->tpl->clearAllCache();
 
             // Log message
             $log = '';
@@ -241,7 +244,7 @@ class photosUpload extends component {
 
             // Clear caches, cheap and easy
             $tpl = new suxTemplate('user');
-            $tpl->clear_cache(null, $_SESSION['nickname']);
+            $tpl->clearCache(null, $_SESSION['nickname']);
         }
 
     }

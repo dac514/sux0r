@@ -12,6 +12,10 @@ class adminPurge extends component {
     // Module name
     protected $module = 'admin';
 
+    // Form name
+    protected $form_name = 'adminPurge';
+
+
     /**
     * Constructor
     *
@@ -64,7 +68,7 @@ class adminPurge extends component {
 
         }
 
-        if (!$this->tpl->get_template_vars('Date_Year')) {
+        if (!$this->tpl->getTemplateVars('Date_Year')) {
             // Today's Date
             $this->tpl->assign('Date_Year', date('Y'));
             $this->tpl->assign('Date_Month', date('m'));

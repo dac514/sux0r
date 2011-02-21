@@ -53,7 +53,7 @@ class userProfile extends component {
         $cache_id = "$nn|{$this->profile['nickname']}";
         $this->tpl->caching = 1;
 
-        if(!$this->tpl->is_cached('profile.tpl', $cache_id)) {
+        if(!$this->tpl->isCached('profile.tpl', $cache_id)) {
 
 
             if (!isset($this->profile['dob']) || $this->profile['dob'] == '0000-00-00') unset($this->profile['dob']); // NULL date
@@ -78,7 +78,7 @@ class userProfile extends component {
         $cache_id = $this->profile['nickname'] . '|rss';
         $this->tpl->caching = 1;
 
-        if (!$this->tpl->is_cached('rss.tpl', $cache_id)) {
+        if (!$this->tpl->isCached('rss.tpl', $cache_id)) {
 
             $fp = $this->log->get(($this->minifeed_limit * 5), 0, $this->profile['users_id']);
             if ($fp) {                

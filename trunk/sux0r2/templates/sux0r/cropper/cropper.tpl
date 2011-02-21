@@ -10,7 +10,7 @@
 
 <div id="middle">
 
-    {if $validate.default.is_error !== false}
+    {if $validate.$form_name.is_error !== false}
     <p class="errorWarning">{$r->gtext.form_error} :</p>
     {elseif $r->detectPOST()}
     <p class="errorWarning">{$r->gtext.form_problem} :</p>
@@ -18,7 +18,7 @@
 
     {validate id="integrity" message="integrity failure"}
 
-    <form action="{$form_url}" name="default" method="post" accept-charset="utf-8" >
+    <form action="{$form_url}" name="{$form_name}" method="post" accept-charset="utf-8" >
 
     <input type="hidden" name="token" value="{$token}" />
     <input type="hidden" name="integrity" value="{$r->integrityHash($module, $id)}" />

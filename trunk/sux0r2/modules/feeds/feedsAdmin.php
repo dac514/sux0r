@@ -12,6 +12,9 @@ class feedsAdmin extends component {
     // Module name
     protected $module = 'feeds';
 
+    // Form name
+    protected $form_name = 'feedsAdmin';
+
     // Object: suxRSS()
     protected $rss;
 
@@ -120,7 +123,7 @@ class feedsAdmin extends component {
         }
 
         // clear all caches, cheap and easy
-        $this->tpl->clear_all_cache();
+        $this->tpl->clearAllCache();
 
     }
 

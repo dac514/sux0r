@@ -12,6 +12,9 @@ class photoalbumsEdit extends component {
     // Module name
     protected $module = 'photos';
 
+    // Form name
+    protected $form_name = 'photoalbumsEdit';
+
     // Object: suxPhoto()
     protected $photo;
 
@@ -138,14 +141,14 @@ class photoalbumsEdit extends component {
         $this->r->text['form_url'] = suxFunct::makeUrl('/photos/album/edit/' . $this->id);
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
-        if (!$this->tpl->get_template_vars('Date_Year')) {
+        if (!$this->tpl->getTemplateVars('Date_Year')) {
             // Today's Date
             $this->tpl->assign('Date_Year', date('Y'));
             $this->tpl->assign('Date_Month', date('m'));
             $this->tpl->assign('Date_Day', date('j'));
         }
 
-        if (!$this->tpl->get_template_vars('Time_Hour')) {
+        if (!$this->tpl->getTemplateVars('Time_Hour')) {
             // Current Time
             $this->tpl->assign('Time_Hour', date('H'));
             $this->tpl->assign('Time_Minute', date('i'));
@@ -208,7 +211,7 @@ class photoalbumsEdit extends component {
         if ($tmp) {
 
             // Clear all caches, cheap and easy
-            $this->tpl->clear_all_cache();
+            $this->tpl->clearAllCache();
 
             if (!isset($clean['id'])) {
                 // New album log message
@@ -223,7 +226,7 @@ class photoalbumsEdit extends component {
 
             // Clear caches, cheap and easy
             $tpl = new suxTemplate('user');
-            $tpl->clear_cache(null, $_SESSION['nickname']);
+            $tpl->clearCache(null, $_SESSION['nickname']);
 
         }
 

@@ -18,7 +18,10 @@ class myExample extends component {
     // Module name
     protected $module = 'example'; ### change me
 
-	### add aditional variables here
+    // Form name
+    protected $form_name = 'myExample'; ### change me
+
+    ### add aditional variables here
 
 
     /**
@@ -29,12 +32,12 @@ class myExample extends component {
     function __construct($id = null) {
 
         // Declare objects
-		### add objects here
+        ### add objects here
         $this->r = new blogRenderer($this->module); // Renderer
         suxValidate::register_object('this', $this); // Register self to validator
         parent::__construct(); // Let the parent do the rest
 
-		### do sanity and security checks here
+        ### do sanity and security checks here
 
         // Assign id:
         $this->id = $id;
@@ -64,11 +67,11 @@ class myExample extends component {
         // Pre assign template variables, maybe overwritten by &$dirty
         // --------------------------------------------------------------------
 
-		$change_me = array(); ### change me
+        $change_me = array(); ### change me
 
         if ($this->id) {
 
-			### get the item from the database, assign it to the $change_me array.
+            ### get the item from the database, assign it to the $change_me array.
 
             // Don't allow spoofing
             unset($dirty['id']);
@@ -82,6 +85,8 @@ class myExample extends component {
         // Form logic
         // --------------------------------------------------------------------
 
+        suxValidate::set_form('myfoo');
+
         if (!empty($dirty)) $this->tpl->assign($dirty);
         else suxValidate::disconnect();
 
@@ -90,10 +95,10 @@ class myExample extends component {
             suxValidate::connect($this->tpl, true); // Reset connection
 
             // Register our validators
-			### add validators here, examples:
+            ### add validators here, examples:
             // if ($this->id) suxValidate::register_validator('integrity', 'integrity:id', 'hasIntegrity');
             // suxValidate::register_validator('title', 'title', 'notEmpty', false, false, 'trim');
-			### @see: ./includes/symbionts/SmartyAddons/docs/SmartyValidate/README
+            ### @see: ./includes/symbionts/SmartyAddons/docs/SmartyValidate/README
 
         }
 
@@ -104,7 +109,7 @@ class myExample extends component {
         $this->r->text['form_url'] = suxFunct::makeUrl('/path/to/form' . $this->id); ### change me
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
-		### do template stuff here
+        ### do template stuff here
 
         // Template
         $this->tpl->display('example.tpl'); ### change me
@@ -120,7 +125,7 @@ class myExample extends component {
     */
     function formProcess(&$clean) {
 
-		### do your thing here, like saving $clean to database
+        ### do your thing here, like saving $clean to database
 
     }
 
@@ -130,7 +135,7 @@ class myExample extends component {
     */
     function formSuccess() {
 
-		### do your thing here
+        ### do your thing here
 
         suxFunct::redirect(suxFunct::makeUrl('/path/to/somewhere/')); #change me
 
@@ -146,11 +151,11 @@ class myExample extends component {
 
 $foo = new myExample();
 if ($foo->formValidate($_POST)) {
-	$foo->formProcess($_POST);
-	$foo->formSuccess();
+    $foo->formProcess($_POST);
+    $foo->formSuccess();
 }
 else {
-	$foo->formBuild($_POST);
+    $foo->formBuild($_POST);
 }
 
 */

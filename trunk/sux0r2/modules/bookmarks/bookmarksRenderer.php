@@ -132,8 +132,8 @@ class bookmarksRenderer extends suxBayesRenderer {
 
         // Get config variables for template
         $tpl = new suxTemplate($this->module);
-        $tpl->config_load('my.conf', $this->module);
-        $image = $tpl->get_config_vars('imgUnsubscribed');
+        $tpl->configLoad('my.conf', $this->module);
+        $image = $tpl->getConfigVars('imgUnsubscribed');
 
         // Don't query the database unnecessarily.
         static $img_cache = array();
@@ -146,7 +146,7 @@ class bookmarksRenderer extends suxBayesRenderer {
             $db = suxDB::get();
             $st = $db->prepare($query);
             $st->execute(array($bookmark_id, $_SESSION['users_id']));
-            if ($st->fetchColumn() > 0) $image = $tpl->get_config_vars('imgSubscribed');
+            if ($st->fetchColumn() > 0) $image = $tpl->getConfigVars('imgSubscribed');
             $img_cache[$bookmark_id] = $image;
         }
 

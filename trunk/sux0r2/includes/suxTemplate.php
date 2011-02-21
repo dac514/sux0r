@@ -27,13 +27,16 @@ class suxTemplate extends Smarty {
 
         // Call parent
         parent::__construct();
+        
+        // Set seperate error reporting for templates
+        $this->error_reporting = $GLOBALS['CONFIG']['SMARTY_ERROR_REPORTING'];
 
         // --------------------------------------------------------------------
         // Plugins directory
         // --------------------------------------------------------------------
 
         $this->plugins_dir = array(
-            'plugins', // the default under SMARTY_DIR
+            $GLOBALS['CONFIG']['PATH'] . '/includes/symbionts/Smarty/libs/plugins',            
             $GLOBALS['CONFIG']['PATH'] . '/includes/symbionts/SmartyAddons/plugins',
             );
 
@@ -155,22 +158,23 @@ class suxTemplate extends Smarty {
     /**
     * Override Smarty fetch() function to look for content in various places
     *
-    * @param string $resource_name
-    * @param string $cache_id
-    * @param string $compile_id
-    * @param boolean $display
+    * @param string $template the resource handle of the template file or template object
+    * @param mixed $cache_id cache id to be used with this template
+    * @param mixed $compile_id compile id to be used with this template
+    * @param object $ |null $parent next higher level of Smarty variables
+    * @return string rendered template output
     */
-    function fetch($resource_name, $cache_id = null, $compile_id = null, $display = false) {
-
-        if (preg_match('/^file:/', $resource_name) || file_exists($this->template_dir . $resource_name)) {
-            return parent::fetch($resource_name, $cache_id, $compile_id, $display);
+    function fetch($template, $cache_id = null, $compile_id = null, $parent = null, $display = false) {
+        
+        if (preg_match('/^file:/', $template) || file_exists($this->template_dir . $template)) {
+            return parent::fetch($template, $cache_id, $compile_id, $parent, $display);
         }
         elseif ($this->template_dir != $this->template_dir_fallback)  {
             // Fallback
-            $location = $this->template_dir_fallback . $resource_name;
-            return parent::fetch("file:$location", $cache_id, $compile_id, $display);
+            $location = $this->template_dir_fallback . $template;
+            return parent::fetch("file:$location", $cache_id, $compile_id, $parent, $display);
         }
-
+        
     }
 
 }

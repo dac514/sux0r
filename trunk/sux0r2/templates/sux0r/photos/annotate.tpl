@@ -21,7 +21,7 @@
 <fieldset>
 <legend>{$r->gtext.annotate_2}</legend>
 
-<form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
+<form action="{$r->text.form_url}" name="{$form_name}" method="post" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />
 
 {if $id}
@@ -39,7 +39,7 @@
     <div class="annotateItem" style="">
 
     <div style="float:left;">
-    <a href="{$r->makeUrl('/cropper/photos')}/{$foo.id}" class="noBg"><img src="{$r->url}/data/photos/{$foo.image|escape:'url'}?time={php}echo time();{/php}" alt="" width="{#thumbnailWidth#}" height="{#thumbnailHeight#}" border="0" class="croppable" /></a>
+    <a href="{$r->makeUrl('/cropper/photos')}/{$foo.id}" class="noBg"><img src="{$r->url}/data/photos/{$foo.image|escape:'url'}?sid={$r->uniqueId()}" alt="" width="{#thumbnailWidth#}" height="{#thumbnailHeight#}" border="0" class="croppable" /></a>
     </div>
 
     <div class="annotateItemDesc" style="float:left;">

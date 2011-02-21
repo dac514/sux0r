@@ -12,10 +12,9 @@
 * Autoload function
 */
 
-function __autoload($class_name) {
+function suxAutoload($class_name) {
 
-    global $controller;
-    $found = false;
+    global $controller;    
     static $dirname; // Wimpy cache
     if (empty($dirname)) $dirname = dirname(__FILE__);
 
@@ -29,17 +28,12 @@ function __autoload($class_name) {
 
     foreach ($file as $f) {
         if (is_file($f)) {
-            require_once($f);
-            $found = true;
+            require_once($f);            
             break;
         }
     }
-
-    if (!$found) {
-        throw new Exception('Class "' . $class_name . '" could not be autoloaded');
-    }
 }
-
+spl_autoload_register('suxAutoload');
 
 /**
 * Procedure

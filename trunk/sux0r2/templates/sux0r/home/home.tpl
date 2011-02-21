@@ -1,28 +1,28 @@
 {capture name=header}
 
 {* Latest version *}
-{assign var='version' value='2.1.0'}
+{assign var='version' value='2.2.0 alpha'}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
 {include file=$r->xhtml_header}{/strip}
 
 <table id="proselytizer">
-	<tr>
-		<td colspan="2" style="vertical-align:top;">
-			<div id="header">
+    <tr>
+        <td colspan="2" style="vertical-align:top;">
+            <div id="header">
 
                 <h1>sux0r - it sux0rs up all the web</h1>
                 {insert name="userInfo"}
-				{insert name="navlist"}
+                {insert name="navlist"}
 
-			</div>
+            </div>
             <div class="clearboth"></div>
-		</td>
-	</tr>
-	<tr>
-		<td style="vertical-align:top;">
-			<div id="leftside">
+        </td>
+    </tr>
+    <tr>
+        <td style="vertical-align:top;">
+            <div id="leftside">
 
             <p>
             <span class="highlight">sux0r {$version}</span> is a blogging package, an RSS aggregator, a bookmark repository,
@@ -61,10 +61,10 @@
             </p>
 
 
-			</div>
-		</td>
-		<td style="vertical-align:top;">
-			<div id="rightside">
+            </div>
+        </td>
+        <td style="vertical-align:top;">
+            <div id="rightside">
 
             {* Capture content *}
 
@@ -105,16 +105,16 @@
 
 
 
-			</div>
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2" style="vertical-align:bottom;">
-			<div id="footer">
-			{$r->copyright()}
-			</div>
-		</td>
-	</tr>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="vertical-align:bottom;">
+            <div id="footer">
+            {$r->copyright()}
+            </div>
+        </td>
+    </tr>
 </table>
 
 

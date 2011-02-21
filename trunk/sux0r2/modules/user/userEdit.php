@@ -12,6 +12,9 @@ class userEdit extends component {
     // Module name
     protected $module = 'user';
 
+    // Form name
+    protected $form_name = 'userEdit';
+
     // Var: caches to clear if the user changes their language
     public $caches = array('home', 'blog', 'feeds', 'bookmarks', 'photos');
 
@@ -33,6 +36,10 @@ class userEdit extends component {
         suxValidate::register_object('this', $this); // Register self to validator
         parent::__construct(); // Let the parent do the rest
 
+        // Give a unique form name
+        $form_name = 'userEdit';
+        $this->tpl->assign('form_name', $form_name);
+        suxValidate::set_form($form_name);
 
         // -------------------------------------------------------------------
         // Edit mode
@@ -209,11 +216,11 @@ class userEdit extends component {
         // --------------------------------------------------------------------
 
         // Defaults
-        if (!$this->tpl->get_template_vars('country'))
+        if (!$this->tpl->getTemplateVars('country'))
             $this->tpl->assign('country', $GLOBALS['CONFIG']['COUNTRY']); // Country
-        if (!$this->tpl->get_template_vars('timezone'))
+        if (!$this->tpl->getTemplateVars('timezone'))
             $this->tpl->assign('timezone', $GLOBALS['CONFIG']['TIMEZONE']); // Timezone
-        if (!$this->tpl->get_template_vars('language'))
+        if (!$this->tpl->getTemplateVars('language'))
             $this->tpl->assign('language', $GLOBALS['CONFIG']['LANGUAGE']); // Languages
 
 
@@ -328,7 +335,7 @@ class userEdit extends component {
         unset($_SESSION['openid_url_registration'], $_SESSION['openid_url_integrity']);
 
         // Clear caches, cheap and easy
-        $this->tpl->clear_all_cache();
+        $this->tpl->clearAllCache();
 
         // Reset session
         if ($this->mode == 'edit' && $clean['nickname'] == $_SESSION['nickname']) {
@@ -336,7 +343,7 @@ class userEdit extends component {
             foreach ($this->caches as $module) {
                 // clear all caches with "nickname" as the first cache_id group
                 $tpl = new suxTemplate($module);
-                $tpl->clear_cache(null, "{$_SESSION['nickname']}");
+                $tpl->clearCache(null, "{$_SESSION['nickname']}");
             }
 
             // Reset session

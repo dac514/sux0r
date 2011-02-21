@@ -12,6 +12,9 @@ class feedsPurge extends component  {
     // Module name
     protected $module = 'feeds';
 
+    // Form name
+    protected $form_name = 'feedsPurge';
+
     // Object: suxRss()
     protected $rss;
 
@@ -74,7 +77,7 @@ class feedsPurge extends component  {
 
         }
 
-        if (!$this->tpl->get_template_vars('Date_Year')) {
+        if (!$this->tpl->getTemplateVars('Date_Year')) {
             // Today's Date
             $this->tpl->assign('Date_Year', date('Y'));
             $this->tpl->assign('Date_Month', date('m'));
@@ -104,7 +107,7 @@ class feedsPurge extends component  {
         $this->rss->purgeFeeds($clean['Date']);
 
         // clear all caches, cheap and easy
-        $this->tpl->clear_all_cache();
+        $this->tpl->clearAllCache();
 
         // Log, private
         $this->log->write($_SESSION['users_id'], "sux0r::feedsPurge() ", 1);
@@ -121,7 +124,7 @@ class feedsPurge extends component  {
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
         $this->r->title .= " | {$this->r->gtext['success']}";
-        $this->r->text['success2'] = $this->r->gtext['success3']; // Overwrite
+        $this->r->gtext['success2'] = $this->r->gtext['success3']; // Overwrite
 
         $this->tpl->display('success.tpl');
 

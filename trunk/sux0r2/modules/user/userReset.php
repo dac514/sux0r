@@ -12,6 +12,9 @@ class userReset extends component {
     // Module name
     protected $module = 'user';
 
+    // Form name
+    protected $form_name = 'userReset';
+
 
     /**
     * Constructor

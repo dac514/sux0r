@@ -32,7 +32,7 @@
 
     <fieldset>
 
-    <form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
+    <form action="{$r->text.form_url}" name="{$form_name}" method="post" accept-charset="utf-8" >
     <input type="hidden" name="token" value="{$token}" />
 
     <input type="hidden" name="nickname" value="{$nickname}" />

@@ -9,6 +9,9 @@
 
 class userLoginOpenID extends userRegisterOpenID {
 
+    // Form name
+    protected $form_name = 'userLoginOpenID';
+
 
     /**
     * Constructor

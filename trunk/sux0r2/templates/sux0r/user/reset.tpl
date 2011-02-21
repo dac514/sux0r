@@ -27,10 +27,10 @@
 <fieldset>
 <legend>{$r->gtext.reset}</legend>
 
-<form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8">
+<form action="{$r->text.form_url}" name="{$form_name}" method="post" accept-charset="utf-8">
 <input type="hidden" name="token" value="{$token}" />
 
-{if $validate.default.is_error !== false}
+{if $validate.$form_name.is_error !== false}
 <p class="errorWarning">{$r->gtext.form_error} :</p>
 {elseif $r->detectPOST()}
 <p class="errorWarning">{$r->gtext.form_problem} :</p>
@@ -67,7 +67,7 @@
 
 <p>
 <label>&nbsp;</label>
-<img src="{$r->url}/modules/captcha/ajax.getImage.php?sid={php}echo md5(uniqid(time()));{/php}" alt="Captcha" border="0" />
+<img src="{$r->url}/modules/captcha/ajax.getImage.php?sid={$r->uniqueId()}" alt="Captcha" border="0" />
 <a href="{$r->url}/modules/captcha/ajax.getSound.php"><img src="{$r->url}/includes/symbionts/securimage/images/audio_icon.gif" alt="Audio Version"  border="0" /></a>
 </p>
 <div class="clearboth"></div>
