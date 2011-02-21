@@ -12,6 +12,9 @@ class blogEdit extends component {
     // Module name
     protected $module = 'blog';
 
+    // Form name
+    protected $form_name = 'blogEdit';
+
     // Object: suxThreadedMessages()
     protected $msg;
 
@@ -196,14 +199,14 @@ class blogEdit extends component {
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog/edit/' . $this->id);
         $this->r->text['back_url'] = suxFunct::getPreviousURL();
 
-        if (!$this->tpl->get_template_vars('Date_Year')) {
+        if (!$this->tpl->getTemplateVars('Date_Year')) {
             // Today's Date
             $this->tpl->assign('Date_Year', date('Y'));
             $this->tpl->assign('Date_Month', date('m'));
             $this->tpl->assign('Date_Day', date('j'));
         }
 
-        if (!$this->tpl->get_template_vars('Time_Hour')) {
+        if (!$this->tpl->getTemplateVars('Time_Hour')) {
             // Current Time
             $this->tpl->assign('Time_Hour', date('H'));
             $this->tpl->assign('Time_Minute', date('i'));
@@ -251,8 +254,8 @@ class blogEdit extends component {
             $fullsize = suxFunct::dataDir($this->module) . "/{$fullsize}";
 
             suxPhoto::resizeImage($format, $_FILES['image']['tmp_name'], $resize,
-                $this->tpl->get_config_vars('thumbnailWidth'),
-                $this->tpl->get_config_vars('thumbnailHeight')
+                $this->tpl->getConfigVars('thumbnailWidth'),
+                $this->tpl->getConfigVars('thumbnailHeight')
                 );
             move_uploaded_file($_FILES['image']['tmp_name'], $fullsize);
 
@@ -289,7 +292,7 @@ class blogEdit extends component {
         if ($tmp) {
 
             // Clear all caches, cheap and easy
-            $this->tpl->clear_all_cache();
+            $this->tpl->clearAllCache();
 
             // Log message
             $log = '';
@@ -304,7 +307,7 @@ class blogEdit extends component {
 
             // Clear cache
             $tpl = new suxTemplate('user');
-            $tpl->clear_cache('profile.tpl', $_SESSION['nickname']);
+            $tpl->clearCache('profile.tpl', $_SESSION['nickname']);
         }
 
         $this->log->write($_SESSION['users_id'], "sux0r::blogEdit()  messages_id: {$clean['id']}", 1); // Private
@@ -416,7 +419,7 @@ class blogEdit extends component {
     */
     function formSuccess() {
 
-        $this->tpl->clear_cache(null, $_SESSION['nickname']); // Clear cache
+        $this->tpl->clearCache(null, $_SESSION['nickname']); // Clear cache
 
         suxFunct::redirect(suxFunct::makeUrl('/blog/bookmarks/' . $this->id)); // Pass this on to bookmarks for scanning
 

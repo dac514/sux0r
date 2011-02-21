@@ -54,7 +54,7 @@ class openid {
         $this->user = new suxUser(); // User
         $this->r = new suxRenderer($this->module); // Renderer
         $this->tpl = new suxTemplate($this->module); // Template
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
+        $this->tpl->assignByRef('r', $this->r); // Renderer referenced in template
 
 
         // Defined by OpenID spec
@@ -722,55 +722,55 @@ class openid {
 
         // bcmath
         $res['bcmath'] = extension_loaded('bcmath')
-		? 'pass' : 'warn - not loaded';
+        ? 'pass' : 'warn - not loaded';
 
         // sys_get_temp_dir
         $res['logfile'] = is_writable($this->profile['logfile'])
-		? 'pass' : "warn - log is not writable";
+        ? 'pass' : "warn - log is not writable";
 
         // secret
         list($test_assoc, $test_new_ss) = $this->newAssoc($test_expire);
         list($check, $check2) = $this->secret($test_assoc);
         $res['secret'] = ($check == $test_new_ss)
-		? 'pass' : 'fail';
+        ? 'pass' : 'fail';
 
         // expire
         $res['expire'] = ($check2 <= $test_expire)
-		? 'pass' : 'fail';
+        ? 'pass' : 'fail';
 
         // base64
         $res['base64'] = (base64_encode($test_ss) == $test_ss_enc)
-		? 'pass' : 'fail';
+        ? 'pass' : 'fail';
 
         // hmac
         $test_sig = base64_decode('/VXgHvZAOdoz/OTa5+XJXzSGhjs=');
         $check = hash_hmac('sha1', $test_token, $test_ss, true);
         $res['hmac'] = ($check == $test_sig)
-		? 'pass' : sprintf("fail - '%s'", base64_encode($check));
+        ? 'pass' : sprintf("fail - '%s'", base64_encode($check));
 
         if ($this->profile['use_bcmath']) {
             // bcmath powmod
             $test_server_public = '102773334773637418574009974502372885384288396853657336911033649141556441102566075470916498748591002884433213640712303846640842555822818660704173387461364443541327856226098159843042567251113889701110175072389560896826887426539315893475252988846151505416694218615764823146765717947374855806613410142231092856731';
             $check = bcpowmod($this->g, $test_server_private, $this->p);
             $res['bmpowmod-1'] = ($check == $test_server_public)
-			? 'pass' : sprintf("fail - '%s'", $check);
+            ? 'pass' : sprintf("fail - '%s'", $check);
 
             // long
             $test_client_long = '133926731803116519408547886573524294471756220428015419404483437186057383311250738749035616354107518232016420809434801736658109316293127101479053449990587221774635063166689561125137927607200322073086097478667514042144489248048756916881344442393090205172004842481037581607299263456852036730858519133859409417564';
             $res['long'] = ($this->long($test_client_public) == $test_client_long)
-			? 'pass' : 'fail';
+            ? 'pass' : 'fail';
 
             // bcmath powmod 2
             $test_client_share = '19333275433742428703546496981182797556056709274486796259858099992516081822015362253491867310832140733686713353304595602619444380387600756677924791671971324290032515367930532292542300647858206600215875069588627551090223949962823532134061941805446571307168890255137575975911397744471376862555181588554632928402';
             $check = bcpowmod($test_client_long, $test_server_private, $this->p);
             $res['bmpowmod-2'] = ($check == $test_client_share)
-			? 'pass' : sprintf("fail - '%s'", $check);
+            ? 'pass' : sprintf("fail - '%s'", $check);
 
             // bin
             $test_client_mac_s1 = base64_decode('G4gQQkYM6QmAzhKbVKSBahFesPL0nL3F2MREVwEtnVRRYI0ifl9zmPklwTcvURt3QTiGBd+9Dn3ESLk5qka6IO5xnILcIoBT8nnGVPiOZvTygfuzKp4tQ2mXuIATJoa7oXRGmBWtlSdFapH5Zt6NJj4B83XF/jzZiRwdYuK4HJI=');
             $check = $this->bin($test_client_share);
             $res['bin'] = ($check == $test_client_mac_s1)
-			? 'pass' : sprintf("fail - '%s'", base64_encode($check));
+            ? 'pass' : sprintf("fail - '%s'", base64_encode($check));
 
         } else {
             $res['bcmath'] = 'fail - big math functions are not available.';
@@ -781,19 +781,19 @@ class openid {
         $test_client_mac_s2 = base64_decode('0Mb2t9d/HvAZyuhbARJPYdx3+v4=');
         $check = sha1($test_client_mac_s1, true);
         $res['sha1_20'] = ($check == $test_client_mac_s2)
-		? 'pass' : sprintf("fail - '%s'", base64_encode($check));
+        ? 'pass' : sprintf("fail - '%s'", base64_encode($check));
 
         // x_or
         $test_client_mac_s3 = base64_decode('i36ZLYAJ1rYEx1VEHObrS8hgAg0=');
         $check = $this->x_or($test_client_mac_s2, $test_ss);
         $res['x_or'] = ($check == $test_client_mac_s3)
-		? 'pass' : sprintf("fail - '%s'", base64_encode($check));
+        ? 'pass' : sprintf("fail - '%s'", base64_encode($check));
 
         $out = "<table border=1 cellpadding=4>\n";
         foreach ($res as $test => $stat) {
             $code = mb_substr($stat, 0, 4);
             $color = ($code == 'pass') ? '#9f9'
-			: (($code == 'warn') ? '#ff9' : '#f99');
+            : (($code == 'warn') ? '#ff9' : '#f99');
             $out .= sprintf("<tr><th>%s</th><td style='background:%s'>%s</td></tr>\n", $test, $color, $stat);
         }
         $out .= "</table>";
@@ -1164,12 +1164,12 @@ class openid {
         $row = $st->fetch();
 
         $secret = !empty($row['shared_secret'])
-		? base64_decode($row['shared_secret'])
-		: false;
+        ? base64_decode($row['shared_secret'])
+        : false;
 
         $expiration = !empty($row['expiration'])
-		? $row['expiration']
-		: null;
+        ? $row['expiration']
+        : null;
 
         $this->debug("Found key: hash = '" . md5($secret) . "', length = '" . mb_strlen($secret) . "', expiration = '$expiration'");
 
@@ -1238,7 +1238,7 @@ class openid {
         // port and scheme must match
         if ($parts['parent']['scheme'] != $parts['child']['scheme'] ||
             $parts['parent']['port'] != $parts['child']['port'])
-		return false;
+        return false;
 
         // compare the hosts by reversing the strings
         $cr_host = mb_strtolower(strrev($parts['child']['host']));

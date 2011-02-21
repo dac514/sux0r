@@ -6,7 +6,7 @@
         width: 100px;
         margin-right: 0.5em;
         text-align: right;
-		height: 1em;
+        height: 1em;
     {rdelim}
     </style>
 
@@ -42,7 +42,7 @@
 <fieldset>
 <legend>{$r->gtext.access}: {$nickname}</legend>
 
-<form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
+<form action="{$r->text.form_url}" name="{$form_name}" method="post" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />
 
 <input type="hidden" name="nickname" value="{$nickname}" />
@@ -50,7 +50,7 @@
 <input type="hidden" name="integrity" value="{$r->integrityHash($users_id, $nickname)}" />
 {validate id="integrity" message="integrity failure"}
 
-{if $validate.default.is_error !== false}
+{if $validate.$form_name.is_error !== false}
 <p class="errorWarning">{$r->gtext.form_error} :</p>
 {elseif $r->detectPOST()}
 <p class="errorWarning">{$r->gtext.form_problem} :</p>

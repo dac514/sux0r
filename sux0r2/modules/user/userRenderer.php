@@ -180,10 +180,10 @@ class userRenderer extends suxRenderer {
         if (!$rel) return $html;
 
         $tpl = new suxTemplate('user');
-        $tpl->config_load('my.conf', 'user');
+        $tpl->configLoad('my.conf', 'user');
 
-        $tw = $tpl->get_config_vars('thumbnailWidth');
-        $th = $tpl->get_config_vars('thumbnailHeight');
+        $tw = $tpl->getConfigVars('thumbnailWidth');
+        $th = $tpl->getConfigVars('thumbnailHeight');
 
         foreach ($rel as $val) {
 
@@ -232,10 +232,10 @@ class userRenderer extends suxRenderer {
         if (!$rel) return $html;
 
         $tpl = new suxTemplate('user');
-        $tpl->config_load('my.conf', 'user');
+        $tpl->configLoad('my.conf', 'user');
 
-        $tw = $tpl->get_config_vars('thumbnailWidth');
-        $th = $tpl->get_config_vars('thumbnailHeight');
+        $tw = $tpl->getConfigVars('thumbnailWidth');
+        $th = $tpl->getConfigVars('thumbnailHeight');
 
         foreach ($rel as $val) {
 

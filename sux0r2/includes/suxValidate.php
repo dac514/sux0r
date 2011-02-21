@@ -23,11 +23,6 @@ require_once(dirname(__FILE__) . '/symbionts/SmartyAddons/libs/SmartyValidate.cl
 class suxValidate extends SmartyValidate {
 
 
-    // Static class, no cloning or instantiating allowed
-    final private function __construct() { }
-    final private function __clone() { }
-
-
     /**
     * Protect against form spoofing, make sure that a form submission is valid
     * and intentional, by adding a hidden form field with a one-time token, and
@@ -35,15 +30,14 @@ class suxValidate extends SmartyValidate {
     *
     * @param string $form the name of the form being validated
     */
-    private static function token() {
+    private static function token($form) {
 
-        $_SESSION['SmartyValidate'][SMARTY_VALIDATE_DEFAULT_FORM]['token'] = md5(uniqid(mt_rand(), true));
+        $_SESSION['SmartyValidate'][$form]['token'] = md5(uniqid(mt_rand(), true));
         $_smarty_obj =& SmartyValidate::_object_instance('Smarty', $_dummy);
-        $_smarty_obj->assign('token', $_SESSION['SmartyValidate'][SMARTY_VALIDATE_DEFAULT_FORM]['token']);
+        $_smarty_obj->assign('token', $_SESSION['SmartyValidate'][$form]['token']);
 
     }
-
-
+    
     /**
     * Override connect(): initialize the validator
     *
@@ -51,14 +45,15 @@ class suxValidate extends SmartyValidate {
     * @param string $reset reset the default form?
     */
     static function connect(&$smarty, $reset = false) {
+        
         if(SmartyValidate::is_valid_smarty_object($smarty)) {
             SmartyValidate::_object_instance('Smarty', $smarty);
-            self::register_form(SMARTY_VALIDATE_DEFAULT_FORM, $reset);
+            suxValidate::register_form(self::$form, $reset); // Changed this line
         } else {
             trigger_error("SmartyValidate: [connect] I need a valid Smarty object.");
             return false;
         }
-    }
+    }   
 
 
     /**
@@ -68,11 +63,10 @@ class suxValidate extends SmartyValidate {
     * @param string $reset reset an already registered form?
     */
     static function register_form($form, $reset = false) {
-
-        $_ret = false;
-
-        if (!(SmartyValidate::is_registered_form($form) && !$reset)) {
-
+        
+        if(SmartyValidate::is_registered_form($form) && !$reset) {
+            return false;
+        } else {
             $_SESSION['SmartyValidate'][$form] = array();
             $_SESSION['SmartyValidate'][$form]['registered_funcs']['criteria'] = array();
             $_SESSION['SmartyValidate'][$form]['registered_funcs']['transform'] = array();
@@ -80,12 +74,27 @@ class suxValidate extends SmartyValidate {
             $_SESSION['SmartyValidate'][$form]['is_error'] = false;
             $_SESSION['SmartyValidate'][$form]['is_init'] = true;
             SmartyValidate::_smarty_assign();
-            self::token();
-            $_ret = true;
+            self::token($form); // Added this line
+            return true;
+        }
+    }
+
+
+    /**
+    * Override disconnect(): clear the SmartyValidate session
+    *
+    * @param bool $all
+    */
+    static function disconnect($all = false) {
+        if ($all) {
+            unset($_SESSION['SmartyValidate']);
+        }
+        else {
+            $form = self::$form;
+            unset($_SESSION['SmartyValidate'][$form]);
 
         }
-        return $_ret;
-
+        SmartyValidate::_object_instance('-', $_dummy);
     }
 
 
@@ -95,29 +104,24 @@ class suxValidate extends SmartyValidate {
     * @param string $formvars the array of submitted for variables
     * @param string $form the name of the form being validated
     */
-    static function is_valid(&$formvars, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
+    static function is_valid(&$formvars, $form = null) {
 
+        if(!isset($form)) $form = self::$form;
+        
         // ------------------------------------------------------------------
         // Token validation
         // ------------------------------------------------------------------
 
         $_ret = null;
-        if (empty($formvars['token']) || empty($_SESSION['SmartyValidate'][SMARTY_VALIDATE_DEFAULT_FORM]['token'])) {
+        if (empty($formvars['token']) || empty($_SESSION['SmartyValidate'][$form]['token'])) {
             trigger_error("SmartyValidate: [token] is not set.");
             $_ret = false;
         }
-        else if ($formvars['token'] != $_SESSION['SmartyValidate'][SMARTY_VALIDATE_DEFAULT_FORM]['token']) {
+        else if ($formvars['token'] != $_SESSION['SmartyValidate'][$form]['token']) {
             $_ret = false;
         }
         unset($formvars['token']);
-        self::token();
-        if ($_ret === false) {
-            // We need this disconnect() here to fix problem with multiple 'default'
-            // forms open in multiple browser tabs, otherwise shit is broken
-            SmartyValidate::disconnect();
-            return false;
-        }
-
+        self::token($form);
 
         // ------------------------------------------------------------------
         // And now, back to your regular scheduled program
@@ -169,11 +173,14 @@ class suxValidate extends SmartyValidate {
     * @param string $form the name of the form being validated
     * @return bool
     */
-    static function formValidate(&$dirty, $tpl, $form = SMARTY_VALIDATE_DEFAULT_FORM) {
+    static function formValidate(&$dirty, $tpl, $form = null) {
+        
+        if(!isset($form)) $form = self::$form;    
 
         if(!empty($dirty) && SmartyValidate::is_registered_form($form)) {
             // Validate
             self::connect($tpl);
+            
             if(self::is_valid($dirty, $form)) {
                 SmartyValidate::disconnect();
                 return true;

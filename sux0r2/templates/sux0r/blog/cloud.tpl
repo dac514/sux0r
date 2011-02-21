@@ -20,7 +20,7 @@
 <div id="header">
     <h1>{$r->gtext.header|lower}</h1>
     {insert name="userInfo"}
-	{insert name="navlist"}
+    {insert name="navlist"}
 </div>
 <div class="clearboth"></div>
 

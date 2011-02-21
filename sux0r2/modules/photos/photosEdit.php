@@ -12,6 +12,9 @@ class photosEdit extends component {
     // Module name
     protected $module = 'photos';
 
+    // Form name
+    protected $form_name = 'photosEdit';
+
     // Object: suxPhoto()
     protected $photo;
 
@@ -41,7 +44,7 @@ class photosEdit extends component {
         // Declare properties
         $this->photo->setPublished(null);
         $this->id = $id;
-        $this->per_page = $this->tpl->get_config_vars('perPage');
+        $this->per_page = $this->tpl->getConfigVars('perPage');
 
         // Redirect if not logged in
         if (empty($_SESSION['users_id'])) suxFunct::redirect(suxFunct::makeUrl('/user/register'));
@@ -148,7 +151,7 @@ class photosEdit extends component {
         }
 
         // Clear all caches, cheap and easy
-        $this->tpl->clear_all_cache();
+        $this->tpl->clearAllCache();
 
     }
 

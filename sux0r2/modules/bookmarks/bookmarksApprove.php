@@ -12,6 +12,9 @@ class bookmarksApprove extends component {
     // Module name
     protected $module = 'bookmarks';
 
+    // Form name
+    protected $form_name = 'bookmarksApprove';
+
     // Object: suxBookmarks()
     protected $bm;
 
@@ -124,7 +127,7 @@ class bookmarksApprove extends component {
         }
 
         // clear all caches, cheap and easy
-        $this->tpl->clear_all_cache();
+        $this->tpl->clearAllCache();
 
     }
 

@@ -22,13 +22,20 @@ resolve the issue.
 Pro-tip
 ------------------------------------------------------------------------------
 
-Use rsync when updating 3rd party vendors, example:
+Use rsync when updating 3rd party vendors.
 
-rsync -rcvb --backup-dir=/tmp --cvs-exclude ~/Desktop/tinymce/ ~/Sites/sux0r2/includes/symbionts/tinymce/
+Example for TinyMCE:
+
+$ rsync -rcvb --cvs-exclude --backup-dir=/tmp ~/Desktop/tinymce_language_pack/ ~/Desktop/tinymce/jscripts/tiny_mce/
+$ rsync -rcvb --cvs-exclude --delete --backup-dir=/tmp ~/Desktop/tinymce/ ~/Sites/sux0r2/includes/symbionts/tinymce/
 
 ------------------------------------------------------------------------------
 3rd Party Vendors, in alphabetical order
 ------------------------------------------------------------------------------
+
+TODO:
+* jQuery-UI info, Jcrop info.
+
 
 Cropper
 * Path: ./cropper/
@@ -75,23 +82,16 @@ Securimage
 
 Smarty
 * Path: ./Smarty/
-* Version: 2.6.26
+* Version: 3.0.7
 * Licence: LGPL 2.1
 * Website: http://www.smarty.net/
-
-
-SmartyPhoneFormatPlugin
-* Path: ./SmartyAddons/plugins/modifier.phone_format.php
-* Version: 0.1.1
-* Licence: LGPL 2.1
-* Website: http://smarty.incutio.com/?page=PhoneFormatPlugin
 
 
 SmartyValidate
 * Path: ./SmartyAddons/libs/SmartyValidate.class.php
         ./SmartyAddons/plugins/%validate%
         ./SmartyAddons/docs/SmartyValidate/
-* Version: 2.9-dev
+* Version: 3.0.2 (beta)
 * Licence: LGPL 2.1
 * Website: http://www.phpinsider.com/php/code/SmartyValidate/
 
@@ -103,8 +103,8 @@ Stopwords
 * Website: http://members.unine.ch/jacques.savoy/clef/
 
 
-TinyMCE
+TinyMCE (jQuery package)
 * Path: ./tinymce/
-* Version: 3.2.7 (+ language files)
+* Version: 3.3.9.3 (+ language files)
 * Licence: LGPL 2.1
 * Website: http://tinymce.moxiecode.com/

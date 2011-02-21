@@ -12,6 +12,9 @@ class bookmarksEdit extends component {
     // Module name
     protected $module = 'bookmarks';
 
+    // Form name
+    protected $form_name = 'bookmarksEdit';
+
     // Object: suxBookmarks()
     protected $bm;
 
@@ -164,14 +167,14 @@ class bookmarksEdit extends component {
         $this->r->text['form_url'] = suxFunct::makeUrl('/bookmarks/edit/' . $this->id);
         $this->r->text['back_url'] = suxFunct::getPreviousURL($this->prev_skip);
 
-        if (!$this->tpl->get_template_vars('Date_Year')) {
+        if (!$this->tpl->getTemplateVars('Date_Year')) {
             // Today's Date
             $this->tpl->assign('Date_Year', date('Y'));
             $this->tpl->assign('Date_Month', date('m'));
             $this->tpl->assign('Date_Day', date('j'));
         }
 
-        if (!$this->tpl->get_template_vars('Time_Hour')) {
+        if (!$this->tpl->getTemplateVars('Time_Hour')) {
             // Current Time
             $this->tpl->assign('Time_Hour', date('H'));
             $this->tpl->assign('Time_Minute', date('i'));
@@ -264,7 +267,7 @@ class bookmarksEdit extends component {
     function formSuccess() {
 
         // clear all caches with "nickname" as the first cache_id group
-        $this->tpl->clear_cache(null, "{$_SESSION['nickname']}");
+        $this->tpl->clearCache(null, "{$_SESSION['nickname']}");
 
         suxFunct::redirect(suxFunct::getPreviousURL($this->prev_skip));
 

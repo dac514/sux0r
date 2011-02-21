@@ -91,7 +91,7 @@ class feeds extends bayesComponent {
             $cache_id = "$nn|user|$nickname|{$this->pager->start}";
             $this->tpl->caching = 1;
 
-            if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
+            if (!$this->tpl->isCached('scroll.tpl', $cache_id)) {
 
                 // User has subscriptions, we need special JOIN queries
                 $this->pager->setPages($this->countUserItems($this->users_id));
@@ -185,7 +185,7 @@ class feeds extends bayesComponent {
             $cache_id = "$nn|listing|$feeds_id|{$this->pager->start}";
             $this->tpl->caching = 1;
 
-            if (!$this->tpl->is_cached('scroll.tpl', $cache_id)) {
+            if (!$this->tpl->isCached('scroll.tpl', $cache_id)) {
 
                 if ($feeds_id || !count($subscriptions)) {
                     // Regular queries

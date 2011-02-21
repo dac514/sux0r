@@ -12,6 +12,9 @@ class adminAccess extends component {
     // Module name
     protected $module = 'admin';
 
+    // Form name
+    protected $form_name = 'adminAccess';
+
     // Var:
     private $nickname;
 

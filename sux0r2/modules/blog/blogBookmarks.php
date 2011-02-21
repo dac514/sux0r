@@ -12,6 +12,9 @@ class blogBookmarks extends component {
     // Module name
     protected $module = 'blog';
 
+    // Form name
+    protected $form_name = 'blogBookmarks';
+
     // Object: suxThreadedMessages()
     protected $msg;
 

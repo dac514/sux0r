@@ -12,6 +12,9 @@ class bookmarksAdmin extends component {
     // Module name
     protected $module = 'bookmarks';
 
+    // Form name
+    protected $form_name = 'bookmarksAdmin';
+
     // Object: suxBookmarks()
     protected $bm;
 
@@ -119,7 +122,7 @@ class bookmarksAdmin extends component {
         }
 
         // clear all caches,cheap and easy
-        $this->tpl->clear_all_cache();
+        $this->tpl->clearAllCache();
 
     }
 

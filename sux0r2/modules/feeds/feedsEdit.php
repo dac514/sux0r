@@ -12,6 +12,9 @@ class feedsEdit extends component {
     // Module name
     protected $module = 'feeds';
 
+    // Form name
+    protected $form_name = 'feedsEdit';
+
     // Object: suxRss()
     protected $rss;
 
@@ -184,7 +187,7 @@ class feedsEdit extends component {
         $this->log->write($_SESSION['users_id'], "sux0r::feedsEdit() feeds_id: {$id}", 1); // Private
 
         // clear all caches, cheap and easy
-        $this->tpl->clear_all_cache();
+        $this->tpl->clearAllCache();
 
 
     }

@@ -12,6 +12,9 @@ class userRegisterOpenID extends component {
     // Module name
     protected $module = 'user';
 
+    // Form name
+    protected $form_name = 'userRegisterOpenID';
+
     // Var
     private $prev_skip = array();
 

@@ -12,6 +12,9 @@ class blogAdmin extends component {
     // Module name
     protected $module = 'blog';
 
+    // Form name
+    protected $form_name = 'blogAdmin';
+
     // Object: suxThreadedMessages()
     protected $msg;
 
@@ -125,7 +128,7 @@ class blogAdmin extends component {
         }
 
         // clear all caches,cheap and easy
-        $this->tpl->clear_all_cache();
+        $this->tpl->clearAllCache();
 
     }
 

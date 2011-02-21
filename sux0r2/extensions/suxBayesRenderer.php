@@ -370,7 +370,7 @@ function insert_bayesFilters($params) {
 
     if (!$GLOBALS['CONFIG']['CLEAN_URL']) $r->text['c'] = @$_GET['c']; // We need this if CLEAN_URL = false
 
-    $tpl->assign_by_ref('r', $r);
+    $tpl->assignByRef('r', $r);
     return $tpl->fetch('filters.tpl');
 
 }
@@ -402,7 +402,20 @@ function insert_bayesFilterScript() {
     $('nbfThreshold').value = {$threshold};
     $('nbfPercentage').innerHTML = ({$threshold} * 100).toFixed(2) + '%';
 
+    
     // horizontal slider control
+    /*
+    // jQuery: TODO
+    $(document).ready(function() {
+        $('#nbfTrack').slider({
+            value: {$threshold},
+            slide: function(event, ui) {
+                $('#nbfPercentage').innerHTML = (ui.values[0] * 100).toFixed(2) + '%';
+                $('#nbfThreshold').value = ui.values[0];
+            }
+        });
+    });
+    */    
     new Control.Slider('nbfHandle', 'nbfTrack', {
             sliderValue: {$threshold},
             onSlide: function(v) {

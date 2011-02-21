@@ -65,24 +65,24 @@
 {include file=$r->xhtml_header}{/strip}
 
 <table id="proselytizer" >
-	<tr>
-		<td colspan="2" style="vertical-align:top;">
-			<div id="header">
+    <tr>
+        <td colspan="2" style="vertical-align:top;">
+            <div id="header">
                 {insert name="userInfo"}
                 <div class='clearboth'></div>
-			</div>
-		</td>
-	</tr>
-	<tr>
+            </div>
+        </td>
+    </tr>
+    <tr>
         <td style="vertical-align:top;">
-			<div id="leftside">
+            <div id="leftside">
 
     {* Content *}
     <div id="middle">
 
 
 
-        {if $validate.default.is_error !== false}
+        {if $validate.$form_name.is_error !== false}
         <p class="errorWarning">{$r->gtext.form_error} :</p>
         {/if}
 
@@ -363,9 +363,9 @@
 
         </div></div>
 
-		</td>
-		<td style="vertical-align:top;">
-			<div id="rightside">
+        </td>
+        <td style="vertical-align:top;">
+            <div id="rightside">
 
             {capture name=stats}{$r->getCategoryStats()}{/capture}
             {if $smarty.capture.stats}
@@ -379,9 +379,9 @@
             <p>{$r->gtext.synopsis_3}</p>
             <p>{$r->gtext.synopsis_4}</p>
 
-			</div>
-		</td>
-	</tr>
+            </div>
+        </td>
+    </tr>
 </table>
 
 

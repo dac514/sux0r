@@ -12,6 +12,9 @@ class photosAdmin extends component {
     // Module name
     protected $module = 'photos';
 
+    // Form name
+    protected $form_name = 'photosAdmin';
+
     // Object: suxPhoto()
     protected $photo;
 
@@ -122,7 +125,7 @@ class photosAdmin extends component {
         }
 
         // Clear caches, cheap and easy
-        $this->tpl->clear_all_cache();
+        $this->tpl->clearAllCache();
 
     }
 

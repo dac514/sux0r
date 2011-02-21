@@ -140,6 +140,6 @@ $log->write($_SESSION['users_id'], "sux0r::bayes::train() doc_id: $doc_id, cat_i
 // ---------------------------------------------------------------------------
 
 $tpl = new suxTemplate($module);
-$tpl->clear_cache(null, "{$_SESSION['nickname']}"); // clear all caches with "nickname" as the first cache_id group
+$tpl->clearCache(null, "{$_SESSION['nickname']}"); // clear all caches with "nickname" as the first cache_id group
 
 ?>

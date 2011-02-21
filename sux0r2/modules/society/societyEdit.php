@@ -12,6 +12,9 @@ class societyEdit extends component {
     // Module name
     protected $module = 'society';
 
+    // Form name
+    protected $form_name = 'societyEdit';
+
     // Object: suxSocialNetwork()
     protected $soc;
 
@@ -184,7 +187,7 @@ class societyEdit extends component {
 
         // Clear caches, cheap and easy
         $tpl = new suxTemplate('user');
-        $tpl->clear_cache(null, $_SESSION['nickname']);
+        $tpl->clearCache(null, $_SESSION['nickname']);
 
     }
 

@@ -12,6 +12,9 @@ class userAvatar extends component  {
     // Module name
     protected $module = 'user';
 
+    // Form name
+    protected $form_name = 'userAvatar';
+
     // Var: supported image extensions
     private $extensions = 'jpg,jpeg,gif,png';
 
@@ -145,8 +148,8 @@ class userAvatar extends component  {
             $fullsize = suxFunct::dataDir($this->module) . "/{$fullsize}";
 
             suxPhoto::resizeImage($format, $_FILES['image']['tmp_name'], $resize,
-                $this->tpl->get_config_vars('thumbnailWidth'),
-                $this->tpl->get_config_vars('thumbnailHeight')
+                $this->tpl->getConfigVars('thumbnailWidth'),
+                $this->tpl->getConfigVars('thumbnailHeight')
                 );
             move_uploaded_file($_FILES['image']['tmp_name'], $fullsize);
 
@@ -170,7 +173,7 @@ class userAvatar extends component  {
         }
 
         // Clear caches, cheap and easy
-        $this->tpl->clear_cache(null, $_SESSION['nickname']);
+        $this->tpl->clearCache(null, $_SESSION['nickname']);
 
     }
 

@@ -32,7 +32,7 @@ class photos extends component {
 
         // Declare properties
         $this->r->bool['analytics'] = true; // Turn on analytics
-        $this->per_page = $this->tpl->get_config_vars('perPage');
+        $this->per_page = $this->tpl->getConfigVars('perPage');
 
     }
 
@@ -60,7 +60,7 @@ class photos extends component {
         $cache_id = "$nn|listing|$nickname|" . $this->pager->start;
         $this->tpl->caching = 1;
 
-        if (!$this->tpl->is_cached('list.tpl', $cache_id)) {
+        if (!$this->tpl->isCached('list.tpl', $cache_id)) {
 
             $this->pager->setPages($this->photo->countAlbums($users_id));
             $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/photos'));
@@ -103,7 +103,7 @@ class photos extends component {
         $cache_id = "$nn|album|{$id}|" . $this->pager->start;
         $this->tpl->caching = 1;
 
-        if (!$this->tpl->is_cached('album.tpl', $cache_id)) {
+        if (!$this->tpl->isCached('album.tpl', $cache_id)) {
 
             $this->pager->setPages($this->photo->countPhotos($id));
             $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/photos/album/{$id}"));
@@ -141,7 +141,7 @@ class photos extends component {
         $cache_id = "$nn|view|{$id}";
         $this->tpl->caching = 1;
 
-        if (!$this->tpl->is_cached('view.tpl', $cache_id)) {
+        if (!$this->tpl->isCached('view.tpl', $cache_id)) {
 
             $this->r->arr['photos'] = $this->photo->getPhotoByID($id);
             if ($this->r->arr['photos'] == false || !count($this->r->arr['photos']))
@@ -202,7 +202,7 @@ class photos extends component {
         $cache_id = 'rss';
         $this->tpl->caching = 1;
 
-        if (!$this->tpl->is_cached('rss.tpl', $cache_id)) {
+        if (!$this->tpl->isCached('rss.tpl', $cache_id)) {
 
             $fp = $this->photo->getAlbums($this->pager->limit);
             if ($fp) {                

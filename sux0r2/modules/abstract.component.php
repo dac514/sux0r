@@ -33,6 +33,9 @@ abstract class component {
     // variable: module
     protected $module;
 
+    // variable: form name
+    protected $form_name = 'default';
+
 
     /**
     * Constructor
@@ -48,8 +51,12 @@ abstract class component {
 
         // Template
         $this->tpl = new suxTemplate($this->module); // Template
-        $this->tpl->assign_by_ref('r', $this->r); // Renderer referenced in template
-        $this->tpl->config_load('my.conf', $this->module); // Config variables
+        $this->tpl->assignByRef('r', $this->r); // Renderer referenced in template
+        $this->tpl->configLoad('my.conf', $this->module); // Config variables
+
+        // Form
+        $this->tpl->assign('form_name', $this->form_name);
+        suxValidate::set_form($this->form_name);
 
         // Common objects
         $this->user = new suxUser();

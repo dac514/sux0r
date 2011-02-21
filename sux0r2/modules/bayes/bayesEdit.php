@@ -12,6 +12,9 @@ class bayesEdit extends component {
     // Module name
     protected $module = 'bayes';
 
+    // Form name
+    protected $form_name = 'bayesEdit';
+
     // Object: suxUserNaiveBayesian();
     public $nb;
 
@@ -156,7 +159,7 @@ class bayesEdit extends component {
         foreach ($this->caches as $module) {
             // clear all caches with "nickname" as the first cache_id group
             $tpl = new suxTemplate($module);
-            $tpl->clear_cache(null, "{$_SESSION['nickname']}");
+            $tpl->clearCache(null, "{$_SESSION['nickname']}");
         }
 
         // --------------------------------------------------------------------
@@ -240,8 +243,8 @@ class bayesEdit extends component {
                 // clear caches
                 foreach ($this->caches as $module) {
                     $tpl = new suxTemplate($module);
-                    $tpl->clear_cache(null, $_SESSION['nickname']);
-                    $tpl->clear_cache(null, $u['nickname']);
+                    $tpl->clearCache(null, $_SESSION['nickname']);
+                    $tpl->clearCache(null, $u['nickname']);
                 }
 
                 // Log message
@@ -258,8 +261,8 @@ class bayesEdit extends component {
 
                 // Clear caches
                 $tpl = new suxTemplate('user');
-                $tpl->clear_cache(null, $_SESSION['nickname']);
-                $tpl->clear_cache(null, $u['nickname']);
+                $tpl->clearCache(null, $_SESSION['nickname']);
+                $tpl->clearCache(null, $u['nickname']);
 
             }
             break;
@@ -275,8 +278,8 @@ class bayesEdit extends component {
                     // Clear caches
                     foreach ($this->caches as $module) {
                         $tpl = new suxTemplate($module);
-                        $tpl->clear_cache(null, $_SESSION['nickname']);
-                        $tpl->clear_cache(null, $u['nickname']);
+                        $tpl->clearCache(null, $_SESSION['nickname']);
+                        $tpl->clearCache(null, $u['nickname']);
                     }
 
                     // Log message
@@ -293,8 +296,8 @@ class bayesEdit extends component {
 
                     // Clear caches
                     $tpl = new suxTemplate('user');
-                    $tpl->clear_cache(null, $_SESSION['nickname']);
-                    $tpl->clear_cache(null, $u['nickname']);
+                    $tpl->clearCache(null, $_SESSION['nickname']);
+                    $tpl->clearCache(null, $u['nickname']);
 
                 }
             }

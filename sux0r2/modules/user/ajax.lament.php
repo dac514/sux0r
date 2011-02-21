@@ -31,7 +31,7 @@ $log->write($_SESSION['users_id'], $lament);
 // ---------------------------------------------------------------------------
 
 $tpl = new suxTemplate('user');
-$tpl->clear_cache('profile.tpl', "{$_SESSION['nickname']}|{$_SESSION['nickname']}");
+$tpl->clearCache('profile.tpl', "{$_SESSION['nickname']}|{$_SESSION['nickname']}");
 
 echo $lament;
 

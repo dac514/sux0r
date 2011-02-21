@@ -40,10 +40,10 @@
 <fieldset>
 <legend>{$r->gtext.admin_purge}</legend>
 
-<form action="{$r->text.form_url}" name="default" method="post" accept-charset="utf-8" >
+<form action="{$r->text.form_url}" name="{$form_name}" method="post" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />
 
-{if $validate.default.is_error !== false}
+{if $validate.$form_name.is_error !== false}
 <p class="errorWarning">{$r->gtext.form_error} :</p>
 {elseif $r->detectPOST()}
 <p class="errorWarning">{$r->gtext.form_problem} :</p>

@@ -12,6 +12,9 @@ class blogReply extends component {
     // Module name
     protected $module = 'blog';
 
+    // Form name
+    protected $form_name = 'blogReply';
+
     // Object: suxThreadedMessages()
     protected $msg;
 
@@ -115,7 +118,7 @@ class blogReply extends component {
         if ($tmp) {
 
             // Clear caches
-            $this->tpl->clear_cache(null, $_SESSION['nickname']);
+            $this->tpl->clearCache(null, $_SESSION['nickname']);
 
             // Log message
             $log = '';
@@ -130,7 +133,7 @@ class blogReply extends component {
 
             // Clear cache
             $tpl = new suxTemplate('user');
-            $tpl->clear_cache('profile.tpl', $_SESSION['nickname']);
+            $tpl->clearCache('profile.tpl', $_SESSION['nickname']);
 
         }
 
@@ -143,7 +146,7 @@ class blogReply extends component {
     */
     function formSuccess() {
 
-        $this->tpl->clear_cache(null, $_SESSION['nickname']); // Clear cache
+        $this->tpl->clearCache(null, $_SESSION['nickname']); // Clear cache
         suxFunct::redirect(suxFunct::makeUrl('/blog/view/' . $this->parent['thread_id'])); // Redirect
 
     }
