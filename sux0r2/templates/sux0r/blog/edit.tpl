@@ -1,5 +1,6 @@
 {capture name=header}
 
+    {$r->jQuery()}
     {if $thread_pos}
          {$r->tinyMceComment()}
     {else}

@@ -8,7 +8,7 @@
     // Set the maximum width of an image
     function disabler() {
 
-        var form = $('default');
+        var form = $('{/literal}{$form_name}{literal}');
         var me = form.getInputs('checkbox', 'identity[]');
         var checkboxes = form.getInputs('checkbox');
         var radios = form.getInputs('radio');
@@ -61,7 +61,7 @@
 <fieldset>
 <legend>{$r->gtext.relationship}: {$nickname}</legend>
 
-<form id="default" action="{$r->text.form_url}" name="{$form_name}" method="post" accept-charset="utf-8" >
+<form id="{$form_name}" action="{$r->text.form_url}" name="{$form_name}" method="post" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />
 
 <input type="hidden" name="nickname" value="{$nickname}" />

@@ -132,8 +132,8 @@ class suxRenderer {
         return md5($v1 . $v2 . $v3 . $v4 . $v5 . $v6 . $GLOBALS['CONFIG']['SALT']);
 
     }
-    
-    
+
+
     /**
     * Return a unique id
     *
@@ -144,7 +144,7 @@ class suxRenderer {
         return md5(uniqid(time()));
 
     }
-    
+
 
     /**
     * Detect $_POST
@@ -414,6 +414,23 @@ class suxRenderer {
 
         return $js;
 
+    }
+
+
+    /**
+    * jQuery Initialization
+    *
+    * @global string $CONFIG['URL']
+    * @return string html header code
+    */
+    function jQuery() {
+        $tmp1 = $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/jquery-ui/css/smoothness/jquery-ui-1.8.9.custom.css';
+        $tmp2 = $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/jquery-ui/js/jquery-1.4.4.min.js';
+        $tmp3 = $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/jquery-ui/js/jquery-ui-1.8.9.custom.min.js';
+        $js = '<link rel="stylesheet" type="text/css" href="' . $tmp1 . '" />' . "\n";
+        $js .= '<script type="text/javascript" src="' . $tmp2 . '"></script>' . "\n";
+        $js .= '<script type="text/javascript" src="' . $tmp3 . '"></script>' . "\n";
+        return $js;
     }
 
 

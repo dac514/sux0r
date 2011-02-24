@@ -1,5 +1,6 @@
 {capture name=header}
 
+    {$r->jQuery()}
     {$r->tinyMceComment()}
 
 {/capture}{strip}
