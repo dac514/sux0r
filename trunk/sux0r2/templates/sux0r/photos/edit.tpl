@@ -1,6 +1,7 @@
 {capture name=header}
 
-{$r->tinyMceEditor()}
+    {$r->jQuery()}
+    {$r->tinyMceEditor()}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}

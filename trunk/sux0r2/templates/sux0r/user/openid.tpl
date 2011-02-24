@@ -77,7 +77,7 @@
 <p>
 <label>&nbsp;</label>
 <input type="button" class="button" value="{$r->gtext.cancel}" onclick="document.location='{$r->text.back_url}';" />
-<input type="button" class="button" value="{$r->gtext.detach}" onclick="rm('default', '{$r->gtext.alert_detach}');" />
+<input type="button" class="button" value="{$r->gtext.detach}" onclick="rm('{$form_name}', '{$r->gtext.alert_detach}');" />
 </p>
 
 </form>
