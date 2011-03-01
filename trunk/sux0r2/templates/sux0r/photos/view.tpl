@@ -3,7 +3,6 @@
     {* RSS Feed *}
     <link rel="alternate" type="application/rss+xml" title="{$r->sitename} | {$r->text.photos}" href="{$r->makeUrl('/photos/rss', null, true)}" />
 
-    {literal}
     <script type="text/javascript">
     // <![CDATA[
     // Set the maximum width of an image
@@ -20,45 +19,44 @@
         }
     }
     window.onload = function() {
-        maximumWidth({/literal}'suxPhoto', {#maxPhotoWidth#}{literal});
+        maximumWidth('suxPhoto', {#maxPhotoWidth#});
     }
     // ]]>
     </script>
-    {/literal}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
 {include file=$r->xhtml_header}{/strip}
 
 <table id="proselytizer">
-	<tr>
-		<td colspan="2" style="vertical-align:top;">
-			<div id="header">
+    <tr>
+        <td colspan="2" style="vertical-align:top;">
+            <div id="header">
 
                 <h1>{$r->gtext.header|lower}</h1>
                 {insert name="userInfo"}
                 {insert name="navlist"}
 
-			</div>
+            </div>
             <div class="clearboth"></div>
-		</td>
-	</tr>
-	<tr>
-		<td style="vertical-align:top;">
-			<div id="leftside">
+        </td>
+    </tr>
+    <tr>
+        <td style="vertical-align:top;">
+            <div id="leftside">
 
             <div class="editLinks">
             <p>{$r->gtext.publisher}: <a href="{$r->makeURL('/user/profile')}/{$r->arr.album.nickname}">{$r->arr.album.nickname}</a></p>
             {insert name="editLinks" album_id=$r->arr.album.id br=true}
             </div>
 
-			<br />
+            <br />
             {$r->arr.album.body_html}
 
-			</div>
-		</td>
-		<td style="vertical-align:top;">
-			<div id="rightside">
+            </div>
+        </td>
+        <td style="vertical-align:top;">
+            <div id="rightside">
 
 
                 <div class="widget">
@@ -86,16 +84,16 @@
 
 
 
-			</div>
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2" style="vertical-align:bottom;">
-			<div id="footer">
-			{$r->copyright()}
-			</div>
-		</td>
-	</tr>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="vertical-align:bottom;">
+            <div id="footer">
+            {$r->copyright()}
+            </div>
+        </td>
+    </tr>
 </table>
 
 

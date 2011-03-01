@@ -7,7 +7,6 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-
 /*
 A renderer object acts as a bridge, and is generally passed to a template
 object.
@@ -421,15 +420,21 @@ class suxRenderer {
     * jQuery Initialization
     *
     * @global string $CONFIG['URL']
+    * @param bool $ui include jQuery-Ui component.
     * @return string html header code
     */
-    function jQuery() {
-        $tmp1 = $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/jquery-ui/css/smoothness/jquery-ui-1.8.9.custom.css';
-        $tmp2 = $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/jquery-ui/js/jquery-1.4.4.min.js';
-        $tmp3 = $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/jquery-ui/js/jquery-ui-1.8.9.custom.min.js';
-        $js = '<link rel="stylesheet" type="text/css" href="' . $tmp1 . '" />' . "\n";
-        $js .= '<script type="text/javascript" src="' . $tmp2 . '"></script>' . "\n";
-        $js .= '<script type="text/javascript" src="' . $tmp3 . '"></script>' . "\n";
+    function jQuery($ui = true) {
+        // jQuery
+        $tmp1 = $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/jquery/js/jquery-1.4.4.min.js';
+        // jQuery UI
+        $tmp2 = $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/jquery/css/smoothness/jquery-ui-1.8.9.custom.css';
+        $tmp3 = $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/jquery/js/jquery-ui-1.8.9.custom.min.js';
+
+        $js = '<script type="text/javascript" src="' . $tmp1 . '"></script>' . "\n";
+        if ($ui) {
+            $js .= '<link rel="stylesheet" type="text/css" href="' . $tmp2 . '" />' . "\n";
+            $js .= '<script type="text/javascript" src="' . $tmp3 . '"></script>' . "\n";
+        }
         return $js;
     }
 

@@ -5,20 +5,18 @@
 /* Don't modify these unless you know what you are doing */
 /* ------------------------------------------------------------------------- */
 
-// Smarty Error Reporting
-// @see: http://ca2.php.net/manual/en/errorfunc.constants.php
-
-$CONFIG['SMARTY_ERROR_REPORTING'] = 0;
-
 // Ability to disable features defined here, false = disabled
 
 $CONFIG['FEATURE'] = array(
     'auto_bookmark' => true,
-    'bayes' => true,
+    'bayes' => true, // Disable completely, overrides other "bayes_" settings.
+    'bayes_blog' => true,
+    'bayes_bookmarks' => true,
+    'bayes_feeds' => true,
     );
 
 // Access levels for modules defined here
-// It is the responsibility of the individual module and it's author(s)
+// It is the responsibility of the individual module and their authors
 // to implement their own access levels.
 
 $CONFIG['ACCESS'] = array(
@@ -69,5 +67,10 @@ $CONFIG['PREV_SKIP'] = array(
     'user/register',
     'user/reset',
     );
+
+// Smarty Error Reporting
+// @see: http://php.net/manual/en/errorfunc.constants.php
+
+$CONFIG['SMARTY_ERROR_REPORTING'] = 0;
 
 ?>

@@ -322,21 +322,16 @@ function insert_lament($params) {
         <div id='lament'>{$text['lament']}</div>
         <script type='text/javascript'>
         // <![CDATA[
-        new Ajax.InPlaceEditor(
-            'lament',
-            '$url', {
+        $(function() {
+            $('#lament').editable('$url', {
+                name: 'lament',
+                type: 'textarea',
                 rows: 4,
-                cols: 25,
-                clickToEditText: '{$text['lament']}',
-                savingText: '{$text['saving']}...',
-                okControl: 'button',
-                okText: '{$text['ok']}',
-                cancelControl: 'button',
-                cancelText: '{$text['cancel']}',
-                callback: function(form, value) {
-                    return 'lament='+encodeURIComponent(value)
-                }
+                placeholder: '{$text['lament']}',
+                submit: '{$text['ok']}',
+                cancel: '{$text['cancel']}'
             });
+        });
         // ]]>
         </script>
     ";

@@ -44,39 +44,36 @@ class suxBayesRenderer extends suxRenderer {
         if ($GLOBALS['CONFIG']['FEATURE']['bayes'] == false) return null; // Feature is turned off
         if (!isset($_SESSION['users_id'])) return null; // Skip anonymous users
 
-        $js = '';
-
-        if ($init) {
-            $path_prototype = $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/scriptaculous/lib/prototype.js';
-            $path_scriptaculous = $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/scriptaculous/src/scriptaculous.js';
-            $js .= '<script type="text/javascript" src="' . $path_prototype . '"></script>' . "\n";
-            $js .= '<script type="text/javascript" src="' . $path_scriptaculous . '"></script>' . "\n";
-        }
-
-        $js .="
+        $js ="
         <script type='text/javascript'>
         // <![CDATA[
 
         function suxTrain(placeholder, link, module, id, cat_id) {
+
             var url = '{$GLOBALS['CONFIG']['URL']}/modules/bayes/ajax.train.php';
             var pars = { link: link, module: module, id: id, cat_id: cat_id };
-            new Effect.Highlight($(placeholder));
-            new Ajax.Request(url, {
-                method: 'post',
-                parameters: pars,
-                onSuccess: function() {
-                    $(placeholder).addClassName('nbVecTrained');
-                    Effect.Pulsate($(placeholder));
+
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: pars,
+                beforeSend: function() {
+                    $(placeholder).effect('highlight', {}, 1000);
                 },
-                onFailure: function(transport){
-                    if (transport.responseText.strip())
+                success: function() {
+                    $(placeholder).addClass('nbVecTrained');
+                    $(placeholder).effect('pulsate');
+                },
+                error: function(transport)  {
+                    if ($.trim(transport.responseText).length) {
                         alert(transport.responseText);
+                    }
                 }
-            });
+                });
         }
 
         function suxNotTrainer(placeholder) {
-            Effect.Shake($(placeholder));
+            $(placeholder).effect('shake', { distance: 5}, 100);
         }
 
         // ]]>
@@ -184,14 +181,14 @@ class suxBayesRenderer extends suxRenderer {
                     // this is $v_trainer[], Ajax trainable
                     $html .= '<select name="category_id[]" class="nbCatDropdown" ';
                     $html .= "%_{$uniqid}_%"; // Action to be replaced
-                    $html .= "=\"suxTrain('nb{$uniqid}', '{$link}', '{$module}', {$id}, this.options[selectedIndex].value);\" ";
+                    $html .= "=\"suxTrain('#nb{$uniqid}', '{$link}', '{$module}', {$id}, this.options[selectedIndex].value);\" ";
                     $html .= '>';
 
                 }
                 else {
                     // this is $v_user[], sit pretty, do nothing
                     $html .= '<select name="null" class="nbCatDropdown" ';
-                    $html .= "onchange=\"suxNotTrainer('nb{$uniqid}');\" ";
+                    $html .= "onchange=\"suxNotTrainer('#nb{$uniqid}');\" ";
                     $html .= '>';
 
                 }
@@ -397,31 +394,23 @@ function insert_bayesFilterScript() {
     // <![CDATA[
     // Script has to come after slider otherwise it doesn't work
     // It also has to be placed outside of a table or it doesn't work on IE6
+    // TODO: Do we care?
 
     // initial slider value
-    $('nbfThreshold').value = {$threshold};
-    $('nbfPercentage').innerHTML = ({$threshold} * 100).toFixed(2) + '%';
+    $('#nbfThreshold').val({$threshold});
+    $('#nbfPercentage').html(({$threshold} * 100).toFixed() + '%');
 
-    
     // horizontal slider control
-    /*
-    // jQuery: TODO
-    $(document).ready(function() {
-        $('#nbfTrack').slider({
-            value: {$threshold},
-            slide: function(event, ui) {
-                $('#nbfPercentage').innerHTML = (ui.values[0] * 100).toFixed(2) + '%';
-                $('#nbfThreshold').value = ui.values[0];
+
+    $(function() {
+        $('#nbfSlider').slider({
+            value: {$threshold} * 100,
+            range: 'min',
+            slide: function( event, ui ) {
+                $('#nbfPercentage').html(ui.value  + '%');
+                $('#nbfThreshold').val(ui.value * .01);
             }
         });
-    });
-    */    
-    new Control.Slider('nbfHandle', 'nbfTrack', {
-            sliderValue: {$threshold},
-            onSlide: function(v) {
-                $('nbfPercentage').innerHTML = (v * 100).toFixed(2) + '%';
-                $('nbfThreshold').value = v;
-            }
     });
 
     // ]]>

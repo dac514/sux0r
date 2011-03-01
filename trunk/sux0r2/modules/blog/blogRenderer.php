@@ -19,6 +19,7 @@ class blogRenderer extends suxBayesRenderer {
     /**
     * Constructor
     *
+    * @global string $CONFIG['FEATURE']
     * @param string $module
     */
     function __construct($module) {
@@ -26,6 +27,7 @@ class blogRenderer extends suxBayesRenderer {
         parent::__construct($module); // Call parent
         $this->user = new suxUser();
         $this->msg = new suxThreadedMessages();
+        $this->bool['bayes'] = $GLOBALS['CONFIG']['FEATURE']['bayes_blog'];
 
     }
 

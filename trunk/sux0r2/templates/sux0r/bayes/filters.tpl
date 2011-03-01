@@ -2,7 +2,7 @@
 
     {* Top *}
     <form action="{$r->text.form_url}" method="get" accept-charset="utf-8"
-    onsubmit="$('nbSearch2').value = $('nbSearch').value; return true;"
+    onsubmit="$('#nbSearch2').val($('#nbSearch').val()); return true;"
     id="nbfCategoriesForm" >
         {$r->gtext.categories} :
         {html_options name='filter' id='filter' options=$r->getUserCategories() selected=$filter}
@@ -13,7 +13,7 @@
 
     {* Threshold *}
     <form action="{$r->text.form_url}" method="get" accept-charset="utf-8"
-    onsubmit="$('filter2').value = $('filter').value; $('nbSearch3').value = $('nbSearch').value; return true;"
+    onsubmit="$('#filter2').val($('#filter').val()); $('#nbSearch3').val($('#nbSearch').val()); return true;"
     id="nbfSliderForm" >
 
         {* Hidden *}
@@ -26,13 +26,24 @@
         {if $r->text.c}<input type="hidden" name="c" value="{$r->text.c}" />{/if}
 
         {* Slider *}
-        <div id="nbfTrack"><div id="nbfHandle"></div></div>
+        <div id="nbfSlider"></div>
         <div id="nbfPercentage">{$threshold*100|truncate:5:""}%</div>
         <input id="nbfThresholdButton" type="submit" value="{$r->gtext.threshold}" />
 
     </form>
 
     <div id="nbSearchBox">{$r->gtext.search} : <input type="text" id='nbSearch' name='search' value='{$search}' /></div>
+    <script type="text/javascript">
+    // <![CDATA[
+    $('#nbSearchBox').keypress(function(e){
+        if(e.which == 13){
+            e.preventDefault();
+            $('#nbfSliderForm').submit();
+            return false;
+        }
+    });
+    // ]]>
+    </script>
 
     <div class='clearboth'></div>
 

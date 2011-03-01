@@ -4,8 +4,12 @@
     <link rel="openid.server" href="{$r->makeUrl('/openid', null, true)}" />
 
     {if $r->isLoggedIn()}
+    {*
     <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
     <script src="{$r->url}/includes/symbionts/scriptaculous/src/scriptaculous.js" type="text/javascript"></script>
+    *}
+    {$r->jQuery()}
+    <script src="{$r->url}/includes/symbionts/jqueryAddons/jeditable/jquery.jeditable.mini.js" type="text/javascript"></script>
     {/if}
 
 {/capture}{strip}
@@ -13,21 +17,21 @@
 {include file=$r->xhtml_header}{/strip}
 
 <table id="proselytizer" >
-	<tr>
-		<td colspan="3" style="vertical-align:top;">
-			<div id="header">
+    <tr>
+        <td colspan="3" style="vertical-align:top;">
+            <div id="header">
 
                 <h1>{$r->gtext.profile_of} : {$r->arr.profile.nickname}</h1>
                 {insert name="userInfo"}
                 {insert name="navlist"}
 
-			</div>
+            </div>
             <div class="clearboth"></div>
-		</td>
-	</tr>
-	<tr>
+        </td>
+    </tr>
+    <tr>
         <td style="vertical-align:top;">
-			<div id="leftside">
+            <div id="leftside">
 
             <p>{$r->gtext.profile_intro}</p>
 
@@ -45,10 +49,10 @@
             <div class='clearboth'></div>
 
 
-			</div>
-		</td>
-		<td style="vertical-align:top;">
-			<div id="middle2">
+            </div>
+        </td>
+        <td style="vertical-align:top;">
+            <div id="middle2">
 
             {* Image *}
             {capture name=image}{strip}
@@ -152,9 +156,9 @@
 
 
             </div>
-		</td>
-		<td style="vertical-align:top;">
-			<div id="rightside">
+        </td>
+        <td style="vertical-align:top;">
+            <div id="rightside">
             <h2><a href="{$r->makeURL('/user/profile', null, true)}/{$r->arr.profile.nickname}/rss" class="noBg"><img class="rssIcon" src="{$r->url}/media/{$r->partition}/assets/rss_icon.png" alt="RSS Feed" /></a> {$r->gtext.minifeed}</h2>
 
             {insert name="lament" users_id=$r->arr.profile.users_id}
@@ -167,16 +171,16 @@
             {/foreach}
             </ul>
 
-			</div>
-		</td>
-	</tr>
-	<tr>
-		<td colspan="3" style="vertical-align:bottom;">
-			<div id="footer">
-			{$r->copyright()}
-			</div>
-		</td>
-	</tr>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" style="vertical-align:bottom;">
+            <div id="footer">
+            {$r->copyright()}
+            </div>
+        </td>
+    </tr>
 </table>
 
 {include file=$r->xhtml_footer}

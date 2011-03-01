@@ -82,6 +82,7 @@ class userAuthenticate extends component {
 
         // Ask browser to clear authentication
         header('HTTP/1.0 401 Unauthorized');
+        header('WWW-Authenticate: Invalid');
 
         $this->r->title .= " | {$this->r->gtext['logout']}";
 

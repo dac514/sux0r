@@ -2,13 +2,12 @@
 
     <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
 
-    {literal}
     <script type="text/javascript">
     // <![CDATA[
     // Toggle subscription to a feed
     function togglePrivate(log_id) {
 
-        var url = '{/literal}{$r->url}/modules/admin/ajax.toggle.php{literal}';
+        var url = '{$r->url}/modules/admin/ajax.toggle.php';
         var pars = { id: log_id };
 
         new Ajax.Request(url, {
@@ -20,7 +19,7 @@
                     var myClass = 'img.private' + log_id;
                     var res = $$(myClass);
                     for (i = 0; i < res.length; i++) {
-                        res[i].src = '{/literal}{$r->url}/media/{$r->partition}/assets/{literal}' + myImage;
+                        res[i].src = '{$r->url}/media/{$r->partition}/assets/' + myImage;
                     }
                 },
                 onFailure: function(transport){
@@ -31,7 +30,6 @@
     }
     // ]]>
     </script>
-    {/literal}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}

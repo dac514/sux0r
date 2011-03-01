@@ -165,7 +165,7 @@ else {
 /**
 * example.tpl
 
-<form action="{$r->text.form_url}" name="default" method="post" enctype="multipart/form-data" accept-charset="utf-8" >
+<form action="{$r->text.form_url}" name="{$form_name}" method="post" enctype="multipart/form-data" accept-charset="utf-8" >
 <input type="hidden" name="token" value="{$token}" />
 
 {if $id}
@@ -174,7 +174,7 @@ else {
 {validate id="integrity" message="integrity failure"}
 {/if}
 
-{if $validate.default.is_error !== false}
+{if $validate.$form_name.is_error !== false}
 <p class="errorWarning">{$r->gtext.form_error} :</p>
 {elseif $r->detectPOST()}
 <p class="errorWarning">{$r->gtext.form_problem} :</p>

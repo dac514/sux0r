@@ -1,7 +1,11 @@
 {capture name=header}
 
+    {*
     <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
     <script src="{$r->url}/includes/symbionts/scriptaculous/src/scriptaculous.js" type="text/javascript"></script>
+    *}
+    {$r->jQuery()}
+    <script src="{$r->url}/includes/symbionts/jqueryAddons/jeditable/jquery.jeditable.mini.js" type="text/javascript"></script>
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
@@ -52,27 +56,21 @@
     </div>
 
 
-    {literal}
+
     <script type="text/javascript">
     // <![CDATA[
-    new Ajax.InPlaceEditor(
-        'editme{/literal}{$foo.id}{literal}',
-        '{/literal}{$r->url}{literal}/modules/photos/ajax.describe.php', {
+    $(function() {
+        $('#editme{$foo.id}').editable('{$r->url}/modules/photos/ajax.describe.php', {
+            name: 'description',
+            type: 'textarea',
             rows: 5,
-            cols: 80,
-            clickToEditText: '{/literal}{$r->gtext.clickme}{literal}',
-            savingText: '{/literal}{$r->gtext.saving}{literal}...',
-            okControl: 'button',
-            okText: '{/literal}{$r->gtext.ok}{literal}',
-            cancelControl: 'button',
-            cancelText: '{/literal}{$r->gtext.cancel}{literal}',
-            callback: function(form, value) {
-                return 'id={/literal}{$foo.id}{literal}&description='+encodeURIComponent(value)
-            }
+            placeholder: '{$r->gtext.clickme}',
+            submit: '{$r->gtext.ok}',
+            cancel: '{$r->gtext.cancel}'
         });
+    });
     // ]]>
     </script>
-    {/literal}
 
     <div class="clearboth"></div>
 

@@ -1,14 +1,13 @@
 {capture name=header}
 
-    <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
+    {$r->jQuery()}
 
-    {literal}
     <script type="text/javascript">
     // <![CDATA[
     // Set the maximum width of an image
-    function disabler() {
+    $(function disabler() {
 
-        var form = $('{/literal}{$form_name}{literal}');
+        var form = $('{$form_name}');
         var me = form.getInputs('checkbox', 'identity[]');
         var checkboxes = form.getInputs('checkbox');
         var radios = form.getInputs('radio');
@@ -24,9 +23,6 @@
 
         me.invoke('enable');
 
-    }
-    Event.observe(window, 'load', function() {
-        disabler();
     });
     // ]]>
     </script>
@@ -41,7 +37,6 @@
         text-align: right;
     }
     </style>
-    {/literal}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}

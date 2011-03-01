@@ -61,7 +61,7 @@ ul.miniFeed li {
 
 ul.openidManage li {
     padding-bottom: 0.5em;
-	margin-left: 2em;
+    margin-left: 2em;
 }
 
 img.friend, img.stalker {
@@ -90,13 +90,5 @@ input.imageFile {
     width: auto;
     border: 0;
     background: none;
-}
-
-form.inplaceeditor-form textarea, form.inplaceeditor-form input[type="text"] {
-    width: 100%;
-}
-
-form.inplaceeditor-form input[type="submit"] {
-  width: auto;
 }
 

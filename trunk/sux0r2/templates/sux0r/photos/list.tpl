@@ -5,7 +5,7 @@
 
     <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
 
-    {literal}
+
     <script type="text/javascript">
     // <![CDATA[
     function trunc(truncateMe) {
@@ -45,16 +45,15 @@
         #leftside { width: 468px; margin-left: 2px; margin-top: 0px; }
         #rightside { width: 468px; margin-top: 0px; }
     </style>
-    {/literal}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
 {include file=$r->xhtml_header}{/strip}
 
 <table id="proselytizer">
-	<tr>
-		<td colspan="2" style="vertical-align:top;">
-			<div id="header">
+    <tr>
+        <td colspan="2" style="vertical-align:top;">
+            <div id="header">
 
                 <h1>{$r->gtext.header|lower}</h1>
                 {insert name="userInfo"}
@@ -62,14 +61,14 @@
 
                 <div class="clearboth"></div>
                 {insert name="editLinks" div=true}
-			</div>
+            </div>
 
-		</td>
-	</tr>
-	<tr>
-		<td style="vertical-align:top;">
+        </td>
+    </tr>
+    <tr>
+        <td style="vertical-align:top;">
 
-			<div id="leftside">
+            <div id="leftside">
 
             {if $r->arr.photos}
             {foreach from=$r->arr.photos item=foo name=bar}
@@ -96,13 +95,11 @@
 
                 {$r->widget($foo.title, $smarty.capture.album, $smarty.capture.album_url, $smarty.capture.thumbnail, null, null, 'floatleft')}
 
-                {literal}
                 <script type="text/javascript">
                 // <![CDATA[
-                trunc('truncId{/literal}{$foo.id}{literal}');
+                trunc('truncId{$foo.id}');
                 // ]]>
                 </script>
-                {/literal}
 
             {/if}
             {/foreach}
@@ -110,10 +107,10 @@
                 <p>{$r->gtext.no_photos}</p>
             {/if}
 
-			</div>
-		</td>
-		<td style="vertical-align:top;">
-			<div id="rightside">
+            </div>
+        </td>
+        <td style="vertical-align:top;">
+            <div id="rightside">
 
             {if $r->arr.photos}
             {foreach from=$r->arr.photos item=foo name=bar}
@@ -140,33 +137,31 @@
 
                 {$r->widget($foo.title, $smarty.capture.album, $smarty.capture.album_url, $smarty.capture.thumbnail, null, null, 'floatleft')}
 
-                {literal}
                 <script type="text/javascript">
                 // <![CDATA[
-                trunc('truncId{/literal}{$foo.id}{literal}');
+                trunc('truncId{$foo.id}');
                 // ]]>
                 </script>
-                {/literal}
 
             {/if}
             {/foreach}
             {/if}
 
-			</div>
-		</td>
-	</tr>
+            </div>
+        </td>
+    </tr>
     <tr>
         <td colspan="2" style="text-align:center;">
            {$r->text.pager}
         </td>
     </tr>
-	<tr>
-		<td colspan="2" style="vertical-align:bottom;">
-			<div id="footer">
-			{$r->copyright()}
-			</div>
-		</td>
-	</tr>
+    <tr>
+        <td colspan="2" style="vertical-align:bottom;">
+            <div id="footer">
+            {$r->copyright()}
+            </div>
+        </td>
+    </tr>
 </table>
 
 

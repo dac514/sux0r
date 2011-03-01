@@ -10,9 +10,6 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/suxLink.php');
-require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
-
 class suxRSS extends DOMDocument {
 
     // --------------------------------------------------------------------
@@ -82,6 +79,8 @@ class suxRSS extends DOMDocument {
 
     /**
     * Constructor
+    *
+    * @global string $CONFIG['PATH']
     */
     function __construct() {
 
@@ -89,7 +88,7 @@ class suxRSS extends DOMDocument {
         $this->formatOutput = true; // DOMDocument
 
         // Cache
-        $this->cache_dir = dirname(__FILE__)  . '/../temporary/rss_cache';
+        $this->cache_dir = $GLOBALS['CONFIG']['PATH'] . '/temporary/rss_cache';
 
         // Db
         $this->db = suxDB::get();
@@ -849,7 +848,7 @@ class suxRSS extends DOMDocument {
         // Backtrack_limit is too restrictive for complex feeds, boost it
         // --------------------------------------------------------------------
 
-        ini_set('pcre.backtrack_limit', 500000);
+        ini_set('pcre.backtrack_limit', 999999);
 
         // --------------------------------------------------------------------
         // Parse

@@ -3,13 +3,13 @@
     {* RSS Feed *}
     <link rel="alternate" type="application/rss+xml" title="{$r->sitename} | {$r->gtext.blog}" href="{$r->makeUrl('/blog/rss', null, true)}" />
 
-    {if $r->isLoggedIn()}
+    {if $r->isLoggedIn() && $r->bool.bayes}
         {$r->genericBayesInterfaceInit()}
+        {$r->jQuery()}
     {else}
         <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
     {/if}
 
-    {literal}
     <script type="text/javascript">
     // <![CDATA[
     // Set the maximum width of an image
@@ -25,12 +25,11 @@
             }
         }
     }
-    Event.observe(window, 'load', function() {
-        maximumWidth('rightside', {/literal}{#maxPhotoWidth#}{literal});
+    $(function() {
+        maximumWidth('rightside', {#maxPhotoWidth#});
     });
     // ]]>
     </script>
-    {/literal}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
@@ -109,8 +108,10 @@
         <td style="vertical-align:top;">
             <div id="rightside">
 
+            {if $r->bool.bayes}
             <!-- Category filters -->
             {insert name="bayesFilters" form_url=$r->text.form_url}
+            {/if}
 
             {* Blogs *}
             {if $r->arr.fp}
@@ -143,17 +144,16 @@
                     {capture name=url assign=url}{$r->makeUrl('/blog/view', null, true)}/{$foo.thread_id}{/capture}
                     <div class="flair"><p>
                     <a href='http://slashdot.org/slashdot-it.pl?op=basic&amp;url={$url|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/assets/slashdot.gif' alt='Slashdot' width='16' height='16' /></a>
-                    <a href='http://digg.com/submit?url={$url|escape:'url, UTF-8'}&amp;title={$foo.title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/assets/digg.gif' alt='Digg' width='16' height='16' /></a>
                     <a href='http://www.facebook.com/share.php?u={$url|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/assets/facebook.gif' alt='Facebook' width='16' height='16' /></a>
+                    <a href='http://twitter.com/share?url={$url|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/assets/twitter.png' alt='Twitter' width='16' height='16' /></a>
                     <a href='http://www.myspace.com/index.cfm?fuseaction=postto&amp;t={$foo.title|escape:'url, UTF-8'}&amp;c=&amp;u={$url|escape:'url, UTF-8'}&amp;l=' target='_blank' ><img src='{$r->url}/media/{$r->partition}/assets/myspace.gif' alt='Myspace' width='16' height='16' /></a>
                     <a href='http://www.stumbleupon.com/submit?url={$url|escape:'url, UTF-8'}&amp;title={$foo.title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/assets/stumbleupon.gif' alt='StumbleUpon' width='16' height='16' /></a>
-                    <a href='http://del.icio.us/login/?url={$url|escape:'url, UTF-8'}&amp;title={$foo.title|escape:'url, UTF-8'}' target='_blank' ><img src='{$r->url}/media/{$r->partition}/assets/delicious.gif' alt='Del.icio.us' width='16' height='16' /></a>
                     </p></div>
 
                     {capture name=nbc}{strip}
                         {$r->authorCategories($foo.id, $foo.users_id)}
                         {capture name=document}{$foo.title} {$foo.body_plaintext}{/capture}
-                        {$r->genericBayesInterface($foo.id, 'messages', 'blog', $smarty.capture.document)}
+                        {if $r->bool.bayes}{$r->genericBayesInterface($foo.id, 'messages', 'blog', $smarty.capture.document)}{/if}
                     {/strip}{/capture}
                     {if $smarty.capture.nbc}
                         <!-- Naive Baysian Classification -->
@@ -189,6 +189,6 @@
     </tr>
 </table>
 
-{insert name="bayesFilterScript"}
+{if $r->bool.bayes}{insert name="bayesFilterScript"}{/if}
 
 {include file=$r->xhtml_footer}

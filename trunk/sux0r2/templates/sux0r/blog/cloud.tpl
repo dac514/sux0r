@@ -3,11 +3,10 @@
     {* RSS Feed *}
     <link rel="alternate" type="application/rss+xml" title="{$r->sitename} | {$r->gtext.blog}" href="{$r->makeUrl('/blog/rss', null, true)}" />
 
-    {literal}
+
     <style type="text/css">
     #proselytizer { border-color: #ffffff; }
     </style>
-    {/literal}
 
 
 {/capture}{strip}

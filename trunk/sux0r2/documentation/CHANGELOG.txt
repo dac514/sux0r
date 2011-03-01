@@ -1,20 +1,34 @@
 
-Fix: Set $controller to 'globals' when banned or 404.
+New shiekasai theme/partition
 
-Added language _override feature. In cases where you want the same string used
-for all languages.
+Upgraded to Smarty 3, a lot of work. :)
+
+Replaced Prototype/Scriptaculous with jQuery-UI and some addons, even more work
 
 Added __autoload() function, removed manually declared includes/requires
 
-Remove <!-- comments --> when sanitizing HTML
+Added language _override feature. In cases where you want the same string
+everywhere
 
-Fix: Language files were ignored when using a partition other than the default
-
-Recursively scan ZIP when uploading photos
+Config setting allowing admin to turn off Bayes filtering for blog, feeds,
+and/or bookmarks
 
 IIS WebPI efforts
 
-Fixed a redirect issue in 404 and banned templates
+Recursively scan Zip files when uploading photos
+
+Remove <!-- comments --> when sanitizing HTML for all languages.
+
+Fix: Couldn't login if language was german or chinese
+
+Fix: Language and template inheritance related bugs. Example, language files
+were ignored when using a partition other than the default
+
+Fix: Set $controller to 'globals' when banned or 404
+
+Fix: A redirect issue in 404 and banned templates
+
+General code cleanup, stuff I probably forgot
 
 Updated symbionts: htmLawed 1.1.9.3
 

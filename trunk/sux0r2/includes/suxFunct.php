@@ -25,12 +25,13 @@ class suxFunct {
     /**
     * Get module menu
     *
+    * @global string $CONFIG['PATH']
     * @param string $module the name of a module
     * @return array|bool suxRenderer::navlist() compatible data structue
     */
     static function getModuleMenu($module) {
 
-        $path_to_menu = dirname(__FILE__) . "/../modules/{$module}/menu.php";
+        $path_to_menu = $GLOBALS['CONFIG']['PATH'] . "/modules/{$module}/menu.php";
 
         if (is_file($path_to_menu)) {
             include_once($path_to_menu);
@@ -461,15 +462,17 @@ class suxFunct {
 
         if ($module) {
             $default = $GLOBALS['CONFIG']['PATH'] . "/templates/sux0r/{$module}/languages/en.php";
-            $requested = $GLOBALS['CONFIG']['PATH'] . "/templates/{$partition}/{$module}/languages/{$lang}.php";
-            $override = $GLOBALS['CONFIG']['PATH'] . "/templates/sux0r/{$module}/languages/_override.php";
+            $requested = $GLOBALS['CONFIG']['PATH'] . "/templates/sux0r/{$module}/languages/{$lang}.php";
+            $override1 = $GLOBALS['CONFIG']['PATH'] . "/templates/{$partition}/{$module}/languages/{$lang}.php";
+            $override2 = $GLOBALS['CONFIG']['PATH'] . "/templates/{$partition}/{$module}/languages/_override.php";
         }
 
         if (!is_readable($default)) return false; // no default, something is wrong
         else include($default);
 
         if (is_readable($requested)) include($requested);
-        if (is_readable($override)) include($override);
+        if (is_readable($override1)) include($override1);
+        if (is_readable($override2)) include($override2);
 
         if (!is_array($gtext) || !count($gtext)) return false; // something is wrong
         else {
