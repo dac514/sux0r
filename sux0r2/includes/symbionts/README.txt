@@ -34,7 +34,7 @@ $ rsync -rcvb --cvs-exclude --delete --backup-dir=/tmp ~/Desktop/tinymce/ ~/Site
 ------------------------------------------------------------------------------
 
 TODO:
-* jQuery-UI info, Jcrop info.
+* jQuery-UI info, Jcrop info, jeditable info...
 
 
 Cropper
