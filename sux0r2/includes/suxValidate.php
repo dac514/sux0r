@@ -7,7 +7,6 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-
 /*
 
 suxValidate extends SmartyValidate.
@@ -37,7 +36,7 @@ class suxValidate extends SmartyValidate {
         $_smarty_obj->assign('token', $_SESSION['SmartyValidate'][$form]['token']);
 
     }
-    
+
     /**
     * Override connect(): initialize the validator
     *
@@ -45,7 +44,7 @@ class suxValidate extends SmartyValidate {
     * @param string $reset reset the default form?
     */
     static function connect(&$smarty, $reset = false) {
-        
+
         if(SmartyValidate::is_valid_smarty_object($smarty)) {
             SmartyValidate::_object_instance('Smarty', $smarty);
             suxValidate::register_form(self::$form, $reset); // Changed this line
@@ -53,7 +52,7 @@ class suxValidate extends SmartyValidate {
             trigger_error("SmartyValidate: [connect] I need a valid Smarty object.");
             return false;
         }
-    }   
+    }
 
 
     /**
@@ -63,7 +62,7 @@ class suxValidate extends SmartyValidate {
     * @param string $reset reset an already registered form?
     */
     static function register_form($form, $reset = false) {
-        
+
         if(SmartyValidate::is_registered_form($form) && !$reset) {
             return false;
         } else {
@@ -107,7 +106,7 @@ class suxValidate extends SmartyValidate {
     static function is_valid(&$formvars, $form = null) {
 
         if(!isset($form)) $form = self::$form;
-        
+
         // ------------------------------------------------------------------
         // Token validation
         // ------------------------------------------------------------------
@@ -174,13 +173,13 @@ class suxValidate extends SmartyValidate {
     * @return bool
     */
     static function formValidate(&$dirty, $tpl, $form = null) {
-        
-        if(!isset($form)) $form = self::$form;    
+
+        if(!isset($form)) $form = self::$form;
 
         if(!empty($dirty) && SmartyValidate::is_registered_form($form)) {
             // Validate
             self::connect($tpl);
-            
+
             if(self::is_valid($dirty, $form)) {
                 SmartyValidate::disconnect();
                 return true;

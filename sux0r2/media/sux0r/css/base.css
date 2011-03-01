@@ -144,7 +144,7 @@ legend {
     font-size: 12px;
     font-weight: bold;
     letter-spacing: 2px;
-	margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 textarea, select, input[type="text"], input[type="password"], input[type="submit"], input[type="button"] {
@@ -267,20 +267,11 @@ img.croppable {
     float: left;
 }
 
-#nbfTrack {
+#nbfSlider {
     float: left;
     margin-left: 1em;
     margin-top: 0.4em;
     width: 100px;
-    background-color: #ccc;
-    height: 10px;
-}
-
-#nbfHandle {
-    width: 10px;
-    height: 15px;
-    background-color: #f00;
-    cursor: crosshair;
 }
 
 #nbfPercentage {

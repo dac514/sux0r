@@ -13,7 +13,7 @@ class suxLog {
     protected $db;
     protected $inTransaction = false;
     protected $db_driver;
-	// Tables
+    // Tables
     protected $db_table = 'users_log';
 
     // Object properties, with defaults
@@ -26,7 +26,7 @@ class suxLog {
     */
     function __construct() {
 
-    	$this->db = suxDB::get();
+        $this->db = suxDB::get();
         $this->db_driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
         set_exception_handler(array($this, 'exceptionHandler'));
 
@@ -50,7 +50,7 @@ class suxLog {
     /**
     * Set order property of object
     *
-	* @param string $col
+    * @param string $col
     * @param string $way
     */
     public function setOrder($col, $way = 'ASC') {
@@ -71,9 +71,9 @@ class suxLog {
     */
     public function sqlPublished() {
 
-		// Published   : private = false
-		// Unpublished : private = true
-		// Null = SELECT ALL, not sure what the best way to represent this is, id = id?
+        // Published   : private = false
+        // Unpublished : private = true
+        // Null = SELECT ALL, not sure what the best way to represent this is, id = id?
 
         // PgSql / MySql
         if ($this->published === true) $query = "private = false ";
@@ -178,7 +178,6 @@ class suxLog {
         $clean['body_html'] = suxFunct::sanitizeHtml($body_html, -1);
 
         // Convert and copy body to UTF-8 plaintext
-        require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
         $converter = new suxHtml2UTF8($clean['body_html']);
         $clean['body_plaintext']  = $converter->getText();
 

@@ -15,8 +15,6 @@
 // reasons. An extended version of this class, with user integration, is
 // located in ./extensions/bayesUser.php
 
-require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
-
 class suxNaiveBayesian {
 
     // Database suff
@@ -37,8 +35,8 @@ class suxNaiveBayesian {
     private $max_category_length = 64;
     private $max_vector_length = 64;
 
-	// Controlled destruction
-	protected static $destroyed = false;
+    // Controlled destruction
+    protected static $destroyed = false;
 
 
     /**
@@ -46,7 +44,7 @@ class suxNaiveBayesian {
     */
     function __construct() {
 
-    	$this->db = suxDB::get();
+        $this->db = suxDB::get();
         $this->db_driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
         set_exception_handler(array($this, 'exceptionHandler'));
 
@@ -59,8 +57,8 @@ class suxNaiveBayesian {
     */
     function __destruct() {
 
-		if (self::$destroyed == true) return; // Avoid cleaning the cache multiple times
-		if (1 == rand(1, 5)) $this->cleanCache(); // 1 in 5 chance
+        if (self::$destroyed == true) return; // Avoid cleaning the cache multiple times
+        if (1 == rand(1, 5)) $this->cleanCache(); // 1 in 5 chance
         self::$destroyed = true;
 
     }
@@ -446,7 +444,6 @@ class suxNaiveBayesian {
         if ($st->fetchColumn() < 1) return false;
 
         // Sanitize to UTF-8 plaintext
-        require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
         $converter = new suxHtml2UTF8($content);
         $content = $converter->getText();
 
@@ -459,7 +456,7 @@ class suxNaiveBayesian {
         $vector_id = array_shift($vector_id);
         $this->deleteCache($vector_id);
 
-    	$tokens = $this->parseTokens($content);
+        $tokens = $this->parseTokens($content);
         foreach($tokens as $token => $count) {
             $this->updateToken($token, $count, $category_id);
         }
@@ -760,7 +757,7 @@ class suxNaiveBayesian {
 
         // Check cache
         if ($this->use_cache) {
-        	if ($scores = $this->checkCache($md5)) return $scores;
+            if ($scores = $this->checkCache($md5)) return $scores;
         }
 
         $scores = array();
@@ -773,7 +770,7 @@ class suxNaiveBayesian {
         if (count($categories) <= 1) return array(); // Less than two categories, skip
 
         foreach ($categories as $data) {
-        	$fake_prob[] = $data['token_count'];
+            $fake_prob[] = $data['token_count'];
             $total_tokens += $data['token_count'];
             $ncat++;
         }

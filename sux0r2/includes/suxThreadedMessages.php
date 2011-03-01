@@ -7,8 +7,6 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/suxLink.php');
-
 class suxThreadedMessages {
 
     // Database stuff
@@ -42,7 +40,7 @@ class suxThreadedMessages {
     */
     function __construct() {
 
-    	$this->db = suxDB::get();
+        $this->db = suxDB::get();
         $this->db_driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
         set_exception_handler(array($this, 'exceptionHandler'));
 
@@ -66,7 +64,7 @@ class suxThreadedMessages {
     /**
     * Set order property of object
     *
-	* @param string $col
+    * @param string $col
     * @param string $way
     */
     public function setOrder($col, $way = 'ASC') {
@@ -87,9 +85,9 @@ class suxThreadedMessages {
     */
     public function sqlPublished() {
 
-		// Published   : draft = FALSE AND published_on < NOW
-		// Unpublished : draft = TRUE OR published_on >= NOW
-		// Null = SELECT ALL, not sure what the best way to represent this is, id = id?
+        // Published   : draft = FALSE AND published_on < NOW
+        // Unpublished : draft = TRUE OR published_on >= NOW
+        // Null = SELECT ALL, not sure what the best way to represent this is, id = id?
 
         // PgSql / MySql
         if ($this->published === true) $query = "draft = false AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
@@ -185,7 +183,6 @@ class suxThreadedMessages {
         $clean['body_html'] = suxFunct::sanitizeHtml($msg['body'], $trusted);
 
         // Convert and copy body to UTF-8 plaintext
-        require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
         $converter = new suxHtml2UTF8($clean['body_html']);
         $clean['body_plaintext']  = $converter->getText();
 
@@ -334,11 +331,11 @@ class suxThreadedMessages {
         if  ($this->db_driver == 'pgsql') {
 
             if (isset($clean['id'])) $st->bindParam(':id', $clean['id'], PDO::PARAM_INT);
-			else {
+            else {
                 $st->bindParam(':thread_id', $clean['thread_id'], PDO::PARAM_INT);
                 $st->bindParam(':level', $clean['level'], PDO::PARAM_INT);
                 $st->bindParam(':thread_pos', $clean['thread_pos'], PDO::PARAM_INT);
-			}
+            }
 
             if (isset($clean['users_id'])) $st->bindParam(':users_id', $clean['users_id'], PDO::PARAM_INT);
 
@@ -346,7 +343,7 @@ class suxThreadedMessages {
             $st->bindParam(':body_html', $clean['body_html'], PDO::PARAM_STR);
             $st->bindParam(':body_plaintext', $clean['body_plaintext'], PDO::PARAM_STR);
             $st->bindParam(':draft', $clean['draft'], PDO::PARAM_BOOL);
-			$st->bindParam(':parent_id', $clean['parent_id'], PDO::PARAM_INT);
+            $st->bindParam(':parent_id', $clean['parent_id'], PDO::PARAM_INT);
 
             if (isset($clean['image'])) $st->bindParam(':image', $clean['image'], PDO::PARAM_STR);
             if (isset($clean['published_on'])) $st->bindParam(':published_on', $clean['published_on'], PDO::PARAM_STR);

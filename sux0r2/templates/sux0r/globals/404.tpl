@@ -3,12 +3,12 @@
 <head>
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
     <title>404 Not Found</title>
-    <style>{literal}
+    <style>
     body  { font-family: Arial, Helvetica, sans-serif; background-color: #ffffff; }
     a:link, a:visited, a:active { font-weight: bold; color: #000000; text-decoration: underline; }
     a:hover { color: #ffffff; background: #000000; }
     p { width: 640px; }
-    {/literal}</style>
+    </style>
 </head>
 <body>
     <h1>{$r->gtext.404_h1}</h1>

@@ -3,7 +3,6 @@
     <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
     <script src="{$r->url}/includes/symbionts/scriptaculous/src/scriptaculous.js" type="text/javascript"></script>
 
-    {literal}
     <script type='text/javascript'>
     // <![CDATA[
 
@@ -17,7 +16,7 @@
     function getDoc(doc_id) {
         if (doc_id) {
 
-            var url = '{/literal}{$r->url}/modules/bayes/ajax.getDoc.php{literal}';
+            var url = '{$r->url}/modules/bayes/ajax.getDoc.php';
             var pars = { id: doc_id };
 
             new Ajax.Updater('placeholder1', url, {
@@ -33,15 +32,13 @@
         }
         else {
             new Effect.Highlight($('placeholder1'));
-            Effect.BlindUp($('placeholder1'), {duration:1});
+            Effect.BlindUp($('placeholder1'), { duration:1 });
         }
     }
 
     function getCat(document, vec_id) {
 
-        {/literal}
         var url = '{$r->url}/modules/bayes/ajax.getCat.php';
-        {literal}
         var pars = { document: document, id: vec_id };
 
         new Ajax.Updater('placeholder2', url, {
@@ -58,7 +55,6 @@
 
     // ]]>
     </script>
-    {/literal}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}

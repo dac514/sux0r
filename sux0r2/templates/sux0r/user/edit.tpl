@@ -1,12 +1,12 @@
 {capture name=header}
 
     <style type="text/css">
-    label {ldelim}
+    label {
         float: left;
         width: 140px;
         margin-right: 0.5em;
         text-align: right;
-    {rdelim}
+    }
     </style>
 
 {/capture}{strip}

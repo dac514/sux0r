@@ -11,7 +11,7 @@ require_once(dirname(__FILE__) . '/config.php'); // Configuration
 
 try {
 
-    require_once(dirname(__FILE__) . '/initialize.php'); // Initialization
+    require_once($GLOBALS['CONFIG']['PATH'] . '/initialize.php'); // Initialization
 
     // ------------------------------------------------------------------------
     // Prepare
@@ -35,15 +35,15 @@ try {
     if ($controller == 'banned') {
         // Banned
         $controller = 'globals';
-        include_once(dirname(__FILE__) . "/modules/globals/controller.php");
+        include_once($GLOBALS['CONFIG']['PATH'] . "/modules/globals/controller.php");
         sux('banned');
         exit;
     }
-    elseif (!preg_match('/^(\w|\-)+$/', $controller) || !is_file(dirname(__FILE__) . "/modules/{$controller}/controller.php")) {
+    elseif (!preg_match('/^(\w|\-)+$/', $controller) || !is_file($GLOBALS['CONFIG']['PATH'] . "/modules/{$controller}/controller.php")) {
         // 404 Not Found
         $controller = 'globals';
         if (!headers_sent()) header('HTTP/1.0 404 Not Found');
-        include_once(dirname(__FILE__) . "/modules/globals/controller.php");
+        include_once($GLOBALS['CONFIG']['PATH'] . "/modules/globals/controller.php");
         sux('e404');
         exit;
     }
@@ -61,12 +61,12 @@ try {
     // Go!
     // ------------------------------------------------------------------------
 
-    include_once(dirname(__FILE__) . "/modules/{$controller}/controller.php");
+    include_once($GLOBALS['CONFIG']['PATH'] . "/modules/{$controller}/controller.php");
     sux($action, $params);
 
 }
 catch (Exception $e) {
-    require_once(dirname(__FILE__) . '/exception.php'); // Default exception handler
+    require_once($GLOBALS['CONFIG']['PATH'] . '/exception.php'); // Default exception handler
     exit;
 }
 

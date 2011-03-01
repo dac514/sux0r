@@ -14,9 +14,8 @@
 
 function suxAutoload($class_name) {
 
-    global $controller;    
-    static $dirname; // Wimpy cache
-    if (empty($dirname)) $dirname = dirname(__FILE__);
+    global $controller;
+    $dirname = $GLOBALS['CONFIG']['PATH'];
 
     $file[] = "$dirname/includes/$class_name.php";
     $file[] = "$dirname/extensions/$class_name.php";
@@ -28,7 +27,7 @@ function suxAutoload($class_name) {
 
     foreach ($file as $f) {
         if (is_file($f)) {
-            require_once($f);            
+            require($f);
             break;
         }
     }
@@ -54,7 +53,7 @@ if (!isset($GLOBALS['CONFIG'])) {
 // Set debug stuff
 if (isset($GLOBALS['CONFIG']['DEBUG']) && $GLOBALS['CONFIG']['DEBUG']) {
     $GLOBALS['CONFIG']['DEBUG'] = true;
-    include_once(dirname(__FILE__)  . '/includes/symbionts/dBug.php');
+    include_once($GLOBALS['CONFIG']['PATH'] . '/includes/symbionts/dBug.php');
 }
 else {
     $GLOBALS['CONFIG']['DEBUG'] = false;

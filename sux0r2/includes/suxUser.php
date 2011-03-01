@@ -35,7 +35,7 @@ class suxUser {
     */
     function __construct() {
 
-    	$this->db = suxDB::get();
+        $this->db = suxDB::get();
         $this->db_driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
         set_exception_handler(array($this, 'exceptionHandler'));
 
@@ -45,7 +45,7 @@ class suxUser {
     /**
     * Set order property of object
     *
-	* @param string $col
+    * @param string $col
     * @param string $way
     */
     public function setOrder($col, $way = 'ASC') {
@@ -837,8 +837,8 @@ class suxUser {
                 $entity_body = '';
                 $a1 = mb_strtolower($auth_user['password']);
                 $a2 = $hdr['qop'] == 'auth-int'
-				? md5(implode(':', array($_SERVER['REQUEST_METHOD'], $hdr['uri'], md5($entity_body))))
-				: md5(implode(':', array($_SERVER['REQUEST_METHOD'], $hdr['uri'])));
+                ? md5(implode(':', array($_SERVER['REQUEST_METHOD'], $hdr['uri'], md5($entity_body))))
+                : md5(implode(':', array($_SERVER['REQUEST_METHOD'], $hdr['uri'])));
                 $ok = md5(implode(':', array($a1, $hdr['nonce'], $hdr['nc'], $hdr['cnonce'], $hdr['qop'], $a2)));
 
                 if ($hdr['response'] == $ok) {
@@ -866,12 +866,20 @@ class suxUser {
         $uid = sprintf("%08x", time()) . uniqid(mt_rand(1,9));
         $_SESSION['uniqid'] = $uid;
 
-        if (headers_sent())
+        if (headers_sent()) {
             throw new Exception('Headers already sent');
+        }
 
         header('HTTP/1.0 401 Unauthorized');
-        header(sprintf('WWW-Authenticate: Digest qop="auth-int, auth", realm="%s", domain="%s", nonce="%s", opaque="%s", stale="%s", algorithm="MD5"', $GLOBALS['CONFIG']['REALM'], $GLOBALS['CONFIG']['URL'] . '/', $uid, md5($GLOBALS['CONFIG']['REALM']), $stale ? 'true' : 'false'));
-		flush();
+        header(sprintf(
+            'WWW-Authenticate: Digest qop="auth-int, auth", realm="%s", domain="%s", nonce="%s", opaque="%s", stale="%s", algorithm="MD5"',
+            $GLOBALS['CONFIG']['REALM'],
+            $GLOBALS['CONFIG']['URL'] . '/',
+            $uid,
+            md5($GLOBALS['CONFIG']['REALM']),
+            $stale ? 'true' : 'false'
+            ));
+        flush();
 
         return false;
 

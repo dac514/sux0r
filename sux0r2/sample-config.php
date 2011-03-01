@@ -38,6 +38,7 @@ $CONFIG['URL'] = '/suxurl';
 
 // Default language for site, uses a 2 letter l10n ISO-CODE naming convention
 // See: http://www.loc.gov/standards/iso639-2/php/code_list.php
+// Available choices: 'en', 'de', 'it', 'nl', or 'zh'
 
 $CONFIG['LANGUAGE'] = 'en';
 
@@ -46,7 +47,8 @@ $CONFIG['LANGUAGE'] = 'en';
 
 $CONFIG['COUNTRY'] = 'ca';
 
-// Default partition for site
+// Default partition for site, available choices:
+// 'sux0r', or 'shiekasai'
 
 $CONFIG['PARTITION'] = 'sux0r';
 
@@ -89,7 +91,7 @@ $CONFIG['TIMEZONE'] = 'America/Montreal';
 /* Don't modify these unless you know what you are doing */
 /* ------------------------------------------------------------------------- */
 
-require(dirname(__FILE__)  . '/config.advanced.php');
+require($GLOBALS['CONFIG']['PATH'] . '/config.advanced.php');
 
 // Override below...
 

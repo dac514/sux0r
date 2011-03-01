@@ -1,28 +1,26 @@
 {capture name=header}
 
     <style type="text/css">
-    label {ldelim}
+    label {
         float: left;
         width: 100px;
         margin-right: 0.5em;
         text-align: right;
         height: 1em;
-    {rdelim}
+    }
     </style>
 
-    {literal}
     <script type='text/javascript'>
     // <![CDATA[
     function deleteWarning() {
         if (document.forms[0].delete_user.checked) {
-            if (!confirm('{/literal}{$r->gtext.alert_delete|escape:'javascript'}{literal}')) {
+            if (!confirm('{$r->gtext.alert_delete|escape:'javascript'}')) {
                 document.forms[0].delete_user.checked = false;
             }
         }
     }
     // ]]>
     </script>
-    {/literal}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}

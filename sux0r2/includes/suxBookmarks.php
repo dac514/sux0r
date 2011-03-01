@@ -7,15 +7,13 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/suxLink.php');
-
 class suxBookmarks {
 
     // Database suff
     protected $db;
     protected $inTransaction = false;
     protected $db_driver;
-	// Tables
+    // Tables
     protected $db_table = 'bookmarks';
 
     // Object properties, with defaults
@@ -28,7 +26,7 @@ class suxBookmarks {
     */
     function __construct() {
 
-    	$this->db = suxDB::get();
+        $this->db = suxDB::get();
         $this->db_driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
         set_exception_handler(array($this, 'exceptionHandler'));
 
@@ -52,7 +50,7 @@ class suxBookmarks {
     /**
     * Set order property of object
     *
-	* @param string $col
+    * @param string $col
     * @param string $way
     */
     public function setOrder($col, $way = 'ASC') {
@@ -73,9 +71,9 @@ class suxBookmarks {
     */
     public function sqlPublished() {
 
-		// Published   : draft = FALSE AND published_on < NOW
-		// Unpublished : draft = TRUE OR published_on >= NOW
-		// Null = SELECT ALL, not sure what the best way to represent this is, id = id?
+        // Published   : draft = FALSE AND published_on < NOW
+        // Unpublished : draft = TRUE OR published_on >= NOW
+        // Null = SELECT ALL, not sure what the best way to represent this is, id = id?
 
         // PgSql / MySql
         if ($this->published === true) $query = "draft = false AND published_on <= '" . date('Y-m-d H:i:s') . "' ";
@@ -212,7 +210,6 @@ class suxBookmarks {
         $clean['body_html'] = suxFunct::sanitizeHtml($url['body'], $trusted);
 
         // Convert and copy body to UTF-8 plaintext
-        require_once(dirname(__FILE__) . '/suxHtml2UTF8.php');
         $converter = new suxHtml2UTF8($clean['body_html']);
         $clean['body_plaintext']  = $converter->getText();
 
@@ -352,13 +349,13 @@ class suxBookmarks {
     }
 
 
-	/**
-	* Fetch a bookmark
+    /**
+    * Fetch a bookmark
     *
     * @param string $url a URL to an RSS Feed
     * @return array|false
-	*/
-	function fetchUrlInfo($url) {
+    */
+    function fetchUrlInfo($url) {
 
         // Sanity check
         if (!filter_var($url, FILTER_VALIDATE_URL)) return false;

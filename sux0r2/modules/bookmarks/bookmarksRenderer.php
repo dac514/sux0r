@@ -16,12 +16,14 @@ class bookmarksRenderer extends suxBayesRenderer {
     /**
     * Constructor
     *
+    * @global string $CONFIG['FEATURE']
     * @param string $module
     */
     function __construct($module) {
 
         parent::__construct($module); // Call parent
         $this->user = new suxUser();
+        $this->bool['bayes'] = $GLOBALS['CONFIG']['FEATURE']['bayes_bookmarks'];
 
     }
 

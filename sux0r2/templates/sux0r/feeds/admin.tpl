@@ -1,6 +1,5 @@
 {capture name=header}
 
-    {literal}
     <script type='text/javascript'>
     // <![CDATA[
     function rm(myForm, myWarning) {
@@ -11,7 +10,6 @@
     }
     // ]]>
     </script>
-    {/literal}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}

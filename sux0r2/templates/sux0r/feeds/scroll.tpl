@@ -1,19 +1,19 @@
 {capture name=header}
 
-    {if $r->isLoggedIn()}
+    {if $r->isLoggedIn() && $r->bool.bayes}
         {$r->genericBayesInterfaceInit()}
+        {$r->jQuery()}
     {else}
         <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
     {/if}
 
-    {literal}
     <script type="text/javascript">
     // <![CDATA[
-    {/literal}{if $r->isLoggedIn()}{literal}
+    {if $r->isLoggedIn()}
     // Toggle subscription to a feed
     function toggleSubscription(feed_id) {
 
-        var url = '{/literal}{$r->url}/modules/feeds/ajax.toggle.php{literal}';
+        var url = '{$r->url}/modules/feeds/ajax.toggle.php';
         var pars = { id: feed_id };
 
         new Ajax.Request(url, {
@@ -25,7 +25,7 @@
                     var myClass = 'img.subscription' + feed_id;
                     var res = $$(myClass);
                     for (i = 0; i < res.length; i++) {
-                        res[i].src = '{/literal}{$r->url}/media/{$r->partition}/assets/{literal}' + myImage;
+                        res[i].src = '{$r->url}/media/{$r->partition}/assets/' + myImage;
                     }
                 },
                 onFailure: function(transport){
@@ -35,7 +35,7 @@
         });
 
     }
-    {/literal}{/if}{literal}
+    {/if}
 
     // Set the maximum width of an image
     function maximumWidth(myId, maxW) {
@@ -50,32 +50,31 @@
             }
         }
     }
-    Event.observe(window, 'load', function() {
-        maximumWidth({/literal}'rightside', {#maxPhotoWidth#}{literal});
+    $(function() {
+        maximumWidth('rightside', {#maxPhotoWidth#});
     });
     // ]]>
     </script>
-    {/literal}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
 {include file=$r->xhtml_header}{/strip}
 
 <table id="proselytizer" >
-	<tr>
-		<td colspan="2" style="vertical-align:top;">
-			<div id="header">
+    <tr>
+        <td colspan="2" style="vertical-align:top;">
+            <div id="header">
 
                 <h1>{$r->gtext.header|lower}</h1>
                 {insert name="userInfo"}
                 {insert name="navlist"}
 
-			</div>
-		</td>
-	</tr>
-	<tr>
+            </div>
+        </td>
+    </tr>
+    <tr>
         <td style="vertical-align:top;">
-			<div id="leftside">
+            <div id="leftside">
 
                 <p>{$r->gtext.feeds}</p>
 
@@ -105,13 +104,15 @@
                 </ul>
 
 
-			</div>
-		</td>
-		<td style="vertical-align:top;">
-			<div id="rightside">
+            </div>
+        </td>
+        <td style="vertical-align:top;">
+            <div id="rightside">
 
+            {if $r->bool.bayes}
             <!-- Category filters -->
             {insert name="bayesFilters" form_url=$r->text.form_url}
+            {/if}
 
             {* Feeds *}
             {if $r->arr.feeds}
@@ -136,7 +137,7 @@
 
                     {capture name=nbc}{strip}
                         {capture name=document}{$foo.title} {$foo.body_plaintext}{/capture}
-                        {$r->genericBayesInterface($foo.id, 'rss_items', 'feeds', $smarty.capture.document)}
+                        {if $r->bool.bayes}{$r->genericBayesInterface($foo.id, 'rss_items', 'feeds', $smarty.capture.document)}{/if}
                     {/strip}{/capture}
                     {if $smarty.capture.nbc}
                         <!-- Naive Baysian Classification -->
@@ -159,18 +160,18 @@
 
             {$r->text.pager}
 
-			</div>
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2" style="vertical-align:bottom;">
-			<div id="footer">
-			{$r->copyright()}
-			</div>
-		</td>
-	</tr>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="vertical-align:bottom;">
+            <div id="footer">
+            {$r->copyright()}
+            </div>
+        </td>
+    </tr>
 </table>
 
-{insert name="bayesFilterScript"}
+{if $r->bool.bayes}{insert name="bayesFilterScript"}{/if}
 
 {include file=$r->xhtml_footer}

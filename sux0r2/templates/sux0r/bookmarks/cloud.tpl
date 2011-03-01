@@ -3,11 +3,9 @@
     {* RSS Feed *}
     <link rel="alternate" type="application/rss+xml" title="{$r->sitename} | {$r->gtext.bookmarks}" href="{$r->makeUrl('/bookmarks/rss', null, true)}" />
 
-    {literal}
     <style type="text/css">
     #proselytizer { border-color: #ffffff; }
     </style>
-    {/literal}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
@@ -19,7 +17,7 @@
 <div id="header">
     <h1>{$r->gtext.header|lower}</h1>
     {insert name="userInfo"}
-	{insert name="navlist"}
+    {insert name="navlist"}
 </div>
 <div class="clearboth"></div>
 
