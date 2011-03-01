@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 // Always UTF-8
 // Always uppercase the first word
