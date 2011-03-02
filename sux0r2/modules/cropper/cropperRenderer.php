@@ -43,7 +43,7 @@ class cropperRenderer extends suxRenderer {
         <script type="text/javascript" language="javascript">
         // <![CDATA[
 
-        $(function(){
+        $(window).load(function(){
             jQuery("#cropperImage").Jcrop({
                 onChange: showCoords,
                 onSelect: showCoords,
