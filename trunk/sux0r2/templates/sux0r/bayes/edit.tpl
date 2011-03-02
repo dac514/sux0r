@@ -18,20 +18,21 @@
             var url = '{$r->url}/modules/bayes/ajax.getDoc.php';
             var pars = { id: doc_id };
 
-            new Ajax.Updater('placeholder1', url, {
-                    method: 'post',
-                    parameters: pars,
-                    onSuccess: function() {
-                        $('placeholder1').addClassName('active');
-                        $('placeholder1').show();
-                        new Effect.Highlight($('placeholder1'));
-                    }
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: pars,
+                success: function(data, textStatus, transport) {
+                    $('#placeholder1').html(transport.responseText);
+                    $('#placeholder1').addClass('active');
+                    $('#placeholder1').show();
+                    $('#placeholder1').effect('highlight');
+                },
             });
 
         }
         else {
-            new Effect.Highlight($('placeholder1'));
-            Effect.BlindUp($('placeholder1'), { duration:1 });
+            $('#placeholder1').hide('slow');
         }
     }
 
@@ -40,14 +41,16 @@
         var url = '{$r->url}/modules/bayes/ajax.getCat.php';
         var pars = { document: document, id: vec_id };
 
-        new Ajax.Updater('placeholder2', url, {
-                method: 'post',
-                parameters: pars,
-                onSuccess: function() {
-                    $('placeholder2').addClassName('active');
-                    $('placeholder2').show();
-                    new Effect.Highlight($('placeholder2'));
-                }
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: pars,
+            success: function(data, textStatus, transport) {
+                $('#placeholder2').html(transport.responseText);
+                $('#placeholder2').addClass('active');
+                $('#placeholder2').show();
+                $('#placeholder2').effect('highlight');
+            },
         });
 
     }
