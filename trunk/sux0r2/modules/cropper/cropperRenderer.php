@@ -28,7 +28,7 @@ class cropperRenderer extends suxRenderer {
     /**
     * Cropper Initialization
     *
-    * @see http://www.defusion.org.uk/code/javascript-image-cropper-ui-using-prototype-scriptaculous/
+    * @see http://deepliquid.com/content/Jcrop_Manual.html
     * @global string $CONFIG['URL']
     * @param int $x ratio width
     * @param int $y ratio height
@@ -36,35 +36,28 @@ class cropperRenderer extends suxRenderer {
     */
     function cropperInit($x, $y) {
 
-        global $CONFIG;
-
-        $js = '
-        <script type="text/javascript" src="' . $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/scriptaculous/lib/prototype.js"></script>
-        <script type="text/javascript" src="' . $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/scriptaculous/src/scriptaculous.js"></script>
-        <script type="text/javascript" src="' . $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/cropper/cropper.js"></script>
+        $js = $this->jQueryInit(false);
+        $js .= '
+        <script type="text/javascript" src="' . $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/jqueryAddons/Jcrop/js/jquery.Jcrop.js"></script>
+        <link rel="stylesheet" href="' . $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/jqueryAddons/Jcrop/css/jquery.Jcrop.css" type="text/css" />
         <script type="text/javascript" language="javascript">
         // <![CDATA[
 
-                function onEndCrop( coords, dimensions ) {
-                    $("x1").value = coords.x1;
-                    $("y1").value = coords.y1;
-                    $("width").value = dimensions.width;
-                    $("height").value = dimensions.height;
-                }
+        $(function(){
+            jQuery("#cropperImage").Jcrop({
+                onChange: showCoords,
+                onSelect: showCoords,
+                setSelect: [ ' . "0, 0, $x, $y" . ' ],
+                aspectRatio: ' . "$x / $y"  . '
+            });
+        });
 
-                Event.observe( window, "load", function() {
-                    new Cropper.Img(
-                        "cropperImage",
-                        {
-                            ratioDim: {
-                                x: ' . $x . ',
-                                y: ' . $y . '
-                            },
-                            displayOnInit: true,
-                            onEndCrop: onEndCrop
-                        }
-                    );
-                } );
+        function showCoords(c) {
+            jQuery("#x1").val(c.x);
+            jQuery("#y1").val(c.y);
+            jQuery("#width").val(c.w);
+            jQuery("#height").val(c.h);
+        };
 
         // ]]>
         </script>
