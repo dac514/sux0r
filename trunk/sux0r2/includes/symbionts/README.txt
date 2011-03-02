@@ -33,17 +33,6 @@ $ rsync -rcvb --cvs-exclude --delete --backup-dir=/tmp ~/Desktop/tinymce/ ~/Site
 3rd Party Vendors, in alphabetical order
 ------------------------------------------------------------------------------
 
-TODO:
-* jQuery-UI info, Jcrop info, jeditable info...
-
-
-Cropper
-* Path: ./cropper/
-* Version: 1.2.0
-* Licence: BSD
-* Website: http://www.defusion.org.uk/
-
-
 dBug
 * Path: ./dBug.php
 * Version: Dec 04, 2007
@@ -54,9 +43,30 @@ dBug
 
 htmLawed
 * Path: ./htmLawed/
-* Version: 1.1.9.3
+* Version: 1.1.9.4
 * Licence: LGPL 3
 * Website: http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/index.php
+
+
+Jcrop
+* Path: ./jqueryAddons/Jcrop/
+* Version: 0.9.8
+* License: MIT
+* Website: http://deepliquid.com/content/Jcrop.html
+
+
+Jeditable:
+* Path: ./jqueryAddons/jeditable/
+* Version: 1.7.1
+* License: MIT
+* Website: http://www.appelsiini.net/projects/jeditable
+
+
+jQuery-UI
+* Path: ./jquery/
+* Version: 1.8.10
+* License: Dual licensed under MIT or GPL Version 2
+* Website: http://jqueryui.com/
 
 
 PHP Calendar
@@ -64,13 +74,6 @@ PHP Calendar
 * Version: 2.3
 * Licence: Artistic License
 * Website: http://keithdevens.com/software/php_calendar
-
-
-Scriptaculous
-* Path: ./scriptaculous/
-* Version: 1.8.3
-* Licence: MIT
-* Website: http://script.aculo.us/
 
 
 Securimage
@@ -108,3 +111,4 @@ TinyMCE (jQuery package)
 * Version: 3.3.9.3 (+ language files)
 * Licence: LGPL 2.1
 * Website: http://tinymce.moxiecode.com/
+

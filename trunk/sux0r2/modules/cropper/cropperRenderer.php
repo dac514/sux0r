@@ -38,7 +38,7 @@ class cropperRenderer extends suxRenderer {
 
         $js = $this->jQueryInit(false);
         $js .= '
-        <script type="text/javascript" src="' . $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/jqueryAddons/Jcrop/js/jquery.Jcrop.js"></script>
+        <script type="text/javascript" src="' . $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/jqueryAddons/Jcrop/js/jquery.Jcrop.min.js"></script>
         <link rel="stylesheet" href="' . $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/jqueryAddons/Jcrop/css/jquery.Jcrop.css" type="text/css" />
         <script type="text/javascript" language="javascript">
         // <![CDATA[
