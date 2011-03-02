@@ -54,6 +54,7 @@
 .rssItem h1, .rssItem h2, .rssItem h3, .rssItem h4, .rssItem h5, .rssItem h6 {
     background-color: transparent !important;
     background-image: none !important;
+    font-size: medium !important;
 }
 
 .readMore {
