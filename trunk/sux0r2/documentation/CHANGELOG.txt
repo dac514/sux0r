@@ -10,17 +10,17 @@ Replaced Prototype/Scriptaculous with jQuery-UI and some addons, even more work
 
 Added __autoload() function, removed manually declared includes/requires
 
-Added language _override feature for cases where you want the same string
-everywhere
+Added language _override feature for cases where you want the same unilingual
+string everywhere
 
-Config setting allowing admin to turn off Bayes filtering for blog, feeds,
+Config setting allowing admin to turn off bayes filtering for blog, feeds,
 and/or bookmarks
 
 IIS WebPI efforts
 
 Recursively scan zip files when uploading photos
 
-Remove <!-- comments --> when sanitizing HTML for all languages.
+Remove <!-- comments --> when sanitizing HTML for all languages
 
 Fix: User was unable to login if language was german or chinese
 
@@ -31,7 +31,7 @@ Fix: Set $controller to 'globals' when banned or 404
 
 Fix: A redirect issue in 404 and banned templates
 
-General code cleanup, stuff I probably forgot
+General code cleanup, other stuff I probably forgot
 
 Updated symbionts: htmLawed 1.1.9.4, Smarty 3.0.7, SmartyValidate 3.0.2+
 jQuery-UI 1.8.10, Jeditable 1.7.1, Jcrop 0.9.8, TinyMCE 3.3.9.3

@@ -51,6 +51,11 @@
     border: none;
 }
 
+.rssItem h1, .rssItem h2, .rssItem h3, .rssItem h4, .rssItem h5, .rssItem h6 {
+    background-color: transparent !important;
+    background-image: none !important;
+}
+
 .readMore {
     height: 1%; /* IE6, Holly Hack */
 }
