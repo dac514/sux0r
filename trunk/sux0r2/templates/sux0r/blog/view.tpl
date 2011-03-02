@@ -25,7 +25,7 @@
             }
         }
     }
-    $(function() {
+    $(window).load(function() {
         maximumWidth('suxBlog', {#maxPhotoWidth#});
     });
     // ]]>
@@ -180,8 +180,8 @@
                 <script type="text/javascript">
                 // <![CDATA[
                 // Set the maximum width of an image
-                $(function() {
-                        maximumWidth('suxComment{$foo.id}', {math equation="x - y" x=#maxPhotoWidth# y=$r->indenter($foo.level)});
+                $(window).load(function() {
+                    maximumWidth('suxComment{$foo.id}', {math equation="x - y" x=#maxPhotoWidth# y=$r->indenter($foo.level)});
                 });
                 // ]]>
                 </script>

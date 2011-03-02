@@ -25,7 +25,7 @@
             }
         }
     }
-    $(function() {
+    $(window).load(function() {
         maximumWidth('rightside', {#maxPhotoWidth#});
     });
     // ]]>
