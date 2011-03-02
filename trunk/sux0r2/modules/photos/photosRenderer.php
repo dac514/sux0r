@@ -59,7 +59,7 @@ class photosRenderer extends suxRenderer {
         relative_urls : false,
         inline_styles : false,
         ';
-        return $this->tinyMce($init);
+        return $this->tinyMceInit($init);
 
     }
 

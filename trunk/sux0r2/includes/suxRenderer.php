@@ -379,7 +379,7 @@ class suxRenderer {
     * @param string $init tinyMCE.init values
     * @return string the javascript code
     */
-    function tinyMce($init) {
+    function tinyMceInit($init) {
 
         // Remove trailing comma, if any
         $init = trim($init);
@@ -423,7 +423,7 @@ class suxRenderer {
     * @param bool $ui include jQuery-Ui component.
     * @return string html header code
     */
-    function jQuery($ui = true) {
+    function jQueryInit($ui = true) {
         // jQuery
         $tmp1 = $GLOBALS['CONFIG']['URL'] . '/includes/symbionts/jquery/js/jquery-1.4.4.min.js';
         // jQuery UI

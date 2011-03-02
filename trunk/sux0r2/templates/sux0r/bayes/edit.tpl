@@ -1,7 +1,6 @@
 {capture name=header}
 
-    <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
-    <script src="{$r->url}/includes/symbionts/scriptaculous/src/scriptaculous.js" type="text/javascript"></script>
+    {$r->jQueryInit()}
 
     <script type='text/javascript'>
     // <![CDATA[

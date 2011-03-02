@@ -4,10 +4,10 @@
     <link rel="alternate" type="application/rss+xml" title="{$r->sitename} | {$r->gtext.blog}" href="{$r->makeUrl('/blog/rss', null, true)}" />
 
     {if $r->isLoggedIn() && $r->bool.bayes}
+        {$r->jQueryInit()}
         {$r->genericBayesInterfaceInit()}
-        {$r->jQuery()}
     {else}
-        <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
+        {$r->jQueryInit(false)}
     {/if}
 
     <script type="text/javascript">

@@ -53,24 +53,29 @@
             </p>
 
             <p>
+            Still not sure what this is all about?
+            <a href="http://bayesianfeedfilter.wordpress.com/2009/12/11/bayesff-final-post/">Read this blog post</a>
+            by the superb BayesFF project.
+            </p>
+
+            <p>
             <span class="highlight">sux0r</span> is <a href="http://sourceforge.net/projects/sux0r/">open source</a> and is distributed under
             the <a href="http://www.fsf.org/licensing/licenses/gpl-3.0.html">GNU General Public License</a>.
             </p>
 
             <p id="sfLinks">
             Found a bug? <a href="http://sourceforge.net/tracker2/?atid=722155&amp;group_id=131752">Report it</a>.
-            Need help? <a href="http://sourceforge.net/forum/forum.php?forum_id=447216">Ask in the Support forum</a>.
-            Got ideas to discuss? Post in the <a href="http://sourceforge.net/forum/forum.php?forum_id=447217">Developers forum</a> or submit
+            Need help? <a href="http://sourceforge.net/projects/sux0r/forums/forum/447216">Ask in the Support forum</a>.
+            Got ideas to discuss? Post in the <a href="http://sourceforge.net/projects/sux0r/forums/forum/447217">Developers forum</a> or submit
             <a href="http://sourceforge.net/tracker2/?group_id=131752&amp;atid=722157">patches</a>.
             All that and more at the <a href="http://sourceforge.net/projects/sux0r/">sux0r SF.net project page</a>.
             </p>
 
-            <p style="text-align: center; margin-top: 2em;">
+            <p style="text-align: center; margin-top: 1.5em;">
             <a href="http://www.php.net/" class="noBg"><img src="{$r->url}/media/sux0r/assets/php5_logo.gif" alt="PHP5" border="0" class="flair" /></a>
             <a href="http://www.fsf.org/licensing/licenses/gpl-3.0.html" class="noBg"> <img src="{$r->url}/media/sux0r/assets/gplv3-88x31.png" alt="GPL" border="0" class="flair" /></a>
             <a href="http://sourceforge.net/projects/sux0r" class="noBg"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=131752&amp;type=11" width="120" height="30" border="0" alt="Get sux0r at SourceForge.net. Fast, secure and Free Open Source software downloads"  class="flair" /></a>
             </p>
-
 
             </div>
         </td>

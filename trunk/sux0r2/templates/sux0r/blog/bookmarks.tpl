@@ -1,6 +1,6 @@
 {capture name=header}
 
-    {$r->jQuery()}
+    {$r->jQueryInit(false)}
     {$r->tinyMceBookmark()}
 
 {/capture}{strip}

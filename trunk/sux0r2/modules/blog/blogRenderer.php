@@ -258,7 +258,7 @@ class blogRenderer extends suxBayesRenderer {
         relative_urls : false,
         inline_styles : false,
         ';
-        return $this->tinyMce($init);
+        return $this->tinyMceInit($init);
 
     }
 
@@ -288,7 +288,7 @@ class blogRenderer extends suxBayesRenderer {
         relative_urls : false,
         inline_styles : false,
         ';
-        return $this->tinyMce($init);
+        return $this->tinyMceInit($init);
 
     }
 
@@ -319,7 +319,7 @@ class blogRenderer extends suxBayesRenderer {
         relative_urls : false,
         external_image_list_url : "' . $GLOBALS['CONFIG']['URL'] . '/modules/photos/ajax.getImagesByUser.php",
         ';
-        return $this->tinyMce($init);
+        return $this->tinyMceInit($init);
 
     }
 

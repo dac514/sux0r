@@ -1,10 +1,6 @@
 {capture name=header}
 
-    {*
-    <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
-    <script src="{$r->url}/includes/symbionts/scriptaculous/src/scriptaculous.js" type="text/javascript"></script>
-    *}
-    {$r->jQuery()}
+    {$r->jQueryInit(false)}
     <script src="{$r->url}/includes/symbionts/jqueryAddons/jeditable/jquery.jeditable.mini.js" type="text/javascript"></script>
 
 {/capture}{strip}

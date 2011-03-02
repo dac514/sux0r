@@ -146,7 +146,7 @@ class feedsRenderer extends suxBayesRenderer {
         relative_urls : false,
         inline_styles : false,
         ';
-        return $this->tinyMce($init);
+        return $this->tinyMceInit($init);
 
     }
 

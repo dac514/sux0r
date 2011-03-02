@@ -1,6 +1,6 @@
 {capture name=header}
 
-    {$r->jQuery()}
+    {$r->jQueryInit(false)}
 
     <script type="text/javascript">
     // <![CDATA[

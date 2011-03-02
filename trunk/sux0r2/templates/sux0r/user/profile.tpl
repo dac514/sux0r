@@ -4,12 +4,8 @@
     <link rel="openid.server" href="{$r->makeUrl('/openid', null, true)}" />
 
     {if $r->isLoggedIn()}
-    {*
-    <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
-    <script src="{$r->url}/includes/symbionts/scriptaculous/src/scriptaculous.js" type="text/javascript"></script>
-    *}
-    {$r->jQuery()}
-    <script src="{$r->url}/includes/symbionts/jqueryAddons/jeditable/jquery.jeditable.mini.js" type="text/javascript"></script>
+        {$r->jQueryInit(false)}
+        <script src="{$r->url}/includes/symbionts/jqueryAddons/jeditable/jquery.jeditable.mini.js" type="text/javascript"></script>
     {/if}
 
 {/capture}{strip}

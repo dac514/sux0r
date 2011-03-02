@@ -3,17 +3,16 @@
     {* RSS Feed *}
     <link rel="alternate" type="application/rss+xml" title="{$r->sitename} | {$r->gtext.photos}" href="{$r->makeUrl('/photos/rss', null, true)}" />
 
-    <script src="{$r->url}/includes/symbionts/scriptaculous/lib/prototype.js" type="text/javascript"></script>
-
+    {$r->jQueryInit(false)}
 
     <script type="text/javascript">
     // <![CDATA[
     function trunc(truncateMe) {
         var len = 80;
-        var p = $(truncateMe);
+        var p = $('#' + truncateMe);
         if (p) {
 
-            var trunc = p.innerHTML.stripTags();
+            var trunc = p.text();
             trunc = trunc.replace('&nbsp;', ' ');
 
             if (trunc.length > len) {
@@ -30,10 +29,10 @@
 
                 trunc += ' <a href="#" ' +
                 'onclick="this.parentNode.innerHTML=' +
-                'unescape(\''+escape(p.innerHTML)+'\');return false;">' +
+                'unescape(\'' + escape(p.html()) + '\');return false;">' +
                 '...<\/a>';
 
-                p.innerHTML = trunc;
+                p.html(trunc);
 
             }
         }
