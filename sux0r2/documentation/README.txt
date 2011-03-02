@@ -61,7 +61,7 @@ be dealt with according to their own licenses.
 
 ### SUPPORT/HELP ###
 
-@see: https://sourceforge.net/forum/forum.php?forum_id=447216
+@see: http://sourceforge.net/projects/sux0r/forums/forum/447216
 
 
 ### FOOTNOTES ###
