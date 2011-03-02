@@ -73,7 +73,7 @@ class suxBayesRenderer extends suxRenderer {
         }
 
         function suxNotTrainer(placeholder) {
-            $(placeholder).effect('shake', { distance: 5}, 100);
+            $(placeholder).effect('shake', { distance: 5 }, 100);
         }
 
         // ]]>
