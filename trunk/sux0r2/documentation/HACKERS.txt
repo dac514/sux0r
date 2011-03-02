@@ -77,8 +77,6 @@ which are already automatically generated on every edit.
 
 ### JOBS ###
 
-@see: http://sourceforge.net/forum/forum.php?thread_id=2372082&forum_id=447217
-
 Improvement to phpDocumentor style code comments. My code comments are crap, I
 doubt they parse. There are probably comments thats don't make any sense
 because I cut from one module and paste into another, then changed everything
@@ -94,9 +92,8 @@ UTF-8 translations. Your languages, I need them.
 
 "Skins" known as "partitions", I need them. Graphic designers, where you at?
 
-Javascript improvements using Prototype/Scriptaculous. Talented
-Protoype/Scriptaculous coders with cool AJAX ideas are more than welcome
-to contribute.
+Javascript improvements using jQuery. Talented jQuery coders with cool AJAX
+ideas are more than welcome to contribute.
 
 Modules. You got ideas? We got a lack of implemented ideas! Go for it!
 
@@ -108,7 +105,7 @@ Optimizations. Patches welcome.
 Please discuss your ideas in the sux0r Development forum, I monitor the forum
 so your ideas will be read:
 
-@see: https://sourceforge.net/forum/forum.php?forum_id=447217
+@see: http://sourceforge.net/projects/sux0r/forums/forum/447217
 
 Better yet, patches welcome:
 
