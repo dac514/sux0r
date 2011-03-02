@@ -10,23 +10,26 @@
         var url = '{$r->url}/modules/admin/ajax.toggle.php';
         var pars = { id: log_id };
 
-        new Ajax.Request(url, {
-                method: 'post',
-                parameters: pars,
-                onSuccess: function(transport) {
-                    // Toggle images
-                    var myImage = transport.responseText.strip();
-                    var myClass = 'img.private' + log_id;
-                    var res = $$(myClass);
-                    for (i = 0; i < res.length; i++) {
-                        res[i].src = '{$r->url}/media/{$r->partition}/assets/' + myImage;
-                    }
-                },
-                onFailure: function(transport){
-                    if (transport.responseText.strip())
-                        alert(transport.responseText);
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: pars,
+            success: function(data, textStatus, transport) {
+              // Toggle images
+                var myImage = $.trim(transport.responseText);
+                var myClass = 'img.private' + log_id;
+                var res = $(myClass);
+                for (i = 0; i < res.length; i++) {
+                    res[i].src = '{$r->url}/media/{$r->partition}/assets/' + myImage;
                 }
+            },
+            error: function(transport) {
+                if ($.trim(transport.responseText).length) {
+                    alert(transport.responseText);
+                }
+            }
         });
+
     }
     // ]]>
     </script>
