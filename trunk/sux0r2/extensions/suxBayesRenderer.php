@@ -73,7 +73,30 @@ class suxBayesRenderer extends suxRenderer {
         }
 
         function suxNotTrainer(placeholder) {
-            $(placeholder).effect('shake', { distance: 5 }, 100);
+
+            // Vibrate animation
+            var interval = 10;
+            var duration = 1000;
+            var shake = 5;
+            var vibrateIndex = 0;
+            var selector = $(placeholder);
+
+            var vibrate = function(){
+                $(selector).stop(true,false).css({
+                position: 'relative',
+                left: Math.round(Math.random() * shake) - ((shake + 1) / 2) +'px',
+                top: 0
+                });
+            }
+
+            var stopVibration = function() {
+                clearInterval(vibrateIndex);
+                $(selector).stop(true,false).css({position: 'static', left: '0px', top: '0px'});
+            };
+
+            vibrateIndex = setInterval(vibrate, interval);
+            setTimeout(stopVibration, duration);
+
         }
 
         // ]]>
