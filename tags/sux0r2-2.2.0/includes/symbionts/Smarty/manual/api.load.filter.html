@@ -1,0 +1,86 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>loadFilter()</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="api.functions.html" title="Chapter 13. Smarty Class Methods()">
+<link rel="prev" href="api.is.cached.html" title="isCached()">
+<link rel="next" href="api.register.filter.html" title="registerFilter()">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">loadFilter()</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="api.is.cached.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 13. Smarty Class Methods()</th>
+<td width="20%" align="right"> <a accesskey="n" href="api.register.filter.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="refentry" title="loadFilter()">
+<a name="api.load.filter"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2>Name</h2>
+<p>loadFilter() — load a filter plugin</p>
+</div>
+<div class="refsect1" title="Description">
+<a name="id3110316"></a><h2>Description</h2>
+<code class="methodsynopsis"><span class="type">void </span><span class="methodname">loadFilter</span>(<span class="methodparam"><span class="type">string </span><span class="parameter">type</span></span>,<br>                <span class="methodparam"><span class="type">string </span><span class="parameter">name</span></span>);</code><p>
+   The first argument specifies the type of the filter to load and can be one
+   of the following: <code class="literal">pre</code>, <code class="literal">post</code> or
+   <code class="literal">output</code>.
+   The second argument specifies the <em class="parameter"><code>name</code></em> of the
+   filter plugin.
+  </p>
+<div class="example">
+<a name="id3110583"></a><p class="title"><b>Example 13.26. Loading filter plugins</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+
+// load prefilter named 'trim'
+$smarty-&gt;loadFilter('pre', 'trim');
+
+// load another prefilter named 'datefooter'
+$smarty-&gt;loadFilter('pre', 'datefooter');
+
+// load output filter named 'compress'
+$smarty-&gt;loadFilter('output', 'compress');
+
+?&gt;
+
+   </pre></div>
+</div>
+<br class="example-break"><p>
+  See also
+  <a class="link" href="api.register.filter.html" title="registerFilter()"><code class="varname">registerFilter()</code></a>,
+  <a class="link" href="variable.autoload.filters.html" title="$autoload_filters"><em class="parameter"><code>$autoload_filters</code></em></a>
+  and
+  <a class="link" href="advanced.features.html" title="Chapter 15. Advanced Features">advanced features</a>.
+  </p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="api.is.cached.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="api.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="api.register.filter.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">isCached() </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> registerFilter()</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

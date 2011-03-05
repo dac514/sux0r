@@ -1,0 +1,178 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Part II. Smarty For Template Designers</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="index.html" title="Smarty3 Manual">
+<link rel="prev" href="installing.smarty.extended.html" title="Extended Setup">
+<link rel="next" href="language.basic.syntax.html" title="Chapter 3. Basic Syntax">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Part II. Smarty For Template Designers</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="installing.smarty.extended.html">Prev</a> </td>
+<th width="60%" align="center"> </th>
+<td width="20%" align="right"> <a accesskey="n" href="language.basic.syntax.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="part" title="Part II. Smarty For Template Designers">
+<div class="titlepage"><div><div><h1 class="title">
+<a name="smarty.for.designers"></a>Part II. Smarty For Template Designers</h1></div></div></div>
+<div class="toc">
+<p><b>Table of Contents</b></p>
+<dl>
+<dt><span class="chapter"><a href="language.basic.syntax.html">3. Basic Syntax</a></span></dt>
+<dd><dl>
+<dt><span class="sect1"><a href="language.basic.syntax.html#language.syntax.comments">Comments</a></span></dt>
+<dt><span class="sect1"><a href="language.syntax.variables.html">Variables</a></span></dt>
+<dt><span class="sect1"><a href="language.syntax.functions.html">Functions</a></span></dt>
+<dt><span class="sect1"><a href="language.syntax.attributes.html">Attributes</a></span></dt>
+<dt><span class="sect1"><a href="language.syntax.quotes.html">Embedding Vars in Double Quotes</a></span></dt>
+<dt><span class="sect1"><a href="language.math.html">Math</a></span></dt>
+<dt><span class="sect1"><a href="language.escaping.html">Escaping Smarty Parsing</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="language.variables.html">4. Variables</a></span></dt>
+<dd><dl>
+<dt><span class="sect1"><a href="language.variables.html#language.assigned.variables">Variables assigned from PHP</a></span></dt>
+<dd><dl>
+<dt><span class="sect2"><a href="language.variables.html#language.variables.assoc.arrays">Associative arrays</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.html#language.variables.array.indexes">Array indexes</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.html#language.variables.objects">Objects</a></span></dt>
+</dl></dd>
+<dt><span class="sect1"><a href="language.variable.scopes.html">Variable scopes</a></span></dt>
+<dt><span class="sect1"><a href="language.config.variables.html">Variables loaded from config files</a></span></dt>
+<dt><span class="sect1"><a href="language.variables.smarty.html">{$smarty} reserved variable</a></span></dt>
+<dd><dl>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.request">Request variables</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.now">{$smarty.now}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.const">{$smarty.const}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.capture">{$smarty.capture}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.config">{$smarty.config}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.loops">{$smarty.section}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.template">{$smarty.template}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.current_dir">{$smarty.current_dir}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.version">{$smarty.version}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.block.child">{$smarty.block.child}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.block.parent">{$smarty.block.parent}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.html#language.variables.smarty.ldelim">{$smarty.ldelim}, {$smarty.rdelim}</a></span></dt>
+</dl></dd>
+</dl></dd>
+<dt><span class="chapter"><a href="language.modifiers.html">5. Variable Modifiers</a></span></dt>
+<dd><dl>
+<dt><span class="sect1"><a href="language.modifiers.html#language.modifier.capitalize">capitalize</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.cat.html">cat</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.count.characters.html">count_characters</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.count.paragraphs.html">count_paragraphs</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.count.sentences.html">count_sentences</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.count.words.html">count_words</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.date.format.html">date_format</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.default.html">default</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.escape.html">escape</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.indent.html">indent</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.lower.html">lower</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.nl2br.html">nl2br</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.regex.replace.html">regex_replace</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.replace.html">replace</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.spacify.html">spacify</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.string.format.html">string_format</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.strip.html">strip</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.strip.tags.html">strip_tags</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.truncate.html">truncate</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.upper.html">upper</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.wordwrap.html">wordwrap</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="language.combining.modifiers.html">6. Combining Modifiers</a></span></dt>
+<dt><span class="chapter"><a href="language.builtin.functions.html">7. Built-in Functions</a></span></dt>
+<dd><dl>
+<dt><span class="sect1"><a href="language.builtin.functions.html#language.function.shortform.assign">{$var=...}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.append.html">{append}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.assign.html">{assign}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.block.html">{block}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.call.html">{call}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.capture.html">{capture}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.config.load.html">{config_load}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.debug.html">{debug}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.extends.html">{extends}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.for.html">{for}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.foreach.html">{foreach},{foreachelse}</a></span></dt>
+<dd><dl>
+<dt><span class="sect2"><a href="language.function.foreach.html#foreach.property.index">@index</a></span></dt>
+<dt><span class="sect2"><a href="language.function.foreach.html#foreach.property.iteration">@iteration</a></span></dt>
+<dt><span class="sect2"><a href="language.function.foreach.html#foreach.property.first">@first</a></span></dt>
+<dt><span class="sect2"><a href="language.function.foreach.html#foreach.property.last">@last</a></span></dt>
+<dt><span class="sect2"><a href="language.function.foreach.html#foreach.property.show">@show</a></span></dt>
+<dt><span class="sect2"><a href="language.function.foreach.html#foreach.property.total">@total</a></span></dt>
+</dl></dd>
+<dt><span class="sect1"><a href="language.function.function.html">{function}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.if.html">{if},{elseif},{else}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.include.html">{include}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.include.php.html">{include_php}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.insert.html">{insert}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.ldelim.html">{ldelim},{rdelim}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.literal.html">{literal}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.nocache.html">{nocache}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.php.html">{php}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.section.html">{section},{sectionelse}</a></span></dt>
+<dd><dl>
+<dt><span class="sect2"><a href="language.function.section.html#section.property.index">.index</a></span></dt>
+<dt><span class="sect2"><a href="language.function.section.html#section.property.index.prev">.index_prev</a></span></dt>
+<dt><span class="sect2"><a href="language.function.section.html#section.property.index.next">.index_next</a></span></dt>
+<dt><span class="sect2"><a href="language.function.section.html#section.property.iteration">.iteration</a></span></dt>
+<dt><span class="sect2"><a href="language.function.section.html#section.property.first">.first</a></span></dt>
+<dt><span class="sect2"><a href="language.function.section.html#section.property.last">.last</a></span></dt>
+<dt><span class="sect2"><a href="language.function.section.html#section.property.rownum">.rownum</a></span></dt>
+<dt><span class="sect2"><a href="language.function.section.html#section.property.loop">.loop</a></span></dt>
+<dt><span class="sect2"><a href="language.function.section.html#section.property.show">.show</a></span></dt>
+<dt><span class="sect2"><a href="language.function.section.html#section.property.total">.total</a></span></dt>
+</dl></dd>
+<dt><span class="sect1"><a href="language.function.strip.html">{strip}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.while.html">{while}</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="language.custom.functions.html">8. Custom Functions</a></span></dt>
+<dd><dl>
+<dt><span class="sect1"><a href="language.custom.functions.html#language.function.counter">{counter}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.cycle.html">{cycle}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.eval.html">{eval}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.fetch.html">{fetch}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.html.checkboxes.html">{html_checkboxes}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.html.image.html">{html_image}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.html.options.html">{html_options}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.html.radios.html">{html_radios}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.html.select.date.html">{html_select_date}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.html.select.time.html">{html_select_time}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.html.table.html">{html_table}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.mailto.html">{mailto}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.math.html">{math}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.textformat.html">{textformat}</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="config.files.html">9. Config Files</a></span></dt>
+<dt><span class="chapter"><a href="chapter.debugging.console.html">10. Debugging Console</a></span></dt>
+</dl>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="installing.smarty.extended.html">Prev</a> </td>
+<td width="20%" align="center"> </td>
+<td width="40%" align="right"> <a accesskey="n" href="language.basic.syntax.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Extended Setup </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Chapter 3. Basic Syntax</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

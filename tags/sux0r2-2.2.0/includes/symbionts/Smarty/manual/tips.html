@@ -1,0 +1,105 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Chapter 18. Tips &amp; Tricks</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="appendixes.html" title="Part IV. Appendixes">
+<link rel="prev" href="troubleshooting.html" title="Chapter 17. Troubleshooting">
+<link rel="next" href="tips.default.var.handling.html" title="Default Variable Handling">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Chapter 18. Tips &amp; Tricks</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="troubleshooting.html">Prev</a> </td>
+<th width="60%" align="center">Part IV. Appendixes</th>
+<td width="20%" align="right"> <a accesskey="n" href="tips.default.var.handling.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="chapter" title="Chapter 18. Tips &amp; Tricks">
+<div class="titlepage"><div><div><h2 class="title">
+<a name="tips"></a>Chapter 18. Tips &amp; Tricks</h2></div></div></div>
+<div class="toc">
+<p><b>Table of Contents</b></p>
+<dl>
+<dt><span class="sect1"><a href="tips.html#tips.blank.var.handling">Blank Variable Handling</a></span></dt>
+<dt><span class="sect1"><a href="tips.default.var.handling.html">Default Variable Handling</a></span></dt>
+<dt><span class="sect1"><a href="tips.passing.vars.html">Passing variable title to header template</a></span></dt>
+<dt><span class="sect1"><a href="tips.dates.html">Dates</a></span></dt>
+<dt><span class="sect1"><a href="tips.wap.html">WAP/WML</a></span></dt>
+<dt><span class="sect1"><a href="tips.componentized.templates.html">Componentized Templates</a></span></dt>
+<dt><span class="sect1"><a href="tips.obfuscating.email.html">Obfuscating E-mail Addresses</a></span></dt>
+</dl>
+</div>
+<p>
+  </p>
+<div class="sect1" title="Blank Variable Handling">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="tips.blank.var.handling"></a>Blank Variable Handling</h2></div></div></div>
+<p>
+    There may be times when you want to print a default value for an empty
+    variable instead of printing nothing, such as printing
+    <code class="literal">&amp;nbsp;</code> so that
+    html table backgrounds work properly. Many would use an
+    <a class="link" href="language.function.if.html" title="{if},{elseif},{else}"><code class="varname">{if}</code></a>
+    statement to  handle this, but there is a shorthand way with Smarty, using
+    the <a class="link" href="language.modifier.default.html" title="default"><code class="varname">default</code>
+    </a> variable modifier.
+    </p>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p><span class="quote">“<span class="quote">Undefined variable</span>”</span> errors will show if PHP
+   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+     and a variable had not been assigned to Smarty.
+    </p>
+</div>
+<p>
+   </p>
+<div class="example">
+<a name="id3139768"></a><p class="title"><b>Example 18.1. Printing &amp;nbsp; when a variable is empty</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+{* the long way *}
+{if $title eq ''}
+   &amp;nbsp;
+{else}
+   {$title}
+{/if}
+
+{* the short way *}
+{$title|default:'&amp;nbsp;'}
+
+    </pre></div>
+</div>
+<br class="example-break"><p>
+See also <a class="link" href="language.modifier.default.html" title="default">
+<code class="varname">default</code></a> modifier and
+<a class="link" href="tips.default.var.handling.html" title="Default Variable Handling">default variable handling</a>.
+</p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="troubleshooting.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="appendixes.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="tips.default.var.handling.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Chapter 17. Troubleshooting </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Default Variable Handling</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

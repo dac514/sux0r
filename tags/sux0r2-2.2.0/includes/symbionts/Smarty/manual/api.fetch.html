@@ -1,0 +1,189 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>fetch()</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="api.functions.html" title="Chapter 13. Smarty Class Methods()">
+<link rel="prev" href="api.enable.security.html" title="enableSecurity()">
+<link rel="next" href="api.get.config.vars.html" title="getConfigVars()">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">fetch()</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="api.enable.security.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 13. Smarty Class Methods()</th>
+<td width="20%" align="right"> <a accesskey="n" href="api.get.config.vars.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="refentry" title="fetch()">
+<a name="api.fetch"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2>Name</h2>
+<p>fetch() — returns the template output</p>
+</div>
+<div class="refsect1" title="Description">
+<a name="id3107540"></a><h2>Description</h2>
+<code class="methodsynopsis"><span class="type">string </span><span class="methodname">fetch</span>(<span class="methodparam"><span class="type">string </span><span class="parameter">template</span></span>,<br>             <span class="methodparam"><span class="type">string </span><span class="parameter">cache_id</span></span>,<br>             <span class="methodparam"><span class="type">string </span><span class="parameter">$compile_id</span></span>);</code><p>
+   This returns the template output instead of
+   <a class="link" href="api.display.html" title="display()">displaying</a> it.
+   Supply a valid <a class="link" href="template.resources.html" title="Resources">template resource</a>
+   type and path. As an optional second parameter, you can pass a
+   <em class="parameter"><code>$cache id</code></em>, see the <a class="link" href="caching.html" title="Chapter 14. Caching">caching
+   section</a> for more information.
+  </p>
+<p>
+ As an optional third parameter, you can pass a
+ <em class="parameter"><code>$compile_id</code></em>.
+ This is in the event that you want to compile different versions of
+ the same template, such as having separate templates compiled
+ for different languages. Another use for
+ <em class="parameter"><code>$compile_id</code></em> is when you use more than one
+ <a class="link" href="api.variables.html#variable.template.dir" title="$template_dir"><em class="parameter"><code>$template_dir</code></em></a>
+ but only one
+ <a class="link" href="variable.compile.dir.html" title="$compile_dir"><em class="parameter"><code>$compile_dir</code></em></a>.
+ Set a separate <em class="parameter"><code>$compile_id</code></em> for each
+ <a class="link" href="api.variables.html#variable.template.dir" title="$template_dir"><em class="parameter"><code>$template_dir</code></em></a>,
+ otherwise templates of the same name will overwrite each other. You can
+ also set the <a class="link" href="variable.compile.id.html" title="$compile_id">
+ <em class="parameter"><code>$compile_id</code></em></a> variable once instead of passing
+  this to each call to this function.
+</p>
+<p>
+   </p>
+<div class="example">
+<a name="id3108878"></a><p class="title"><b>Example 13.18. fetch()</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+include('Smarty.class.php');
+$smarty = new Smarty;
+
+$smarty-&gt;setCaching(true);
+
+// only do db calls if cache doesn't exist
+if(!$smarty-&gt;isCached('index.tpl')) {
+
+  // dummy up some data
+  $address = '245 N 50th';
+  $db_data = array(
+               'City' =&gt; 'Lincoln',
+               'State' =&gt; 'Nebraska',
+               'Zip' =&gt; '68502'
+             );
+
+  $smarty-&gt;assign('Name','Fred');
+  $smarty-&gt;assign('Address',$address);
+  $smarty-&gt;assign($db_data);
+
+}
+
+// capture the output
+$output = $smarty-&gt;fetch('index.tpl');
+
+// do something with $output here
+echo $output;
+?&gt;
+
+    </pre></div>
+</div>
+<p><br class="example-break">
+  </p>
+<p>
+   </p>
+<div class="example">
+<a name="id3108896"></a><p class="title"><b>Example 13.19. Using fetch() to send an email</b></p>
+<div class="example-contents">
+<p>
+     The <code class="filename">email_body.tpl</code> template
+    </p>
+<pre class="programlisting">
+
+Dear {$contact.name},
+
+Welcome and thankyou for signing up as a member of our user group,
+
+Click on the link below to login with your user name of '{$contact.login_id}'
+so you can post in our forums.
+
+http://{$smarty.server.SERVER_NAME}/login/
+
+List master
+Some user group
+
+{include file='email_disclaimer.tpl'}
+
+    </pre>
+<p>
+     The <code class="filename">email_disclaimer.tpl</code> template which uses the
+     <a class="link" href="language.function.textformat.html" title="{textformat}">
+     <code class="varname">{textformat}</code></a> modifier.
+    </p>
+<pre class="programlisting">
+
+{textformat wrap=40}
+Unless you are named "{$contact.name}", you may read only the "odd numbered
+words" (every other word beginning with the first) of the message above. If you have
+violated that, then you hereby owe the sender 10 GBP for each even
+numbered word you have read
+{/textformat}
+
+    </pre>
+<p>
+     The php script using the PHP
+     <a class="ulink" href="http://php.net/function.mail" target="_top">
+     <code class="varname">mail()</code></a> function
+    </p>
+<pre class="programlisting">
+
+&lt;?php
+
+// get contact from database eg using pear or adodb
+$query  = 'select name, email, login_id from contacts where contact_id='.$contact_id;
+$contact = $db-&gt;getRow($sql);
+$smarty-&gt;assign('contact', $contact);
+
+mail($contact['email'], 'Subject', $smarty-&gt;fetch('email_body.tpl'));
+
+?&gt;
+
+    </pre>
+</div>
+</div>
+<p><br class="example-break">
+  </p>
+<p>
+   See also
+   <a class="link" href="language.function.fetch.html" title="{fetch}"><code class="varname">{fetch}</code></a>
+   <a class="link" href="api.display.html" title="display()"><code class="varname">display()</code></a>,
+   <a class="link" href="language.function.eval.html" title="{eval}"><code class="varname">{eval}</code></a>,
+   and
+   <a class="link" href="api.template.exists.html" title="templateExists()"><code class="varname">templateExists()</code></a>.
+  </p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="api.enable.security.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="api.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="api.get.config.vars.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">enableSecurity() </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> getConfigVars()</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

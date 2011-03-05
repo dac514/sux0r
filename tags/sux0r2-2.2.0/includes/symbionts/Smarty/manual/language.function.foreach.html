@@ -1,0 +1,483 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{foreach},{foreachelse}</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="language.builtin.functions.html" title="Chapter 7. Built-in Functions">
+<link rel="prev" href="language.function.for.html" title="{for}">
+<link rel="next" href="language.function.function.html" title="{function}">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">{foreach},{foreachelse}</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="language.function.for.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 7. Built-in Functions</th>
+<td width="20%" align="right"> <a accesskey="n" href="language.function.function.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="{foreach},{foreachelse}">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="language.function.foreach"></a>{foreach},{foreachelse}</h2></div></div></div>
+<p>
+  <code class="varname">{foreach}</code> is used for looping over arrays of data. <code class="varname">{foreach}</code> has a simpler and cleaner syntax than the <a class="link" href="language.function.section.html" title="{section},{sectionelse}"><code class="varname">{section}</code></a> loop, and can also loop over associative arrays.
+ </p>
+<p>
+  <code class="varname">{foreach $arrayvar as $itemvar}</code> 
+ </p>
+<p>
+  <code class="varname">{foreach $arrayvar as $keyvar=&gt;$itemvar}</code> 
+ </p>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+  This foreach syntax does not accept any named attributes. This syntax is new to Smarty 3, however the Smarty 2.x syntax <code class="literal">{foreach from=$myarray key="mykey" item="myitem"}</code> is still supported.
+ </p>
+</div>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><p>
+   <code class="varname">{foreach}</code> loops can be nested.
+   </p></li>
+<li class="listitem"><p>
+   The <em class="parameter"><code>array</code></em> variable, usually an array of values,
+   determines the number of times <code class="varname">{foreach}</code> will loop. You can also pass an integer for arbitrary loops.
+   </p></li>
+<li class="listitem"><p>
+   <code class="varname">{foreachelse}</code> is executed when there are no
+   values in the <em class="parameter"><code>array</code></em> variable.
+   </p></li>
+<li class="listitem"><p>
+    <code class="varname">{foreach}</code> properties are
+    <a class="link" href="language.function.foreach.html#foreach.property.index" title="@index"><em class="parameter"><code>@index</code></em></a>,
+    <a class="link" href="language.function.foreach.html#foreach.property.iteration" title="@iteration"><em class="parameter"><code>@iteration</code></em></a>,
+    <a class="link" href="language.function.foreach.html#foreach.property.first" title="@first"><em class="parameter"><code>@first</code></em></a>,
+    <a class="link" href="language.function.foreach.html#foreach.property.last" title="@last"><em class="parameter"><code>@last</code></em></a>,
+    <a class="link" href="language.function.foreach.html#foreach.property.show" title="@show"><em class="parameter"><code>@show</code></em></a>,
+    <a class="link" href="language.function.foreach.html#foreach.property.total" title="@total"><em class="parameter"><code>@total</code></em></a>.
+  </p></li>
+<li class="listitem"><p>
+     Instead of specifying the <em class="parameter"><code>key</code></em> variable you can access the current key of the
+     loop item by <em class="parameter"><code>{$item@key}</code></em> (see examples below).
+    </p></li>
+</ul></div>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+    The <code class="literal">$var@property</code> syntax is new to Smarty 3, however when using the Smarty 2 <code class="literal">{foreach from=$myarray key="mykey" item="myitem"}</code> style syntax, the <code class="literal">$smarty.foreach.name.property</code> syntax is still supported.
+   </p>
+</div>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+    Although you can retrieve the array key with the syntax <code class="literal">{foreach $myArray as $myKey =&gt; $myValue}</code>, the key is always available as <code class="varname">$myValue@key</code> within the foreach loop.
+   </p>
+</div>
+<p><span class="bold"><strong>Option Flags:</strong></span></p>
+<div class="informaltable"><table border="1">
+<colgroup>
+<col align="center">
+<col>
+</colgroup>
+<thead><tr>
+<th align="center">Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td align="center">nocache</td>
+<td>Disables caching of the <code class="varname">{foreach}</code> loop</td>
+</tr></tbody>
+</table></div>
+<div class="example">
+<a name="id3049823"></a><p class="title"><b>Example 7.30. A simple <code class="varname">{foreach}</code> loop</b></p>
+<div class="example-contents">
+<pre class="programlisting">
+
+&lt;?php
+$arr = array('red', 'green', 'blue');
+$smarty-&gt;assign('myColors', $arr);
+?&gt;
+
+  </pre>
+<p>Template to output <em class="parameter"><code>$myColors</code></em> in an un-ordered list</p>
+<pre class="programlisting">
+
+&lt;ul&gt;
+{foreach $myColors as $color}
+    &lt;li&gt;{$color}&lt;/li&gt;
+{/foreach}
+&lt;/ul&gt;
+
+  </pre>
+<p>
+   The above example will output:
+  </p>
+<pre class="screen">
+
+&lt;ul&gt;
+    &lt;li&gt;red&lt;/li&gt;
+    &lt;li&gt;green&lt;/li&gt;
+    &lt;li&gt;blue&lt;/li&gt;
+&lt;/ul&gt;
+
+  </pre>
+</div>
+</div>
+<br class="example-break"><div class="example">
+<a name="id3049876"></a><p class="title"><b>Example 7.31. Demonstrates the an additional <em class="parameter"><code>key</code></em> variable</b></p>
+<div class="example-contents">
+<pre class="programlisting">
+
+&lt;?php
+$people = array('fname' =&gt; 'John', 'lname' =&gt; 'Doe', 'email' =&gt; 'j.doe@example.com');
+$smarty-&gt;assign('myPeople', $people);
+?&gt;
+
+  </pre>
+<p>Template to output <em class="parameter"><code>$myArray</code></em> as key/value pairs.</p>
+<pre class="programlisting">
+
+&lt;ul&gt;
+{foreach $myPeople as $value}
+   &lt;li&gt;{$value@key}: {$value}&lt;/li&gt;
+{/foreach}
+&lt;/ul&gt;
+
+  </pre>
+<p>
+   The above example will output:
+  </p>
+<pre class="screen">
+
+&lt;ul&gt;
+    &lt;li&gt;fname: John&lt;/li&gt;
+    &lt;li&gt;lname: Doe&lt;/li&gt;
+    &lt;li&gt;email: j.doe@example.com&lt;/li&gt;
+&lt;/ul&gt;
+
+  </pre>
+</div>
+</div>
+<br class="example-break"><div class="example">
+<a name="id3049933"></a><p class="title"><b>Example 7.32. {foreach} with nested <em class="parameter"><code>item</code></em> and <em class="parameter"><code>key</code></em></b></p>
+<div class="example-contents">
+<p>Assign an array to Smarty, the key contains the key for each looped value.</p>
+<pre class="programlisting">
+
+&lt;?php
+ $smarty-&gt;assign('contacts', array(
+                             array('phone' =&gt; '555-555-1234',
+                                   'fax' =&gt; '555-555-5678',
+                                   'cell' =&gt; '555-555-0357'),
+                             array('phone' =&gt; '800-555-4444',
+                                   'fax' =&gt; '800-555-3333',
+                                   'cell' =&gt; '800-555-2222')
+                             ));
+?&gt;
+
+  </pre>
+<p>The template to output <em class="parameter"><code>$contact</code></em>.</p>
+<pre class="programlisting">
+
+{* key always available as a property *}
+{foreach $contacts as $contact}
+  {foreach $contact as $value}
+    {$value@key}: {$value}
+  {/foreach}
+{/foreach}
+
+{* accessing key the PHP syntax alternate *}
+{foreach $contacts as $contact}
+  {foreach $contact as $key =&gt; $value}
+    {$key}: {$value}
+  {/foreach}
+{/foreach}
+
+  </pre>
+<p>
+   Either of the above examples will output:
+  </p>
+<pre class="screen">
+
+  phone: 555-555-1234
+  fax: 555-555-5678
+  cell: 555-555-0357
+  phone: 800-555-4444
+  fax: 800-555-3333
+  cell: 800-555-2222
+
+  </pre>
+</div>
+</div>
+<br class="example-break"><div class="example">
+<a name="id3050012"></a><p class="title"><b>Example 7.33. Database example with {foreachelse}</b></p>
+<div class="example-contents">
+<p>A database (PDO) example of looping over search results. This example is looping over a PHP iterator instead of an array().</p>
+<pre class="programlisting">
+
+&lt;?php 
+  include('Smarty.class.php'); 
+
+  $smarty = new Smarty; 
+
+  $dsn = 'mysql:host=localhost;dbname=test'; 
+  $login = 'test'; 
+  $passwd = 'test'; 
+
+  // setting PDO to use buffered queries in mysql is 
+  // important if you plan on using multiple result cursors 
+  // in the template. 
+
+  $db = new PDO($dsn, $login, $passwd, array( 
+     PDO::MYSQL_ATTR_USE_BUFFERED_QUERY =&gt; true)); 
+
+  $res = $db-&gt;prepare("select * from users"); 
+  $res-&gt;execute(); 
+  $res-&gt;setFetchMode(PDO::FETCH_LAZY); 
+
+  // assign to smarty 
+  $smarty-&gt;assign('res',$res); 
+
+  $smarty-&gt;display('index.tpl');?&gt;
+?&gt;
+
+  </pre>
+<pre class="programlisting">
+
+{foreach $res as $r} 
+  {$r.id} 
+  {$r.name}
+{foreachelse}
+  .. no results .. 
+{/foreach}
+
+  </pre>
+</div>
+</div>
+<br class="example-break"><p>
+   The above is assuming the results contain the columns named <code class="literal">id</code> and <code class="literal">name</code>.
+ </p>
+<p>
+   What is the advantage of an iterator vs. looping over a plain old array? With an array, all the results are accumulated into memory before being looped. With an iterator, each result is loaded/released within the loop. This saves processing time and memory, especially for very large result sets.
+ </p>
+<div class="sect2" title="@index">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="foreach.property.index"></a>@index</h3></div></div></div>
+<p>
+   <em class="parameter"><code>index</code></em> contains the current array index, starting with zero.
+  </p>
+<div class="example">
+<a name="id3050109"></a><p class="title"><b>Example 7.34. <em class="parameter"><code>index</code></em> example</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+{* output empty row on the 4th iteration (when index is 3) *}
+&lt;table&gt;
+{foreach $items as $i}
+  {if $i@index eq 3}
+     {* put empty table row *}
+     &lt;tr&gt;&lt;td&gt;nbsp;&lt;/td&gt;&lt;/tr&gt;
+  {/if}
+  &lt;tr&gt;&lt;td&gt;{$i.label}&lt;/td&gt;&lt;/tr&gt;
+{/foreach}
+&lt;/table&gt;
+
+  </pre></div>
+</div>
+<br class="example-break">
+</div>
+<div class="sect2" title="@iteration">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="foreach.property.iteration"></a>@iteration</h3></div></div></div>
+<p>
+   <em class="parameter"><code>iteration</code></em> contains the current loop iteration and always
+   starts at one, unlike <a class="link" href="language.function.foreach.html#foreach.property.index" title="@index"><em class="parameter"><code>index</code></em></a>.
+   It is incremented by one on each iteration.
+  </p>
+<div class="example">
+<a name="id3050166"></a><p class="title"><b>Example 7.35. <em class="parameter"><code>iteration</code></em> example: is div by</b></p>
+<div class="example-contents">
+<p>
+    The <span class="emphasis"><em>"is div by"</em></span> operator can be used to detect a specific iteration. Here we bold-face the name every 4th iteration.
+  </p>
+<pre class="programlisting">
+
+{foreach $myNames as $name}
+  {if $name@iteration is div by 4}
+    &lt;b&gt;{$name}&lt;/b&gt;
+  {/if}
+  {$name}
+{/foreach}
+
+</pre>
+</div>
+</div>
+<br class="example-break"><div class="example">
+<a name="id3050192"></a><p class="title"><b>Example 7.36. <em class="parameter"><code>iteration</code></em> example: is even/odd by</b></p>
+<div class="example-contents">
+<p>
+     The <span class="emphasis"><em>"is even by"</em></span> and <span class="emphasis"><em>"is odd by"</em></span> operators can be used to alternate something every so many iterations. Choosing between even or odd rotates which one starts. Here we switch the font color every 3rd iteration.
+   </p>
+<pre class="programlisting">
+ 
+ {foreach $myNames as $name}
+   {if $name@iteration is even by 3}
+     &lt;span style="color: #000"&gt;{$name}&lt;/span&gt;
+   {else}
+     &lt;span style="color: #eee"&gt;{$name}&lt;/span&gt;
+   {/if}
+ {/foreach}
+ 
+ </pre>
+<p>
+    This will output something similar to this:
+   </p>
+<pre class="screen">
+
+    &lt;span style="color: #000"&gt;...&lt;/span&gt;
+    &lt;span style="color: #000"&gt;...&lt;/span&gt;
+    &lt;span style="color: #000"&gt;...&lt;/span&gt;
+    &lt;span style="color: #eee"&gt;...&lt;/span&gt;
+    &lt;span style="color: #eee"&gt;...&lt;/span&gt;
+    &lt;span style="color: #eee"&gt;...&lt;/span&gt;
+    &lt;span style="color: #000"&gt;...&lt;/span&gt;
+    &lt;span style="color: #000"&gt;...&lt;/span&gt;
+    &lt;span style="color: #000"&gt;...&lt;/span&gt;
+    &lt;span style="color: #eee"&gt;...&lt;/span&gt;
+    &lt;span style="color: #eee"&gt;...&lt;/span&gt;
+    &lt;span style="color: #eee"&gt;...&lt;/span&gt;
+    ...
+
+   </pre>
+</div>
+</div>
+<br class="example-break">
+</div>
+<div class="sect2" title="@first">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="foreach.property.first"></a>@first</h3></div></div></div>
+<p>
+   <em class="parameter"><code>first</code></em> is <code class="constant">TRUE</code> if the current <code class="varname">{foreach}</code>
+   iteration is the initial one. Here we display a table header row on the first iteration.
+  </p>
+<div class="example">
+<a name="id3050289"></a><p class="title"><b>Example 7.37. <em class="parameter"><code>first</code></em> property example</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+{* show table header at first iteration *}
+&lt;table&gt;
+{foreach $items as $i}
+  {if $i@first}
+    &lt;tr&gt;
+      &lt;th&gt;key&lt;/td&gt;
+      &lt;th&gt;name&lt;/td&gt;
+    &lt;/tr&gt;
+  {/if}
+  &lt;tr&gt;
+    &lt;td&gt;{$i@key}&lt;/td&gt;
+    &lt;td&gt;{$i.name}&lt;/td&gt;
+  &lt;/tr&gt;
+{/foreach}
+&lt;/table&gt;
+
+  </pre></div>
+</div>
+<br class="example-break">
+</div>
+<div class="sect2" title="@last">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="foreach.property.last"></a>@last</h3></div></div></div>
+<p>
+   <em class="parameter"><code>last</code></em> is set to <code class="constant">TRUE</code> if the current
+   <code class="varname">{foreach}</code> iteration is the final one. Here we display a horizontal rule on the last iteration.
+  </p>
+<div class="example">
+<a name="id3050343"></a><p class="title"><b>Example 7.38. <em class="parameter"><code>last</code></em> property example</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+{* Add horizontal rule at end of list *}
+{foreach $items as $item}
+  &lt;a href="#{$item.id}"&gt;{$item.name}&lt;/a&gt;{if $prod@last}&lt;hr&gt;{else},{/if}
+{foreachelse}
+  ... no items to loop ...
+{/foreach}
+
+  </pre></div>
+</div>
+<br class="example-break">
+</div>
+<div class="sect2" title="@show">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="foreach.property.show"></a>@show</h3></div></div></div>
+<p>
+   The show <em class="parameter"><code>show</code></em> property can be used after the execution of a
+   <code class="varname">{foreach}</code> loop to detect if data has been displayed or not.
+   <em class="parameter"><code>show</code></em> is a boolean value.
+  </p>
+<div class="example">
+<a name="id3050397"></a><p class="title"><b>Example 7.39. <em class="parameter"><code>show</code></em> property example</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;ul&gt;
+{foreach $myArray as $name}
+    &lt;li&gt;{$name}&lt;/li&gt;
+{/foreach}
+&lt;/ul&gt;
+{if $name@show} do something here if the array contained data {/if}
+
+</pre></div>
+</div>
+<br class="example-break">
+</div>
+<div class="sect2" title="@total">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="foreach.property.total"></a>@total</h3></div></div></div>
+<p>
+   <em class="parameter"><code>total</code></em> contains the number of iterations that this
+   <code class="varname">{foreach}</code>  will loop.
+   This can be used inside or after the <code class="varname">{foreach}</code>.
+  </p>
+<div class="example">
+<a name="id3050448"></a><p class="title"><b>Example 7.40. <em class="parameter"><code>total</code></em> property example</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+{* show number of rows at end *}
+{foreach $items as $item}
+  {$item.name}&lt;hr/&gt;
+  {if $prod@last}
+    &lt;div id="total"&gt;{$prod@total} items&lt;/div&gt;
+  {/if}
+{foreachelse}
+ ... no items to loop ...
+{/foreach}
+
+</pre></div>
+</div>
+<br class="example-break"><p>
+   See also <a class="link" href="language.function.section.html" title="{section},{sectionelse}"><code class="varname">{section}</code></a> and <a class="link" href="language.function.for.html" title="{for}"><code class="varname">{for}</code></a>.
+  </p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="language.function.for.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="language.builtin.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="language.function.function.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">{for} </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> {function}</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>$autoload_filters</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="api.variables.html" title="Chapter 12. Smarty Class Variables">
+<link rel="prev" href="variable.auto.literal.html" title="$auto_literal">
+<link rel="next" href="variable.compile.check.html" title="$compile_check">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">$autoload_filters</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="variable.auto.literal.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 12. Smarty Class Variables</th>
+<td width="20%" align="right"> <a accesskey="n" href="variable.compile.check.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="$autoload_filters">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="variable.autoload.filters"></a>$autoload_filters</h2></div></div></div>
+<p>
+       If there are some filters that you wish to load on every template
+       invocation, you can specify them using this variable and Smarty will
+       automatically load them for you. The variable is an associative array
+       where keys are filter types and values are arrays of the filter
+       names. For example:
+       </p>
+<div class="informalexample"><pre class="programlisting">
+
+&lt;?php
+$smarty-&gt;autoload_filters = array('pre' =&gt; array('trim', 'stamp'),
+                                  'output' =&gt; array('convert'));
+?&gt;
+
+        </pre></div>
+<p>
+      </p>
+<p>
+      See also
+      <a class="link" href="api.register.filter.html" title="registerFilter()"><code class="varname">registerFilter()</code></a>
+      and
+   <a class="link" href="api.load.filter.html" title="loadFilter()"><code class="varname">loadFilter()</code></a>
+      </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="variable.auto.literal.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="api.variables.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="variable.compile.check.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">$auto_literal </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> $compile_check</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

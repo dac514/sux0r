@@ -1,0 +1,90 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>lower</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="language.modifiers.html" title="Chapter 5. Variable Modifiers">
+<link rel="prev" href="language.modifier.indent.html" title="indent">
+<link rel="next" href="language.modifier.nl2br.html" title="nl2br">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">lower</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="language.modifier.indent.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 5. Variable Modifiers</th>
+<td width="20%" align="right"> <a accesskey="n" href="language.modifier.nl2br.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="lower">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="language.modifier.lower"></a>lower</h2></div></div></div>
+<p>
+   This is used to lowercase a variable. This is equivalent to the PHP
+   <a class="ulink" href="http://php.net/strtolower" target="_top">
+   <code class="varname">strtolower()</code></a> function.
+  </p>
+<div class="example">
+<a name="id3032737"></a><p class="title"><b>Example 5.13. lower</b></p>
+<div class="example-contents">
+<pre class="programlisting">
+
+&lt;?php
+
+$smarty-&gt;assign('articleTitle', 'Two Convicts Evade Noose, Jury Hung.');
+
+?&gt;
+
+   </pre>
+<p>
+    Where template is:
+   </p>
+<pre class="programlisting">
+
+{$articleTitle}
+{$articleTitle|lower}
+
+   </pre>
+<p>
+    This will output:
+   </p>
+<pre class="screen">
+
+Two Convicts Evade Noose, Jury Hung.
+two convicts evade noose, jury hung.
+
+   </pre>
+</div>
+</div>
+<br class="example-break"><p>
+   See also
+   <a class="link" href="language.modifier.upper.html" title="upper"><code class="varname">upper</code></a>
+   and
+   <a class="link" href="language.modifiers.html#language.modifier.capitalize" title="capitalize"><code class="varname">capitalize</code></a>.
+  </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="language.modifier.indent.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="language.modifiers.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="language.modifier.nl2br.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">indent </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> nl2br</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

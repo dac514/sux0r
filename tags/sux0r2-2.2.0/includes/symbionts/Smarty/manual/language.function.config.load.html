@@ -1,0 +1,195 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{config_load}</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="language.builtin.functions.html" title="Chapter 7. Built-in Functions">
+<link rel="prev" href="language.function.capture.html" title="{capture}">
+<link rel="next" href="language.function.debug.html" title="{debug}">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">{config_load}</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="language.function.capture.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 7. Built-in Functions</th>
+<td width="20%" align="right"> <a accesskey="n" href="language.function.debug.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="{config_load}">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="language.function.config.load"></a>{config_load}</h2></div></div></div>
+<p>
+   <code class="varname">{config_load}</code> is used for loading  config
+   <a class="link" href="language.config.variables.html" title="Variables loaded from config files"><em class="parameter"><code>#variables#</code></em></a>
+   from a <a class="link" href="config.files.html" title="Chapter 9. Config Files">configuration file</a> into the template.
+ </p>
+<p><span class="bold"><strong>Attributes:</strong></span></p>
+<div class="informaltable"><table border="1">
+<colgroup>
+<col align="center">
+<col align="center">
+<col align="center">
+<col align="center">
+<col>
+</colgroup>
+<thead><tr>
+<th align="center">Attribute Name</th>
+<th align="center">Type</th>
+<th align="center">Required</th>
+<th align="center">Default</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="center">file</td>
+<td align="center">string</td>
+<td align="center">Yes</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>The name of the config file to include</td>
+</tr>
+<tr>
+<td align="center">section</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>The name of the section to load</td>
+</tr>
+<tr>
+<td align="center">scope</td>
+<td align="center">string</td>
+<td align="center">no</td>
+<td align="center"><span class="emphasis"><em>local</em></span></td>
+<td>
+      How the scope of the loaded variables are treated,
+      which must be one of local, parent or global. local
+      means variables are loaded into the local template
+      context. parent means variables are loaded into both
+      the local context and the parent template that called
+      it. global means variables are available to all
+      templates.
+     </td>
+</tr>
+</tbody>
+</table></div>
+<div class="example">
+<a name="id3047611"></a><p class="title"><b>Example 7.24. {config_load}</b></p>
+<div class="example-contents">
+<p>
+   The <code class="filename">example.conf</code> file.
+  </p>
+<pre class="programlisting">
+
+#this is config file comment
+
+# global variables
+pageTitle = "Main Menu"
+bodyBgColor = #000000
+tableBgColor = #000000
+rowBgColor = #00ff00
+
+#customer variables section
+[Customer]
+pageTitle = "Customer Info"
+
+  </pre>
+<p>and the template</p>
+<pre class="programlisting">
+
+{config_load file="example.conf"}
+{config_load "example.conf"}  {* short-hand *}
+
+&lt;html&gt;
+&lt;title&gt;{#pageTitle#|default:"No title"}&lt;/title&gt;
+&lt;body bgcolor="{#bodyBgColor#}"&gt;
+&lt;table border="{#tableBorderSize#}" bgcolor="{#tableBgColor#}"&gt;
+   &lt;tr bgcolor="{#rowBgColor#}"&gt;
+      &lt;td&gt;First&lt;/td&gt;
+      &lt;td&gt;Last&lt;/td&gt;
+      &lt;td&gt;Address&lt;/td&gt;
+   &lt;/tr&gt;
+&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+  </pre>
+</div>
+</div>
+<br class="example-break"><p>
+  <a class="link" href="config.files.html" title="Chapter 9. Config Files">Config Files</a>
+  may also contain sections. You can load variables from
+  within a section with the added attribute
+  <em class="parameter"><code>section</code></em>. Note that global config
+  variables are always loaded along with section variables,
+  and same-named section variables overwrite the globals.
+ </p>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+   Config file <span class="emphasis"><em>sections</em></span> and the built-in
+   template function called
+   <a class="link" href="language.function.section.html" title="{section},{sectionelse}"><code class="varname">{section}</code></a>
+   have nothing  to do with each other, they just happen to share a common naming
+   convention.
+  </p>
+</div>
+<div class="example">
+<a name="id3047705"></a><p class="title"><b>Example 7.25. function {config_load} with section</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+{config_load file='example.conf' section='Customer'}
+{config_load 'example.conf' 'Customer'} {* short-hand *}
+
+&lt;html&gt;
+&lt;title&gt;{#pageTitle#}&lt;/title&gt;
+&lt;body bgcolor="{#bodyBgColor#}"&gt;
+&lt;table border="{#tableBorderSize#}" bgcolor="{#tableBgColor#}"&gt;
+   &lt;tr bgcolor="{#rowBgColor#}"&gt;
+      &lt;td&gt;First&lt;/td&gt;
+      &lt;td&gt;Last&lt;/td&gt;
+      &lt;td&gt;Address&lt;/td&gt;
+   &lt;/tr&gt;
+&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+  </pre></div>
+</div>
+<br class="example-break"><p>
+See <a class="link" href="variable.config.overwrite.html" title="$config_overwrite"><em class="parameter"><code>$config_overwrite</code></em></a>
+to create arrays of config file variables.
+</p>
+<p>
+  See also the <a class="link" href="config.files.html" title="Chapter 9. Config Files">config files</a> page,
+  <a class="link" href="language.config.variables.html" title="Variables loaded from config files">config variables</a> page,
+  <a class="link" href="variable.config.dir.html" title="$config_dir"><em class="parameter"><code>$config_dir</code></em></a>,
+  <a class="link" href="api.get.config.vars.html" title="getConfigVars()"><code class="varname">get_config_vars()</code></a>
+  and
+  <a class="link" href="api.config.load.html" title="configLoad()"><code class="varname">config_load()</code></a>.
+ </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="language.function.capture.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="language.builtin.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="language.function.debug.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">{capture} </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> {debug}</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

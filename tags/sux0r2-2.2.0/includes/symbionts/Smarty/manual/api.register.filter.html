@@ -1,0 +1,125 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>registerFilter()</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="api.functions.html" title="Chapter 13. Smarty Class Methods()">
+<link rel="prev" href="api.load.filter.html" title="loadFilter()">
+<link rel="next" href="api.register.plugin.html" title="registerPlugin()">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">registerFilter()</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="api.load.filter.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 13. Smarty Class Methods()</th>
+<td width="20%" align="right"> <a accesskey="n" href="api.register.plugin.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="refentry" title="registerFilter()">
+<a name="api.register.filter"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2>Name</h2>
+<p>registerFilter() — dynamically register filters</p>
+</div>
+<div class="refsect1" title="Description">
+<a name="id3110825"></a><h2>Description</h2>
+<code class="methodsynopsis"><span class="type">void </span><span class="methodname">registerFilter</span>(<span class="methodparam"><span class="type">string </span><span class="parameter">type</span></span>,<br>                    <span class="methodparam"><span class="type">mixed </span><span class="parameter">callback</span></span>);</code><p>
+   Use this to dynamically register filters to operate on
+   a templates.
+   It uses the following parameters:
+   </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><p>
+<em class="parameter"><code>type</code></em> defines the type of the filter. Valid values are "pre", "post", "output" and "variable".
+</p></li>
+<li class="listitem">
+<p>
+<em class="parameter"><code>callback</code></em> defines the PHP callback. it can be either:
+   </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="circle">
+<li class="listitem"><p>
+       A string containing the function <em class="parameter"><code>name</code></em>
+       </p></li>
+<li class="listitem"><p>
+       An array of the form <code class="literal">array(&amp;$object, $method)</code> with
+       <code class="literal">&amp;$object</code> being a reference to an
+       object and <code class="literal">$method</code> being a string
+       containing the method-name
+       </p></li>
+<li class="listitem"><p>
+       An array of the form
+       <code class="literal">array($class, $method)</code> with
+       <code class="literal">$class</code> being the class name and
+       <code class="literal">$method</code> being a method of the class.
+       </p></li>
+</ul></div>
+<p>
+   </p>
+</li>
+</ul></div>
+<p>   
+  </p>
+<div class="note" title="Technical Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Technical Note</h3>
+<p>
+  If the chosen <em class="parameter"><code>function</code></em> callback is of the form 
+  <code class="literal">array(&amp;$object, $method)</code>, only one instance of the
+  same class and with the same <code class="literal">$method</code> can be registered. The
+  latest registered <em class="parameter"><code>function</code></em> callback will be used in 
+  such a scenario.
+ </p>
+</div>
+<p>
+   A <a class="link" href="plugins.prefilters.postfilters.html" title="Prefilters/Postfilters">prefilter</a> runs through the template source before it gets compiled. See <a class="link" href="advanced.features.prefilters.html" title="Prefilters">template prefilters</a> for
+   more information on how to setup a prefiltering function.
+  </p>
+<p>
+   A <a class="link" href="plugins.prefilters.postfilters.html" title="Prefilters/Postfilters">postfilter</a> runs through the template code after it was compiled to PHP. See <a class="link" href="advanced.features.postfilters.html" title="Postfilters">template postfilters</a> for
+   more information on how to setup a postfiltering function.
+  </p>
+<p>
+   A <a class="link" href="plugins.outputfilters.html" title="Output Filters">outputfilter</a> operates on
+   a template's output before it is
+   <a class="link" href="api.display.html" title="display()">displayed</a>. See
+   <a class="link" href="advanced.features.outputfilters.html" title="Output Filters">template output
+    filters</a>
+   for more information on how to set up an output filter function.
+  </p>
+<p>
+See also
+<a class="link" href="api.unregister.filter.html" title="unregisterFilter()"><code class="varname">unregisterFilter()</code></a>,
+<a class="link" href="api.load.filter.html" title="loadFilter()"><code class="varname">loadFilter()</code></a>,
+<a class="link" href="variable.autoload.filters.html" title="$autoload_filters"><em class="parameter"><code>$autoload_filters</code></em></a>,
+ <a class="link" href="advanced.features.prefilters.html" title="Prefilters">template pre filters</a>
+ <a class="link" href="advanced.features.postfilters.html" title="Postfilters">template post filters</a>
+ <a class="link" href="advanced.features.outputfilters.html" title="Output Filters">template output filters</a>
+ section.
+</p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="api.load.filter.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="api.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="api.register.plugin.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">loadFilter() </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> registerPlugin()</td>
+</tr>
+</table>
+</div>
+</body>
+</html>
