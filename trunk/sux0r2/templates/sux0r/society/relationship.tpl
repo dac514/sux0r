@@ -5,24 +5,26 @@
     <script type="text/javascript">
     // <![CDATA[
     // Set the maximum width of an image
-    $(function disabler() {
+    function disabler() {
 
-        var form = $('{$form_name}');
-        var me = form.getInputs('checkbox', 'identity[]');
-        var checkboxes = form.getInputs('checkbox');
-        var radios = form.getInputs('radio');
+        var me = $('#{$form_name} :input[name="identity[]"]');
+        var checkboxes = $('#{$form_name} :input:checkbox');
+        var radios = $('#{$form_name} :input:radio');
 
-        if (me[0].checked) {
-            checkboxes.invoke('disable');
-            radios.invoke('disable');
+        if (me.attr('checked')) {
+            checkboxes.attr('disabled','true');
+            radios.attr('disabled','true');
         }
         else {
-            checkboxes.invoke('enable');
-            radios.invoke('enable');
+            checkboxes.removeAttr("disabled");
+            radios.removeAttr("disabled");
         }
 
-        me.invoke('enable');
+        me.removeAttr("disabled");
 
+    };
+    $(window).load(function() {
+        disabler();
     });
     // ]]>
     </script>
