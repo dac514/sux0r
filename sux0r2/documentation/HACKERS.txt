@@ -67,7 +67,7 @@ Blog - initial post is a blog, all replies are comments.
 Wiki - Initial post is a wiki, all comments are discussion.
 Slideshow - like a powerpoint presentation, flow is ordered by thread.
 
-Although sux0r 2.0 focuses on the blog, the framework for further development
+Although Sux0r focuses on the blog, the framework for further development
 is in place. Each suxThreadedMessage() is sanitized into both an HTML message
 and a plain text version. Each edited suxThreadedMessage() saves a backup of
 itself into a history table. The beginnings of a wiki would merely require a
@@ -107,7 +107,7 @@ so your ideas will be read:
 
 @see: http://sourceforge.net/projects/sux0r/forums/forum/447217
 
-Better yet, patches welcome:
+Patches welcome:
 
 @see: https://sourceforge.net/tracker2/?group_id=131752&atid=722157
 
