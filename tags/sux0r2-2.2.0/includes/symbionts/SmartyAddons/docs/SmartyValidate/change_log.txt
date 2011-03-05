@@ -1,9 +1,0 @@
-3.0.1
-=====
-
-fix E_STRICT warnings, fix constructor for PHP5
-
-3.0
-===
-
-- Make SmartyValidate Smarty 3.0 compliant
