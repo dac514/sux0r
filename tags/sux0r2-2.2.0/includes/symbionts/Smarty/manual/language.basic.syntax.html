@@ -1,0 +1,150 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Chapter 3. Basic Syntax</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="smarty.for.designers.html" title="Part II. Smarty For Template Designers">
+<link rel="prev" href="smarty.for.designers.html" title="Part II. Smarty For Template Designers">
+<link rel="next" href="language.syntax.variables.html" title="Variables">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Chapter 3. Basic Syntax</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="smarty.for.designers.html">Prev</a> </td>
+<th width="60%" align="center">Part II. Smarty For Template Designers</th>
+<td width="20%" align="right"> <a accesskey="n" href="language.syntax.variables.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="chapter" title="Chapter 3. Basic Syntax">
+<div class="titlepage"><div><div><h2 class="title">
+<a name="language.basic.syntax"></a>Chapter 3. Basic Syntax</h2></div></div></div>
+<div class="toc">
+<p><b>Table of Contents</b></p>
+<dl>
+<dt><span class="sect1"><a href="language.basic.syntax.html#language.syntax.comments">Comments</a></span></dt>
+<dt><span class="sect1"><a href="language.syntax.variables.html">Variables</a></span></dt>
+<dt><span class="sect1"><a href="language.syntax.functions.html">Functions</a></span></dt>
+<dt><span class="sect1"><a href="language.syntax.attributes.html">Attributes</a></span></dt>
+<dt><span class="sect1"><a href="language.syntax.quotes.html">Embedding Vars in Double Quotes</a></span></dt>
+<dt><span class="sect1"><a href="language.math.html">Math</a></span></dt>
+<dt><span class="sect1"><a href="language.escaping.html">Escaping Smarty Parsing</a></span></dt>
+</dl>
+</div>
+<p>
+  All Smarty template tags are enclosed within delimiters. By
+  default these are <code class="literal">{</code> and
+  <code class="literal">}</code>, but they can be <a class="link" href="variable.left.delimiter.html" title="$left_delimiter">changed</a>.
+ </p>
+<p>
+  For the examples in this manual, we will assume that you are using the default
+  delimiters. In Smarty, all content outside of delimiters is displayed as
+  static content, or unchanged. When Smarty encounters template tags, it
+  attempts to interpret them, and displays the appropriate output in their
+  place.
+ </p>
+<div class="sect1" title="Comments">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="language.syntax.comments"></a>Comments</h2></div></div></div>
+<p>
+  Template comments are surrounded by asterisks, and that is surrounded
+  by the
+  <a class="link" href="variable.left.delimiter.html" title="$left_delimiter">delimiter</a>
+  tags like so:
+  </p>
+<div class="informalexample"><pre class="programlisting">
+
+{* this is a comment *}
+
+   </pre></div>
+<p>
+  Smarty comments are NOT displayed in the final output of the template,
+  unlike <code class="literal">&lt;!-- HTML comments --&gt;</code>.
+  These are useful for making internal notes in the templates which no one will see ;-)
+ </p>
+<div class="example">
+<a name="id3021136"></a><p class="title"><b>Example 3.1. Comments within a template</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+{* I am a Smarty comment, I don't exist in the compiled output  *}
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;{$title}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+{* another single line smarty comment  *}
+&lt;!-- HTML comment that is sent to the browser --&gt;
+
+{* this multiline smarty
+   comment is
+   not sent to browser
+*}
+
+{*********************************************************
+Multi line comment block with credits block
+  @ author:         bg@example.com
+  @ maintainer:     support@example.com
+  @ para:           var that sets block style
+  @ css:            the style output
+**********************************************************}
+
+{* The header file with the main logo and stuff  *}
+{include file='header.tpl'}
+
+
+{* Dev note:  the $includeFile var is assigned in foo.php script  *}
+&lt;!-- Displays main content block --&gt;
+{include file=$includeFile}
+
+{* this &lt;select&gt; block is redundant *}
+{*
+&lt;select name="company"&gt;
+  {html_options options=$vals selected=$selected_id}
+&lt;/select&gt;
+*}
+
+&lt;!-- Show header from affiliate is disabled --&gt;
+{* $affiliate|upper *}
+
+{* you cannot nest comments *}
+{*
+&lt;select name="company"&gt;
+  {* &lt;option value="0"&gt;-- none -- &lt;/option&gt; *}
+  {html_options options=$vals selected=$selected_id}
+&lt;/select&gt;
+*}
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+  </pre></div>
+</div>
+<br class="example-break">
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="smarty.for.designers.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="smarty.for.designers.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="language.syntax.variables.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Part II. Smarty For Template Designers </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Variables</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

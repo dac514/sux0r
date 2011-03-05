@@ -1,0 +1,314 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{textformat}</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="language.custom.functions.html" title="Chapter 8. Custom Functions">
+<link rel="prev" href="language.function.math.html" title="{math}">
+<link rel="next" href="config.files.html" title="Chapter 9. Config Files">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">{textformat}</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="language.function.math.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 8. Custom Functions</th>
+<td width="20%" align="right"> <a accesskey="n" href="config.files.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="{textformat}">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="language.function.textformat"></a>{textformat}</h2></div></div></div>
+<p>
+   <code class="varname">{textformat}</code> is a
+   <a class="link" href="plugins.block.functions.html" title="Block Functions">block function</a>
+   used to format text. It basically  cleans up spaces and special characters,
+   and formats paragraphs by  wrapping at a boundary and indenting lines.
+  </p>
+<p>
+   You can set the parameters explicitly, or use a preset style.
+   Currently <span class="quote">“<span class="quote">email</span>”</span> is the only available style.
+ </p>
+<div class="informaltable"><table border="1">
+<colgroup>
+<col align="center">
+<col align="center">
+<col align="center">
+<col align="center">
+<col>
+</colgroup>
+<thead><tr>
+<th align="center">Attribute Name</th>
+<th align="center">Type</th>
+<th align="center">Required</th>
+<th align="center">Default</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="center">style</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>Preset style</td>
+</tr>
+<tr>
+<td align="center">indent</td>
+<td align="center">number</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>0</em></span></td>
+<td>The number of chars to indent every line</td>
+</tr>
+<tr>
+<td align="center">indent_first</td>
+<td align="center">number</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>0</em></span></td>
+<td>The number of chars to indent the first line</td>
+</tr>
+<tr>
+<td align="center">indent_char</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>(single space)</em></span></td>
+<td>The character (or string of chars) to indent with</td>
+</tr>
+<tr>
+<td align="center">wrap</td>
+<td align="center">number</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>80</em></span></td>
+<td>How many characters to wrap each line to</td>
+</tr>
+<tr>
+<td align="center">wrap_char</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>\n</em></span></td>
+<td>The character (or string of chars) to break each line with</td>
+</tr>
+<tr>
+<td align="center">wrap_cut</td>
+<td align="center">boolean</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em><code class="constant">FALSE</code></em></span></td>
+<td>If <code class="constant">TRUE</code>, wrap will break the line at the exact
+      character instead of at a word boundary</td>
+</tr>
+<tr>
+<td align="center">assign</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>The template variable the output will be assigned to</td>
+</tr>
+</tbody>
+</table></div>
+<div class="example">
+<a name="id3084640"></a><p class="title"><b>Example 8.22. {textformat}</b></p>
+<div class="example-contents">
+<pre class="programlisting">
+
+   {textformat wrap=40}
+
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+
+   This is bar.
+
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+
+   {/textformat}
+
+
+  </pre>
+<p>
+   The above example will output:
+  </p>
+<pre class="screen">
+
+
+   This is foo. This is foo. This is foo.
+   This is foo. This is foo. This is foo.
+
+   This is bar.
+
+   bar foo bar foo foo. bar foo bar foo
+   foo. bar foo bar foo foo. bar foo bar
+   foo foo. bar foo bar foo foo. bar foo
+   bar foo foo. bar foo bar foo foo.
+
+  </pre>
+<pre class="programlisting">
+
+   {textformat wrap=40 indent=4}
+
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+
+   This is bar.
+
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+
+   {/textformat}
+
+
+  </pre>
+<p>
+   The above example will output:
+  </p>
+<pre class="screen">
+
+
+   This is foo. This is foo. This is
+   foo. This is foo. This is foo. This
+   is foo.
+
+   This is bar.
+
+   bar foo bar foo foo. bar foo bar foo
+   foo. bar foo bar foo foo. bar foo
+   bar foo foo. bar foo bar foo foo.
+   bar foo bar foo foo. bar foo bar
+   foo foo.
+
+  </pre>
+<pre class="programlisting">
+
+   {textformat wrap=40 indent=4 indent_first=4}
+
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+
+   This is bar.
+
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+
+   {/textformat}
+
+  </pre>
+<p>
+   The above example will output:
+  </p>
+<pre class="screen">
+
+
+   This is foo. This is foo. This
+   is foo. This is foo. This is foo.
+   This is foo.
+
+   This is bar.
+
+   bar foo bar foo foo. bar foo bar
+   foo foo. bar foo bar foo foo. bar
+   foo bar foo foo. bar foo bar foo
+   foo. bar foo bar foo foo. bar foo
+   bar foo foo.
+
+  </pre>
+<pre class="programlisting">
+
+   {textformat style="email"}
+
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+   This is foo.
+
+   This is bar.
+
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+   bar foo bar foo     foo.
+
+   {/textformat}
+
+
+  </pre>
+<p>
+   The above example will output:
+  </p>
+<pre class="screen">
+
+
+   This is foo. This is foo. This is foo. This is foo. This is foo. This is
+   foo.
+
+   This is bar.
+
+   bar foo bar foo foo. bar foo bar foo foo. bar foo bar foo foo. bar foo
+   bar foo foo. bar foo bar foo foo. bar foo bar foo foo. bar foo bar foo
+   foo.
+
+
+  </pre>
+</div>
+</div>
+<br class="example-break"><p>
+  See also
+  <a class="link" href="language.function.strip.html" title="{strip}"><code class="varname">{strip}</code></a>
+  and
+  <a class="link" href="language.modifier.wordwrap.html" title="wordwrap"><code class="varname">wordwrap</code></a>.
+ </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="language.function.math.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="language.custom.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="config.files.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">{math} </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Chapter 9. Config Files</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

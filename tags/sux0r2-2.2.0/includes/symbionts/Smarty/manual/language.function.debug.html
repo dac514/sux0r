@@ -1,0 +1,64 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{debug}</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="language.builtin.functions.html" title="Chapter 7. Built-in Functions">
+<link rel="prev" href="language.function.config.load.html" title="{config_load}">
+<link rel="next" href="language.function.extends.html" title="{extends}">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">{debug}</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="language.function.config.load.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 7. Built-in Functions</th>
+<td width="20%" align="right"> <a accesskey="n" href="language.function.extends.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="{debug}">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="language.function.debug"></a>{debug}</h2></div></div></div>
+<p>
+  <code class="varname">{debug}</code> dumps the debug console to the page. This works
+  regardless of the <a class="link" href="chapter.debugging.console.html" title="Chapter 10. Debugging Console">debug</a>
+  settings in the php script. Since this gets executed at runtime, this is
+  only able to show the <a class="link" href="api.assign.html" title="assign()">assigned</a>
+  variables; not the templates that
+  are in use. However, you can see all the currently available variables
+  within the scope of a template.
+ </p>
+<p>
+ 	If caching is enabled and a page is loaded from cache <code class="varname">{debug}</code>
+ 	does show only the variables which assigned for the cached page.
+ </p>
+<p>
+ See also the
+ <a class="link" href="chapter.debugging.console.html" title="Chapter 10. Debugging Console">debugging console page</a>.
+ </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="language.function.config.load.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="language.builtin.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="language.function.extends.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">{config_load} </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> {extends}</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

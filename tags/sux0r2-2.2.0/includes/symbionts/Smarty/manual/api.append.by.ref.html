@@ -1,0 +1,97 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>appendByRef()</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="api.functions.html" title="Chapter 13. Smarty Class Methods()">
+<link rel="prev" href="api.append.html" title="append()">
+<link rel="next" href="api.assign.html" title="assign()">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">appendByRef()</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="api.append.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 13. Smarty Class Methods()</th>
+<td width="20%" align="right"> <a accesskey="n" href="api.assign.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="refentry" title="appendByRef()">
+<a name="api.append.by.ref"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2>Name</h2>
+<p>appendByRef() — append values  by reference</p>
+</div>
+<div class="refsect1" title="Description">
+<a name="id3101458"></a><h2>Description</h2>
+<code class="methodsynopsis"><span class="type">void </span><span class="methodname">appendByRef</span>(<span class="methodparam"><span class="type">string </span><span class="parameter">varname</span></span>,<br>                 <span class="methodparam"><span class="type">mixed </span><span class="parameter">var</span></span>,<br>                 <span class="methodparam"><span class="type">bool </span><span class="parameter">merge</span></span>);</code><p>
+   This is used to
+   <a class="link" href="api.append.html" title="append()"><code class="varname">append()</code></a> values
+   to the templates by reference.
+  </p>
+<div class="note" title="Technical Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Technical Note</h3>
+<p>
+     With the introduction of PHP5, <code class="varname">appendByRef()</code> is not necessary for most
+     intents and purposes. <code class="varname">appendByRef()</code> is useful if you want a PHP array index value
+     to be affected by its reassignment from a template. Assigned object properties behave
+     this way by default.
+   </p>
+</div>
+<div class="note" title="Technical Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Technical Note</h3>
+<p>
+  The <em class="parameter"><code>merge</code></em> parameter respects array keys, so if
+  you merge two numerically indexed arrays, they may overwrite each other
+  or result in non-sequential keys. This is unlike the PHP
+  <a class="ulink" href="http://php.net/array_merge" target="_top">
+  <code class="varname">array_merge()</code></a> function
+   which wipes out numerical keys and renumbers them.
+ </p>
+</div>
+<div class="example">
+<a name="id3102449"></a><p class="title"><b>Example 13.2. appendByRef</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+// appending name/value pairs
+$smarty-&gt;appendByRef('Name', $myname);
+$smarty-&gt;appendByRef('Address', $address);
+?&gt;
+
+   </pre></div>
+</div>
+<br class="example-break"><p>
+   See also
+   <a class="link" href="api.append.html" title="append()"><code class="varname">append()</code></a>,
+  <a class="link" href="api.assign.html" title="assign()"><code class="varname">assign()</code></a>
+  and
+  <a class="link" href="api.get.template.vars.html" title="getTemplateVars()"><code class="varname">getTemplateVars()</code></a>.
+</p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="api.append.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="api.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="api.assign.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">append() </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> assign()</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

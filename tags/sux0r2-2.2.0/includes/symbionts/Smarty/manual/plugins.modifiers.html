@@ -1,0 +1,151 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Modifiers</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="plugins.html" title="Chapter 16. Extending Smarty With Plugins">
+<link rel="prev" href="plugins.functions.html" title="Template Functions">
+<link rel="next" href="plugins.block.functions.html" title="Block Functions">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Modifiers</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="plugins.functions.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 16. Extending Smarty With Plugins</th>
+<td width="20%" align="right"> <a accesskey="n" href="plugins.block.functions.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="Modifiers">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="plugins.modifiers"></a>Modifiers</h2></div></div></div>
+<p>
+     <a class="link" href="language.modifiers.html" title="Chapter 5. Variable Modifiers">Modifiers</a> are little functions
+     that are applied to a variable in the template before it is displayed or
+     used in some other context. Modifiers can be chained together.
+    </p>
+<div class="funcsynopsis">
+<table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table">
+<tr>
+<td><code class="funcdef">mixed <b class="fsfunc">smarty_modifier_name</b>(</code></td>
+<td>
+<var class="pdparam">$value</var>, </td>
+<td> </td>
+</tr>
+<tr>
+<td> </td>
+<td>
+<var class="pdparam">$param1</var><code>)</code>;</td>
+<td> </td>
+</tr>
+</table>
+<div class="paramdef-list">
+<code>mixed <var class="pdparam">$value</var></code>;<br><code>[mixed <var class="pdparam">$param1</var>, ...]</code>;</div>
+<div class="funcprototype-spacer"> </div>
+</div>
+<p>
+     The first parameter to the modifier plugin is the value on which
+     the modifier is to operate. The rest of the parameters are optional,
+     depending on what kind of operation is to be  performed.
+    </p>
+<p>
+     The modifier has to <a class="ulink" href="http://php.net/return" target="_top">return</a>
+     the result of its processing.
+    </p>
+<div class="example">
+<a name="id3133086"></a><p class="title"><b>Example 16.3. A simple modifier plugin</b></p>
+<div class="example-contents">
+<p>
+      This plugin basically aliases one of the built-in PHP functions. It
+      does not have any additional parameters.
+     </p>
+<pre class="programlisting">
+
+&lt;?php
+/*
+ * Smarty plugin
+ * -------------------------------------------------------------
+ * File:     modifier.capitalize.php
+ * Type:     modifier
+ * Name:     capitalize
+ * Purpose:  capitalize words in the string
+ * -------------------------------------------------------------
+ */
+function smarty_modifier_capitalize($string)
+{
+    return ucwords($string);
+}
+?&gt;
+
+</pre>
+</div>
+</div>
+<br class="example-break"><p></p>
+<div class="example">
+<a name="id3134611"></a><p class="title"><b>Example 16.4. More complex modifier plugin</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+/*
+ * Smarty plugin
+ * -------------------------------------------------------------
+ * File:     modifier.truncate.php
+ * Type:     modifier
+ * Name:     truncate
+ * Purpose:  Truncate a string to a certain length if necessary,
+ *           optionally splitting in the middle of a word, and
+ *           appending the $etc string.
+ * -------------------------------------------------------------
+ */
+function smarty_modifier_truncate($string, $length = 80, $etc = '...',
+                                  $break_words = false)
+{
+    if ($length == 0)
+        return '';
+
+    if (strlen($string) &gt; $length) {
+        $length -= strlen($etc);
+        $fragment = substr($string, 0, $length+1);
+        if ($break_words)
+            $fragment = substr($fragment, 0, -1);
+        else
+            $fragment = preg_replace('/\s+(\S+)?$/', '', $fragment);
+        return $fragment.$etc;
+    } else
+        return $string;
+}
+?&gt;
+
+     </pre></div>
+</div>
+<br class="example-break"><p>
+     See also
+     <a class="link" href="api.register.plugin.html" title="registerPlugin()"><code class="varname">registerPlugin()</code></a>,
+     <a class="link" href="api.unregister.plugin.html" title="unregisterPlugin"><code class="varname">unregisterPlugin()</code></a>.
+    </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="plugins.functions.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="plugins.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="plugins.block.functions.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Template Functions </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Block Functions</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

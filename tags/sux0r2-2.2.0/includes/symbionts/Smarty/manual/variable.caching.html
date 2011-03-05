@@ -1,0 +1,100 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>$caching</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="api.variables.html" title="Chapter 12. Smarty Class Variables">
+<link rel="prev" href="variable.force.compile.html" title="$force_compile">
+<link rel="next" href="variable.cache.id.html" title="$cache_id">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">$caching</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="variable.force.compile.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 12. Smarty Class Variables</th>
+<td width="20%" align="right"> <a accesskey="n" href="variable.cache.id.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="$caching">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="variable.caching"></a>$caching</h2></div></div></div>
+<p>
+	   This tells Smarty whether or not to cache the output of the templates
+	   to the <a class="link" href="variable.cache.dir.html" title="$cache_dir">
+       <em class="parameter"><code>$cache_dir</code></em></a>.
+	   By default this is set to the constant Smarty::CACHING_OFF. If your templates consistently generate
+	   the same content, it is advisable to turn on
+       <em class="parameter"><code>$caching</code></em>, as this may result in significant
+       performance gains.
+	   </p>
+<p>
+	   You can also have
+	   <a class="link" href="caching.multiple.caches.html" title="Multiple Caches Per Page">multiple</a>
+	   caches for the same template.
+       </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><p>
+	    A constant value of Smarty::CACHING_LIFETIME_CURRENT or Smarty::CACHING_LIFETIME_SAVED enables caching.
+     </p></li>
+<li class="listitem"><p>
+        A value of Smarty::CACHING_LIFETIME_CURRENT tells  Smarty to use the current
+	   <a class="link" href="variable.cache.lifetime.html" title="$cache_lifetime"><em class="parameter"><code>$cache_lifetime</code></em></a>
+	   variable to determine if the  cache has expired.
+       </p></li>
+<li class="listitem"><p>A value of Smarty::CACHING_LIFETIME_SAVED tells Smarty to use the
+       <a class="link" href="variable.cache.lifetime.html" title="$cache_lifetime"><em class="parameter"><code>$cache_lifetime</code></em></a>
+	   value at the time the cache was generated.  This way you can set the
+      <a class="link" href="variable.cache.lifetime.html" title="$cache_lifetime"> <em class="parameter"><code>$cache_lifetime</code></em></a>
+   just before <a class="link" href="api.fetch.html" title="fetch()">fetching</a>
+   the template to have granular control over when that particular cache expires.
+	   See also <a class="link" href="api.is.cached.html" title="isCached()"><code class="varname">isCached()</code></a>.
+           </p></li>
+<li class="listitem"><p>
+	   If <a class="link" href="variable.compile.check.html" title="$compile_check"><em class="parameter"><code>$compile_check</code></em></a>
+	   is enabled, the cached content will be regenerated if
+	   any of the templates or config files that are part of this cache are
+	   changed.
+       </p></li>
+<li class="listitem"><p>
+       If <a class="link" href="variable.force.compile.html" title="$force_compile">
+       <em class="parameter"><code>$force_compile</code></em></a> is enabled, the cached
+       content will always be regenerated.
+      </p></li>
+</ul></div>
+<p>
+  See also
+  <a class="link" href="variable.cache.dir.html" title="$cache_dir"><em class="parameter"><code>$cache_dir</code></em></a>,
+  <a class="link" href="variable.cache.lifetime.html" title="$cache_lifetime"><em class="parameter"><code>$cache_lifetime</code></em></a>,
+  <a class="link" href="variable.cache.handler.func.html" title="$cache_handler_func"><em class="parameter"><code>$cache_handler_func</code></em></a>,
+  <a class="link" href="variable.cache.modified.check.html" title="$cache_modified_check"><em class="parameter"><code>$cache_modified_check</code></em></a>,
+  <a class="link" href="api.is.cached.html" title="isCached()"><code class="varname">is_cached()</code></a>
+and the
+<a class="link" href="caching.html" title="Chapter 14. Caching">caching section</a>.
+</p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="variable.force.compile.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="api.variables.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="variable.cache.id.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">$force_compile </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> $cache_id</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Resources</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="plugins.html" title="Chapter 16. Extending Smarty With Plugins">
+<link rel="prev" href="plugins.outputfilters.html" title="Output Filters">
+<link rel="next" href="plugins.inserts.html" title="Inserts">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Resources</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="plugins.outputfilters.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 16. Extending Smarty With Plugins</th>
+<td width="20%" align="right"> <a accesskey="n" href="plugins.inserts.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="Resources">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="plugins.resources"></a>Resources</h2></div></div></div>
+<p>
+     Resource plugins are meant as a generic way of providing template
+     sources or PHP script components to Smarty. Some examples of resources:
+     databases, LDAP, shared memory, sockets, and so on.
+    </p>
+<p>
+     There are a total of four functions that need to be registered for each
+     type of resource. Every function will receive the requested resource as
+     the first parameter and the Smarty object as the last parameter. The
+     rest of parameters depend on the function.
+    </p>
+<div class="funcsynopsis">
+<table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table">
+<tr>
+<td><code class="funcdef">bool <b class="fsfunc">smarty_resource_name_source</b>(</code></td>
+<td>
+<var class="pdparam">$rsrc_name</var>, </td>
+<td> </td>
+</tr>
+<tr>
+<td> </td>
+<td>
+<var class="pdparam">&amp;$source</var>, </td>
+<td> </td>
+</tr>
+<tr>
+<td> </td>
+<td>
+<var class="pdparam">&amp;$smarty</var><code>)</code>;</td>
+<td> </td>
+</tr>
+</table>
+<div class="paramdef-list">
+<code>string <var class="pdparam">$rsrc_name</var></code>;<br><code>string <var class="pdparam">&amp;$source</var></code>;<br><code>object <var class="pdparam">&amp;$smarty</var></code>;</div>
+<div class="funcprototype-spacer"> </div>
+<table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table">
+<tr>
+<td><code class="funcdef">bool <b class="fsfunc">smarty_resource_name_timestamp</b>(</code></td>
+<td>
+<var class="pdparam">$rsrc_name</var>, </td>
+<td> </td>
+</tr>
+<tr>
+<td> </td>
+<td>
+<var class="pdparam">&amp;$timestamp</var>, </td>
+<td> </td>
+</tr>
+<tr>
+<td> </td>
+<td>
+<var class="pdparam">&amp;$smarty</var><code>)</code>;</td>
+<td> </td>
+</tr>
+</table>
+<div class="paramdef-list">
+<code>string <var class="pdparam">$rsrc_name</var></code>;<br><code>int <var class="pdparam">&amp;$timestamp</var></code>;<br><code>object <var class="pdparam">&amp;$smarty</var></code>;</div>
+<div class="funcprototype-spacer"> </div>
+<table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table">
+<tr>
+<td><code class="funcdef">bool <b class="fsfunc">smarty_resource_name_secure</b>(</code></td>
+<td>
+<var class="pdparam">$rsrc_name</var>, </td>
+<td> </td>
+</tr>
+<tr>
+<td> </td>
+<td>
+<var class="pdparam">&amp;$smarty</var><code>)</code>;</td>
+<td> </td>
+</tr>
+</table>
+<div class="paramdef-list">
+<code>string <var class="pdparam">$rsrc_name</var></code>;<br><code>object <var class="pdparam">&amp;$smarty</var></code>;</div>
+<div class="funcprototype-spacer"> </div>
+<table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table">
+<tr>
+<td><code class="funcdef">bool <b class="fsfunc">smarty_resource_name_trusted</b>(</code></td>
+<td>
+<var class="pdparam">$rsrc_name</var>, </td>
+<td> </td>
+</tr>
+<tr>
+<td> </td>
+<td>
+<var class="pdparam">&amp;$smarty</var><code>)</code>;</td>
+<td> </td>
+</tr>
+</table>
+<div class="paramdef-list">
+<code>string <var class="pdparam">$rsrc_name</var></code>;<br><code>object <var class="pdparam">&amp;$smarty</var></code>;</div>
+<div class="funcprototype-spacer"> </div>
+</div>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><p>
+     The first function, <code class="literal">source()</code> is supposed to retrieve
+     the resource. Its second parameter <em class="parameter"><code>$source</code></em> is a
+     variable passed by reference where the result should be
+     stored. The function is supposed to return <code class="constant">TRUE</code> if
+     it was able to successfully retrieve the resource and <code class="constant">FALSE</code> otherwise.
+    </p></li>
+<li class="listitem"><p>
+     The second function, <code class="literal">timestamp()</code> is supposed to
+     retrieve the last modification time of the requested resource, as a UNIX
+     timestamp. The second parameter <em class="parameter"><code>$timestamp</code></em>
+     is a variable passed by reference where the timestamp should be stored.
+     The function is supposed to return <code class="constant">TRUE</code> if the timestamp could be
+     succesfully determined, or <code class="constant">FALSE</code> otherwise.
+    </p></li>
+<li class="listitem"><p>
+     The third function, <code class="literal">secure()</code>is supposed to return
+     <code class="constant">TRUE</code> or <code class="constant">FALSE</code>, depending on whether the requested resource is secure
+     or not. This function is used only for template resources but
+     should still be defined.
+    </p></li>
+<li class="listitem"><p>
+     The fourth function, <code class="literal">trusted()</code> is supposed to return
+     <code class="constant">TRUE</code> or <code class="constant">FALSE</code>, depending on whether the requested resource
+     is trusted or not. This function is used for only for PHP script
+     components requested by <a class="link" href="language.function.include.php.html" title="{include_php}">
+     <code class="varname">{include_php}</code></a> tag or
+     <a class="link" href="language.function.insert.html" title="{insert}"><code class="varname">{insert}</code></a>
+     tag with the <em class="parameter"><code>src</code></em> attribute. However, it should still
+     be defined even for template resources.
+    </p></li>
+</ul></div>
+<div class="example">
+<a name="id3136705"></a><p class="title"><b>Example 16.10. resource plugin</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+/*
+ * Smarty plugin
+ * -------------------------------------------------------------
+ * File:     resource.db.php
+ * Type:     resource
+ * Name:     db
+ * Purpose:  Fetches templates from a database
+ * -------------------------------------------------------------
+ */
+function smarty_resource_db_source($tpl_name, &amp;$tpl_source, $smarty)
+{
+    // do database call here to fetch your template,
+    // populating $tpl_source with actual template contents
+    $tpl_source = "This is the template text";
+    // return true on success, false to generate failure notification
+    return true;
+}
+
+function smarty_resource_db_timestamp($tpl_name, &amp;$tpl_timestamp, $smarty)
+{
+    // do database call here to populate $tpl_timestamp
+    // with unix epoch time value of last template modification.
+    // This is used to determine if recompile is necessary.
+    $tpl_timestamp = time(); // this example will always recompile!
+    // return true on success, false to generate failure notification
+    return true;
+}
+
+function smarty_resource_db_secure($tpl_name, $smarty)
+{
+    // assume all templates are secure
+    return true;
+}
+
+function smarty_resource_db_trusted($tpl_name, $smarty)
+{
+    // not used for templates
+}
+?&gt;
+
+     </pre></div>
+</div>
+<br class="example-break"><p>
+ See also
+ <a class="link" href="api.register.resource.html" title="registerResource()"><code class="varname">register_resource()</code></a>,
+ <a class="link" href="api.unregister.resource.html" title="unregisterResource()"><code class="varname">unregister_resource()</code></a>.
+</p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="plugins.outputfilters.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="plugins.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="plugins.inserts.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Output Filters </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Inserts</td>
+</tr>
+</table>
+</div>
+</body>
+</html>
