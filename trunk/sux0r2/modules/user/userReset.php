@@ -91,7 +91,7 @@ class userReset extends component {
         unset($_SESSION['captcha']);
         unset($clean['captcha']);
 
-        $user = $this->getByID($clean['user']);
+        $user = $this->user->getByEmail($clean['user']);
         if (!$user) throw new Exception('Invalid user?!');
         elseif (@$user['banned']) {
             // Banned user, abort
@@ -142,7 +142,7 @@ class userReset extends component {
     function userExists($value, $empty, &$params, &$formvars) {
 
         if (empty($formvars['user'])) return false;
-        if (!$this->getByID($formvars['user'])) return false;
+        if (!$this->user->getByEmail($formvars['user'])) return false;
         return true;
 
     }
