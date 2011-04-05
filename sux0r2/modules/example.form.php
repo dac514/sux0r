@@ -85,8 +85,6 @@ class myExample extends component {
         // Form logic
         // --------------------------------------------------------------------
 
-        suxValidate::set_form('myfoo');
-
         if (!empty($dirty)) $this->tpl->assign($dirty);
         else suxValidate::disconnect();
 
