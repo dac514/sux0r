@@ -1,4 +1,8 @@
 
+Fixed minor SmartyValidate bugs
+
+Improved breadcrumb algorithm
+
 Fixed bug with password reset module, fixed typo in example form
 
 ------------------------------------------------------------------------------
