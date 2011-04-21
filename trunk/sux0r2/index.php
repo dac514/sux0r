@@ -74,12 +74,15 @@ catch (Exception $e) {
 // Breadcrumbs
 // ---------------------------------------------------------------------------
 
-$crumb = filter_var(trim(trim(isset($_GET['c']) ? $_GET['c'] : 'home'), '/'), FILTER_SANITIZE_URL);
-if (isset($_GET['page']) && filter_var($_GET['page'], FILTER_VALIDATE_INT) && $_GET['page'] > 0) {
+$crumb = filter_var(trim((isset($_GET['c']) ? $_GET['c'] : 'home'), '/'), FILTER_SANITIZE_URL);
+if (count($_GET) > 1) {
     $crumb .= $GLOBALS['CONFIG']['CLEAN_URL'] ? '?' : '&';
-    $crumb .= "page={$_GET['page']}";
+    foreach($_GET as $key => $val) {
+        if ($key == 'c') continue;
+        $crumb .= filter_var("$key=$val&", FILTER_SANITIZE_URL);
+    }
+    $crumb = rtrim($crumb, '&');
 }
-
 if (!isset($_SESSION['breadcrumbs'])) $_SESSION['breadcrumbs'] = array();
 array_unshift($_SESSION['breadcrumbs'], $crumb);
 $_SESSION['breadcrumbs'] = array_unique($_SESSION['breadcrumbs']);
