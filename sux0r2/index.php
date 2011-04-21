@@ -74,23 +74,7 @@ catch (Exception $e) {
 // Breadcrumbs
 // ---------------------------------------------------------------------------
 
-$crumb = filter_var(trim((isset($_GET['c']) ? $_GET['c'] : 'home'), '/'), FILTER_SANITIZE_URL);
-if (count($_GET) > 1) {
-    $crumb .= $GLOBALS['CONFIG']['CLEAN_URL'] ? '?' : '&';
-    $tmp = $_GET;
-    ksort($tmp);
-    foreach($tmp as $key => $val) {
-        if ($key == 'c') continue;
-        elseif ($key == 'page' && $val == 1) continue;
-        else $crumb .= filter_var("$key=$val&", FILTER_SANITIZE_URL);
-    }
-    $crumb = rtrim($crumb, '&');
-}
-if (!isset($_SESSION['breadcrumbs'])) $_SESSION['breadcrumbs'] = array();
-array_unshift($_SESSION['breadcrumbs'], $crumb);
-$_SESSION['breadcrumbs'] = array_unique($_SESSION['breadcrumbs']);
-$_SESSION['breadcrumbs'] = array_slice($_SESSION['breadcrumbs'], 0, 10); // maximum 10
-$_SESSION['birdfeed'] = 0; // Reset, used to prevent infinite redirects
+suxFunct::breadcrumbs();
 
 // new dBug($_SESSION);
 
