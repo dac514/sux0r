@@ -77,9 +77,12 @@ catch (Exception $e) {
 $crumb = filter_var(trim((isset($_GET['c']) ? $_GET['c'] : 'home'), '/'), FILTER_SANITIZE_URL);
 if (count($_GET) > 1) {
     $crumb .= $GLOBALS['CONFIG']['CLEAN_URL'] ? '?' : '&';
-    foreach($_GET as $key => $val) {
+    $tmp = $_GET;
+    ksort($tmp);
+    foreach($tmp as $key => $val) {
         if ($key == 'c') continue;
-        $crumb .= filter_var("$key=$val&", FILTER_SANITIZE_URL);
+        elseif ($key == 'page' && $val == 1) continue;
+        else $crumb .= filter_var("$key=$val&", FILTER_SANITIZE_URL);
     }
     $crumb = rtrim($crumb, '&');
 }
