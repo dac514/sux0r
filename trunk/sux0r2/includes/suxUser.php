@@ -516,7 +516,7 @@ class suxUser {
 
         $q = "
         SELECT {$this->db_table_access}.accesslevel FROM {$this->db_table_access}
-        INNER JOIN {$this->db_table}  ON {$this->db_table_access} .users_id = {$this->db_table} .id
+        INNER JOIN {$this->db_table} ON {$this->db_table_access}.users_id = {$this->db_table}.id
         WHERE {$this->db_table_access}.users_id = ? AND {$this->db_table_access}.module = ?
         ";
 

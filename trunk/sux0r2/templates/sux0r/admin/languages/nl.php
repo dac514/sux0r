@@ -26,6 +26,7 @@ $gtext['profile'] = 'Profiel';
 $gtext['root'] = 'Root';
 $gtext['submit'] = 'Versturen';
 $gtext['timestamp'] = 'Timestamp';
+$gtext['url'] = 'URL';
 $gtext['yourself'] = 'Je bent jezelf aan het aanpassen, sommige functies zijn vanwege veiligheidsredenen uitgeschakeld';
 
 ?>

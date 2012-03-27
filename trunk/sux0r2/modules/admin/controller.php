@@ -78,7 +78,15 @@ function sux($action, $params = null) {
         // --------------------------------------------------------------------
 
         $admin = new admin();
-        $admin->userlist();
+
+        if ($admin->formValidate($_POST)) {
+            $admin->formProcess($_POST);
+            $admin->formSuccess();
+        }
+        else {
+            $admin->formBuild($_POST);
+        }
+
         break;
 
     }
