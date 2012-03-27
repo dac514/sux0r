@@ -14,6 +14,8 @@
 
 function suxAutoload($class_name) {
 
+    if (strpos($class_name, 'Smarty') === 0) return;
+
     global $controller;
     $dirname = $GLOBALS['CONFIG']['PATH'];
 

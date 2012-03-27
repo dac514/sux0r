@@ -169,7 +169,6 @@ class suxFunct {
     * Remove directory
     *
     * @param string $dirname
-    * @param bool $empty
     * @return bool
     */
     static function obliterateDir($dirname) {
@@ -980,8 +979,6 @@ class suxFunct {
             );
 
     }
-
 }
-
 
 ?>

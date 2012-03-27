@@ -37,6 +37,7 @@ $gtext['profile'] = 'Profile';
 $gtext['root'] = 'Root';
 $gtext['submit'] = 'Submit';
 $gtext['timestamp'] = 'Timestamp';
+$gtext['url'] = 'URL';
 $gtext['yourself'] = 'You are editing yourself, some features are disabled for safety reasons';
 
 ?>

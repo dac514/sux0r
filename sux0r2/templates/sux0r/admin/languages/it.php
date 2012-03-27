@@ -34,6 +34,7 @@ $gtext['submit'] = 'Invia';
 $gtext['success2'] = 'Sembra tutto a posto.';
 $gtext['success'] = 'Fatto!';
 $gtext['timestamp'] = 'Timestamp ##FIX##';
+$gtext['url'] = 'URL';
 $gtext['yourself'] = 'Stai editando la tua pagina, alcune opzioni sono disabilitate per sicurezza';
 
 ?>
