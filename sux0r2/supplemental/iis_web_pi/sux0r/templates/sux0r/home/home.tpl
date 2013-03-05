@@ -92,7 +92,7 @@
             {capture name='img' assign='img'}{$r->myHttpServer()}{$r->url}/media/sux0r/assets/nullwhore.png{/capture}
 
             {* Render widget *}
-            {$r->widget($title, $welcome, 'http://sourceforge.net/projects/sux0r/', $img, '', 'http://www.sux0r.org/user/profile/conner_bw')}
+            {$r->widget($title, $welcome, 'http://sourceforge.net/projects/sux0r/', $img, '', 'http://sux0r.trotch.com/user/profile/conner_bw')}
 
             <p id="sfLinks">
             Found a bug? <a href="http://sourceforge.net/tracker2/?atid=722155&amp;group_id=131752">Report it</a>.

@@ -26,7 +26,7 @@ $gtext['navcontainer'] = array(
 
 /* Copyright */
 
-$gtext['copyright'] = '<a href="http://www.sux0r.org/">sux0r</a> è copyleft &copy;
+$gtext['copyright'] = '<a href="http://sux0r.trotch.com/">sux0r</a> è copyleft &copy;
 <a href="http://www.trotch.com/">Trotch.com</a> ' . date('Y') . ' ed è distribuito sotto licenza
 <a href="http://www.fsf.org/licensing/licenses/gpl-3.0.html">GNU General Public License</a>.';
 
