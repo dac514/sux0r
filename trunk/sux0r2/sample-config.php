@@ -30,7 +30,7 @@ $CONFIG['TITLE'] = 'sux0r';
 $CONFIG['PATH'] = dirname(__FILE__);
 
 // The url suffix to your site. For example, if your site is
-// http://www.sux0r.org/ then '' is appropriate. If your site is
+// http://sux0r.trotch.com/ then '' is appropriate. If your site is
 // http://domain.com/my/sux0r/ then '/my/sux0r' is the correct value.
 // No trailing slash!
 

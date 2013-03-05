@@ -7,12 +7,12 @@ AUTHOR:
     Monte Ohrt (monte [AT] ohrt [DOT] com)
 
 VERSION:
-    3.0.2
+    3.0.3
 
 NOTE: As of version 3.0, SmartyValidate requires Smarty 3.0 or higher.
     
 DATE:
-    February 17th, 2011
+    December 12th, 2011
 
 WEBSITE:
     http://www.phpinsider.com/php/code/SmartyValidate/
@@ -249,10 +249,12 @@ PUBLIC METHODS:
     
     examples:
     SmartyValidate::disconnect();
+    SmartyValidate::disconnect(true);
     
-    This clears the SmartyValidate session data. Call this after you are
-    completely finished with SmartyValidate (eg. do NOT call between form
-    submissions.)
+    This clears the SmartyValidate session data for the current form. Call
+    this after you are completely finished with the SmartyValidate form.
+    (eg. do NOT call between posts to the same form.) A parameter of true
+    will force all forms to reset.
 
     function set_form($form_name)
     -----------------------------

@@ -43,7 +43,7 @@ dBug
 
 htmLawed
 * Path: ./htmLawed/
-* Version: 1.1.9.4
+* Version: 1.1.14
 * Licence: LGPL 3
 * Website: http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/index.php
 
@@ -85,7 +85,7 @@ Securimage
 
 Smarty
 * Path: ./Smarty/
-* Version: 3.0.7
+* Version: 3.1.13
 * Licence: LGPL 2.1
 * Website: http://www.smarty.net/
 
@@ -94,7 +94,7 @@ SmartyValidate
 * Path: ./SmartyAddons/libs/SmartyValidate.class.php
         ./SmartyAddons/plugins/%validate%
         ./SmartyAddons/docs/SmartyValidate/
-* Version: 3.0.2 (beta)
+* Version: 3.0.3
 * Licence: LGPL 2.1
 * Website: http://www.phpinsider.com/php/code/SmartyValidate/
 

@@ -146,7 +146,7 @@
 
   <parameter
     name="Suffix"
-    description="Please specify the suffix to your site. For example, if your site is http://www.sux0r.org/ then leave this blank. If your site is http://domain.com/my/sux0r/ then '/my/sux0r' is the correct value. No trailing slash!"
+    description="Please specify the suffix to your site. For example, if your site is http://sux0r.trotch.com/ then leave this blank. If your site is http://domain.com/my/sux0r/ then '/my/sux0r' is the correct value. No trailing slash!"
     defaultValue="/sux0r"
     >
     <parameterEntry

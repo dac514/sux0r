@@ -27,7 +27,7 @@ class suxTemplate extends Smarty {
 
         // Call parent
         parent::__construct();
-        
+
         // Set seperate error reporting for templates
         $this->error_reporting = $GLOBALS['CONFIG']['SMARTY_ERROR_REPORTING'];
 
@@ -36,7 +36,7 @@ class suxTemplate extends Smarty {
         // --------------------------------------------------------------------
 
         $this->plugins_dir = array(
-            $GLOBALS['CONFIG']['PATH'] . '/includes/symbionts/Smarty/libs/plugins',            
+            $GLOBALS['CONFIG']['PATH'] . '/includes/symbionts/Smarty/libs/plugins',
             $GLOBALS['CONFIG']['PATH'] . '/includes/symbionts/SmartyAddons/plugins',
             );
 
@@ -70,7 +70,7 @@ class suxTemplate extends Smarty {
         if(!is_dir($compile_dir) && !mkdir($compile_dir, 0777, true)) {
             throw new Exception('Missing compile dir ' . $compile_dir);
         }
-        $this->compile_dir = $compile_dir;
+        $this->setCompileDir($compile_dir);
 
 
         // --------------------------------------------------------------------
@@ -97,30 +97,20 @@ class suxTemplate extends Smarty {
             $config_dir = $config_dir_fallback;
         }
 
-        $this->config_dir = $config_dir;
+        $this->setConfigDir($config_dir);
 
         // --------------------------------------------------------------------
         // Template directory
         // --------------------------------------------------------------------
 
-        // Assume the templates are located in templates directory
-        $template_dir = $GLOBALS['CONFIG']['PATH'] . "/templates/$partition/$module/";
-        $template_dir_fallback = $GLOBALS['CONFIG']['PATH'] . "/templates/sux0r/$module/";
-
-        if($partition != 'sux0r' && !is_dir($template_dir)) {
-            // We didn't find anything, but the partition wasn't default, let's try with default
-            $template_dir = $template_dir_fallback;
-        }
-
-        if(!is_dir($template_dir)) {
-            // No templates
-            throw new Exception('Missing template dir ' . $template_dir);
-        }
 
         $this->module = $module;
         $this->partition = $partition;
-        $this->template_dir = $template_dir;
-        $this->template_dir_fallback = $template_dir_fallback;
+
+        $this->setTemplateDir(array(
+        		$GLOBALS['CONFIG']['PATH'] . "/templates/$partition/$module/",
+            $GLOBALS['CONFIG']['PATH'] . "/templates/sux0r/$module/"
+            ));
 
     }
 
@@ -149,33 +139,6 @@ class suxTemplate extends Smarty {
 
     }
 
-
-
-    // --------------------------------------------------------------------
-    // Override Smarty Functions
-    // --------------------------------------------------------------------
-
-    /**
-    * Override Smarty fetch() function to look for content in various places
-    *
-    * @param string $template the resource handle of the template file or template object
-    * @param mixed $cache_id cache id to be used with this template
-    * @param mixed $compile_id compile id to be used with this template
-    * @param object $ |null $parent next higher level of Smarty variables
-    * @return string rendered template output
-    */
-    function fetch($template, $cache_id = null, $compile_id = null, $parent = null, $display = false) {
-        
-        if (preg_match('/^file:/', $template) || file_exists($this->template_dir . $template)) {
-            return parent::fetch($template, $cache_id, $compile_id, $parent, $display);
-        }
-        elseif ($this->template_dir != $this->template_dir_fallback)  {
-            // Fallback
-            $location = $this->template_dir_fallback . $template;
-            return parent::fetch("file:$location", $cache_id, $compile_id, $parent, $display);
-        }
-        
-    }
 
 }
 

@@ -1,4 +1,4 @@
-http://www.sux0r.org/
+http://sux0r.trotch.com/
 All spelling mistakes are final and will not be refunded
 
 

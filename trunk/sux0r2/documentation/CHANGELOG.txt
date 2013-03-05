@@ -1,4 +1,9 @@
 
+
+Changed URLs from sux0r.org to sux0r.trotch.com
+
+Updated htmLawed to 1.1.14, Smarty 3.1.13, Smarty Validate 3.0.3
+
 Fixed minor SmartyValidate bugs
 
 Improved breadcrumb algorithm
