@@ -51,7 +51,12 @@ class suxValidate extends SmartyValidate {
                 SmartyValidate::disconnect(true);
                 return true;
             }
+            else {
+                SmartyValidate::disconnect(true);
+                return false;
+            }
         }
+
         return false;
 
     }
