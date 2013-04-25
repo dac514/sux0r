@@ -48,12 +48,8 @@ class suxValidate extends SmartyValidate {
             self::connect($tpl);
 
             if(self::is_valid($dirty, $form)) {
-                SmartyValidate::disconnect(true);
+                SmartyValidate::disconnect();
                 return true;
-            }
-            else {
-                SmartyValidate::disconnect(true);
-                return false;
             }
         }
 
