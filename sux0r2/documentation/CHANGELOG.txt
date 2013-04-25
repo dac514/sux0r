@@ -1,4 +1,11 @@
 
+------------------------------------------------------------------------------
+sux0r 2.2.1
+------------------------------------------------------------------------------
+
+Removed iis_web_pi directory, no longer maintained.
+
+Simplify the way we handle security tokens in forms.
 
 Changed URLs from sux0r.org to sux0r.trotch.com
 
