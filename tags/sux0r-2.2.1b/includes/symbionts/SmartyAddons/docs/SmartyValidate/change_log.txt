@@ -1,0 +1,15 @@
+3.0.2
+=====
+
+add set_form() so form values are not passed around after initial setting
+make disconnect() only reset current form by default
+
+3.0.1
+=====
+
+fix E_STRICT warnings, fix constructor for PHP5
+
+3.0
+===
+
+- Make SmartyValidate Smarty 3.0 compliant
