@@ -48,7 +48,7 @@ class suxTemplate extends Smarty {
         else $partition = $GLOBALS['CONFIG']['PARTITION'];
 
         $this->setModule($module, $partition);
-
+        $this->setToken();
     }
 
 
@@ -137,6 +137,24 @@ class suxTemplate extends Smarty {
             );
         return htmLawed($html, $config);
 
+    }
+
+
+    /**
+    * Set a random token that we can check against (for form spoofing.)
+    * Will be available as {$token} in Smarty template
+    *
+    * @global array $_SESSION['_sux0r_tokens']
+    */
+    function setToken() {
+
+        $token = md5(uniqid(mt_rand(), true));
+        $this->assign('token', $token);
+
+        // Store token for later
+        if (!isset($_SESSION['_sux0r_tokens'])) $_SESSION['_sux0r_tokens'] = array();
+        array_unshift($_SESSION['_sux0r_tokens'], $token);
+        $_SESSION['_sux0r_tokens'] = array_slice($_SESSION['_sux0r_tokens'], 0, 20); // maximum 20
     }
 
 
