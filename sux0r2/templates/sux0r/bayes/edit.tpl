@@ -80,9 +80,11 @@
 
 
 
+        {* FIXME: Form is not always $form_name
         {if $validate.$form_name.is_error !== false}
         <p class="errorWarning">{$r->gtext.form_error} :</p>
         {/if}
+        *}
 
         <fieldset>
         <legend>{$r->gtext.vectors}</legend>
