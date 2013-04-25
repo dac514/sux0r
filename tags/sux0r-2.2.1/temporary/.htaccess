@@ -1,2 +1,0 @@
-# tmp files should not be publicly accessible
-deny from all
