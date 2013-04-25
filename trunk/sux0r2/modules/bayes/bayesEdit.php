@@ -80,7 +80,7 @@ class bayesEdit extends component {
         // --------------------------------------------------------------------
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
-        else suxValidate::disconnect();
+        else suxValidate::disconnect(true);
 
         if (empty($dirty['action']) || !suxValidate::is_registered_form($dirty['action'])) {
 
