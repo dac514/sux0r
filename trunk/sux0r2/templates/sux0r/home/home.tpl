@@ -1,7 +1,7 @@
 {capture name=header}
 
 {* Latest version *}
-{assign var='version' value='2.2.0'}
+{assign var='version' value='2.2.1'}
 
 {/capture}{strip}
 {$r->assign('header', $smarty.capture.header)}
