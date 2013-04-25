@@ -1,0 +1,67 @@
+#leftside {
+    margin: 10px;
+    width: 160px;
+}
+
+#leftside ul {
+    margin-left: 15px;
+    padding: 0;
+}
+
+#leftside li {
+    margin-bottom: 4px;
+}
+
+
+#rightside {
+    width: 738px;
+}
+
+
+.widerInput {
+    width: 350px;
+}
+
+.categoryContainer {
+    border: 1px dashed #ccc;
+    padding: 10px;
+}
+
+.rssItem a:link, .rssItem a:visited, .rssItem a:active {
+    color: #000000;
+    text-decoration: none;
+    font-style: italic;
+}
+
+.rssItem a:hover {
+    color: red;
+    background: none;
+}
+
+.rssItem img {
+    border: none;
+}
+
+.rssItem h1, .rssItem h2, .rssItem h3, .rssItem h4, .rssItem h5, .rssItem h6 {
+    background-color: transparent !important;
+    background-image: none !important;
+    font-size: medium !important;
+}
+
+.readMore {
+    height: 1%; /* IE6, Holly Hack */
+}
+
+.approveItem {
+    border: 1px dashed #ccc;
+    padding: 10px;
+    margin: 10px;
+}
+
+.approveItemOptions {
+    margin-top: 20px;
+}
+
+.feedTable td {
+    padding-right: 30px;
+}

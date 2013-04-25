@@ -1,0 +1,107 @@
+<?php
+
+// Always UTF-8
+// Always uppercase the first word
+
+$gtext['acquaintances'] = 'Conoscenti';
+$gtext['alert_detach'] = 'Sicuri di voler rimuovere questo OpenID dal vostro account?';
+$gtext['avatar'] = 'Avatar';
+$gtext['back'] = 'Indietro';
+$gtext['blog'] = 'Blog';
+$gtext['bookmarks'] = 'Preferiti';
+$gtext['cancel'] = 'Annulla';
+$gtext['captcha'] = 'Codice anti-spam';
+$gtext['changed_avatar'] = 'Hanno cambiato il loro avatar';
+$gtext['changed_profile'] = 'Hanno cambiato il loro profilo';
+$gtext['country'] = 'Nazione';
+$gtext['detach'] = 'Detach'; # Check
+$gtext['dob'] = 'Giorno di nascita'; # Check - compleanno?
+$gtext['edit_avatar'] = 'Modifica Avatar';
+$gtext['edit_bayes'] = 'Modifica Filtri Bayes';
+$gtext['editing'] = 'Modifica'; # Check
+$gtext['edit_openid'] = 'Modifica OpenID';
+$gtext['edit_profile'] = 'Modifica Profilo';
+$gtext['edit_relationship'] = 'Modifica Legame';
+$gtext['email'] = 'Email';
+$gtext['extensions'] = 'Estensioni supportate';
+$gtext['family_name'] = 'Cognome';
+$gtext['feeds'] = 'Feed';
+$gtext['female'] = 'Femmina';
+$gtext['form_error_10'] = 'URL duplicato';
+$gtext['form_error_11'] = 'Captcha non valido';
+$gtext['form_error_12'] = 'Fallimento dell\'integrità dei dati'; # Check ??
+$gtext['form_error_13'] = '"nobody" è riservato, per favore utilizzare un altro nick';
+$gtext['form_error_14'] = 'Tipo di file non valido';
+$gtext['form_error_15'] = 'File troppo grande';
+$gtext['form_error_16'] = 'Nickname/email non possono essere vuoti';
+$gtext['form_error_17'] = 'L\'utente non esiste';
+$gtext['form_error_1'] = 'Nickname non può essere vuoto';
+$gtext['form_error_2'] = 'Caratteri non validi';
+$gtext['form_error_3'] = 'Nickname duplicato';
+$gtext['form_error_4'] = 'E-Mail non valida';
+$gtext['form_error_5'] = 'E-Mail duplicata';
+$gtext['form_error_6'] = 'Minimo 6 caratteri';
+$gtext['form_error_7'] = 'Le password non coincidono';
+$gtext['form_error_8'] = 'L\'URL non può essere vuoto';
+$gtext['form_error_9'] = 'URL non valido';
+$gtext['form_error'] = 'La form non è stata inviata, verificare gli errori';
+$gtext['form_problem'] = 'La form non è stata inviata, per favore riprovare';
+$gtext['friends'] = 'Amici';
+$gtext['gender'] = 'Sesso';
+$gtext['given_name'] = 'Nome';
+$gtext['homepage'] = 'Torna alla homepage';
+$gtext['image'] = 'Immagine';
+$gtext['lament'] = 'Che stai facendo?';
+$gtext['language'] = 'Lingua';
+$gtext['locality'] = 'Città';
+$gtext['logout2'] = 'Questo sito utilizza <a href="http://en.wikipedia.org/wiki/Digest_access_authentication">HTTP Digest Authentication</a>, dovete uscire dal vostro browser. Questo perché il vostro browser altrimenti salverebbe le vostre credenziali e vi farebbe di nuovo accedere la prossima volta. Non vedreste il box di login. Vi sembrerebbe di non aver mai effettuato il logout.';
+$gtext['logout'] = 'Logout completato';
+$gtext['male'] = 'Maschio';
+$gtext['max_filesize'] = 'Massime dimensioni del file';
+$gtext['minifeed'] = 'Mini-feed';
+$gtext['name'] = 'Nome';
+$gtext['nickname'] = 'Nickname';
+$gtext['nickname_or_email'] = 'Nickname o email';
+$gtext['nothing'] = 'Niente da vedere, qui';
+$gtext['ok'] = 'Ok';
+$gtext['openid_login'] = 'OpenID Login';
+$gtext['openid_msg_1'] = 'I seguenti OpenID sono collegati al vostro account. Potete usarne uno qualsiasi per entrare';
+$gtext['openid_msg_2'] = 'I seguenti OpenID consumer sono riconosciuti da questo account.';
+$gtext['openid_none_2'] = 'Non ci sono OpenID consumer riconosciuti da questo account';
+$gtext['openid_none'] = 'Non c\'è nessun OpenID collegato a questo account';
+$gtext['openid'] = 'OpenID';
+$gtext['openid_register'] = 'Registra un nuovo OpenID';
+$gtext['openid_reg'] = 'Registrazione con OpenID'; # Check
+$gtext['password'] = 'Password';
+$gtext['password_verify'] = 'Verifica password';
+$gtext['photoalbums'] = 'Album';
+$gtext['postcode'] = 'CAP';
+$gtext['previous_page'] = 'Torna alla pagina precedente';
+$gtext['profile_intro'] = 'Questo profilo / URL è una pagina OpenID Identity';
+$gtext['profile_of'] = 'Profilo di';
+$gtext['profile'] = 'Profilo';
+$gtext['pw_failure_2'] = 'Troppi tentativi di accesso errati, dovete chiudere e riaprire il browser per riprovare.';
+$gtext['pw_failure_3'] = 'Avete dimenticato la password? Fatevene inviare una nuova per mail';
+$gtext['pw_failure'] = 'Troppi tentativi di accesso errati';
+$gtext['region'] = 'Provincia';
+$gtext['reg'] = 'Registrazione';
+$gtext['reset_2'] = 'Una nuova password vi verrà inviata via mail.';
+$gtext['reset_mail_1'] = 'Nuova password per';
+$gtext['reset_mail_2'] = 'La vostra nuova password è';
+$gtext['reset_mail_3'] = 'Una volta effettuato il login fate in modo di <b>cambiare la vostra password!</b> Se avete ricevuto questo messaggio senza richiederlo, allora qualcuno ha richiesto una password al posto vostro. L\'IP usato è stato';
+$gtext['reset'] = 'Reimposta password';
+$gtext['saving'] = 'Saving'; # Check
+$gtext['stalkers'] = 'Stalkers'; # Check
+$gtext['street_address'] = 'Indirizzo';
+$gtext['submit'] = 'Invia';
+$gtext['success_edit'] = 'Sembra tutto a posto, verrete rediretti entro 5 secondi.';
+$gtext['success_register'] = 'Grazie per aver completato la form di registrazione, ora potete accedere.';
+$gtext['success'] = 'Successo!';
+$gtext['tel'] = 'Telefono';
+$gtext['thanks'] = 'Grazie per esservi registrati!';
+$gtext['timezone'] = 'Timezone';
+$gtext['unset_image'] = 'Togli l\'immagine corrente';
+$gtext['url'] = 'URL';
+
+
+?>
