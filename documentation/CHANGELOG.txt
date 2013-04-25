@@ -1,0 +1,235 @@
+------------------------------------------------------------------------------
+sux0r 2.2.0
+------------------------------------------------------------------------------
+
+New shiekasai theme/partition
+
+Upgraded to Smarty 3, a lot of work :)
+
+Replaced Prototype/Scriptaculous with jQuery-UI and some addons, even more work
+
+Added __autoload() function, removed manually declared includes/requires
+
+Added language _override feature for cases where you want the same unilingual
+string everywhere
+
+Config setting allowing admin to turn off bayes filtering for blog, feeds,
+and/or bookmarks
+
+IIS WebPI efforts
+
+Recursively scan zip files when uploading photos
+
+Remove <!-- comments --> when sanitizing HTML for all languages
+
+Fix: User was unable to login if language was german or chinese
+
+Fix: Language and template inheritance related bugs. Example, language files
+were ignored when using a partition other than default
+
+Fix: Set $controller to 'globals' when banned or 404
+
+Fix: A redirect issue in 404 and banned templates
+
+General code cleanup, other stuff I probably forgot
+
+Updated symbionts: htmLawed 1.1.9.4, Smarty 3.0.7, SmartyValidate 3.0.2+
+jQuery-UI 1.8.10, Jeditable 1.7.1, Jcrop 0.9.8, TinyMCE 3.3.9.3
+
+------------------------------------------------------------------------------
+sux0r 2.1.0
+------------------------------------------------------------------------------
+
+Refactoring:
+
+Since bayesRenderer is reused, it was moved to the extensions/ directory.
+Child classes now inherit instead of instatiate.  It was also renamed to
+suxBayesRenderer. In addition, bayesUser was renamed to  suxUserNaiveBayesian
+to in an attempt to make things clearer. Same for openid class.
+
+Moved the Banned and 404 templates out of the root directory, added them to
+the globals module
+
+Renamed the config.php and .htaccess files, turned them into sample files
+instead
+
+Pre-pended 'ajax.' to all files that are called correspondingly
+
+Added a DEBUG mode to the advanced configuration file
+
+Updated documentation
+
+Updated symbionts: Scriptaculous 1.8.3, TinyMCE 3.2.7
+
+------------------------------------------------------------------------------
+sux0r 2.0.7
+------------------------------------------------------------------------------
+
+Change from $cache_id = false to $cache_id = null to remove redundant template
+display condition
+
+Added rounded borders and drop shadows to #proselytizer with non-standards
+compliant CSS
+
+Fixed JavaScript menus: Z-index only works on elements that are
+position:absolute
+
+Bugfix: Weird & character was showing in photoalbum lists
+
+Minor changes to code comments and formatting for legibility reasons
+
+Stopwords were corrupted. Converted back to proper UTF-8 format
+
+Moved  killSession() function to suxUser() class
+
+If available, try to use iconv //TRANSLIT for RSS feeds
+
+Reduce SQL queries when doing loginCheck()
+
+Changed the behavior of the <select> list to make it easier to initially train
+documents
+
+Changed the way we ignore indexes to be compatible with XAMPP and ~/user_dirs
+
+Minor optimization to the getPreviousUrl() function
+
+Use comma to concatenate echo() where appropriate
+
+Updated symbionts: Smarty 2.6.26, TinyMCE 3.2.5
+
+------------------------------------------------------------------------------
+sux0r 2.0.6
+------------------------------------------------------------------------------
+
+Italian translation
+
+A few tweaks to make sux0r IIS 7 compatible
+
+Bugfix: Editing a blog wasn't working with Postgres
+
+Converted all tables to Innodb, tried to optimize SQL indexes
+
+Changed link_table_ naming convention to: link__table__
+
+Updated symbionts: Smarty 2.6.25, TinyMCE 3.2.4.1
+
+------------------------------------------------------------------------------
+sux0r 2.0.5
+------------------------------------------------------------------------------
+
+Fixed a rare infinite redirect problem
+
+Fixed a bug with bookmarks menu
+
+Added log buttons in user administration menu
+
+Optimized: don't call suxNaiveBayesian destructor unless logged-in
+
+Fixed bug #2754647: Can't Edit Un-approved Feed
+
+Migrated captcha from jpGraph to Securimage
+
+Removed symbiont jpGraph. It was taking too much space and was not being used.
+
+Updated symbionts: htmLawed 1.1.8, TinyMCE 3.2.3
+
+------------------------------------------------------------------------------
+sux0r 2.0.4
+------------------------------------------------------------------------------
+
+Changed license from AGPL to GPL
+
+Refactarded all up in the code
+
+Added JavaScript menus
+
+Fixed a bug that was preventing login using WAMP
+
+Fixed a search highlighting bug
+
+Fixed a bug where Smarty would crash if an apostraphe was in $title of widget()
+
+Removed redundant security checks from several modules.
+
+Added the ability to permanently delete a user
+
+Updated symbionts: htmLawed 1.1.7.2
+
+------------------------------------------------------------------------------
+sux0r 2.0.3
+------------------------------------------------------------------------------
+
+Fallback to cURL if allow_url_fopen is disabled.
+
+HTTP Authorization fix when using PHP in CGI mode
+
+Moved inline HTML in suxRenderer() to various templates
+
+Updated symbionts: htmLawed 1.1.6, JpGraph 2.3.4
+
+------------------------------------------------------------------------------
+sux0r 2.0.2
+------------------------------------------------------------------------------
+
+General bugfixes and optimizations
+
+Various changes related to problems when clean_url was false
+
+Changed renderer variable naming conventions. It was too confusing to
+know where a variable was comming from whev everything was named
+r->text.somekey.
+
+Moved language files into template directories.
+
+Using PDO::ATTR_EMULATE_PREPARES in suxDB to handle MySql's (lack of) caching
+
+Work in progress: In an effort to improve results on skewed training data, I
+am trying to adjust the value of the fake probability to that of the average of
+the token count for the vector.
+
+Bugfix: array_merge() re-numbered keys which was causing problems with the
+redunancy checking in Naive Bayesian filtering
+
+Changes to photo templates, go to next when user clicks on an image
+
+Added ability to purge user logs and RSS feeds
+
+Moved some esoteric config options to config.advanced.php
+
+Moved LICENSE.txt to the documentation directory, updated README files
+
+Updated symbionts: htmLawed 1.1.2, Smarty 2.6.22, TinyMCE 3.2.1.1
+
+------------------------------------------------------------------------------
+sux0r 2.0.1
+------------------------------------------------------------------------------
+
+Support for microformats hcard specification in user profile page
+
+AGPL exception for templates (html/css/graphics), simple permissive terms
+
+Template tweaks: changed admin menus, sprinkled some javascript in photos, etc
+
+purge_orphans script in supplemental directory to clean up deleted images and
+corrupted link tables
+
+Ability for user to reset their lost password (TODO: translate)
+
+Support for Atom 1.0 in suxRss()
+
+Regex improvements in suxHtml2UTF8()
+
+Fixed a problem where Naive Bayesian filtering was redundantly re-scanning
+items when limit was not yet reached
+
+New option in config file allows you to turn off Naive Bayesian categorization
+and automatic bookmark scanning, in case you want to use sux0r as a vanilla
+blog. (update your config.php files accordingly)
+
+Updated symbionts: Scriptaculous 1.8.2, TinyMCE 3.2.1
+
+------------------------------------------------------------------------------
+sux0r 2.0
+------------------------------------------------------------------------------
+
+Initial incarnation

@@ -1,0 +1,85 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Chapter 11. Constants</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="smarty.for.programmers.html" title="Part III. Smarty For Programmers">
+<link rel="prev" href="smarty.for.programmers.html" title="Part III. Smarty For Programmers">
+<link rel="next" href="api.variables.html" title="Chapter 12. Smarty Class Variables">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Chapter 11. Constants</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="smarty.for.programmers.html">Prev</a> </td>
+<th width="60%" align="center">Part III. Smarty For Programmers</th>
+<td width="20%" align="right"> <a accesskey="n" href="api.variables.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="chapter" title="Chapter 11. Constants">
+<div class="titlepage"><div><div><h2 class="title">
+<a name="smarty.constants"></a>Chapter 11. Constants</h2></div></div></div>
+<div class="toc">
+<p><b>Table of Contents</b></p>
+<dl><dt><span class="sect1"><a href="smarty.constants.html#constant.smarty.dir">SMARTY_DIR</a></span></dt></dl>
+</div>
+<div class="sect1" title="SMARTY_DIR">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="constant.smarty.dir"></a>SMARTY_DIR</h2></div></div></div>
+<p>
+     This is the <span class="bold"><strong>full system path</strong></span>
+     to the location of the Smarty
+     class files. If this is not defined in your script, then Smarty will attempt to
+     determine the appropriate value automatically. If defined, the path
+     <span class="bold"><strong>must end with a trailing slash/</strong></span>.
+    </p>
+<div class="example">
+<a name="id3091072"></a><p class="title"><b>Example 11.1. SMARTY_DIR</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+// set path to Smarty directory *nix style
+define('SMARTY_DIR', '/usr/local/lib/php/Smarty-v.e.r/libs/');
+
+// path to Smarty windows style
+define('SMARTY_DIR', 'c:/webroot/libs/Smarty-v.e.r/libs/');
+
+// include the smarty class, note 'S' is upper case
+require_once(SMARTY_DIR . 'Smarty.class.php');
+?&gt;
+
+     </pre></div>
+</div>
+<br class="example-break"><p>
+  See also
+  <a class="link" href="language.variables.smarty.html#language.variables.smarty.const" title="{$smarty.const}"><em class="parameter"><code>$smarty.const</code></em></a>
+  and
+  <a class="link" href="variable.php.handling.html" title="$php_handling"><em class="parameter"><code>$php_handling constants</code></em></a>
+  </p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="smarty.for.programmers.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="smarty.for.programmers.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="api.variables.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Part III. Smarty For Programmers </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Chapter 12. Smarty Class Variables</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

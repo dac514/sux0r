@@ -1,0 +1,114 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>string_format</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="language.modifiers.html" title="Chapter 5. Variable Modifiers">
+<link rel="prev" href="language.modifier.spacify.html" title="spacify">
+<link rel="next" href="language.modifier.strip.html" title="strip">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">string_format</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="language.modifier.spacify.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 5. Variable Modifiers</th>
+<td width="20%" align="right"> <a accesskey="n" href="language.modifier.strip.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="string_format">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="language.modifier.string.format"></a>string_format</h2></div></div></div>
+<p>
+     This is a way to format strings, such as decimal numbers and such.
+     Use the syntax for
+     <a class="ulink" href="http://php.net/sprintf" target="_top"><code class="varname">sprintf()</code></a>
+     for the formatting.
+  </p>
+<div class="informaltable"><table border="1">
+<colgroup>
+<col align="center">
+<col align="center">
+<col align="center">
+<col align="center">
+<col>
+</colgroup>
+<thead><tr>
+<th align="center">Parameter Position</th>
+<th align="center">Type</th>
+<th align="center">Required</th>
+<th align="center">Default</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">string</td>
+<td align="center">Yes</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>This is what format to use. (sprintf)</td>
+</tr></tbody>
+</table></div>
+<div class="example">
+<a name="id3035300"></a><p class="title"><b>Example 5.18. string_format</b></p>
+<div class="example-contents">
+<pre class="programlisting">
+
+&lt;?php
+
+$smarty-&gt;assign('number', 23.5787446);
+
+?&gt;
+
+   </pre>
+<p>
+    Where template is:
+   </p>
+<pre class="programlisting">
+
+{$number}
+{$number|string_format:"%.2f"}
+{$number|string_format:"%d"}
+
+   </pre>
+<p>
+    Will output:
+   </p>
+<pre class="screen">
+
+23.5787446
+23.58
+24
+
+   </pre>
+</div>
+</div>
+<br class="example-break"><p>
+   See also
+   <a class="link" href="language.modifier.date.format.html" title="date_format"><code class="varname">date_format</code></a>.
+  </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="language.modifier.spacify.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="language.modifiers.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="language.modifier.strip.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">spacify </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> strip</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

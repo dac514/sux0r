@@ -1,0 +1,101 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Chapter 10. Debugging Console</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="smarty.for.designers.html" title="Part II. Smarty For Template Designers">
+<link rel="prev" href="config.files.html" title="Chapter 9. Config Files">
+<link rel="next" href="smarty.for.programmers.html" title="Part III. Smarty For Programmers">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Chapter 10. Debugging Console</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="config.files.html">Prev</a> </td>
+<th width="60%" align="center">Part II. Smarty For Template Designers</th>
+<td width="20%" align="right"> <a accesskey="n" href="smarty.for.programmers.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="chapter" title="Chapter 10. Debugging Console">
+<div class="titlepage"><div><div><h2 class="title">
+<a name="chapter.debugging.console"></a>Chapter 10. Debugging Console</h2></div></div></div>
+<p>
+  There is a debugging console included with Smarty. The console informs you
+  of all the
+  <a class="link" href="language.function.include.html" title="{include}">included</a> templates,
+  <a class="link" href="api.assign.html" title="assign()">assigned</a> variables and
+  <a class="link" href="language.config.variables.html" title="Variables loaded from config files">config</a>
+  file variables for the current invocation of the template. A template file
+  named <code class="literal">debug.tpl</code> is included with the distribution of
+  Smarty which controls the formatting of the console.
+  </p>
+<p>
+  Set  <a class="link" href="variable.debugging.html" title="$debugging"><em class="parameter"><code>$debugging</code></em></a>
+  to <code class="constant">TRUE</code> in Smarty, and if needed set <a class="link" href="variable.debug_template.html" title="$debug_tpl">
+  <em class="parameter"><code>$debug_tpl</code></em></a> to the template resource path to
+  <code class="literal">debug.tpl</code> (this is in <a class="link" href="smarty.constants.html#constant.smarty.dir" title="SMARTY_DIR">
+  <code class="constant">SMARTY_DIR</code></a> by default).
+  When you load the page, a Javascript console window will pop up
+  and give you the names of all the included templates and assigned variables
+  for the current page.</p>
+<p>To see the available variables for a particular
+  template, see the <a class="link" href="language.function.debug.html" title="{debug}">
+  <code class="varname">{debug}</code></a> template function.
+  To disable the debugging console, set
+  <a class="link" href="variable.debugging.html" title="$debugging"><em class="parameter"><code>$debugging</code></em></a> to
+  <code class="constant">FALSE</code>. You can also temporarily turn on the debugging console by putting
+  <code class="literal">SMARTY_DEBUG</code> in the URL if you enable this option with
+  <a class="link" href="variable.debugging.ctrl.html" title="$debugging_ctrl"><em class="parameter"><code>$debugging_ctrl</code></em>
+  </a>.
+ </p>
+<div class="note" title="Technical Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Technical Note</h3>
+<p>
+   The debugging console does not work when you use the
+   <a class="link" href="api.fetch.html" title="fetch()"><code class="varname">fetch()</code></a>
+   API, only when using  <a class="link" href="api.display.html" title="display()">
+   <code class="varname">display()</code></a>.
+   It is a set of javascript statements added
+   to the very bottom of the generated template. If you do not like javascript,
+   you can edit the <code class="literal">debug.tpl</code> template to format the output
+   however you like.  Debug data is not cached and <code class="literal">debug.tpl</code>
+    info is not included in the output of the debug console.
+  </p>
+</div>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+   The load times of each template and config file are in seconds, or
+   fractions thereof.
+  </p>
+</div>
+<p>
+    See also
+    <a class="link" href="troubleshooting.html" title="Chapter 17. Troubleshooting">troubleshooting</a>.
+   </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="config.files.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="smarty.for.designers.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="smarty.for.programmers.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Chapter 9. Config Files </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Part III. Smarty For Programmers</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

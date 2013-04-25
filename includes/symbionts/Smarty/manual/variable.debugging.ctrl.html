@@ -1,0 +1,73 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>$debugging_ctrl</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="api.variables.html" title="Chapter 12. Smarty Class Variables">
+<link rel="prev" href="variable.debug_template.html" title="$debug_tpl">
+<link rel="next" href="variable.auto.literal.html" title="$auto_literal">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">$debugging_ctrl</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="variable.debug_template.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 12. Smarty Class Variables</th>
+<td width="20%" align="right"> <a accesskey="n" href="variable.auto.literal.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="$debugging_ctrl">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="variable.debugging.ctrl"></a>$debugging_ctrl</h2></div></div></div>
+<p>
+       This allows alternate ways to enable debugging. <code class="literal">NONE</code>
+        means no  alternate methods are allowed. <code class="literal">URL</code>
+        means when the keyword <code class="literal">SMARTY_DEBUG</code> is found in the
+        <code class="literal">QUERY_STRING</code>, debugging is enabled for that
+        invocation of the script. If <a class="link" href="variable.debugging.html" title="$debugging">
+        <em class="parameter"><code>$debugging</code></em></a> is <code class="constant">TRUE</code>, this value is ignored.
+      </p>
+<div class="example">
+<a name="id3092833"></a><p class="title"><b>Example 12.3. $debugging_ctrl on localhost</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+// shows debug console only on localhost ie
+// http://localhost/script.php?foo=bar&amp;SMARTY_DEBUG
+$smarty-&gt;debugging = false; // the default
+$smarty-&gt;debugging_ctrl = ($_SERVER['SERVER_NAME'] == 'localhost') ? 'URL' : 'NONE';
+?&gt;
+
+</pre></div>
+</div>
+<br class="example-break"><p>
+      See also <a class="link" href="chapter.debugging.console.html" title="Chapter 10. Debugging Console">debugging console</a>
+     section and
+     <a class="link" href="variable.debugging.html" title="$debugging"><em class="parameter"><code>$debugging</code></em></a>.
+      </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="variable.debug_template.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="api.variables.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="variable.auto.literal.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">$debug_tpl </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> $auto_literal</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

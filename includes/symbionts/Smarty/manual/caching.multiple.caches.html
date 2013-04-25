@@ -1,0 +1,156 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Multiple Caches Per Page</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="caching.html" title="Chapter 14. Caching">
+<link rel="prev" href="caching.html" title="Chapter 14. Caching">
+<link rel="next" href="caching.groups.html" title="Cache Groups">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Multiple Caches Per Page</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="caching.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 14. Caching</th>
+<td width="20%" align="right"> <a accesskey="n" href="caching.groups.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="Multiple Caches Per Page">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="caching.multiple.caches"></a>Multiple Caches Per Page</h2></div></div></div>
+<p>
+     You can have multiple cache files for a single call to
+     <a class="link" href="api.display.html" title="display()"><code class="varname">display()</code></a>
+     or <a class="link" href="api.fetch.html" title="fetch()"><code class="varname">fetch()</code></a>.
+     Let's say that a call to <code class="literal">display('index.tpl')</code> may have
+     several different output contents depending on some condition, and you want
+     separate caches for each one. You can do this by passing a
+     <em class="parameter"><code>$cache_id</code></em> as the second parameter to the
+     function call.
+    </p>
+<div class="example">
+<a name="id3121688"></a><p class="title"><b>Example 14.6. Passing a $cache_id to display()</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+require('Smarty.class.php');
+$smarty = new Smarty;
+
+$smarty-&gt;caching = Smarty::CACHING_LIFETIME_CURRENT;
+
+$my_cache_id = $_GET['article_id'];
+
+$smarty-&gt;display('index.tpl', $my_cache_id);
+?&gt;
+
+     </pre></div>
+</div>
+<br class="example-break"><p>
+     Above, we are passing the variable <code class="literal">$my_cache_id</code> to
+     <a class="link" href="api.display.html" title="display()"><code class="varname">display()</code></a>
+     as the <em class="parameter"><code>$cache_id</code></em>. For each unique value of
+     <code class="literal">$my_cache_id</code>, a separate cache will be
+     generated for <code class="filename">index.tpl</code>. In this example,
+     <code class="literal">article_id</code> was passed in the
+     URL and is used as the <em class="parameter"><code>$cache_id</code></em>.
+    </p>
+<div class="note" title="Technical Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Technical Note</h3>
+<p>
+      Be very cautious when passing values from a client (web browser) into
+      Smarty or any PHP application. Although the above example of using the
+      article_id from the URL looks handy, it could have bad consequences. The
+      <em class="parameter"><code>$cache_id</code></em> is used to create a directory on the file
+      system, so if the user
+      decided to pass an extremely large value for article_id, or write a script
+      that sends random article_id's at a rapid pace, this could possibly cause
+      problems at the server level. Be sure to sanitize any data passed in before
+      using it. In this instance, maybe you know the article_id has a length of
+      ten characters and is made up of alpha-numerics only, and must be a valid
+      article_id in the database. Check for this!
+     </p>
+</div>
+<p>
+     Be sure to pass the same <em class="parameter"><code>$cache_id</code></em> as the
+     second parameter to
+     <a class="link" href="api.is.cached.html" title="isCached()"><code class="varname">is_cached()</code></a> and
+     <a class="link" href="api.clear.cache.html" title="clearCache()"><code class="varname">clear_cache()</code></a>.
+    </p>
+<div class="example">
+<a name="id3122991"></a><p class="title"><b>Example 14.7. Passing a cache_id to is_cached()</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+require('Smarty.class.php');
+$smarty = new Smarty;
+
+$smarty-&gt;caching = Smarty::CACHING_LIFETIME_CURRENT;
+
+$my_cache_id = $_GET['article_id'];
+
+if(!$smarty-&gt;is_cached('index.tpl',$my_cache_id)) {
+    // No cache available, do variable assignments here.
+    $contents = get_database_contents();
+    $smarty-&gt;assign($contents);
+}
+
+$smarty-&gt;display('index.tpl',$my_cache_id);
+?&gt;
+
+     </pre></div>
+</div>
+<br class="example-break"><p>
+     You can clear all caches for a particular <em class="parameter"><code>$cache_id</code></em>
+     by passing <code class="constant">NULL</code> as the
+     first parameter to
+     <a class="link" href="api.clear.cache.html" title="clearCache()"><code class="varname">clear_cache()</code></a>.
+    </p>
+<div class="example">
+<a name="id3123042"></a><p class="title"><b>Example 14.8. Clearing all caches for a particular $cache_id</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+&lt;?php
+require('Smarty.class.php');
+$smarty = new Smarty;
+
+$smarty-&gt;caching = Smarty::CACHING_LIFETIME_CURRENT;
+
+// clear all caches with "sports" as the $cache_id
+$smarty-&gt;clear_cache(null,'sports');
+
+$smarty-&gt;display('index.tpl','sports');
+?&gt;
+
+     </pre></div>
+</div>
+<br class="example-break"><p>
+     In this manner, you can <span class="quote">“<span class="quote">group</span>”</span> your caches together by giving
+     them the same <em class="parameter"><code>$cache_id</code></em>.
+    </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="caching.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="caching.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="caching.groups.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Chapter 14. Caching </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> Cache Groups</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

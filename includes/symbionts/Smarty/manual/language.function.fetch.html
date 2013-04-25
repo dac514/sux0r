@@ -1,0 +1,156 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{fetch}</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="Smarty3 Manual">
+<link rel="up" href="language.custom.functions.html" title="Chapter 8. Custom Functions">
+<link rel="prev" href="language.function.eval.html" title="{eval}">
+<link rel="next" href="language.function.html.checkboxes.html" title="{html_checkboxes}">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">{fetch}</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="language.function.eval.html">Prev</a> </td>
+<th width="60%" align="center">Chapter 8. Custom Functions</th>
+<td width="20%" align="right"> <a accesskey="n" href="language.function.html.checkboxes.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect1" title="{fetch}">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="language.function.fetch"></a>{fetch}</h2></div></div></div>
+<p>
+   <code class="varname">{fetch}</code> is used to retrieve files from the
+   local file system, http, or ftp and display the contents.
+   </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+<p>
+   If the file name begins with
+   <em class="parameter"><code>http://</code></em>, the web site page will be fetched and displayed.
+	</p>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+	   This will not support http redirects, be sure to
+	   include a trailing slash on your web page fetches where necessary.
+	  </p>
+</div>
+<p>
+	</p>
+</li>
+<li class="listitem"><p>
+   If the  file name begins with <em class="parameter"><code>ftp://</code></em>, the file will
+   be downloaded from the ftp server and displayed.
+   </p></li>
+<li class="listitem">
+<p>
+   For local files, either a full system file path
+    must be given, or a path relative to the executed php script.
+	 </p>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>If security is enabled and you are fetching a file from the local file system, <code class="varname">{fetch}</code>
+	   will only allow files from within the <em class="parameter"><code>$secure_dir</code></em> path of the securty policy.
+	   See the <a class="link" href="advanced.features.html#advanced.features.security" title="Security">Security</a> section for details.
+	  </p>
+</div>
+<p>
+  </p>
+</li>
+<li class="listitem"><p>
+   If the <em class="parameter"><code>assign</code></em> attribute is set, the output of the
+   <code class="varname">{fetch}</code> function will be assigned to this template
+   variable instead of being output to the template.
+   </p></li>
+</ul></div>
+<div class="informaltable"><table border="1">
+<colgroup>
+<col align="center">
+<col align="center">
+<col align="center">
+<col align="center">
+<col>
+</colgroup>
+<thead><tr>
+<th align="center">Attribute Name</th>
+<th align="center">Type</th>
+<th align="center">Required</th>
+<th align="center">Default</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="center">file</td>
+<td align="center">string</td>
+<td align="center">Yes</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>The file, http or ftp site to fetch</td>
+</tr>
+<tr>
+<td align="center">assign</td>
+<td align="center">string</td>
+<td align="center">No</td>
+<td align="center"><span class="emphasis"><em>n/a</em></span></td>
+<td>The template variable the output will be assigned
+      to</td>
+</tr>
+</tbody>
+</table></div>
+<div class="example">
+<a name="id3074291"></a><p class="title"><b>Example 8.5. {fetch} examples</b></p>
+<div class="example-contents"><pre class="programlisting">
+
+{* include some javascript in your template *}
+{fetch file='/export/httpd/www.example.com/docs/navbar.js'}
+
+{* embed some weather text in your template from another web site *}
+{fetch file='http://www.myweather.com/68502/'}
+
+{* fetch a news headline file via ftp *}
+{fetch file='ftp://user:password@ftp.example.com/path/to/currentheadlines.txt'}
+{* as above but with variables *}
+{fetch file="ftp://`$user`:`$password`@`$server`/`$path`"}
+
+{* assign the fetched contents to a template variable *}
+{fetch file='http://www.myweather.com/68502/' assign='weather'}
+{if $weather ne ''}
+  &lt;div id="weather"&gt;{$weather}&lt;/div&gt;
+{/if}
+
+  </pre></div>
+</div>
+<br class="example-break"><p>
+ See also
+ <a class="link" href="language.function.capture.html" title="{capture}"><code class="varname">{capture}</code></a>,
+ <a class="link" href="language.function.eval.html" title="{eval}"><code class="varname">{eval}</code></a>,
+ <a class="link" href="language.function.assign.html" title="{assign}"><code class="varname">{assign}</code></a>
+ and
+ <a class="link" href="api.fetch.html" title="fetch()"><code class="varname">fetch()</code></a>.
+ </p>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="language.function.eval.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="language.custom.functions.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="language.function.html.checkboxes.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">{eval} </td>
+<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+<td width="40%" align="right" valign="top"> {html_checkboxes}</td>
+</tr>
+</table>
+</div>
+</body>
+</html>
