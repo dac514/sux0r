@@ -7,6 +7,7 @@ under the GNU General Public License (version 3)
 
 These additional open source libraries have their own licensing requirements
 and, as such, should not be directly modified by the sux0r development group.
+(Some test and demo files were removed)
 
 ------------------------------------------------------------------------------
 Rationale
@@ -43,7 +44,7 @@ dBug
 
 htmLawed
 * Path: ./htmLawed/
-* Version: 1.1.14
+* Version: 1.2.8
 * Licence: LGPL 3
 * Website: http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/index.php
 
@@ -69,23 +70,16 @@ jQuery-UI
 * Website: http://jqueryui.com/
 
 
-PHP Calendar
-* Path: ./calendar.php
-* Version: 2.3
-* Licence: Artistic License
-* Website: http://keithdevens.com/software/php_calendar
-
-
 Securimage
 * Path: ./securimage/
-* Version: 1.0.3.1
+* Version: 3.6.8
 * Licence: GPL 2.1 or any later version
 * Website: http://www.phpcaptcha.org/
 
 
 Smarty
 * Path: ./Smarty/
-* Version: 3.1.13
+* Version: 4.1.1
 * Licence: LGPL 2.1
 * Website: http://www.smarty.net/
 
