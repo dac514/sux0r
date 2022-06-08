@@ -201,7 +201,7 @@ class SmartyValidate {
                         }
                     }
                     
-                    if(is_array($formvars[$_field]) && @is_array($formvars[$_field]) && !$_trans_on_array) {
+                    if(@is_array($formvars[$_field]) && !$_trans_on_array) {
                         if(isset($_field_key)) {
                             // only apply to given key
                             if(($_new_val = SmartyValidate::_execute_transform($_trans_name, @$formvars[$_field][$_field_key], $_sess[$_key], $formvars, $form)) !== false)
@@ -211,7 +211,7 @@ class SmartyValidate {
                             // apply to all keys
                             foreach ($formvars[$_field] as $_fv_key => $_fv_value) {
                                 if(isset($formvars[$_field]) && ($_new_val = SmartyValidate::_execute_transform($_trans_name, $formvars[$_field][$_fv_key], $_sess[$_key], $formvars, $form)) !== false)
-                                    $formvars[$_field][$_x] = $_new_val;
+                                    $formvars[$_field][$_fv_key] = $_new_val;
                             }
                         }
                     } else {
@@ -223,7 +223,7 @@ class SmartyValidate {
 
             if((!isset($formvars[$_field]) && (!isset($_FILES[$_field])))
                 || (
-                    ((is_array(@$formvars[$_field]) && count($_field) == 0) || (is_string(@$formvars[$_field]) && strlen($formvars[$_field]) == 0)) && $_empty
+                    ((is_array(@$formvars[$_field]) && count($formvars[$_field]) == 0) || (is_string(@$formvars[$_field]) && strlen($formvars[$_field]) == 0)) && $_empty
                    )
                 ) {
                 // field must exist, or else fails automatically
