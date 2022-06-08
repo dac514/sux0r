@@ -217,7 +217,7 @@ class suxUser {
 
         if (!empty($info['nickname'])) {
             $tmp = $this->getByNickname($info['nickname']);
-            if ($tmp['users_id'] != $users_id) throw new Exception('Duplicate nickname');
+            if ($tmp && $tmp['users_id'] != $users_id) throw new Exception('Duplicate nickname');
         }
 
         if (!empty($info['email'])) {
@@ -553,7 +553,7 @@ class suxUser {
         $st->execute(array($clean['users_id'], $clean['module']));
         $edit = $st->fetch(PDO::FETCH_ASSOC);
 
-        if ($edit['id']) {
+        if ($edit) {
 
             // UPDATE
             $clean['id'] = $edit['id'];
@@ -804,7 +804,7 @@ class suxUser {
         }
 
         // Double check
-        if (!$hdr) $hdr = null;
+        if (!$hdr) $hdr = '';
 
         $digest = (mb_substr($hdr,0,7) == 'Digest ') ? mb_substr($hdr, mb_strpos($hdr, ' ') + 1) : $hdr;
         $stale = false;
@@ -813,7 +813,13 @@ class suxUser {
         // is the user trying to log in?
         if (!is_null($digest) && $this->loginCheck() === false) {
 
-            $hdr = array();
+            $hdr = array(
+                'nonce' => '',
+                'username' => '',
+                'qop' => '',
+                'response' => '',
+                'nc' => ''
+            );
 
             // decode the Digest authorization headers
             $mtx = array();

@@ -210,10 +210,12 @@ class suxNaiveBayesian {
         $st->execute(array($category_id));
 
         $vectors = array();
-        $row = $st->fetch(PDO::FETCH_ASSOC); // There should only be one vector
-        $vectors[$row['id']] = array(
-            'vector' => $row['vector'],
+        if ($row = $st->fetch(PDO::FETCH_ASSOC)) {
+            // There should only be one vector
+            $vectors[$row['id']] = array(
+                'vector' => $row['vector'],
             );
+        }
 
         return $vectors;
     }

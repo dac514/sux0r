@@ -1,7 +1,7 @@
 <?php
 
 // Enforce config
-if (!isset($GLOBALS['CONFIG'])) {
+if (!isset($GLOBALS['CONFIG']) || !isset($e)) {
     die("Something is wrong, can't define exception handler without configuration.");
 }
 

@@ -22,7 +22,7 @@ abstract class component {
     protected $log;
 
     // object: suxLink()
-    protected $liuk;
+    protected $link;
 
     // object: suxPager()
     protected $pager;

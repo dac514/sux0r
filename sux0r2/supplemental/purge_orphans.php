@@ -94,6 +94,7 @@ $image_dirs = array(
 
 $not_found = array();
 foreach($image_dirs as $dir => $table) {
+    /** @var array $CONFIG */
     $path = $CONFIG['PATH'] . "/data/$dir";
     if (is_dir($path)) foreach (new DirectoryIterator($path) as $file) {
 

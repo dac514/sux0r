@@ -258,7 +258,6 @@ class userEdit extends component {
         // --------------------------------------------------------------------
 
         // Captcha
-        unset($_SESSION['captcha']);
         unset($clean['captcha']);
 
         // Redundant password field
@@ -463,11 +462,10 @@ class userEdit extends component {
     function isValidCaptcha($value, $empty, &$params, &$formvars) {
 
         if (empty($formvars['captcha'])) return false;
-        if (empty($_SESSION['captcha'])) return false;
 
-        if (mb_strtolower($_SESSION['captcha']) == mb_strtolower($formvars['captcha'])) return true;
-        else return false;
-
+        require_once(dirname(__FILE__) . '/../../includes/symbionts/securimage/securimage.php');
+        $image = new Securimage();
+        return $image->check($formvars['captcha']);
     }
 
 

@@ -535,7 +535,7 @@ class suxPhoto {
     * @param int $users_id users id
     * @return array|false
     */
-    function getPhotosByUser($limit = null, $start = 0, $users_id) {
+    function getPhotosByUser($limit, $start, $users_id) {
 
         // Sanity check
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
@@ -810,6 +810,9 @@ class suxPhoto {
             $height = $imagethumbsize_h;
             $width = ($imagethumbsize_h / $height_orig) * $width_orig;
         }
+
+        $width = (int) $width;
+        $height = (int) $height;
 
         // Original, proportionally modified
         $thumb = imagecreatetruecolor($width, $height);

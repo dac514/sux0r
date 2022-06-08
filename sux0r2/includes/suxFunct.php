@@ -14,7 +14,7 @@ class suxFunct {
 
     // Static class, no cloning or instantiating allowed
     final private function __construct() { }
-    final private function __clone() { }
+    private function __clone() { }
 
 
     // ------------------------------------------------------------------------

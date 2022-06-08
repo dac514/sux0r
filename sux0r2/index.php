@@ -25,8 +25,8 @@ try {
     // Get controller & params
     if (!empty($_GET['c'])) {
         $params = explode('/', $_GET['c']);
-        $controller = array_shift($params);
-        $action = array_shift($params);
+        $controller = (string) array_shift($params);
+        $action = (string) array_shift($params);
     }
 
     // Sanity check controller
