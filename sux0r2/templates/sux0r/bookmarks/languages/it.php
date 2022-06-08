@@ -51,4 +51,3 @@ $gtext['time'] = 'Ora';
 $gtext['title'] = 'Titolo';
 $gtext['url'] = 'URL';
 
-?>

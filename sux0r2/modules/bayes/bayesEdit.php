@@ -343,4 +343,3 @@ class bayesEdit extends component {
 }
 
 
-?>

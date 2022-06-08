@@ -147,4 +147,3 @@ class bookmarksApprove extends component {
 }
 
 
-?>

@@ -35,4 +35,3 @@ $tpl->clearCache('profile.tpl', "{$_SESSION['nickname']}|{$_SESSION['nickname']}
 
 echo $lament;
 
-?>

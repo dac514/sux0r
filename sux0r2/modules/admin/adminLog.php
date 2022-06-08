@@ -93,4 +93,3 @@ class adminLog extends component {
 }
 
 
-?>

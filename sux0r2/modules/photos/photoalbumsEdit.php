@@ -252,4 +252,3 @@ class photoalbumsEdit extends component {
 }
 
 
-?>

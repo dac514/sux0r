@@ -29,4 +29,3 @@ $gtext['timestamp'] = 'Zeitstempel';
 $gtext['url'] = 'URL';
 $gtext['yourself'] = 'Sie bearbeiten sich selbst, aus Sicherheitsgründen sind einige Funktionen deaktiviert';
 
-?>

@@ -243,4 +243,3 @@ class cropper extends component {
 }
 
 
-?>

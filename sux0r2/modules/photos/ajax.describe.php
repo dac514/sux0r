@@ -58,4 +58,3 @@ catch (Exception $e) {
 $tpl = new suxTemplate('photos');
 $tpl->clearCache(null, $_SESSION['nickname']); // clear all user caches
 
-?>

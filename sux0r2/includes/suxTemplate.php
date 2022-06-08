@@ -191,4 +191,3 @@ function flash_encode($string) {
 }
 
 
-?>

@@ -2,4 +2,3 @@
 
 $gtext['header'] = '';
 
-?>

@@ -492,4 +492,3 @@ class userEdit extends component {
 }
 
 
-?>

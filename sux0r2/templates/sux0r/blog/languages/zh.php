@@ -62,4 +62,3 @@ $gtext['title'] = '标题';
 $gtext['unset_image'] = '没有设置当前图片';
 $gtext['url'] = 'URL';
 
-?>

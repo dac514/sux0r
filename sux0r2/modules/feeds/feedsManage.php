@@ -129,4 +129,3 @@ class feedsManage extends component  {
 }
 
 
-?>

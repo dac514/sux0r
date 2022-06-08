@@ -69,4 +69,3 @@ $gtext['vector'] = '容器';
 $gtext['vectors'] = '容器';
 $gtext['with'] = '给好友';
 
-?>

@@ -336,4 +336,3 @@ class bayesRenderer extends suxBayesRenderer {
 
 }
 
-?>

@@ -140,4 +140,3 @@ class societyRenderer extends suxRenderer {
 }
 
 
-?>

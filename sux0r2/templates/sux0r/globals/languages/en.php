@@ -51,4 +51,3 @@ $gtext['logout'] = 'Logout';
 $gtext['register'] = 'Register';
 $gtext['welcome'] = 'Welcome';
 
-?>

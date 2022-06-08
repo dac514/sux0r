@@ -894,4 +894,3 @@ class suxPhoto {
 
 }
 
-?>

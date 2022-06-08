@@ -301,4 +301,3 @@ class adminAccess extends component {
 }
 
 
-?>

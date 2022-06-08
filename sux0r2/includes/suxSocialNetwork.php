@@ -318,4 +318,3 @@ class suxSocialNetwork {
 
 }
 
-?>

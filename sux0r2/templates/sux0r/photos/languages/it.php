@@ -53,4 +53,3 @@ $gtext['upload_2'] = 'Carica';
 $gtext['upload'] = 'Carica Immagine/i';
 $gtext['uploaded_images'] = 'Carica Immagine/i nell\'album ';
 
-?>

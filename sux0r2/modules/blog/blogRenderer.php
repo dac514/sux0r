@@ -436,4 +436,3 @@ function insert_edit($params) {
 }
 
 
-?>

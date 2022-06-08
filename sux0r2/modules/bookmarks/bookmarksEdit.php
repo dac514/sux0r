@@ -315,4 +315,3 @@ class bookmarksEdit extends component {
 }
 
 
-?>

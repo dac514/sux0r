@@ -173,4 +173,3 @@ class userOpenID extends component {
 }
 
 
-?>

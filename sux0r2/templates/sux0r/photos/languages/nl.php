@@ -52,4 +52,3 @@ $gtext['upload'] = 'Upload foto(s)';
 $gtext['upload_2'] = 'Upload';
 $gtext['uploaded_images'] = 'Upload foto(s) naar het fotoalbum ';
 
-?>

@@ -105,4 +105,3 @@ $gtext['zh'] = '简体中文';
 // Countries
 $gtext['cn2'] = '中国';
 
-?>

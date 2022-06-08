@@ -55,4 +55,3 @@ catch (Exception $e) {
 echo trim($image);
 exit;
 
-?>

@@ -129,4 +129,3 @@ foreach ($not_found as $file) {
 
 echo "> $count images deleted <br /> \n";
 
-?>

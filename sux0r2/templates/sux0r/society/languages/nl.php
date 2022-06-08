@@ -40,4 +40,3 @@ $gtext['spouse'] = 'Spouse';
 $gtext['submit'] = 'Versturen';
 $gtext['sweetheart'] = 'Lieverd';
 
-?>

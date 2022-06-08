@@ -52,4 +52,3 @@ $gtext['upload'] = 'Bild(er) hochladen';
 $gtext['upload_2'] = 'Hochladen';
 $gtext['uploaded_images'] = 'Bild(er) zum Fotoalbum hochladen ';
 
-?>

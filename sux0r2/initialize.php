@@ -133,4 +133,3 @@ if (isset($_SESSION['users_id']) || isset($_SESSION['nickname'])) {
 }
 unset($u);
 
-?>

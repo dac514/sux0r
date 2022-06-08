@@ -41,4 +41,3 @@ $gtext['suggested'] = '提交者';
 $gtext['title'] = '标题';
 $gtext['url'] = 'URL';
 
-?>

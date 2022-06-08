@@ -501,4 +501,3 @@ $gtext['zm2'] = 'Zambia';
 $gtext['zw2'] = 'Zimbabwe';
 */
 
-?>

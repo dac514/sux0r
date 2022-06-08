@@ -78,4 +78,3 @@ suxFunct::breadcrumbs();
 
 // new dBug($_SESSION);
 
-?>

@@ -66,4 +66,3 @@ $gtext['title'] = 'Title';
 $gtext['unset_image'] = 'Unset current image';
 $gtext['url'] = 'URL';
 
-?>

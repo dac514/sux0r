@@ -51,4 +51,3 @@ class globals extends component {
 }
 
 
-?>

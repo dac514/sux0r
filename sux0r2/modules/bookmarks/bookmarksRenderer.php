@@ -215,4 +215,3 @@ function insert_bookmarksEdit($params) {
 }
 
 
-?>

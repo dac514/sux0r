@@ -12,4 +12,3 @@ $gtext['height'] = 'Höhe';
 $gtext['submit'] = 'Senden';
 $gtext['width'] = 'Breite';
 
-?>

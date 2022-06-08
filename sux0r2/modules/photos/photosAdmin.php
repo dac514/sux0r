@@ -142,4 +142,3 @@ class photosAdmin extends component {
 }
 
 
-?>

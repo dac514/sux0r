@@ -21,4 +21,3 @@ if ($GLOBALS['CONFIG']['DEBUG'])
 if (!headers_sent()) header('Content-Type: text/plain');
 die($message);
 
-?>

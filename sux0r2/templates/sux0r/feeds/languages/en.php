@@ -49,4 +49,3 @@ $gtext['suggested'] = 'Suggested by';
 $gtext['title'] = 'Title';
 $gtext['url'] = 'URL';
 
-?>

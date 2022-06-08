@@ -38,4 +38,3 @@ function feeds_menu() {
 }
 
 
-?>

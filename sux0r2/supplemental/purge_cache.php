@@ -13,4 +13,3 @@ foreach($cache as $dir) {
     suxFunct::obliterateDir($dir);
 }
 
-?>

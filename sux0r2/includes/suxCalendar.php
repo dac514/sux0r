@@ -82,4 +82,3 @@ CREATE TABLE `calendar_dates` (
 
 */
 
-?>

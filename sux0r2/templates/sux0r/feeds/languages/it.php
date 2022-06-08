@@ -46,4 +46,3 @@ $gtext['suggest'] = 'Suggerisci un Feed';
 $gtext['title'] = 'Titolo';
 $gtext['url'] = 'URL';
 
-?>

@@ -684,4 +684,3 @@ class suxUserNaiveBayesian extends suxNaiveBayesian {
 
 
 
-?>

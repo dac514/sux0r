@@ -43,4 +43,3 @@ $html .= '<p><em>' . $text['categorized_on'] . ' : ' . date('D M j, G:i:s') . '<
 
 echo $html;
 
-?>

@@ -445,4 +445,3 @@ function insert_bayesFilterScript() {
 }
 
 
-?>
