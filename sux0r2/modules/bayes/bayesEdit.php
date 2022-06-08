@@ -31,7 +31,7 @@ class bayesEdit extends component {
         // Declare objects
         $this->nb = new suxUserNaiveBayesian();
         $this->r = new bayesRenderer($this->module); // Renderer
-        suxValidate::register_object('this', $this); // Register self to validator
+        (new suxValidate())->register_object('this', $this); // Register self to validator
         parent::__construct(); // Let the parent do the rest
 
 
@@ -80,55 +80,55 @@ class bayesEdit extends component {
         // --------------------------------------------------------------------
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
-        else suxValidate::disconnect(true);
+        else (new suxValidate())->disconnect(true);
 
-        if (empty($dirty['action']) || !suxValidate::is_registered_form($dirty['action'])) {
+        if (empty($dirty['action']) || !(new suxValidate())->is_registered_form($dirty['action'])) {
 
-            suxValidate::connect($this->tpl, true); // Reset connection
+            (new suxValidate())->connect($this->tpl, true); // Reset connection
 
             // Register additional forms
-            suxValidate::register_form('addvec');
-            suxValidate::register_form('addcat');
-            suxValidate::register_form('adddoc');
-            suxValidate::register_form('remcat');
-            suxValidate::register_form('remvec');
-            suxValidate::register_form('remdoc');
-            suxValidate::register_form('sharevec');
-            suxValidate::register_form('unsharevec');
+            (new suxValidate())->register_form('addvec');
+            (new suxValidate())->register_form('addcat');
+            (new suxValidate())->register_form('adddoc');
+            (new suxValidate())->register_form('remcat');
+            (new suxValidate())->register_form('remvec');
+            (new suxValidate())->register_form('remdoc');
+            (new suxValidate())->register_form('sharevec');
+            (new suxValidate())->register_form('unsharevec');
 
 
             // Register our additional criterias
-            suxValidate::register_criteria('invalidShare', 'this->invalidShare', 'sharevec');
-            suxValidate::register_criteria('userExists', 'this->userExists', 'sharevec');
+            (new suxValidate())->register_criteria('invalidShare', 'this->invalidShare', 'sharevec');
+            (new suxValidate())->register_criteria('userExists', 'this->userExists', 'sharevec');
 
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
 
             // Add vector
-            suxValidate::register_validator('addvec1', 'vector', 'notEmpty', false, false, 'trim', 'addvec');
-            suxValidate::register_validator('addvec2', "vector:-1:{$this->nb->getMaxVectorLength()}", 'isLength', false, false, 'trim', 'addvec');
+            (new suxValidate())->register_validator('addvec1', 'vector', 'notEmpty', false, false, 'trim', 'addvec');
+            (new suxValidate())->register_validator('addvec2', "vector:-1:{$this->nb->getMaxVectorLength()}", 'isLength', false, false, 'trim', 'addvec');
             // Add category
-            suxValidate::register_validator('addcat1', 'category', 'notEmpty', false, true, 'trim', 'addcat');
-            suxValidate::register_validator('addcat2', 'vector_id', 'isInt', false, true, 'trim', 'addcat');
-            suxValidate::register_validator('addcat3', "category:-1:{$this->nb->getMaxCategoryLength()}", 'isLength', false, false, 'trim', 'addcat');
+            (new suxValidate())->register_validator('addcat1', 'category', 'notEmpty', false, true, 'trim', 'addcat');
+            (new suxValidate())->register_validator('addcat2', 'vector_id', 'isInt', false, true, 'trim', 'addcat');
+            (new suxValidate())->register_validator('addcat3', "category:-1:{$this->nb->getMaxCategoryLength()}", 'isLength', false, false, 'trim', 'addcat');
             // Remove category
-            suxValidate::register_validator('remcat1', 'category_id', 'isInt', false, false, 'trim', 'remcat');
+            (new suxValidate())->register_validator('remcat1', 'category_id', 'isInt', false, false, 'trim', 'remcat');
             // Remove vector
-            suxValidate::register_validator('remvec1', 'vector_id', 'isInt', false, false, 'trim', 'remvec');
+            (new suxValidate())->register_validator('remvec1', 'vector_id', 'isInt', false, false, 'trim', 'remvec');
             // Add document
-            suxValidate::register_validator('adddoc1', 'document', 'notEmpty', false, true, 'trim', 'adddoc');
-            suxValidate::register_validator('adddoc2', 'category_id', 'isInt', false, false, 'trim', 'adddoc');
+            (new suxValidate())->register_validator('adddoc1', 'document', 'notEmpty', false, true, 'trim', 'adddoc');
+            (new suxValidate())->register_validator('adddoc2', 'category_id', 'isInt', false, false, 'trim', 'adddoc');
             // Remove document
-            suxValidate::register_validator('remdoc1', 'document_id', 'isInt', false, false, 'trim', 'remdoc');
+            (new suxValidate())->register_validator('remdoc1', 'document_id', 'isInt', false, false, 'trim', 'remdoc');
             // Share vector
-            suxValidate::register_validator('sharevec1', 'vector_id', 'isInt', false, false, 'trim', 'sharevec');
-            suxValidate::register_validator('sharevec2', 'users_id', 'isInt', false, false, 'trim', 'sharevec');
-            suxValidate::register_validator('sharevec3', 'trainer:1:1', 'isRange', true, false, 'trim', 'sharevec');
-            suxValidate::register_validator('sharevec4', 'owner:1:1', 'isRange', true, false, 'trim', 'sharevec');
-            suxValidate::register_validator('sharevec5', 'users_id', 'invalidShare', true, false, 'trim', 'sharevec');
-            suxValidate::register_validator('sharevec6', 'users_id', 'userExists', true, false, 'trim', 'sharevec');
+            (new suxValidate())->register_validator('sharevec1', 'vector_id', 'isInt', false, false, 'trim', 'sharevec');
+            (new suxValidate())->register_validator('sharevec2', 'users_id', 'isInt', false, false, 'trim', 'sharevec');
+            (new suxValidate())->register_validator('sharevec3', 'trainer:1:1', 'isRange', true, false, 'trim', 'sharevec');
+            (new suxValidate())->register_validator('sharevec4', 'owner:1:1', 'isRange', true, false, 'trim', 'sharevec');
+            (new suxValidate())->register_validator('sharevec5', 'users_id', 'invalidShare', true, false, 'trim', 'sharevec');
+            (new suxValidate())->register_validator('sharevec6', 'users_id', 'userExists', true, false, 'trim', 'sharevec');
             // Unshare vector
-            suxValidate::register_validator('unsharevec1', 'unshare', 'dummyValid', false, false, null, 'unsharevec');
+            (new suxValidate())->register_validator('unsharevec1', 'unshare', 'dummyValid', false, false, null, 'unsharevec');
 
         }
 

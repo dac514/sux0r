@@ -37,7 +37,7 @@ class photoalbumsEdit extends component {
         // Declare objects
         $this->photo = new suxPhoto(); // Photos
         $this->r = new photosRenderer($this->module); // Renderer
-        suxValidate::register_object('this', $this); // Register self to validator
+        (new suxValidate())->register_object('this', $this); // Register self to validator
         parent::__construct(); // Let the parent do the rest
 
         // Declare properties
@@ -97,7 +97,7 @@ class photoalbumsEdit extends component {
             // regex must match '2008-06-18 16:53:29' or '2008-06-18T16:53:29-04:00'
             $matches = array();
             $regex = '/^(\d{4})-(0[0-9]|1[0,1,2])-([0,1,2][0-9]|3[0,1]).+(\d{2}):(\d{2}):(\d{2})/';
-            preg_match($regex, $tmp['published_on'], $matches);
+            preg_match($regex, (string) $tmp['published_on'], $matches);
             $photoalbum['Date_Year'] = @$matches[1]; // year
             $photoalbum['Date_Month'] = @$matches[2]; // month
             $photoalbum['Date_Day'] = @$matches[3]; // day
@@ -119,20 +119,20 @@ class photoalbumsEdit extends component {
         // --------------------------------------------------------------------
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
-        else suxValidate::disconnect();
+        else (new suxValidate())->disconnect();
 
-        if (!suxValidate::is_registered_form()) {
+        if (!(new suxValidate())->is_registered_form()) {
 
-            suxValidate::connect($this->tpl, true); // Reset connection
+            (new suxValidate())->connect($this->tpl, true); // Reset connection
 
             // Register our validators
-            if ($this->id) suxValidate::register_validator('integrity', 'integrity:id', 'hasIntegrity');
-            suxValidate::register_validator('title', 'title', 'notEmpty', false, false, 'trim');
-            suxValidate::register_validator('body', 'body', 'notEmpty', false, false, 'trim');
-            suxValidate::register_validator('date', 'Date:Date_Year:Date_Month:Date_Day', 'isDate', false, false, 'makeDate');
-            suxValidate::register_validator('time', 'Time_Hour', 'isInt');
-            suxValidate::register_validator('time2', 'Time_Minute', 'isInt');
-            suxValidate::register_validator('time3', 'Time_Second', 'isInt');
+            if ($this->id) (new suxValidate())->register_validator('integrity', 'integrity:id', 'hasIntegrity');
+            (new suxValidate())->register_validator('title', 'title', 'notEmpty', false, false, 'trim');
+            (new suxValidate())->register_validator('body', 'body', 'notEmpty', false, false, 'trim');
+            (new suxValidate())->register_validator('date', 'Date:Date_Year:Date_Month:Date_Day', 'isDate', false, false, 'makeDate');
+            (new suxValidate())->register_validator('time', 'Time_Hour', 'isInt');
+            (new suxValidate())->register_validator('time2', 'Time_Minute', 'isInt');
+            (new suxValidate())->register_validator('time3', 'Time_Second', 'isInt');
 
 
         }

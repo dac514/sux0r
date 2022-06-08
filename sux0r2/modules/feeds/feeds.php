@@ -54,7 +54,7 @@ class feeds extends bayesComponent {
 
         $this->r->title .= " | {$this->r->gtext['feeds']} | $nickname";
 
-        if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
+        if ([$vec_id, $cat_id, $threshold, $start, $search] = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
             // Filtered results
@@ -98,7 +98,7 @@ class feeds extends bayesComponent {
                 $this->r->arr['feeds'] = $this->getUserItems($this->users_id, $this->pager->limit, $this->pager->start);
 
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/feeds/user/$nickname"));
-                if (!count($this->r->arr['feeds'])) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+                if (!(is_countable($this->r->arr['feeds']) ? count($this->r->arr['feeds']) : 0)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
             }
 
@@ -140,16 +140,16 @@ class feeds extends bayesComponent {
             $this->r->title .= " | {$this->r->gtext['feeds']}";
         }
 
-        if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
+        if ([$vec_id, $cat_id, $threshold, $start, $search] = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
             // Filtered results
             // ---------------------------------------------------------------
 
-            if ($feeds_id || !count($subscriptions)) {
+            if ($feeds_id || !(is_countable($subscriptions) ? count($subscriptions) : 0)) {
                 // Regular queries
                 $max = $this->rss->countItems($feeds_id);
-                $eval = '$this->rss->getItems($this->pager->limit, $start, ' . ($feeds_id ? $feeds_id : 'null') . ')';
+                $eval = '$this->rss->getItems($this->pager->limit, $start, ' . ($feeds_id ?: 'null') . ')';
             }
             else {
                 // User has subscriptions, we need special JOIN queries
@@ -187,7 +187,7 @@ class feeds extends bayesComponent {
 
             if (!$this->tpl->isCached('scroll.tpl', $cache_id)) {
 
-                if ($feeds_id || !count($subscriptions)) {
+                if ($feeds_id || !(is_countable($subscriptions) ? count($subscriptions) : 0)) {
                     // Regular queries
                     $this->pager->setPages($this->rss->countItems($feeds_id));
                     $this->r->arr['feeds'] = $this->rss->getItems($this->pager->limit, $this->pager->start, $feeds_id);
@@ -199,7 +199,7 @@ class feeds extends bayesComponent {
                 }
 
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/feeds/$feeds_id"));
-                if (!count($this->r->arr['feeds'])) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+                if (!(is_countable($this->r->arr['feeds']) ? count($this->r->arr['feeds']) : 0)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
             }
 

@@ -16,7 +16,7 @@ class userAvatar extends component  {
     protected $form_name = 'userAvatar';
 
     // Var: supported image extensions
-    private $extensions = 'jpg,jpeg,gif,png';
+    private string $extensions = 'jpg,jpeg,gif,png';
 
     // Var
     private $nickname;
@@ -37,7 +37,7 @@ class userAvatar extends component  {
 
         // Declare objects
         $this->r = new userRenderer($this->module); // Renderer
-        suxValidate::register_object('this', $this); // Register self to validator
+        (new suxValidate())->register_object('this', $this); // Register self to validator
         parent::__construct(); // Let the parent do the rest
 
         // Redirect if not logged in
@@ -84,11 +84,11 @@ class userAvatar extends component  {
         // --------------------------------------------------------------------
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
-        else suxValidate::disconnect();
+        else (new suxValidate())->disconnect();
 
-        if (!suxValidate::is_registered_form()) {
+        if (!(new suxValidate())->is_registered_form()) {
 
-            suxValidate::connect($this->tpl, true); // Reset connection
+            (new suxValidate())->connect($this->tpl, true); // Reset connection
 
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
@@ -96,9 +96,9 @@ class userAvatar extends component  {
             $empty = false;
             if ($this->image) $empty = true;
 
-            suxValidate::register_validator('integrity', 'integrity:users_id:nickname', 'hasIntegrity');
-            suxValidate::register_validator('image', 'image:' . $this->extensions, 'isFileType', $empty);
-            suxValidate::register_validator('image2','image:' . ini_get('upload_max_filesize'), 'isFileSize', $empty);
+            (new suxValidate())->register_validator('integrity', 'integrity:users_id:nickname', 'hasIntegrity');
+            (new suxValidate())->register_validator('image', 'image:' . $this->extensions, 'isFileType', $empty);
+            (new suxValidate())->register_validator('image2', 'image:' . ini_get('upload_max_filesize'), 'isFileSize', $empty);
 
         }
 
@@ -129,6 +129,7 @@ class userAvatar extends component  {
     */
     function formProcess(&$clean) {
 
+        $user = [];
         // Commence $clean array
         $user['users_id'] = $clean['users_id'];
         $user['image']  = false;
@@ -139,10 +140,10 @@ class userAvatar extends component  {
         // Image?
         if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
 
-            $format = explode('.', $_FILES['image']['name']);
+            $format = explode('.', (string) $_FILES['image']['name']);
             $format = strtolower(end($format)); // Extension
 
-            list($resize, $fullsize) = suxPhoto::renameImage($_FILES['image']['name']);
+            [$resize, $fullsize] = suxPhoto::renameImage($_FILES['image']['name']);
             $user['image'] = $resize; // Add image to user array
             $resize = suxFunct::dataDir($this->module) . "/{$resize}";
             $fullsize = suxFunct::dataDir($this->module) . "/{$fullsize}";

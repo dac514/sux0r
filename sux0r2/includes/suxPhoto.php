@@ -227,6 +227,7 @@ class suxPhoto {
     */
     function saveAlbum($users_id, array $album, $trusted = -1) {
 
+        $clean = [];
         // -------------------------------------------------------------------
         // Sanitize
         // -------------------------------------------------------------------
@@ -265,7 +266,7 @@ class suxPhoto {
             // ISO 8601 date format
             // regex must match '2008-06-18 16:53:29' or '2008-06-18T16:53:29-04:00'
             $regex = '/^(\d{4})-(0[0-9]|1[0,1,2])-([0,1,2][0-9]|3[0,1]).+(\d{2}):(\d{2}):(\d{2})/';
-            if (!preg_match($regex, $album['published_on'])) throw new Exception('Invalid date');
+            if (!preg_match($regex, (string) $album['published_on'])) throw new Exception('Invalid date');
             $clean['published_on'] = $album['published_on'];
         }
         else $clean['published_on'] = date('Y-m-d H:i:s');
@@ -620,6 +621,7 @@ class suxPhoto {
     */
     function savePhoto($users_id, array $photo) {
 
+        $clean = [];
         // -------------------------------------------------------------------
         // Sanitize
         // -------------------------------------------------------------------
@@ -729,7 +731,7 @@ class suxPhoto {
     static function renameImage($filename) {
 
         $pattern = '/(\.jpe?g|\.gif|\.png)$/i';
-        $uniqid = time() . substr(md5(microtime()), 0, rand(5, 12));
+        $uniqid = time() . substr(md5(microtime()), 0, random_int(5, 12));
 
         $replacement = "_{$uniqid}" . "$1";
         $resize = preg_replace($pattern, $replacement, $filename);
@@ -790,7 +792,7 @@ class suxPhoto {
 
         $width = $imagethumbsize_w;
         $height = $imagethumbsize_h;
-        list($width_orig, $height_orig) = getimagesize($filein);
+        [$width_orig, $height_orig] = getimagesize($filein);
 
         if ($width_orig < $height_orig) {
             $height = ($imagethumbsize_w / $width_orig) * $height_orig;
@@ -855,7 +857,7 @@ class suxPhoto {
         if ($format == 'jpeg') {
             // Jpeg
             $fudge = 1.65; // This is a guestimate, your mileage may very
-            $memoryNeeded = round(($size[0] * $size[1] * $size['bits'] * $size['channels'] / 8 + pow(2, 16)) * $fudge);
+            $memoryNeeded = round(($size[0] * $size[1] * $size['bits'] * $size['channels'] / 8 + 2 ** 16) * $fudge);
         }
         else {
             // Not Sure
@@ -864,9 +866,9 @@ class suxPhoto {
             $memoryNeeded = round($memoryNeeded);
         }
 
-        if (memory_get_usage() + $memoryNeeded > (int) ini_get('memory_limit') * pow(1024, 2)) {
+        if (memory_get_usage() + $memoryNeeded > (int) ini_get('memory_limit') * 1024 ** 2) {
             trigger_error('Image is too big, attempting to compensate...', E_USER_WARNING);
-            ini_set('memory_limit', (int) ini_get('memory_limit') + ceil(((memory_get_usage() + $memoryNeeded) - (int) ini_get('memory_limit') * pow(1024, 2)) / pow(1024, 2)) . 'M');
+            ini_set('memory_limit', (int) ini_get('memory_limit') + ceil(((memory_get_usage() + $memoryNeeded) - (int) ini_get('memory_limit') * 1024 ** 2) / 1024 ** 2) . 'M');
         }
 
     }
@@ -880,7 +882,7 @@ class suxPhoto {
     /**
     * @param Exception $e an Exception class
     */
-    function exceptionHandler(Exception $e) {
+    function exceptionHandler(\Throwable $e) {
 
         if ($this->db && $this->inTransaction) {
             $this->db->rollback();

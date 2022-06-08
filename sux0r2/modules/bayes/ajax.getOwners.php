@@ -5,8 +5,8 @@
 
 if (isset($_POST['id']) && filter_var($_POST['id'], FILTER_VALIDATE_INT)) {
 
-    require_once(dirname(__FILE__) . '/../../config.php');
-    require_once(dirname(__FILE__) . '/../../initialize.php');
+    require_once(__DIR__ . '/../../config.php');
+    require_once(__DIR__ . '/../../initialize.php');
 
     $user = new suxUser();
     $nb = new suxUserNaiveBayesian();

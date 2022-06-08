@@ -1,12 +1,12 @@
 <?php
 
-require_once(dirname(__FILE__)  . '/../includes/suxFunct.php'); // Configuration
+require_once(__DIR__  . '/../includes/suxFunct.php'); // Configuration
 
 // Cache dirs to delete
 $cache = array();
-$cache[] = realpath(dirname(__FILE__) . '/../temporary/cache/');
-$cache[] = realpath(dirname(__FILE__) . '/../temporary/rss_cache/');
-$cache[] = realpath(dirname(__FILE__) . '/../temporary/templates_c/');
+$cache[] = realpath(__DIR__ . '/../temporary/cache/');
+$cache[] = realpath(__DIR__ . '/../temporary/rss_cache/');
+$cache[] = realpath(__DIR__ . '/../temporary/templates_c/');
 
 // Go!
 foreach($cache as $dir) {

@@ -14,7 +14,8 @@
 
 function suxAutoload($class_name) {
 
-    if (strpos($class_name, 'Smarty') === 0) return;
+    $file = [];
+    if (str_starts_with((string) $class_name, 'Smarty')) return;
 
     global $controller;
     $dirname = $GLOBALS['CONFIG']['PATH'];
@@ -111,7 +112,7 @@ date_default_timezone_set($GLOBALS['CONFIG']['TIMEZONE']);
 // Get rid of magic quotes
 if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc() && (!ini_get('magic_quotes_sybase'))) {
     $in = array(&$_GET, &$_POST, &$_REQUEST, &$_COOKIE, &$_FILES);
-    while (list($k,$v) = each($in)) {
+    foreach ($in as $k => $v) {
         foreach ($v as $key => $val) {
             if (!is_array($val)) {
                 $in[$k][$key] = stripslashes($val);

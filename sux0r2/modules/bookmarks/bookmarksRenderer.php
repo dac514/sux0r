@@ -36,6 +36,7 @@ class bookmarksRenderer extends suxBayesRenderer {
     */
     function tags($id) {
 
+        $html = null;
         // ----------------------------------------------------------------
         // SQL
         // ----------------------------------------------------------------

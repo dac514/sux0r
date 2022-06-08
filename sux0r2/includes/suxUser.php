@@ -21,10 +21,10 @@ class suxUser {
     protected $db_table_log = 'users_log';
 
     // Maximum authetication failures allowed
-    private $max_failures = 4;
+    private int $max_failures = 4;
     // If you change these, then you need to adjust your database columns
-    private $max_access = 999;
-    private $max_module_length = 32;
+    private int $max_access = 999;
+    private int $max_module_length = 32;
 
     // Object properties, with defaults
     protected $order = array('root DESC, nickname', 'ASC');
@@ -536,6 +536,7 @@ class suxUser {
     */
     function saveAccess($users_id, $module, $access) {
 
+        $clean = [];
         if (mb_strlen($module) > $this->max_module_length) throw new Exception('Module name too long');
         if (!filter_var($access, FILTER_VALIDATE_INT) || $access < 0 || $access > $this->max_access) throw new Exception('Invalid access integer');
 
@@ -583,6 +584,7 @@ class suxUser {
     */
     function removeAccess($module, $users_id = null) {
 
+        $clean = [];
         if (mb_strlen($module) > $this->max_module_length) throw new Exception('Module name too long');
 
         // This user
@@ -780,8 +782,8 @@ class suxUser {
 
         // Try to get the digest headers
         if (function_exists('apache_request_headers') && ini_get('safe_mode') == false) {
-            $arh = apache_request_headers();
-            $hdr = (isset($arh['Authorization']) ? $arh['Authorization'] : null);
+            $arh = getallheaders();
+            $hdr = ($arh['Authorization'] ?? null);
         }
         elseif (isset($_SERVER['PHP_AUTH_DIGEST'])) {
             $hdr = $_SERVER['PHP_AUTH_DIGEST'];
@@ -823,13 +825,13 @@ class suxUser {
 
             // decode the Digest authorization headers
             $mtx = array();
-            preg_match_all('/(\w+)=(?:"([^"]+)"|([^\s,]+))/', $digest, $mtx, PREG_SET_ORDER);
+            preg_match_all('/(\w+)=(?:"([^"]+)"|([^\s,]+))/', (string) $digest, $mtx, PREG_SET_ORDER);
 
             foreach ($mtx as $m)
-                $hdr[$m[1]] = $m[2] ? $m[2] : $m[3];
+                $hdr[$m[1]] = $m[2] ?: $m[3];
 
 
-            if (isset($_SESSION['uniqid']) && ($hdr['nonce'] != $_SESSION['uniqid'] || $_SERVER['REQUEST_TIME'] - hexdec(substr($hdr['nonce'], 0, 8)) > 300)) {
+            if (isset($_SESSION['uniqid']) && ($hdr['nonce'] != $_SESSION['uniqid'] || $_SERVER['REQUEST_TIME'] - hexdec(substr((string) $hdr['nonce'], 0, 8)) > 300)) {
                 $stale = true;
                 unset($_SESSION['uniqid']);
             }
@@ -869,7 +871,7 @@ class suxUser {
         }
 
         // if we get this far the user is not authorized, so send the headers
-        $uid = sprintf("%08x", time()) . uniqid(mt_rand(1,9));
+        $uid = sprintf("%08x", time()) . uniqid(random_int(1,9));
         $_SESSION['uniqid'] = $uid;
 
         if (headers_sent()) {
@@ -944,7 +946,7 @@ class suxUser {
 
         $new_pw = '';
         for ($i = 0; $i < 10; $i++) {
-            $new_pw .= chr(mt_rand(33, 126));
+            $new_pw .= chr(random_int(33, 126));
         }
         return $new_pw;
 
@@ -1011,7 +1013,7 @@ class suxUser {
     /**
     * @param Exception $e an Exception class
     */
-    function exceptionHandler(Exception $e) {
+    function exceptionHandler(\Throwable $e) {
 
         if ($this->db && $this->inTransaction) {
             $this->db->rollback();

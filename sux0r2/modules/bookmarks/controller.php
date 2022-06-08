@@ -30,7 +30,7 @@ function sux($action, $params = null) {
             $admin->formSuccess();
         }
         else {
-            $admin->formBuild($_POST);
+            $admin->formBuild();
         }
 
 

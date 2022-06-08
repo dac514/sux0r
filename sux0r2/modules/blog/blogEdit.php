@@ -25,7 +25,7 @@ class blogEdit extends component {
     private $id;
 
     // Var: supported image extensions
-    private $extensions = 'jpg,jpeg,gif,png';
+    private string $extensions = 'jpg,jpeg,gif,png';
 
 
 
@@ -40,7 +40,7 @@ class blogEdit extends component {
         $this->nb = new suxUserNaiveBayesian();
         $this->msg = new suxThreadedMessages();
         $this->r = new blogRenderer($this->module); // Renderer
-        suxValidate::register_object('this', $this); // Register self to validator
+        (new suxValidate())->register_object('this', $this); // Register self to validator
         parent::__construct(); // Let the parent do the rest
 
         // Declare properties
@@ -117,7 +117,7 @@ class blogEdit extends component {
             // regex must match '2008-06-18 16:53:29' or '2008-06-18T16:53:29-04:00'
             $matches = array();
             $regex = '/^(\d{4})-(0[0-9]|1[0,1,2])-([0,1,2][0-9]|3[0,1]).+(\d{2}):(\d{2}):(\d{2})/';
-            preg_match($regex, $tmp['published_on'], $matches);
+            preg_match($regex, (string) $tmp['published_on'], $matches);
             $blog['Date_Year'] = @$matches[1]; // year
             $blog['Date_Month'] = @$matches[2]; // month
             $blog['Date_Day'] = @$matches[3]; // day
@@ -169,22 +169,22 @@ class blogEdit extends component {
         // --------------------------------------------------------------------
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
-        else suxValidate::disconnect();
+        else (new suxValidate())->disconnect();
 
-        if (!suxValidate::is_registered_form()) {
+        if (!(new suxValidate())->is_registered_form()) {
 
-            suxValidate::connect($this->tpl, true); // Reset connection
+            (new suxValidate())->connect($this->tpl, true); // Reset connection
 
             // Register our validators
-            if ($this->id) suxValidate::register_validator('integrity', 'integrity:id', 'hasIntegrity');
-            suxValidate::register_validator('title', 'title', 'notEmpty', false, false, 'trim');
-            suxValidate::register_validator('image', 'image:' . $this->extensions, 'isFileType', true);
-            suxValidate::register_validator('image2','image:' . ini_get('upload_max_filesize'), 'isFileSize', true);
-            suxValidate::register_validator('body', 'body', 'notEmpty', false, false, 'trim');
-            suxValidate::register_validator('date', 'Date:Date_Year:Date_Month:Date_Day', 'isDate', false, false, 'makeDate');
-            suxValidate::register_validator('time', 'Time_Hour', 'isInt');
-            suxValidate::register_validator('time2', 'Time_Minute', 'isInt');
-            suxValidate::register_validator('time3', 'Time_Second', 'isInt');
+            if ($this->id) (new suxValidate())->register_validator('integrity', 'integrity:id', 'hasIntegrity');
+            (new suxValidate())->register_validator('title', 'title', 'notEmpty', false, false, 'trim');
+            (new suxValidate())->register_validator('image', 'image:' . $this->extensions, 'isFileType', true);
+            (new suxValidate())->register_validator('image2', 'image:' . ini_get('upload_max_filesize'), 'isFileSize', true);
+            (new suxValidate())->register_validator('body', 'body', 'notEmpty', false, false, 'trim');
+            (new suxValidate())->register_validator('date', 'Date:Date_Year:Date_Month:Date_Day', 'isDate', false, false, 'makeDate');
+            (new suxValidate())->register_validator('time', 'Time_Hour', 'isInt');
+            (new suxValidate())->register_validator('time2', 'Time_Minute', 'isInt');
+            (new suxValidate())->register_validator('time3', 'Time_Second', 'isInt');
 
 
         }
@@ -245,10 +245,10 @@ class blogEdit extends component {
         // Image?
         if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
 
-            $format = explode('.', $_FILES['image']['name']);
+            $format = explode('.', (string) $_FILES['image']['name']);
             $format = strtolower(end($format)); // Extension
 
-            list($resize, $fullsize) = suxPhoto::renameImage($_FILES['image']['name']);
+            [$resize, $fullsize] = suxPhoto::renameImage($_FILES['image']['name']);
             $clean['image'] = $resize; // Add image to clean array
             $resize = suxFunct::dataDir($this->module) . "/{$resize}";
             $fullsize = suxFunct::dataDir($this->module) . "/{$fullsize}";

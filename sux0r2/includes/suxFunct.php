@@ -99,7 +99,7 @@ class suxFunct {
                 );
         }
 
-        require_once(dirname(__FILE__) . '/symbionts/htmLawed/htmLawed.php');
+        require_once(__DIR__ . '/symbionts/htmLawed/htmLawed.php');
         return htmLawed($html, $config);
 
     }
@@ -133,7 +133,7 @@ class suxFunct {
     */
     static function unzip($file, $dir) {
 
-        if (class_exists('ZipArchive')) {
+        if (class_exists(\ZipArchive::class)) {
 
             $zip = new ZipArchive();
             if ($zip->open($file) === true) {
@@ -229,7 +229,7 @@ class suxFunct {
 
         if (empty($month)) $month = date('m');
         if (empty($year)) $year = date('Y');
-        $result = strtotime("{$year}-{$month}-01");
+        $result = strtotime((string) "{$year}-{$month}-01");
         $result = strtotime('-1 second', strtotime('+1 month', $result));
         return date('Y-m-d', $result);
 
@@ -280,10 +280,10 @@ class suxFunct {
     static function myHttpServer() {
 
         // Autodetect ourself
-        $s = isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off' ? 's' : '';
+        $s = isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) != 'off' ? 's' : '';
         $host = $_SERVER['SERVER_NAME'];
         $port = $_SERVER['SERVER_PORT'];
-        if (($s && $port == "443") || (!$s && $port == "80") || preg_match("/:$port\$/", $host)) {
+        if (($s && $port == "443") || (!$s && $port == "80") || preg_match("/:$port\$/", (string) $host)) {
             $p = '';
         }
         else {
@@ -342,7 +342,7 @@ class suxFunct {
 
         // Sanitize and transform array into regular expressions
         foreach ($skip as $key => $val) {
-            $val = str_replace('#', '', $val);
+            $val = str_replace('#', '', (string) $val);
             $val = trim($val);
             $val = trim($val, '/');
             $skip[$key] = "#^{$val}#i"; // regex
@@ -352,7 +352,7 @@ class suxFunct {
 
             $ok = true;
             foreach ($skip as $val2) {
-                if (preg_match($val2, $val)) $ok = false;
+                if (preg_match($val2, (string) $val)) $ok = false;
             }
             if ($ok) return suxFunct::makeUrl($val);
 
@@ -376,7 +376,7 @@ class suxFunct {
         // Add http:// if it's missing
         if (!preg_match('#^https?://#i', $url)) {
             // Remove ftp://, gopher://, fake://, etc
-            if (mb_strpos($url, '://')) list($garbage, $url) = mb_split('://', $url);
+            if (mb_strpos($url, '://')) [$garbage, $url] = mb_split('://', $url);
             // Prepend http
             $url = 'http://' . $url;
             if (preg_match('#^http:///#', $url)) {
@@ -403,7 +403,7 @@ class suxFunct {
     */
     static function breadcrumbs() {
 
-        $crumb = filter_var(trim((isset($_GET['c']) ? $_GET['c'] : 'home'), '/'), FILTER_SANITIZE_URL);
+        $crumb = filter_var(trim(($_GET['c'] ?? 'home'), '/'), FILTER_SANITIZE_URL);
         if (count($_GET) > 1) {
             $crumb .= $GLOBALS['CONFIG']['CLEAN_URL'] ? '?' : '&';
             $tmp = $_GET;
@@ -448,7 +448,7 @@ class suxFunct {
     */
     static function setLocale($locale) {
 
-        @list($lang, $cty) = explode('_', $locale);
+        @[$lang, $cty] = explode('_', $locale);
         $locales = array("$locale.UTF-8", "$locale.utf8", $lang);
         $result = setlocale(LC_ALL, $locales);
 
@@ -474,6 +474,10 @@ class suxFunct {
     */
     static function gtext($module = 'globals') {
 
+        $default = null;
+        $requested = null;
+        $override1 = null;
+        $override2 = null;
         // Cache
         static $gtext_cache = array();
         if (isset($gtext_cache[$module])) return $gtext_cache[$module];
@@ -528,14 +532,14 @@ class suxFunct {
 
         $string = mb_strtolower($string);
         $rawtokens = mb_split("\W", $string);
-        if (!count($rawtokens)) return array();
+        if (!(is_countable($rawtokens) ? count($rawtokens) : 0)) return array();
 
         if ($use_stopwords && !is_array(self::$stopwords)) {
             //. Get stopwords
             self::$stopwords = array();
-            $dir = dirname(__FILE__) . '/symbionts/stopwords';
+            $dir = __DIR__ . '/symbionts/stopwords';
             foreach (new DirectoryIterator($dir) as $file) {
-                if (preg_match('/^[a-z]{2}\.txt$/', $file)) {
+                if (preg_match('/^[a-z]{2}\.txt$/', (string) $file)) {
                     self::$stopwords = array_merge(self::$stopwords, file("{$dir}/{$file}", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
                 }
             }

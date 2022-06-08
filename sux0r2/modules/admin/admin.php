@@ -60,14 +60,14 @@ class admin extends component {
         // --------------------------------------------------------------------
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
-        else suxValidate::disconnect();
+        else (new suxValidate())->disconnect();
 
-        if (!suxValidate::is_registered_form()) {
+        if (!(new suxValidate())->is_registered_form()) {
 
-            suxValidate::connect($this->tpl, true); // Reset connection
+            (new suxValidate())->connect($this->tpl, true); // Reset connection
 
             // Register our validators
-            suxValidate::register_validator('integrity', 'integrity:users_id:nickname', 'hasIntegrity');
+            (new suxValidate())->register_validator('integrity', 'integrity:users_id:nickname', 'hasIntegrity');
 
         }
 

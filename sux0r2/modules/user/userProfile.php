@@ -16,7 +16,7 @@ class userProfile extends component {
     public $profile;
 
     // Var: minifeed limit
-    private $minifeed_limit = 10;
+    private int $minifeed_limit = 10;
 
 
     /**
@@ -88,7 +88,7 @@ class userProfile extends component {
                 $rss->outputRSS($title, $url, null);
 
                 foreach($fp as $item) {
-                    $url2 = $url . '#' . strtotime($item['ts']);
+                    $url2 = $url . '#' . strtotime((string) $item['ts']);
                     $rss->addOutputItem($item['ts'], $url2, $item['body_html']);
                 }
 

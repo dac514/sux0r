@@ -1,10 +1,10 @@
 <?php
 
-require_once(dirname(__FILE__)  . '/../config.php');
-require_once(dirname(__FILE__)  . '/../initialize.php');
-require_once(dirname(__FILE__)  . '/../includes/suxFunct.php');
-require_once(dirname(__FILE__)  . '/../includes/suxLink.php');
-require_once(dirname(__FILE__)  . '/../includes/suxPhoto.php');
+require_once(__DIR__  . '/../config.php');
+require_once(__DIR__  . '/../initialize.php');
+require_once(__DIR__  . '/../includes/suxFunct.php');
+require_once(__DIR__  . '/../includes/suxLink.php');
+require_once(__DIR__  . '/../includes/suxPhoto.php');
 set_time_limit(900); // Set the timeout to 15 minutes.
 
 // ----------------------------------------------------------------------------
@@ -28,7 +28,7 @@ $link_tables = $link->getLinkTables();
 $not_found = array();
 foreach ($link_tables as $val) {
 
-    $parts = explode('__', $val);
+    $parts = explode('__', (string) $val);
     if (count($parts) != 3) die('Unexpected result, ejecting early to avoid catastrophe...');
 
     $st = $db->query("SELECT * FROM {$val} ");
@@ -99,7 +99,7 @@ foreach($image_dirs as $dir => $table) {
     if (is_dir($path)) foreach (new DirectoryIterator($path) as $file) {
 
         $pattern = '/[^_fullsize](\.jpe?g|\.gif|\.png)$/i';
-        if ($file->isFile() && preg_match($pattern, $file)) {
+        if ($file->isFile() && preg_match($pattern, (string) $file)) {
             // Query
             $query = "SELECT id FROM {$table} WHERE image = " . $db->quote("$file");
             $st = $db->query($query);

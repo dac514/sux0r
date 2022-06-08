@@ -7,7 +7,7 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/symbionts/Smarty/libs/Smarty.class.php');
+require_once(__DIR__ . '/symbionts/Smarty/libs/Smarty.class.php');
 
 class suxTemplate extends Smarty {
 
@@ -131,7 +131,7 @@ class suxTemplate extends Smarty {
         elements frameset, frame and noframes.
         */
 
-        require_once(dirname(__FILE__) . '/symbionts/htmLawed/htmLawed.php');
+        require_once(__DIR__ . '/symbionts/htmLawed/htmLawed.php');
         $config = array(
             'tidy' => $tidy,
             );
@@ -148,7 +148,7 @@ class suxTemplate extends Smarty {
     */
     function setToken() {
 
-        $token = md5(uniqid(mt_rand(), true));
+        $token = md5(uniqid(random_int(0, mt_getrandmax()), true));
         $this->assign('token', $token);
 
         // Store token for later

@@ -24,7 +24,7 @@ class userReset extends component {
 
         // Declare objects
         $this->r = new userRenderer($this->module); // Renderer
-        suxValidate::register_object('this', $this); // Register self to validator
+        (new suxValidate())->register_object('this', $this); // Register self to validator
         parent::__construct(); // Let the parent do the rest
 
 
@@ -50,21 +50,21 @@ class userReset extends component {
     function formBuild(&$dirty) {
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
-        else suxValidate::disconnect();
+        else (new suxValidate())->disconnect();
 
-        if (!suxValidate::is_registered_form()) {
+        if (!(new suxValidate())->is_registered_form()) {
 
-            suxValidate::connect($this->tpl, true); // Reset connection
+            (new suxValidate())->connect($this->tpl, true); // Reset connection
 
             // Register our additional criterias
-            suxValidate::register_criteria('userExists', 'this->userExists');
-            suxValidate::register_criteria('isValidCaptcha', 'this->isValidCaptcha');
+            (new suxValidate())->register_criteria('userExists', 'this->userExists');
+            (new suxValidate())->register_criteria('isValidCaptcha', 'this->isValidCaptcha');
 
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
-            suxValidate::register_validator('user', 'user', 'notEmpty', false, false, 'trim');
-            suxValidate::register_validator('user2', 'user', 'userExists');
-            suxValidate::register_validator('captcha', 'captcha', 'isValidCaptcha');
+            (new suxValidate())->register_validator('user', 'user', 'notEmpty', false, false, 'trim');
+            (new suxValidate())->register_validator('user2', 'user', 'userExists');
+            (new suxValidate())->register_validator('captcha', 'captcha', 'isValidCaptcha');
 
         }
 
@@ -155,7 +155,7 @@ class userReset extends component {
 
         if (empty($formvars['captcha'])) return false;
 
-        require_once(dirname(__FILE__) . '/../../includes/symbionts/securimage/securimage.php');
+        require_once(__DIR__ . '/../../includes/symbionts/securimage/securimage.php');
         $image = new Securimage();
         return $image->check($formvars['captcha']);
     }

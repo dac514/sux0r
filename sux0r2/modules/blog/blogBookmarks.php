@@ -22,26 +22,20 @@ class blogBookmarks extends component {
     // Object: suxBookmarks()
     protected $bookmarks;
 
-    // Var: message id
-    private $id;
-
 
     /**
     * Constructor
     *
     * @param string $key PDO dsn key
     */
-    function __construct($id) {
+    function __construct(private $id) {
 
         // Declare objects
         $this->msg = new suxThreadedMessages();
         $this->bookmarks = new suxBookmarks();
         $this->r = new blogRenderer($this->module); // Renderer
-        suxValidate::register_object('this', $this); // Register self to validator
-        parent::__construct(); // Let the parent do the rest
-
-        // Declare properties
-        $this->id = $id;
+        (new suxValidate())->register_object('this', $this); // Register self to validator
+        parent::__construct();
         $this->msg->setPublished(null);
         $this->bookmarks->setPublished(null);
 
@@ -65,9 +59,9 @@ class blogBookmarks extends component {
 
         $matches = array();
         $pattern = '#<a[\s]+[^>]*?href[\s]?=[\s"\']+(.*?)["\']+.*?>([^<]+|.*?)?</a>#si'; // href pattern
-        preg_match_all($pattern, $msg['body_html'], $matches);
+        preg_match_all($pattern, (string) $msg['body_html'], $matches);
 
-        $count = count($matches[1]);
+        $count = is_countable($matches[1]) ? count($matches[1]) : 0;
         if (!$count) suxFunct::redirect(suxFunct::getPreviousURL()); //  No links, skip
 
         // Limit the amount of time we wait for a connection to a remote server to 5 seconds
@@ -98,7 +92,7 @@ class blogBookmarks extends component {
             }
         }
 
-        $count = count(@$this->arr['found_links']);
+        $count = is_countable(@$this->arr['found_links']) ? count(@$this->arr['found_links']) : 0;
         if (!$count) suxFunct::redirect(suxFunct::getPreviousURL()); //  No links, skip
 
     }
@@ -128,15 +122,15 @@ class blogBookmarks extends component {
 
         $count = 0;
         if (isset($dirty['url']) && is_array($dirty['url'])) {
-            $count = count($this->arr['found_links']); // Original count
+            $count = is_countable($this->arr['found_links']) ? count($this->arr['found_links']) : 0; // Original count
             $this->arr['found_links'] = array(); // Clear array
             for ($i = 0; $i < $count; ++$i) {
                 if (!empty($dirty['url'][$i]) && !isset($this->arr['found_links'][$dirty['url'][$i]])) {
                     $this->arr['found_links'][$dirty['url'][$i]] = array('title' => $dirty['title'][$i], 'body' => $dirty['body'][$i]);
                 }
                 else {
-                    $title = isset($dirty['title'][$i]) ? $dirty['title'][$i] : null;
-                    $body = isset($dirty['body'][$i]) ? $dirty['body'][$i] : null;
+                    $title = $dirty['title'][$i] ?? null;
+                    $body = $dirty['body'][$i] ?? null;
                     $this->arr['found_links'][] = array('title' => $title, 'body' => $body);
                 }
             }
@@ -147,19 +141,19 @@ class blogBookmarks extends component {
         // --------------------------------------------------------------------
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
-        else suxValidate::disconnect();
+        else (new suxValidate())->disconnect();
 
-        if (!suxValidate::is_registered_form()) {
+        if (!(new suxValidate())->is_registered_form()) {
 
-            suxValidate::connect($this->tpl, true); // Reset connection
+            (new suxValidate())->connect($this->tpl, true); // Reset connection
 
             // Register our validators
-            $count = count($this->arr['found_links']);
+            $count = is_countable($this->arr['found_links']) ? count($this->arr['found_links']) : 0;
             for ($i = 0; $i < $count; ++$i) {
-                suxValidate::register_validator("url[$i]", "url[$i]", 'notEmpty', false, false, 'trim');
-                suxValidate::register_validator("url2[$i]", "url[$i]", 'isURL');
-                suxValidate::register_validator("title[$i]", "title[$i]", 'notEmpty', false, false, 'trim');
-                suxValidate::register_validator("body[$i]", "body[$i]", 'notEmpty', false, false, 'trim');
+                (new suxValidate())->register_validator("url[$i]", "url[$i]", 'notEmpty', false, false, 'trim');
+                (new suxValidate())->register_validator("url2[$i]", "url[$i]", 'isURL');
+                (new suxValidate())->register_validator("title[$i]", "title[$i]", 'notEmpty', false, false, 'trim');
+                (new suxValidate())->register_validator("body[$i]", "body[$i]", 'notEmpty', false, false, 'trim');
             }
 
         }

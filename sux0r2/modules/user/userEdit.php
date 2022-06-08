@@ -19,7 +19,7 @@ class userEdit extends component {
     public $caches = array('home', 'blog', 'feeds', 'bookmarks', 'photos');
 
     // Var: edit mode
-    private $mode = 'register';
+    private string $mode = 'register';
 
     // Var:
     private $users_id = null;
@@ -33,13 +33,13 @@ class userEdit extends component {
 
         // Declare objects
         $this->r = new userRenderer($this->module); // Renderer
-        suxValidate::register_object('this', $this); // Register self to validator
+        (new suxValidate())->register_object('this', $this); // Register self to validator
         parent::__construct(); // Let the parent do the rest
 
         // Give a unique form name
         $form_name = 'userEdit';
         $this->tpl->assign('form_name', $form_name);
-        suxValidate::set_form($form_name);
+        (new suxValidate())->set_form($form_name);
 
         // -------------------------------------------------------------------
         // Edit mode
@@ -161,28 +161,28 @@ class userEdit extends component {
         // --------------------------------------------------------------------
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
-        else suxValidate::disconnect();
+        else (new suxValidate())->disconnect();
 
-        if (!suxValidate::is_registered_form()) {
+        if (!(new suxValidate())->is_registered_form()) {
 
-            suxValidate::connect($this->tpl, true); // Reset connection
+            (new suxValidate())->connect($this->tpl, true); // Reset connection
 
             // Register our additional criterias
-            suxValidate::register_criteria('invalidCharacters', 'this->invalidCharacters');
-            suxValidate::register_criteria('isDuplicateNickname', 'this->isDuplicateNickname');
-            suxValidate::register_criteria('isReservedNickname', 'this->isReservedNickname');
-            suxValidate::register_criteria('isDuplicateEmail', 'this->isDuplicateEmail');
-            suxValidate::register_criteria('isValidCaptcha', 'this->isValidCaptcha');
+            (new suxValidate())->register_criteria('invalidCharacters', 'this->invalidCharacters');
+            (new suxValidate())->register_criteria('isDuplicateNickname', 'this->isDuplicateNickname');
+            (new suxValidate())->register_criteria('isReservedNickname', 'this->isReservedNickname');
+            (new suxValidate())->register_criteria('isDuplicateEmail', 'this->isDuplicateEmail');
+            (new suxValidate())->register_criteria('isValidCaptcha', 'this->isValidCaptcha');
 
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
-            suxValidate::register_validator('nickname', 'nickname', 'notEmpty', false, false, 'trim');
-            suxValidate::register_validator('nickname2', 'nickname', 'invalidCharacters');
-            suxValidate::register_validator('nickname3', 'nickname', 'isDuplicateNickname');
-            suxValidate::register_validator('nickname4', 'nickname', 'isReservedNickname');
-            suxValidate::register_validator('email', 'email', 'isEmail', false, false, 'trim');
-            suxValidate::register_validator('email2', 'email', 'isDuplicateEmail');
-            if ($this->mode == 'edit') suxValidate::register_validator('integrity', 'integrity:nickname', 'hasIntegrity');
+            (new suxValidate())->register_validator('nickname', 'nickname', 'notEmpty', false, false, 'trim');
+            (new suxValidate())->register_validator('nickname2', 'nickname', 'invalidCharacters');
+            (new suxValidate())->register_validator('nickname3', 'nickname', 'isDuplicateNickname');
+            (new suxValidate())->register_validator('nickname4', 'nickname', 'isReservedNickname');
+            (new suxValidate())->register_validator('email', 'email', 'isEmail', false, false, 'trim');
+            (new suxValidate())->register_validator('email2', 'email', 'isDuplicateEmail');
+            if ($this->mode == 'edit') (new suxValidate())->register_validator('integrity', 'integrity:nickname', 'hasIntegrity');
 
 
 
@@ -195,18 +195,18 @@ class userEdit extends component {
 
                 if ($this->mode == 'edit') {
                     // Empty is ok in edit mode
-                    suxValidate::register_validator('password', 'password:6:-1', 'isLength', true, false, 'trim');
-                    suxValidate::register_validator('password2', 'password:password_verify', 'isEqual', true);
+                    (new suxValidate())->register_validator('password', 'password:6:-1', 'isLength', true, false, 'trim');
+                    (new suxValidate())->register_validator('password2', 'password:password_verify', 'isEqual', true);
                 }
                 else {
-                    suxValidate::register_validator('password', 'password:6:-1', 'isLength', false, false, 'trim');
-                    suxValidate::register_validator('password2', 'password:password_verify', 'isEqual');
+                    (new suxValidate())->register_validator('password', 'password:6:-1', 'isLength', false, false, 'trim');
+                    (new suxValidate())->register_validator('password2', 'password:password_verify', 'isEqual');
                 }
 
             }
 
             // Captcha
-            if ($this->mode != 'edit') suxValidate::register_validator('captcha', 'captcha', 'isValidCaptcha');
+            if ($this->mode != 'edit') (new suxValidate())->register_validator('captcha', 'captcha', 'isValidCaptcha');
 
         }
 
@@ -271,7 +271,7 @@ class userEdit extends component {
             $clean['dob'] = null;
         }
         unset ($clean['Date_Year'], $clean['Date_Month'], $clean['Date_Day']);
-        if (isset($clean['dob'])) $clean['dob'] = date('Y-m-d', strtotime($clean['dob'])); // Sanitize
+        if (isset($clean['dob'])) $clean['dob'] = date('Y-m-d', strtotime((string) $clean['dob'])); // Sanitize
         else $clean['dob'] = null;
 
 
@@ -383,7 +383,7 @@ class userEdit extends component {
 
         if (empty($formvars['nickname'])) return false;
 
-        if (!preg_match('/^(\w|\-)+$/', $formvars['nickname'])) return false; // Invalid characters
+        if (!preg_match('/^(\w|\-)+$/', (string) $formvars['nickname'])) return false; // Invalid characters
         else return true;
 
     }
@@ -463,7 +463,7 @@ class userEdit extends component {
 
         if (empty($formvars['captcha'])) return false;
 
-        require_once(dirname(__FILE__) . '/../../includes/symbionts/securimage/securimage.php');
+        require_once(__DIR__ . '/../../includes/symbionts/securimage/securimage.php');
         $image = new Securimage();
         return $image->check($formvars['captcha']);
     }

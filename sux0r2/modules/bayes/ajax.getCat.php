@@ -7,8 +7,8 @@
 // Require
 // ---------------------------------------------------------------------------
 
-require_once(dirname(__FILE__) . '/../../config.php');
-require_once(dirname(__FILE__) . '/../../initialize.php');
+require_once(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/../../initialize.php');
 
 $text = suxFunct::gtext('bayes');
 

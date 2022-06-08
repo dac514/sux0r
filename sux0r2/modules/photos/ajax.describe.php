@@ -3,15 +3,15 @@
 // Ajax
 // Describe a photo
 
-require_once(dirname(__FILE__) . '/../../config.php');
-require_once(dirname(__FILE__) . '/../../initialize.php');
+require_once(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/../../initialize.php');
 
 // ---------------------------------------------------------------------------
 // Pre-processing
 // ---------------------------------------------------------------------------
 
 // Remove 'editme' from id
-$_POST['id'] = str_replace('editme', '', $_POST['id']);
+$_POST['id'] = str_replace('editme', '', (string) $_POST['id']);
 
 // ---------------------------------------------------------------------------
 // Error checking

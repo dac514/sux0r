@@ -185,6 +185,7 @@ class suxRenderer {
     function widget($title, $content, $url = null, $image = null, $caption = null, $url2 = null, $floater = 'floatright') {
 
 
+        $r = [];
         // Sanitize / Filter
         if ($url) {
             $url = suxFunct::canonicalizeUrl($url);
@@ -196,7 +197,7 @@ class suxRenderer {
             // The server can be crippled if getimagesize() recursively points
             // to itself (example: . $image = /index.php) so we enforce image
             // extensions to avoid this
-            if (!preg_match('/\.(jpe?g|gif|png)$/i', $image)) $image = null;
+            if (!preg_match('/\.(jpe?g|gif|png)$/i', (string) $image)) $image = null;
 
         }
         if ($url2) {
@@ -296,6 +297,7 @@ class suxRenderer {
     */
     static function navlist($list = null) {
 
+        $r = [];
         if (!is_array($list)) {
             $gtext = suxFunct::gtext();
             if (isset($gtext['navcontainer'])) $list = $gtext['navcontainer'];
@@ -305,7 +307,7 @@ class suxRenderer {
             // Make an educated guess as to which controller we are currently using?
             $compare = 'home';
             if (!empty($_GET['c'])) {
-                $params = explode('/', $_GET['c']);
+                $params = explode('/', (string) $_GET['c']);
                 $compare = array_shift($params);
             }
 

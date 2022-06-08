@@ -16,7 +16,7 @@ class userRegisterOpenID extends component {
     protected $form_name = 'userRegisterOpenID';
 
     // Var
-    private $prev_skip = array();
+    private array $prev_skip = array();
 
 
     /**
@@ -27,7 +27,7 @@ class userRegisterOpenID extends component {
 
         // Declare objects
         $this->r = new userRenderer($this->module); // Renderer
-        suxValidate::register_object('this', $this); // Register self to validator
+        (new suxValidate())->register_object('this', $this); // Register self to validator
         parent::__construct(); // Let the parent do the rest
 
         // This module can fallback on user/openid module
@@ -58,20 +58,20 @@ class userRegisterOpenID extends component {
     function formBuild(&$dirty) {
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
-        else suxValidate::disconnect();
+        else (new suxValidate())->disconnect();
 
-        if (!suxValidate::is_registered_form()) {
+        if (!(new suxValidate())->is_registered_form()) {
 
-            suxValidate::connect($this->tpl, true); // Reset connection
+            (new suxValidate())->connect($this->tpl, true); // Reset connection
 
             // Register our additional criterias
-            suxValidate::register_criteria('isDuplicateOpenIDUrl', 'this->isDuplicateOpenIDUrl');
+            (new suxValidate())->register_criteria('isDuplicateOpenIDUrl', 'this->isDuplicateOpenIDUrl');
 
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
-            suxValidate::register_validator('url', 'url', 'notEmpty', false, false, 'trim');
-            suxValidate::register_validator('url2', 'url', 'isURL');
-            suxValidate::register_validator('url3', 'url', 'isDuplicateOpenIDUrl');
+            (new suxValidate())->register_validator('url', 'url', 'notEmpty', false, false, 'trim');
+            (new suxValidate())->register_validator('url2', 'url', 'isURL');
+            (new suxValidate())->register_validator('url3', 'url', 'isDuplicateOpenIDUrl');
 
         }
 

@@ -29,9 +29,9 @@ class suxDB {
     // difficult to manage. The option is here for future developement.
 
     public static $dsn = array();
-    private static $supported = array('mysql', 'pgsql');
-    private static $db = array();
-    private static $transaction = array();
+    private static array $supported = array('mysql', 'pgsql');
+    private static array $db = array();
+    private static array $transaction = array();
 
 
     // Static class, no cloning or instantiating allowed
@@ -65,7 +65,7 @@ class suxDB {
                 // Figure out what kind of PDO DSN this is supposed to be
                 if (is_array(self::$dsn[$key])) {
                     // Call appropriate PDO constructor and provide array arguments
-                    $c = new ReflectionClass('PDO');
+                    $c = new ReflectionClass(\PDO::class);
                     self::$db[$key] = $c->newInstanceArgs(self::$dsn[$key]);
                 }
                 else {
@@ -154,21 +154,11 @@ class suxDB {
     static function showTablesQuery($key = null) {
 
         $db = self::get($key);
-        switch($db->getAttribute(PDO::ATTR_DRIVER_NAME))
-        {
-
-        case 'mysql':
-            $q = "SHOW TABLES ";
-            break;
-
-        case 'pgsql':
-            $q = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' and table_type = 'BASE TABLE' ";
-            break;
-
-        default:
-            throw new Exception('Unsupported database driver');
-
-        }
+        $q = match ($db->getAttribute(PDO::ATTR_DRIVER_NAME)) {
+            'mysql' => "SHOW TABLES ",
+            'pgsql' => "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' and table_type = 'BASE TABLE' ",
+            default => throw new Exception('Unsupported database driver'),
+        };
 
         return $q;
 
@@ -182,25 +172,14 @@ class suxDB {
     */
     static function showColumnsQuery($table, $key = null) {
 
-        if (!preg_match('/^[A-Za-z0-9_]+$/', $table)) throw new Exception('Invalid table name');
+        if (!preg_match('/^[A-Za-z0-9_]+$/', (string) $table)) throw new Exception('Invalid table name');
 
         $db = self::get($key);
-        switch($db->getAttribute(PDO::ATTR_DRIVER_NAME))
-
-        {
-
-        case 'mysql':
-            $q = "SHOW COLUMNS FROM {$table} ";
-            break;
-
-        case 'pgsql':
-            $q = "SELECT column_name FROM information_schema.columns WHERE table_name = '{$table}' ";
-            break;
-
-        default:
-            throw new Exception('Unsupported database driver');
-
-        }
+        $q = match ($db->getAttribute(PDO::ATTR_DRIVER_NAME)) {
+            'mysql' => "SHOW COLUMNS FROM {$table} ",
+            'pgsql' => "SELECT column_name FROM information_schema.columns WHERE table_name = '{$table}' ",
+            default => throw new Exception('Unsupported database driver'),
+        };
 
         return $q;
 
@@ -314,10 +293,10 @@ class suxDB {
             //quote
             $string = $db->quote($string);
             // replace the first character
-            $tmp = substr($string, 0, 1);
+            $tmp = substr((string) $string, 0, 1);
             $string = substr_replace($string, "{$tmp}%", 0, 1);
             // replace the last character
-            $tmp = substr($string, -1, 1);
+            $tmp = substr((string) $string, -1, 1);
             $string = substr_replace($string, "%{$tmp}", -1, 1);
             // append to query
             $q .= "(title LIKE {$string} OR body_plaintext LIKE {$string}) $op ";
