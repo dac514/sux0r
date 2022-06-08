@@ -272,12 +272,16 @@ class suxThreadedMessages {
             thread_pos value incremented by 1 (to make room for N).
             */
 
+            $parent = false;
             if ($clean['parent_id']) {
 
                 // Get thread_id, level, and thread_pos from parent
                 $st = $this->db->prepare("SELECT thread_id, level, thread_pos FROM {$this->db_table} WHERE id = ? ");
                 $st->execute(array($clean['parent_id']));
                 $parent = $st->fetch(PDO::FETCH_ASSOC);
+            }
+
+            if ($parent) {
 
                 // a reply's level is one greater than its parent's
                 $clean['level'] = $parent['level'] + 1;
@@ -393,7 +397,7 @@ class suxThreadedMessages {
         $st->execute(array($thread_id, $parent_id));
         $result = $st->fetch(PDO::FETCH_ASSOC);
 
-        if ($result['thread_pos'] && $max_pos < $result['thread_pos']) {
+        if ($result && $result['thread_pos'] && $max_pos < $result['thread_pos']) {
             $max_pos = $result['thread_pos'];
             return $this->biggestThreadPos($thread_id, $result['id']);
         }

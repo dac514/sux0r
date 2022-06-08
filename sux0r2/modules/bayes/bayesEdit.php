@@ -54,7 +54,7 @@ class bayesEdit extends component {
 
         if (empty($dirty['action'])) return false;
 
-        $action = filter_var($dirty['action'], FILTER_SANITIZE_STRING);
+        $action = filter_var($dirty['action'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         return suxValidate::formValidate($dirty, $this->tpl, $action);
 
     }

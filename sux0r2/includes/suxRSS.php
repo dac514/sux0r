@@ -56,7 +56,7 @@ class suxRSS extends DOMDocument {
         );
 
     // RSS Code Page / Encoding
-    private $rsscp;
+    private $rsscp = '';
 
     // Channel
     private $channel;
@@ -496,8 +496,9 @@ class suxRSS extends DOMDocument {
         $st = $this->db->prepare("SELECT url FROM {$this->db_feeds} WHERE id = ? ");
         $st->execute(array($id));
 
-        $url = $st->fetch(PDO::FETCH_ASSOC);
-        $this->deleteCache($url['url']);
+        if ($url = $st->fetch(PDO::FETCH_ASSOC)) {
+            $this->deleteCache($url['url']);
+        }
 
     }
 

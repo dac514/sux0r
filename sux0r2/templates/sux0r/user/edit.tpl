@@ -182,7 +182,7 @@
 
     <div>
     <img src="{$r->url}/modules/captcha/ajax.getImage.php?sid={$r->uniqueId()}" alt="Captcha" border="0" />
-    <a href="{$r->url}/modules/captcha/ajax.getSound.php"><img src="{$r->url}/includes/symbionts/securimage/images/audio_icon.gif" alt="Audio Version"  border="0" /></a>
+    <a href="{$r->url}/modules/captcha/ajax.getSound.php"><img src="{$r->url}/includes/symbionts/securimage/images/audio_icon.png" alt="Audio Version"  border="0" /></a>
     </div>
 
     <label>&nbsp;</label>

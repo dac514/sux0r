@@ -75,7 +75,7 @@ class admin extends component {
         // Sort / Order
         // -------------------------------------------------------------------
 
-        $sort = null;
+        $sort = '';
         if (isset($_GET['sort'])) $sort = $_GET['sort'];
 
         $order = 'DESC';

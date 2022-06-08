@@ -7,7 +7,7 @@
 $CONFIG['DEBUG'] = false;
 
 error_reporting(E_ALL | E_STRICT); // Development
-// error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING); // Hosting
+// error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING ^ E_DEPRECATED); // Hosting
 
 /* ------------------------------------------------------------------------- */
 /* Configuration variables */

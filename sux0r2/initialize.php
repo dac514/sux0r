@@ -37,6 +37,30 @@ function suxAutoload($class_name) {
 spl_autoload_register('suxAutoload');
 
 /**
+ * Polyfills
+ */
+
+if (!function_exists('each')) {
+    function each(array &$array) {
+        $value = current($array);
+        $key = key($array);
+        if (is_null($key)) {
+            return false;
+        }
+
+        // Move pointer.
+        next($array);
+        return array(1 => $value, 'value' => $value, 0 => $key, 'key' => $key);
+    }
+}
+
+if (!function_exists('session_is_registered')) {
+    function session_is_registered($x) {
+        return isset($_SESSION[$x]);
+    }
+}
+
+/**
 * Procedure
 */
 
@@ -85,7 +109,7 @@ ini_set('arg_separator.output', '&');
 date_default_timezone_set($GLOBALS['CONFIG']['TIMEZONE']);
 
 // Get rid of magic quotes
-if (get_magic_quotes_gpc() && (!ini_get('magic_quotes_sybase'))) {
+if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc() && (!ini_get('magic_quotes_sybase'))) {
     $in = array(&$_GET, &$_POST, &$_REQUEST, &$_COOKIE, &$_FILES);
     while (list($k,$v) = each($in)) {
         foreach ($v as $key => $val) {

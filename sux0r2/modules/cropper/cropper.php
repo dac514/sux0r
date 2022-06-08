@@ -84,7 +84,7 @@ class cropper extends component {
         $st->execute(array($id));
         $image = $st->fetch(PDO::FETCH_ASSOC);
 
-        if (!$image['image']) throw new Exception('$image not found');
+        if (!$image) throw new Exception('$image not found');
 
         if ($image['users_id'] != $_SESSION['users_id']) {
             // Check that the user is allowed to be here
@@ -159,13 +159,13 @@ class cropper extends component {
         $st->execute(array($clean['id']));
         $image = $st->fetch(PDO::FETCH_ASSOC);
 
-        if (!$image['image']) throw new Exception('$image not found');
+        if (!$image) throw new Exception('$image not found');
 
         if ($image['users_id'] != $_SESSION['users_id']) {
             // Security check
             if (!$this->user->isRoot()) {
                 $access = $this->user->getAccess($clean['module']);
-                if (!isset($GLOBALS['CONFIG']['ACCESS'][$module]['admin']))
+                if (!isset($GLOBALS['CONFIG']['ACCESS'][$this->module]['admin']))
                     suxFunct::redirect(suxFunct::getPreviousURL('cropper'));
                 elseif ($access < $GLOBALS['CONFIG']['ACCESS'][$clean['module']]['admin'])
                     suxFunct::redirect(suxFunct::getPreviousURL('cropper'));

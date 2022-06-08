@@ -252,7 +252,7 @@ class suxHtml2UTF8 {
             $text = trim(html_entity_decode(stripslashes($this->html), ENT_QUOTES, 'UTF-8'));
 
             // Run our defined search-and-replace
-            $text = @preg_replace($this->search, $this->replace, $text); // Ignore warnings?
+            $text = (string) @preg_replace($this->search, $this->replace, $text); // Ignore warnings?
 
             // Strip any other HTML tags
             $text = strip_tags($text);

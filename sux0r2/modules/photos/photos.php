@@ -175,8 +175,9 @@ class photos extends component {
                     }
                     $prev_id = $prev_next['id'];
                 }
-                $prev_next = $st->fetch(PDO::FETCH_ASSOC);
-                $next_id = $prev_next['id'];
+                if ($prev_next = $st->fetch(PDO::FETCH_ASSOC)) {
+                    $next_id = $prev_next['id'];
+                }
 
                 $this->r->text['prev_id'] = $prev_id;
                 $this->r->text['next_id'] = $next_id;

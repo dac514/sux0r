@@ -3,7 +3,7 @@
     <style type="text/css">
     label {
         float: left;
-        width: 140px;
+        width: 160px;
         margin-right: 0.5em;
         text-align: right;
     }
@@ -53,6 +53,7 @@
 <input type="text" name="user" value="{$user}" />
 {$smarty.capture.error}
 </p>
+<div class="clearboth"></div>
 
 <p>
 {strip}
@@ -68,7 +69,7 @@
 <p>
 <label>&nbsp;</label>
 <img src="{$r->url}/modules/captcha/ajax.getImage.php?sid={$r->uniqueId()}" alt="Captcha" border="0" />
-<a href="{$r->url}/modules/captcha/ajax.getSound.php"><img src="{$r->url}/includes/symbionts/securimage/images/audio_icon.gif" alt="Audio Version"  border="0" /></a>
+<a href="{$r->url}/modules/captcha/ajax.getSound.php"><img src="{$r->url}/includes/symbionts/securimage/images/audio_icon.png" alt="Audio Version"  border="0" /></a>
 </p>
 <div class="clearboth"></div>
 

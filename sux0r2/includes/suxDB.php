@@ -36,7 +36,7 @@ class suxDB {
 
     // Static class, no cloning or instantiating allowed
     final private function __construct() { }
-    final private function __clone() { }
+    private function __clone() { }
 
     // ------------------------------------------------------------------------
     // Static Functions
@@ -97,7 +97,6 @@ class suxDB {
                 $message = 'There was a problem connecting to the database. ';
                 $message .= $e->getMessage();
                 throw new Exception($message);
-                die();
             }
 
         }
