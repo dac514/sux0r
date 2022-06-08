@@ -245,4 +245,3 @@ class feedsEdit extends component {
 }
 
 
-?>

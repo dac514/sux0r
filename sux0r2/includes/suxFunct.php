@@ -981,4 +981,3 @@ class suxFunct {
     }
 }
 
-?>

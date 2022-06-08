@@ -4,3 +4,4 @@ sux0r2/temporary/**
 sux0r2/.htaccess
 sux0r2/config.php
 .DS_Store
+vendor/

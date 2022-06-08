@@ -36,4 +36,3 @@ function blog_menu() {
 }
 
 
-?>

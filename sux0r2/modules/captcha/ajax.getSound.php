@@ -15,4 +15,3 @@ $image->audio_path =  realpath(dirname(__FILE__) . '/../../includes/symbionts/se
 
 $image->outputAudioFile();
 
-?>

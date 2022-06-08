@@ -69,4 +69,3 @@ $gtext['vector'] = 'Vector';
 $gtext['vectors'] = 'Vectors';
 $gtext['with'] = 'With friend';
 
-?>

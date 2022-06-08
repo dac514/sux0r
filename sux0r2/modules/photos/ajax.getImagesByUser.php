@@ -29,4 +29,3 @@ $output .= "\n" . ');';
 header('Content-type: text/javascript'); // Make output a real JavaScript file
 echo $output;
 
-?>

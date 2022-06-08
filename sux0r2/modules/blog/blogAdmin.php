@@ -145,4 +145,3 @@ class blogAdmin extends component {
 }
 
 
-?>

@@ -16,4 +16,3 @@ $image->ttf_file =  realpath(dirname(__FILE__) . '/../../includes/symbionts/secu
 
 $image->show();
 
-?>

@@ -268,4 +268,3 @@ class photosUpload extends component {
 }
 
 
-?>

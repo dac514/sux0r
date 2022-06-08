@@ -41,4 +41,3 @@ $gtext['suggested'] = 'Suggestie door';
 $gtext['title'] = 'Titel';
 $gtext['url'] = 'URL';
 
-?>

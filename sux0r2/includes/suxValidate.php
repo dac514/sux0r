@@ -101,4 +101,3 @@ function smarty_validate_criteria_hasIntegrity($value, $empty, &$params, &$formv
 }
 
 
-?>

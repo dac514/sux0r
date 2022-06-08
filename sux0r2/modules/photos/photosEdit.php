@@ -174,4 +174,3 @@ class photosEdit extends component {
 }
 
 
-?>

@@ -25,4 +25,3 @@ if (isset($_POST['id']) && filter_var($_POST['id'], FILTER_VALIDATE_INT)) {
 
 }
 
-?>

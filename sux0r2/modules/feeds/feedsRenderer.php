@@ -154,4 +154,3 @@ class feedsRenderer extends suxBayesRenderer {
 }
 
 
-?>

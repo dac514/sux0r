@@ -1140,4 +1140,3 @@ class suxThreadedMessages {
 
 }
 
-?>

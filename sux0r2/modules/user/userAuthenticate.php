@@ -95,4 +95,3 @@ class userAuthenticate extends component {
 }
 
 
-?>

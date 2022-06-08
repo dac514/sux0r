@@ -340,4 +340,3 @@ function insert_lament($params) {
 
 }
 
-?>

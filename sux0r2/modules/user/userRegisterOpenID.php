@@ -123,4 +123,3 @@ class userRegisterOpenID extends component {
 }
 
 
-?>

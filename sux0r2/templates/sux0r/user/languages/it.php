@@ -104,4 +104,3 @@ $gtext['unset_image'] = 'Togli l\'immagine corrente';
 $gtext['url'] = 'URL';
 
 
-?>

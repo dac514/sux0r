@@ -71,4 +71,3 @@ class cropperRenderer extends suxRenderer {
 }
 
 
-?>

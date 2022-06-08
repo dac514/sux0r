@@ -22,4 +22,3 @@ class globalsRenderer extends suxRenderer {
 }
 
 
-?>

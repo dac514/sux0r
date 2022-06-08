@@ -245,4 +245,3 @@ class admin extends component {
 }
 
 
-?>

@@ -23,4 +23,3 @@ $gtext['server'] = '服务器';
 $gtext['test'] = '测试';
 $gtext['yes'] = '是';
 
-?>

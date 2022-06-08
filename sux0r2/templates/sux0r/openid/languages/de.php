@@ -22,4 +22,3 @@ $gtext['server'] = 'Server';
 $gtext['test'] = 'Test';
 $gtext['yes'] = 'Ja';
 
-?>

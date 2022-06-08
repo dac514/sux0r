@@ -233,4 +233,3 @@ class photos extends component {
 }
 
 
-?>

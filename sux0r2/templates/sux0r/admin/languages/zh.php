@@ -29,4 +29,3 @@ $gtext['timestamp'] = '时间戳';
 $gtext['url'] = 'URL';
 $gtext['yourself'] = '您在编辑自身，由于安全因素，一些功能不可用。';
 
-?>

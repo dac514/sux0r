@@ -218,4 +218,3 @@ class blogBookmarks extends component {
 }
 
 
-?>

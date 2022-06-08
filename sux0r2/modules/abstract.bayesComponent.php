@@ -119,4 +119,3 @@ abstract class bayesComponent extends component {
 
 }
 
-?>

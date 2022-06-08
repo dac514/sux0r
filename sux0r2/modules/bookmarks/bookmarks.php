@@ -452,4 +452,3 @@ class bookmarks extends bayesComponent {
 }
 
 
-?>

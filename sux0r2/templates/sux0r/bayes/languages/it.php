@@ -68,4 +68,3 @@ $gtext['vectors'] = 'Vettori';
 $gtext['vector'] = 'Vettore';
 $gtext['with'] = 'Con';
 
-?>

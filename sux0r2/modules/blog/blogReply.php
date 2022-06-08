@@ -155,4 +155,3 @@ class blogReply extends component {
 }
 
 
-?>

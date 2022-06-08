@@ -134,4 +134,3 @@ class feedsPurge extends component  {
 }
 
 
-?>

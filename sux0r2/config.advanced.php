@@ -73,4 +73,3 @@ $CONFIG['PREV_SKIP'] = array(
 
 $CONFIG['SMARTY_ERROR_REPORTING'] = 0;
 
-?>

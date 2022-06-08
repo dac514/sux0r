@@ -15,4 +15,3 @@ catch (Exception $e) {
     echo "Line: " , $e->getLine() , "\n\n";    
 }
 
-?>

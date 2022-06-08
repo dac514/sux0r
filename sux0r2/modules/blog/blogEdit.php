@@ -429,4 +429,3 @@ class blogEdit extends component {
 }
 
 
-?>

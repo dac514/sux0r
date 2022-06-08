@@ -110,4 +110,3 @@ class userProfile extends component {
 }
 
 
-?>

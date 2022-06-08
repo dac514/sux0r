@@ -12,4 +12,3 @@ $gtext['height'] = '高度';
 $gtext['submit'] = '提交';
 $gtext['width'] = '宽度';
 
-?>

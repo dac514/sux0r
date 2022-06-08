@@ -95,4 +95,3 @@ require($GLOBALS['CONFIG']['PATH'] . '/config.advanced.php');
 
 // Override below...
 
-?>

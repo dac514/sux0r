@@ -104,4 +104,3 @@ $gtext['nl'] = 'Nederlands';
 // Countries
 $gtext['nl2'] = 'Nederland';
 
-?>

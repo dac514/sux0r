@@ -80,4 +80,3 @@ $tpl->clearCache(null, "{$_SESSION['nickname']}"); // clear all caches with "nic
 echo trim($image);
 exit;
 
-?>

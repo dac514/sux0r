@@ -1586,4 +1586,3 @@ CREATE TABLE `openid_trusted` (
 */
 
 
-?>

@@ -140,4 +140,3 @@ class feedsAdmin extends component {
 }
 
 
-?>

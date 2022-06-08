@@ -51,4 +51,3 @@ $gtext['logout'] = '退出';
 $gtext['register'] = '注册';
 $gtext['welcome'] = '欢迎';
 
-?>

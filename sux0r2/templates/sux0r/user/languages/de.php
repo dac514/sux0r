@@ -104,4 +104,3 @@ $gtext['de'] = 'Deutsch';
 // Countries
 $gtext['de2'] = 'Deutschland';
 
-?>

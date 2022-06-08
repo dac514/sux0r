@@ -330,4 +330,3 @@ class suxHtml2UTF8 {
 
 }
 
-?>

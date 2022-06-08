@@ -29,4 +29,3 @@ $gtext['timestamp'] = 'Timestamp';
 $gtext['url'] = 'URL';
 $gtext['yourself'] = 'Je bent jezelf aan het aanpassen, sommige functies zijn vanwege veiligheidsredenen uitgeschakeld';
 
-?>

@@ -139,4 +139,3 @@ class bookmarksAdmin extends component {
 }
 
 
-?>

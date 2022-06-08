@@ -708,4 +708,3 @@ class blog extends bayesComponent {
 }
 
 
-?>

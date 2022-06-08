@@ -200,4 +200,3 @@ function sux($action, $params = null) {
 
 }
 
-?>

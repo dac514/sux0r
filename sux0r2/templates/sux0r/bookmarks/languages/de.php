@@ -50,4 +50,3 @@ $gtext['tags_2'] = 'Tags, Kommando getrennt';
 $gtext['time'] = 'Zeit';
 $gtext['title'] = 'Titel';
 $gtext['url'] = 'URL';
-?>

@@ -52,4 +52,3 @@ $gtext['upload'] = '上传图片';
 $gtext['upload_2'] = '上传';
 $gtext['uploaded_images'] = '上传图片到相册';
 
-?>

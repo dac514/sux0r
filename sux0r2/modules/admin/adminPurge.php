@@ -120,4 +120,3 @@ class adminPurge extends component {
 }
 
 
-?>
