@@ -10,9 +10,9 @@ require_once(__DIR__  . '/../config.php'); // Configuration
 $prob = null;
 $continue = false;
 
-// Enforce minimum version of PHP 5.2.3
-if (preg_replace('/[a-z-]/i', '', phpversion()) < '5.2.3') {
-    $prob .= "Error: sux0r requires PHP 5.2.3, or higher. see: http://www.gophp5.org/ \n";
+// Enforce minimum version of PHP 8.1.0
+if (preg_replace('/[a-z-]/i', '', phpversion()) < '8.1.0') {
+    $prob .= "Error: sux0r requires PHP 8.1.0, or higher.\n";
 }
 
 // Check for mbstring
