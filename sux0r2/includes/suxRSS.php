@@ -56,7 +56,7 @@ class suxRSS extends DOMDocument {
         );
 
     // RSS Code Page / Encoding
-    private $rsscp = '';
+    private string $rsscp = '';
 
     // Channel
     private $channel;
@@ -308,6 +308,7 @@ class suxRSS extends DOMDocument {
     */
     function saveFeed($users_id, array $url, $trusted = -1) {
 
+        $clean = [];
         // -------------------------------------------------------------------
         // Sanitize
         // -------------------------------------------------------------------
@@ -819,6 +820,7 @@ class suxRSS extends DOMDocument {
     */
     private function parse($rss_url, $timestamp = null) {
 
+        $result = [];
         // Sanity check
         if (!filter_var($rss_url, FILTER_VALIDATE_URL)) return false;
         $timestamp = filter_var($timestamp, FILTER_VALIDATE_INT);
@@ -901,10 +903,10 @@ class suxRSS extends DOMDocument {
             $is_atom = false;
             $out_channel = array();
 
-            preg_match("'<channel.*?>(.*?)</channel>'si", $rss_content, $out_channel);
+            preg_match("'<channel.*?>(.*?)</channel>'si", (string) $rss_content, $out_channel);
             if (!count($out_channel)) {
                 // Maybe this is an Atom feed? Parse FEED info
-                preg_match("'<feed.*?>(.*?)</feed>'si", $rss_content, $out_channel);
+                preg_match("'<feed.*?>(.*?)</feed>'si", (string) $rss_content, $out_channel);
                 if (count($out_channel)) $is_atom = true;
                 else return false; // This isn't an RSS/Atom feed, abort
             }
@@ -949,7 +951,7 @@ class suxRSS extends DOMDocument {
             // ---------------------------------------------------------------
 
             $out_textinfo = array();
-            preg_match("'<textinput(|[^>]*[^/])>(.*?)</textinput>'si", $rss_content, $out_textinfo);
+            preg_match("'<textinput(|[^>]*[^/])>(.*?)</textinput>'si", (string) $rss_content, $out_textinfo);
 
             // This a little strange regexp means:
             // Look for tag <textinput> with or without any attributes, but skip truncated version <textinput /> (it's not beggining tag)
@@ -965,7 +967,7 @@ class suxRSS extends DOMDocument {
             // ---------------------------------------------------------------
 
             $out_imageinfo = array();
-            preg_match("'<image.*?>(.*?)</image>'si", $rss_content, $out_imageinfo);
+            preg_match("'<image.*?>(.*?)</image>'si", (string) $rss_content, $out_imageinfo);
             if (isset($out_imageinfo[1])) {
                 foreach($this->imagetags as $imagetag) {
                     $temp = $this->myPregMatch("'<$imagetag.*?>(.*?)</$imagetag>'si", $out_imageinfo[1]);
@@ -978,8 +980,8 @@ class suxRSS extends DOMDocument {
             // ---------------------------------------------------------------
 
             $items = array();
-            if ($is_atom) preg_match_all("'<entry(| .*?)>(.*?)</entry>'si", $rss_content, $items); // Atom
-            else preg_match_all("'<item(| .*?)>(.*?)</item>'si", $rss_content, $items); // RSS
+            if ($is_atom) preg_match_all("'<entry(| .*?)>(.*?)</entry>'si", (string) $rss_content, $items); // Atom
+            else preg_match_all("'<item(| .*?)>(.*?)</item>'si", (string) $rss_content, $items); // RSS
             $rss_items = $items[2];
             $i = 0;
             $result['items'] = array(); // create array even if there are no items
@@ -1028,10 +1030,10 @@ class suxRSS extends DOMDocument {
                         $pattern = '#<.*?xml:base[\s]?=[\s"\']+(.*?)["\']+#i';
                         $out_baseurl = array();
                         // Attempt 1) Look for xml:base in this node
-                        preg_match($pattern, $rss_item, $out_baseurl);
+                        preg_match($pattern, (string) $rss_item, $out_baseurl);
                         if (!isset($out_baseurl[1]) || !suxFunct::canonicalizeUrl($out_baseurl[1])) {
                             // Attempt 2) Look for xml:base anywhere, starting from the begining of the document
-                            preg_match($pattern, $rss_content, $out_baseurl);
+                            preg_match($pattern, (string) $rss_content, $out_baseurl);
                             if (!isset($out_baseurl[1]) || !suxFunct::canonicalizeUrl($out_baseurl[1])) {
                                 // Attempt 3) Look for the channel <link> and see if that's a real url
                                 if (isset($result['link']) && suxFunct::canonicalizeUrl($result['link'])) {
@@ -1065,7 +1067,7 @@ class suxRSS extends DOMDocument {
                 // ---------------------------------------------------------------
 
                 // If date_format is specified and pubDate is valid
-                if ($this->date_format != '' && isset($result['items'][$i]['pubDate']) && ($timestamp = strtotime($result['items'][$i]['pubDate'])) !== -1) {
+                if ($this->date_format != '' && isset($result['items'][$i]['pubDate']) && ($timestamp = strtotime((string) $result['items'][$i]['pubDate'])) !== -1) {
                     // convert pubDate to specified date format
                     $result['items'][$i]['pubDate'] = date($this->date_format, $timestamp);
                 }
@@ -1124,7 +1126,7 @@ class suxRSS extends DOMDocument {
     /**
     * @param Exception $e an Exception class
     */
-    function exceptionHandler(Exception $e) {
+    function exceptionHandler(\Throwable $e) {
 
         if ($this->db && $this->inTransaction) {
             $this->db->rollback();

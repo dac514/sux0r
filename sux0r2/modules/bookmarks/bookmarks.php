@@ -68,7 +68,7 @@ class bookmarks extends bayesComponent {
         $this->tpl->assign('alphasort_url', suxFunct::makeUrl("/bookmarks/user/$nickname", array('sort' => 'alpha')));
         $this->tpl->assign('sort', $sort);
 
-        if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
+        if ([$vec_id, $cat_id, $threshold, $start, $search] = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
             // Filtered results
@@ -115,7 +115,7 @@ class bookmarks extends bayesComponent {
                 $this->r->arr['bookmarks'] = $this->getUserItems($this->users_id, $this->pager->limit, $this->pager->start);
 
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/bookmarks/user/$nickname", $sort));
-                if (!count($this->r->arr['bookmarks'])) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+                if (!(is_countable($this->r->arr['bookmarks']) ? count($this->r->arr['bookmarks']) : 0)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
             }
 
@@ -158,7 +158,7 @@ class bookmarks extends bayesComponent {
 
         $count = $this->countTaggedItems($this->tag_id);
 
-        if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
+        if ([$vec_id, $cat_id, $threshold, $start, $search] = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
             // Filtered results
@@ -203,7 +203,7 @@ class bookmarks extends bayesComponent {
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl('/bookmarks/tag/' . $this->tag_id, $sort));
                 $this->r->arr['bookmarks'] = $this->getTaggedItems($this->tag_id, $this->pager->limit, $this->pager->start);
 
-                if (!count($this->r->arr['bookmarks'])) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+                if (!(is_countable($this->r->arr['bookmarks']) ? count($this->r->arr['bookmarks']) : 0)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
             }
 
@@ -277,7 +277,7 @@ class bookmarks extends bayesComponent {
         $this->tpl->assign('alphasort_url', suxFunct::makeUrl('/bookmarks', array('sort' => 'alpha')));
         $this->tpl->assign('sort', $sort);
 
-        if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
+        if ([$vec_id, $cat_id, $threshold, $start, $search] = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
             // Filtered results
@@ -323,7 +323,7 @@ class bookmarks extends bayesComponent {
                 $this->r->text['pager'] = $this->pager->pageList(suxFunct::makeUrl("/bookmarks/", $sort));
                 $this->r->arr['bookmarks'] = $this->bm->get($this->pager->limit, $this->pager->start);
 
-                if (!count($this->r->arr['bookmarks'])) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
+                if (!(is_countable($this->r->arr['bookmarks']) ? count($this->r->arr['bookmarks']) : 0)) $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
             }
 

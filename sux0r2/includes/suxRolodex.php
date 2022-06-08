@@ -41,7 +41,7 @@ class suxRolodex {
     /**
     * @param Exception $e an Exception class
     */
-    function exceptionHandler(Exception $e) {
+    function exceptionHandler(\Throwable $e) {
 
         if ($this->db && $this->inTransaction) {
             $this->db->rollback();

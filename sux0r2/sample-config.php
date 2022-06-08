@@ -27,7 +27,7 @@ $CONFIG['TITLE'] = 'sux0r';
 // The auto-detected path to your sux0r installation.
 // If you set this yourself, no trailing slash!
 
-$CONFIG['PATH'] = dirname(__FILE__);
+$CONFIG['PATH'] = __DIR__;
 
 // The url suffix to your site. For example, if your site is
 // http://sux0r.trotch.com/ then '' is appropriate. If your site is

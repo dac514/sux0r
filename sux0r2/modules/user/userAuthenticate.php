@@ -37,7 +37,7 @@ class userAuthenticate extends component {
 
             // Redirect to previous page
             if (isset($_SESSION['breadcrumbs'])) foreach($_SESSION['breadcrumbs'] as $val) {
-                if (!preg_match('#^user/[login|logout|register|edit]#i', $val)) {
+                if (!preg_match('#^user/[login|logout|register|edit]#i', (string) $val)) {
                     suxFunct::redirect(suxFunct::makeUrl($val));
                     break;
                 }

@@ -28,7 +28,7 @@ class feedsSuggest extends component {
         // Declare objects
         $this->rss = new suxRSS();
         $this->r = new suxRenderer($this->module); // Renderer
-        suxValidate::register_object('this', $this); // Register self to validator
+        (new suxValidate())->register_object('this', $this); // Register self to validator
         parent::__construct(); // Let the parent do the rest
 
 
@@ -58,22 +58,22 @@ class feedsSuggest extends component {
     function formBuild(&$dirty) {
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
-        else suxValidate::disconnect();
+        else (new suxValidate())->disconnect();
 
-        if (!suxValidate::is_registered_form()) {
+        if (!(new suxValidate())->is_registered_form()) {
 
-            suxValidate::connect($this->tpl, true); // Reset connection
+            (new suxValidate())->connect($this->tpl, true); // Reset connection
 
             // Register our additional criterias
-            suxValidate::register_criteria('isDuplicateFeed', 'this->isDuplicateFeed');
-            suxValidate::register_criteria('isValidFeed', 'this->isValidFeed');
+            (new suxValidate())->register_criteria('isDuplicateFeed', 'this->isDuplicateFeed');
+            (new suxValidate())->register_criteria('isValidFeed', 'this->isValidFeed');
 
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
-            suxValidate::register_validator('url', 'url', 'notEmpty', false, false, 'trim');
-            suxValidate::register_validator('url2', 'url', 'isURL');
-            suxValidate::register_validator('url3', 'url', 'isDuplicateFeed');
-            suxValidate::register_validator('url4', 'url', 'isValidFeed');
+            (new suxValidate())->register_validator('url', 'url', 'notEmpty', false, false, 'trim');
+            (new suxValidate())->register_validator('url2', 'url', 'isURL');
+            (new suxValidate())->register_validator('url3', 'url', 'isDuplicateFeed');
+            (new suxValidate())->register_validator('url4', 'url', 'isValidFeed');
 
         }
 
@@ -96,11 +96,12 @@ class feedsSuggest extends component {
     */
     function formProcess(&$clean) {
 
+        $rss = [];
         $feed = $this->rss->fetchRss($clean['url']);
 
         $rss['url'] = $clean['url'];
-        $rss['title'] = isset($feed['title']) ? $feed['title'] : '---';
-        $rss['body'] = isset($feed['description']) ? $feed['description'] : '';
+        $rss['title'] = $feed['title'] ?? '---';
+        $rss['body'] = $feed['description'] ?? '';
         $rss['draft'] = true;
 
         $id = $this->rss->saveFeed($_SESSION['users_id'], $rss);

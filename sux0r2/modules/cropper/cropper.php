@@ -24,7 +24,7 @@ class cropper extends component {
 
         // Declare objects
         $this->r = new cropperRenderer($this->module); // Renderer
-        suxValidate::register_object('this', $this); // Register self to validator
+        (new suxValidate())->register_object('this', $this); // Register self to validator
         parent::__construct(); // Let the parent do the rest
 
     }
@@ -67,11 +67,11 @@ class cropper extends component {
         // --------------------------------------------------------------------
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
-        else suxValidate::disconnect();
+        else (new suxValidate())->disconnect();
 
-        if (!suxValidate::is_registered_form()) {
-            suxValidate::connect($this->tpl, true); // Reset connection
-            suxValidate::register_validator('integrity', 'integrity:module:id', 'hasIntegrity');
+        if (!(new suxValidate())->is_registered_form()) {
+            (new suxValidate())->connect($this->tpl, true); // Reset connection
+            (new suxValidate())->register_validator('integrity', 'integrity:module:id', 'hasIntegrity');
         }
 
         // --------------------------------------------------------------------
@@ -105,8 +105,8 @@ class cropper extends component {
 
         // Double check
         if (!filter_var($image, FILTER_VALIDATE_URL)) $image = null;
-        if (!preg_match('/\.(jpe?g|gif|png)$/i', $image)) $image = null;
-        if ($image) list($width, $height) = @getimagesize($image);
+        if (!preg_match('/\.(jpe?g|gif|png)$/i', (string) $image)) $image = null;
+        if ($image) [$width, $height] = @getimagesize($image);
 
         // --------------------------------------------------------------------
         // Template

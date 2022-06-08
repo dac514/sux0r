@@ -25,7 +25,7 @@ class userLoginOpenID extends userRegisterOpenID {
 
             // Redirect to previous page
             if (isset($_SESSION['breadcrumbs'])) foreach($_SESSION['breadcrumbs'] as $val) {
-                if (!preg_match('#^user/[login|logout|register|edit]#i', $val)) {
+                if (!preg_match('#^user/[login|logout|register|edit]#i', (string) $val)) {
                     suxFunct::redirect(suxFunct::makeUrl($val));
                     break;
                 }
@@ -58,16 +58,16 @@ class userLoginOpenID extends userRegisterOpenID {
     function formBuild(&$dirty) {
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
-        else suxValidate::disconnect();
+        else (new suxValidate())->disconnect();
 
-        if (!suxValidate::is_registered_form()) {
+        if (!(new suxValidate())->is_registered_form()) {
 
-            suxValidate::connect($this->tpl, true); // Reset connection
+            (new suxValidate())->connect($this->tpl, true); // Reset connection
 
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
-            suxValidate::register_validator('url', 'url', 'notEmpty', false, false, 'trim');
-            suxValidate::register_validator('url2', 'url', 'isURL');
+            (new suxValidate())->register_validator('url', 'url', 'notEmpty', false, false, 'trim');
+            (new suxValidate())->register_validator('url2', 'url', 'isURL');
 
         }
 

@@ -32,8 +32,8 @@ class suxNaiveBayesian {
     public $use_cache = true;
 
     // If you change these, then you need to adjust your database columns
-    private $max_category_length = 64;
-    private $max_vector_length = 64;
+    private int $max_category_length = 64;
+    private int $max_vector_length = 64;
 
     // Controlled destruction
     protected static $destroyed = false;
@@ -58,7 +58,7 @@ class suxNaiveBayesian {
     function __destruct() {
 
         if (self::$destroyed == true) return; // Avoid cleaning the cache multiple times
-        if (1 == rand(1, 5)) $this->cleanCache(); // 1 in 5 chance
+        if (1 == random_int(1, 5)) $this->cleanCache(); // 1 in 5 chance
         self::$destroyed = true;
 
     }
@@ -164,6 +164,7 @@ class suxNaiveBayesian {
     */
     function getVector($vector_id) {
 
+        $vector = [];
         $st = $this->db->prepare("SELECT * FROM {$this->db_table_vec} WHERE id = ? ");
         $st->execute(array($vector_id));
 
@@ -329,6 +330,7 @@ class suxNaiveBayesian {
     */
     function getCategory($category_id) {
 
+        $category = [];
         $st = $this->db->prepare("SELECT * FROM {$this->db_table_cat} WHERE id = ? ");
         $st->execute(array($category_id));
 
@@ -498,7 +500,7 @@ class suxNaiveBayesian {
         }
 
         $ref = $this->getDocument($document_id);
-        if (count($ref)) {
+        if (is_countable($ref) ? count($ref) : 0) {
 
             // Checking against stopwords is a big performance hog and
             // they don't affect the results here, so not using them
@@ -526,6 +528,7 @@ class suxNaiveBayesian {
     */
     function getDocument($document_id) {
 
+        $document = [];
         $st = $this->db->prepare("SELECT * FROM {$this->db_table_doc} WHERE id = ? ");
         $st->execute(array($document_id));
 
@@ -799,7 +802,7 @@ class suxNaiveBayesian {
                     else $prob = 0;
 
                     // pow($total_tokens/$ncat, $count) is here to avoid underflow.
-                    $scores[$category_id] *= pow($prob, $count)*pow($total_tokens/$ncat, $count);
+                    $scores[$category_id] *= $prob ** $count*($total_tokens/$ncat) ** $count;
                 }
             }
             // Remember and use in reorganization of array
@@ -841,8 +844,7 @@ class suxNaiveBayesian {
         if ($threshold === false) {
             // Top
             $score = $this->categorize($text, $vec_id);
-            reset($score);
-            if ($cat_id != key($score)) return false;
+            if ($cat_id != array_key_first($score)) return false;
         }
         elseif ($threshold > 0 && $threshold <= 1) {
             // Threshold
@@ -872,7 +874,7 @@ class suxNaiveBayesian {
 
         foreach($scores as $category => $score) {
             $scores[$category] = (float) exp($score - $max);
-            $total += (float) pow($scores[$category],2);
+            $total += (float) $scores[$category] ** 2;
         }
         $total = (float) sqrt($total);
 
@@ -1118,7 +1120,7 @@ class suxNaiveBayesian {
     /**
     * @param Exception $e an Exception class
     */
-    function exceptionHandler(Exception $e) {
+    function exceptionHandler(\Throwable $e) {
 
         if ($this->db && $this->inTransaction) {
             $this->db->rollback();

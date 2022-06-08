@@ -72,7 +72,7 @@ class photos extends component {
             }
 
 
-            if ($this->r->arr['photos'] == false || !count($this->r->arr['photos']))
+            if ($this->r->arr['photos'] == false || !(is_countable($this->r->arr['photos']) ? count($this->r->arr['photos']) : 0))
                 $this->tpl->caching = 0; // Nothing to cache, avoid writing to disk
 
             $this->r->title .= " | {$this->r->gtext['photos']}";
@@ -110,7 +110,7 @@ class photos extends component {
             $this->r->arr['photos'] = $this->photo->getPhotos($this->pager->limit, $this->pager->start, $id);
             $this->r->arr['album'] = $this->photo->getAlbumByID($id);
 
-            if ($this->r->arr['album'] && $this->r->arr['photos'] && count($this->r->arr['photos']))
+            if ($this->r->arr['album'] && $this->r->arr['photos'] && (is_countable($this->r->arr['photos']) ? count($this->r->arr['photos']) : 0))
             {
                 $tmp = $this->user->getByID($this->r->arr['album']['users_id']);
                 $this->r->arr['album']['nickname'] = $tmp['nickname'];
@@ -144,7 +144,7 @@ class photos extends component {
         if (!$this->tpl->isCached('view.tpl', $cache_id)) {
 
             $this->r->arr['photos'] = $this->photo->getPhotoByID($id);
-            if ($this->r->arr['photos'] == false || !count($this->r->arr['photos']))
+            if ($this->r->arr['photos'] == false || !(is_countable($this->r->arr['photos']) ? count($this->r->arr['photos']) : 0))
                 suxFunct::redirect(suxFunct::getPreviousURL()); // Redirect
             else {
 

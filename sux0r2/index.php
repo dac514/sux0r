@@ -7,7 +7,7 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/config.php'); // Configuration
+require_once(__DIR__ . '/config.php'); // Configuration
 
 try {
 
@@ -24,7 +24,7 @@ try {
 
     // Get controller & params
     if (!empty($_GET['c'])) {
-        $params = explode('/', $_GET['c']);
+        $params = explode('/', (string) $_GET['c']);
         $controller = (string) array_shift($params);
         $action = (string) array_shift($params);
     }
@@ -54,7 +54,7 @@ try {
 
     // Sanity check params
     foreach ($params as $key => $val) {
-        if (!preg_match('/^(\w|\-)+$/', $val)) $params[$key] = null;
+        if (!preg_match('/^(\w|\-)+$/', (string) $val)) $params[$key] = null;
     }
 
     // -----------------------------------------------------------------------

@@ -189,6 +189,7 @@ class suxBookmarks {
     */
     function save($users_id, array $url, $trusted = -1) {
 
+        $clean = [];
         // -------------------------------------------------------------------
         // Sanitize
         // -------------------------------------------------------------------
@@ -231,7 +232,7 @@ class suxBookmarks {
             // ISO 8601 date format
             // regex must match '2008-06-18 16:53:29' or '2008-06-18T16:53:29-04:00'
             $regex = '/^(\d{4})-(0[0-9]|1[0,1,2])-([0,1,2][0-9]|3[0,1]).+(\d{2}):(\d{2}):(\d{2})/';
-            if (!preg_match($regex, $url['published_on'])) throw new Exception('Invalid date');
+            if (!preg_match($regex, (string) $url['published_on'])) throw new Exception('Invalid date');
             $clean['published_on'] = $url['published_on'];
         }
         else $clean['published_on'] = date('Y-m-d H:i:s');
@@ -385,11 +386,11 @@ class suxBookmarks {
 
         // <title>
         $found = array();
-        if (preg_match('/<title>(.*?)<\/title>/is', $webpage, $found)) {
+        if (preg_match('/<title>(.*?)<\/title>/is', (string) $webpage, $found)) {
             $title = html_entity_decode(strip_tags($found[1]), ENT_QUOTES, 'UTF-8');
         }
         // Meta description
-        if (preg_match('/<meta[^>]+name="description"[^>]+content="([^"]*)"[^>]*>/i', $webpage, $found)) {
+        if (preg_match('/<meta[^>]+name="description"[^>]+content="([^"]*)"[^>]*>/i', (string) $webpage, $found)) {
             $description = html_entity_decode(strip_tags($found[1]), ENT_QUOTES, 'UTF-8');
         }
 
@@ -410,7 +411,7 @@ class suxBookmarks {
     /**
     * @param Exception $e an Exception class
     */
-    function exceptionHandler(Exception $e) {
+    function exceptionHandler(\Throwable $e) {
 
         if ($this->db && $this->inTransaction) {
             $this->db->rollback();

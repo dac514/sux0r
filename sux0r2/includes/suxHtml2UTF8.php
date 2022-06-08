@@ -49,7 +49,7 @@ class suxHtml2UTF8 {
     *  @param array $search
     *  @see $replace
     */
-    private $search = array(
+    private array $search = array(
         "/\r/",                                  // Non-legal carriage return
         "/[\n\t]+/",                             // Newlines and tabs
         '/[ ]{2,}/',                             // Runs of spaces, pre-handling
@@ -84,7 +84,7 @@ class suxHtml2UTF8 {
     *  @param array $replace
     *  @see $search
     */
-    private $replace = array(
+    private array $replace = array(
         '',                                     // Non-legal carriage return
         ' ',                                    // Newlines and tabs
         ' ',                                    // Runs of spaces, pre-handling
@@ -119,7 +119,7 @@ class suxHtml2UTF8 {
     *  @param boolean $converted
     *  @see $html, $text
     */
-    private $converted = false;
+    private bool $converted = false;
 
 
     /**
@@ -128,7 +128,7 @@ class suxHtml2UTF8 {
     *  @param string $link_list
     *  @see buildLinkList()
     */
-    private $link_list = '';
+    private string $link_list = '';
 
 
     /**
@@ -138,7 +138,7 @@ class suxHtml2UTF8 {
     *  @param integer $link_count
     *  @see buildLinkList()
     */
-    private $link_count = 0;
+    private int $link_count = 0;
 
 
     // ----------------------------------------------------------------------------

@@ -40,6 +40,7 @@ class blogRenderer extends suxBayesRenderer {
     */
     function tags($id) {
 
+        $html = null;
         // ----------------------------------------------------------------
         // SQL
         // ----------------------------------------------------------------
@@ -107,6 +108,7 @@ class blogRenderer extends suxBayesRenderer {
     */
     function authorCategories($id, $users_id) {
 
+        $html = null;
         // ----------------------------------------------------------------
         // SQL
         // ----------------------------------------------------------------
@@ -373,6 +375,7 @@ class blogRenderer extends suxBayesRenderer {
     */
     function getCategoriesByVector($vector_id) {
 
+        $categories = [];
         $categories[''] = '---';
         foreach ($this->nb->getCategoriesByVector($vector_id) as $key => $val) {
             $categories[$key] = $val['category'];
@@ -396,6 +399,7 @@ class blogRenderer extends suxBayesRenderer {
 */
 function insert_edit($params) {
 
+    $access = null;
     if (!isset($_SESSION['users_id'])) return null;
     if (!isset($params['id'])) return null;
 

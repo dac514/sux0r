@@ -31,7 +31,7 @@ class blogAdmin extends component {
         // Declare objects
         $this->msg = new suxThreadedMessages();
         $this->r = new blogRenderer($this->module); // Renderer
-        suxValidate::register_object('this', $this); // Register self to validator
+        (new suxValidate())->register_object('this', $this); // Register self to validator
         parent::__construct(); // Let the parent do the rest
 
         // Declare properties
@@ -68,14 +68,14 @@ class blogAdmin extends component {
         // --------------------------------------------------------------------
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
-        else suxValidate::disconnect();
+        else (new suxValidate())->disconnect();
 
-        if (!suxValidate::is_registered_form()) {
+        if (!(new suxValidate())->is_registered_form()) {
 
-            suxValidate::connect($this->tpl, true); // Reset connection
+            (new suxValidate())->connect($this->tpl, true); // Reset connection
 
             // Register our validators
-            suxValidate::register_validator('integrity', 'integrity:users_id:nickname', 'hasIntegrity');
+            (new suxValidate())->register_validator('integrity', 'integrity:users_id:nickname', 'hasIntegrity');
 
         }
 

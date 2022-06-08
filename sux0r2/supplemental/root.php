@@ -1,7 +1,7 @@
 <?php
 
-require_once(dirname(__FILE__)  . '/../config.php'); // Configuration
-require_once(dirname(__FILE__)  . '/../initialize.php'); // Init
+require_once(__DIR__  . '/../config.php'); // Configuration
+require_once(__DIR__  . '/../initialize.php'); // Init
 
 // ---------------------------------------------------------------------------
 // Do the dirty
@@ -16,7 +16,7 @@ if (isset($_POST) && count($_POST)) {
     // Nickname
     if (empty($_POST['nickname'])) $errors[] = 'nickname cannot be empty';
     else {
-        if (!preg_match('/^(\w|\-)+$/', $_POST['nickname'])) $errors[] = 'nickname has invalid characters';
+        if (!preg_match('/^(\w|\-)+$/', (string) $_POST['nickname'])) $errors[] = 'nickname has invalid characters';
         if (mb_strtolower($_POST['nickname']) == 'nobody') $errors[] = 'nickname cannot be reserved word nobody';
         $tmp = $u->getByNickname($_POST['nickname']);
         if ($tmp !== false ) $errors[] = 'duplicate nickname found';

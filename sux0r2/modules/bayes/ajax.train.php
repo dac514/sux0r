@@ -9,8 +9,8 @@ Steps to add a new module to this trainer:
 2) Create a new procedure/condition in getBody() function
 */
 
-require_once(dirname(__FILE__) . '/../../config.php');
-require_once(dirname(__FILE__) . '/../../initialize.php');
+require_once(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/../../initialize.php');
 
 // ---------------------------------------------------------------------------
 // Variables

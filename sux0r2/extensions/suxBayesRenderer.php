@@ -7,9 +7,9 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../includes/suxLink.php');
-require_once(dirname(__FILE__) . '/../includes/suxRenderer.php');
-require_once(dirname(__FILE__) . '/../extensions/suxUserNaiveBayesian.php');
+require_once(__DIR__ . '/../includes/suxLink.php');
+require_once(__DIR__ . '/../includes/suxRenderer.php');
+require_once(__DIR__ . '/../extensions/suxUserNaiveBayesian.php');
 
 class suxBayesRenderer extends suxRenderer {
 
@@ -194,10 +194,10 @@ class suxBayesRenderer extends suxRenderer {
 
             foreach ($vectors2 as $key => $val) {
 
-                if (count($val['categories']) < 2) continue; // Not enough categories, skip
+                if ((is_countable($val['categories']) ? count($val['categories']) : 0) < 2) continue; // Not enough categories, skip
 
                 // Vector name to be replaced
-                $uniqid = time() . substr(md5(microtime()), 0, rand(5, 12));
+                $uniqid = time() . substr(md5(microtime()), 0, random_int(5, 12));
                 $html .= "<span id='nb{$uniqid}'>@_{$uniqid}_@</span>";
 
                 if ($i == 0) {

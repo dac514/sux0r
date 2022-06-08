@@ -56,7 +56,7 @@ abstract class component {
 
         // Form
         $this->tpl->assign('form_name', $this->form_name);
-        suxValidate::set_form($this->form_name);
+        (new suxValidate())->set_form($this->form_name);
 
         // Common objects
         $this->user = new suxUser();

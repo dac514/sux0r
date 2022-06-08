@@ -19,14 +19,14 @@ class suxSocialNetwork {
     protected $db_table = 'socialnetwork';
 
     // Enum (zero or one value)
-    private $xfn_identity = array('me');
-    private $xfn_friendship = array('contact', 'acquaintance', 'friend');
-    private $xfn_geographical = array('co-resident', 'neighbor');
-    private $xfn_family = array('child', 'parent', 'sibling', 'spouse', 'kin');
+    private array $xfn_identity = array('me');
+    private array $xfn_friendship = array('contact', 'acquaintance', 'friend');
+    private array $xfn_geographical = array('co-resident', 'neighbor');
+    private array $xfn_family = array('child', 'parent', 'sibling', 'spouse', 'kin');
     // Set (zero or more values)
-    private $xfn_physical = array('met');
-    private $xfn_professional = array('co-worker', 'colleague');
-    private $xfn_romantic = array('muse', 'crush', 'date', 'sweetheart');
+    private array $xfn_physical = array('met');
+    private array $xfn_professional = array('co-worker', 'colleague');
+    private array $xfn_romantic = array('muse', 'crush', 'date', 'sweetheart');
 
 
     /**
@@ -219,7 +219,7 @@ class suxSocialNetwork {
         if (!filter_var($uid, FILTER_VALIDATE_INT) || $uid < 1) throw new Exception('Invalid user id');
         if (!filter_var($fid, FILTER_VALIDATE_INT) || $fid < 1) throw new Exception('Invalid friend id');
 
-        list($identity, $friendship, $physical, $professional, $geographical, $family, $romantic) = $this->relationshipArray($rel);
+        [$identity, $friendship, $physical, $professional, $geographical, $family, $romantic] = $this->relationshipArray($rel);
 
         if ($identity) {
             $rel = $identity;
@@ -304,7 +304,7 @@ class suxSocialNetwork {
     /**
     * @param Exception $e an Exception class
     */
-    function exceptionHandler(Exception $e) {
+    function exceptionHandler(\Throwable $e) {
 
         if ($this->db && $this->inTransaction) {
             $this->db->rollback();

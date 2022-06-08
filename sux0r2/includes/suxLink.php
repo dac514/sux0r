@@ -74,7 +74,7 @@ class suxLink {
 
         $st = $this->db->query(suxDB::showTablesQuery());
         foreach ($st->fetchAll(PDO::FETCH_NUM) as $val) {
-            if (preg_match('/^link__/', $val[0]) && (!$match || mb_strpos($val[0], "__{$match}")))
+            if (preg_match('/^link__/', (string) $val[0]) && (!$match || mb_strpos($val[0], "__{$match}")))
                 $return[] = $val[0];
         }
         return $return;
@@ -118,6 +118,7 @@ class suxLink {
     */
     function saveLink($link, $table1, $id1, $table2, $id2, $onkey = false) {
 
+        $id2 = [];
         // One to many mapping
         // $id1 = One
         // $id2 = Many
@@ -170,6 +171,7 @@ class suxLink {
     */
     function deleteLink($link, $table, $id, $onkey = false) {
 
+        $id = [];
         if (!is_array($id)) {
             $tmp = $id;
             unset($id);
@@ -200,7 +202,7 @@ class suxLink {
     /**
     * @param Exception $e an Exception class
     */
-    function exceptionHandler(Exception $e) {
+    function exceptionHandler(\Throwable $e) {
 
         if ($this->db && $this->inTransaction) {
             $this->db->rollback();

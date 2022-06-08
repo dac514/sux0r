@@ -54,7 +54,7 @@ class blog extends bayesComponent {
 
         $this->r->title .= " | {$this->r->gtext['blog']} | $author";
 
-        if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
+        if ([$vec_id, $cat_id, $threshold, $start, $search] = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
             // Filtered results
@@ -134,7 +134,7 @@ class blog extends bayesComponent {
 
         $this->r->title .= " | {$this->r->gtext['blog']} | {$this->r->gtext['tag']} | {$tag['tag']}";
 
-        if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
+        if ([$vec_id, $cat_id, $threshold, $start, $search] = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
             // Filtered results
@@ -250,7 +250,7 @@ class blog extends bayesComponent {
 
         $this->r->title .= " | {$this->r->gtext['blog']}  | {$this->r->gtext['category']} | {$c['category']}";
 
-        if (list($vec_id, $cat_id2, $threshold, $start, $search) = $this->nb->isValidFilter()) {
+        if ([$vec_id, $cat_id2, $threshold, $start, $search] = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
             // Filtered results
@@ -322,15 +322,15 @@ class blog extends bayesComponent {
         // Sanity check, YYYY-MM-DD
         $matches = array();
         $regex = '/^(\d{4})-(0[0-9]|1[0,1,2])-([0,1,2][0-9]|3[0,1])$/';
-        if (!preg_match($regex, $date)) $date = date('Y-m-d');
+        if (!preg_match($regex, (string) $date)) $date = date('Y-m-d');
         $datetime = $date . ' ' . date('H:i:s'); // Append current time
 
         $this->r->text['form_url'] = suxFunct::makeUrl('/blog/month/' . $date); // Form Url
         $cache_id = null;
 
-        $this->r->title .= " | {$this->r->gtext['blog']}  | " .  date('F Y', strtotime($date));
+        $this->r->title .= " | {$this->r->gtext['blog']}  | " .  date('F Y', strtotime((string) $date));
 
-        if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
+        if ([$vec_id, $cat_id, $threshold, $start, $search] = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
             // Filtered results
@@ -363,7 +363,7 @@ class blog extends bayesComponent {
             $this->pager->setStart(); // Start pager
 
             // "Cache Groups" using a vertical bar |
-            $cache_id = $nn . '|month|' . date('Y-m', strtotime($date)) . '|' . $this->pager->start;
+            $cache_id = $nn . '|month|' . date('Y-m', strtotime((string) $date)) . '|' . $this->pager->start;
             $this->tpl->caching = 1;
 
             if (!$this->tpl->isCached('scroll.tpl', $cache_id)) {
@@ -385,7 +385,7 @@ class blog extends bayesComponent {
         if (!$this->tpl->isCached('scroll.tpl', $cache_id)) {
 
             $this->r->arr['sidelist'] = $this->msg->getFirstPostsByMonth($datetime, null, 0, 'blog');
-            $this->r->text['sidelist'] = date('F Y', strtotime($date));
+            $this->r->text['sidelist'] = date('F Y', strtotime((string) $date));
 
         }
 
@@ -404,7 +404,7 @@ class blog extends bayesComponent {
 
         $this->r->title .= " | {$this->r->gtext['blog']}";
 
-        if (list($vec_id, $cat_id, $threshold, $start, $search) = $this->nb->isValidFilter()) {
+        if ([$vec_id, $cat_id, $threshold, $start, $search] = $this->nb->isValidFilter()) {
 
             // ---------------------------------------------------------------
             // Filtered results
@@ -463,6 +463,7 @@ class blog extends bayesComponent {
     */
     function view($thread_id) {
 
+        $fp = [];
         // Get nickname
         if (isset($_SESSION['nickname'])) $nn = $_SESSION['nickname'];
         else $nn = 'nobody';

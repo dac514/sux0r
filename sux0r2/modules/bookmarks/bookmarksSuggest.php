@@ -28,7 +28,7 @@ class bookmarksSuggest extends component  {
         // Declare objects
         $this->bm = new suxBookmarks();
         $this->r = new suxRenderer($this->module); // Renderer
-        suxValidate::register_object('this', $this); // Register self to validator
+        (new suxValidate())->register_object('this', $this); // Register self to validator
         parent::__construct(); // Let the parent do the rest
 
         // Declare properties
@@ -59,22 +59,22 @@ class bookmarksSuggest extends component  {
     function formBuild(&$dirty) {
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
-        else suxValidate::disconnect();
+        else (new suxValidate())->disconnect();
 
-        if (!suxValidate::is_registered_form()) {
+        if (!(new suxValidate())->is_registered_form()) {
 
-            suxValidate::connect($this->tpl, true); // Reset connection
+            (new suxValidate())->connect($this->tpl, true); // Reset connection
 
             // Register our additional criterias
-            suxValidate::register_criteria('isDuplicateBookmark', 'this->isDuplicateBookmark');
-            suxValidate::register_criteria('isValidBookmark', 'this->isValidBookmark');
+            (new suxValidate())->register_criteria('isDuplicateBookmark', 'this->isDuplicateBookmark');
+            (new suxValidate())->register_criteria('isValidBookmark', 'this->isValidBookmark');
 
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
-            suxValidate::register_validator('url', 'url', 'notEmpty', false, false, 'trim');
-            suxValidate::register_validator('url2', 'url', 'isURL');
-            suxValidate::register_validator('url3', 'url', 'isDuplicateBookmark');
-            suxValidate::register_validator('url4', 'url', 'isValidBookmark');
+            (new suxValidate())->register_validator('url', 'url', 'notEmpty', false, false, 'trim');
+            (new suxValidate())->register_validator('url2', 'url', 'isURL');
+            (new suxValidate())->register_validator('url3', 'url', 'isDuplicateBookmark');
+            (new suxValidate())->register_validator('url4', 'url', 'isValidBookmark');
 
         }
 
@@ -97,11 +97,12 @@ class bookmarksSuggest extends component  {
     */
     function formProcess(&$clean) {
 
+        $bookmark = [];
         $bm = $this->bm->fetchUrlInfo($clean['url']);
 
         $bookmark['url'] = $clean['url'];
-        $bookmark['title'] = isset($bm['title']) ? $bm['title'] : '---';
-        $bookmark['body'] = isset($bm['description']) ? $bm['description'] : '';
+        $bookmark['title'] = $bm['title'] ?? '---';
+        $bookmark['body'] = $bm['description'] ?? '';
         $bookmark['draft'] = true;
 
         $id = $this->bm->save($_SESSION['users_id'], $bookmark);

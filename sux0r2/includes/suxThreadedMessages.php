@@ -153,6 +153,7 @@ class suxThreadedMessages {
     */
     function save($users_id, array $msg, $trusted = -1) {
 
+        $clean = [];
         // -------------------------------------------------------------------
         // Sanitize
         // -------------------------------------------------------------------
@@ -196,7 +197,7 @@ class suxThreadedMessages {
             // ISO 8601 date format
             // regex must match '2008-06-18 16:53:29' or '2008-06-18T16:53:29-04:00'
             $regex = '/^(\d{4})-(0[0-9]|1[0,1,2])-([0,1,2][0-9]|3[0,1]).+(\d{2}):(\d{2}):(\d{2})/';
-            if (!preg_match($regex, $msg['published_on'])) throw new Exception('Invalid date');
+            if (!preg_match($regex, (string) $msg['published_on'])) throw new Exception('Invalid date');
             $clean['published_on'] = $msg['published_on'];
         }
         else $clean['published_on'] = date('Y-m-d H:i:s');
@@ -863,7 +864,7 @@ class suxThreadedMessages {
         // regex must match '2008-06-18 16:53:29' or '2008-06-18T16:53:29-04:00'
         $matches = array();
         $regex = '/^(\d{4})-(0[0-9]|1[0,1,2])-([0,1,2][0-9]|3[0,1]).+(\d{2}):(\d{2}):(\d{2})/';
-        if (!preg_match($regex, $date, $matches)) throw new Exception('Invalid date');
+        if (!preg_match($regex, (string) $date, $matches)) throw new Exception('Invalid date');
 
         // SQL Query
         $query = "SELECT COUNT(*) FROM {$this->db_table} WHERE thread_pos = 0 ";
@@ -1126,7 +1127,7 @@ class suxThreadedMessages {
     /**
     * @param Exception $e an Exception class
     */
-    function exceptionHandler(Exception $e) {
+    function exceptionHandler(\Throwable $e) {
 
         if ($this->db && $this->inTransaction) {
             $this->db->rollback();

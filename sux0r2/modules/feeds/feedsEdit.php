@@ -35,7 +35,7 @@ class feedsEdit extends component {
         // Declare objects
         $this->rss = new suxRSS();
         $this->r = new feedsRenderer($this->module); // Renderer
-        suxValidate::register_object('this', $this); // Register self to validator
+        (new suxValidate())->register_object('this', $this); // Register self to validator
         parent::__construct(); // Let the parent do the rest
 
         // Declare properties
@@ -112,26 +112,26 @@ class feedsEdit extends component {
         // --------------------------------------------------------------------
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
-        else suxValidate::disconnect();
+        else (new suxValidate())->disconnect();
 
-        if (!suxValidate::is_registered_form()) {
+        if (!(new suxValidate())->is_registered_form()) {
 
-            suxValidate::connect($this->tpl, true); // Reset connection
+            (new suxValidate())->connect($this->tpl, true); // Reset connection
 
             // Register our additional criterias
-            suxValidate::register_criteria('isDuplicateFeed', 'this->isDuplicateFeed');
-            suxValidate::register_criteria('isValidFeed', 'this->isValidFeed');
+            (new suxValidate())->register_criteria('isDuplicateFeed', 'this->isDuplicateFeed');
+            (new suxValidate())->register_criteria('isValidFeed', 'this->isValidFeed');
 
             // Register our validators
-            if ($this->id) suxValidate::register_validator('integrity', 'integrity:id', 'hasIntegrity');
+            if ($this->id) (new suxValidate())->register_validator('integrity', 'integrity:id', 'hasIntegrity');
 
-            suxValidate::register_validator('url', 'url', 'notEmpty', false, false, 'trim');
-            suxValidate::register_validator('url2', 'url', 'isURL');
-            suxValidate::register_validator('url3', 'url', 'isDuplicateFeed');
-            suxValidate::register_validator('url4', 'url', 'isValidFeed');
+            (new suxValidate())->register_validator('url', 'url', 'notEmpty', false, false, 'trim');
+            (new suxValidate())->register_validator('url2', 'url', 'isURL');
+            (new suxValidate())->register_validator('url3', 'url', 'isDuplicateFeed');
+            (new suxValidate())->register_validator('url4', 'url', 'isValidFeed');
 
-            suxValidate::register_validator('title', 'title', 'notEmpty', false, false, 'trim');
-            suxValidate::register_validator('body', 'body', 'notEmpty', false, false, 'trim');
+            (new suxValidate())->register_validator('title', 'title', 'notEmpty', false, false, 'trim');
+            (new suxValidate())->register_validator('body', 'body', 'notEmpty', false, false, 'trim');
 
 
         }

@@ -58,7 +58,7 @@ abstract class bayesComponent extends component {
             foreach ($rawtokens as $k => $v) {
                 if (!trim($v)) unset($rawtokens[$k]);
             }
-            $rawtoken_count = count($rawtokens);
+            $rawtoken_count = is_countable($rawtokens) ? count($rawtokens) : 0;
         }
 
         // Start filtering

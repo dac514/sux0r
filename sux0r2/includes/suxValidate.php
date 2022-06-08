@@ -17,7 +17,7 @@ token in the user's SmartyValidate session.
 
 */
 
-require_once(dirname(__FILE__) . '/symbionts/SmartyAddons/libs/SmartyValidate.class.php');
+require_once(__DIR__ . '/symbionts/SmartyAddons/libs/SmartyValidate.class.php');
 
 class suxValidate extends SmartyValidate {
 
@@ -84,7 +84,7 @@ function smarty_validate_criteria_hasIntegrity($value, $empty, &$params, &$formv
             unset($formvars[$val]);
             continue;
         }
-        elseif (preg_match('/^field[2-7]$/', $key)) {
+        elseif (preg_match('/^field[2-7]$/', (string) $key)) {
             // Up to 6 variables can be hashed
             // see suxRenderer::integrityHash()
             $compare .= $formvars[$val];

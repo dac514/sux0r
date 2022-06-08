@@ -32,7 +32,7 @@ class blogReply extends component {
         // Declare objects
         $this->msg = new suxThreadedMessages();
         $this->r = new blogRenderer($this->module); // Renderer
-        suxValidate::register_object('this', $this); // Register self to validator
+        (new suxValidate())->register_object('this', $this); // Register self to validator
         parent::__construct(); // Let the parent do the rest
 
         // Redirect if not logged in
@@ -69,16 +69,16 @@ class blogReply extends component {
         // --------------------------------------------------------------------
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
-        else suxValidate::disconnect();
+        else (new suxValidate())->disconnect();
 
-        if (!suxValidate::is_registered_form()) {
+        if (!(new suxValidate())->is_registered_form()) {
 
-            suxValidate::connect($this->tpl, true); // Reset connection
+            (new suxValidate())->connect($this->tpl, true); // Reset connection
 
             // Register our validators
-            suxValidate::register_validator('integrity', 'integrity:parent_id', 'hasIntegrity');
-            suxValidate::register_validator('title', 'title', 'notEmpty', false, false, 'trim');
-            suxValidate::register_validator('body', 'body', 'notEmpty', false, false, 'trim');
+            (new suxValidate())->register_validator('integrity', 'integrity:parent_id', 'hasIntegrity');
+            (new suxValidate())->register_validator('title', 'title', 'notEmpty', false, false, 'trim');
+            (new suxValidate())->register_validator('body', 'body', 'notEmpty', false, false, 'trim');
 
         }
 
@@ -105,6 +105,7 @@ class blogReply extends component {
     */
     function formProcess(&$clean) {
 
+        $msg = [];
         $msg['blog'] = true;
         $msg['title'] = $clean['title'];
         $msg['body'] = $clean['body'];

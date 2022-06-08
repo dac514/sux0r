@@ -61,6 +61,7 @@ class suxTags {
     */
     function save($users_id, $tag) {
 
+        $clean = [];
         // -------------------------------------------------------------------
         // Sanitize
         // -------------------------------------------------------------------
@@ -225,7 +226,7 @@ class suxTags {
     /**
     * @param Exception $e an Exception class
     */
-    function exceptionHandler(Exception $e) {
+    function exceptionHandler(\Throwable $e) {
 
         if ($this->db && $this->inTransaction) {
             $this->db->rollback();

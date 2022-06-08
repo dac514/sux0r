@@ -4,8 +4,8 @@
 // TinyMCE external image list url
 // http://wiki.moxiecode.com/index.php/TinyMCE:Configuration/external_image_list_url
 
-require_once(dirname(__FILE__) . '/../../config.php');
-require_once(dirname(__FILE__) . '/../../initialize.php');
+require_once(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/../../initialize.php');
 
 if (!isset($_SESSION['users_id'])) exit;
 

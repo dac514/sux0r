@@ -19,7 +19,7 @@ class photosUpload extends component {
     protected $photo;
 
     // Var: supported extensions
-    private $extensions = 'jpg,jpeg,gif,png,zip';
+    private string $extensions = 'jpg,jpeg,gif,png,zip';
 
 
     /**
@@ -36,7 +36,7 @@ class photosUpload extends component {
         // Declare objects
         $this->photo = new suxPhoto(); // Photos
         $this->r = new photosRenderer($this->module); // Renderer
-        suxValidate::register_object('this', $this); // Register self to validator
+        (new suxValidate())->register_object('this', $this); // Register self to validator
         parent::__construct(); // Let the parent do the rest
 
         // Declare properties
@@ -79,18 +79,18 @@ class photosUpload extends component {
     function formBuild(&$dirty) {
 
         if (!empty($dirty)) $this->tpl->assign($dirty);
-        else suxValidate::disconnect();
+        else (new suxValidate())->disconnect();
 
-        if (!suxValidate::is_registered_form()) {
+        if (!(new suxValidate())->is_registered_form()) {
 
-            suxValidate::connect($this->tpl, true); // Reset connection
+            (new suxValidate())->connect($this->tpl, true); // Reset connection
 
             // Register our validators
             // register_validator($id, $field, $criteria, $empty = false, $halt = false, $transform = null, $form = 'default')
 
-            suxValidate::register_validator('image', 'image:' . $this->extensions, 'isFileType');
-            suxValidate::register_validator('image2','image:' . ini_get('upload_max_filesize'),'isFileSize');
-            suxValidate::register_validator('album', 'album', 'isInt', false, false, 'trim');
+            (new suxValidate())->register_validator('image', 'image:' . $this->extensions, 'isFileType');
+            (new suxValidate())->register_validator('image2', 'image:' . ini_get('upload_max_filesize'), 'isFileSize');
+            (new suxValidate())->register_validator('album', 'album', 'isInt', false, false, 'trim');
 
         }
 
@@ -119,6 +119,7 @@ class photosUpload extends component {
     */
     function formProcess(&$clean) {
 
+        $photo = [];
         if (!isset($_FILES['image']) || !is_uploaded_file($_FILES['image']['tmp_name']))
             throw new Exception('No file uploaded?');
 
@@ -135,7 +136,7 @@ class photosUpload extends component {
         $photo['photoalbums_id'] = $clean['album'];
 
         // Get extension
-        $format = explode('.', $_FILES['image']['name']);
+        $format = explode('.', (string) $_FILES['image']['name']);
         $format = strtolower(end($format));
 
         // Set the data dir
@@ -147,7 +148,7 @@ class photosUpload extends component {
             // Image file
             // ----------------------------------------------------------------
 
-            list($resize, $fullsize) = suxPhoto::renameImage($_FILES['image']['name']);
+            [$resize, $fullsize] = suxPhoto::renameImage($_FILES['image']['name']);
             $photo['image'] = $resize; // Add image to $photo array
             $resize =  $data_dir . "/{$resize}";
             $fullsize = $data_dir . "/{$fullsize}";
@@ -173,7 +174,7 @@ class photosUpload extends component {
             // Zip file
             // ----------------------------------------------------------------
 
-            $tmp_dir = $GLOBALS['CONFIG']['PATH'] . '/temporary/' . md5(uniqid(mt_rand(), true));
+            $tmp_dir = $GLOBALS['CONFIG']['PATH'] . '/temporary/' . md5(uniqid(random_int(0, mt_getrandmax()), true));
             if (!is_dir($tmp_dir) && !mkdir($tmp_dir, 0777, true)) throw new Exception('Can\'t create temp dir ' . $tmp_dir);
 
             if (suxFunct::unzip($_FILES['image']['tmp_name'], $tmp_dir)) {
@@ -189,11 +190,11 @@ class photosUpload extends component {
 
                 foreach($files as $filepath => $file) {
 
-                    $format = explode('.', $file);
+                    $format = explode('.', (string) $file);
                     $format = strtolower(end($format));
                     if (!in_array($format, $valid_formats)) continue; // Skip
 
-                    list($resize, $fullsize) = suxPhoto::renameImage($file);
+                    [$resize, $fullsize] = suxPhoto::renameImage($file);
                     $photo['image'] = $resize; // Add image to $photo array
                     $resize =  $data_dir . "/{$resize}";
                     $fullsize = $data_dir . "/{$fullsize}";

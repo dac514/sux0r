@@ -7,8 +7,8 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../includes/suxNaiveBayesian.php');
-require_once(dirname(__FILE__) . '/../includes/suxLink.php');
+require_once(__DIR__ . '/../includes/suxNaiveBayesian.php');
+require_once(__DIR__ . '/../includes/suxLink.php');
 
 class suxUserNaiveBayesian extends suxNaiveBayesian {
 
@@ -531,8 +531,7 @@ class suxUserNaiveBayesian extends suxNaiveBayesian {
 
         $vec_id = $this->getVectorByCategory($_GET['filter']);
         if (!$vec_id) return failure();
-        reset($vec_id);
-        $vec_id = key($vec_id);
+        $vec_id = array_key_first($vec_id);
         if (@!$this->isVectorUser($vec_id, $_SESSION['users_id'])) return failure();
 
         if (!isset($_GET['start'])) $_GET['start'] = 0;

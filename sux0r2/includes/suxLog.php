@@ -167,6 +167,7 @@ class suxLog {
     */
     function write($users_id, $body_html, $private = false) {
 
+        $clean = [];
         // Any user
         if (!filter_var($users_id, FILTER_VALIDATE_INT) || $users_id < 1)
             throw new Exception('Invalid user id');
@@ -285,7 +286,7 @@ class suxLog {
     /**
     * @param Exception $e an Exception class
     */
-    function exceptionHandler(Exception $e) {
+    function exceptionHandler(\Throwable $e) {
 
         if ($this->db && $this->inTransaction) {
             $this->db->rollback();

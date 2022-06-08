@@ -10,8 +10,8 @@
 * @license    http://www.fsf.org/licensing/licenses/gpl-3.0.html
 */
 
-require_once(dirname(__FILE__) . '/../includes/suxTemplate.php');
-require_once(dirname(__FILE__) . '/../includes/suxRenderer.php');
+require_once(__DIR__ . '/../includes/suxTemplate.php');
+require_once(__DIR__ . '/../includes/suxRenderer.php');
 
 class openid {
 
@@ -37,7 +37,7 @@ class openid {
     protected $bcmath_types = array();
     private $g;
     private $p;
-    private $module = 'openid';
+    private string $module = 'openid';
 
 
     /**
@@ -161,7 +161,7 @@ class openid {
 
         case 'DH-SHA1':
             // Create the associate id and shared secret now
-            list ($assoc_handle, $shared_secret) = $this->newAssoc($lifetime);
+            [$assoc_handle, $shared_secret] = $this->newAssoc($lifetime);
 
             // Compute the Diffie-Hellman stuff
             $private_key = $this->random($dh_modulus);
@@ -179,7 +179,7 @@ class openid {
         default:
 
             // Create the associate id and shared secret now
-            list ($assoc_handle, $shared_secret) = $this->newAssoc($lifetime);
+            [$assoc_handle, $shared_secret] = $this->newAssoc($lifetime);
 
             $keys['assoc_handle'] = $assoc_handle;
             $keys['mac_key'] = base64_encode($shared_secret);
@@ -344,7 +344,7 @@ class openid {
             unset($_SESSION['openid_post_auth_url']);
 
             // check the assoc handle
-            list($shared_secret, $expires) = $this->secret($assoc_handle);
+            [$shared_secret, $expires] = $this->secret($assoc_handle);
 
             // if I can't verify the assoc_handle, or if it's expired
             if (!$shared_secret || (is_numeric($expires) && $expires < time())) {
@@ -357,7 +357,7 @@ class openid {
                 }
 
                 $lifetime = time() + $this->profile['lifetime'];
-                list ($assoc_handle, $shared_secret) = $this->newAssoc($lifetime);
+                [$assoc_handle, $shared_secret] = $this->newAssoc($lifetime);
             }
 
             // $keys['identity'] = $this->profile['my_url'];
@@ -456,13 +456,13 @@ class openid {
         // Validate the sig by recreating the kv pair and signing
         $_POST['openid_mode'] = 'id_res';
         $tokens = '';
-        foreach (explode(',', $signed) as $param) {
+        foreach (explode(',', (string) $signed) as $param) {
             $post = str_replace('.', '_', $param);
             $tokens .= sprintf("%s:%s\n", $param, $_POST['openid_' . $post]);
         }
 
         // Look up the consumer's shared_secret and timeout
-        list ($shared_secret, $expires) = $this->secret($assoc_handle);
+        [$shared_secret, $expires] = $this->secret($assoc_handle);
 
         // if I can't verify the assoc_handle, or if it's expired
         $ok = null;
@@ -729,8 +729,8 @@ class openid {
         ? 'pass' : "warn - log is not writable";
 
         // secret
-        list($test_assoc, $test_new_ss) = $this->newAssoc($test_expire);
-        list($check, $check2) = $this->secret($test_assoc);
+        [$test_assoc, $test_new_ss] = $this->newAssoc($test_expire);
+        [$check, $check2] = $this->secret($test_assoc);
         $res['secret'] = ($check == $test_new_ss)
         ? 'pass' : 'fail';
 
@@ -873,7 +873,7 @@ class openid {
         $this->debug($keys, "Server URL: $url");
 
         // Send all the openid response parameters from the openid.signed list
-        if (!empty($_GET['openid_signed'])) foreach (explode(',', $_GET['openid_signed']) as $param) {
+        if (!empty($_GET['openid_signed'])) foreach (explode(',', (string) $_GET['openid_signed']) as $param) {
             $param = str_replace('.', '_', $param);
             if ($param != 'mode') {
                 $tmp = 'openid_' . $param;
@@ -922,7 +922,7 @@ class openid {
         }
 
 
-        if (preg_match( '/is_valid:true/', $resp)) $auth = true;
+        if (preg_match( '/is_valid:true/', (string) $resp)) $auth = true;
 
         $this->debug('Valid Openid URL = ' . ($auth ? 'true' : 'false'));
 
@@ -963,11 +963,11 @@ class openid {
         }
 
         // Try
-        preg_match('/<link[^>]*rel=(["\'])openid.server\\1[^>]*href=(["\'])([^"\']+)\\2[^>]*\/?>/i', $tmp, $found);
+        preg_match('/<link[^>]*rel=(["\'])openid.server\\1[^>]*href=(["\'])([^"\']+)\\2[^>]*\/?>/i', (string) $tmp, $found);
         if (!empty($found[3])) $url = filter_var($found[3], FILTER_SANITIZE_URL);
         else {
             // And try again
-            preg_match('/<link[^>]*href=(["\'])([^"\']+)\\1[^>]*rel=(["\'])openid.server\\3[^>]*\/?>/i', $tmp, $found);
+            preg_match('/<link[^>]*href=(["\'])([^"\']+)\\1[^>]*rel=(["\'])openid.server\\3[^>]*\/?>/i', (string) $tmp, $found);
             if (!empty($found[2])) $url = filter_var($found[2], FILTER_SANITIZE_URL);
         }
 
@@ -1186,7 +1186,7 @@ class openid {
 
         $r = '';
         for($i=0; $i<20; $i++)
-            $r .= chr(mt_rand(0, 255));
+            $r .= chr(random_int(0, 255));
 
         $this->debug("Generated new key: hash = '" . md5($r) . "', length = '" . mb_strlen($r) . "'");
 
@@ -1213,7 +1213,7 @@ class openid {
         $bad = array('fragment', 'pass', 'user');
 
         foreach (array('parent', 'child') as $name) {
-            $parts[$name] = @parse_url($$name);
+            $parts[$name] = @parse_url(${$name});
             if ($parts[$name] === false)
                 return false;
 
@@ -1252,7 +1252,7 @@ class openid {
         // now compare the paths
         $break = $this->strDiffAt($parts['child']['path'], $parts['parent']['path']);
         @($pb_char = $parts['parent']['path'][$break]);
-        if ($break >= 0 && ($break < strlen($parts['parent']['path']) && $pb_char != '*') || ($break > strlen($parts['child']['path']))) {
+        if ($break >= 0 && ($break < strlen((string) $parts['parent']['path']) && $pb_char != '*') || ($break > strlen((string) $parts['child']['path']))) {
             return false;
         }
 
@@ -1329,13 +1329,13 @@ class openid {
     * @return integer
     */
     private function random($max) {
-        if (strlen($max) < 4)
-            return mt_rand(1, $max - 1);
+        if (strlen((string) $max) < 4)
+            return random_int(1, $max - 1);
 
         $r = '';
-        for($i=1; $i < strlen($max) - 1; $i++)
-            $r .= mt_rand(0,9);
-        $r .= mt_rand(1,9);
+        for($i=1; $i < strlen((string) $max) - 1; $i++)
+            $r .= random_int(0,9);
+        $r .= random_int(1,9);
 
         return $r;
     }
@@ -1451,7 +1451,7 @@ class openid {
     * @global string $charset
     * @param string $message
     */
-    private function wrapHtml($message) {
+    private function wrapHtml($message): never {
 
         $this->r->text['message'] = $message;
 
@@ -1466,7 +1466,7 @@ class openid {
     * @global string $charset
     * @param string $url
     */
-    private function wrapRefresh($url) {
+    private function wrapRefresh($url): never {
 
         // Template
 
@@ -1547,7 +1547,7 @@ class openid {
     /**
     * @param Exception $e an Exception class
     */
-    function exceptionHandler(Exception $e) {
+    function exceptionHandler(\Throwable $e) {
 
         if ($this->db && $this->inTransaction) {
             $this->db->rollback();

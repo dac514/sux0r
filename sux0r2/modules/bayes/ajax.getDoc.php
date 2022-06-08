@@ -5,8 +5,8 @@
 
 if (isset($_POST['id']) && filter_var($_POST['id'], FILTER_VALIDATE_INT)) {
 
-    require_once(dirname(__FILE__) . '/../../config.php');
-    require_once(dirname(__FILE__) . '/../../initialize.php');
+    require_once(__DIR__ . '/../../config.php');
+    require_once(__DIR__ . '/../../initialize.php');
 
     $nb = new suxNaiveBayesian();
     $doc = $nb->getDocument($_POST['id']);
@@ -20,9 +20,9 @@ if (isset($_POST['id']) && filter_var($_POST['id'], FILTER_VALIDATE_INT)) {
             $links = $link->getLinks($table, 'bayes_documents', $_POST['id']);
             if($links && count($links)) {
 
-                $table = str_replace('link__', '', $table);
-                $table = str_replace('bayes_documents', '', $table);
-                $table = str_replace('__', '', $table);
+                $table = str_replace('link__', '', (string) $table);
+                $table = str_replace('bayes_documents', '', (string) $table);
+                $table = str_replace('__', '', (string) $table);
 
                 $tmp .= "[ {$text['to']} {$table}_id -&gt; ";
                 foreach ($links as $val) $tmp .= " $val,";
